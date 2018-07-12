@@ -1,0 +1,11 @@
+generic/351 # bsc#1073393 fixes queued, pending testing
+generic/445 # bsc#1070995 on ppc64le
+xfs/082 # bsc#1073417 golden output diff
+xfs/083 # bsc#1074427 call trace
+xfs/097 # bsc#1073420 golden output diff
+xfs/098 # bsc#1073421 golden output diff
+xfs/104 # bsc#1084002 null pointer dereference
+xfs/107 # bsc#1073423 golden output diff
+xfs/136 # bsc#1073426 golden output diff - takes 1351s
+xfs/171 # bsc#1074443 golden output diff
+xfs/172 # bsc#1073425 golden output diff
