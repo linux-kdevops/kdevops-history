@@ -1,0 +1,15 @@
+# XFS error injection requires CONFIG_XFS_DEBUG
+xfs/057
+xfs/141
+xfs/196
+xfs/318
+xfs/433
+
+# Requires upstream commit 2e2271787419a ("xfs: export log_recovery_delay to
+# delay mount time log recovery") to enable testing log recovery with
+# device mapper dm-flakey. This commit adds:
+#
+# /sys/fs/xfs/debug/log_recovery_delay
+#
+# This was merged as of v3.18, but you also need a CONFIG_XFS_DEBUG kernel.
+xfs/051

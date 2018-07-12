@@ -1,0 +1,3 @@
+# Requires kernel support for y2038 sysfs: /proc/sys/fs/fs-timestamp-check-on
+# Note, this is not upstream.
+generic/402

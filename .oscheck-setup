@@ -1,0 +1,8 @@
+#!/bin/bash
+
+export FSTYP="xfs"
+export OSCHECK_TRUNCATE_PATH="/media/truncated"
+export OSCHECK_SETUP_SYSTEM="yes"
+
+# Use this if you want to emulate the expunge set from a release.
+# export OSCHECK_OS_FILE="$HOME/oscheck/osfiles/whatever"

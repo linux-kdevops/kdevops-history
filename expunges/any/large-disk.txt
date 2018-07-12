@@ -1,0 +1,23 @@
+# Device size related tests, should we have a group for these, or should
+# tests have size requirements, and have everything be figured out for us
+# automatically? We want to at least be able to know which tests we miss
+# out on. Also, the different types of ways to specify issue requirements
+# or requirements is just sloppy.
+
+# Requires 10 GiB scratch area
+generic/038
+generic/048
+
+# Requires a large test device, the test is not clear how big.
+generic/213" # takes 0s
+
+# These just say the scratch device is too small but in other types of words.
+# It is unclear what the exact requirements are.
+generic/224
+generic/225
+generic/273
+generic/274
+generic/312
+generic/320
+generic/347
+shared/006

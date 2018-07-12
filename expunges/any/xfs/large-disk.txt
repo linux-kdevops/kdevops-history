@@ -1,0 +1,6 @@
+# These just say the scratch device is too small but in other types of words.
+# It is unclear what the exact requirements are.
+xfs/104 # takes 35s
+
+# Requires 10 GiB scratch area
+xfs/167

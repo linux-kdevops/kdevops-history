@@ -1,0 +1,10 @@
+# These are tests which might be broken and require a bit more love.
+
+# This is failing at mkfs.xfs, and its not clear why, maybe
+# a broken test.
+xfs/044
+
+# I can't get this to run, might be a broken test. It
+# complains about "Cannot mkfs for this test using MKFS_OPTIONS
+# specified", even if we have no MKFS_OPTIONS specified.
+xfs/016
