@@ -1,3 +1,13 @@
+# Based on a quick glance on the errors, one possibility is that
+# perhaps generic tests do not have the semantics necessary to
+# determine if an external log is used in a generic form and adjust
+# the test for this. But that does not seem to be the case for all
+# tests. A common error for at least two tests seems to be size
+# related, and that may be a limitation on the log size, and the
+# inability to generically detect the filesyste log size max allowed
+# to then invalidate the test. But note that we even have XFS specific
+# tests which fail, so if its a matter of semantics this is all just
+# crap and are missing a lot of work for improvement.
 generic/034
 generic/039
 generic/040
