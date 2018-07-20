@@ -16,9 +16,41 @@ XFS against:
   * linux-next
   * linux
   * linux-stable kernels listed as supported on kernel.org
+  * xfs-linux for-next branch
 
 Different filesystems support can be added at a later time, if there is
 interest and a willing maintainer for its respective entries.
+
+## Setup for Tracking xfs-linux for-next branch with a localversion file
+
+oscheck determines which expunge files to use for your kernel buy looking at
+your running kernel with uname -r. Since we want to track both Linus' latest
+tree, and also xfs-linux for-next branch, and since xfs-linux is based on Linus'
+latest tree if we booted into a for-next branch for xfs-linux we'd end up with
+the same uname -r. To distinguish these kernels you are encouraged to add an
+extra file when building the for-next branch.
+
+The kernel build system appends a tag to your build if you have any file
+named prefixed with "localversion-", as such we recommend adding a
+localversion-xfs file and with a date to reflect the date matching
+the date for you checked out the for-next branch. For instance:
+
+	oscheck@linuxnext-xfs ~/xfs-next (git::xfs-next)$ cat localversion-xfs
+	-xfs-20180713
+
+This will produce the following uname -r:
+
+	oscheck@linuxnext-xfs ~/xfs-next (git::xfs-next)$ uname -r
+	4.18.0-rc4-xfs-20180713+
+
+This enables oscheck in turn to be able to look at the following directory for
+its respective expunge files:
+
+	expunges/4.18.0-rc4-xfs-20180713+
+
+This will typically be a symlink to the linux-next-xfs directory if the
+kernel you are building is the latest. Otherwise, it will become a directory
+reflecting old results.
 
 # oscheck's secondary objective: track a baseline XFS on different distributions
 
