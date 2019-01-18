@@ -12,7 +12,7 @@ install_basic_reqs()
 			uuid-dev uuid-runtime \
 			attr libattr1 libattr1-dev \
 			gdbm-l10n libgdbm-dev \
-			libssl-dev
+			libssl-dev xfslibs-dev
 		;;
 	*)
 		echo "$0: Consider adding $OSCHECK_RELEASE support, should be easy"
