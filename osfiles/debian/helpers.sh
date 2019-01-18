@@ -4,7 +4,6 @@ install_basic_reqs()
 {
 	case "$OSCHECK_RELEASE" in
 	testing)
-		echo FUck you
 		apt-get install -y git e2fsprogs automake gcc libuuid1 quota \
 			make xfsprogs gawk uuid-runtime acl bc \
 			dump indent libtool lvm2 psmisc sed xfsdump \
