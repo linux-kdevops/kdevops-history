@@ -5,10 +5,11 @@ install_basic_reqs()
 	case "$VERSION_ID" in
 	2019*)
 		zypper install -n git e2fsprogs automake gcc libuuid1 quota \
-			attr make xfsprogs libgdbm4 gawk acl bc \
+			attr make xfsprogs libgdbm5 gawk acl bc \
 			dump indent libtool lvm2 psmisc sed xfsdump \
+			libtool \
 			libacl-devel libattr-devel libaio-devel libuuid-devel \
-			openssl-devel xfsprogs-devel ca-certificates-suse
+			libopenssl-devel xfsprogs-devel ca-certificates-suse
 		;;
 	esac
 }
