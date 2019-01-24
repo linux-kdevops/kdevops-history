@@ -7,7 +7,7 @@ install_basic_reqs()
 		zypper install -n git e2fsprogs automake gcc libuuid1 quota \
 			attr make xfsprogs libgdbm5 gawk acl bc \
 			dump indent libtool lvm2 psmisc sed xfsdump \
-			libtool \
+			libtool bc \
 			libacl-devel libattr-devel libaio-devel libuuid-devel \
 			libopenssl-devel xfsprogs-devel
 		;;
