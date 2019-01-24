@@ -9,7 +9,7 @@ install_basic_reqs()
 			dump indent libtool lvm2 psmisc sed xfsdump \
 			libtool \
 			libacl-devel libattr-devel libaio-devel libuuid-devel \
-			libopenssl-devel xfsprogs-devel ca-certificates-suse
+			libopenssl-devel xfsprogs-devel
 		;;
 	esac
 }
