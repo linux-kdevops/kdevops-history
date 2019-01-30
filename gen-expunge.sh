@@ -18,5 +18,8 @@ if [ ! -f $LOG_FILE ]; then
 fi
 
 for i in $(grep ^Fail $LOG_FILE | head -1); do
-	echo $i
+	echo $i | grep -q Fail
+	if [ $? -ne 0 ]; then
+		echo $i
+	fi
 done
