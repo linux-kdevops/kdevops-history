@@ -1,4 +1,3 @@
-Failures:
 generic/034
 generic/039
 generic/040
