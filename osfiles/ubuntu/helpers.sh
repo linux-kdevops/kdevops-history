@@ -208,8 +208,7 @@ ubuntu_distro_kernel_check()
 	if [ ! -e $KERNEL_BOOT_CONFIG ]; then
 		return 1;
 	fi
-	CERT="$(grep CONFIG_SYSTEM_TRUSTED_KEYS $KERNEL_BOOT_CONFIG | head -1 | awk -F"=" '{print $2}' | sed -e 's/"//g')"
-	echo $CERT | grep -q debian
+	dpkg -S $KERNEL_BOOT_CONFIG 2>&1 > /dev/null
 	if [ $? -eq 0 ]; then
 		return 0;
 	fi
