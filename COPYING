@@ -1,0 +1,12 @@
+oscheck is provided provided under :
+
+	SPDX-License-Identifier: GPL-2.0-or-later
+	LICENSES/preferred/GPL-2.0
+
+In addition, other licenses may also apply. We embrace the same SPDX
+practice as used in the Linux kernel, for those details refer to under
+Linux:
+
+	Documentation/process/license-rules.rst
+
+for more details.
