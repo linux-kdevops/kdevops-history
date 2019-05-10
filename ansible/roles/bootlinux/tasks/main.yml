@@ -1,0 +1,49 @@
+---
+# Distro specific
+- include: tasks/install-deps/main.yml
+
+# Distro agnostic stuff to build and boot Linux goes below
+
+- name: Copy configuration for linux {{ target_linux_tree }}
+  template:
+    src: "{{ target_linux_config }}"
+    dest: "{{ target_linux_dir_path }}/.config"
+    owner: "{{ data_user }}"
+    group: "{{ data_group }}"
+    mode: 0644
+  tags: linux
+
+- name: Configure linux {{ target_linux_tree }}
+  shell: yes "" | make oldconfig
+  args:
+    chdir: "{{ target_linux_dir_path }}"
+  register: out
+  tags: linux
+- debug: var=out.stdout_lines
+- debug: var=out.delta
+
+- name: Build linux {{ target_linux_tree }}
+  command: "{{ target_linux_make_cmd }}"
+  args:
+    chdir: "{{ target_linux_dir_path }}"
+  register: out
+- debug: var=out.stdout_lines
+- debug: var=out.delta
+
+- name: Install linux {{ target_linux_tree }}
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "{{ target_linux_make_install_cmd }}"
+  args:
+    chdir: "{{ target_linux_dir_path }}"
+  register: out
+  tags: linux
+- debug: var=out.stdout_lines
+- debug: var=out.delta
+
+- name: Reboot into linux {{ target_linux_tree }}
+  become: yes
+  become_method: sudo
+  reboot:
+  tags: linux

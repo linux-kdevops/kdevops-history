@@ -1,0 +1,8 @@
+[all]
+oscheck-xfs
+oscheck-xfs-nocrc
+oscheck-xfs-nocrc-512
+oscheck-xfs-reflink
+oscheck-xfs-reflink-1024
+oscheck-xfs-logdev
+oscheck-xfs-realtimedev

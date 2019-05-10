@@ -1,0 +1,23 @@
+---
+# Install dependencies for building linux on Debian
+
+# apt-get build-dep does not capture all requirements
+- name: Install Linux kernel build dependencies
+  become: yes
+  become_method: sudo
+  apt:
+    name:
+      - bison
+      - flex
+      - git
+      - gcc
+      - make
+      - gawk
+      - bc
+      - dump
+      - indent
+      - sed
+      - libssl-dev
+    state: present
+    update_cache: yes
+  tags: linux

@@ -1,0 +1,63 @@
+---
+vagrant_global:
+  box: "debian/buster64"
+  ssh_key: "~/.ssh/oscheck"
+  memory: 8192
+  cpus: 8
+  # You can use force_provider if your OS defaults differ from the default
+  # heuristics on Vagrantfile.
+  #force_provider: "virtualbox"
+  virtualbox_cfg:
+    auto_update: false
+    enabled: "true"
+    enable_sse4: "true"
+    # can be vdi, vmdk, vhd
+    nvme_disk_postfix: 'vdi'
+    # To stress test a virtual nvme controller you could peg all disks onto
+    # one controller. We want to avoid this as our focus is testing filesystems
+    # and not storage controllers however Virtualbox currently only supports
+    # one nvme storage controller. Set this to true only if you are adding
+    # support for this upstream to Virtualbox.
+    nvme_controller_per_disk: false
+  libvirt_cfg:
+    # q35 should be used, however nvme doesn't seem to work there
+    # for some versions of qemu.
+    machine_type: 'pc-i440fx-4.0'
+    nvme_disk_postfix: 'qcow2'
+    nvme_disk_id_prefix: 'drv'
+    qemu_group: 'qemu'
+    # In case you use a development version of qemu
+    emulator_path: '/usr/local/bin/qemu-system-x86_64'
+  # On the current directory
+  nvme_disk_path: '.vagrant/nvme_disks/'
+  nvme_disk_prefix: 'nvme_disk'
+  # This ends up slightly different depending on the vagrant provider right now.
+  # For Virtualbox: /dev/nvme0n1, /dev/nvme0n2, etc.
+  # For libvirt:    /dev/nvme0n1, /dev/nvme1n1, etc.
+  # This is due to how Virtualbox only supports one nvme storage controller
+  nvme_disks:
+    0:
+      size: 102400
+    1:
+      size: 102400
+    2:
+      size: 102400
+    4:
+      size: 102400
+
+# Note: vagrant is not a fan of hosts with underscores.
+vagrant_boxes:
+  - name: oscheck-xfs
+    ip: 172.17.8.101
+  - name: oscheck-xfs-nocrc
+    ip: 172.17.8.102
+  - name: oscheck-xfs-nocrc-512
+    ip: 172.17.8.103
+  - name: oscheck-xfs-reflink
+    ip: 172.17.8.104
+  - name: oscheck-xfs-reflink-1024
+    ip: 172.17.8.105
+  - name: oscheck-xfs-logdev
+    ip: 172.17.8.106
+  - name: oscheck-xfs-realtimedev
+    ip: 172.17.8.107

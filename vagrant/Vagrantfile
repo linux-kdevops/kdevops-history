@@ -1,0 +1,194 @@
+# -*- mode: ruby -*-
+# # vi: set ft=ruby :
+
+Vagrant.require_version ">= 1.6.0"
+
+require 'yaml'
+require 'fileutils'
+require 'rbconfig'
+
+@os = RbConfig::CONFIG['host_os']
+
+# XXX: upstream libvirt enhancement needed
+#
+# Vagrant allows multiple provider code to be supported easily, however
+# this logic assuems all provider setup is supported through configuration
+# variables from the provider. This is not the case for libvirt. We need
+# to create the qemu image, and the libvirt vagrant provider doesn't have
+# support to create the images as virtual box does. We run the commands
+# natively, however this also reveals that on execution path even code
+# for other providers gets executed regardless of the provider you are
+# using *unless* that code is using provider specific variables. Best we
+# can do for now is detect your OS and set a local variable where we *do*
+# run different local code paths depending on the target provider. We enable
+# to override this variable via the global configuration file in case you
+# are actually using a different provider for your OS. Right now we make
+# these assumptions:
+#
+# Your OS            Provider
+# -------------------------------
+# Linux              libirt
+# Mac OS X           virtualbox
+provider = "libvirt"
+
+case
+when @os.downcase.include?('linux')
+  provider = "libvirt"
+when @os.downcase.include?('darwin')
+  provider = "virtualbox"
+else
+  puts "You OS hasn't been tested yet, go add support and send a patch."
+  exit
+end
+
+config_data= YAML.load_file('xfs.yaml')
+global_data = config_data['vagrant_global']
+vagrant_boxes = config_data['vagrant_boxes']
+
+if global_data['force_provider']
+  provider = global_data['force_provider']
+end
+
+supported_provider = case provider
+  when "virtualbox" then true
+  when "libvirt" then true
+  else false
+end
+
+if ! supported_provider
+  puts "Unsupported provider: #{provider} on " + RbConfig::CONFIG['host_os']
+  puts "Consider adding support and send a patch"
+  exit
+end
+
+Vagrant.configure("2") do |config|
+  num_servers = vagrant_boxes.size()
+  box_count = 0
+  vagrant_boxes.each do |server_data|
+    # Using sync folders won't work for say openstack / aws / azure / gce, and
+    # for that we'll use terraform, so best to allow whatever data we want to
+    # sync be provisioned with ansible.
+    config.vm.synced_folder './', '/vagrant', type: '9p', disabled: true, accessmode: "mapped", mount: false
+    config.vm.define server_data["name"] do |srv|
+      srv.vm.box = global_data["box"]
+      srv.vm.network "private_network", ip: server_data["ip"]
+      host_name = server_data["name"]
+      nvme_path = File.dirname(__FILE__) + "/" + global_data['nvme_disk_path'] + "/#{host_name}"
+      srv.vm.provider "virtualbox" do |vb, override|
+	if provider == "virtualbox" && ! global_data['virtualbox_cfg']['auto_update']
+          # we'll need to run later: vagrant vbguest install
+          config.vbguest.auto_update = false
+        end
+        override.vm.hostname = host_name
+        override.vm.boot_timeout = global_data['boot_timeout']
+        vb.memory = global_data["memory"]
+        vb.cpus = global_data["cpus"]
+        if global_data['nvme_disks']
+          port_count = global_data['nvme_disks'].size()
+          FileUtils.mkdir_p nvme_path
+          global_data['nvme_disks'].each do |key, value|
+            size = value['size']
+            port = key
+            port_plus = key + 1
+            nvme_disk_postfix = global_data['virtualbox_cfg']['nvme_disk_postfix']
+            nvme_disk = nvme_path + "/nvme#{port}n#{port_plus}.#{nvme_disk_postfix}"
+
+            # "Standard" provides a sparse file. That's what we want, we cheat
+            # the OS and only use what we need. If you want the real file size
+            # add a global config option and send a patch and justify it. I'd
+            # like to hear about it. We use sparse files for libvirt as well
+            # and should try to keep setup in sync.
+            if (! File.file?(nvme_disk))
+              vb.customize ["createmedium", "disk", "--filename", nvme_disk, "--variant", "Standard", "--format", nvme_disk_postfix.upcase, "--size", size]
+            end
+            # Virtualbox supports only one nvme controller... this will fail
+            # unless you are a Virtualbox hacker adding support for this :)
+            if global_data['virtualbox_cfg']['nvme_controller_per_disk']
+              # https://www.virtualbox.org/manual/ch08.html#vboxmanage-storagectl
+              # This command attaches, modifies, and removes a storage
+              # controller. After this, virtual media can be attached to the
+              # controller with the storageattach command.
+              nvme_name = "nvme#{port}"
+              vb.customize ["storagectl", :id, "--name", "#{nvme_name}", "--add", "pcie", "--controller", "NVMe", "--portcount", 1, "--bootable", "off"]
+	      # Now attach the drive
+	      vb.customize ["storageattach", :id, "--storagectl", "#{nvme_name}", "--type", "hdd", "--medium", nvme_disk, "--port", 0]
+            else
+              if port == 0
+                vb.customize ["storagectl", :id, "--name", "nvme0", "--add", "pcie", "--controller", "NVMe", "--portcount", port + 1, "--bootable", "off"]
+              end
+	      vb.customize ["storageattach", :id, "--storagectl", "nvme0", "--type", "hdd", "--medium", nvme_disk, "--port", port]
+            end
+
+            if global_data['enable_sse4']
+	      # Support for the SSE4.x instruction is required in some versions of VB.
+              vb.customize ["setextradata", :id, "VBoxInternal/CPUM/SSE4.1", "1"]
+              vb.customize ["setextradata", :id, "VBoxInternal/CPUM/SSE4.2", "1"]
+            end
+          end
+        end
+      end
+      # For details see: https://github.com/vagrant-libvirt/vagrant-libvirt
+      srv.vm.provider "libvirt" do |libvirt, override|
+        #libvirt.host = "localhost"
+        override.vm.hostname = host_name
+        override.vm.boot_timeout = global_data['boot_timeout']
+        #libvirt.id_ssh_key_file = global_data['ssh_key']
+        libvirt.watchdog :model => 'i6300esb', :action => 'reset'
+	libvirt.storage_pool_path = File.dirname(__FILE__)
+        libvirt.memory = global_data["memory"]
+        libvirt.cpus = global_data["cpus"]
+        libvirt.emulator_path = global_data['libvirt_cfg']['emulator_path']
+        libvirt.machine_type = global_data['libvirt_cfg']['machine_type']
+        if global_data['nvme_disks']
+          port_count = global_data['nvme_disks'].size()
+          FileUtils.mkdir_p nvme_path
+          global_data['nvme_disks'].each do |key, value|
+            size = value['size']
+            port = key
+            port_plus = key + 1
+	    key_id_prefix = global_data['libvirt_cfg']['nvme_disk_id_prefix']
+	    disk_id = "#{key_id_prefix}#{port}"
+	    serial_id = "serial#{port}"
+            nvme_disk_postfix = global_data['libvirt_cfg']['nvme_disk_postfix']
+            nvme_disk = nvme_path + "/nvme#{port}n#{port_plus}.#{nvme_disk_postfix}"
+            unless File.exist? (nvme_disk)
+	      if provider == "libvirt"
+	        cmd = "qemu-img create -f qcow2 #{nvme_disk} #{size}M"
+	        ok = system(cmd)
+	        if ! ok
+                  puts "Command failed: #{cmd}"
+                  exit
+                end
+              end
+            end
+            libvirt.qemuargs :value => "-drive"
+            libvirt.qemuargs :value => "file=#{nvme_disk},if=none,id=#{disk_id}"
+            libvirt.qemuargs :value => "-device"
+            libvirt.qemuargs :value => "nvme,drive=#{disk_id},serial=#{serial_id}"
+	  end
+	  if provider == "libvirt"
+	    qemu_group = global_data['libvirt_cfg']['qemu_group']
+	    ok = system("chgrp -R #{qemu_group} #{nvme_path}")
+	    if ! ok
+              puts "Command failed: #{cmd}"
+              exit
+            end
+	    ok = system("chmod -R g+rw #{nvme_path}")
+	    if ! ok
+              puts "Command failed: #{cmd}"
+              exit
+            end
+	  end # end of provider check for libvirt
+	end # end of check for nvme disks for libvirt
+      end # end of libvirt provider code
+      box_count+=1
+      puts "#{box_count}  ====== #{num_servers}"
+      if box_count == num_servers
+        srv.vm.provision :ansible do |ansible|
+          ansible.limit = "all"
+          ansible.playbook = "../ansible/dev_config.yml"
+	end # end of ansible
+      end # end of check for the last server
+    end # end of srv defined loop
+  end # end of vagrant_boxes loop
+end

@@ -1,0 +1,5 @@
+deb http://deb.debian.org/debian testing main
+deb-src http://deb.debian.org/debian testing main
+
+deb http://deb.debian.org/debian sid main
+deb-src http://deb.debian.org/debian sid main

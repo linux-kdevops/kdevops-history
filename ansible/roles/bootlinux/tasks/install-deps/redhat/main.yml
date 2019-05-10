@@ -1,0 +1,6 @@
+---
+# Install dependenciesfor oscheck on Red Hat based systems
+- name: Set up apt for Red Hat sources
+  yum:
+     update_cache: yes
+

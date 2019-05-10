@@ -1,0 +1,59 @@
+---
+# Distro specific
+- include: tasks/install-deps/main.yml
+
+# Distro agnostic
+- include: tasks/configure-ssmtp.yml
+- include: tasks/configure-watchdog.yml
+
+# XXX:
+# 1) mkfs.xfs /dev/nvme0n1 if not mounted
+# 2) add entries to /etc/fstab
+# 3) mount it
+- name: Creates directory
+  file:
+    path: "{{ data_path }}"
+    state: directory
+
+- git:
+    repo: "{{ oscheck_git }}"
+    dest: "{{ oscheck_data }}"
+
+- name: Install oscheck as regular user
+  command: "{{ make }} install"
+  tags: [ 'oscheck', 'install']
+  args:
+    chdir: "{{ oscheck_data }}"
+  register: out
+- debug: var=out.stdout_lines
+- debug: var=out.delta
+
+- name: Install oscheck as root
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "{{  make }} install"
+  tags: [ 'oscheck', 'install', 'root']
+  args:
+    chdir: "{{ oscheck_data }}"
+  register: out
+- debug: var=out.stdout_lines
+- debug: var=out.delta
+
+# XXX: port the below to the above ansible targets
+# This is complete now for Debian. Other distros need
+# to convert their oscheck --install-deps target to
+# ansible. Once all distros are proted we can remove this
+# as then provisioning would all be handled through
+# ansible.
+- name: Install oscheck dependencies
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "./oscheck.sh --install-deps"
+  tags: [ 'oscheck', 'deps', 'shell']
+  args:
+    chdir: "{{ oscheck_data }}"
+  register: out
+- debug: var=out.stdout_lines
+- debug: var=out.delta

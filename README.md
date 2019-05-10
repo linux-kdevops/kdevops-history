@@ -1,12 +1,12 @@
 # oscheck
 
-oscheck is an overlay of distribution agnostic scripts and expunge files which
-can be used top of the latest [fstests ](git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git)
-to easily track baseline results for different filesystems for different Linux
-distributions and stable Linux kernels.
+oscheck is a framework to let you easily get
+[fstests ](git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git)
+going, and running with the correct set of parameters for a specific
+distribution / stable kernels.
 
-oscheck also provides a way to easily ramp up to install all dependencies and
-requirements to compile and install [fstests ](git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git)
+oscheck relies on vagrant (soon terraform) and ansible to get you going
+with a virtualization environment easily.
 
 # oscheck's primary objective: track a baseline for XFS on latest Linux and Linux stable kernels
 
@@ -65,13 +65,8 @@ distributions:
 
 # Long term goals
 
-We are evaluating making changes to the architecture and infrastructure to
-use to use things like [katacontainers](https://katacontainers.io) to enable
-even further faster ramp up, and make it easy to reproduce issues in the
-community.
-
-Eventually we want the ability to have some form of continuous integration
-so that regressions or new issues are properly tracked as development happens.
+Quick automation for tests. This is now almost complete as we merged
+ansible/vagrant support.
 
 # fstest bug triage
 
