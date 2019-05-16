@@ -1,0 +1,14 @@
+---
+# These are general global variables shared between all roles.
+
+# Your default username to log in to systems
+data_user: vagrant
+data_group: vagrant
+
+data_home_dir: "/home/{{ data_user }}"
+
+# Where we put git trees
+data_path: "/data"
+
+# Full path to make command if you want to override
+make: "make"
