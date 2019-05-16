@@ -1,0 +1,28 @@
+# Generic import of data. Terraform doesn't support reading YAML files
+# directly. Instead we need to use a terraform plugin for that. We do
+# this so we can just use *one* file for provisioning which is shared
+# for both simple Vagrant solutions and cloud terraform configurations.
+#
+# To use this just symlink to this in your respective provider directory.
+# Terraform will process all *.tf files in alphabetical order, but the
+# order does not matter as terraform is declarative.
+
+locals {
+  input = "${var.file_yaml_vagrant_boxes}"
+}
+
+# https://github.com/ashald/terraform-provider-yaml
+data "yaml_map_of_strings"  "normal" { input = "${file(local.input)}" }
+data "yaml_map_of_strings"  "flat"   { input = "${file(local.input)}" flatten="/" }
+
+# You *must* have a section your YAML file with "vagrant_boxes" declaring a
+# list of hosts.
+data "yaml_list_of_strings" "list"   { input = "${data.yaml_map_of_strings.normal.output["vagrant_boxes"]}" }
+
+locals {
+  vagrant_num_boxes = "${length(data.yaml_list_of_strings.list.output)}"
+}
+
+locals {
+  num_boxes = "${var.limit_boxes == "yes" ? min(local.vagrant_num_boxes, var.limit_num_boxes) : local.vagrant_num_boxes }"
+}

@@ -1,3 +1,5 @@
+# Azure terraform provider main
+
 resource "azurerm_resource_group" "fstests_group" {
     name     = "fstests_resource_group"
     location = "westus"
@@ -26,7 +28,8 @@ resource "azurerm_subnet" "fstests_subnet" {
 }
 
 resource "azurerm_public_ip" "fstests_publicip" {
-    name                         = "fstestPublicIP"
+    count                        = "${local.num_boxes}"
+    name                         = "${format("fstests_pub_ip_%02d", count.index + 1)}"
     location                     = "westus"
     resource_group_name          = "${azurerm_resource_group.fstests_group.name}"
     allocation_method            = "Dynamic"
@@ -59,7 +62,8 @@ resource "azurerm_network_security_group" "fstests_sg" {
 }
 
 resource "azurerm_network_interface" "fstests_nic" {
-    name                = "fstestsNIC"
+    count               = "${local.num_boxes}"
+    name                = "${format("fstests_nic_%02d", count.index + 1)}"
     location            = "westus"
     resource_group_name = "${azurerm_resource_group.fstests_group.name}"
     network_security_group_id = "${azurerm_network_security_group.fstests_sg.id}"
@@ -68,7 +72,7 @@ resource "azurerm_network_interface" "fstests_nic" {
         name                          = "fstestsNicConfiguration"
         subnet_id                     = "${azurerm_subnet.fstests_subnet.id}"
         private_ip_address_allocation = "Dynamic"
-        public_ip_address_id          = "${azurerm_public_ip.fstests_publicip.id}"
+        public_ip_address_id          = "${element(azurerm_public_ip.fstests_publicip.*.id, count.index)}"
     }
 
     tags {
@@ -77,6 +81,7 @@ resource "azurerm_network_interface" "fstests_nic" {
 }
 
 resource "random_id" "randomId" {
+    count               = "${local.num_boxes}"
     keepers = {
         # Generate a new ID only when a new resource group is defined
         resource_group = "${azurerm_resource_group.fstests_group.name}"
@@ -86,7 +91,8 @@ resource "random_id" "randomId" {
 }
 
 resource "azurerm_storage_account" "fstests_storageaccount" {
-    name                = "diag${random_id.randomId.hex}"
+    count               = "${local.num_boxes}"
+    name                = "diag${element(random_id.randomId.*.hex, count.index)}"
     resource_group_name = "${azurerm_resource_group.fstests_group.name}"
     location            = "westus"
     account_replication_type = "LRS"
@@ -98,14 +104,29 @@ resource "azurerm_storage_account" "fstests_storageaccount" {
 }
 
 resource "azurerm_virtual_machine" "fstests_vm" {
-    name                  = "fstests_vm_1"
+    count                 = "${local.num_boxes}"
+    # As of terraform 0.11 there is no easy way to convert a list to a map
+    # for the structure we have defined for the vagrant_boxes. We can use
+    # split to construct a subjset list though, and then key in with the
+    # target left hand value name we want to look for. On the last split we
+    # call always uses the second element given its a value: figure, we want
+    # the right hand side of this.
+    #
+    # The "%7D" is the lingering nagging trailing "}" at the end of the string,
+    # we just remove it.
+    name                  = "${replace(urlencode(element(split("name: ", element(data.yaml_list_of_strings.list.output, count.index)), 1)), "%7D", "")}"
     location              = "westus"
     resource_group_name   = "${azurerm_resource_group.fstests_group.name}"
-    network_interface_ids = ["${azurerm_network_interface.fstests_nic.id}"]
+    network_interface_ids = ["${element(azurerm_network_interface.fstests_nic.*.id, count.index)}"]
     vm_size               = "Standard_DS1_v2"
 
     storage_os_disk {
-        name              = "fstestsOsDisk"
+	# Note: yes using the names like the ones below is better however it also
+	# means propagating a hack *many* times. It would be better to instead
+	# move this hack to a single place using local variables somehow so that
+	# we can later adjust the hack *once* instead of many times.
+        #name              = "${format("fstests-main-disk-%s", element(azurerm_virtual_machine.fstests_vm.*.name, count.index))}"
+        name              = "${format("fstest-main-disk-%02d", count.index + 1)}"
         caching           = "ReadWrite"
         create_option     = "FromImage"
         managed_disk_type = "Premium_LRS"
@@ -119,7 +140,7 @@ resource "azurerm_virtual_machine" "fstests_vm" {
     }
 
     os_profile {
-        computer_name  = "oscheck-xfs"
+        computer_name  = "${replace(urlencode(element(split("name: ", element(data.yaml_list_of_strings.list.output, count.index)), 1)), "%7D", "")}"
         admin_username = "${var.ssh_username}"
     }
 
@@ -133,7 +154,7 @@ resource "azurerm_virtual_machine" "fstests_vm" {
 
     boot_diagnostics {
         enabled     = "true"
-        storage_uri = "${azurerm_storage_account.fstests_storageaccount.primary_blob_endpoint}"
+        storage_uri = "${element(azurerm_storage_account.fstests_storageaccount.*.primary_blob_endpoint, count.index)}"
     }
 
     tags {
@@ -141,6 +162,25 @@ resource "azurerm_virtual_machine" "fstests_vm" {
     }
 }
 
-output "master_ip_address" {
-  value = "${azurerm_public_ip.fstests_publicip.ip_address}"
+data "null_data_source" "host_names" {
+  count  = "${local.num_boxes}"
+  inputs = {
+    value = "${replace(urlencode(element(split("name: ", element(data.yaml_list_of_strings.list.output, count.index)), 1)), "%7D", "")}"
+  }
+}
+
+output "fstest_hosts" {
+  value = "${data.null_data_source.host_names.*.outputs.value}"
+}
+
+data "azurerm_public_ip" "public_ips" {
+  count                = "${local.num_boxes}"
+  # Note: the name must match the respective name used for the public ip
+  # for the node.
+  name                 = "${format("fstests_pub_ip_%02d", count.index + 1)}"
+  resource_group_name  = "${azurerm_resource_group.fstests_group.name}"
+}
+
+output "fstest_public_ip_addresses" {
+  value = "${data.azurerm_public_ip.public_ips.*.ip_address}"
 }

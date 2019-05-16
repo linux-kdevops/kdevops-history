@@ -13,9 +13,16 @@ TARGET_CONFIG := $(FSTESTS_CONFIGS)/$(HOSTNAME_CONFIG)
 EXAMPLE_CONFIG := example.config
 ID=$(shell id -u)
 
-.PHONY: all install
+.PHONY: all install deps
+
+include globals.mk
+
+DIRS=$(shell find ./* -maxdepth 0 -type d)
 
 all: $(PROGS)
+
+deps:
+	@for i in $(DIRS); do if [ -f $$i/Makefile ]; then $(MAKE) -C $$i deps; fi; done
 
 install: $(PROGS)
 	@if [ $(ID) != "0" ]; then \
@@ -55,3 +62,6 @@ install: $(PROGS)
 	@echo
 	@echo To try to get oscheck to install fstests build dependencies run the following a few times:
 	@echo	$(FSTESTS)/oscheck.sh --install-deps
+
+clean:
+	@for i in $(DIRS); do if [ -f $$i/Makefile ]; then $(MAKE) -C $$i clean; fi; done

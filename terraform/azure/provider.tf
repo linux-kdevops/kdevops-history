@@ -1,3 +1,7 @@
+# Describes the provider we are going to use. This will automatically
+# phone home to HashiCorp to download the latest azure plugins being
+# described here.
+
 provider "azurerm" {
   # Whilst version is optional, we /strongly recommend/ using it to pin the version of the Provider being used
   version = "=1.24.0"
