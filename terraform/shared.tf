@@ -7,6 +7,18 @@
 # Terraform will process all *.tf files in alphabetical order, but the
 # order does not matter as terraform is declarative.
 
+provider "null" {
+  # any non-beta version >= 2.0.0 and < 2.1.0, e.g. 2.0.1
+  version = "~> 2.1"
+}
+
+# We'd have to update our Makefiles to do the right thing, if we
+# add this, terraform can't find the stupid plugin.
+#provider "yaml" {
+# any non-beta version >= 2.0.0 and < 2.1.0, e.g. 2.0.1
+#  version = "~>2.0"
+#}
+
 locals {
   input = "${var.file_yaml_vagrant_boxes}"
 }
