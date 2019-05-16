@@ -5,8 +5,16 @@ oscheck is a framework to let you easily get
 going, and running with the correct set of parameters for a specific
 distribution / stable kernels.
 
-oscheck relies on vagrant (soon terraform) and ansible to get you going
-with a virtualization environment easily.
+oscheck relies on vagrant, terraform and ansible to get you going
+with whatever your virtualization / bare metal / cloud provisioning
+environment easily.
+
+The vagrant / terraform stuff still needs more documentation to be
+written for it. For now only developers willing to contribute in this
+area are encouraged to go and use it. If you are one of those rely
+on the git commit logs for at laest some form of initial crude
+documentation. Hopefully we can get maintainers for different
+providers eventually.
 
 # oscheck's primary objective: track a baseline for XFS on latest Linux and Linux stable kernels
 
