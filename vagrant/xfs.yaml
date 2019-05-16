@@ -36,13 +36,13 @@ vagrant_global:
   # For libvirt:    /dev/nvme0n1, /dev/nvme1n1, etc.
   # This is due to how Virtualbox only supports one nvme storage controller
   nvme_disks:
-    0:
+    data:
       size: 102400
-    1:
+    scratch:
       size: 102400
-    2:
+    extra1:
       size: 102400
-    4:
+    extra2:
       size: 102400
 
 # Note: vagrant is not a fan of hosts with underscores.
