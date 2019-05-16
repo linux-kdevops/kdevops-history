@@ -55,7 +55,13 @@ variable "ssh_username" {
     default  = "aurelia"
 }
 
+variable "ssh_pubkey_file" {
+    description = "Path to the ssh public key file, alternative to ssh_pubkey_data"
+    default  = "~/.ssh/id_rsa.pub"
+}
+
 variable "ssh_pubkey_data" {
     description = "The ssh public key data"
-    default  = "ssh-rsa AA{snip}asdf"
+    # for instance it coudl be "ssh-rsa AAetcccc"
+    default  = ""
 }
