@@ -4,6 +4,7 @@
 # your variables in these files, the later has major precedence:
 #
 # ansible/roles/bootlinux/vars/main.yml
+# ansible/extra_vars.yml
 
 # Linux target defaults
 target_linux_admin_name: "Hacker Amanda"

@@ -4,6 +4,7 @@
 # your variables in these files, the later has major precedence:
 #
 # ansible/roles/dev_config/vars/main.yml
+# ansible/extra_vars.yml
 
 # On your own system
 dev_gitconfig_src: "~/.gitconfig"

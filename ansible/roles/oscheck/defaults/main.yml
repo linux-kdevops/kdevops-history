@@ -4,6 +4,7 @@
 # your variables in these files, the later has major precedence:
 #
 # ansible/roles/oscheck/vars/main.yml
+# ansible/extra_vars.yml
 
 oscheck_git: "https://gitlab.com/mcgrof/oscheck.git"
 # where we'll clone oscheck to

@@ -61,3 +61,10 @@ vagrant_boxes:
     ip: 172.17.8.106
   - name: oscheck-xfs-realtimedev
     ip: 172.17.8.107
+
+ansible_playbooks:
+  # If this file exists you can override any ansible variable there.
+  # This file is optional.
+  extra_vars: "../ansible/extra_vars.yml"
+  playbooks:
+    - name: "../ansible/dev_config.yml"

@@ -1,6 +1,11 @@
 # -*- mode: ruby -*-
 # # vi: set ft=ruby :
 
+# This file should only be edited to *grow* support for new features.
+# If you are not interested in that and are happy with what is provided,
+# all you'd have to do is edit your respective fileesystem yaml file
+# to set the hosts / playbooks you need to run.
+
 Vagrant.require_version ">= 1.6.0"
 
 require 'yaml'
@@ -44,6 +49,7 @@ end
 config_data= YAML.load_file('xfs.yaml')
 global_data = config_data['vagrant_global']
 vagrant_boxes = config_data['vagrant_boxes']
+ansible_playbooks = config_data['ansible_playbooks']
 
 if global_data['force_provider']
   provider = global_data['force_provider']
@@ -189,12 +195,22 @@ Vagrant.configure("2") do |config|
       end # end of libvirt provider code
       box_count+=1
       puts "#{box_count}  ====== #{num_servers}"
-      if box_count == num_servers
-        srv.vm.provision :ansible do |ansible|
-          ansible.limit = "all"
-          ansible.playbook = "../ansible/dev_config.yml"
-	end # end of ansible
-      end # end of check for the last server
+      if box_count == num_servers && ansible_playbooks && ansible_playbooks['playbooks']
+        playbooks = ansible_playbooks['playbooks']
+        extra_vars = ansible_playbooks['extra_vars'] ? File.dirname(__FILE__) + "/" + ansible_playbooks['extra_vars'] : ""
+        playbook_num = 0
+        playbooks.each do |playbook|
+          srv.vm.provision "my_playbook_#{playbook_num}", type:'ansible' do |ansible|
+            ansible.limit = playbook['limit'] ? playbook['limit'] : "all"
+            ansible.playbook = playbook['name']
+            if ansible_playbooks['extra_vars']
+              if File.exist?(extra_vars)
+                ansible.extra_vars = "#{extra_vars}"
+              end # end of file check for extra_vars
+            end # end of check if extra vars is set
+	  end # end of ansible
+        end # end of playbooks
+      end # end of check for the last server and ansible
     end # end of srv defined loop
   end # end of vagrant_boxes loop
 end
