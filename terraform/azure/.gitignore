@@ -1,0 +1,8 @@
+terraform.tfvars
+terraform.tfstate
+terraform.tfstate.backup
+.terraform
+.terraform.tfstate.lock.info
+service-principal.*
+terraform-provider-*
+crash.log

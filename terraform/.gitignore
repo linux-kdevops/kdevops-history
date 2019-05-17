@@ -3,7 +3,14 @@ terraform.tfstate
 terraform.tfstate.backup
 .terraform
 .terraform.tfstate.lock.info
-service-principal.*
-terraform-provider-yaml_v2.0.2-darwin-amd64
-*/terraform-provider-yaml_v2.0.2-darwin-amd64
+crash.log
+
+*/terraform.tfvars
+*/terraform.tfstate
+*/terraform.tfstate.backup
+*/.terraform
+*/.terraform.tfstate.lock.info
+
+terraform-provider-yaml_*
+*/terraform-provider-yaml_*
 */crash.log
