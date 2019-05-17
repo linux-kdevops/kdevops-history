@@ -1,0 +1,7 @@
+terraform.tfvars
+terraform.tfstate
+terraform.tfstate.backup
+.terraform
+.terraform.tfstate.lock.info
+terraform-provider-yaml*
+*crash.log

@@ -1,0 +1,8 @@
+# cloud-init override configuration
+preserve_hostname: false
+manage_etc_hosts: true
+hostname: ${new_hostname}
+
+system_info:
+  default_user:
+    name: ${ssh_username}
