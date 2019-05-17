@@ -40,6 +40,13 @@ ssh_username = "yourcoolusername"
 ssh_pubkey_data = "ssh-rsa AAASNIP"
 ```
 
-## Multiple guests
+## Openstack
 
-Setting up multiple guests dynamically will be the next development step.
+Openstack is supported now. This has been tested with the minicloud openstack.
+This solution relies on the new clouds.yaml file for openstack configuration.
+This simplifies things considerably.
+
+Since minicoud is an example cloud solution and, since it also has a custom
+setup where the you have to ssh with a special port depending on the IP address
+you get, if you enable minicloud we do this computation for you and tell you
+where to ssh to.
