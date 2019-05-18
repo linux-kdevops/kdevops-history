@@ -27,8 +27,9 @@ require 'rbconfig'
 # can do for now is detect your OS and set a local variable where we *do*
 # run different local code paths depending on the target provider. We enable
 # to override this variable via the global configuration file in case you
-# are actually using a different provider for your OS. Right now we make
-# these assumptions:
+# are actually using a different provider for your OS. You override with the
+# force_provider variable on the respective filesystem yaml file, for instance
+# if using xfs you'd use xfs.yanml. Right now we make these assumptions:
 #
 # Your OS            Provider
 # -------------------------------

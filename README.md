@@ -14,7 +14,136 @@ written for it. For now only developers willing to contribute in this
 area are encouraged to go and use it. If you are one of those rely
 on the git commit logs for at laest some form of initial crude
 documentation. Hopefully we can get maintainers for different
-providers eventually.
+vagrant providers and cloud providers eventually.
+
+There are five parts to the long terms ideals for oscheck:
+
+1. Provisioning required virtual hosts for fstests purposes (filesystem specific)
+2. Provisioning requirements for building fstests and installing oscheck
+3. Running oscheck
+4. Collecting results
+5. Processing results
+
+Vagrant, terraform are used for the first part. Vagrant and terraform are
+also used to kick off ansible later for the second part of the provisioning,
+to get all requirements installed to build and then install fstests and
+oscheck.
+
+Since oscheck has its own set of expunge lists, it is then used to let you run
+fstests as easily as possible. By default it should in theory never crash *iff*
+the distro you are testing has the respective expunge files set for the
+filesystem you are testing. This should let you run fstests against a custom
+kernel, for example, to ensure you don't introduce regressions for changes.
+
+Collecting results is next. This is not implemented yet. Its still all manual.
+Processing results is also manual, and you can see the results of this effort
+on the respective expunge lists for each distro on oscheck. Ideally each
+failure is properly tracked with a bz# (redhat) bsc# (suse) or a respective
+kernel.org bugzilla entry. Someone must be working on these issues :)
+
+What works?
+
+  * Vagrant initial provisioning and running *one* devconfig playbook.
+  * Terraform provisioning on different cloud providers
+  * Running ansible to install dependencies on debian
+  * Running oscheck to install dependencies on other distros
+  * Running ansible for running oscheck or building a custom kernel and booting into it
+  * Running oscheck with a set of expunge files
+
+What's missing?
+
+  * Hooking up terraform with ansible. For this I am considering using [the terraform ansible module](https://registry.terraform.io/modules/radekg/ansible/provisioner/2.2.0).
+  * Testing the rest of the ansible playbooks with vagrant
+  * Storage setup for vagrant / cloud providers in a consistent way for both data and scratch drives we can use for fstests.
+  * A way to automate getting your vagrant / cloud provider IP address to your ssh config so we can later run with ansible
+  * Processing results -- we should use xunit, ted has some scripts for this already
+  * Displaying results: well... hopefully someone will volunteer for this :)
+
+By default Debian testing is used where possible. Support for other
+distributions has been added, however upkeeping it is up to the folks interested
+in those distributions or the community to at least keep the expunge list up to
+date.
+
+## Provisioning
+
+If you are using baremetal just skip the sections about using oscheck. If
+you need to provision systems read on.
+
+### Vagrant support - localized VMs
+
+Vagrant is used to easily deploy oscheck non-cloud virtual machines. Below are
+the list of providers supported:
+
+  * Virtualbox
+  * libvirt (KVM)
+
+The following Operating Systems are supported:
+
+  * OS X
+  * Linux
+
+#### Provisioning with vagrant for oscheck
+
+If on Linux we'll assume you are using KVM. If OS X we'll assume you are using
+Virtualbox. If these assumptions are incorrect you can override on the
+filesystem configuration file of your choise. If using xfs, for example,
+you'd edit vagrant/xfs.yaml and set the force_provider variable to either
+"libvirt" or "kvm"
+
+You are responsible for having a pretty recent system with some fresh
+libvirt, or vitualbox installed. For instance, a virtualbox which supports
+nvme. By default additional sparse files are used for the target disks
+which will be used for testing fstests.
+
+```bash
+cd vagrant/
+vagrant up
+```
+
+Say you want to just test the provisioning mechanism:
+
+```bash
+vagrant provision
+```
+
+### Terraform support
+
+Terraform is used to deploy oscheck on cloud virtual machines. Below are the
+list of clouds currently supported:
+
+  * azure
+  * openstack (special minicloud support added)
+  * aws
+
+#### Provisioning with terraform with oscheck
+
+```bash
+cd terraform/you_provider
+make deps
+terraform init
+terraform plan
+terraform apply
+```
+
+## Running ansible
+
+Before running ansible make sure you can ssh into the hosts listed on ansible/hosts.
+
+You'd use ansible to provision fstests and oscheck's dependencies, and install
+all you need to get going with oscheck. You can also use it to *run* oscheck
+in parallel on your shiny systems. Later we'll add playbooks to collect
+results and then process them.
+
+```bash
+cd ansible/
+ansible-playbook -i hosts oscheck.yml
+```
+
+Let's say you have a custom kernel you want to test:
+
+```bash
+ansible-playbook -i hosts bootlinux.yml
+```
 
 # oscheck's primary objective: track a baseline for XFS on latest Linux and Linux stable kernels
 
@@ -70,11 +199,6 @@ distributions:
   * Debian testing
   * OpenSUSE Leap 15.0
   * Fedora 28
-
-# Long term goals
-
-Quick automation for tests. This is now almost complete as we merged
-ansible/vagrant support.
 
 # fstest bug triage
 
