@@ -103,6 +103,7 @@ variable "aws_ami_owner" {
 }
 
 # https://aws.amazon.com/ec2/instance-types/
+# Free trial limits you to 750 hours of only t2.micro
 variable "aws_instance_type" {
     description = "Your AWS instance type"
     default  = "t2.micro"
