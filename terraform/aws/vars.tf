@@ -109,6 +109,33 @@ variable "aws_instance_type" {
     default  = "t2.micro"
 }
 
+variable "aws_enable_ebs" {
+    description = "Whether or not to enable EBS"
+    default  = "yes"
+}
+
+variable "aws_ebs_num_volumes_per_instance" {
+    description = "Number of EBS volumes to create per instance"
+    default  = "1"
+}
+
+# Sigh.. These are required!
+variable "aws_ebs_device_names" {
+    description = "The EBS device names to use"
+    type = "list"
+    default  = ["/dev/sdh", "/dev/sdi"]
+}
+
+# The t2.micro comes with 8 GiB of storage.
+# For more storage we need to use EBS.
+# AWS Free Tier includes 30GB of Storage, 2 million I/Os, and 1GB of snapshot
+# storage with Amazon Elastic Block Store (EBS).
+variable "aws_ebs_volume_sizes" {
+    type = "list"
+    description = "Size in GiB for each of the volumes"
+    default  = ["30", "150"]
+}
+
 # We had to use this as aws terraform provider doesn't have a way to set
 # the hostname. local-exec works too, but this is what we went with.
 variable "user_data_enabled" {

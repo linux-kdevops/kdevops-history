@@ -116,6 +116,19 @@ resource "aws_instance" "fstests_instance" {
   }
 }
 
+resource "aws_ebs_volume" "fstests_vols" {
+  count               = "${var.aws_enable_ebs == "yes" ? local.num_boxes * var.aws_ebs_num_volumes_per_instance : 0 }"
+  availability_zone   = "${var.aws_availability_region}"
+  size                = "${element(var.aws_ebs_volume_sizes, ceil(count.index / local.num_boxes))}"
+}
+
+resource "aws_volume_attachment" "fstests_att" {
+  count             = "${var.aws_enable_ebs == "yes" ? local.num_boxes * var.aws_ebs_num_volumes_per_instance : 0 }"
+  device_name       = "${element(var.aws_ebs_device_names, count.index % local.num_boxes)}"
+  volume_id         = "${element(aws_ebs_volume.fstests_vols.*.id, count.index)}"
+  instance_id       = "${element(aws_instance.fstests_instance.*.id, count.index)}"
+}
+
 resource "aws_eip" "fstests_eip" {
   count    = "${local.num_boxes}"
   instance = "${element(aws_instance.fstests_instance.*.id, count.index)}"
