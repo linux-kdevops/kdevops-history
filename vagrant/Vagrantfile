@@ -195,7 +195,6 @@ Vagrant.configure("2") do |config|
 	end # end of check for nvme disks for libvirt
       end # end of libvirt provider code
       box_count+=1
-      puts "#{box_count}  ====== #{num_servers}"
       if box_count == num_servers && ansible_playbooks && ansible_playbooks['playbooks']
         playbooks = ansible_playbooks['playbooks']
         extra_vars = ansible_playbooks['extra_vars'] ? File.dirname(__FILE__) + "/" + ansible_playbooks['extra_vars'] : ""
