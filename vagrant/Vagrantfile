@@ -81,7 +81,7 @@ Vagrant.configure("2") do |config|
       srv.vm.network "private_network", ip: server_data["ip"]
       host_name = server_data["name"]
       nvme_path = File.dirname(__FILE__) + "/" + global_data['nvme_disk_path'] + "/#{host_name}"
-      srv.vm.provider "virtualbox" do |vb, override|
+      srv.vm.provider ":virtualbox" do |vb, override|
 	if provider == "virtualbox" && ! global_data['virtualbox_cfg']['auto_update']
           # we'll need to run later: vagrant vbguest install
           config.vbguest.auto_update = false
@@ -139,7 +139,7 @@ Vagrant.configure("2") do |config|
         end # end of checking for nvme disks
       end # end of virtualbox provider section
       # For details see: https://github.com/vagrant-libvirt/vagrant-libvirt
-      srv.vm.provider "libvirt" do |libvirt, override|
+      srv.vm.provider ":libvirt" do |libvirt, override|
         #libvirt.host = "localhost"
         override.vm.hostname = host_name
         override.vm.boot_timeout = global_data['boot_timeout']
