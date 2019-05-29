@@ -1,0 +1,59 @@
+---
+- name: Create data filesystem
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  tags: [ 'oscheck', 'disk_setup', 'root']
+  filesystem:
+    fstype: "{{ data_fstype }}"
+    dev: "{{ data_device }}"
+    opts: "{{ data_fs_opts }}"
+  register: create_data_fs
+
+- name: Mount data filesystem
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  tags: [ 'oscheck', 'disk_setup', 'root']
+  mount:
+    path: "{{ data_path }}"
+    src: LABEL="{{ data_label }}"
+    fstype: "{{ data_fstype }}"
+    state: mounted
+  register: out
+  when: create_data_fs is success
+
+- name: Create truncated filesystem
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  tags: [ 'oscheck', 'disk_setup', 'root']
+  filesystem:
+    fstype: "{{ truncated_fstype }}"
+    dev: "{{ truncated_device }}"
+    opts: "{{ truncated_fs_opts }}"
+  register: create_truncated_fs
+
+- name: Change permissions for the data partition
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  tags: [ 'oscheck', 'disk_setup', 'root']
+  file:
+    path: "{{ data_path }}"
+    owner: "{{ data_user }}"
+    group: "{{ data_group }}"
+  when: create_data_fs is success
+
+- name: Mount truncated filesystem
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  tags: [ 'oscheck', 'disk_setup', 'root']
+  mount:
+    path: "{{ truncated_path }}"
+    src: LABEL="{{ truncated_label }}"
+    fstype: "{{ truncated_fstype }}"
+    state: mounted
+  register: out
+  when: create_truncated_fs is success

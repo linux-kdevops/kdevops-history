@@ -48,6 +48,14 @@
     update_cache: yes
   tags: [ 'watchdog', 'deps' ]
 
+- name: Install disk provisioning dependencies
+  become: yes
+  become_method: sudo
+  apt:
+    name:
+      - nvme-cli
+      - xfsprogs
+
 - name: Install fstests build dependencies
   become: yes
   become_method: sudo

@@ -5,20 +5,7 @@
 # Distro agnostic
 - include: tasks/configure-ssmtp.yml
 - include: tasks/configure-watchdog.yml
-
-# XXX:
-# 1) mkfs.xfs /dev/nvme0n1 if not mounted
-# 2) add entries to /etc/fstab
-# 3) mount it
-- name: Creates directory
-  become: yes
-  become_flags: 'su - -c'
-  become_method: sudo
-  file:
-    path: "{{ data_path }}"
-    state: directory
-    owner: "{{ data_user }}"
-    group: "{{ data_group }}"
+- include: tasks/disk-setup.yml
 
 - git:
     repo: "{{ oscheck_git }}"

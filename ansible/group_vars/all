@@ -8,7 +8,20 @@ data_group: vagrant
 data_home_dir: "/home/{{ data_user }}"
 
 # Where we put git trees
+data_device: "/dev/nvme0n1"
 data_path: "/data"
+data_fstype: "xfs"
+data_label: "data"
+data_fs_opts: "-L {{ data_label }}"
+
+# We end up just using loopback devices for the fstests TEST_DEV and
+# SCRATCH_DEV_POOL, refer to oscheck/example.config for details.  So we just
+# need *one* large disk for to put sparse/truncated files into.
+truncated_device: "/dev/nvme0n2"
+truncated_path: "/media/truncated"
+truncated_fstype: "xfs"
+truncated_label: "truncated"
+truncated_fs_opts: "-L {{ truncated_label }}"
 
 # Full path to make command if you want to override
 make: "make"
