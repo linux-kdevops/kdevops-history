@@ -81,7 +81,7 @@ Vagrant.configure("2") do |config|
       srv.vm.network "private_network", ip: server_data["ip"]
       host_name = server_data["name"]
       nvme_path = File.dirname(__FILE__) + "/" + global_data['nvme_disk_path'] + "/#{host_name}"
-      srv.vm.provider ":virtualbox" do |vb, override|
+      srv.vm.provider "virtualbox" do |vb, override|
 	if provider == "virtualbox" && ! global_data['virtualbox_cfg']['auto_update']
           # we'll need to run later: vagrant vbguest install
           config.vbguest.auto_update = false
@@ -119,11 +119,13 @@ Vagrant.configure("2") do |config|
               # controller. After this, virtual media can be attached to the
               # controller with the storageattach command.
               nvme_name = "nvme#{port}"
-              vb.customize ["storagectl", :id, "--name", "#{nvme_name}", "--add", "pcie", "--controller", "NVMe", "--portcount", 1, "--bootable", "off"]
+              if (! File.file?(nvme_disk))
+                vb.customize ["storagectl", :id, "--name", "#{nvme_name}", "--add", "pcie", "--controller", "NVMe", "--portcount", 1, "--bootable", "off"]
+              end
 	      # Now attach the drive
 	      vb.customize ["storageattach", :id, "--storagectl", "#{nvme_name}", "--type", "hdd", "--medium", nvme_disk, "--port", 0]
             else
-              if port == 0
+              if (port == 0 && !File.file?(nvme_disk))
                 vb.customize ["storagectl", :id, "--name", "nvme0", "--add", "pcie", "--controller", "NVMe", "--portcount", port + 1, "--bootable", "off"]
               end
 	      vb.customize ["storageattach", :id, "--storagectl", "nvme0", "--type", "hdd", "--medium", nvme_disk, "--port", port]
@@ -139,7 +141,7 @@ Vagrant.configure("2") do |config|
         end # end of checking for nvme disks
       end # end of virtualbox provider section
       # For details see: https://github.com/vagrant-libvirt/vagrant-libvirt
-      srv.vm.provider ":libvirt" do |libvirt, override|
+      srv.vm.provider "libvirt" do |libvirt, override|
         #libvirt.host = "localhost"
         override.vm.hostname = host_name
         override.vm.boot_timeout = global_data['boot_timeout']
