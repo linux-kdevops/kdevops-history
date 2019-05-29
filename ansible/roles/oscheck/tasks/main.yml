@@ -11,22 +11,18 @@
 # 2) add entries to /etc/fstab
 # 3) mount it
 - name: Creates directory
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
   file:
     path: "{{ data_path }}"
     state: directory
+    owner: "{{ data_user }}"
+    group: "{{ data_group }}"
 
 - git:
     repo: "{{ oscheck_git }}"
     dest: "{{ oscheck_data }}"
-
-- name: Install oscheck as regular user
-  command: "{{ make }} install"
-  tags: [ 'oscheck', 'install']
-  args:
-    chdir: "{{ oscheck_data }}"
-  register: out
-- debug: var=out.stdout_lines
-- debug: var=out.delta
 
 - name: Install oscheck as root
   become: yes
