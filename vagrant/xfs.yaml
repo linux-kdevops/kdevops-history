@@ -4,6 +4,9 @@ vagrant_global:
   ssh_key: "~/.ssh/oscheck"
   memory: 8192
   cpus: 8
+  # Enable the below options
+  #limit_boxes: "yes"
+  #limit_num_boxes: 1
   # You can use force_provider if your OS defaults differ from the default
   # heuristics on Vagrantfile.
   #force_provider: "virtualbox"
