@@ -1,6 +1,7 @@
 FSTESTS?="/var/lib/xfstests"
 FSTESTS_CONFIGS?= $(FSTESTS)/configs
 BASHRC?= $(HOME)/.bashrc
+FSTYP?="xfs"
 
 TRUNCATE_PATH="/media/truncated"
 
@@ -10,7 +11,7 @@ SETUP_FILE := .oscheck-setup
 HOSTNAME := $(shell hostname)
 HOSTNAME_CONFIG := $(HOSTNAME).config
 TARGET_CONFIG := $(FSTESTS_CONFIGS)/$(HOSTNAME_CONFIG)
-EXAMPLE_CONFIG := example.config
+EXAMPLE_CONFIG := fstests-configs/$(FSTYP).config
 ID=$(shell id -u)
 
 .PHONY: all install deps
@@ -48,15 +49,22 @@ install: $(PROGS)
 		cat .bashrc >> $(BASHRC) ;\
 		chmod 755 $(BASHRC) ;\
 	fi
-	@if [ ! -f $(HOME)/$(SETUP_FILE) ]; then \
-		echo INSTALL $(SETUP_FILE) $(HOME) ;\
-		install $(SETUP_FILE) $(HOME) ;\
-	fi
+
+	@echo INSTALL $(SETUP_FILE) $(HOME)
+	@install $(SETUP_FILE) $(HOME)
+	@cat $(HOME)/$(SETUP_FILE) | sed 's|export FSTYP=.*|export FSTYP="'$(FSTYP)'"|' | tee $(HOME)/$(SETUP_FILE) 2>&1 > /dev/null
+
 	@mkdir -p $(FSTESTS_CONFIGS)
-	@if [ ! -f $(TARGET_CONFIG) ]; then \
-		echo INSTALL $(HOSTNAME_CONFIG)  $(FSTESTS_CONFIGS) ;\
-		install $(EXAMPLE_CONFIG) $(TARGET_CONFIG) ;\
+	@echo INSTALL $(HOSTNAME_CONFIG)  $(FSTESTS_CONFIGS)
+	@if [ ! -f $(EXAMPLE_CONFIG) ]; then \
+		echo "Unsupported filesystem: $(FSTYP)" ;\
+		echo "Consider adding an example fstests config in $(EXAMPLE_CONFIG) and submit to oscheck upstream" ;\
+		exit 1 ;\
 	fi
+	@install $(EXAMPLE_CONFIG) $(TARGET_CONFIG)
+
+	@export TEST_VAR=$(shell grep ^TEST_DEV $(TARGET_CONFIG)) && echo "export $$TEST_VAR" >> $(HOME)/$(SETUP_FILE)
+
 	@echo After this, consider running the following as root to check for fstests build dependencies:
 	@echo	$(FSTESTS)/oscheck.sh --check-deps
 	@echo

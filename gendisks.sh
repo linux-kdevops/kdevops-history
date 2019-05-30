@@ -4,6 +4,7 @@
 # and deploy the test on any system.
 
 SIZE="20G"
+CREATE_TEST_DEV="false"
 
 if [ -z "$OSCHECK_SETUP_SYSTEM" ]; then
 	OSCHECK_TRUNCATE_PATH=/media/truncated/
@@ -34,12 +35,46 @@ delete_loops()
 	done
 }
 
-if [ $# -eq 1 ]; then
-	if [ $1 = "-d" ]; then
-		delete_loops
-		rm -rf $OSCHECK_TRUNCATE_PATH/disk-sdc*
-	fi
-fi
+gendisk_usage()
+{
+	echo "$0 - helps you create disks using truncated files on loopback disks"
+	echo "--help          - Shows this menu"
+	echo "-d              - Delete old files remove old loopback devices"
+	echo "-m              - Create the TEST_DEV filesystem for you, requires FSTYP set and TEST_DEV set on your configuration file"
+}
+
+parse_args()
+{
+	while [[ ${#1} -gt 0 ]]; do
+		key="$1"
+
+		case $key in
+		-d)
+			delete_loops
+			rm -rf $OSCHECK_TRUNCATE_PATH/disk-sdc*
+			shift
+			;;
+		-m)
+			CREATE_TEST_DEV="true"
+			if [ ! -z $TEST_DEV ]; then
+				umount $TEST_DEV
+			fi
+			shift
+			;;
+		--help)
+			gendisk_usage
+			exit
+			;;
+		*)
+			echo -e "Uknown option: $key\n"
+			gendisk_usage
+			exit
+			;;
+		esac
+	done
+}
+
+parse_args $@
 
 if [ ! -d $OSCHECK_TRUNCATE_PATH ]; then
 	mkdir -p $OSCHECK_TRUNCATE_PATH
@@ -64,5 +99,21 @@ for i in $(seq 5 16); do
 	fi
 done
 
-echo "Reminder: fstests requires you to run mkfs your TEST_DEV variable"
-echo "this may typically be $LOOPDEV"
+if [ "$CREATE_TEST_DEV" == "false" ]; then
+	echo "Reminder: fstests requires you to run mkfs your TEST_DEV variable"
+	echo "this may typically be $LOOPDEV"
+else
+	error="no"
+	if [ -z $FSTYP ]; then
+		echo "FSTYP environment variable is required to be set when the -m argument is used"
+	fi
+	if [ -z $TEST_DEV ]; then
+		echo "TEST_DEV environment variable is required to be set when the -m argument is used"
+		echo "TEST_DEV: $TEST_DEV"
+		error="yes"
+	fi
+	if [ "$error" == "yes" ]; then
+		exit 1
+	fi
+	mkfs.$FSTYP -f $TEST_DEV
+fi
