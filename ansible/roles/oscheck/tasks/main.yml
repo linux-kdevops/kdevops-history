@@ -7,9 +7,12 @@
 - include: tasks/configure-watchdog.yml
 - include: tasks/disk-setup.yml
 
-- git:
+- name: git clone oscheck
+  git:
     repo: "{{ oscheck_git }}"
     dest: "{{ oscheck_data }}"
+  tags: [ 'oscheck', 'install', 'git']
+  register: oscheck_cloned
 
 - name: Install oscheck as root
   become: yes
@@ -20,6 +23,7 @@
   args:
     chdir: "{{ oscheck_data }}"
   register: out
+  when: oscheck_cloned is success
 - debug: var=out.stdout_lines
 - debug: var=out.delta
 
@@ -38,5 +42,37 @@
   args:
     chdir: "{{ oscheck_data }}"
   register: out
+  when: oscheck_cloned is success
+- debug: var=out.stdout_lines
+- debug: var=out.delta
+
+- name: git clone fstests
+  git:
+    repo: "{{ fstests_git }}"
+    dest: "{{ fstests_data }}"
+  register: fstests_clone
+  tags: [ 'oscheck', 'git', 'fstests']
+
+- name: Build fstests
+  tags: [ 'oscheck', 'fstests', 'build']
+  make:
+    chdir: "{{ fstests_data }}"
+    params:
+      NUM_THREADS: "{{ make_num_jobs }}"
+  register: fstests_build
+  when: fstests_clone is success
+- debug: var=fstests_build.stdout_lines
+- debug: var=fstests_build.delta
+
+- name: Install fstests
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "{{  make }} install"
+  tags: [ 'oscheck', 'fstests', 'install', 'root']
+  args:
+    chdir: "{{ fstests_data }}"
+  register: out
+  when: fstests_build is success
 - debug: var=out.stdout_lines
 - debug: var=out.delta

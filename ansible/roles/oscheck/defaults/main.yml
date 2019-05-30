@@ -11,6 +11,7 @@ oscheck_git: "https://gitlab.com/mcgrof/oscheck.git"
 oscheck_data: "{{ data_path }}/oscheck"
 oscheck_data_target: "/var/lib/xfstests/"
 
+fstests_git: "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git"
 fstests_data: "{{ data_path }}/xfstests"
 fstests_data_target: "/var/lib/xfstests/"
 

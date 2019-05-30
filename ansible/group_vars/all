@@ -25,3 +25,4 @@ truncated_fs_opts: "-L {{ truncated_label }}"
 
 # Full path to make command if you want to override
 make: "make"
+make_num_jobs: "$(nproc --all)"
