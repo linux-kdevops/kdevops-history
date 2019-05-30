@@ -139,6 +139,12 @@ ansible-playbook -i hosts oscheck.yml
 To use ansible to run oscheck to do a full fstests run you would use:
 
 ```bash
+$ cat ansible/extra_vars.yml
+---
+oscheck_run_tests: true
+```
+
+```bash
 cd ansible/
 ansible-playbook -i hosts oscheck.yml --tags "run_tests"
 ```
