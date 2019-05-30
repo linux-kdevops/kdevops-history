@@ -6,6 +6,15 @@
 # ansible/roles/oscheck/vars/main.yml
 # ansible/extra_vars.yml
 
+# We default to not run tests, because you may be calling ansible from
+# vagrant or terraform which just provision systems. A user may want to
+# run tests as a secondary step within the ansible directory alone given
+# after a set of systems are setup all you'd need later is just to run
+# ansible. Ansible and terraform would only be needed to do initial
+# system provisioning.
+oscheck_run_tests: false
+oscheck_fstyp: "xfs"
+
 oscheck_git: "https://gitlab.com/mcgrof/oscheck.git"
 # where we'll clone oscheck to
 oscheck_data: "{{ data_path }}/oscheck"

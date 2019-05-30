@@ -1,5 +1,7 @@
 ---
 # These are general global variables shared between all roles.
+# You can override these on the file:
+# ansible/extra_vars.yml
 
 # Your default username to log in to systems
 data_user: vagrant

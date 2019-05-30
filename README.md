@@ -7,14 +7,8 @@ distribution / stable kernels.
 
 oscheck relies on vagrant, terraform and ansible to get you going
 with whatever your virtualization / bare metal / cloud provisioning
-environment easily.
-
-The vagrant / terraform stuff still needs more documentation to be
-written for it. For now only developers willing to contribute in this
-area are encouraged to go and use it. If you are one of those rely
-on the git commit logs for at laest some form of initial crude
-documentation. Hopefully we can get maintainers for different
-vagrant providers and cloud providers eventually.
+environment easily. The vagrant / terraform setup is completely
+optional, however ansible *is* used to run oscheck across all hosts.
 
 There are five parts to the long terms ideals for oscheck:
 
@@ -24,10 +18,10 @@ There are five parts to the long terms ideals for oscheck:
 4. Collecting results
 5. Processing results
 
-Vagrant, terraform are used for the first part. Vagrant and terraform are
-also used to kick off ansible later for the second part of the provisioning,
-to get all requirements installed to build and then install fstests and
-oscheck.
+Vagrant or terraform can optionally be used for the first part. Vagrant and
+terraform are also used to kick off ansible later for the second part of the
+provisioning, to get all requirements installed, then to build and install
+oscheck and fstests.
 
 Since oscheck has its own set of expunge lists, it is then used to let you run
 fstests as easily as possible. By default it should in theory never crash *iff*
@@ -39,12 +33,14 @@ Collecting results is next. This is not implemented yet. Its still all manual.
 Processing results is also manual, and you can see the results of this effort
 on the respective expunge lists for each distro on oscheck. Ideally each
 failure is properly tracked with a bz# (redhat) bsc# (suse) or a respective
-kernel.org bugzilla entry. Someone must be working on these issues :)
+kernel.org bugzilla (kz#) entry. It is expected someone should be working on
+these issues.
 
 What works?
 
-  * Vagrant initial provisioning and running *one* devconfig playbook.
-  * Terraform provisioning on different cloud providers
+  * Full vagrant provisioning
+  * Optionally allowing vagrant to also run oscheck to run a full fstests run
+  * Initial terraform provisioning on different cloud providers
   * Running ansible to install dependencies on debian
   * Running oscheck to install dependencies on other distros
   * Running ansible for running oscheck or building a custom kernel and booting into it
@@ -53,8 +49,7 @@ What works?
 What's missing?
 
   * Hooking up terraform with ansible. For this I am considering using [the terraform ansible module](https://registry.terraform.io/modules/radekg/ansible/provisioner/2.2.0).
-  * Testing the rest of the ansible playbooks with vagrant
-  * Storage setup for vagrant / cloud providers in a consistent way for both data and scratch drives we can use for fstests.
+  * Storage setup when terraform is used in a consistent way for both /data and /media/truncated drives we can use for fstests. Right now the oscheck ansible playbook relies on at least two nvme drives to be available.
   * A way to automate getting your vagrant / cloud provider IP address to your ssh config so we can later run with ansible
   * Processing results -- we should use xunit, ted has some scripts for this already
   * Displaying results: well... hopefully someone will volunteer for this :)
@@ -138,6 +133,17 @@ results and then process them.
 cd ansible/
 ansible-playbook -i hosts oscheck.yml
 ```
+
+### Running oscheck with ansible to do a full fstests run
+
+To use ansible to run oscheck to do a full fstests run you would use:
+
+```bash
+cd ansible/
+ansible-playbook -i hosts oscheck.yml --tags "run_tests"
+```
+
+### Testinga  custom kernel
 
 Let's say you have a custom kernel you want to test:
 
