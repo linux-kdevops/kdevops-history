@@ -3,8 +3,20 @@
 
 # This file should only be edited to *grow* support for new features.
 # If you are not interested in that and are happy with what is provided,
-# all you'd have to do is edit your respective fileesystem yaml file
+# all you'd have to do is edit your respective filesystem yaml file
 # to set the hosts / playbooks you need to run.
+#
+# You can customize your configuration on your filesystem configuration file,
+# for instance for xfs you'd edit xfs.yml. Since this file is version control
+# an alternative is to use environment variables. We support the following
+# environment variables:
+#
+# OSCHECK_VAGRANT_PROVIDER - lets you override provider
+#
+# XXX: environment variables are not ideal, consider letting one override
+# variables using an extra_args.yml file and then we'd let *those* variables
+# override the default settings on your filesystem configuration. This would
+# require some work.
 
 Vagrant.require_version ">= 1.6.0"
 
@@ -25,11 +37,9 @@ require 'rbconfig'
 # for other providers gets executed regardless of the provider you are
 # using *unless* that code is using provider specific variables. Best we
 # can do for now is detect your OS and set a local variable where we *do*
-# run different local code paths depending on the target provider. We enable
-# to override this variable via the global configuration file in case you
-# are actually using a different provider for your OS. You override with the
-# force_provider variable on the respective filesystem yaml file, for instance
-# if using xfs you'd use xfs.yanml. Right now we make these assumptions:
+# run different local code paths depending on the target provider.
+#
+# Right now we make these assumptions:
 #
 # Your OS            Provider
 # -------------------------------
@@ -54,6 +64,10 @@ ansible_playbooks = config_data['ansible_playbooks']
 
 if global_data['force_provider']
   provider = global_data['force_provider']
+end
+
+if ENV['OSCHECK_VAGRANT_PROVIDER']
+  provider = ENV['OSCHECK_VAGRANT_PROVIDER']
 end
 
 supported_provider = case provider
