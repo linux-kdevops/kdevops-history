@@ -100,6 +100,21 @@ Say you want to just test the provisioning mechanism:
 ```bash
 vagrant provision
 ```
+##### Limitting vagrant's number of boxes
+
+By default the using vagrant will try to create *all* the boxes specified on
+the filesystem you are trying to test. By default this is xfs.yml and there
+are currently 7 boxes there. If you are going to just test this framework
+you can limit this initially using environment variables:
+
+```bash
+export OSCHECK_VAGRANT_LIMIT_BOXES="yes"
+export OSCHECK_VAGRANT_LIMIT_NUM_BOXES=1
+```
+
+This will ensure only oscheck-xfs for example would be created and
+provisioned. This might be useful if you are developing oscheck on a laptop,
+for example, and you want to limit the amount of resources used by oscheck.
 
 ### Terraform support
 
