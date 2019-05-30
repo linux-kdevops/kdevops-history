@@ -85,6 +85,7 @@
       - libacl1
       - libacl1-dev
       - libaio1
+      - libaio-dev
       - uuid-dev
       - uuid-runtime
       - attr
