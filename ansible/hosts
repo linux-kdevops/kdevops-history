@@ -1,8 +1,8 @@
 [all]
-oscheck-xfs
-oscheck-xfs-nocrc
-oscheck-xfs-nocrc-512
-oscheck-xfs-reflink
-oscheck-xfs-reflink-1024
-oscheck-xfs-logdev
-oscheck-xfs-realtimedev
+kdevops-1
+kdevops-2
+kdevops-3
+kdevops-4
+kdevops-5
+kdevops-6
+kdevops-7

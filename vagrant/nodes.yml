@@ -1,7 +1,7 @@
 ---
 vagrant_global:
   box: "debian/buster64"
-  ssh_key: "~/.ssh/oscheck"
+  ssh_key: "~/.ssh/kdevops"
   memory: 8192
   cpus: 8
   # Enable the below options
@@ -50,19 +50,19 @@ vagrant_global:
 
 # Note: vagrant is not a fan of hosts with underscores.
 vagrant_boxes:
-  - name: oscheck-xfs
+  - name: kdevops-1
     ip: 172.17.8.101
-  - name: oscheck-xfs-nocrc
+  - name: kdevops-2
     ip: 172.17.8.102
-  - name: oscheck-xfs-nocrc-512
+  - name: kdevops-3
     ip: 172.17.8.103
-  - name: oscheck-xfs-reflink
+  - name: kdevops-4
     ip: 172.17.8.104
-  - name: oscheck-xfs-reflink-1024
+  - name: kdevops-5
     ip: 172.17.8.105
-  - name: oscheck-xfs-logdev
+  - name: kdevops-6
     ip: 172.17.8.106
-  - name: oscheck-xfs-realtimedev
+  - name: kdevops-7
     ip: 172.17.8.107
 
 ansible_playbooks:
