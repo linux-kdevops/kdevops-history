@@ -71,4 +71,3 @@ ansible_playbooks:
   extra_vars: "../ansible/extra_vars.yml"
   playbooks:
     - name: "../ansible/dev_config.yml"
-    - name: "../ansible/oscheck.yml"

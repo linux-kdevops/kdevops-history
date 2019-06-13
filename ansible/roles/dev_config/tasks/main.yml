@@ -1,4 +1,9 @@
 ---
+# Distro specific
+- include: tasks/install-deps/main.yml
+
+# Distro agnostic stuff goes below
+
 - name: check if the developer has a git config
   local_action: stat
     path={{ dev_gitconfig_src }}

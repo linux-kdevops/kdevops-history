@@ -1,3 +1,0 @@
-# SPDX-License-Identifier GPL-2.0+ OR MIT
-- name: restart watchdog daemon
-  service: name="{{watchdog_service_name}}" state=restarted
