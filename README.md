@@ -98,6 +98,8 @@ the list of clouds currently supported:
   * openstack (special minicloud support added)
   * aws
 
+More details are available on the file [terraform/README.md](./terraform/README.md) file
+
 #### Provisioning with terraform
 
 ```bash
@@ -114,7 +116,7 @@ Before running ansible make sure you can ssh into the hosts listed on ansible/ho
 
 ```bash
 cd ansible/
-ansible-playbook -i hosts oscheck.yml
+ansible-playbook -i hosts devconfig.yml
 ```
 
 ## qemu kernel configs
