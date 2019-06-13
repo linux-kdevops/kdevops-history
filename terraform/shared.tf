@@ -9,7 +9,6 @@
 
 # This lets you override the node configuraiton file with an environment
 # variable, TN_VAR_DEVOPS_NODE_CONFIG.
-variable "DEVOPS_NODE_CONFIG" {}
 
 variable "file_yaml_vagrant_boxes" {
     description = "Path to the yaml file which has the vagrant_boxes declared as list"
@@ -29,7 +28,7 @@ provider "null" {
 #}
 
 locals {
-  input = "${var.DEVOPS_NODE_CONFIG != "" ? var.DEVOPS_NODE_CONFIG : var.file_yaml_vagrant_boxes}"
+  input = "${var.file_yaml_vagrant_boxes}"
 }
 
 # https://github.com/ashald/terraform-provider-yaml

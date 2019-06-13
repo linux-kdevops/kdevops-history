@@ -9,10 +9,10 @@ guests are up, by kicking off vagrant for a managed server:
 https://github.com/tknerr/vagrant-managed-servers
 
 Node configuration is shared, and by default kdevops relies on the file
-../vagrant/nodes.yaml however you can override this by using the environment
-variable:
+../vagrant/nodes.yaml however you can override this by using configuration
+variable your respective cloud terraform.tfvars file using the variable:
 
-  * TN_VAR_DEVOPS_NODE_CONFIG
+  * file_yaml_vagrant_boxes
 
 ## Azure
 
