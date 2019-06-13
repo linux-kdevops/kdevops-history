@@ -46,7 +46,7 @@ The following Operating Systems are supported:
 You configure your node target deployment on the node.yaml file by default,
 you however can override what file to use with the environment variables:
 
-  * OSCHECK_VAGRANT_NODE_CONFIG
+  * KDEVOPS_VAGRANT_NODE_CONFIG
 
 #### Provisioning with vagrant
 
@@ -57,7 +57,7 @@ use vagrant/nodes.yaml and set the force_provider variable to either "libvirt"
 or "kvm". However, since you would typically keep your vagrant/nodes.yaml file
 in version control you can instead use an environment variable:
 
-  * OSCHECK_VAGRANT_PROVIDER
+  * KDEVOPS_VAGRANT_PROVIDER
 
 You are responsible for having a pretty recent system with some fresh
 libvirt, or vitualbox installed. For instance, a virtualbox which supports
@@ -81,8 +81,8 @@ nodes there. If you are going to just test this framework you can limit this
 initially using environment variables:
 
 ```bash
-export OSCHECK_VAGRANT_LIMIT_BOXES="yes"
-export OSCHECK_VAGRANT_LIMIT_NUM_BOXES=1
+export KDEVOPS_VAGRANT_LIMIT_BOXES="yes"
+export KDEVOPS_VAGRANT_LIMIT_NUM_BOXES=1
 ```
 
 This will ensure only the first host, for example, would be created and

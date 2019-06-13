@@ -10,11 +10,11 @@
 # Since this file is version control an alternative is to use environment
 # variables. We support the following environment variables:
 #
-# OSCHECK_VAGRANT_NODE_CONFIG - lets you override default configuration
+# KDEVOPS_VAGRANT_NODE_CONFIG - lets you override default configuration
 #   file used
-# OSCHECK_VAGRANT_PROVIDER - lets you override provider
-# OSCHECK_VAGRANT_LIMIT_BOXES - lets you enable box limiting
-# OSCHECK_VAGRANT_LIMIT_NUM_BOXES - number of boxes to limit
+# KDEVOPS_VAGRANT_PROVIDER - lets you override provider
+# KDEVOPS_VAGRANT_LIMIT_BOXES - lets you enable box limiting
+# KDEVOPS_VAGRANT_LIMIT_NUM_BOXES - number of boxes to limit
 #
 # XXX: environment variables are not ideal, consider letting one override
 # variables using an extra_args.yml file and then we'd let *those* variables
@@ -60,7 +60,7 @@ else
   exit
 end
 
-node_config = ENV['OSCHECK_VAGRANT_NODE_CONFIG'] ? ENV['OSCHECK_VAGRANT_NODE_CONFIG'] : "nodes.yaml"
+node_config = ENV['KDEVOPS_VAGRANT_NODE_CONFIG'] ? ENV['KDEVOPS_VAGRANT_NODE_CONFIG'] : "nodes.yaml"
 
 config_data= YAML.load_file(node_config)
 global_data = config_data['vagrant_global']
@@ -71,8 +71,8 @@ if global_data['force_provider']
   provider = global_data['force_provider']
 end
 
-if ENV['OSCHECK_VAGRANT_PROVIDER']
-  provider = ENV['OSCHECK_VAGRANT_PROVIDER']
+if ENV['KDEVOPS_VAGRANT_PROVIDER']
+  provider = ENV['KDEVOPS_VAGRANT_PROVIDER']
 end
 
 supported_provider = case provider
@@ -88,12 +88,12 @@ if ! supported_provider
 end
 
 limit_boxes = global_data['limit_boxes'] == "yes" ? "yes" : "no"
-limit_boxes = ENV['OSCHECK_VAGRANT_LIMIT_BOXES'] == "yes" ? "yes" : limit_boxes
+limit_boxes = ENV['KDEVOPS_VAGRANT_LIMIT_BOXES'] == "yes" ? "yes" : limit_boxes
 
 limit_num_boxes = vagrant_boxes.count
 limit_num_boxes = vagrant_boxes.count
 limit_num_boxes = limit_boxes == "yes" && global_data['limit_num_boxes']  ? global_data['limit_num_boxes'] : limit_num_boxes
-limit_num_boxes = limit_boxes == "yes" && ENV['OSCHECK_VAGRANT_LIMIT_NUM_BOXES'] ? ENV['OSCHECK_VAGRANT_LIMIT_NUM_BOXES'] : limit_num_boxes
+limit_num_boxes = limit_boxes == "yes" && ENV['KDEVOPS_VAGRANT_LIMIT_NUM_BOXES'] ? ENV['KDEVOPS_VAGRANT_LIMIT_NUM_BOXES'] : limit_num_boxes
 
 num_servers = limit_num_boxes.to_i
 ansible_ran = false
