@@ -41,6 +41,13 @@ The following Operating Systems are supported:
   * OS X
   * Linux
 
+#### Node configuration
+
+You configure your node target deployment on the node.yaml file by default,
+you however can override what file to use with the environment variables:
+
+  * OSCHECK_VAGRANT_NODE_CONFIG
+
 #### Provisioning with vagrant
 
 If on Linux we'll assume you are using KVM. If on OS X we'll assume you are

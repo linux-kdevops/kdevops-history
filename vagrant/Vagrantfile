@@ -6,11 +6,12 @@
 # all you'd have to do is edit your respective filesystem yaml file
 # to set the hosts / playbooks you need to run.
 #
-# You can customize your configuration on your filesystem configuration file,
-# for instance for xfs you'd edit xfs.yml. Since this file is version control
-# an alternative is to use environment variables. We support the following
-# environment variables:
+# You can customize your configuration node configuration file, node.yml.
+# Since this file is version control an alternative is to use environment
+# variables. We support the following environment variables:
 #
+# OSCHECK_VAGRANT_NODE_CONFIG - lets you override default configuration
+#   file used
 # OSCHECK_VAGRANT_PROVIDER - lets you override provider
 # OSCHECK_VAGRANT_LIMIT_BOXES - lets you enable box limiting
 # OSCHECK_VAGRANT_LIMIT_NUM_BOXES - number of boxes to limit
@@ -59,7 +60,9 @@ else
   exit
 end
 
-config_data= YAML.load_file('xfs.yaml')
+node_config = ENV['OSCHECK_VAGRANT_NODE_CONFIG'] ? ENV['OSCHECK_VAGRANT_NODE_CONFIG'] : "nodes.yaml"
+
+config_data= YAML.load_file(node_config)
 global_data = config_data['vagrant_global']
 vagrant_boxes = config_data['vagrant_boxes']
 ansible_playbooks = config_data['ansible_playbooks']
