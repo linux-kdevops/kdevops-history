@@ -1,1 +1,0 @@
-xfs/117 # bsc#1072764 fs corruption

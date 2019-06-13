@@ -1,9 +1,0 @@
-generic/042 # bsc#1073390 golden output diff
-xfs/018 # bsc#1073413 golden output diff
-xfs/081 # bsc#1073415 golden output diff
-xfs/087 # bsc#1073418 golden output diff
-xfs/191-input-validation # bsc#1085917 possible regression
-xfs/285 # bsc#1085914 possible regression
-xfs/348 # bsc#1085909 possible regression
-xfs/349 # bsc#1086050 possible regression
-xfs/423 # bsc#1086051 possible regression, "Inappropriate ioctl for device"
