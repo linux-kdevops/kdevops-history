@@ -13,7 +13,7 @@ variable "DEVOPS_NODE_CONFIG" {}
 
 variable "file_yaml_vagrant_boxes" {
     description = "Path to the yaml file which has the vagrant_boxes declared as list"
-    default = "${var.DEVOPS_NODE_CONFIG != "" ? var.DEVOPS_NODE_CONFIG : "../../vagrant/nodes.yaml"}"
+    default = "../../vagrant/nodes.yaml"
 }
 
 provider "null" {
@@ -29,7 +29,7 @@ provider "null" {
 #}
 
 locals {
-  input = "${var.file_yaml_vagrant_boxes}"
+  input = "${var.DEVOPS_NODE_CONFIG != "" ? var.DEVOPS_NODE_CONFIG : var.file_yaml_vagrant_boxes}"
 }
 
 # https://github.com/ashald/terraform-provider-yaml
