@@ -1,8 +1,3 @@
-variable "file_yaml_vagrant_boxes" {
-    description = "Path to the yaml file which has the vagrant_boxes declared as list"
-    default  = "../../vagrant/xfs.yaml"
-}
-
 # You may want to enable this if for example your aws subscription is
 # the free trial. As of May 2019 you get only XXX.
 #

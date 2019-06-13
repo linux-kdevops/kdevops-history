@@ -1,8 +1,3 @@
-variable "file_yaml_vagrant_boxes" {
-    description = "Path to the yaml file which has the vagrant_boxes declared as list"
-    default  = "../../vagrant/xfs.yaml"
-}
-
 # You may want to enable this if for example your azure subscription is
 # the demo one. As of May 2019 you get only 4 cores, so if you are
 # creating more than 4 nodes it'd fail. Setting this to true will

@@ -1,8 +1,3 @@
-variable "file_yaml_vagrant_boxes" {
-    description = "Path to the yaml file which has the vagrant_boxes declared as list"
-    default  = "../../vagrant/xfs.yaml"
-}
-
 # This is a relatively new feature, reading cloud.yaml and friends. Even
 # though older openstack solutions don't support this, we keep things simple
 # and ask you to use these files for now.
