@@ -22,6 +22,8 @@ What works?
   * Full vagrant provisioning
   * Initial terraform provisioning on different cloud providers
   * Running ansible to install dependencies on debian
+  * Using ansible to clone, compile and boot into to any random kernel git tree
+    with a supplied config
 
 What's missing?
 
