@@ -19,24 +19,19 @@
     owner: "{{ data_user }}"
     group: "{{ data_group }}"
     mode: 0644
-  tags: linux
+  tags: [ 'linux', 'config' ]
 
 - name: Configure linux {{ target_linux_tree }}
   shell: yes "" | make oldconfig
   args:
     chdir: "{{ target_linux_dir_path }}"
-  register: out
-  tags: linux
-- debug: var=out.stdout_lines
-- debug: var=out.delta
+  tags: [ 'linux', 'oldconfig' ]
 
 - name: Build linux {{ target_linux_tree }}
   command: "{{ target_linux_make_cmd }}"
   args:
     chdir: "{{ target_linux_dir_path }}"
-  register: out
-- debug: var=out.stdout_lines
-- debug: var=out.delta
+  tags: [ 'linux', 'build-linux' ]
 
 - name: Install linux {{ target_linux_tree }}
   become: yes
@@ -45,13 +40,11 @@
   command: "{{ target_linux_make_install_cmd }}"
   args:
     chdir: "{{ target_linux_dir_path }}"
-  register: out
   tags: linux
-- debug: var=out.stdout_lines
-- debug: var=out.delta
+  tags: [ 'linux', 'install-linux' ]
 
 - name: Reboot into linux {{ target_linux_tree }}
   become: yes
   become_method: sudo
   reboot:
-  tags: linux
+  tags: [ 'linux', 'reboot' ]
