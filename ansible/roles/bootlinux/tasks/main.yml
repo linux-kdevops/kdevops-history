@@ -4,6 +4,14 @@
 
 # Distro agnostic stuff to build and boot Linux goes below
 
+- name: git clone {{ target_linux_tree }}
+  git:
+    repo: "{{ target_linux_git }}"
+    dest: "{{ target_linux_dir_path }}"
+    update: yes
+    version: v4.19.58
+  tags: [ 'linux', 'git', 'clone']
+
 - name: Copy configuration for linux {{ target_linux_tree }}
   template:
     src: "{{ target_linux_config }}"
