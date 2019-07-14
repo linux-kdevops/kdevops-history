@@ -1,0 +1,7 @@
+
+- name: Run update-grub
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "grub2-mkconfig -o \"$(readlink -e /etc/grub2.conf)\""
+  tags: [ 'linux', 'manual-update-grub' ]

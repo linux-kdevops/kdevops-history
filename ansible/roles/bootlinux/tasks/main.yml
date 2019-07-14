@@ -33,6 +33,35 @@
     chdir: "{{ target_linux_dir_path }}"
   tags: [ 'linux', 'build-linux' ]
 
+# Say you want to remove a kernel you no longer care for:
+# ansible-playbook -i hosts --tags uninstall-linux --extra-vars "uninstall_kernel_ver=4.19.58" bootlinux.yml
+- name: Uninstall an old version of linux manually specified
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  file:
+    state: absent
+    path: "{{ item }}"
+  tags: [ 'linux', 'uninstall-linux' ]
+  with_items:
+    - "/boot/vmlinuz-{{ uninstall_kernel_ver }}"
+    - "/boot/vmlinuz-{{ uninstall_kernel_ver }}.old"
+    - "/boot/initrd.img-{{ uninstall_kernel_ver }}"
+    - "/boot/initrd.img-{{ uninstall_kernel_ver }}.old"
+    - "/boot/config-{{ uninstall_kernel_ver }}"
+    - "/boot/config-{{ uninstall_kernel_ver }}.old"
+    - "/boot/System.map-{{ uninstall_kernel_ver }}"
+    - "/boot/System.map-{{ uninstall_kernel_ver }}.old"
+    - "/lib/modules/{{ uninstall_kernel_ver }}"
+  loop_control:
+    label: "{{ item }}"
+  when: uninstall_kernel_ver is defined
+
+- name: Update your boot grub file if necessary
+  tags: [ 'linux', 'uninstall-linux', 'manual-update-grub' ]
+  import_tasks: tasks/update-grub/main.yml
+  when: (manual_update_grub is defined) or (uninstall_kernel_ver is defined)
+
 - name: Install linux {{ target_linux_tree }}
   become: yes
   become_flags: 'su - -c'
@@ -40,7 +69,6 @@
   command: "{{ target_linux_make_install_cmd }}"
   args:
     chdir: "{{ target_linux_dir_path }}"
-  tags: linux
   tags: [ 'linux', 'install-linux' ]
 
 - name: Reboot into linux {{ target_linux_tree }}
