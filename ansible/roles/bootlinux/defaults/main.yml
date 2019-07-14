@@ -15,9 +15,10 @@ target_linux_dir_path: "{{ data_path }}/linux-stable"
 #target_linux_tree:  "linux-next"
 #target_linux_tree: "linux"
 
-target_linux_commit: "v4.19.58"
+target_linux_version:  "4.19.58"
+target_linux_tag : "v{{ target_linux_version }}"
 target_linux_delta_file:
-target_linux_config: "config-4.19.58"
+target_linux_config: "config-{{ target_linux_version }}"
 make: "make"
 target_linux_make_cmd: "{{ make }} -j8"
 target_linux_make_install_cmd: "{{ make }} modules_install install"

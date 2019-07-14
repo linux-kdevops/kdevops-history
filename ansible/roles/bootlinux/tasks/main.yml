@@ -9,7 +9,7 @@
     repo: "{{ target_linux_git }}"
     dest: "{{ target_linux_dir_path }}"
     update: yes
-    version: v4.19.58
+    version: "{{ target_linux_tag }}"
   tags: [ 'linux', 'git', 'clone']
 
 - name: Copy configuration for linux {{ target_linux_tree }}
