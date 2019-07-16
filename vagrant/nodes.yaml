@@ -49,6 +49,15 @@ vagrant_global:
       size: 102400
 
 # Note: vagrant is not a fan of hosts with underscores.
+#
+# Modify the hostname to include a purpose, and then extract it later with
+# ansible, for instance with:
+#
+# section: "{{ ansible_hostname | regex_replace('kdevops-') | regex_replace('-dev') | regex_replace('-', '_') }}"
+#
+# So if you say embraced kdevops-pokeyman and kdevops-pokeyman-dev you'd end up
+# getting in the section always as pokeyman. As is below, with the above
+# ansible regex you'd get the digits.
 vagrant_boxes:
   - name: kdevops-1
     ip: 172.17.8.101
@@ -64,6 +73,20 @@ vagrant_boxes:
     ip: 172.17.8.106
   - name: kdevops-7
     ip: 172.17.8.107
+  - name: kdevops-1-dev
+    ip: 172.17.8.111
+  - name: kdevops-2-dev
+    ip: 172.17.8.112
+  - name: kdevops-3-dev
+    ip: 172.17.8.113
+  - name: kdevops-4-dev
+    ip: 172.17.8.114
+  - name: kdevops-5-dev
+    ip: 172.17.8.115
+  - name: kdevops-6-dev
+    ip: 172.17.8.116
+  - name: kdevops-7-dev
+    ip: 172.17.8.117
 
 ansible_playbooks:
   # If this file exists you can override any ansible variable there.
