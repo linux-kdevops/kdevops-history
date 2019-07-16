@@ -15,6 +15,23 @@
     version: "{{ target_linux_tag }}"
   tags: [ 'linux', 'git', 'clone']
 
+- name: Copy kernel delta if requested
+  template:
+    src: "{{ target_linux_extra_patch }}"
+    dest: "{{ target_linux_dir_path }}/{{ target_linux_extra_patch }}"
+    owner: "{{ data_user }}"
+    group: "{{ data_group }}"
+    mode: 0644
+  tags: [ 'linux', 'git', 'config' ]
+  when: target_linux_extra_patch is defined
+
+- name: Apply kernel delta if requested
+  command: "git am {{ target_linux_extra_patch }}"
+  args:
+    chdir: "{{ target_linux_dir_path }}"
+  tags: [ 'linux', 'extra-patch' ]
+  when: target_linux_extra_patch is defined
+
 - name: Copy configuration for linux {{ target_linux_tree }}
   template:
     src: "{{ target_linux_config }}"
@@ -22,7 +39,7 @@
     owner: "{{ data_user }}"
     group: "{{ data_group }}"
     mode: 0644
-  tags: [ 'linux', 'config' ]
+  tags: [ 'linux', 'git', 'config' ]
 
 - name: Configure linux {{ target_linux_tree }}
   shell: yes "" | make oldconfig
