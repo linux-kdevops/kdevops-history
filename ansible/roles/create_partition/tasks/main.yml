@@ -1,0 +1,61 @@
+---
+- name: partitions | check if block {{ disk_setup_device }} exists
+  stat:
+    path: "{{ disk_setup_device }}"
+    follow: yes
+  register: stat_result
+
+- name: partitions | Read {{ disk_setup_device }} partitions and mountpoints
+  shell: lsblk -npr -oNAME,MOUNTPOINT {{ disk_setup_device }}
+  register: result
+  when: >
+    stat_result is success and
+    stat_result.stat.isblk is defined
+    and stat_result.stat.isblk == True
+
+- set_fact:
+    part_mounts: |
+      {%- set x = [] -%}
+      {%- for line in result.stdout_lines -%}
+      {{ x.append(line.split()) }}
+      {%- endfor -%}
+      {{ x }}
+  when: >
+    result is success and
+    result.stdout_lines is defined
+
+- name: Create data filesystem iff {{ disk_setup_device }} has no partitions and is not mounted
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  filesystem:
+    fstype: "{{ disk_setup_fstype }}"
+    dev: "{{ disk_setup_device }}"
+    opts: "{{ disk_setup_fs_opts }}"
+  when: >
+    result is success and
+    part_mounts_item[0] is not defined and
+    part_mounts_item[1] is not defined
+  register: create_data_fs
+
+- name: Ensure directory {{ disk_setup_path }} is created and with correct permissions
+  become: yes
+  become_method: sudo
+  file:
+    state: directory
+    path: "{{ disk_setup_path }}"
+    owner: "{{ disk_setup_user }}"
+    group: "{{ disk_setup_group }}"
+
+- name: Mount data filesystem iff {{ disk_setup_path }} is not mounted
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  mount:
+    path: "{{ disk_setup_path }}"
+    src: LABEL="{{ disk_setup_label }}"
+    fstype: "{{ disk_setup_fstype }}"
+    state: mounted
+  when: >
+    create_data_fs is success and
+    part_mounts_item[1] is not defined

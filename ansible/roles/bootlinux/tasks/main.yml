@@ -2,6 +2,9 @@
 # Distro specific
 - include: tasks/install-deps/main.yml
 
+- include_role:
+  name: create_data_partition
+
 # Distro agnostic stuff to build and boot Linux goes below
 
 - name: git clone {{ target_linux_tree }}

@@ -1,0 +1,4 @@
+---
+- hosts: all
+  roles:
+    - role: create_data_partition
