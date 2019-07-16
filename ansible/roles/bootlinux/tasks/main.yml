@@ -3,7 +3,7 @@
 - include: tasks/install-deps/main.yml
 
 - include_role:
-  name: create_data_partition
+    name: create_data_partition
 
 # Distro agnostic stuff to build and boot Linux goes below
 
