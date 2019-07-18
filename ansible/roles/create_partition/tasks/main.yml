@@ -1,9 +1,41 @@
 ---
+- name: Check if {{ disk_setup_path }} is mounted
+  become: yes
+  become_method: sudo
+  command: mountpoint -q {{ disk_setup_path }}
+  register: mountpoint_stat
+  failed_when: False
+  changed_when: False
+  tags: [ 'partition' ]
+
+- name: Check if {{ disk_setup_path }} is present on /etc/fstab
+  become: yes
+  become_method: sudo
+  shell: awk '{print $2}' /etc/fstab  | grep -q ^"{{ disk_setup_path }}"
+  register: fstab_grep_stat
+  failed_when: False
+  changed_when: False
+  tags: [ 'partition' ]
+
+- name: partitions | Read all partitions labels and see if they match {{ disk_setup_label }}
+  become: yes
+  become_method: sudo
+  shell: find /dev -type b | xargs sudo lsblk -npr -oLABEL | xargs lsblk -npr -oLABEL | grep -q ^"{{ disk_setup_label }}"
+  register: label_grep
+  failed_when: False
+  changed_when: False
+  tags: [ 'partition' ]
+
 - name: partitions | check if block {{ disk_setup_device }} exists
   stat:
     path: "{{ disk_setup_device }}"
     follow: yes
   register: stat_result
+  when: >
+    mountpoint_stat != 0 and
+    fstab_grep_stat != 0 and
+    label_grep.rc != 0
+  tags: [ 'partition' ]
 
 - name: partitions | Read {{ disk_setup_device }} partitions and mountpoints
   shell: lsblk -npr -oNAME,MOUNTPOINT {{ disk_setup_device }}
@@ -12,6 +44,7 @@
     stat_result is success and
     stat_result.stat.isblk is defined
     and stat_result.stat.isblk == True
+  tags: [ 'partition' ]
 
 - set_fact:
     part_mounts: |
@@ -23,6 +56,7 @@
   when: >
     result is success and
     result.stdout_lines is defined
+  tags: [ 'partition' ]
 
 - name: Create data filesystem iff {{ disk_setup_device }} has no partitions and is not mounted
   become: yes
@@ -37,6 +71,7 @@
     part_mounts_item[0] is not defined and
     part_mounts_item[1] is not defined
   register: create_data_fs
+  tags: [ 'partition' ]
 
 - name: Ensure directory {{ disk_setup_path }} is created and with correct permissions
   become: yes
@@ -46,6 +81,7 @@
     path: "{{ disk_setup_path }}"
     owner: "{{ disk_setup_user }}"
     group: "{{ disk_setup_group }}"
+  tags: [ 'partition' ]
 
 - name: Mount data filesystem iff {{ disk_setup_path }} is not mounted
   become: yes
@@ -59,3 +95,4 @@
   when: >
     create_data_fs is success and
     part_mounts_item[1] is not defined
+  tags: [ 'partition' ]
