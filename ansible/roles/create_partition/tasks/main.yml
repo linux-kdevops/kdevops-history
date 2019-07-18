@@ -20,7 +20,7 @@
 - name: partitions | Read all partitions labels and see if they match {{ disk_setup_label }}
   become: yes
   become_method: sudo
-  shell: find /dev -type b | xargs sudo lsblk -npr -oLABEL | xargs lsblk -npr -oLABEL | grep -q ^"{{ disk_setup_label }}"
+  shell: find /dev -type b | xargs lsblk -npr -oLABEL | xargs lsblk -npr -oLABEL | grep -q ^"{{ disk_setup_label }}"
   register: label_grep
   failed_when: False
   changed_when: False
