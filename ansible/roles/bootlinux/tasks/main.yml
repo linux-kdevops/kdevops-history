@@ -4,6 +4,7 @@
 
 - include_role:
     name: create_data_partition
+  tags: [ 'linux', 'data_partition' ]
 
 # Distro agnostic stuff to build and boot Linux goes below
 
