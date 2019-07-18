@@ -1,5 +1,5 @@
 ---
-- name: Create {{ data_path }} if not created yet
+- name: Create {{ data_path }} partition if not created yet
   include_role:
     name: create_partition
   vars:
@@ -10,3 +10,4 @@
     disk_setup_path: "{{ data_path }}"
     disk_setup_user: "{{ data_user }}"
     disk_setup_group: "{{ data_group }}"
+  tags: [ 'data_partition' ]
