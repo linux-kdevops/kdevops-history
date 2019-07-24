@@ -28,7 +28,8 @@ vagrant_global:
     nvme_disk_id_prefix: 'drv'
     qemu_group: 'qemu'
     # In case you use a development version of qemu
-    emulator_path: '/usr/local/bin/qemu-system-x86_64'
+    # emulator_path: '/usr/local/bin/qemu-system-x86_64'
+    emulator_path: '/usr/bin/qemu-system-x86_64'
   # On the current directory
   nvme_disk_path: '.vagrant/nvme_disks/'
   nvme_disk_prefix: 'nvme_disk'
