@@ -23,9 +23,7 @@ vagrant_global:
     # support for this upstream to Virtualbox.
     nvme_controller_per_disk: false
   libvirt_cfg:
-    # q35 should be used, however nvme doesn't seem to work there
-    # for some versions of qemu.
-    machine_type: 'pc-i440fx-4.0'
+    machine_type: 'q35'
     nvme_disk_postfix: 'qcow2'
     nvme_disk_id_prefix: 'drv'
     qemu_group: 'qemu'
