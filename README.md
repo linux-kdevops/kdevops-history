@@ -43,6 +43,15 @@ The following Operating Systems are supported:
   * OS X
   * Linux
 
+#### Running libvirt as a regular user
+
+kdevops can be used without requiring root privileges. To do this you must
+ensure the user which runs vagrant is part of the following groups:
+
+  * kvm
+  * libvirt
+  * qemu on Fedora / libvirt-qemu on Debian
+
 #### Node configuration
 
 You configure your node target deployment on the node.yaml file by default,
