@@ -167,6 +167,12 @@ Now say you wantd to be explicit about a tag of Linux you'd want to use:
 ansible-playbook -i hosts -l dev --extra-vars "target_linux_version=4.19.21 "target_linux_extra_patch=try-v4.19.20-fixes-20190716-v1.patch" bootlinux.yml
 ```
 
+To uninstall a kernel:
+
+```
+ansible-playbook -i hosts -l dev --tags uninstall-linux --extra-vars "uninstall_kernel_ver=4.19.58+" bootlinux.yml
+```
+
 ## qemu kernel configs
 
 For now we supply kernel configs used to build the vanilla / stable kernels
