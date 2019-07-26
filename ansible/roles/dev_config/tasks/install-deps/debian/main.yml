@@ -1,20 +1,28 @@
 ---
 # Install dependencies on Debian
-- name: Set up apt for Debian testing/unstable
+- name: Set up apt for Debian testing
   become: yes
   become_method: sudo
   template:
-    src: debian/sources.list.testing-unstable
+    src: debian/sources.list.testing
     dest: /etc/apt/sources.list
   tags: [ 'apt', 'config' ]
 
-- name: Set pinning preference for debian testing over unstable
+- name: Allow for distro source change / upgrade
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "apt-get update  --allow-releaseinfo-change"
+  args:
+    warn: no
+  tags: [ 'apt', 'release-info-change' ]
+
+- name: Update apt cache
   become: yes
   become_method: sudo
-  template:
-    src: debian/apt-preferences
-    dest: /etc/apt/preferences
-  tags: [ 'apt', 'config' ]
+  apt:
+    update_cache: yes
+  tags: [ 'apt', 'cache' ]
 
 - name: Install our generic dependencies
   become: yes
@@ -38,6 +46,7 @@
       - libtool
       - psmisc
       - sed
+      - vim
     state: present
     update_cache: yes
   tags: [ 'kdevops', 'deps' ]
