@@ -7,13 +7,14 @@
 - name: check if the developer has a git config
   local_action: stat
     path={{ dev_gitconfig_src }}
+  run_once: true
   register: dev_git_config_file
 
 - name: copy the developer's gitconfig *iff* it exists
   copy:
     src={{ dev_gitconfig_src }}
     dest={{ dev_gitconfig_dest }}
-  when: dev_git_config_file is success
+  when: dev_git_config_file.stat.exists
 
 - name: copy the developer's gitconfig *iff* it exists to root
   become: yes
@@ -23,6 +24,7 @@
     src={{ dev_gitconfig_dest }}
     dest=/root/
     remote_src=yes
+  when: dev_git_config_file.stat.exists
 
 - name: check if the developer has a configuration file with favorite bash hacks
   local_action: stat
@@ -33,7 +35,7 @@
   copy:
     src={{ dev_bash_config_hacks_src }}
     dest={{ dev_bash_config_hacks_dest }}
-  when: dev_bash_config_file is success
+  when: dev_bash_config_file.stat.exists
   register: dev_bash_config_file_copied
 
 - name: source the developer's bash hack script
@@ -57,7 +59,7 @@
   copy:
     src={{ dev_bash_config_hacks_src }}
     dest=/root/
-  when: dev_bash_config_file is success
+  when: dev_bash_config_file.stat.exists
   register: dev_bash_config_file_copied_root
 
 - name: source the developer's bash hack script for root
