@@ -28,7 +28,7 @@ What works?
 What's missing?
 
   * Hooking up terraform with ansible. For this perhaps [the terraform ansible module](https://registry.terraform.io/modules/radekg/ansible/provisioner/2.2.0).
-  * A way to automate getting your vagrant / cloud provider IP address to your ssh config so we can later run with ansible (you can use vagrant ssh-config for now)
+  * A role similar to update_ssh_config_vagrant.yml for cloud providers
 
 ### Vagrant support - localized VMs
 
