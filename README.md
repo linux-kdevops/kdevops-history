@@ -142,6 +142,31 @@ cd ansible/
 ansible-playbook -i hosts devconfig.yml
 ```
 
+### The ansible bootlinux role
+
+The ansible bootlinux role from kdevops lets you get, build and install Linux.
+It also lets you apply custom patches, remove kernels, etc. Anything you have
+to do with regards to generic kernel development.
+
+Say you want to boot compile a vanilla kernel and you have created a new
+section under the hosts file called [dev], with a subset of the [all] section.
+You can compile say a vanilla kernel v4.19.58 with an extra set of patches we'd
+`git am` for you on top by using the following:
+
+```
+cd ansible
+ansible-playbook -i hosts -l dev --extra-vars "target_linux_extra_patch=pend-v4.19.58-fixes-20190716-v2.patch" bootlinux.yml
+```
+
+You'd place the `pend-v4.19.58-fixes-20190716-v2.patch` file on the directory
+`ansible/roles/bootlinux/templates/`.
+
+Now say you wantd to be explicit about a tag of Linux you'd want to use:
+
+```
+ansible-playbook -i hosts -l dev --extra-vars "target_linux_version=4.19.21 "target_linux_extra_patch=try-v4.19.20-fixes-20190716-v1.patch" bootlinux.yml
+```
+
 ## qemu kernel configs
 
 For now we supply kernel configs used to build the vanilla / stable kernels
