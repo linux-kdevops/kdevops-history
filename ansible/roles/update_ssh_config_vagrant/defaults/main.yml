@@ -1,0 +1,10 @@
+# SPDX-License-Identifier GPL-2.0+
+---
+# Our sensible defaults for dev_config. You can override them by putting
+# your variables in these files, the later has major precedence:
+#
+# ansible/extra_vars.yml
+
+# On your own system
+sshconfig: "~/.ssh/config"
+sshconfig_backup: "~/.ssh/config.bk"
