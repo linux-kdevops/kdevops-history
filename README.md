@@ -52,6 +52,18 @@ ensure the user which runs vagrant is part of the following groups:
   * libvirt
   * qemu on Fedora / libvirt-qemu on Debian
 
+Debian uses libvirt-qemu as the userid which runs qemu, Fedora uses qemu.
+The qcow2 files created are ensured to allow the default user qemu executes
+under by letting the qemu user group to write to them as well. We have the
+defaults for debian on this project, to override the default group to use for
+qemu set the value need on the environment variable:
+
+  * KDEVOPS_VAGRANT_QEMU_GROUP
+
+You can override the default user qemu will run by modifying
+`/etc/libvirt/qemu.conf' user and group settings there. If on a system with
+apparmor or selinux enabled, there may be more work required on your part.
+
 #### Node configuration
 
 You configure your node target deployment on the node.yaml file by default,

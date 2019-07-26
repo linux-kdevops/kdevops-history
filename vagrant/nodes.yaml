@@ -26,7 +26,11 @@ vagrant_global:
     machine_type: 'q35'
     nvme_disk_postfix: 'qcow2'
     nvme_disk_id_prefix: 'drv'
-    qemu_group: 'qemu'
+    # Fedora uses qemu here by default. Override with the environment variable
+    # KDEVOPS_VAGRANT_QEMU_GROUP. If not sure edit /etc/libvirt/qemu.conf user
+    # and group settings. If using apparmor / selinux you may run into snags,
+    # but that is out of scope of this project.
+    qemu_group: 'libvirt-qemu'
     # In case you use a development version of qemu
     # emulator_path: '/usr/local/bin/qemu-system-x86_64'
     emulator_path: '/usr/bin/qemu-system-x86_64'

@@ -95,6 +95,11 @@ limit_num_boxes = vagrant_boxes.count
 limit_num_boxes = limit_boxes == "yes" && global_data['limit_num_boxes']  ? global_data['limit_num_boxes'] : limit_num_boxes
 limit_num_boxes = limit_boxes == "yes" && ENV['KDEVOPS_VAGRANT_LIMIT_NUM_BOXES'] ? ENV['KDEVOPS_VAGRANT_LIMIT_NUM_BOXES'] : limit_num_boxes
 
+qemu_group = global_data['libvirt_cfg']['qemu_group']
+if ENV['KDEVOPS_VAGRANT_QEMU_GROUP']
+  qemu_group = ENV['KDEVOPS_VAGRANT_QEMU_GROUP']
+end
+
 num_servers = limit_num_boxes.to_i
 ansible_ran = false
 
@@ -215,7 +220,6 @@ Vagrant.configure("2") do |config|
             port += 1
 	  end
 	  if provider == "libvirt"
-	    qemu_group = global_data['libvirt_cfg']['qemu_group']
 	    ok = system("chgrp -R #{qemu_group} #{nvme_path}")
 	    if ! ok
               puts "Command failed: #{cmd}"
