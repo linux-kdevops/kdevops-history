@@ -96,4 +96,5 @@ ansible_playbooks:
   # This file is optional.
   extra_vars: "../ansible/extra_vars.yml"
   playbooks:
+    - name: "../ansible/update_ssh_config_vagrant.yml"
     - name: "../ansible/dev_config.yml"
