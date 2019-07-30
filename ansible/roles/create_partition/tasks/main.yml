@@ -20,7 +20,7 @@
 - name: partitions | Read all partitions labels and see if they match {{ disk_setup_label }}
   become: yes
   become_method: sudo
-  shell: find /dev -type b | xargs lsblk -npr -oLABEL | xargs lsblk -npr -oLABEL | grep -q ^"{{ disk_setup_label }}"
+  shell: find /dev -type b | xargs lsblk -npr -oLABEL | grep -q ^"{{ disk_setup_label }}"
   register: label_grep
   failed_when: False
   changed_when: False
@@ -42,8 +42,9 @@
   register: result
   when: >
     stat_result is success and
-    stat_result.stat.isblk is defined
-    and stat_result.stat.isblk == True
+    stat_result.stat is defined and
+    stat_result.stat.isblk is defined and
+    stat_result.stat.isblk == True
   tags: [ 'partition' ]
 
 - set_fact:
@@ -67,9 +68,13 @@
     dev: "{{ disk_setup_device }}"
     opts: "{{ disk_setup_fs_opts }}"
   when: >
-    result is success and
-    part_mounts_item[0] is not defined and
-    part_mounts_item[1] is not defined
+    (result is success and
+    part_mounts_item is not defined) or
+    (result is success and
+    part_mounts_item is defined and
+    (part_mounts_item | length == 0) or
+    (part_mounts_item[0] is not defined and
+    part_mounts_item[1] is not defined))
   register: create_data_fs
   tags: [ 'partition' ]
 
@@ -93,6 +98,15 @@
     fstype: "{{ disk_setup_fstype }}"
     state: mounted
   when: >
-    create_data_fs is success and
-    part_mounts_item[1] is not defined
+    label_grep.rc == 0 or
+    (create_data_fs is success and
+    part_mounts_item is defined and
+    part_mounts_item | length <= 1 or
+    part_mounts_item[1] is not defined) or
+    (part_mounts_item is not defined) or
+    (part_mounts_item is defined and
+    part_mounts_item | length <= 0) or
+    (part_mounts_item is defined and
+    part_mounts_item | length <= 1 or
+    part_mounts_item[1] is not defined)
   tags: [ 'partition' ]
