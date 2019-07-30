@@ -178,7 +178,7 @@ partition where we can stuff code, and compile it. To test that aspect of
 the bootlinux role you can run:
 
 ```
-ansible-playbook -i hosts -l only-3 --tags data_partition,partition bootlinux.yml
+ansible-playbook -i hosts -l baseline --tags data_partition,partition bootlinux.yml
 
 ```
 
