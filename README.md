@@ -173,6 +173,15 @@ To uninstall a kernel:
 ansible-playbook -i hosts -l dev --tags uninstall-linux --extra-vars "uninstall_kernel_ver=4.19.58+" bootlinux.yml
 ```
 
+The ansible bootlinux role relies on the create_partition role to create a data
+partition where we can stuff code, and compile it. To test that aspect of
+the bootlinux role you can run:
+
+```
+ansible-playbook -i hosts -l only-3 --tags data_partition,partition bootlinux.yml
+
+```
+
 ## qemu kernel configs
 
 For now we supply kernel configs used to build the vanilla / stable kernels
