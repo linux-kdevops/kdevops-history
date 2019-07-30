@@ -15,7 +15,7 @@ target_linux_dir_path: "{{ data_path }}/linux-stable"
 #target_linux_tree:  "linux-next"
 #target_linux_tree: "linux"
 
-target_linux_version:  "4.19.58"
+target_linux_version:  "4.19.62"
 target_linux_tag : "v{{ target_linux_version }}"
 target_linux_delta_file:
 target_linux_config: "config-{{ target_linux_version }}"
