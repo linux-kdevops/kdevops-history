@@ -3,18 +3,24 @@
 
 # This file should only be edited to *grow* support for new features.
 # If you are not interested in that and are happy with what is provided,
-# all you'd have to do is edit your respective filesystem yaml file
-# to set the hosts / playbooks you need to run.
+# all you'd have to do is edit your respective project name space
+# yaml file to set the hosts / playbooks you need to run.
 #
-# You can customize your configuration node configuration file, node.yml.
-# Since this file is version control an alternative is to use environment
-# variables. We support the following environment variables:
+# We infer your project namespace from the parent directory where this
+# vagrant directory sits in. Suppose this file is in your project under
+# kdevops/vagrant/Vagrantfile then your namespace is inferred to be kdevops.
 #
-# KDEVOPS_VAGRANT_NODE_CONFIG - lets you override default configuration
+# The file which describes nodes for this project is expected to then be
+# kdevops_nodes.yml Environment you can use are expected to be prefixed in
+# upper case by your project namespace. We support the following environment
+# variables, assume ${PN_U} below is your upper case of your project namespace,
+# so for kdevops this would be KDEVOPS:
+#
+# ${PN_U}_VAGRANT_NODE_CONFIG - lets you override default configuration
 #   file used
-# KDEVOPS_VAGRANT_PROVIDER - lets you override provider
-# KDEVOPS_VAGRANT_LIMIT_BOXES - lets you enable box limiting
-# KDEVOPS_VAGRANT_LIMIT_NUM_BOXES - number of boxes to limit
+# ${PN_U}_VAGRANT_PROVIDER - lets you override provider
+# ${PN_U}_VAGRANT_LIMIT_BOXES - lets you enable box limiting
+# ${PN_U}__VAGRANT_LIMIT_NUM_BOXES - number of boxes to limit
 #
 # XXX: environment variables are not ideal, consider letting one override
 # variables using an extra_args.yml file and then we'd let *those* variables
@@ -60,7 +66,15 @@ else
   exit
 end
 
-node_config = ENV['KDEVOPS_VAGRANT_NODE_CONFIG'] ? ENV['KDEVOPS_VAGRANT_NODE_CONFIG'] : "nodes.yaml"
+# We assume if you are in kdevops/vagrant/ your project namespace is kdevops
+#                         oscheck/vagrant/ your project namespace is oscheck
+project_namespace = File.basename(File.dirname(Dir.getwd))
+
+# shorthand accessors
+pn_l = project_namespace.downcase
+pn_u = project_namespace.upcase
+
+node_config = ENV[pn_u + '_VAGRANT_NODE_CONFIG'] ? ENV[pn_u + '_VAGRANT_NODE_CONFIG'] : pn_l + "_nodes.yaml"
 
 config_data= YAML.load_file(node_config)
 global_data = config_data['vagrant_global']
@@ -71,8 +85,8 @@ if global_data['force_provider']
   provider = global_data['force_provider']
 end
 
-if ENV['KDEVOPS_VAGRANT_PROVIDER']
-  provider = ENV['KDEVOPS_VAGRANT_PROVIDER']
+if ENV[pn_u + '_VAGRANT_PROVIDER']
+  provider = ENV[pn_u + '_VAGRANT_PROVIDER']
 end
 
 supported_provider = case provider
@@ -88,16 +102,16 @@ if ! supported_provider
 end
 
 limit_boxes = global_data['limit_boxes'] == "yes" ? "yes" : "no"
-limit_boxes = ENV['KDEVOPS_VAGRANT_LIMIT_BOXES'] == "yes" ? "yes" : limit_boxes
+limit_boxes = ENV[pn_u + '_VAGRANT_LIMIT_BOXES'] == "yes" ? "yes" : limit_boxes
 
 limit_num_boxes = vagrant_boxes.count
 limit_max_num_boxes = limit_num_boxes
 limit_num_boxes = limit_boxes == "yes" && global_data['limit_num_boxes']  ? [limit_max_num_boxes, global_data['limit_num_boxes']].min : limit_num_boxes
-limit_num_boxes = limit_boxes == "yes" && ENV['KDEVOPS_VAGRANT_LIMIT_NUM_BOXES'] ? [limit_max_num_boxes, ENV['KDEVOPS_VAGRANT_LIMIT_NUM_BOXES'].to_i].min : limit_num_boxes
+limit_num_boxes = limit_boxes == "yes" && ENV[pn_u + '_VAGRANT_LIMIT_NUM_BOXES'] ? [limit_max_num_boxes, ENV[pn_u + '_VAGRANT_LIMIT_NUM_BOXES'].to_i].min : limit_num_boxes
 
 qemu_group = global_data['libvirt_cfg']['qemu_group']
-if ENV['KDEVOPS_VAGRANT_QEMU_GROUP']
-  qemu_group = ENV['KDEVOPS_VAGRANT_QEMU_GROUP']
+if ENV[pn_u + '_VAGRANT_QEMU_GROUP']
+  qemu_group = ENV[pn_u + '_VAGRANT_QEMU_GROUP']
 end
 
 num_servers = limit_num_boxes.to_i
