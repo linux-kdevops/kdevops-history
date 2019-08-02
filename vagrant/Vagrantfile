@@ -74,6 +74,9 @@ project_namespace = File.basename(File.dirname(Dir.getwd))
 pn_l = project_namespace.downcase
 pn_u = project_namespace.upcase
 
+# Bash variables cannot use "-", they must use _
+pn_u = pn_u.tr("-", "_")
+
 node_config = ENV[pn_u + '_VAGRANT_NODE_CONFIG'] ? ENV[pn_u + '_VAGRANT_NODE_CONFIG'] : pn_l + "_nodes.yaml"
 
 config_data= YAML.load_file(node_config)
