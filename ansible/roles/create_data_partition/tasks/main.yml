@@ -1,7 +1,7 @@
 ---
 - name: Create {{ data_path }} partition if not created yet
   include_role:
-    name: create_partition
+    name: mcgrof.create_partition
   vars:
     disk_setup_device: "{{ data_device }}"
     disk_setup_fstype: "{{ data_fstype }}"

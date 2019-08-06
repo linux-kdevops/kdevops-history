@@ -5,7 +5,7 @@ SETUP_FILE := .$(KDEVOPS_PROJECT)-kdevops-setup
 HOSTNAME := $(shell hostname)
 ID=$(shell id -u)
 
-.PHONY: all install deps
+.PHONY: all install deps ansible_deps
 
 include globals.mk
 
@@ -13,7 +13,10 @@ DIRS=$(shell find ./* -maxdepth 0 -type d)
 
 all: deps
 
-deps:
+ansible_deps:
+	@ansible-galaxy install --force -r requirements.yml
+
+deps: ansible_deps
 	@for i in $(DIRS); do if [ -f $$i/Makefile ]; then $(MAKE) -C $$i deps; fi; done
 
 install:

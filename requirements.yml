@@ -1,0 +1,6 @@
+# http://docs.ansible.com/galaxy.html#installing-multiple-roles-from-a-file
+# The skinny: ansible-galaxy install -r requirements.yml
+
+- src: mcgrof.create_partition
+  name: mcgrof.create_partition
+  version: v1.1.0

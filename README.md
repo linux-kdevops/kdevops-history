@@ -87,6 +87,7 @@ libvirt, or vitualbox installed. For instance, a virtualbox which supports
 nvme.
 
 ```bash
+make ansible_deps
 cd vagrant/
 vagrant up
 ```
@@ -126,6 +127,7 @@ More details are available on the file [terraform/README.md](./terraform/README.
 #### Provisioning with terraform
 
 ```bash
+make deps
 cd terraform/you_provider
 make deps
 terraform init
@@ -138,6 +140,7 @@ terraform apply
 Before running ansible make sure you can ssh into the hosts listed on ansible/hosts.
 
 ```bash
+make ansible_deps
 cd ansible/
 ansible-playbook -i hosts devconfig.yml
 ```
