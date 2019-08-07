@@ -4,3 +4,7 @@
 - src: mcgrof.create_partition
   name: mcgrof.create_partition
   version: v1.1.0
+
+- src: mcgrof.devconfig
+  name: mcgrof.devconfig
+  version: v1.0.1
