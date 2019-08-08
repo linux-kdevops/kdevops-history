@@ -156,13 +156,10 @@ runs with additional tags or extra variables from the command line:
   * [devconfig](https://github.com/mcgrof/devconfig)
   * [bootlinux](https://github.com/mcgrof/bootlinux)
 
-## qemu kernel configs
-
-For now we supply kernel configs used to build the vanilla / stable kernels
-tested.  These are purposely trimmed to be minimal for use on qemu KVM guests
-to run a generic kernel tests. They are under:
-
-	qemu-kernel-configs/
+Kernel configuration files are tracked in the [bootlinux](https://github.com/mcgrof/bootlinux)
+role. If you need to update a kernel configuration for whatever reason, please
+submit a patch for the [bootlinux](https://github.com/mcgrof/bootlinux)
+role upstream.
 
 License
 -------
