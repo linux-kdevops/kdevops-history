@@ -1,7 +1,0 @@
-galaxy_info:
-  author: Luis Chamberlain
-  description: oscheck ansible files
-  license: GPLv2
-  min_ansible_version: 2.7
-  galaxy_tags: []
-dependencies: []
