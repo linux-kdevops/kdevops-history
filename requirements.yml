@@ -5,6 +5,10 @@
   name: mcgrof.create_partition
   version: v1.2.0
 
+- src: mcgrof.update_ssh_config_vagrant
+  name: mcgrof.update_ssh_config_vagrant
+  version: v1.2.0
+
 - src: mcgrof.devconfig
   name: mcgrof.devconfig
   version: v1.0.1

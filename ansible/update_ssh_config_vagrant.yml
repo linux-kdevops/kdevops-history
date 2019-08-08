@@ -1,4 +1,4 @@
 ---
 - hosts: all
   roles:
-    - role: update_ssh_config_vagrant
+    - role: mcgrof.update_ssh_config_vagrant
