@@ -141,7 +141,6 @@ Before running ansible make sure you can ssh into the hosts listed on ansible/ho
 
 ```bash
 make ansible_deps
-cd ansible/
 ansible-playbook -i hosts -l dev --extra-vars "target_linux_extra_patch=pend-v4.19.58-fixes-20190716-v2.patch" playbooks/bootlinux.yml
 ```
 

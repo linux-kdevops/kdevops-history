@@ -1,2 +1,8 @@
 *.swp
 *.o
+*.retry
+
+# You can override role specific stuff on these
+ansible/roles/*/vars/main.yml
+extra_vars.yml
+python/*.pyc
