@@ -142,48 +142,19 @@ Before running ansible make sure you can ssh into the hosts listed on ansible/ho
 ```bash
 make ansible_deps
 cd ansible/
-ansible-playbook -i hosts playbooks/devconfig.yml
-```
-
-### The ansible bootlinux role
-
-The ansible bootlinux role from kdevops lets you get, build and install Linux.
-It also lets you apply custom patches, remove kernels, etc. Anything you have
-to do with regards to generic kernel development.
-
-Say you want to boot compile a vanilla kernel and you have created a new
-section under the hosts file called [dev], with a subset of the [all] section.
-You can compile say a vanilla kernel v4.19.58 with an extra set of patches we'd
-`git am` for you on top by using the following:
-
-```
-cd ansible
 ansible-playbook -i hosts -l dev --extra-vars "target_linux_extra_patch=pend-v4.19.58-fixes-20190716-v2.patch" playbooks/bootlinux.yml
 ```
 
-You'd place the `pend-v4.19.58-fixes-20190716-v2.patch` file on the directory
-`ansible/roles/bootlinux/templates/`.
+### Public ansible role documentation
 
-Now say you wantd to be explicit about a tag of Linux you'd want to use:
+The following public roles are used, and so have respective upstream
+documentation which can be used if one wants to modify how the role
+runs with additional tags or extra variables from the command line:
 
-```
-ansible-playbook -i hosts -l dev --extra-vars "target_linux_version=4.19.21 "target_linux_extra_patch=try-v4.19.20-fixes-20190716-v1.patch" playbooks/bootlinux.yml
-```
-
-To uninstall a kernel:
-
-```
-ansible-playbook -i hosts -l dev --tags uninstall-linux --extra-vars "uninstall_kernel_ver=4.19.58+" playbooks/bootlinux.yml
-```
-
-The ansible bootlinux role relies on the create_partition role to create a data
-partition where we can stuff code, and compile it. To test that aspect of
-the bootlinux role you can run:
-
-```
-ansible-playbook -i hosts -l baseline --tags data_partition,partition playbooks/bootlinux.yml
-
-```
+  * [create_partition](https://github.com/mcgrof/create_partition)
+  * [update_ssh_config_vagrant](https://github.com/mcgrof/update_ssh_config_vagrant)
+  * [devconfig](https://github.com/mcgrof/devconfig)
+  * [bootlinux](https://github.com/mcgrof/bootlinux)
 
 ## qemu kernel configs
 
