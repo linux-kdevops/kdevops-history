@@ -142,7 +142,7 @@ Before running ansible make sure you can ssh into the hosts listed on ansible/ho
 ```bash
 make ansible_deps
 cd ansible/
-ansible-playbook -i hosts devconfig.yml
+ansible-playbook -i hosts playbooks/devconfig.yml
 ```
 
 ### The ansible bootlinux role
@@ -158,7 +158,7 @@ You can compile say a vanilla kernel v4.19.58 with an extra set of patches we'd
 
 ```
 cd ansible
-ansible-playbook -i hosts -l dev --extra-vars "target_linux_extra_patch=pend-v4.19.58-fixes-20190716-v2.patch" bootlinux.yml
+ansible-playbook -i hosts -l dev --extra-vars "target_linux_extra_patch=pend-v4.19.58-fixes-20190716-v2.patch" playbooks/bootlinux.yml
 ```
 
 You'd place the `pend-v4.19.58-fixes-20190716-v2.patch` file on the directory
@@ -167,13 +167,13 @@ You'd place the `pend-v4.19.58-fixes-20190716-v2.patch` file on the directory
 Now say you wantd to be explicit about a tag of Linux you'd want to use:
 
 ```
-ansible-playbook -i hosts -l dev --extra-vars "target_linux_version=4.19.21 "target_linux_extra_patch=try-v4.19.20-fixes-20190716-v1.patch" bootlinux.yml
+ansible-playbook -i hosts -l dev --extra-vars "target_linux_version=4.19.21 "target_linux_extra_patch=try-v4.19.20-fixes-20190716-v1.patch" playbooks/bootlinux.yml
 ```
 
 To uninstall a kernel:
 
 ```
-ansible-playbook -i hosts -l dev --tags uninstall-linux --extra-vars "uninstall_kernel_ver=4.19.58+" bootlinux.yml
+ansible-playbook -i hosts -l dev --tags uninstall-linux --extra-vars "uninstall_kernel_ver=4.19.58+" playbooks/bootlinux.yml
 ```
 
 The ansible bootlinux role relies on the create_partition role to create a data
@@ -181,7 +181,7 @@ partition where we can stuff code, and compile it. To test that aspect of
 the bootlinux role you can run:
 
 ```
-ansible-playbook -i hosts -l baseline --tags data_partition,partition bootlinux.yml
+ansible-playbook -i hosts -l baseline --tags data_partition,partition playbooks/bootlinux.yml
 
 ```
 
