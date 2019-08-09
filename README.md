@@ -1,11 +1,18 @@
 # kdevops
 
-kdevops is a framework to let you easily get your Linux devops environment
-going for whatever use case you have. The first use case is to provide a
-devops environment for Linux kernel development testing, and hence the name.
+kdevops is a sample framework which lets you easily get your Linux devops
+environment going for whatever use case you have. The first use case is to
+provide a devops environment for Linux kernel development testing, and hence
+the name. The goal behind this project is to let you *easily fork it* and
+re-purpose it for whatever kdevops needs you may have.
 
 kdevops relies on vagrant, terraform and ansible to get you going with whatever
 your virtualization / bare metal / cloud provisioning environment easily.
+It realies heavily on public ansible galaxy roles. This lets us share code
+with the community work and allows us to not have to carry all that code
+in this project. Each role focuses on one specific small goal of the
+development focus of kdevops. kdevops then is a bare bones sample demo
+project of the kdevops ansible roles made available to the community.
 
 There are three parts to the long terms ideals for kdevops:
 
@@ -13,9 +20,11 @@ There are three parts to the long terms ideals for kdevops:
 2. Provisioning your requirements
 3. Running whatever you want
 
-Vagrant or terraform are used for the first part. Vagrant and terraform are
-also used to kick off ansible later for the second part of the provisioning, to
-get all requirements installed.
+Ansible is first used to get all the required ansible roles.
+
+Vagrant or terraform can then be used to provision hosts. Vagrant and terraform
+are also used to kick off ansible later for the second part of the
+provisioning, to get all requirements installed.
 
 What works?
 
@@ -30,7 +39,24 @@ What's missing?
   * Hooking up terraform with ansible. For this perhaps [the terraform ansible module](https://registry.terraform.io/modules/radekg/ansible/provisioner/2.2.0).
   * A role similar to update_ssh_config_vagrant.yml for cloud providers
 
-### Vagrant support - localized VMs
+# Install dependencies
+
+Just run:
+
+```
+make deps
+```
+
+kdevops relies on a series of ansible roles to allow us to share as much code
+as possible with other projects. Next decide if you want to use a series of
+already provisioned hosts, provision your own localized VMs, or use a cloud
+provider. If you already have your hosts provisioned then skip to the ansible
+section. If you need to provision local VMs read the vagrant section below.
+If you want to use a cloud provider read the terraform docs below.
+
+In the end you will rely on ansible after all hosts are provisioned.
+
+## Vagrant support - localized VMs
 
 Vagrant is used to easily deploy non-cloud virtual machines. Below are
 the list of providers supported:
@@ -43,7 +69,7 @@ The following Operating Systems are supported:
   * OS X
   * Linux
 
-#### Running libvirt as a regular user
+### Running libvirt as a regular user
 
 kdevops can be used without requiring root privileges. To do this you must
 ensure the user which runs vagrant is part of the following groups:
@@ -64,14 +90,14 @@ You can override the default user qemu will run by modifying
 `/etc/libvirt/qemu.conf' user and group settings there. If on a system with
 apparmor or selinux enabled, there may be more work required on your part.
 
-#### Node configuration
+### Node configuration
 
 You configure your node target deployment on the node.yaml file by default,
 you however can override what file to use with the environment variables:
 
   * KDEVOPS_VAGRANT_NODE_CONFIG
 
-#### Provisioning with vagrant
+### Provisioning with vagrant
 
 If on Linux we'll assume you are using KVM. If on OS X we'll assume you are
 using Virtualbox. If these assumptions are incorrect you can override on the
@@ -87,7 +113,7 @@ libvirt, or vitualbox installed. For instance, a virtualbox which supports
 nvme.
 
 ```bash
-make ansible_deps
+make deps
 cd vagrant/
 vagrant up
 ```
@@ -97,7 +123,7 @@ Say you want to just test the provisioning mechanism:
 ```bash
 vagrant provision
 ```
-##### Limitting vagrant's number of boxes
+### Limitting vagrant's number of boxes
 
 By default the using vagrant will try to create *all* the nodes specified on
 your configuration file. By default this is nodes.yml and there are currently 7
@@ -113,7 +139,7 @@ This will ensure only the first host, for example, would be created and
 provisioned. This might be useful if you are developing on a laptop, for
 example, and you want to limit the amount of resources used.
 
-### Terraform support
+## Terraform support
 
 Terraform is used to deploy your solution on cloud virtual machines. Below are
 the list of clouds currently supported:
@@ -124,7 +150,7 @@ the list of clouds currently supported:
 
 More details are available on the file [terraform/README.md](./terraform/README.md) file
 
-#### Provisioning with terraform
+### Provisioning with terraform
 
 ```bash
 make deps
@@ -141,8 +167,18 @@ Before running ansible make sure you can ssh into the hosts listed on ansible/ho
 
 ```bash
 make ansible_deps
-ansible-playbook -i hosts -l dev --extra-vars "target_linux_extra_patch=pend-v4.19.58-fixes-20190716-v2.patch" playbooks/bootlinux.yml
+ansible-playbook -i hosts -l dev playbooks/bootlinux.yml
 ```
+
+Yes you can later add use a different tag for the kernel revision from the
+command line, and even add an extra patch to test on top a kernel:
+
+```
+ansible-playbook -i hosts -l dev --extra-vars "target_linux_version=4.19.21 "target_linux_extra_patch=try-v4.19.20-fixes-20190716-v1.patch" bootlinux.yml
+```
+
+You would place the `pend-v4.19.58-fixes-20190716-v2.patch` file into the
+`~/.ansible/roles/mcgrof.bootlinux/templates/` directory.
 
 ### Public ansible role documentation
 
