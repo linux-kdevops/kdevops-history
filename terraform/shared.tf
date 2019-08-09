@@ -8,8 +8,8 @@
 # order does not matter as terraform is declarative.
 
 variable "file_yaml_vagrant_boxes" {
-    description = "Path to the yaml file which has the vagrant_boxes declared as list"
-    default = "../nodes.yaml"
+  description = "Path to the yaml file which has the vagrant_boxes declared as list"
+  default     = "../nodes.yaml"
 }
 
 provider "null" {
@@ -25,21 +25,30 @@ provider "null" {
 #}
 
 locals {
-  input = "${var.file_yaml_vagrant_boxes}"
+  input = var.file_yaml_vagrant_boxes
 }
 
 # https://github.com/ashald/terraform-provider-yaml
-data "yaml_map_of_strings"  "normal" { input = "${file(local.input)}" }
-data "yaml_map_of_strings"  "flat"   { input = "${file(local.input)}" flatten="/" }
+data "yaml_map_of_strings" "normal" {
+  input = file(local.input)
+}
+
+data "yaml_map_of_strings" "flat" {
+  input   = file(local.input)
+  flatten = "/"
+}
 
 # You *must* have a section your YAML file with "vagrant_boxes" declaring a
 # list of hosts.
-data "yaml_list_of_strings" "list"   { input = "${data.yaml_map_of_strings.normal.output["vagrant_boxes"]}" }
-
-locals {
-  vagrant_num_boxes = "${length(data.yaml_list_of_strings.list.output)}"
+data "yaml_list_of_strings" "list" {
+  input = data.yaml_map_of_strings.normal.output["vagrant_boxes"]
 }
 
 locals {
-  num_boxes = "${var.limit_boxes == "yes" ? min(local.vagrant_num_boxes, var.limit_num_boxes) : local.vagrant_num_boxes }"
+  vagrant_num_boxes = length(data.yaml_list_of_strings.list.output)
 }
+
+locals {
+  num_boxes = var.limit_boxes == "yes" ? min(local.vagrant_num_boxes, var.limit_num_boxes) : local.vagrant_num_boxes
+}
+
