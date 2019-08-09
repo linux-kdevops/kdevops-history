@@ -10,6 +10,24 @@ file:
 
   * file_yaml_vagrant_boxes
 
+# Install dependencies
+
+```bash
+make deps
+```
+
+# Use a cloud provider
+
+```bash
+cd you_provider
+make deps
+terraform init
+terraform plan
+terraform apply
+```
+
+Below are more cloud provider specific instructions.
+
 ## Azure
 
 Read these pages:
