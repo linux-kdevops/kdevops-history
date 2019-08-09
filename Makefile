@@ -9,7 +9,7 @@ vagrant-deps:
 	@ansible-playbook -i hosts playbooks/kdevops_vagrant.yml
 
 ansible_deps:
-	@ansible-galaxy install --force -r requirements.yml
+	@ansible-galaxy install -r requirements.yml
 
 deps: ansible_deps vagrant-deps terraform-deps
 	@echo Installed dependencies
