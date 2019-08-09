@@ -69,7 +69,11 @@ This simplifies things considerably.
 Since minicloud is an example cloud solution and, since it also has a custom
 setup where the you have to ssh with a special port depending on the IP address
 you get, if you enable minicloud we do this computation for you and tell you
-where to ssh to.
+where to ssh to. Just follow the instructions at the output of `terraform
+plan` to be able to ssh into the open cloud nodes. Please note that minicloud
+takes a while to update its ports / mac address tables, and so you may not be
+able to log in until after about 5 minutes after you are able to create the
+nodes. Have patience.
 
 ## AWS
 
