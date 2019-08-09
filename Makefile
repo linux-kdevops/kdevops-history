@@ -11,7 +11,7 @@ vagrant-deps:
 ansible_deps:
 	@ansible-galaxy install -r requirements.yml
 
-deps: ansible_deps vagrant-deps terraform-deps
+deps: ansible_deps terraform-deps vagrant-deps
 	@echo Installed dependencies
 
 terraform-clean:
