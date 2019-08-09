@@ -1,6 +1,6 @@
 .PHONY: deps all
 
-TOPDIR=$(CURDIR)/../../
+TOPDIR=$(CURDIR)/../
 include $(TOPDIR)/globals.mk
 
 all: deps
