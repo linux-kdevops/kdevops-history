@@ -7,12 +7,9 @@
 # Terraform will process all *.tf files in alphabetical order, but the
 # order does not matter as terraform is declarative.
 
-# This lets you override the node configuraiton file with an environment
-# variable, TN_VAR_DEVOPS_NODE_CONFIG.
-
 variable "file_yaml_vagrant_boxes" {
     description = "Path to the yaml file which has the vagrant_boxes declared as list"
-    default = "../../vagrant/nodes.yaml"
+    default = "../nodes.yaml"
 }
 
 provider "null" {

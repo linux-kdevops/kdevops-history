@@ -1,16 +1,12 @@
 # Terraform setup
 
-Terraform will be used instead of Vagrant for cloud solutions such as
-Azure, AWS, OpenStack.
+Terraform is used to deploy hosts on for cloud platforms such as Azure, AWS,
+OpenStack.
 
-Vagrant can still be used to provision via ansible, this is done after the
-guests are up, by kicking off vagrant for a managed server:
-
-https://github.com/tknerr/vagrant-managed-servers
-
-Node configuration is shared, and by default kdevops relies on the file
-../vagrant/nodes.yaml however you can override this by using configuration
-variable your respective cloud terraform.tfvars file using the variable:
+Node configuration is shared between cloud proivers, and by default kdevops
+terraform relies on the file `nodes.yaml`. You can also override this with
+the a configuration variable for your respective cloud terraform.tfvars
+file:
 
   * file_yaml_vagrant_boxes
 
@@ -52,7 +48,11 @@ Openstack is supported now. This has been tested with the minicloud openstack.
 This solution relies on the new clouds.yaml file for openstack configuration.
 This simplifies things considerably.
 
-Since minicoud is an example cloud solution and, since it also has a custom
+Since minicloud is an example cloud solution and, since it also has a custom
 setup where the you have to ssh with a special port depending on the IP address
 you get, if you enable minicloud we do this computation for you and tell you
 where to ssh to.
+
+## AWS
+
+AWS is supported. More documentation needs to be added.
