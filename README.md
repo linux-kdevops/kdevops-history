@@ -58,6 +58,9 @@ In the end you will rely on ansible after all hosts are provisioned.
 
 ## Vagrant support - localized VMs
 
+Read the [kdevops_vagrant](https://github.com/mcgrof/kdevops_vagrant)
+documentation, then come here and read this.
+
 Vagrant is used to easily deploy non-cloud virtual machines. Below are
 the list of providers supported:
 
@@ -140,6 +143,9 @@ provisioned. This might be useful if you are developing on a laptop, for
 example, and you want to limit the amount of resources used.
 
 ## Terraform support
+
+Read the [kdevops_terraform](https://github.com/mcgrof/kdevops_terraform)
+documentation, then come here and read this.
 
 Terraform is used to deploy your solution on cloud virtual machines. Below are
 the list of clouds currently supported:
