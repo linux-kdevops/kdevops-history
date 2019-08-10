@@ -7,3 +7,10 @@ ansible/roles/*/vars/main.yml
 extra_vars.yml
 python/*.pyc
 vagrant/Vagrantfile
+
+terraform/Makefile
+terraform/aws/
+terraform/azure/
+terraform/globals.mk
+terraform/openstack/
+terraform/shared.tf
