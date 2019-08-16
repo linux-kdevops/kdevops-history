@@ -252,6 +252,12 @@ ansible-playbook -i hosts -l dev --extra-vars "target_linux_version=4.19.21 targ
 You would place the `pend-v4.19.58-fixes-20190716-v2.patch` file into the
 `~/.ansible/roles/mcgrof.bootlinux/templates/` directory.
 
+Say you just want to reboot the systems:
+
+```bash
+ansible-playbook -i hosts playbooks/bootlinux.yml --tags reboot
+```
+
 ### Public ansible role documentation
 
 The following public roles are used, and so have respective upstream
