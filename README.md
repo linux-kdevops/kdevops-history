@@ -148,6 +148,26 @@ Say you want to just test the provisioning mechanism:
 ```bash
 vagrant up --provision
 ```
+
+### Destroying provisioned nodes with vagrant
+
+You can either destroy directly with vagrant:
+
+```bash
+cd vagrant/
+vagrant destroy -f
+# This last step is optional
+rm -rf .vagrant
+```
+
+Or you can just use virsh directly, if using KVM:
+
+```bash
+sudo virsh list --all
+sudo virsh destroy name-of-guest
+sudo virsh undefine name-of-guest
+```
+
 ### Limitting vagrant's number of boxes
 
 By default using vagrant will try to create *all* the nodes specified on
