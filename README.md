@@ -33,11 +33,10 @@ What works?
   * Running ansible to install dependencies on debian
   * Using ansible to clone, compile and boot into to any random kernel git tree
     with a supplied config
-
-What's missing?
-
-  * Hooking up terraform with ansible. For this perhaps [the terraform ansible module](https://registry.terraform.io/modules/radekg/ansible/provisioner/2.2.0).
-  * A role similar to update_ssh_config_vagrant.yml for cloud providers
+  * Updating your ~/ssh/config for terraform, first tested with the
+    OpenStack provider, with both generic and special minicloud support. Other
+    terraform providers just require making use of the newly published
+    [terraform module add-host-ssh-config](https://registry.terraform.io/modules/mcgrof/add-host-ssh-config/)
 
 # Install dependencies
 
@@ -166,6 +165,23 @@ terraform init
 terraform plan
 terraform apply
 ```
+
+Because cloud providers can take time to make hosts accessible via ssh, the
+only thing we strive for is update your `~/ssh/config` for you. Once the
+hosts become available you are required to run ansible yourself.
+
+#### Terraform ssh config update
+
+We provide support for updating your ssh configuration file (typically
+`~/.ssh/config`) automatically for you, however each cloud provider requires
+support to be added in order for this to work. Below is the status of support
+for this by different cloud providers we support:
+
+  * OpenStack
+   * Generic OpenStack solutions
+   * Minicloud
+  * Azure: requires work
+  * AWS: requires work
 
 ## Running ansible
 
