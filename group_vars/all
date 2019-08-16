@@ -19,3 +19,5 @@ data_fs_opts: "-L {{ data_label }}"
 # Full path to make command if you want to override
 make: "make"
 make_num_jobs: "$(nproc --all)"
+
+enable_dhcp_hack: true
