@@ -8,11 +8,14 @@ re-purpose it for whatever kdevops needs you may have.
 
 kdevops relies on vagrant, terraform and ansible to get you going with whatever
 your virtualization / bare metal / cloud provisioning environment easily.
-It realies heavily on public ansible galaxy roles. This lets us share code
-with the community work and allows us to not have to carry all that code
-in this project. Each role focuses on one specific small goal of the
-development focus of kdevops. kdevops then is a bare bones sample demo
-project of the kdevops ansible roles made available to the community.
+It relies heavily on public ansible galaxy roles and terraform modules. This
+lets us share as much code as possible with the community and allows us to use
+this project as a demo framework which uses theses ansinle roles and terraform
+modules.
+
+Each ansible role and terraform module focuses on one specific small goal of
+the development focus of kdevops. kdevops then is intended  to be forked so
+you can use for whatever kdevops purpose you need.
 
 There are three parts to the long terms ideals for kdevops:
 
@@ -22,25 +25,40 @@ There are three parts to the long terms ideals for kdevops:
 
 Ansible is first used to get all the required ansible roles.
 
-Vagrant or terraform can then be used to provision hosts. Vagrant and terraform
-are also used to kick off ansible later for the second part of the
-provisioning, to get all requirements installed.
+Vagrant or terraform can then be used to provision hosts. Vagrant makes use
+of two ansible roles to setup update your `~/.ssh/config` and update the
+systems with basic development preference files, things like your `.gitconfig`
+or bashrc hacks. This last part is handled by the `devconfig` ansible role.
+Since your `~/.ssh/config` is updated you can then run further ansible roles
+manually when using vagrant. If using terraform for cloud environments, it
+updates your `~/.ssh/config` directly without ansible, however since access
+to hosts on cloud environments can vary in time running all ansible roles
+is expected to be done manually.
+
+The `bootlinux` lets you get Linux, configure it, build it, install it and
+reboot into it.
 
 What works?
 
-  * Full vagrant provisioning
-  * Initial terraform provisioning on different cloud providers
+  * Full vagrant provisioning, including updating your `~/.ssh/config`
+  * Terraform provisioning on different cloud providers
   * Running ansible to install dependencies on debian
   * Using ansible to clone, compile and boot into to any random kernel git tree
     with a supplied config
-  * Updating your ~/ssh/config for terraform, first tested with the
+  * Updating your `~/.ssh/config` for terraform, first tested with the
     OpenStack provider, with both generic and special minicloud support. Other
     terraform providers just require making use of the newly published
     [terraform module add-host-ssh-config](https://registry.terraform.io/modules/mcgrof/add-host-ssh-config/)
 
 # Install dependencies
 
-Just run:
+You will have to install ansible, vagrant and terraform first. Do that on your
+own, we can later add local ansible roles to do this but for now you are
+expected to at least do this on your own. This project has been initially
+tested with ansible 2.7.8, Vagrant 2.2.3, and Terraform v0.12.6.
+
+To install further dependencies after you have ansible, vagrant and terraform
+installed just run:
 
 ```
 make deps
@@ -48,10 +66,11 @@ make deps
 
 kdevops relies on a series of ansible roles to allow us to share as much code
 as possible with other projects. Next decide if you want to use a series of
-already provisioned hosts, provision your own localized VMs, or use a cloud
-provider. If you already have your hosts provisioned then skip to the ansible
-section. If you need to provision local VMs read the vagrant section below.
-If you want to use a cloud provider read the terraform docs below.
+already provisioned hosts (say bare metal), provision your own localized VMs,
+or use a cloud provider. If you already have your hosts provisioned then skip
+to the ansible section. If you need to provision local VMs read the vagrant
+section below.  If you want to use a cloud provider read the terraform docs
+below.
 
 In the end you will rely on ansible after all hosts are provisioned.
 
@@ -92,10 +111,13 @@ You can override the default user qemu will run by modifying
 `/etc/libvirt/qemu.conf' user and group settings there. If on a system with
 apparmor or selinux enabled, there may be more work required on your part.
 
+Note: we can later add a ansible role to automate the above.
+
 ### Node configuration
 
-You configure your node target deployment on the node.yaml file by default,
-you however can override what file to use with the environment variables:
+You configure your node target deployment on the vagrant/${PROJECT}_nodes.yaml
+file by default, you however can override what file to use with the environment
+variables:
 
   * KDEVOPS_VAGRANT_NODE_CONFIG
 
@@ -103,10 +125,11 @@ you however can override what file to use with the environment variables:
 
 If on Linux we'll assume you are using KVM. If on OS X we'll assume you are
 using Virtualbox. If these assumptions are incorrect you can override on the
-configuration file for your node provisioning. For instance, the demo you'd
-use vagrant/nodes.yaml and set the force_provider variable to either "libvirt"
-or "kvm". However, since you would typically keep your vagrant/nodes.yaml file
-in version control you can instead use an environment variable:
+configuration file for your node provisioning. For instance, for this demo
+you'd use `vagrant/kdevops_nodes.yaml` and set the force_provider variable to
+either "libvirt" or "kvm". However, since you would typically keep your
+`vagrant/kdevops_nodes.yaml` file in version control you can instead use an
+environment variable to verride the provider:
 
   * KDEVOPS_VAGRANT_PROVIDER
 
@@ -123,14 +146,14 @@ vagrant up
 Say you want to just test the provisioning mechanism:
 
 ```bash
-vagrant provision
+vagrant up --provision
 ```
 ### Limitting vagrant's number of boxes
 
-By default the using vagrant will try to create *all* the nodes specified on
-your configuration file. By default this is nodes.yml and there are currently 7
-nodes there. If you are going to just test this framework you can limit this
-initially using environment variables:
+By default using vagrant will try to create *all* the nodes specified on
+your configuration file. By default this is `vagrant/kdevops_nodes.yaml` for
+this project, and there are currently 7 nodes there. If you are going to just
+test this framework you can limit this initially using environment variables:
 
 ```bash
 export KDEVOPS_VAGRANT_LIMIT_BOXES="yes"
@@ -146,8 +169,8 @@ example, and you want to limit the amount of resources used.
 Read the [kdevops_terraform](https://github.com/mcgrof/kdevops_terraform)
 documentation, then come here and read this.
 
-Terraform is used to deploy your solution on cloud virtual machines. Below are
-the list of clouds currently supported:
+Terraform is used to deploy your development hosts on cloud virtual machines.
+Below are the list of clouds providers currently supported:
 
   * azure
   * openstack (special minicloud support added)
@@ -161,14 +184,20 @@ More details are available on the file [terraform/README.md](./terraform/README.
 make deps
 cd terraform/you_provider
 make deps
+# Make sure you then add the variables to let you log in to your cloud provider
 terraform init
 terraform plan
 terraform apply
 ```
 
 Because cloud providers can take time to make hosts accessible via ssh, the
-only thing we strive for is update your `~/ssh/config` for you. Once the
-hosts become available you are required to run ansible yourself.
+only thing we strive in terms of initial setup is to update your `~/ssh/config`
+for you. Once the hosts become available you are required to run ansible
+yourself, including the `devconfig` role:
+
+```bash
+ansible-playbook -i hosts playbooks/bootlinux.yml
+```
 
 #### Terraform ssh config update
 
@@ -180,12 +209,13 @@ for this by different cloud providers we support:
   * OpenStack
    * Generic OpenStack solutions
    * Minicloud
-  * Azure: requires work
-  * AWS: requires work
+  * Azure: requires work, should be easy
+  * AWS: requires work, should be easy
 
 ## Running ansible
 
-Before running ansible make sure you can ssh into the hosts listed on ansible/hosts.
+Before running ansible make sure you can ssh into the hosts listed on
+ansible/hosts.
 
 ```bash
 make ansible_deps
