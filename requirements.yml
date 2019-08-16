@@ -3,7 +3,7 @@
 
 - src: mcgrof.kdevops_vagrant
   name: mcgrof.kdevops_vagrant
-  version: v1.0.0
+  version: v1.0.1
 
 - src: mcgrof.kdevops_terraform
   name: mcgrof.kdevops_terraform
@@ -23,4 +23,4 @@
 
 - src: mcgrof.bootlinux
   name: mcgrof.bootlinux
-  version: v1.1.1
+  version: v1.3.0
