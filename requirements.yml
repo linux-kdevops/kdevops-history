@@ -3,28 +3,28 @@
 
 - src: mcgrof.kdevops_vagrant
   name: mcgrof.kdevops_vagrant
-  version: v1.0.1
+  version: v1.0.2
 
 - src: mcgrof.kdevops_terraform
   name: mcgrof.kdevops_terraform
-  version: v0.3.0
+  version: v0.4.0
 
 - src: mcgrof.create_partition
   name: mcgrof.create_partition
-  version: v1.2.0
+  version: v1.2.1
 
 - src: mcgrof.update_ssh_config_vagrant
   name: mcgrof.update_ssh_config_vagrant
-  version: v1.2.0
+  version: v1.2.1
 
 - src: mcgrof.devconfig
   name: mcgrof.devconfig
-  version: v1.0.2
+  version: v1.0.3
 
 - src: mcgrof.bootlinux
   name: mcgrof.bootlinux
-  version: v1.3.0
+  version: v1.3.2
 
 - src: mcgrof.fix_dhcp_hack
   name: mcgrof.fix_dhcp_hack
-  version: v0.0.5
+  version: v0.0.7
