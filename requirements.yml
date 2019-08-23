@@ -7,7 +7,7 @@
 
 - src: mcgrof.kdevops_terraform
   name: mcgrof.kdevops_terraform
-  version: v0.6.0
+  version: v0.6.2
 
 - src: mcgrof.create_partition
   name: mcgrof.create_partition
