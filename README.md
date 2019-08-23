@@ -41,14 +41,11 @@ reboot into it.
 What works?
 
   * Full vagrant provisioning, including updating your `~/.ssh/config`
-  * Terraform provisioning on different cloud providers
+  * Terraform provisioning on different cloud providers, and updating
+    your `~/.ssh/config` for you
   * Running ansible to install dependencies on debian
   * Using ansible to clone, compile and boot into to any random kernel git tree
     with a supplied config
-  * Updating your `~/.ssh/config` for terraform, first tested with the
-    OpenStack provider, with both generic and special minicloud support. Other
-    terraform providers just require making use of the newly published
-    [terraform module add-host-ssh-config](https://registry.terraform.io/modules/mcgrof/add-host-ssh-config/)
 
 # Install dependencies
 
@@ -192,11 +189,10 @@ documentation, then come here and read this.
 Terraform is used to deploy your development hosts on cloud virtual machines.
 Below are the list of clouds providers currently supported:
 
-  * azure
   * openstack (special minicloud support added)
-  * aws
-
-More details are available on the file [terraform/README.md](./terraform/README.md) file
+  * aws - Amazon Web Service
+  * gce - Google Cloud Compute
+  * azure - Microsoft Azure
 
 ### Provisioning with terraform
 
@@ -210,10 +206,10 @@ terraform plan
 terraform apply
 ```
 
-Because cloud providers can take time to make hosts accessible via ssh, the
-only thing we strive in terms of initial setup is to update your `~/ssh/config`
-for you. Once the hosts become available you are required to run ansible
-yourself, including the `devconfig` role:
+Because *some* buggy cloud providers can take time to make hosts accessible via
+ssh, the only thing we strive in terms of initial setup is to update your
+`~/ssh/config` for you. Once the hosts become available you are required to run
+ansible yourself, including the `devconfig` role:
 
 ```bash
 ansible-playbook -i hosts playbooks/bootlinux.yml
@@ -223,14 +219,9 @@ ansible-playbook -i hosts playbooks/bootlinux.yml
 
 We provide support for updating your ssh configuration file (typically
 `~/.ssh/config`) automatically for you, however each cloud provider requires
-support to be added in order for this to work. Below is the status of support
-for this by different cloud providers we support:
-
-  * OpenStack
-   * Generic OpenStack solutions
-   * Minicloud
-  * Azure: requires work, should be easy
-  * AWS: requires work, should be easy
+support to be added in order for this to work. As of this writing we
+support this for all cloud providers  we support, however Azure seems to
+have a bug, and I'm not yet sure who to blame.
 
 ## Running ansible
 
@@ -268,6 +259,8 @@ runs with additional tags or extra variables from the command line:
   * [update_ssh_config_vagrant](https://github.com/mcgrof/update_ssh_config_vagrant)
   * [devconfig](https://github.com/mcgrof/devconfig)
   * [bootlinux](https://github.com/mcgrof/bootlinux)
+  * [kdevops_vagrant](https://github.com/mcgrof/kdevops_vagrant)
+  * [kdevops_terraform](https://github.com/mcgrof/kdevops_terraform)
 
 Kernel configuration files are tracked in the [bootlinux](https://github.com/mcgrof/bootlinux)
 role. If you need to update a kernel configuration for whatever reason, please
