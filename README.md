@@ -126,12 +126,12 @@ configuration file for your node provisioning. For instance, for this demo
 you'd use `vagrant/kdevops_nodes.yaml` and set the force_provider variable to
 either "libvirt" or "kvm". However, since you would typically keep your
 `vagrant/kdevops_nodes.yaml` file in version control you can instead use an
-environment variable to verride the provider:
+environment variable to override the provider:
 
   * KDEVOPS_VAGRANT_PROVIDER
 
 You are responsible for having a pretty recent system with some fresh
-libvirt, or vitualbox installed. For instance, a virtualbox which supports
+libvirt, or virtualbox installed. For instance, a virtualbox which supports
 nvme.
 
 ```bash
