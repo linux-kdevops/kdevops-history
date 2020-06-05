@@ -23,6 +23,11 @@ kdevops_vagrant_deps:
 PHONY += kdevops_vagrant_deps
 KDEVOPS_VAGRANT_WORK := kdevops_vagrant_deps
 
+kdevops_vagrant_boxes:
+	@ansible-playbook -i hosts $(KDEVOPS_PLAYBOOKS_DIR)/install-vagrant-boxes.yml
+PHONY += kdevops_vagrant_boxes
+KDEVOPS_VAGRANT_WORK += kdevops_vagrant_boxes
+
 kdevops_verify_vagrant_user:
 	@ansible-playbook -i hosts $(KDEVOPS_PLAYBOOKS_DIR)/libvirt_user.yml -e "only_verify_user=True"
 PHONY += kdevops_verify_vagrant_user

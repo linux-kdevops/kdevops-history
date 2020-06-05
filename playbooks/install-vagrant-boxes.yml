@@ -1,0 +1,5 @@
+---
+- hosts: localhost
+  tasks:
+    - include_role:
+        name: mcgrof.install_vagrant_boxes
