@@ -28,9 +28,9 @@ verify-vagrant-user:
 	@ansible-playbook -i hosts $(KDEVOPS_PLAYBOOKS_DIR)/libvirt_user.yml -e "only_verify_user=True"
 PHONY += verify-vagrant-user
 
-ansible_deps:
-	@ansible-galaxy install -r requirements.yml
-PHONY += ansible_deps
+kdevops_ansible_deps:
+	@ansible-galaxy install --force -r requirements.yml
+PHONY += kdevops_ansible_deps
 
 kdevops_deps: kdevops_ansible_deps kdevops_terraform_deps kdevops_vagrant_deps
 	@echo Installed dependencies
