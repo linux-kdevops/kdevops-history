@@ -21,16 +21,18 @@ kdevops_vagrant_deps:
 	@ansible-playbook -i hosts $(KDEVOPS_PLAYBOOKS_DIR)/libvirt_user.yml
 	@ansible-playbook -i hosts $(KDEVOPS_PLAYBOOKS_DIR)/kdevops_vagrant.yml
 PHONY += kdevops_vagrant_deps
+KDEVOPS_VAGRANT_WORK := kdevops_vagrant_deps
 
-verify-vagrant-user:
+kdevops_verify_vagrant_user:
 	@ansible-playbook -i hosts $(KDEVOPS_PLAYBOOKS_DIR)/libvirt_user.yml -e "only_verify_user=True"
-PHONY += verify-vagrant-user
+PHONY += kdevops_verify_vagrant_user
+KDEVOPS_VAGRANT_WORK += kdevops_vagrant_deps
 
 kdevops_ansible_deps:
 	@ansible-galaxy install --force -r $(KDEVOPS_REQUIREMENTS)
 PHONY += kdevops_ansible_deps
 
-kdevops_deps: kdevops_ansible_deps kdevops_terraform_deps kdevops_vagrant_deps
+kdevops_deps: kdevops_ansible_deps kdevops_terraform_deps $(KDEVOPS_VAGRANT_WORK)
 	@echo Installed dependencies
 PHONY += kdevops_deps
 
