@@ -3,6 +3,7 @@
 KDEVOPS_TERRAFORM_DIR ?=	terraform
 KDEVOPS_PLAYBOOKS_DIR ?=	playbooks
 KDEVOPS_HOSTFILE ?=		hosts
+KDEVOPS_REQUIREMENTS ?=		kdevops_requirements.yml
 
 all: kdevops_all
 PHONY := all
@@ -29,7 +30,7 @@ verify-vagrant-user:
 PHONY += verify-vagrant-user
 
 kdevops_ansible_deps:
-	@ansible-galaxy install --force -r requirements.yml
+	@ansible-galaxy install --force -r $(KDEVOPS_REQUIREMENTS)
 PHONY += kdevops_ansible_deps
 
 kdevops_deps: kdevops_ansible_deps kdevops_terraform_deps kdevops_vagrant_deps
