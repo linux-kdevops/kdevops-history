@@ -1,4 +1,0 @@
----
-- hosts: localhost
-  roles:
-    - role: mcgrof.kdevops_vagrant
