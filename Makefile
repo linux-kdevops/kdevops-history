@@ -7,3 +7,8 @@ include Makefile.kdevops
 .SUFFIXES:
 
 .DEFAULT: kdevops_deps
+
+deps: kdevops_deps
+PHONY := deps
+
+.PHONY: $(PHONY)
