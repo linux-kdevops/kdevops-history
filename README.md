@@ -3,8 +3,8 @@
 kdevops is a sample framework which lets you easily get your Linux devops
 environment going for whatever use case you have. The first use case is to
 provide a devops environment for Linux kernel development testing, and hence
-the name. The goal behind this project is to let you *easily fork it* and
-re-purpose it for whatever kdevops needs you may have.
+the name. The goal behind this project is to let you easily deploy a collection
+of tasks which enable automating Linux kernel development and testing.
 
 kdevops relies on vagrant, terraform and ansible to get you going with whatever
 your virtualization / bare metal / cloud provisioning environment easily.
@@ -14,8 +14,12 @@ this project as a demo framework which uses theses ansinle roles and terraform
 modules.
 
 Each ansible role and terraform module focuses on one specific small goal of
-the development focus of kdevops. kdevops then is intended  to be forked so
-you can use for whatever kdevops purpose you need.
+the development focus of kdevops. Since the number of ansible roles has grown
+quite a lot, and we don't want to deal with the complexities of 'galaxy
+collections', we rely on *one* galaxy role to let you install all the rest
+of the kdevops dependencies. You can either fork this project to start
+your own use rely on the bare bones `kdevops_install` galaxy role to get
+going.
 
 There are three parts to the long terms ideals for kdevops:
 
@@ -26,20 +30,21 @@ There are three parts to the long terms ideals for kdevops:
 Ansible is first used to get all the required ansible roles.
 
 Vagrant or terraform can then be used to provision hosts. Vagrant makes use
-of two ansible roles to setup update your `~/.ssh/config` and update the
-systems with basic development preference files, things like your `.gitconfig`
-or bashrc hacks. This last part is handled by the `devconfig` ansible role.
-Since your `~/.ssh/config` is updated you can then run further ansible roles
-manually when using vagrant. If using terraform for cloud environments, it
-updates your `~/.ssh/config` directly without ansible, however since access
-to hosts on cloud environments can vary in time running all ansible roles
-is expected to be done manually.
+of three ansible roles to let you use libvirt as a regular user, update your
+`~/.ssh/config`, update the systems with basic development preference files,
+things like your `.gitconfig` or bashrc hacks. This last part is handled by
+the `devconfig` ansible role. Since your `~/.ssh/config` is updated you can
+then run further ansible roles manually when using vagrant. If using terraform
+for cloud environments, it updates your `~/.ssh/config` directly without
+ansible, however since access to hosts on cloud environments can vary in time
+running all ansible roles is expected to be done manually.
 
 The `bootlinux` lets you get Linux, configure it, build it, install it and
 reboot into it.
 
 What works?
 
+  * Automated setup of libvirt to let you use libvirt as a regular user
   * Full vagrant provisioning, including updating your `~/.ssh/config`
   * Terraform provisioning on different cloud providers, and updating
     your `~/.ssh/config` for you
@@ -49,13 +54,9 @@ What works?
 
 # Install dependencies
 
-You will have to install ansible, vagrant and terraform first. Do that on your
-own, we can later add local ansible roles to do this but for now you are
-expected to at least do this on your own. This project has been initially
-tested with ansible 2.7.8, Vagrant 2.2.3, and Terraform v0.12.6.
+You will have to install ansible, and python. We do the rest for you.
 
-To install further dependencies after you have ansible, vagrant and terraform
-installed just run:
+To install further dependencies:
 
 ```
 make deps
@@ -89,26 +90,8 @@ The following Operating Systems are supported:
 
 ### Running libvirt as a regular user
 
-kdevops can be used without requiring root privileges. To do this you must
-ensure the user which runs vagrant is part of the following groups:
-
-  * kvm
-  * libvirt
-  * qemu on Fedora / libvirt-qemu on Debian
-
-Debian uses libvirt-qemu as the userid which runs qemu, Fedora uses qemu.
-The qcow2 files created are ensured to allow the default user qemu executes
-under by letting the qemu user group to write to them as well. We have the
-defaults for debian on this project, to override the default group to use for
-qemu set the value need on the environment variable:
-
-  * KDEVOPS_VAGRANT_QEMU_GROUP
-
-You can override the default user qemu will run by modifying
-`/etc/libvirt/qemu.conf' user and group settings there. If on a system with
-apparmor or selinux enabled, there may be more work required on your part.
-
-Note: we can later add a ansible role to automate the above.
+kdevops can be used without requiring root privileges. We have an ansible
+role which takes care of dealing with this for you.
 
 ### Node configuration
 

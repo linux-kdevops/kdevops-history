@@ -1,44 +1,20 @@
-.PHONY: all deps bin-check ansible_deps vagrant-deps clean
+KDEVOPS_PLAYBOOKS_DIR :=	playbooks
+KDEVOPS_HOSTFILE :=		hosts
 
-BINS :=  ansible
-BINS +=  vagrant
-BINS +=  terraform
+-include Makefile.kdevops
 
-all: deps
+# disable built-in rules for this file
+.SUFFIXES:
 
-bin-check:
-	@for i in $(BINS); do                                                 \
-		if ! which $$i 2>&1 > /dev/null ; then                        \
-			echo "--------------------------------------------- ";\
-			echo "$$i not installed, install it. In the         ";\
-			echo "future we may have an option to try to do this";\
-			echo "for you... but for now, its on you to do this.";\
-			echo "--------------------------------------------- ";\
-			return 1                                             ;\
-		else                                                          \
-			echo "$$i installed !"                               ;\
-		fi                                                            \
-	done
+.DEFAULT: deps
 
-terraform-deps: ansible_deps
-	@ansible-playbook -i hosts playbooks/kdevops_terraform.yml
-	@if [ -d terraform ]; then \
-		make -C terraform deps; \
-	fi
+deps: kdevops_install
+	$(MAKE) -f Makefile.kdevops kdevops_deps
+PHONY := deps
 
-vagrant-deps: ansible_deps
-	@ansible-playbook -i hosts playbooks/kdevops_vagrant.yml
+kdevops_install:
+	@ansible-galaxy install --force -r requirements.yml
+	@ansible-playbook -i $(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/kdevops_install.yml
+PHONY += kdevops_install
 
-ansible_deps: bin-check
-	@ansible-galaxy install -r requirements.yml
-
-deps: terraform-deps vagrant-deps
-	@echo Installed dependencies
-
-terraform-clean:
-	@if [ -d terraform ]; then \
-		make -C terraform clean ; \
-	fi
-
-clean: terraform-clean
-	@echo Cleaned up
+.PHONY: $(PHONY)
