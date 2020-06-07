@@ -13,4 +13,5 @@ terraform/aws/
 terraform/azure/
 terraform/globals.mk
 terraform/openstack/
+terraform/gce/
 terraform/shared.tf
