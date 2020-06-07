@@ -40,7 +40,3 @@
 - src: mcgrof.bootlinux
   name: mcgrof.bootlinux
   version: v1.3.6
-
-- src: mcgrof.fix_dhcp_hack
-  name: mcgrof.fix_dhcp_hack
-  version: v0.0.8
