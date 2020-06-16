@@ -4,11 +4,22 @@ kdevops-2
 kdevops-1-dev
 kdevops-2-dev
 kdevops-services
+[all:vars]
+ansible_python_interpreter =  "/usr/bin/python3"
+
 [baseline]
 kdevops-1
 kdevops-2
+[baseline:vars]
+ansible_python_interpreter =  "/usr/bin/python3"
+
 [dev]
 kdevops-1-dev
 kdevops-2-dev
+[dev:vars]
+ansible_python_interpreter =  "/usr/bin/python3"
+
 [infra]
 kdevops-services
+[infra:vars]
+ansible_python_interpreter =  "/usr/bin/python3"

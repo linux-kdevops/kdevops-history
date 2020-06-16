@@ -53,6 +53,9 @@ vagrant_global:
       size: 102400
     extra2:
       size: 102400
+  # You can also specify this per vagrant_boxes below, so you can talk
+  # to different systems which need different interpreters.
+  ansible_python_interpreter: "/usr/bin/python3"
 
 # Note: vagrant is not a fan of hosts with underscores.
 #
@@ -75,6 +78,8 @@ vagrant_boxes:
     ip: 172.17.8.112
   - name: kdevops-services
     ip: 172.17.8.120
+    # This is an example, you can obviously specify whatever, python2, etc.
+    ansible_python_interpreter: "/usr/bin/python3"
 
 ansible_playbooks:
   # If this file exists you can override any ansible variable there.
