@@ -136,7 +136,7 @@ if using Linux.
 
 ### Node configuration
 
-The term `host` is often used to describe `localhost, and so to help distinguish
+The term `host` is often used to describe `localhost`, and so to help distinguish
 `localhost` from your target hosts you'd use for development we refer to target
 hosts for development as `nodes`.
 
