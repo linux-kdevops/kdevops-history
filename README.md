@@ -10,6 +10,8 @@ kdevops ansible role to let you ramp up with a Linux kernel development
 and testing environment fast. You can use this as a template, or you can
 fork it for your own needs.
 
+![kdevops-diagram](images/kdevops-diagram.png)
+
 ## Motivation
 
 A tedious part about doing Linux kernel development or testing is ramping up
