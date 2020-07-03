@@ -68,17 +68,12 @@ vagrant_global:
 # getting in the section always as pokeyman. As is below, with the above
 # ansible regex you'd get the digits.
 vagrant_boxes:
-  - name: kdevops-1
+  - name: kdevops
     ip: 172.17.8.101
-  - name: kdevops-2
-    ip: 172.17.8.102
-  - name: kdevops-1-dev
-    ip: 172.17.8.111
-  - name: kdevops-2-dev
-    ip: 172.17.8.112
-  - name: kdevops-services
-    ip: 172.17.8.120
     # This is an example, you can obviously specify whatever, python2, etc.
+    ansible_python_interpreter: "/usr/bin/python3"
+  - name: kdevops-dev
+    ip: 172.17.8.102
     ansible_python_interpreter: "/usr/bin/python3"
 
 ansible_playbooks:
