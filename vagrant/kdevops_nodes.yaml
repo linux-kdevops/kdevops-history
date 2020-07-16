@@ -1,7 +1,6 @@
 ---
 vagrant_global:
   box: "debian/buster64"
-  ssh_key: "~/.ssh/kdevops"
   memory: 8192
   cpus: 8
   # Enable the below options
