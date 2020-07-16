@@ -37,6 +37,19 @@ This project synchronizes releases based on that role's own releases, and
 so there is parity in release numbers between both of these projects to
 reflect this.
 
+## Be lazy and override all settings in one optional file
+
+To help users easily override role variables *all* of the kdevops ansible roles
+look for optional extra argument files, which you can use to override *all*
+role defaults. This is a `kdevops` thing, to help you be lazy. Since ansible
+roles are expected to be defined in a directory, we look at the parent directory
+for these optional files, and use the first one found. The oder of the files
+we look for is:
+
+  * `extra_args.yml`
+  * `extra_args.yaml`
+  * `extra_args.json`
+
 ## Fork me
 
 You can either fork this project to start your own kdevops project, or you can
@@ -59,9 +72,11 @@ need to use vagrant or terraform if you are using baremetal hosts.
 
 Vagrant makes use of three ansible roles to let you use libvirt as a regular
 user, update your `~/.ssh/config`, update the systems with basic development
-preference files, things like your `.gitconfig` or bashrc hacks. This last part
-is handled by the `devconfig` ansible role. Since your `~/.ssh/config` is
-updated you can then run further ansible roles manually when using vagrant.
+preference files, things like your `.gitconfig` or bashrc hacks, or typical
+packages which you most likely need on any system where you do Linux kernel
+development. This last part is handled by the `devconfig` ansible role. Since
+your `~/.ssh/config` is updated you can then run further ansible roles manually
+when using vagrant.
 
 You would use terraform if instead you want to provision hosts on the cloud, it
 updates your `~/.ssh/config` directly without ansible. Setting up hosts with
@@ -72,7 +87,7 @@ these buggy cloud providers the last provisioning step of running ansible to
 update your `~/.ssh/config` and the `devconfig` ansible role would time out.
 Because of these buggy cloud providers the last step to run ansible to
 update your `~/.ssh/config` and run the `devconfig` ansible role is
-expected to be done manually.
+expected to be done manually. One day we expect this to not be an issue.
 
 After provisioning you want to get Linux, configure it, build it, install it
 and reboot into it. This is handled by the `bootlinux` ansible role. This is
@@ -82,19 +97,57 @@ more eleborate examples, which take this further. For instance:
   * [fw-kdevops](https://github.com/mcgrof/fw-kdevops) - Linux kernel firmware loader testing, and demo for selftests
   * [oscheck](https://github.com/mcgrof/oscheck) - Linux kernel filesystem testsing
 
-## What works
+# Operating Systems supported by kdevops
 
-What works? At this point all of our goals are completed and supported now.
+The following operating systems are supported
 
-  * Automated setup of libvirt to let you use libvirt as a regular user
-  * Full vagrant provisioning, including updating your `~/.ssh/config`
-  * Terraform provisioning on different cloud providers, and updating
-    your `~/.ssh/config` for you
-  * Running ansible to install dependencies on debian
-  * Using ansible to clone, compile and boot into to any random kernel git tree
-    with a supplied config
+  * Linux
+  * OS X
 
-# Install dependencies
+Adding windows support should be easy, if a recent version of vagrant,
+terraform, and ansible can be found.
+
+# Linux distribution support by kdevops
+
+There are two scopes to consider for Linux distribution support, one the
+host, and then for the target systems. We document our support for each
+here.
+
+## Host Linux distribution support by kdevops
+
+Linux Distribution support is only relevant for the host system which you
+will use as your `command and control center`, if you will.
+
+Distributions are supported as new users add support for them. Adding support
+for a new distribution typically just consists of updating the kdevops
+ansible roles with support for doing a mapping of package names, package
+manager updates, and ensuring your distribution can install the latest
+version of vagrant and terraform. Because you *want* the latest version of
+vagrant and terraform rolling Linux distributions are encouraged to be used.
+Currently supported Linux distributions:
+
+  * Debian testing
+  * OpenSUSE Tumbleweed
+
+If your distribution does not have vagrant and terraform packaged, support
+is provided to download the latest releases via the published zip files,
+however this can get complex quite fast due to the dependency chain.
+
+# Target Linux distributions support
+
+*Any* Linux distribution can be used as a target, however, the kdevops ansible
+roles would need to be updated to map for distribution specific things such
+as package names, and if you are using an enterprise release how to register
+it. Give kdevops a test run, and if you get support added, feel free to extend
+this list.
+
+Currently supported target Linux distributions:
+
+   * Debian testing
+   * OpenSUSE Tumbleweed
+   * SUSE Linux
+
+# Project dependencies
 
 You will have to install ansible, and python. We do the rest for you.
 
@@ -132,15 +185,17 @@ The following Operating Systems are supported:
 
 ### Running libvirt as a regular user
 
-kdevops can be used without requiring root privileges. We have an ansible
-role which takes care of dealing with this for you. You'd only use libvirt
-if using Linux.
+kdevops is designed be used without requiring root privileges, however your
+user must be allowed to run sudo without a password, and for the regular
+user to also be able to run libvirt commands as a regular user. We have an
+ansible role which takes care of dealing with this for you. You'd only use
+libvirt if using Linux.
 
 ### Node configuration
 
-The term `host` is often used to describe `localhost`, and so to help distinguish
-`localhost` from your target hosts you'd use for development we refer to target
-hosts for development as `nodes`.
+The term `host` is often used to describe `localhost`, and so to help
+distinguish `localhost` from your target hosts you'd use for development we
+refer to target hosts for development as `nodes`.
 
 We use a yml file to let you describe your project's nodes and how to configure
 them. You configure your node target deployment on the
