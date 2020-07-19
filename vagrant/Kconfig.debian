@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: GPL-2.0
+if VAGRANT_DEBIAN
+
+choice
+	prompt "Debian release to use"
+	default VAGRANT_DEBIAN_BUSTER64
+
+config VAGRANT_DEBIAN_BUSTER64
+	bool "debian/buster64"
+	help
+	  This option will set the target guest to debian/buster64.
+
+endchoice
+
+endif # VAGRANT_DEBIAN

@@ -1,0 +1,90 @@
+if VAGRANT
+
+choice
+	prompt "Vagrant Guest Linux distribution to use"
+	default VAGRANT_DEBIAN
+
+config VAGRANT_DEBIAN
+	bool "Debian"
+	help
+	  This option will set the target tuest to Debian.
+
+config VAGRANT_OPENSUSE
+	bool "OpenSUSE"
+	help
+	  This option will set the target tuest to OpenSUSE.
+
+config VAGRANT_FEDORA
+	bool "Fedora"
+	help
+	  This option will set the target tuest to Fedora.
+
+endchoice
+
+source "vagrant/Kconfig.debian"
+source "vagrant/Kconfig.opensuse"
+source "vagrant/Kconfig.fedora"
+
+config VAGRANT_BOX
+	string "Vagrant box"
+	default "debian/buster64" if VAGRANT_DEBIAN_BUSTER64 || !VAGRANT
+	default "opensuse/Tumbleweed.x86_64" if VAGRANT_OPENSUSE_X86_64_TW
+	default "fedora/32-beta-cloud-base" if VAGRANT_FEDORA_X86_64_32_CLOUD_BASE
+	help
+	  The vagrant box to use.
+
+config VAGRANT_BOX_VERSION
+	string "Vagrant box version"
+	default "" if VAGRANT_DEBIAN_BUSTER64 || !VAGRANT
+	default "1.0.20200714" if VAGRANT_OPENSUSE_X86_64_TW_1020200714
+	default "32.20200312.0" if VAGRANT_FEDORA_32_202003120
+	help
+	  The vagrant box version to use. Leave this empty if using
+	  debian/buster64.
+
+config VAGRANT_LIBVIRT_INSTALL
+	bool "Installs libvirt"
+	default y
+	help
+	  If this option is enabled then the ansible role which installs
+	  libvirt for you will be run. The goal will be to ensure you have
+	  libvirt installed and running.
+
+config VAGRANT_LIBVIRT_CONFIGURE
+	bool "Configure libvirt so you spawn guests as a regular user"
+	default y
+	help
+	  If this option is enabled then the ansible role which configures
+	  libvirt for you will be run. This typically just requires adding the
+	  user to a specific set of groups. The user must log out and back
+	  in again, to ensure the new group takes effect. The goal in the
+	  configuration will be to ensure you can use libvirt to spawn guests
+	  as a regular user. You are encouraged to say y here unless you know
+	  what you are doing or you already know this works. If you are unsure,
+	  the litmus test for this is if you can run vagrant up, on any public
+	  demo box available.
+
+config VAGRANT_LIBVIRT_VERIFY
+	bool "Verify that a user can spawn libvirt as a regular user"
+	default y
+	help
+	  To enable a user to be able to spawn libvirt guests as a regular user
+	  a user is typically added to a few groups. These groups are not
+	  effective immediately, and so before a user can assume that they
+	  use vagrant they must verify that the required groups are effective.
+	  If you enable this option, we will spawn an ansible role that will
+	  verfify and ensure that your user is already part of these groups.
+	  You can safely say yes here.
+
+config VAGRANT_INSTALL_PRIVATE_BOXES
+	bool "Install private vagrant boxes"
+	default y
+	help
+	  If this option is enabled then the ansible role which installs
+	  additional vagrant boxes will be run. This is useful if for example,
+	  you have private vagrant boxes available and you want to use them.
+	  You can safely disable this option if you are using only public
+	  vagrant boxes. Enabling this option is safe as well, given no
+	  private boxes would be defined, and so nothing is done.
+
+endif # VAGRANT

@@ -1,0 +1,32 @@
+# SPDX-License-Identifier: GPL-2.0
+if VAGRANT_FEDORA
+
+choice
+	prompt "Fedora release to use"
+	default VAGRANT_FEDORA_X86_64_32_CLOUD_BASE
+
+config VAGRANT_FEDORA_X86_64_32_CLOUD_BASE
+	bool "fedora/32-beta-cloud-base"
+	help
+	  This option will set the target guest to fedora/32-beta-cloud-base
+	  release 32.20200312.0
+
+endchoice
+
+if VAGRANT_FEDORA_X86_64_32_CLOUD_BASE
+
+choice
+	prompt "fedora/32-beta-cloud-base version to use"
+	default VAGRANT_FEDORA_32_202003120
+
+config VAGRANT_FEDORA_32_202003120
+	bool "fedora/32-beta-cloud-base 32.20200312.0"
+	help
+	  This option will set the target guest to fedora/32-beta-cloud-base
+	  release 32.20200312.0
+
+endchoice
+
+endif # VAGRANT_FEDORA_X86_64_32_CLOUD_BASE
+
+endif # VAGRANT_FEDORA

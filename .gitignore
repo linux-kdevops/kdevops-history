@@ -2,6 +2,15 @@
 *.o
 *.retry
 
+.config
+.config.old
+
+scripts/kconfig/.mconf-cfg
+
+vagrant/kdevops_nodes.yaml
+
+include/
+
 # You can override role specific stuff on these
 ansible/roles/*/vars/main.yml
 extra_vars.yml

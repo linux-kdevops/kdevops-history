@@ -1,6 +1,7 @@
 ---
 vagrant_global:
-  box: "debian/buster64"
+  box: "@VAGRANTBOX@"
+  box_version: "@VBOXVERSION@"
   memory: 8192
   cpus: 8
   # Enable the below options

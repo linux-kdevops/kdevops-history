@@ -1,0 +1,32 @@
+# SPDX-License-Identifier: GPL-2.0
+if VAGRANT_OPENSUSE
+
+choice
+	prompt "OpenSUSE release to use"
+	default VAGRANT_OPENSUSE_X86_64_TW
+
+config VAGRANT_OPENSUSE_X86_64_TW
+	bool "opensuse/Tumbleweed.x86_64"
+	help
+	  Enable this to be able to select between the supported OpenSUSE
+	  Tumbleweed releases.
+
+endchoice
+
+if VAGRANT_OPENSUSE_X86_64_TW
+
+choice
+	prompt "opensuse/Tumbleweed.x86_64 version to use"
+	default VAGRANT_OPENSUSE_X86_64_TW_1020200714
+
+config VAGRANT_OPENSUSE_X86_64_TW_1020200714
+	bool "opensuse/Tumbleweed.x86_64 1.0.20200714"
+	help
+	  This option will set the target guest to opensuse/Tumbleweed.x86_64
+	  release 1.0.20200714.
+
+endchoice
+
+endif # VAGRANT_OPENSUSE_X86_64_TW
+
+endif # VAGRANT_OPENSUSE
