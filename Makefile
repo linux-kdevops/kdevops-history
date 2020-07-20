@@ -41,7 +41,7 @@ obj-$(CONFIG_VAGRANT_INSTALL_PRIVATE_BOXES)	+= kdevops_vagrant_boxes
 obj-$(CONFIG_VAGRANT_LIBVIRT_VERIFY)		+= kdevops_verify_vagrant_user
 endif
 
-ifeq (y,$(FORCE_INSTALL_ANSIBLE_KDEVOPS))
+ifeq (y,$(CONFIG_FORCE_INSTALL_ANSIBLE_KDEVOPS))
 KDEVOPS_FORCE_ANSIBLE_ROLES := "--force"
 else
 KDEVOPS_FORCE_ANSIBLE_ROLES := ""
