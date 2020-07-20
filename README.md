@@ -10,7 +10,43 @@ kdevops ansible role to let you ramp up with a Linux kernel development
 and testing environment fast. You can use this as a template, or you can
 fork it for your own needs.
 
+kconfig support is provided, to allow you to configure which features from
+kdevops you want to use.
+
 ![kdevops-diagram](images/kdevops-diagram.png)
+
+# Configuring kdevops
+
+kdevops provides support for vagrant, and terraform, and optionally helps
+you install and configure libvirt. What a target system may need will vary,
+and so a the Linux modeling variability language, kconfig, has been embraced
+to allow users to configure how kdevops is to be used.
+
+![kdevops-config](images/kdevops-config.png)
+
+To configure run:
+
+```bash
+make menuconfig
+```
+
+To get help:
+
+```
+make help
+```
+
+The different tested distributions with kdevops is also enabled through
+the configuration interface, and so you don't have to do much but select
+the distribution you want to use.
+
+Once done with configuration just run:
+
+```bash
+make
+```
+
+This is the same as running `make deps`.
 
 ## Motivation
 
@@ -141,6 +177,9 @@ as package names, and if you are using an enterprise release how to register
 it. Give kdevops a test run, and if you get support added, feel free to extend
 this list.
 
+The list of supported distributions are parft of the list of avaiable
+distributions you can select for using `make menuconfig`.
+
 Currently supported target Linux distributions:
 
    * Debian testing
@@ -150,11 +189,16 @@ Currently supported target Linux distributions:
 # Project dependencies
 
 You will have to install ansible, and python. We do the rest for you.
-
-To install further dependencies:
+After configuration install further dependencies with:
 
 ```
 make deps
+```
+
+or just:
+
+```
+make
 ```
 
 kdevops relies on a series of ansible roles to allow us to share as much code
@@ -214,7 +258,7 @@ used.
 If on Linux we'll assume you are using KVM / libvirt. If on OS X we'll assume
 you are using Virtualbox. If these assumptions are incorrect you can override
 on the configuration file for your node provisioning. For instance, for this
-demo you'd use `vagrant/kdevops_nodes.yaml` and set the force_provider variable
+demo you'd use `vagrant/kdevops_nodes.yaml` and set the `force_provider` variable
 to either "libvirt" or "kvm". You can also use environment variables to
 override the provider:
 
