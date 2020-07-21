@@ -15,6 +15,12 @@ kdevops you want to use.
 
 ![kdevops-diagram](images/kdevops-diagram.png)
 
+# Requirements for kdevops
+
+You must be on a recent Linux distribution or OS X with a recent version of
+vagrant or terraform. More details on the system host requirements are
+documented below, but this is the gist.
+
 # Configuring kdevops
 
 kdevops provides support for vagrant, and terraform, and optionally helps
@@ -30,7 +36,7 @@ To configure run:
 make menuconfig
 ```
 
-To get help:
+## Getting help with configuration
 
 ```
 make help
@@ -40,15 +46,34 @@ The different tested distributions with kdevops is also enabled through
 the configuration interface, and so you don't have to do much but select
 the distribution you want to use.
 
+## Installing dependencies
+
 Once done with configuration just run:
 
 ```bash
 make
 ```
 
-This is the same as running `make deps`.
+This is the same as running `make deps`. Now to get Linux, compile it,
+install it, and get the two default guests to boot into the Linux we
+just compiled you would run:
 
-## Motivation
+## Bring up guests if using vagrant
+
+```
+cd vagrant
+vagrant up
+```
+
+## Installing Linux on guests and rebooting into Linux
+
+On the top level directory just run:
+
+```bash
+make linux
+```
+
+# Motivation
 
 A tedious part about doing Linux kernel development or testing is ramping up
 a set of systems for it. For instance, settings up a test bed for testing
@@ -59,7 +84,7 @@ cloud-neutral way, is useful for many other things than just Linux filesystems
 testing, and so kdevops was born to generalize bring up for Linux kernel
 development and testing as fast as possible.
 
-## One ansible role to rule them all
+# One ansible role to rule them all
 
 Each ansible role and terraform module which kdevops uses focuses on one
 specific small goal of the development focus of kdevops. Since the number of
@@ -73,65 +98,11 @@ This project synchronizes releases based on that role's own releases, and
 so there is parity in release numbers between both of these projects to
 reflect this.
 
-## Be lazy and override all settings in one optional file
-
-To help users easily override role variables *all* of the kdevops ansible roles
-look for optional extra argument files, which you can use to override *all*
-role defaults. This is a `kdevops` thing, to help you be lazy. Since ansible
-roles are expected to be defined in a directory, we look at the parent directory
-for these optional files, and use the first one found. The oder of the files
-we look for is:
-
-  * `extra_args.yml`
-  * `extra_args.yaml`
-  * `extra_args.json`
-
-## Fork me
+# Fork me
 
 You can either fork this project to start your own kdevops project, or you can
 rely on the bare bones `kdevops_install` ansible galaxy role to get going and
 use this project as an example of how to use that ansible role.
-
-## Parts to kdevops
-
-There are four parts to the long terms ideals for kdevops:
-
-0. Installing ansible roles required
-1. Optional provisioning required for virtual hosts / cloud environment
-2. Provisioning your requirements
-3. Running whatever you want
-
-Ansible is first used to get all the required ansible roles.
-
-Vagrant or terraform can then optionally be used to provision hosts. You don't
-need to use vagrant or terraform if you are using baremetal hosts.
-
-Vagrant makes use of three ansible roles to let you use libvirt as a regular
-user, update your `~/.ssh/config`, update the systems with basic development
-preference files, things like your `.gitconfig` or bashrc hacks, or typical
-packages which you most likely need on any system where you do Linux kernel
-development. This last part is handled by the `devconfig` ansible role. Since
-your `~/.ssh/config` is updated you can then run further ansible roles manually
-when using vagrant.
-
-You would use terraform if instead you want to provision hosts on the cloud, it
-updates your `~/.ssh/config` directly without ansible. Setting up hosts with
-terraform can take time, but what we care most about is *when* hosts are
-finally ready and accessible. Unfortunately some cloud providers can be buggy
-and can lie to you about them being ready and accessible. If we were to believe
-these buggy cloud providers the last provisioning step of running ansible to
-update your `~/.ssh/config` and the `devconfig` ansible role would time out.
-Because of these buggy cloud providers the last step to run ansible to
-update your `~/.ssh/config` and run the `devconfig` ansible role is
-expected to be done manually. One day we expect this to not be an issue.
-
-After provisioning you want to get Linux, configure it, build it, install it
-and reboot into it. This is handled by the `bootlinux` ansible role. This is
-a bare minimum example of "Running whatever you want", however there are
-more eleborate examples, which take this further. For instance:
-
-  * [fw-kdevops](https://github.com/mcgrof/fw-kdevops) - Linux kernel firmware loader testing, and demo for selftests
-  * [oscheck](https://github.com/mcgrof/oscheck) - Linux kernel filesystem testsing
 
 # Operating Systems supported by kdevops
 
@@ -169,7 +140,7 @@ If your distribution does not have vagrant and terraform packaged, support
 is provided to download the latest releases via the published zip files,
 however this can get complex quite fast due to the dependency chain.
 
-# Target Linux distributions support
+## Target Linux distributions support
 
 *Any* Linux distribution can be used as a target, however, the kdevops ansible
 roles would need to be updated to map for distribution specific things such
@@ -186,6 +157,71 @@ Currently supported target Linux distributions:
    * OpenSUSE Tumbleweed
    * Fedora 32
    * SUSE Linux
+
+# Underneath the kdevops hood
+
+## Be lazy and override all settings in one optional file
+
+With kconfig support the additional extra files are not needed, but are
+useful for project configurations which don't want to rely on the kdevop's
+kconfig integration.
+
+To help users easily override role variables *all* of the kdevops ansible roles
+look for optional extra argument files, which you can use to override *all*
+role defaults. This is a `kdevops` thing, to help you be lazy. Since ansible
+roles are expected to be defined in a directory, we look at the parent directory
+for these optional files, and use the first one found. The oder of the files
+we look for is:
+
+  * `extra_args.yml`
+  * `extra_args.yaml`
+  * `extra_args.json`
+
+## Parts to kdevops
+
+There are five parts to the long terms ideals for kdevops:
+
+0. Configuring kdevops
+1. Installing ansible roles required
+2. Optional provisioning required for virtual hosts / cloud environment
+3. Provisioning your requirements
+4. Running whatever you want
+
+We configure kdevops using the Linux modeling variability language, kconfig.
+Using kconfig streamlines the other steps for you.
+
+Ansible is then used to get all the required ansible roles.
+
+Vagrant or terraform can then optionally be used to provision hosts. You don't
+need to use vagrant or terraform if you are using baremetal hosts.
+
+Vagrant makes use of three ansible roles to let you use libvirt as a regular
+user, update your `~/.ssh/config`, update the systems with basic development
+preference files, things like your `.gitconfig` or bashrc hacks, or typical
+packages which you most likely need on any system where you do Linux kernel
+development. This last part is handled by the `devconfig` ansible role. Since
+your `~/.ssh/config` is updated you can then run further ansible roles manually
+when using vagrant.
+
+You would use terraform if instead you want to provision hosts on the cloud, it
+updates your `~/.ssh/config` directly without ansible. Setting up hosts with
+terraform can take time, but what we care most about is *when* hosts are
+finally ready and accessible. Unfortunately some cloud providers can be buggy
+and can lie to you about them being ready and accessible. If we were to believe
+these buggy cloud providers the last provisioning step of running ansible to
+update your `~/.ssh/config` and the `devconfig` ansible role would time out.
+Because of these buggy cloud providers the last step to run ansible to
+update your `~/.ssh/config` and run the `devconfig` ansible role is
+expected to be done manually. One day we expect this to not be an issue.
+
+After provisioning you want to get Linux, configure it, build it, install it
+and reboot into it. This is handled by the `bootlinux` ansible role. This is
+a bare minimum example of "Running whatever you want", however there are
+more eleborate examples, which take this further. For instance:
+
+  * [fw-kdevops](https://github.com/mcgrof/fw-kdevops) - Linux kernel firmware loader testing, and demo for selftests
+  * [oscheck](https://github.com/mcgrof/oscheck) - Linux kernel filesystem testsing
+
 
 # Project dependencies
 
