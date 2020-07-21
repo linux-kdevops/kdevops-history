@@ -1,0 +1,10 @@
+config BOOTLINUX
+	bool "Options to get or install Linux from git"
+	default y
+	help
+	  This option will allow the 'make linux' target be usable for you
+	  to just get Linux from git, or to install it as well.
+
+	  Say y unless you don't want to have 'make linux' do anything.
+
+source "Kconfig.bootlinux"

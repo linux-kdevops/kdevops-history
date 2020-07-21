@@ -1,0 +1,47 @@
+choice
+	prompt "Node bring up method"
+	default VAGRANT
+
+config VAGRANT
+	bool "Vagrant"
+	default y
+	help
+	  This option will enable use of vagrant. Enable this if you want to
+	  use local virtualization technologies such as KVM with libvirt or
+	  VirtualBox. Enabling this feature will enable you to select which
+	  target guests to use, and configures things for you. It will also
+	  ensure dependencies are installed for vagrant when running:
+
+	    make deps
+
+config TERRAFORM
+	bool "Terraform"
+	default y
+	help
+	  This option will enable use of vagrant. Enable this if you want to
+	  use terraform to create nodes on a cloud environment such as:
+
+	    * Azure
+	    * AWS
+	    * OpenStack
+	    * GCE
+
+	  Enabling this option will enable installing terraform dependencies
+	  when you run:
+
+	    make deps
+
+	  If you are not using a cloud environment just disable this.
+
+config SKIP_BRINGUP
+	bool "Skip bring up - bare metal or existing nodes"
+	default y
+	help
+	  This option will skip bring up, as you already have existing
+	  systems up and available and ssh'able. This might be the case
+	  if you are working with bare metal systems or systems you may
+	  have already provisioned through other means.
+
+endchoice
+
+source "vagrant/Kconfig"
