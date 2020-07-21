@@ -49,11 +49,14 @@ endif
 
 BOOTLINUX_ARGS	:=
 ifeq (y,$(CONFIG_BOOTLINUX))
-BOOTLINUX_ARGS	+= "--extra-vars='"
-BOOTLINUX_ARGS	+= "target_linux_tag=$(CONFIG_BOOTLINUX_TREE)"
-BOOTLINUX_ARGS	+= "target_linux_config=$(CONFIG_BOOTLINUX_TREE_VERSION)"
-BOOTLINUX_ARGS	+= "--extra-vars='"
-BOOTLINUX_ARGS	+= "'"
+TREE_URL:=$(subst ",,$(CONFIG_BOOTLINUX_TREE))
+TREE_NAME:=$(notdir $(TREE_URL))
+TREE_VERSION:=$(subst ",,$(CONFIG_BOOTLINUX_TREE_VERSION))
+TREE_CONFIG:=config-$(TREE_VERSION)
+BOOTLINUX_ARGS	+= target_linux_git=$(TREE_URL)
+BOOTLINUX_ARGS	+= target_linux_tree=$(TREE_NAME)
+BOOTLINUX_ARGS	+= target_linux_tag=$(TREE_VERSION)
+BOOTLINUX_ARGS	+= target_linux_config=$(TREE_CONFIG)
 else
 endif
 
@@ -111,5 +114,5 @@ PHONY += linux
 linux: $(KDEVOPS_NODES)
 	@ansible-playbook -i \
 		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
-		$(BOOTLINUX_ARGS)
+		--extra-vars="$(BOOTLINUX_ARGS)"
 .PHONY: $(PHONY)
