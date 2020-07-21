@@ -42,9 +42,9 @@ obj-$(CONFIG_VAGRANT_LIBVIRT_VERIFY)		+= kdevops_verify_vagrant_user
 endif
 
 ifeq (y,$(CONFIG_FORCE_INSTALL_ANSIBLE_KDEVOPS))
-KDEVOPS_FORCE_ANSIBLE_ROLES := "--force"
+KDEVOPS_FORCE_ANSIBLE_ROLES := --force
 else
-KDEVOPS_FORCE_ANSIBLE_ROLES := ""
+KDEVOPS_FORCE_ANSIBLE_ROLES :=
 endif
 
 BOOTLINUX_ARGS	:=
@@ -107,7 +107,7 @@ deps: $(KDEVOPS_NODES) $(obj-y)
 
 PHONY += kdevops_install
 kdevops_install: $(KDEVOPS_NODES)
-	@ansible-galaxy install $(FORCE_INSTALL_ANSIBLE_ROLES) -r requirements.yml
+	@ansible-galaxy install $(KDEVOPS_FORCE_ANSIBLE_ROLES) -r requirements.yml
 	@ansible-playbook -i $(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/kdevops_install.yml
 
 PHONY += linux
