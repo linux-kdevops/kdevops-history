@@ -97,6 +97,7 @@ mrproper:
 	@rm -f $(KDEVOPS_NODES)
 	@rm -f .config .config.old
 	@rm -rf include
+	@find terraform/ -type f| egrep -v "terraform/$|terraform/nodes.yaml|terraform/.gitignore" | xargs rm -f
 
 PHONY += help
 help:
