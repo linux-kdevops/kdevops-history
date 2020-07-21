@@ -16,8 +16,8 @@ config BOOTLINUX_DEV
 
 endchoice
 
-source "Kconfig.bootlinux.stable"
-source "Kconfig.bootlinux.dev"
+source "kconfigs/workflows/bootlinux/Kconfig.stable"
+source "kconfigs/workflows/bootlinux/Kconfig.dev"
 
 config BOOTLINUX_TREE
 	string "Linux git tree URL"

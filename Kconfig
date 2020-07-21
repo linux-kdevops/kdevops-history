@@ -6,13 +6,13 @@
 mainmenu "$(PROJECT) $(PROJECTRELEASE)"
 
 menu "Bring up methods"
-source "Kconfig.bringup"
+source "kconfigs/Kconfig.bringup"
 endmenu
 
 menu "Kdevops configuration"
-source "Kconfig.kdevops"
+source "kconfigs/Kconfig.kdevops"
 endmenu
 
 menu "Target workflows"
-source "Kconfig.workflows"
+source "kconfigs/workflows/Kconfig"
 endmenu

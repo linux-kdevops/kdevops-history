@@ -7,4 +7,4 @@ config BOOTLINUX
 
 	  Say y unless you don't want to have 'make linux' do anything.
 
-source "Kconfig.bootlinux"
+source "kconfigs/workflows/bootlinux/Kconfig
