@@ -184,6 +184,7 @@ Currently supported target Linux distributions:
 
    * Debian testing
    * OpenSUSE Tumbleweed
+   * Fedora 32
    * SUSE Linux
 
 # Project dependencies
