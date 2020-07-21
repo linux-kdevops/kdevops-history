@@ -1,0 +1,38 @@
+if BOOTLINUX
+
+choice
+	prompt "Type of development version of Linux to use"
+	default BOOTLINUX_DEV
+
+config BOOTLINUX_STABLE
+	bool "Stable Linux releases"
+	help
+	  This will let you choose from stable Linux trees only.
+
+config BOOTLINUX_DEV
+	bool "Development Linux releases"
+	help
+	  This will let you choose from development Linux trees only.
+
+endchoice
+
+source "Kconfig.bootlinux.stable"
+source "Kconfig.bootlinux.dev"
+
+config BOOTLINUX_TREE
+	string "Linux git tree URL"
+	default "git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git" if BOOTLINUX_TREE_LINUS
+	default "git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git" if BOOTLINUX_TREE_STABLE
+	default "git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git" if BOOTLINUX_TREE_NEXT
+	help
+	  The Linux git tree to use.
+
+config BOOTLINUX_TREE_VERSION
+	string "Git tree branch / tag / sha1sum to use"
+	default "4.19" if BOOTLINUX_TREE_LINUS
+	default "4.19.133" if BOOTLINUX_TREE_STABLE
+	default "next-20200701" if BOOTLINUX_TREE_NEXT
+	help
+	  The git branch / tag or sha1sum to use.
+
+endif # BOOTLINUX

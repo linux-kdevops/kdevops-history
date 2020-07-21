@@ -1,0 +1,14 @@
+if BOOTLINUX_DEV
+
+choice
+	prompt "Linux development tree to use"
+	default BOOTLINUX_TREE_NEXT
+
+config BOOTLINUX_TREE_NEXT
+	bool "linux-next"
+	help
+	  Use the linux-next tree.
+
+endchoice
+
+endif # BOOTLINUX_DEV

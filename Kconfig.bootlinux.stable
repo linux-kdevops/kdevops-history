@@ -1,0 +1,19 @@
+if BOOTLINUX_STABLE
+
+choice
+	prompt "Linust stable tree to use"
+	default BOOTLINUX_TREE_STABLE
+
+config BOOTLINUX_TREE_LINUS
+	bool "linux"
+	help
+	  Use Linus Torvald's linux tree.
+
+config BOOTLINUX_TREE_STABLE
+	bool "linux-stable"
+	help
+	  Use the linux-stable tree.
+
+endchoice
+
+endif # BOOTLINUX_STABLE

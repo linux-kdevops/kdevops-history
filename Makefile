@@ -1,9 +1,9 @@
 # SPDX-License-Identifier: GPL-2.0
 #
 PROJECT = kdevops
-VERSION = 2
+VERSION = 3
 PATCHLEVEL = 0
-SUBLEVEL = 7
+SUBLEVEL = 1
 EXTRAVERSION = -rc1
 
 KDEVOPS_PLAYBOOKS_DIR :=	playbooks
@@ -45,6 +45,16 @@ ifeq (y,$(CONFIG_FORCE_INSTALL_ANSIBLE_KDEVOPS))
 KDEVOPS_FORCE_ANSIBLE_ROLES := "--force"
 else
 KDEVOPS_FORCE_ANSIBLE_ROLES := ""
+endif
+
+BOOTLINUX_ARGS	:=
+ifeq (y,$(CONFIG_BOOTLINUX))
+BOOTLINUX_ARGS	+= "--extra-vars='"
+BOOTLINUX_ARGS	+= "target_linux_tag=$(CONFIG_BOOTLINUX_TREE)"
+BOOTLINUX_ARGS	+= "target_linux_config=$(CONFIG_BOOTLINUX_TREE_VERSION)"
+BOOTLINUX_ARGS	+= "--extra-vars='"
+BOOTLINUX_ARGS	+= "'"
+else
 endif
 
 export TOPDIR=./
@@ -97,4 +107,9 @@ kdevops_install: $(KDEVOPS_NODES)
 	@ansible-galaxy install $(FORCE_INSTALL_ANSIBLE_ROLES) -r requirements.yml
 	@ansible-playbook -i $(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/kdevops_install.yml
 
+PHONY += linux
+linux: $(KDEVOPS_NODES)
+	@ansible-playbook -i \
+		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
+		$(BOOTLINUX_ARGS)
 .PHONY: $(PHONY)
