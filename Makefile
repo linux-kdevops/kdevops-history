@@ -31,7 +31,7 @@ CFLAGS += $(INCLUDES)
 ifeq (,$(wildcard $(CURDIR)/.config))
 else
 obj-$(CONFIG_INSTALL_ANSIBLE_KDEVOPS)		:= kdevops_install
-obj-$(CONFIG_INSTALL_ANSIBLE_KDEVOPS_ROLES)	:= kdevops_ansible_deps
+obj-$(CONFIG_INSTALL_ANSIBLE_KDEVOPS_ROLES)	+= kdevops_ansible_deps
 obj-$(CONFIG_TERRAFORM)				+= kdevops_terraform_deps
 obj-$(CONFIG_VAGRANT)				+= kdevops_vagrant_install_vagrant
 obj-$(CONFIG_VAGRANT_LIBVIRT_INSTALL)		+= kdevops_vagrant_install_libvirt
