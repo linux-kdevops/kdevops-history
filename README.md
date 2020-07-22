@@ -141,6 +141,7 @@ make destroy
 Below are sections which get into technical details of how kdevops works.
 
   * [One ansible role to rule them all](docs/one-ansible-role.md)
+  * [kconfig integration](docs/kconfig-integration.md)
   * [Motivation behind kdevops](docs/motivations.md)
   * [Linux distribution support](docs/linux-distro-support.md)
   * [Overriding all ansible role options with one file](docs/ansible-override.md)
