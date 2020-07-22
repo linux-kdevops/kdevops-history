@@ -149,11 +149,14 @@ $(KDEVOPS_TFVARS): $(KDEVOPS_TFVARS_TEMPLATE) .config
 PHONY += clean
 clean:
 	$(MAKE) -f scripts/build.Makefile $@
+	$(MAKE) -C terraform $@
 
 PHONY += mrproper
 mrproper:
 	$(MAKE) -f scripts/build.Makefile clean
 	$(MAKE) -f scripts/build.Makefile $@
+	$(MAKE) -C terraform $@
+	@rm -f terraform/*/terraform.tfvars
 	@rm -f $(KDEVOPS_NODES)
 	@rm -f .config .config.old
 	@rm -rf include
