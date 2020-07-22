@@ -47,6 +47,52 @@ else
 KDEVOPS_FORCE_ANSIBLE_ROLES :=
 endif
 
+export KDEVOPS_CLOUD_PROVIDER=aws
+ifeq (y,$(CONFIG_TERRAFORM_AWS))
+endif
+ifeq (y,$(CONFIG_TERRAFORM_GCE))
+export KDEVOPS_CLOUD_PROVIDER=gce
+endif
+ifeq (y,$(CONFIG_TERRAFORM_AZURE))
+export KDEVOPS_CLOUD_PROVIDER=azure
+endif
+ifeq (y,$(CONFIG_TERRAFORM_OPENSTACK))
+export KDEVOPS_CLOUD_PROVIDER=openstack
+endif
+
+TFVARS_TEMPLATE_DIR=terraform/templates
+TFVARS_FILE_NAME=terraform.tfvars
+TFVARS_FILE_POSTFIX=$(TFVARS_FILE_NAME).in
+
+KDEVOPS_TFVARS_TEMPLATE=$(TFVARS_TEMPLATE_DIR)/$(KDEVOPS_CLOUD_PROVIDER)/$(TFVARS_FILE_POSTFIX)
+KDEVOPS_TFVARS=terraform/$(KDEVOPS_CLOUD_PROVIDER)/$(TFVARS_FILE_NAME)
+
+KDEVOS_TERRAFORM_EXTRA_DEPS :=
+ifeq (y,$(CONFIG_TERRAFORM))
+# For now, we only have tfvars processing support for aws
+ifeq (y,$(CONFIG_TERRAFORM_AWS))
+KDEVOS_TERRAFORM_EXTRA_DEPS += $(KDEVOPS_TFVARS)
+endif
+endif
+
+# This will always exist, so the dependency is no set unless we have
+# a key to generate.
+KDEVOPS_GEN_SSH_KEY := /dev/null
+KDEVOPS_REMOVE_KEY := /dev/null
+
+ifeq (y,$(CONFIG_TERRAFORM_SSH_CONFIG_GENKEY))
+export KDEVOPS_SSH_PUBKEY:=$(subst ",,$(CONFIG_TERRAFORM_SSH_CONFIG_PUBKEY_FILE))
+# We have to do shell expansion. Oh, life is so hard.
+export KDEVOPS_SSH_PUBKEY:=$(subst ~,$(HOME),$(KDEVOPS_SSH_PUBKEY))
+export KDEVOPS_SSH_PRIVKEY:=$(basename $(KDEVOPS_SSH_PUBKEY))
+
+ifeq (y,$(CONFIG_TERRAFORM_SSH_CONFIG_GENKEY_OVERWRITE))
+KDEVOPS_REMOVE_KEY = remove-ssh-key
+endif
+
+KDEVOPS_GEN_SSH_KEY := $(KDEVOPS_SSH_PRIVKEY)
+endif
+
 BOOTLINUX_ARGS	:=
 ifeq (y,$(CONFIG_BOOTLINUX))
 TREE_URL:=$(subst ",,$(CONFIG_BOOTLINUX_TREE))
@@ -83,8 +129,22 @@ export TOPDIR=./
 	echo "\--"							;\
 	false)
 
+PHONY += remove-ssh-key
+remove-ssh-key:
+	@echo Removing key pair for $(KDEVOPS_SSH_PRIVKEY)
+	@rm -f $(KDEVOPS_SSH_PRIVKEY)
+	@rm -f $(KDEVOPS_SSH_PUBKEY)
+
+$(KDEVOPS_SSH_PRIVKEY): .config
+	@echo Generating new private key: $(KDEVOPS_SSH_PRIVKEY)
+	@echo Generating new public key: $(KDEVOPS_SSH_PUBKEY)
+	@$(TOPDIR)/scripts/gen_ssh_key.sh
+
 $(KDEVOPS_NODES): $(KDEVOPS_NODES_TEMPLATE) .config
 	@$(TOPDIR)/scripts/gen_nodes_file.sh
+
+$(KDEVOPS_TFVARS): $(KDEVOPS_TFVARS_TEMPLATE) .config
+	@$(TOPDIR)scripts/gen_tfvars.sh
 
 PHONY += clean
 clean:
@@ -97,14 +157,18 @@ mrproper:
 	@rm -f $(KDEVOPS_NODES)
 	@rm -f .config .config.old
 	@rm -rf include
-	@find terraform/ -type f| egrep -v "terraform/$|terraform/nodes.yaml|terraform/.gitignore" | xargs rm -f
 
 PHONY += help
 help:
 	$(MAKE) -f scripts/build.Makefile $@
 
 PHONY := deps
-deps: $(KDEVOPS_NODES) $(obj-y)
+deps: \
+	$(KDEVOPS_NODES) \
+	$(KDEVOS_TERRAFORM_EXTRA_DEPS) \
+	$(KDEVOPS_REMOVE_KEY) \
+	$(KDEVOPS_GEN_SSH_KEY) \
+	$(obj-y)
 
 PHONY += kdevops_install
 kdevops_install: $(KDEVOPS_NODES)

@@ -1,0 +1,26 @@
+if TERRAFORM_AWS
+
+choice
+	prompt "AWS region to use"
+	default TERRAFORM_AWS_US_WEST_1B
+
+config TERRAFORM_AWS_US_WEST_1
+	bool "us-west-1"
+	help
+	  This option will set the aws region to us-west-1b
+
+config TERRAFORM_AWS_US_WEST_1B
+	bool "us-west-1b"
+	help
+	  This option will set the aws region to us-west-1b
+
+endchoice
+
+config TERRAFORM_AWS_REGION
+	string "AWS region"
+	default "us-west-1" if TERRAFORM_AWS_US_WEST_1
+	default "us-west-1b" if TERRAFORM_AWS_US_WEST_1B
+	help
+	  This option will set the aws region to the specified value.
+
+endif # TERRAFORM_AWS

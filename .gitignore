@@ -18,7 +18,6 @@ python/*.pyc
 vagrant/Vagrantfile
 
 terraform/Makefile
-terraform/aws/
 terraform/azure/
 terraform/gce/
 terraform/globals.mk

@@ -45,3 +45,4 @@ config SKIP_BRINGUP
 endchoice
 
 source "vagrant/Kconfig"
+source "terraform/Kconfig"
