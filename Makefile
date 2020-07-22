@@ -145,52 +145,52 @@ export TOPDIR=./
 	false)
 
 bringup_vagrant:
-	@$(TOPDIR)/scripts/bringup_vagrant.sh
+	$(Q)$(TOPDIR)/scripts/bringup_vagrant.sh
 
 bringup_terraform:
-	@$(TOPDIR)/scripts/bringup_terraform.sh
+	$(Q)$(TOPDIR)/scripts/bringup_terraform.sh
 
 bringup: $(KDEVOPS_BRING_UP_DEPS)
 
 destroy_vagrant:
-	@$(TOPDIR)/scripts/destroy_vagrant.sh
+	$(Q)$(TOPDIR)/scripts/destroy_vagrant.sh
 
 destroy_terraform:
-	@$(TOPDIR)/scripts/destroy_vagrant.sh
+	$(Q)$(TOPDIR)/scripts/destroy_vagrant.sh
 
 destroy: $(KDEVOPS_DESTROY_DEPS)
 
 PHONY += remove-ssh-key
 remove-ssh-key:
-	@echo Removing key pair for $(KDEVOPS_SSH_PRIVKEY)
-	@rm -f $(KDEVOPS_SSH_PRIVKEY)
-	@rm -f $(KDEVOPS_SSH_PUBKEY)
+	$(NQ) Removing key pair for $(KDEVOPS_SSH_PRIVKEY)
+	$(Q)rm -f $(KDEVOPS_SSH_PRIVKEY)
+	$(Q)rm -f $(KDEVOPS_SSH_PUBKEY)
 
 $(KDEVOPS_SSH_PRIVKEY): .config
-	@echo Generating new private key: $(KDEVOPS_SSH_PRIVKEY)
-	@echo Generating new public key: $(KDEVOPS_SSH_PUBKEY)
-	@$(TOPDIR)/scripts/gen_ssh_key.sh
+	$(NQ) Generating new private key: $(KDEVOPS_SSH_PRIVKEY)
+	$(NQ) Generating new public key: $(KDEVOPS_SSH_PUBKEY)
+	$(Q)$(TOPDIR)/scripts/gen_ssh_key.sh
 
 $(KDEVOPS_NODES): $(KDEVOPS_NODES_TEMPLATE) .config
-	@$(TOPDIR)/scripts/gen_nodes_file.sh
+	$(Q)$(TOPDIR)/scripts/gen_nodes_file.sh
 
 $(KDEVOPS_TFVARS): $(KDEVOPS_TFVARS_TEMPLATE) .config
-	@$(TOPDIR)/scripts/gen_tfvars.sh
+	$(Q)$(TOPDIR)/scripts/gen_tfvars.sh
 
 PHONY += clean
 clean:
-	$(MAKE) -f scripts/build.Makefile $@
-	$(MAKE) -C terraform $@
+	$(Q)$(MAKE) -f scripts/build.Makefile $@
+	$(Q)$(MAKE) -C terraform $@
 
 PHONY += mrproper
 mrproper:
-	$(MAKE) -f scripts/build.Makefile clean
-	$(MAKE) -f scripts/build.Makefile $@
-	$(MAKE) -C terraform $@
-	@rm -f terraform/*/terraform.tfvars
-	@rm -f $(KDEVOPS_NODES)
-	@rm -f .config .config.old
-	@rm -rf include
+	$(Q)$(MAKE) -f scripts/build.Makefile clean
+	$(Q)$(MAKE) -f scripts/build.Makefile $@
+	$(Q)$(MAKE) -C terraform $@
+	$(Q)rm -f terraform/*/terraform.tfvars
+	$(Q)rm -f $(KDEVOPS_NODES)
+	$(Q)rm -f .config .config.old
+	$(Q)rm -rf include
 
 PHONY += help
 help:
@@ -203,16 +203,16 @@ deps: \
 	$(KDEVOPS_REMOVE_KEY) \
 	$(KDEVOPS_GEN_SSH_KEY) \
 	$(stage-1-y)
-	@$(KDEVOPS_STAGE_2_CMD)
+	$(Q)$(KDEVOPS_STAGE_2_CMD)
 
 PHONY += kdevops_install
 kdevops_install: $(KDEVOPS_NODES)
-	@ansible-galaxy install $(KDEVOPS_FORCE_ANSIBLE_ROLES) -r requirements.yml
-	@ansible-playbook -i $(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/kdevops_install.yml
+	$(Q)ansible-galaxy install $(KDEVOPS_FORCE_ANSIBLE_ROLES) -r requirements.yml
+	$(Q)ansible-playbook -i $(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/kdevops_install.yml
 
 PHONY += linux
 linux: $(KDEVOPS_NODES)
-	@ansible-playbook -i \
+	$(Q)ansible-playbook -i \
 		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
 		--extra-vars="$(BOOTLINUX_ARGS)"
 .PHONY: $(PHONY)
