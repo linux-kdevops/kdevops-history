@@ -35,7 +35,7 @@ ifeq (,$(wildcard $(CURDIR)/.config))
 else
 stage-1-$(CONFIG_INSTALL_ANSIBLE_KDEVOPS)	:= kdevops_install
 stage-2-$(CONFIG_INSTALL_ANSIBLE_KDEVOPS_ROLES)	+= kdevops_ansible_deps
-stage-2--$(CONFIG_TERRAFORM)			+= kdevops_terraform_deps
+stage-2-$(CONFIG_TERRAFORM)			+= kdevops_terraform_deps
 stage-2-$(CONFIG_VAGRANT)			+= kdevops_vagrant_install_vagrant
 stage-2-$(CONFIG_VAGRANT_LIBVIRT_INSTALL)	+= kdevops_vagrant_install_libvirt
 stage-2-$(CONFIG_VAGRANT_LIBVIRT_CONFIGURE)	+= kdevops_vagrant_configure_libvirt
