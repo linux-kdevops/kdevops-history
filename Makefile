@@ -28,23 +28,27 @@ include scripts/kconfig.Makefile
 INCLUDES = -I include/
 CFLAGS += $(INCLUDES)
 
+# kdevops-stage-1-y will be called first.
+# kdevops-stage-2-y will be called after we've deployed all the ansible
+# roles.
 ifeq (,$(wildcard $(CURDIR)/.config))
 else
-obj-$(CONFIG_INSTALL_ANSIBLE_KDEVOPS)		:= kdevops_install
-obj-$(CONFIG_INSTALL_ANSIBLE_KDEVOPS_ROLES)	+= kdevops_ansible_deps
-obj-$(CONFIG_TERRAFORM)				+= kdevops_terraform_deps
-obj-$(CONFIG_VAGRANT)				+= kdevops_vagrant_install_vagrant
-obj-$(CONFIG_VAGRANT_LIBVIRT_INSTALL)		+= kdevops_vagrant_install_libvirt
-obj-$(CONFIG_VAGRANT_LIBVIRT_CONFIGURE)		+= kdevops_vagrant_configure_libvirt
-obj-$(CONFIG_VAGRANT)				+= kdevops_vagrant_get_Vagrantfile
-obj-$(CONFIG_VAGRANT_INSTALL_PRIVATE_BOXES)	+= kdevops_vagrant_boxes
-obj-$(CONFIG_VAGRANT_LIBVIRT_VERIFY)		+= kdevops_verify_vagrant_user
+stage-1-$(CONFIG_INSTALL_ANSIBLE_KDEVOPS)	:= kdevops_install
+stage-2-$(CONFIG_INSTALL_ANSIBLE_KDEVOPS_ROLES)	+= kdevops_ansible_deps
+stage-2--$(CONFIG_TERRAFORM)			+= kdevops_terraform_deps
+stage-2-$(CONFIG_VAGRANT)			+= kdevops_vagrant_install_vagrant
+stage-2-$(CONFIG_VAGRANT_LIBVIRT_INSTALL)	+= kdevops_vagrant_install_libvirt
+stage-2-$(CONFIG_VAGRANT_LIBVIRT_CONFIGURE)	+= kdevops_vagrant_configure_libvirt
+stage-2-$(CONFIG_VAGRANT)			+= kdevops_vagrant_get_Vagrantfile
+stage-2-$(CONFIG_VAGRANT_INSTALL_PRIVATE_BOXES)	+= kdevops_vagrant_boxes
+stage-2-$(CONFIG_VAGRANT_LIBVIRT_VERIFY)	+= kdevops_verify_vagrant_user
+KDEVOPS_STAGE_2_CMD := $(MAKE) -f Makefile.kdevops $(stage-2-y)
 endif
 
 ifeq (y,$(CONFIG_FORCE_INSTALL_ANSIBLE_KDEVOPS))
-KDEVOPS_FORCE_ANSIBLE_ROLES := --force
+export KDEVOPS_FORCE_ANSIBLE_ROLES := --force
 else
-KDEVOPS_FORCE_ANSIBLE_ROLES :=
+export KDEVOPS_FORCE_ANSIBLE_ROLES :=
 endif
 
 KDEVOPS_BRING_UP_DEPS := /dev/null
@@ -121,8 +125,6 @@ endif
 
 export TOPDIR=./
 
--include Makefile.kdevops
-
 # disable built-in rules for this file
 .SUFFIXES:
 
@@ -153,7 +155,7 @@ bringup: $(KDEVOPS_BRING_UP_DEPS)
 destroy_vagrant:
 	@$(TOPDIR)/scripts/destroy_vagrant.sh
 
-destroy_vagrant:
+destroy_terraform:
 	@$(TOPDIR)/scripts/destroy_vagrant.sh
 
 destroy: $(KDEVOPS_DESTROY_DEPS)
@@ -200,7 +202,8 @@ deps: \
 	$(KDEVOS_TERRAFORM_EXTRA_DEPS) \
 	$(KDEVOPS_REMOVE_KEY) \
 	$(KDEVOPS_GEN_SSH_KEY) \
-	$(obj-y)
+	$(stage-1-y)
+	@$(KDEVOPS_STAGE_2_CMD)
 
 PHONY += kdevops_install
 kdevops_install: $(KDEVOPS_NODES)
