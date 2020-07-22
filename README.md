@@ -3,75 +3,138 @@
 kdevops provides a devops environment for Linux kernel development and testing.
 It makes heavy use of public ansible galaxy roles and optionally lets you use
 vagrant or terraform. kdevops is Linux distribution agnostic, and also supports
-OS X.
+OS X. It aims at letting you configure these tools and bring up a set
+of nodes for Linux kernel development as fast as possible.
 
-This particular project is an example demo project which makes use of the
-kdevops ansible role to let you ramp up with a Linux kernel development
-and testing environment fast. You can use this as a template, or you can
-fork it for your own needs.
+You can use this project as a template, or you can fork it for your own needs.
 
 kconfig support is provided, to allow you to configure which features from
-kdevops you want to use.
+kdevops you want to use and get up and running on a fresh version of linux
+in just 4 commands:
+
+  * `make menuconfig`
+  * `make`
+  * `make bringup`
+  * `make linux`
+
+Once kdevops is configured, there are 3 main parts to what kdevops will do
+for you:
+
+  * Bring up
+  * Make systemse easily accessible, and install generic developer preferences
+  * Run defined workflows
 
 ![kdevops-diagram](images/kdevops-diagram.png)
 
-# Requirements for kdevops
+## Requirements for kdevops
 
-You must be on a recent Linux distribution or OS X with a recent version of
-vagrant or terraform. More details on the system host requirements are
-documented below, but this is the gist.
+You must be on a recent rolling Linux distribution or OS X. You must have
+installed:
 
-# Configuring kdevops
+  * ansible
+  * python
+  * ncurses-devel
 
-kdevops provides support for vagrant, and terraform, and optionally helps
-you install and configure libvirt. What a target system may need will vary,
-and so a the Linux modeling variability language, kconfig, has been embraced
-to allow users to configure how kdevops is to be used.
+If you enable vagrant or terraform *we* try to install it for you along with
+their dependencies, including the vagrant-libvirt plugin. The dependency chain
+for vagrant or terraform can get complex quite fast. Even if your distribution
+does not have a package for these we support installing from the latest zip
+file releases, however installing manually can get complicated fast later,
+specially with vagrant-libvirt. Examples of well tested rolling distributions
+recommended:
 
-![kdevops-config](images/kdevops-config.png)
+  * Debian testing
+  * OpenSUSE Tumbleweed
 
-To configure run:
+## Configuring kdevops
+
+kdevops provides support for vagrant, terraform, bare metal, and optionally
+helps you install and configure libvirt, as well as let you choose which git
+tree for Linux to compile, install and boot into, along with which sha1sum to
+use, and apply any extra patches you might have. The last step of booting into
+a particular version of Linux is only the beginning of what can be accomplished
+with kdevops, it is just a core demonstration of the infrastructure. You are
+encouraged to expand on it for your own needs and a few more elaborate projects
+are referenced later.
+
+What a target system may need will vary depending on your needs and your
+preferences and so the Linux modeling variability language, kconfig, has been
+embraced to allow users to configure how kdevops is to be used. You choose
+whether or not to use vagrant, terraform, bare metal, and what bells or
+whistles to turn on or off.
+
+To configure kdevops use:
 
 ```bash
 make menuconfig
 ```
 
+Below are a few screnshots of the current options avialable when
+configuring kdevops:
+
+![config-main-menu](images/config-main-menu.png)
+
+![config-bringup-vagrant](images/config-bringup-vagrant.png)
+
+![config-bringup-terraform](images/config-bringup-terraform.png)
+
+![config-kdevops](images/config-kdevops.png)
+
+![config-workflows](images/config-workflows.png)
+
 ## Getting help with configuration
 
-```
+```bash
 make help
 ```
 
-The different tested distributions with kdevops is also enabled through
-the configuration interface, and so you don't have to do much but select
-the distribution you want to use.
-
 ## Installing dependencies
 
-Once done with configuration just run:
+Once done with configuration we must install all dependencies, and generate
+configuration files which will be used later during bring up. To do this
+run:
 
 ```bash
 make
 ```
 
-This is the same as running `make deps`. Now to get Linux, compile it,
-install it, and get the two default guests to boot into the Linux we
-just compiled you would run:
+## Bring up nodes
 
-## Bring up guests if using vagrant
+To get your systems up and running and accessible directly via ssh, just do:
 
-```
-cd vagrant
-vagrant up
+```bash
+make bringup
 ```
 
-## Installing Linux on guests and rebooting into Linux
+At this point you should be able to run:
 
-On the top level directory just run:
+  * `ssh kdevops`
+  * `ssh kdevops-dev`
+
+We provide two hosts by default, one to be used as a baseline for your kernel
+development, and another for development.
+
+## Booting into a configured version of Linux
+
+Now, to get the configured version of Linux on the systems we just brought up,
+all you have to run is:
 
 ```bash
 make linux
 ```
+
+Immediately after this you should be able to ssh into either system, and `uname
+-r` should disply the kernel you configured.
+
+## Destroying nodes
+
+Just do:
+
+```bash
+make destroy
+```
+
+---
 
 # Motivation
 
@@ -83,6 +146,12 @@ doing this correctly for baremetal, but also in a virtualization-neutral and
 cloud-neutral way, is useful for many other things than just Linux filesystems
 testing, and so kdevops was born to generalize bring up for Linux kernel
 development and testing as fast as possible.
+
+---
+
+# Underneath the kdevops hood
+
+Below are sections which get into technical details of how kdevops works.
 
 # One ansible role to rule them all
 
@@ -103,16 +172,6 @@ reflect this.
 You can either fork this project to start your own kdevops project, or you can
 rely on the bare bones `kdevops_install` ansible galaxy role to get going and
 use this project as an example of how to use that ansible role.
-
-# Operating Systems supported by kdevops
-
-The following operating systems are supported
-
-  * Linux
-  * OS X
-
-Adding windows support should be easy, if a recent version of vagrant,
-terraform, and ansible can be found.
 
 # Linux distribution support by kdevops
 
@@ -158,9 +217,7 @@ Currently supported target Linux distributions:
    * Fedora 32
    * SUSE Linux
 
-# Underneath the kdevops hood
-
-## Be lazy and override all settings in one optional file
+## Overriding all settings in one optional file
 
 With kconfig support the additional extra files are not needed, but are
 useful for project configurations which don't want to rely on the kdevop's
@@ -185,12 +242,13 @@ There are five parts to the long terms ideals for kdevops:
 1. Installing ansible roles required
 2. Optional provisioning required for virtual hosts / cloud environment
 3. Provisioning your requirements
-4. Running whatever you want
+4. Running whatever workflow you want
 
 We configure kdevops using the Linux modeling variability language, kconfig.
-Using kconfig streamlines the other steps for you.
+Using kconfig streamlines the other steps for you, and rely on `Makefile`
+target to bundle the work under one command.
 
-Ansible is then used to get all the required ansible roles.
+Ansible is used to get all the required ansible roles.
 
 Vagrant or terraform can then optionally be used to provision hosts. You don't
 need to use vagrant or terraform if you are using baremetal hosts.
@@ -217,36 +275,14 @@ expected to be done manually. One day we expect this to not be an issue.
 After provisioning you want to get Linux, configure it, build it, install it
 and reboot into it. This is handled by the `bootlinux` ansible role. This is
 a bare minimum example of "Running whatever you want", however there are
-more eleborate examples, which take this further. For instance:
+more eleborate examples, which take this further.
+
+# kdevops projects
+
+The following is a list of kdevops based projects as further demonstrations:
 
   * [fw-kdevops](https://github.com/mcgrof/fw-kdevops) - Linux kernel firmware loader testing, and demo for selftests
   * [oscheck](https://github.com/mcgrof/oscheck) - Linux kernel filesystem testsing
-
-
-# Project dependencies
-
-You will have to install ansible, and python. We do the rest for you.
-After configuration install further dependencies with:
-
-```
-make deps
-```
-
-or just:
-
-```
-make
-```
-
-kdevops relies on a series of ansible roles to allow us to share as much code
-as possible with other projects. Next decide if you want to use a series of
-already provisioned hosts (say baremetal), provision your own localized VMs,
-or use a cloud provider. If you already have your hosts provisioned then skip
-to the ansible section. If you need to provision local VMs read the vagrant
-section below.  If you want to use a cloud provider read the terraform docs
-below.
-
-In the end you will rely on ansible after all hosts are provisioned.
 
 ## Vagrant support - localized VMs
 
@@ -335,12 +371,17 @@ to be independent of vagrant or terraform.
 
 ### Destroying provisioned nodes with vagrant
 
-You can either destroy directly with vagrant:
+You can just use the helper:
+
+```bash
+make destroy
+```
+
+Or you can either destroy directly with vagrant:
 
 ```bash
 cd vagrant/
 vagrant destroy -f
-# This last step is optional
 rm -rf .vagrant
 ```
 
@@ -382,6 +423,14 @@ Below are the list of clouds providers currently supported:
 
 ### Provisioning with terraform
 
+You can just use:
+
+```bash
+make bringup
+```
+
+Or to do this manually:
+
 ```bash
 make deps
 cd terraform/you_provider
@@ -409,7 +458,7 @@ support to be added in order for this to work. As of this writing we
 support this for all cloud providers we support, however Azure seems to
 have a bug, and I'm not yet sure who to blame.
 
-## Running ansible
+## Running ansible for worklows
 
 Before running ansible make sure you can ssh into the hosts listed on
 ansible/hosts.
