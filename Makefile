@@ -51,8 +51,8 @@ else
 export KDEVOPS_FORCE_ANSIBLE_ROLES :=
 endif
 
-KDEVOPS_BRING_UP_DEPS := /dev/null
-KDEVOPS_DESTROY_DEPS := /dev/null
+KDEVOPS_BRING_UP_DEPS :=
+KDEVOPS_DESTROY_DEPS :=
 
 ifeq (y,$(CONFIG_VAGRANT))
 KDEVOPS_BRING_UP_DEPS := bringup_vagrant
@@ -94,8 +94,8 @@ endif
 
 # This will always exist, so the dependency is no set unless we have
 # a key to generate.
-KDEVOPS_GEN_SSH_KEY := /dev/null
-KDEVOPS_REMOVE_KEY := /dev/null
+KDEVOPS_GEN_SSH_KEY :=
+KDEVOPS_REMOVE_KEY :=
 
 ifeq (y,$(CONFIG_TERRAFORM_SSH_CONFIG_GENKEY))
 export KDEVOPS_SSH_PUBKEY:=$(subst ",,$(CONFIG_TERRAFORM_SSH_CONFIG_PUBKEY_FILE))
