@@ -47,6 +47,19 @@ else
 KDEVOPS_FORCE_ANSIBLE_ROLES :=
 endif
 
+KDEVOPS_BRING_UP_DEPS := /dev/null
+KDEVOPS_DESTROY_DEPS := /dev/null
+
+ifeq (y,$(CONFIG_VAGRANT))
+KDEVOPS_BRING_UP_DEPS := bringup_vagrant
+KDEVOPS_DESTROY_DEPS := destroy_vagrant
+endif
+
+ifeq (y,$(CONFIG_TERRAFORM))
+KDEVOPS_BRING_UP_DEPS := bringup_terraform
+KDEVOPS_DESTROY_DEPS := destroy_terraform
+endif
+
 export KDEVOPS_CLOUD_PROVIDER=aws
 ifeq (y,$(CONFIG_TERRAFORM_AWS))
 endif
@@ -129,6 +142,22 @@ export TOPDIR=./
 	echo "\--"							;\
 	false)
 
+bringup_vagrant:
+	@$(TOPDIR)/scripts/bringup_vagrant.sh
+
+bringup_terraform:
+	@$(TOPDIR)/scripts/bringup_terraform.sh
+
+bringup: $(KDEVOPS_BRING_UP_DEPS)
+
+destroy_vagrant:
+	@$(TOPDIR)/scripts/destroy_vagrant.sh
+
+destroy_vagrant:
+	@$(TOPDIR)/scripts/destroy_vagrant.sh
+
+destroy: $(KDEVOPS_DESTROY_DEPS)
+
 PHONY += remove-ssh-key
 remove-ssh-key:
 	@echo Removing key pair for $(KDEVOPS_SSH_PRIVKEY)
@@ -144,7 +173,7 @@ $(KDEVOPS_NODES): $(KDEVOPS_NODES_TEMPLATE) .config
 	@$(TOPDIR)/scripts/gen_nodes_file.sh
 
 $(KDEVOPS_TFVARS): $(KDEVOPS_TFVARS_TEMPLATE) .config
-	@$(TOPDIR)scripts/gen_tfvars.sh
+	@$(TOPDIR)/scripts/gen_tfvars.sh
 
 PHONY += clean
 clean:
