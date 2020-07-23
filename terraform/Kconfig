@@ -11,8 +11,7 @@ config TERRAFORM_LIMIT_BOXES
 if TERRAFORM_LIMIT_BOXES
 
 config TERRAFORM_LIMIT_NUM_BOXES
-	bool "Limit the number of boxes to this number"
-	int
+	int "Limit the number of boxes to this number"
 	default 1
 	help
 	  If enabled and say you have 2 hosts enabled we'll only create 1.
