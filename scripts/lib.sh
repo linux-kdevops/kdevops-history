@@ -13,7 +13,7 @@ cat_template_hosts_sed()
 		' | cat -s
 }
 
-cat_template_file_sed()
+cat_template_nodes_sed()
 {
 	cat $1 | sed -e \
 		'
