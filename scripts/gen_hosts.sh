@@ -1,0 +1,8 @@
+#!/bin/bash
+
+source ${TOPDIR}/.config
+source ${TOPDIR}/scripts/lib.sh
+
+KDEVOPSPYTHONINTERPRETER=$CONFIG_KDEVOPS_PYTHON_INTERPRETER
+
+cat_hosts_file_sed $KDEVOPS_HOSTS_TEMPLATE > $KDEVOPS_HOSTS
