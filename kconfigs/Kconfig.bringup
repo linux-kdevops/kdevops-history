@@ -4,7 +4,6 @@ choice
 
 config VAGRANT
 	bool "Vagrant"
-	default y
 	help
 	  This option will enable use of vagrant. Enable this if you want to
 	  use local virtualization technologies such as KVM with libvirt or
@@ -16,7 +15,6 @@ config VAGRANT
 
 config TERRAFORM
 	bool "Terraform"
-	default y
 	help
 	  This option will enable use of vagrant. Enable this if you want to
 	  use terraform to create nodes on a cloud environment such as:
@@ -35,7 +33,6 @@ config TERRAFORM
 
 config SKIP_BRINGUP
 	bool "Skip bring up - bare metal or existing nodes"
-	default y
 	help
 	  This option will skip bring up, as you already have existing
 	  systems up and available and ssh'able. This might be the case
