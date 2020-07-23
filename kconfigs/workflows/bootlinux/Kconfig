@@ -35,6 +35,21 @@ config BOOTLINUX_TREE_VERSION
 	help
 	  The git branch / tag or sha1sum to use.
 
+config BOOTLINUX_MAKE_CMD_OVERRIDE
+	bool "Override default make command to build Linux"
+	default n
+	help
+	  The bootlinux ansible relies on the following:
+	    {{ make }} -j{{ ansible_processor_vcpus }}
+	  However this is known to not work as expected with containers.
+	  The fix is in commit 34db57a47f875d11c4068567b9ec7ace174ec4cf
+	  ("introduce fact "ansible_processor_nproc": number of usable
+	  vcpus #66569") but it will be a while before we see this propagate.
+	  This will be needed for containers. In the meantime you can
+	  override the make command with this option.
+
+if BOOTLINUX_MAKE_CMD_OVERRIDE
+
 config BOOTLINUX_MAKE_CMD
 	string "The make command to use when building linux"
 	default "make -j 16" if TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE
@@ -42,6 +57,8 @@ config BOOTLINUX_MAKE_CMD
 	help
 	  The actual make command to use when building Linux. You want to
 	  optimize this as per the number of cores you have.
+
+endif
 
 config BOOTLINUX_DATA_DEVICE
 	string "The device to use to create the data parition for linux"
