@@ -174,7 +174,7 @@ destroy_vagrant:
 	$(Q)$(TOPDIR)/scripts/destroy_vagrant.sh
 
 destroy_terraform:
-	$(Q)$(TOPDIR)/scripts/destroy_vagrant.sh
+	$(Q)$(TOPDIR)/scripts/destroy_terraform.sh
 
 destroy: $(KDEVOPS_DESTROY_DEPS)
 
