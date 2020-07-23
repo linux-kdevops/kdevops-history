@@ -73,7 +73,8 @@ config BOOTLINUX_DATA_USER
 config BOOTLINUX_DATA_GROUP
 	string "The group to use to chown on the target directory"
 	default "vagrant" if VAGRANT
-	default "users" if TERRAFORM
+	default TERRAFORM_SSH_CONFIG_USER if TERRAFORM_AWS_AMI_DEBIAN
+	default "users" if !TERRAFORM_AWS_AMI_DEBIAN
 	help
 	  The group ownership to use for the data directory where linux will
 	  be cloned on. We default to "vagrant" if you are using vagrant,
