@@ -35,4 +35,78 @@ config BOOTLINUX_TREE_VERSION
 	help
 	  The git branch / tag or sha1sum to use.
 
+config BOOTLINUX_DATA_DEVICE
+	string "The device to use to create the data parition for linux"
+	default "/dev/nvme0n1" if VAGRANT
+	default "/dev/xvdh" if TERRAFORM_AWS
+	help
+	  The device name to use to create the data partition used to create
+	  to use for where we will place the git clone of Linux.
+
+config BOOTLINUX_DATA_PATH
+	string "Directory path to place the linux git clone"
+	default "/data"
+	help
+	  When we clone the linux git tree we will place it in another location
+	  other than your home directory. This is done in case you want to
+	  refresh the OS and not do away with all your developmente work.
+	  Use this to specify the path which we will use to place your
+	  development work.
+
+config BOOTLINUX_DATA_USER
+	string "The username to use to chown on the target directory"
+	default "vagrant" if VAGRANT
+	default TERRAFORM_SSH_CONFIG_USER if TERRAFORM
+	help
+	  When we clone the linux git tree we will place it in another location
+	  other than your home directory. This is done in case you want to
+	  refresh the OS and not do away with all your developmente work.
+
+config BOOTLINUX_DATA_GROUP
+	string "The group to use to chown on the target directory"
+	default "vagrant" if VAGRANT
+	default "users" if TERRAFORM
+	help
+	  The group ownership to use for the data directory where linux will
+	  be cloned on. We default to "vagrant" if you are using vagrant,
+	  otherwise we rely on the the assumption your distribution has the
+	  "users" group created.
+
+choice
+	prompt "Filesystem for the data partition for the Linux clone"
+	default BOOTLINUX_DATA_FSTYPE_XFS
+
+config BOOTLINUX_DATA_FSTYPE_XFS
+	bool "xfs"
+	help
+	  Use the xfs filesystem.
+
+config BOOTLINUX_DATA_FSTYPE_EXT4
+	bool "ext4"
+	help
+	  Use the ext4 filesystem.
+
+config BOOTLINUX_DATA_FSTYPE_BTRFS
+	bool "btrfs"
+	help
+	  Use the btrfs filesystem.
+
+endchoice
+
+config BOOTLINUX_DATA_FSTYPE
+	string "The filesystem target to use"
+	default "xfs" if BOOTLINUX_DATA_FSTYPE_XFS
+	default "ext4" if BOOTLINUX_DATA_FSTYPE_EXT4
+	default "btrfs" if BOOTLINUX_DATA_FSTYPE_BTRFS
+	help
+	  The filesystem to use for the data partition.
+
+config BOOTLINUX_DATA_LABEL
+	string "The filesystem label to use"
+	default "data"
+	help
+	  The filesystem label to create and later mount the partition on
+	  the /etc/fstab file for the data partition. Since the device can
+	  be *anything*, we use a label to ensure we find the partition.
+
 endif # BOOTLINUX
