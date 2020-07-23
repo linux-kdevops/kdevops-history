@@ -7,7 +7,7 @@ choice
 config TERRAFORM_AWS_US_WEST_1
 	bool "us-west-1"
 	help
-	  This option will set the aws region to us-west-1b
+	  This option will set the aws region to us-west-1.
 
 endchoice
 
@@ -16,5 +16,133 @@ config TERRAFORM_AWS_REGION
 	default "us-west-1" if TERRAFORM_AWS_US_WEST_1
 	help
 	  This option will set the aws region to the specified value.
+
+	  If you wish to expand on this list send a patch after reading
+	  this list:
+
+	  https://docs.aws.amazon.com/general/latest/gr/rande.html
+
+choice
+	prompt "AWS availability region to use"
+	default TERRAFORM_AWS_AV_US_WEST_1B
+
+config TERRAFORM_AWS_AV_US_WEST_1B
+	bool "us-west-1b"
+	help
+	  This option will set the aws availiability region to us-west-1b.
+
+endchoice
+
+config TERRAFORM_AWS_AV_REGION
+	string "AWS availablity region"
+	default "us-west-1b" if TERRAFORM_AWS_AV_US_WEST_1B
+	help
+	  This option will set the aws availablity region to the specified
+	  value.
+
+	  If you wish to expand on this list send a patch after reading this
+	  list:
+
+	  https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html
+	  https://gist.github.com/neilstuartcraig/0ccefcf0887f29b7f240
+
+choice
+	prompt "AWS ami owner"
+	default TERRAFORM_AWS_AMI_DEBIAN
+
+config TERRAFORM_AWS_AMI_DEBIAN
+	bool "Debian - 379101102735"
+	help
+	  This option will set aws ami owner to Debian.
+
+endchoice
+
+config TERRAFORM_AWS_AMI_OWNER
+	string "AWS AMI owner"
+	default "379101102735" if TERRAFORM_AWS_AMI_DEBIAN
+	help
+	  This option will set aws AMI owner.
+
+choice
+	prompt "AWS name search"
+	default TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_X86_64
+
+config TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_X86_64
+	bool "debian-stretch-hvm-x86_64-*"
+	help
+	  This option will set aws name search to debian-stretch-hvm-x86_64-*
+
+endchoice
+
+config TERRAFORM_AWS_NS
+	string "AWS name search"
+	default "debian-stretch-hvm-x86_64-*" if TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_X86_64
+	help
+	  This option will set aws image search to use. Using this filter glob
+	  lets us get the latest ami for this owner / release.
+
+	  For debian updates you can use this list for AMI updates:
+
+	  https://wiki.debian.org/Cloud/AmazonEC2Image/Stretch
+
+	  If you want to expand on this list or just use a value yourself here
+	  read:
+
+	  https://letslearndevops.com/2018/08/23/terraform-get-latest-centos-ami/
+
+	  To get filter values you can first setup aws cli:
+
+	  https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html#cli-quick-configuration
+
+	  Get your image ami id, for debian 9 amd64 on the us-west1 this is
+	  ami-0adbaf2e0ce044437 so you can run:
+
+	  aws ec2 describe-images --image-ids ami-0adbaf2e0ce044437
+
+	  For details:
+
+	  https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-images.html
+
+choice
+	prompt "AWS virt type"
+	default TERRAFORM_AWS_VIRT_TYPE_HVM
+
+config TERRAFORM_AWS_VIRT_TYPE_HVM
+	bool "hvm"
+	help
+	  This option will set aws virt type to hvm.
+
+endchoice
+
+config TERRAFORM_AWS_VIRT_TYPE
+	string "AWS virt type"
+	default "hvm" if TERRAFORM_AWS_VIRT_TYPE_HVM
+	help
+	  This option will set aws virt type. It must match your your
+	  preferred image filter used above for name search.
+
+choice
+	prompt "AWS instance type"
+	default TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE
+
+config TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE
+	bool "m5ad.4xlarge - $0.824 per Hour"
+	help
+	  61 GiB RAM, 16 vcpus, 1 8 GiB main drive, and two additional
+	  300 GiB nvme drives.
+
+endchoice
+
+config TERRAFORM_AWS_INSTANCE_TYPE
+	string "AWS AMI owner"
+	default "m5ad.4xlarge" if TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE
+	help
+	  This sets the aws instance type. There are many options, so go
+	  read this if you want to expand on this list or just set the value
+	  here:
+
+	  https://aws.amazon.com/ec2/instance-types/
+
+	  The AWS free trial limits you to 750 hours of only t2.micro.
 
 endif # TERRAFORM_AWS

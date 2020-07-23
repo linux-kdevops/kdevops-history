@@ -1,4 +1,9 @@
 aws_region = "@AWSREGION@"
+aws_availability_region = "@AWSAVREGION@"
+aws_name_search = "@AWSNAMESEARCH@"
+aws_virt_type = "@AWSVIRTTYPE@"
+aws_ami_owner = "@AWSAMIOWNER@"
+aws_instance_type = "@AWSINSTANCETYPE@"
 
 limit_boxes = "@LIMITBOXES@"
 limit_num_boxes = @LIMITNUMBOXES@

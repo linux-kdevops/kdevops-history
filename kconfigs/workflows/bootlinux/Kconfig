@@ -38,7 +38,7 @@ config BOOTLINUX_TREE_VERSION
 config BOOTLINUX_DATA_DEVICE
 	string "The device to use to create the data parition for linux"
 	default "/dev/nvme0n1" if VAGRANT
-	default "/dev/xvdh" if TERRAFORM_AWS
+	default "/dev/nvme1n1" if TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE
 	help
 	  The device name to use to create the data partition used to create
 	  to use for where we will place the git clone of Linux.
