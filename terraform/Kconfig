@@ -177,5 +177,4 @@ endchoice
 
 source "terraform/aws/Kconfig"
 
-
 endif # TERRAFORM
