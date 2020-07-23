@@ -10,6 +10,7 @@ cat_template_hosts_sed()
 	cat $1 | sed -e \
 		'
 		s|@KDEVOPSPYTHONINTERPRETER@|'"$KDEVOPSPYTHONINTERPRETER"'|g;
+		s|@KDEVOPSPYTHONOLDINTERPRETER@|'"$KDEVOPSPYTHONOLDINTERPRETER"'|g;
 		' | cat -s
 }
 

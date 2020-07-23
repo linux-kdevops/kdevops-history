@@ -3,13 +3,23 @@ config KDEVOPS_PYTHON_INTERPRETER
 	default "/usr/bin/python3" if !VAGRANT_OPENSUSE
 	default "/usr/bin/python2" if VAGRANT_OPENSUSE
 	help
-	  kdevops consists of a series of ansible roles, amongst other things.
-	  In order to allow users to easily upgrade, instead of updating tons
-	  of dependencies, we provide a convenient single ansible role
-	  which you can use to update, and we do the work for you on getting
-	  the kdevops ansible role dependencies for you. You want to enable
-	  this option and only disable this if you are debugging or testing
-	  things.
+	  The python interpreter must be specified clearly for each host when
+	  using ansible, otherwise you will run into odd issues if the
+	  heuristics used by ansible are incorrect. Specify the default
+	  python interpreter we should use on the target hosts. You shouldn't
+	  need to modify unless you are going to be working with a distribution
+	  which we have not yet added support for. You can also instead use
+	  the old interpreter in your file if you know you are working with
+	  old hosts.
+
+config KDEVOPS_PYTHON_OLD_INTERPRETER
+	string "Which python interpreter to use for old systems"
+	default "/usr/bin/python2"
+	help
+	  The default python interpreter may be python3 but we need something
+	  so that we can specify it on older systems. You can then use the
+	  KDEVOPSPYTHONOLDINTERPRETER value on your hosts.in file on old
+	  systems so that this gets properly placed.
 
 config INSTALL_ANSIBLE_KDEVOPS
 	bool "Installs the main ansible kdevops role"
