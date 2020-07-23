@@ -1,0 +1,16 @@
+[all]
+kdevops
+kdevops-dev
+
+[all:vars]
+ansible_python_interpreter =  "@KDEVOPSPYTHONINTERPRETER@"
+
+[baseline]
+kdevops
+[baseline:vars]
+ansible_python_interpreter =  "@KDEVOPSPYTHONINTERPRETER@"
+
+[dev]
+kdevops-dev
+[dev:vars]
+ansible_python_interpreter =  "@KDEVOPSPYTHONINTERPRETER@"

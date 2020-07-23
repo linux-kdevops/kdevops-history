@@ -28,6 +28,9 @@ include scripts/kconfig.Makefile
 INCLUDES = -I include/
 CFLAGS += $(INCLUDES)
 
+KDEVOPS_HOSTS_TEMPLATE := $(KDEVOPS_HOSTFILE).in
+KDEVOPS_HOSTS := $(KDEVOPS_HOSTFILE)
+
 # kdevops-stage-1-y will be called first.
 # kdevops-stage-2-y will be called after we've deployed all the ansible
 # roles.
@@ -183,6 +186,9 @@ destroy_terraform:
 
 destroy: $(KDEVOPS_DESTROY_DEPS)
 
+$(KDEVOPS_HOSTS): .config
+	$(Q)$(TOPDIR)/scripts/gen_hosts.sh
+
 PHONY += remove-ssh-key
 remove-ssh-key:
 	$(NQ) Removing key pair for $(KDEVOPS_SSH_PRIVKEY)
@@ -221,6 +227,7 @@ help:
 
 PHONY := deps
 deps: \
+	$(KDEVOPS_HOSTS) \
 	$(KDEVOPS_NODES) \
 	$(KDEVOS_TERRAFORM_EXTRA_DEPS) \
 	$(KDEVOPS_REMOVE_KEY) \

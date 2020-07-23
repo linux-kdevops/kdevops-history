@@ -5,6 +5,14 @@ source ${TOPDIR}/scripts/gce/lib.sh
 source ${TOPDIR}/scripts/azure/lib.sh
 source ${TOPDIR}/scripts/openstack/lib.sh
 
+cat_template_hosts_sed()
+{
+	cat $1 | sed -e \
+		'
+		s|@KDEVOPSPYTHONINTERPRETER@|'"$KDEVOPSPYTHONINTERPRETER"'|g;
+		' | cat -s
+}
+
 cat_template_file_sed()
 {
 	cat $1 | sed -e \

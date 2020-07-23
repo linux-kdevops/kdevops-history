@@ -1,3 +1,16 @@
+config KDEVOPS_PYTHON_INTERPRETER
+	string "Which default python interpreter to use"
+	default "/usr/bin/python3" if !VAGRANT_OPENSUSE
+	default "/usr/bin/python2" if VAGRANT_OPENSUSE
+	help
+	  kdevops consists of a series of ansible roles, amongst other things.
+	  In order to allow users to easily upgrade, instead of updating tons
+	  of dependencies, we provide a convenient single ansible role
+	  which you can use to update, and we do the work for you on getting
+	  the kdevops ansible role dependencies for you. You want to enable
+	  this option and only disable this if you are debugging or testing
+	  things.
+
 config INSTALL_ANSIBLE_KDEVOPS
 	bool "Installs the main ansible kdevops role"
 	default y
