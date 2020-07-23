@@ -175,5 +175,6 @@ config TERRAFORM_AZURE
 endchoice
 
 source "terraform/aws/Kconfig"
+source "terraform/azure/Kconfig"
 
 endif # TERRAFORM

@@ -89,11 +89,18 @@ KDEVOPS_TFVARS=terraform/$(KDEVOPS_CLOUD_PROVIDER)/$(TFVARS_FILE_NAME)
 
 KDEVOS_TERRAFORM_EXTRA_DEPS :=
 ifeq (y,$(CONFIG_TERRAFORM))
-# For now, we only have tfvars processing support for aws
+
 ifeq (y,$(CONFIG_TERRAFORM_AWS))
 KDEVOS_TERRAFORM_EXTRA_DEPS += $(KDEVOPS_TFVARS)
 endif
+
+ifeq (y,$(CONFIG_TERRAFORM_AZURE))
+KDEVOS_TERRAFORM_EXTRA_DEPS += $(KDEVOPS_TFVARS)
 endif
+
+# XXX: gce, and openstack
+
+endif # CONFIG_TERRAFORM
 
 # This will always exist, so the dependency is no set unless we have
 # a key to generate.

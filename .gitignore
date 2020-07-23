@@ -18,12 +18,10 @@ python/*.pyc
 vagrant/Vagrantfile
 
 terraform/Makefile
-terraform/azure/
-terraform/gce/
 terraform/globals.mk
-terraform/openstack/
-terraform/gce/
 terraform/shared.tf
+
+terraform/*/versions.tf
 
 playbooks/bootlinux.yml
 playbooks/devconfig.yml
