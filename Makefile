@@ -28,8 +28,8 @@ include scripts/kconfig.Makefile
 INCLUDES = -I include/
 CFLAGS += $(INCLUDES)
 
-KDEVOPS_HOSTS_TEMPLATE := $(KDEVOPS_HOSTFILE).in
-KDEVOPS_HOSTS := $(KDEVOPS_HOSTFILE)
+export KDEVOPS_HOSTS_TEMPLATE := $(KDEVOPS_HOSTFILE).in
+export KDEVOPS_HOSTS := $(KDEVOPS_HOSTFILE)
 
 # kdevops-stage-1-y will be called first.
 # kdevops-stage-2-y will be called after we've deployed all the ansible
