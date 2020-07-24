@@ -33,6 +33,10 @@ You must be on a recent Linux distribution or OS X. You must have installed:
   * ansible
   * python
   * ncurses-devel
+  * make
+  * gcc
+  * bison
+  * flex
 
 If you enable vagrant or terraform *we* try to install it for you along with
 their dependencies, including the vagrant-libvirt plugin. The dependency chain
