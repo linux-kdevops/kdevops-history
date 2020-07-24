@@ -19,18 +19,24 @@ config TERRAFORM_AZURE_RESOURCE_LOCATION
 
 choice
 	prompt "Azure vmsize"
-	default TERRAFORM_AZURE_VM_SIZE_STANDARD_DS1_V2
+	default TERRAFORM_AZURE_VM_SIZE_STANDARD_DS3_V2
 
 config TERRAFORM_AZURE_VM_SIZE_STANDARD_DS1_V2
 	bool "Standard_DS1_v2"
 	help
 	  This option will set the azure vm image size to Standard_DS1_v2.
 
+config TERRAFORM_AZURE_VM_SIZE_STANDARD_DS3_V2
+	bool "Standard_DS3_v2"
+	help
+	  This option will set the azure vm image size to Standard_DS3_v2.
+
 endchoice
 
 config TERRAFORM_AZURE_VM_SIZE
 	string "Azure vm size"
 	default "Standard_DS1_v2" if TERRAFORM_AZURE_VM_SIZE_STANDARD_DS1_V2
+	default "Standard_DS3_v2" if TERRAFORM_AZURE_VM_SIZE_STANDARD_DS3_V2
 	help
 	  This option will set the azure vm image size.
 
