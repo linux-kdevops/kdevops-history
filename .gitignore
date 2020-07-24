@@ -2,6 +2,8 @@
 *.o
 *.retry
 
+hosts
+
 .config
 .config.old
 
