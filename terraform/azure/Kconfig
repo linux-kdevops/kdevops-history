@@ -102,7 +102,9 @@ config TERRAFORM_AZURE_IMAGE_OFFER
 	string "Azure image offer to use"
 	default "debian-10" if TERRAFORM_AZURE_IMAGE_OFFER_DEBIAN_10
 	help
-	  This option will set image offer.
+	  This option will set image offer. For more debian offers read:
+
+	  https://wiki.debian.org/Cloud/MicrosoftAzure
 
 
 config TERRAFORM_AZURE_IMAGE_SKU
@@ -122,7 +124,21 @@ config TERRAFORM_AZURE_CLIENT_CERT_PATH
 	string "Azure client certificate path"
 	default "./service-principal.pfx"
 	help
-	  Path to the service principal PFX file for this application.
+	  Path to the service principal PFX file for this application. For
+	  details on how to create this and associate it with your account
+	  read this:
+
+	  https://www.terraform.io/docs/providers/azurerm/auth/service_principal_client_certificate.html
+	  https://github.com/terraform-providers/terraform-provider-azurerm.git
+
+	  But the skinny of of how to create it:
+
+	  openssl req -newkey rsa:4096 -nodes -keyout "service-principal.key" -out "service-principal.csr"
+	  openssl x509 -signkey "service-principal.key" -in "service-principal.csr" -req -days 365 -out "service-principal.crt"
+	  openssl pkcs12 -export -out "service-principal.pfx" -inkey "service-principal.key" -in "service-principal.crt"
+
+	  Then use the documentation to get your tentant ID, the applicaiton id,
+	  the subscription ID.
 
 config TERRAFORM_AZURE_CLIENT_CERT_PASSWD
 	string "Azure client certificate password"
@@ -144,7 +160,7 @@ config TERRAFORM_AZURE_SUBSCRIPTION_ID
 
 config TERRAFORM_AZURE_TENANT_ID
 	string "Azure tenant ID"
-	default "someLONGGUID"
+	default "anotherGUID"
 	help
 	  The tentant ID to use.
 
