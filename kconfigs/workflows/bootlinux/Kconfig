@@ -53,6 +53,8 @@ if BOOTLINUX_MAKE_CMD_OVERRIDE
 config BOOTLINUX_MAKE_CMD
 	string "The make command to use when building linux"
 	default "make -j 16" if TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE
+	default "make -j 1" if TERRAFORM_AZURE_VM_SIZE_STANDARD_DS1_V2
+	default "make -j 4" if TERRAFORM_AZURE_VM_SIZE_STANDARD_DS3_V2
 	default "make -j 8" if VAGRANT
 	help
 	  The actual make command to use when building Linux. You want to
