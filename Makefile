@@ -6,8 +6,8 @@ PATCHLEVEL = 1
 SUBLEVEL = 6
 EXTRAVERSION = -rc1
 
-KDEVOPS_PLAYBOOKS_DIR :=	playbooks
-KDEVOPS_HOSTFILE ?=		hosts
+export KDEVOPS_PLAYBOOKS_DIR :=		playbooks
+export KDEVOPS_HOSTFILE ?=		hosts
 export KDEVOPS_NODES :=			vagrant/kdevops_nodes.yaml
 export KDEVOPS_NODES_TEMPLATE :=	vagrant/kdevops_nodes.yaml.in
 

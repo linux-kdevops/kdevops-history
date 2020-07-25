@@ -1,0 +1,67 @@
+config KDEVOPS_ANSIBLE_PROVISION_ENABLE
+	bool "Enable ansible provisioning"
+	default y
+	help
+	  If enabled we will provision the target hosts with ansible as a last
+	  last step after bringup. For vagrant we use this to update your
+	  ~/.ssh/config with the provisioned hosts, followed by calling the
+	  final provisioning configured playbook, which is configurable, see
+	  CONFIG_KDEVOPS_ANSIBLE_INVENTORY_FILE.
+
+	  When using terraform your ~/.ssh/config is updated through a terraform
+	  module instead, and so enabling this option on terraform will only
+	  enable calling the CONFIG_KDEVOPS_ANSIBLE_INVENTORY_FILE playbook.
+
+if KDEVOPS_ANSIBLE_PROVISION_ENABLE
+
+config KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK
+	string "The name of the ansible playbook file to use when provisioning"
+	default "devconfig.yml"
+	  help
+	  The final provisioned playbook to run after bringup. We strive to
+	  only do two work items after bringup through as part of the
+	  'make bringup' target:
+
+	    o update your ssh configuration file with the hosts
+	    o run one provisioning ansible playbook
+
+	  For this reason we only allow specifying one playbook to provision.
+	  If users want to add more playbooks, new make targets can be added
+	  to kdevops.
+
+config KDEVOPS_PLAYBOOK_DIR
+	string "The directory for the ansible playbooks to use"
+	default $(shell, echo $KDEVOPS_PLAYBOOKS_DIR)
+	help
+	  The directory where ansible playbooks are found.
+
+config KDEVOPS_ANSIBLE_INVENTORY_FILE
+	string "The ansible inventory file to use"
+	default $(shell, echo $KDEVOPS_HOSTFILE)
+	help
+	  The file to use for the ansible inventory.
+
+config KDEVOPS_PYTHON_INTERPRETER
+	string "Which default python interpreter to use"
+	default "/usr/bin/python3" if !VAGRANT_OPENSUSE
+	default "/usr/bin/python2" if VAGRANT_OPENSUSE
+	help
+	  The python interpreter must be specified clearly for each host when
+	  using ansible, otherwise you will run into odd issues if the
+	  heuristics used by ansible are incorrect. Specify the default
+	  python interpreter we should use on the target hosts. You shouldn't
+	  need to modify unless you are going to be working with a distribution
+	  which we have not yet added support for. You can also instead use
+	  the old interpreter in your file if you know you are working with
+	  old hosts.
+
+config KDEVOPS_PYTHON_OLD_INTERPRETER
+	string "Which python interpreter to use for old systems"
+	default "/usr/bin/python2"
+	help
+	  The default python interpreter may be python3 but we need something
+	  so that we can specify it on older systems. You can then use the
+	  KDEVOPSPYTHONOLDINTERPRETER value on your hosts.in file on old
+	  systems so that this gets properly placed.
+endif # KDEVOPS_ANSIBLE_PROVISION_ENABLE
+

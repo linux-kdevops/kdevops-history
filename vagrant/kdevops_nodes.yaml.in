@@ -2,6 +2,7 @@
 vagrant_global:
   box: "@VAGRANTBOX@"
   box_version: "@VBOXVERSION@"
+  skip_ansible: "@SKIPANSIBLE@"
   memory: 8192
   cpus: 8
   # Enable the below options
@@ -73,8 +74,8 @@ vagrant_boxes:
 ansible_playbooks:
   # If this file exists you can override any ansible variable there.
   # This file is optional.
-  inventory: "../hosts"
+  inventory: "../@INVENTORY@"
   extra_vars: "../extra_vars.yml"
   playbooks:
-    - name: "../playbooks/update_ssh_config_vagrant.yml"
-    - name: "../playbooks/devconfig.yml"
+    - name: "../@PLAYBOOKDIR@/update_ssh_config_vagrant.yml"
+    - name: "../@PLAYBOOKDIR@/@PROVISIONPLAYBOOK@"

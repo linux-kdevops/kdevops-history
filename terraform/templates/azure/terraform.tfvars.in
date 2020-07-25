@@ -21,3 +21,8 @@ ssh_config = "@SSHCONFIGFILE@"
 ssh_config_update = "@SSHCONFIGUPDATE@"
 ssh_config_use_strict_settings = "@SSHCONFIGSTRICT@"
 ssh_config_backup = "@SSHCONFIGBACKUP@"
+
+ansible_provision = "@ENABLEANSIBLE@"
+ansible_inventory = "@INVENTORY@"
+ansible_playbookdir = "@PLAYBOOKDIR@"
+ansible_provision_playbook = "@PROVISIONPLAYBOOK@"

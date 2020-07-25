@@ -1,9 +1,20 @@
-
 source ${TOPDIR}/scripts/lib_terraform.sh
 source ${TOPDIR}/scripts/aws/lib.sh
 source ${TOPDIR}/scripts/gce/lib.sh
 source ${TOPDIR}/scripts/azure/lib.sh
 source ${TOPDIR}/scripts/openstack/lib.sh
+
+ANSIBLE_ENABLE=$CONFIG_KDEVOPS_ANSIBLE_PROVISION_ENABLE
+PROVISIONPLAYBOOK=$CONFIG_KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK
+PLAYBOOKDIR=$CONFIG_KDEVOPS_PLAYBOOK_DIR
+INVENTORY=$CONFIG_KDEVOPS_ANSIBLE_INVENTORY_FILE
+
+SKIPANSIBLE="false"
+ENABLEANSIBLE="true"
+if [[ "$ANSIBLE_ENABLE" != "y" ]]; then
+	SKIPANSIBLE="true"
+	ENABLEANSIBLE="false"
+fi
 
 cat_template_hosts_sed()
 {
@@ -20,6 +31,10 @@ cat_template_nodes_sed()
 		'
 		s|@VAGRANTBOX@|'"$VAGRANTBOX"'|g;
 		s|@VBOXVERSION@|'$VBOXVERSION'|g;
+		s|@SKIPANSIBLE@|'$SKIPANSIBLE'|g;
+		s|@PROVISIONPLAYBOOK@|'$PROVISIONPLAYBOOK'|g;
+		s|@PLAYBOOKDIR@|'$PLAYBOOKDIR'|g;
+		s|@INVENTORY@|'$INVENTORY'|g;
 		' | cat -s
 }
 
@@ -53,5 +68,9 @@ cat_template_terraform_sed()
 		s|@SSHCONFIGFILE@|'$SSHCONFIGFILE'|g;
 		s|@SSHCONFIGSTRICT@|'$SSHCONFIGSTRICT'|g;
 		s|@SSHCONFIGBACKUP@|'$SSHCONFIGBACKUP'|g;
+		s|@ENABLEANSIBLE@|'$ENABLEANSIBLE'|g;
+		s|@PROVISIONPLAYBOOK@|'$PROVISIONPLAYBOOK'|g;
+		s|@PLAYBOOKDIR@|'$PLAYBOOKDIR'|g;
+		s|@INVENTORY@|'$INVENTORY'|g;
 		' | cat -s
 }
