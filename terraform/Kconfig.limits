@@ -1,0 +1,19 @@
+config TERRAFORM_LIMIT_BOXES
+	bool "Limit the number of boxes creaed beyond what the project defines"
+	default y
+	help
+	  If enabled we and you are running 'make menuconfig' as user sonia,
+	  then we'd infer this and peg sonia as the default user name for you.
+	  We'll simply run $(shell echo $USER).
+
+if TERRAFORM_LIMIT_BOXES
+
+config TERRAFORM_LIMIT_NUM_BOXES
+	int "Limit the number of boxes to this number"
+	default 1
+	help
+	  If enabled and say you have 2 hosts enabled we'll only create 1.
+	  You can use this if you are afraid of getting chaged on your cloud
+	  provider while taking kdevops out for a spin on your cloud provider.
+
+endif # TERRAFORM_LIMIT_BOXES
