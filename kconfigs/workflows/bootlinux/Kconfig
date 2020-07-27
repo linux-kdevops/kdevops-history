@@ -81,6 +81,27 @@ config BOOTLINUX_DATA_PATH
 	  Use this to specify the path which we will use to place your
 	  development work.
 
+config BOOTLINUX_INFER_USER_AND_GROUP
+	bool "Infer user and group to use for the data partition"
+	default y
+	help
+	  When we build Linux we rely on all the data to go into a new
+	  partition we will create. We set the username and group based
+	  on passed manual settings. Giving a good guess about what these
+	  settings might be is possible for users are creating systems with
+	  vagrant, but not when users are using terraform or bare metal.
+	  Instead of extending the possible sensible default for the target
+	  username and group to use for the data partition based on Linux
+	  distribution chosen, we also provide support to infer your target
+	  username and group settings based on the login user on the target
+	  system.
+
+	  You can safely enable this feature so we can do this inference.
+	  It should work on vagrant, and helps not have to extend our defaults
+	  for a manual settings when users are using terraform.
+
+if !BOOTLINUX_INFER_USER_AND_GROUP
+
 config BOOTLINUX_DATA_USER
 	string "The username to use to chown on the target directory"
 	default "vagrant" if VAGRANT
@@ -93,13 +114,20 @@ config BOOTLINUX_DATA_USER
 config BOOTLINUX_DATA_GROUP
 	string "The group to use to chown on the target directory"
 	default "vagrant" if VAGRANT
-	default TERRAFORM_SSH_CONFIG_USER if TERRAFORM_AWS_AMI_DEBIAN
-	default "users" if !TERRAFORM_AWS_AMI_DEBIAN
+	default TERRAFORM_SSH_CONFIG_USER if TERRAFORM_AWS_AMI_DEBIAN || TERRAFORM_AZURE_IMAGE_PUBLISHER_DEBIAN
+	default "users" if !TERRAFORM_AWS_AMI_DEBIAN && !TERRAFORM_AZURE_IMAGE_PUBLISHER_DEBIAN
+	default "root" if !VAGRANT && !TERRAFORM_AWS_AMI_DEBIAN && !TERRAFORM_AZURE_IMAGE_PUBLISHER_DEBIAN
 	help
 	  The group ownership to use for the data directory where linux will
 	  be cloned on. We default to "vagrant" if you are using vagrant,
 	  otherwise we rely on the the assumption your distribution has the
-	  "users" group created.
+	  "users" group created for distributions where we are certain of that.
+	  If on debian based systems we assume the same group exists with the
+	  username you used to log in. This mechanism if not ideal for
+	  supporting all systems and so simply user the bootlinux user and
+	  group inference mechansim to support more distributions or images.
+
+endif # BOOTLINUX_INFER_USER_AND_GROUP
 
 choice
 	prompt "Filesystem for the data partition for the Linux clone"
