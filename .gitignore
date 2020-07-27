@@ -32,3 +32,14 @@ playbooks/update_ssh_config_vagrant.yml
 
 Makefile.kdevops
 kdevops_requirements.yml
+
+terraform/Makefile
+terraform/shared.tf
+terraform/globals.mk
+terraform/ansible_provision_cmd.tpl
+terraform/*/ansible_provision_cmd.tpl
+terraform/*/versions.tf
+
+terraform/openstack/clouds-public.yaml
+terraform/openstack/output_minicloud.tf
+terraform/openstack/update_ssh_config_minicloud.tf
