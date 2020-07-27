@@ -148,15 +148,9 @@ config TERRAFORM_AZURE_CLIENT_CERT_PATH
 
 config TERRAFORM_AZURE_CLIENT_CERT_PASSWD
 	string "Azure client certificate password"
-	default "this_sucks_wish_they_used_clien_auth_file"
+	default "some-password"
 	help
 	  The password to the service principal PFX file.
-
-config TERRAFORM_AZURE_APPLICATION_ID
-	string "Azure client application ID"
-	default "someGUID"
-	help
-	  The application ID to use.
 
 config TERRAFORM_AZURE_SUBSCRIPTION_ID
 	string "Azure subscription ID"
@@ -169,5 +163,11 @@ config TERRAFORM_AZURE_TENANT_ID
 	default "anotherGUID"
 	help
 	  The tentant ID to use.
+
+config TERRAFORM_AZURE_APPLICATION_ID
+	string "Azure client application ID"
+	default "someGUID"
+	help
+	  The application ID to use.
 
 endif # TERRAFORM_AZURE
