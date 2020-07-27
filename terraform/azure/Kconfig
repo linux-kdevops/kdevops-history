@@ -90,8 +90,8 @@ endchoice
 if TERRAFORM_AZURE_IMAGE_OFFER_DEBIAN_10
 
 choice
-	prompt "Azure image SKU"
-	default TERRAFORM_AZURE_VM_SIZE_STANDARD_DS1_V2
+	prompt "Azure debian image SKU"
+	default TERRAFORM_AZURE_IMAGE_DEBIAN_SKU_10
 
 config TERRAFORM_AZURE_IMAGE_DEBIAN_SKU_10
 	bool "10"
@@ -111,7 +111,6 @@ config TERRAFORM_AZURE_IMAGE_OFFER
 	  This option will set image offer. For more debian offers read:
 
 	  https://wiki.debian.org/Cloud/MicrosoftAzure
-
 
 config TERRAFORM_AZURE_IMAGE_SKU
 	string "Azure image SKU"
