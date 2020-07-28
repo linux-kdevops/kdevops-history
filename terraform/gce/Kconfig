@@ -1,5 +1,13 @@
 if TERRAFORM_GCE
 
+config TERRAFORM_GCE_PROJECT_NAME
+	string "GCE Project name"
+	default "kdevops"
+	help
+	  This option will set the GCE project name. This name must match
+	  the actual name of the project you have created using the
+	  GCE interface.
+
 choice
 	prompt "Choose GCE region location to use"
 	default TERRAFORM_GCE_WEST_2C
@@ -20,18 +28,24 @@ config TERRAFORM_GCE_REGION_LOCATION
 
 choice
 	prompt "Choose GCE Machine type"
-	default TERRAFORM_GCE_MACHINE_N1_STANDARD_1
+	default TERRAFORM_GCE_MACHINE_N1_STANDARD_8
 
 config TERRAFORM_GCE_MACHINE_N1_STANDARD_1
 	bool "n1-standard-1"
 	help
-	  This option will set the GCE machine type.
+	  This option will set the GCE machine type to n1-standard-1.
+
+config TERRAFORM_GCE_MACHINE_N1_STANDARD_8
+	bool "n1-standard-8"
+	help
+	  This option will set the GCE machine type to n1-standard-8.
 
 endchoice
 
 config TERRAFORM_GCE_MACHINE_TYPE
 	string "GCE Machine type"
 	default "n1-standard-1" if TERRAFORM_GCE_MACHINE_N1_STANDARD_1
+	default "n1-standard-8" if TERRAFORM_GCE_MACHINE_N1_STANDARD_8
 	help
 	  This option will set the GCE machine type. For other machine types,
 	  refer to this page:
@@ -81,6 +95,8 @@ config TERRAFORM_GCE_JSON_CREDENTIALS_PATH
 
 	    o https://www.terraform.io/docs/providers/google/getting_started.html
 	    o https://www.terraform.io/docs/providers/google/index.html
+	    o https://cloud.google.com/community/tutorials/getting-started-on-gcp-with-terraform
+	    o https://cloud.google.com/iam/docs/creating-managing-service-account-keys
 	    o https://cloud.google.com/iam/docs/granting-roles-to-service-accounts#granting_access_to_a_service_account_for_a_resource
 
 endif # TERRAFORM_GCE

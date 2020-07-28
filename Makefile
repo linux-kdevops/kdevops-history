@@ -98,7 +98,11 @@ ifeq (y,$(CONFIG_TERRAFORM_AZURE))
 KDEVOS_TERRAFORM_EXTRA_DEPS += $(KDEVOPS_TFVARS)
 endif
 
-# XXX: gce, and openstack
+ifeq (y,$(CONFIG_TERRAFORM_GCE))
+KDEVOS_TERRAFORM_EXTRA_DEPS += $(KDEVOPS_TFVARS)
+endif
+
+# XXX: openstack
 
 endif # CONFIG_TERRAFORM
 
