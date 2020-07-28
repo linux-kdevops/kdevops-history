@@ -1,0 +1,15 @@
+limit_boxes = "@LIMITBOXES@"
+limit_num_boxes = @LIMITNUMBOXES@
+
+ssh_config_pubkey_file = "@SSHCONFIGPUBKEYFILE@"
+ssh_config_user = "@SSHCONFIGUSER@"
+ssh_config = "@SSHCONFIGFILE@"
+ssh_config_update = "@SSHCONFIGUPDATE@"
+ssh_config_use_strict_settings = "@SSHCONFIGSTRICT@"
+ssh_config_backup = "@SSHCONFIGBACKUP@"
+
+openstack_cloud = "@OPENSTACKCLOUD@"
+instance_prefix = "@OPENSTACKPREFIX@"
+flavor_name = "@OPENSTACKFLAVOR@"
+image_name = "@OPENSTACKIMAGE@"
+ssh_pubkey_name = "@OPENSTACKKEYNAME@"

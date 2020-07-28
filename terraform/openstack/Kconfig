@@ -1,0 +1,59 @@
+if TERRAFORM_OPENSTACK
+
+config TERRAFORM_TERRAFORM_OPENSTACK_CLOUD_NAME
+	string "OpenStack cloud name on your clouds.yaml"
+	default "minicloud"
+	help
+	  This option sets the name of the cloud you will use which has
+	  configuration settings described on the file clouds.yaml.
+
+config TERRAFORM_TERRAFORM_OPENSTACK_INSTANCE_PREFIX
+	string "Openstack instance prefix name for resources"
+	default "example"
+	help
+	  This option will set a prefix name for openstack_compute_secgroup_v2.
+	  This will likely be removed or replaced in the future. This is only
+	  useful to distinguish one resource name right now.
+
+choice
+	prompt "Choose flavor name (machine type)"
+	default TERRAFORM_OPENSTACK_MINICLOUD_TINY
+
+config TERRAFORM_OPENSTACK_MINICLOUD_TINY
+	bool "minicloud.tiny"
+	help
+	  This option will set the Openstack flavor to minicloud.tiny.
+
+endchoice
+
+config TERRAFORM_OPENSTACK_FLAVOR
+	string "OpenStack flavor"
+	default "minicloud.tiny" if TERRAFORM_OPENSTACK_MINICLOUD_TINY
+	help
+	  This option will set the OpenStack flavor name.
+
+choice
+	prompt "Choose OpenStack image name"
+	default TERRAFORM_OPENSTACK_IMAGE_DEBIAN_10_PPC64LE
+
+config TERRAFORM_OPENSTACK_IMAGE_DEBIAN_10_PPC64LE
+	bool "Debian 10 ppc64le"
+	help
+	  This option sets the image name to Debian 10 ppc64le.
+
+endchoice
+
+config TERRAFORM_OPENSTACK_IMAGE_NAME
+	string "OpenStack image name"
+	default "Debian 10 ppc64le" if TERRAFORM_OPENSTACK_IMAGE_DEBIAN_10_PPC64LE
+	help
+	  This option will set OpenStack image name to use.
+
+config TERRAFORM_OPENSTACK_SSH_PUBKEY_NAME
+	string "Name of already existing pubkey uploaded"
+	default "kdevops-pubkey"
+	help
+	  Name of already existing pubkey or the new one you are about to
+	  upload, this must be set
+
+endif # TERRAFORM_OPENSTACK

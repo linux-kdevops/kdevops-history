@@ -29,3 +29,4 @@ endchoice
 source "terraform/gce/Kconfig"
 source "terraform/aws/Kconfig"
 source "terraform/azure/Kconfig"
+source "terraform/openstack/Kconfig"
