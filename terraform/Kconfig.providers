@@ -2,21 +2,15 @@ choice
 	prompt "Choose your cloud provider"
 	default TERRAFORM_AWS
 
-config TERRAFORM_AWS
-	bool "AWS - Amazon Web Services"
-	help
-	  Enabling this means you are going to use AWS for your cloud solution.
-
 config TERRAFORM_GCE
 	bool "GCE - Google Cloud Engine"
 	help
 	  Enabling this means you are going to use GCE for your cloud solution.
 
-config TERRAFORM_OPENSTACK
-	bool "OpenStack"
+config TERRAFORM_AWS
+	bool "AWS - Amazon Web Services"
 	help
-	  Enabling this means you are going to use OpenStack for your cloud
-	  solution.
+	  Enabling this means you are going to use AWS for your cloud solution.
 
 config TERRAFORM_AZURE
 	bool "Azure"
@@ -24,8 +18,14 @@ config TERRAFORM_AZURE
 	  Enabling this means you are going to use Azure for your cloud
 	  solution.
 
+config TERRAFORM_OPENSTACK
+	bool "OpenStack"
+	help
+	  Enabling this means you are going to use OpenStack for your cloud
+	  solution.
+
 endchoice
 
-source "terraform/aws/Kconfig"
 source "terraform/gce/Kconfig"
+source "terraform/aws/Kconfig"
 source "terraform/azure/Kconfig"
