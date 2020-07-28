@@ -6,10 +6,10 @@ documentation, then come here and read this.
 Terraform is used to deploy your development hosts on cloud virtual machines.
 Below are the list of clouds providers currently supported:
 
-  * openstack (special minicloud support added)
-  * aws - Amazon Web Service
   * gce - Google Cloud Compute
+  * aws - Amazon Web Service
   * azure - Microsoft Azure
+  * openstack (special minicloud support added)
 
 ## Provisioning with terraform
 
@@ -31,22 +31,36 @@ terraform plan
 terraform apply
 ```
 
-Because *some* buggy cloud providers can take time to make hosts accessible via
-ssh, the only thing we strive in terms of initial setup is to update your
-`~/ssh/config` for you. Once the hosts become available you are required to run
-ansible yourself, including the `devconfig` role:
-
-```bash
-ansible-playbook -i hosts playbooks/bootlinux.yml
-```
+You should have had your `~/.ssh/config` updated automatically with the
+provisioned hosts.
 
 ### Terraform ssh config update
 
 We provide support for updating your ssh configuration file (typically
 `~/.ssh/config`) automatically for you, however each cloud provider requires
-support to be added in order for this to work. As of this writing we
-support this for all cloud providers we support, however Azure seems to
-have a bug, and I'm not yet sure who to blame.
+support to be added in order for this to work. At the time of this writing
+we support this for all cloud providers we support.
+
+# If provisioning failed
+
+We run the devconfig ansible role after we update your ssh configuration,
+as part of the bring up process. If can happen that this can fail due to
+connectivity issues. In such cases, you can run the ansible role yourself
+manually:
+
+```bash
+ansible-playbook -i hosts -l kdevops playbooks/devconfig.yml
+```
+
+Note that there a few configuration items you may have enabled, for things
+which we are aware of that we need to pass in as extra arguments to
+the roles we support we automatically build an `extra_vars.yaml` with all
+known extra arguments. We do use this for one argument for the devconfig
+role, and a series of these for the bootlinux role. The `extra_args.yaml`
+file is read by all kdevops ansible roles, it does this on each role with
+a task, so that users do not have to specify the
+`--extra-args=@extra_args.yaml` argument themselves. We however strive to
+make inferences for sensible defaults for most things.
 
 # Running ansible for worklows
 
