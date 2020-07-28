@@ -1,15 +1,15 @@
 if TERRAFORM
 
-menu "Terraform limits"
-source "terraform/Kconfig.limits"
+menu "Terraform cloud provider configuration"
+source "terraform/Kconfig.providers"
 endmenu
 
 menu "Terraform ssh configuration"
 source "terraform/Kconfig.ssh"
 endmenu
 
-menu "Terraform cloud provider configuration"
-source "terraform/Kconfig.providers"
+menu "Terraform limits"
+source "terraform/Kconfig.limits"
 endmenu
 
 endif # TERRAFORM
