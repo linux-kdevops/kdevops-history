@@ -6,6 +6,7 @@ PATCHLEVEL = 1
 SUBLEVEL = 6
 EXTRAVERSION = -rc1
 
+export KDEVOPS_EXTRA_VARS ?=		extra_vars.yaml
 export KDEVOPS_PLAYBOOKS_DIR :=		playbooks
 export KDEVOPS_HOSTFILE ?=		hosts
 export KDEVOPS_NODES :=			vagrant/kdevops_nodes.yaml
@@ -167,6 +168,32 @@ endif
 else
 endif
 
+ANSIBLE_EXTRA_ARGS :=
+
+ifeq (y,$(CONFIG_TERRAFORM))
+SSH_CONFIG_USER:=$(subst ",,$(CONFIG_TERRAFORM_SSH_CONFIG_USER))
+# XXX: add support to auto-infer in devconfig role as we did with the bootlinux
+# role. Then we can re-use the same infer_uid_and_group=True variable and
+# we could then remove this entry.
+ANSIBLE_EXTRA_ARGS += data_home_dir=/home/${SSH_CONFIG_USER}
+endif
+
+ANSIBLE_EXTRA_ARGS += $(BOOTLINUX_ARGS)
+
+# We don't need the extra_args.yaml file all the time. *If* we know
+# we have changed a default variable though we can extend the arguments
+# on ANSIBLE_EXTRA_ARGS and all these will be used to create the file
+# for you. If this file is empty you don't need it. All of our ansible
+# kdevops roles check for this file without you having to specify it as
+# an extra_args=@extra_args.yaml file. This helps us with allowing users
+# call ansible on the command line themselves, instead of using the make
+# constructs we have built here.
+ifneq (,$(ANSIBLE_EXTRA_ARGS))
+EXTRA_ARGS_BUILD_DEP := $(KDEVOPS_EXTRA_VARS)
+else
+EXTRA_ARGS_BUILD_DEP :=
+endif
+
 export TOPDIR=./
 
 # disable built-in rules for this file
@@ -187,6 +214,9 @@ export TOPDIR=./
 	done )								;\
 	echo "\--"							;\
 	false)
+
+$(KDEVOPS_EXTRA_VARS): .config
+	 @for i in $(foreach exp,$(ANSIBLE_EXTRA_ARGS),$(exp)); do echo $$i; done > $(KDEVOPS_EXTRA_VARS)
 
 bringup_vagrant:
 	$(Q)$(TOPDIR)/scripts/bringup_vagrant.sh
@@ -245,6 +275,7 @@ help:
 
 PHONY := deps
 deps: \
+	$(EXTRA_ARGS_BUILD_DEP) \
 	$(KDEVOPS_HOSTS) \
 	$(KDEVOPS_NODES) \
 	$(KDEVOS_TERRAFORM_EXTRA_DEPS) \

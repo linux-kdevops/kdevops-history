@@ -3,6 +3,9 @@
 *.retry
 
 hosts
+extra_vars.yaml
+extra_vars.yml
+extra_vars.json
 
 .config
 .config.old
