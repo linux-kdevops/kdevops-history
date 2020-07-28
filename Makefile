@@ -2,8 +2,8 @@
 #
 PROJECT = kdevops
 VERSION = 3
-PATCHLEVEL = 1
-SUBLEVEL = 6
+PATCHLEVEL = 2
+SUBLEVEL = 1
 EXTRAVERSION = -rc1
 
 export KDEVOPS_EXTRA_VARS ?=		extra_vars.yaml
