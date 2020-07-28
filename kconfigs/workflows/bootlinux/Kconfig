@@ -66,7 +66,7 @@ config BOOTLINUX_DATA_DEVICE
 	string "The device to use to create the data parition for linux"
 	default "/dev/nvme0n1" if VAGRANT
 	default "/dev/nvme1n1" if TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE
-	default "/dev/nvme0n1" if TERRAFORM_AZURE
+	default "/dev/nvme0n1" if TERRAFORM_GCE
 	default "/dev/sdc" if TERRAFORM_AZURE
 	help
 	  The device name to use to create the data partition used to create
