@@ -82,19 +82,6 @@ To configure kdevops use:
 make menuconfig
 ```
 
-Below are a few screnshots of the current options avialable when
-configuring kdevops:
-
-![config-main-menu](images/config-main-menu.png)
-
-![config-bringup-vagrant](images/config-bringup-vagrant.png)
-
-![config-bringup-terraform](images/config-bringup-terraform.png)
-
-![config-kdevops](images/config-kdevops.png)
-
-![config-workflows](images/config-workflows.png)
-
 ## Getting help with configuration
 
 ```bash
