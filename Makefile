@@ -217,8 +217,14 @@ export TOPDIR=./
 	echo "\--"							;\
 	false)
 
+define YAML_ENTRY
+$(1)
+
+endef
+
 $(KDEVOPS_EXTRA_VARS): .config
-	 @for i in $(foreach exp,$(ANSIBLE_EXTRA_ARGS),$(exp)); do echo $$i; done > $(KDEVOPS_EXTRA_VARS)
+	@echo --- > $(KDEVOPS_EXTRA_VARS)
+	@$(foreach exp,$(ANSIBLE_EXTRA_ARGS),echo $(call YAML_ENTRY,$(subst =,: ,$(exp)) >> $(KDEVOPS_EXTRA_VARS)))
 
 bringup_vagrant:
 	$(Q)$(TOPDIR)/scripts/bringup_vagrant.sh
