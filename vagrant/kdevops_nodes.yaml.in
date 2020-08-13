@@ -2,7 +2,7 @@
 vagrant_global:
   box: "@VAGRANTBOX@"
   box_version: "@VBOXVERSION@"
-  skip_ansible: "@SKIPANSIBLE@"
+  skip_ansible: @SKIPANSIBLE@
   memory: 8192
   cpus: 8
   # Enable the below options
