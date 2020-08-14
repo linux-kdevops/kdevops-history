@@ -133,7 +133,7 @@ fi
 OS_SECTION_PREFIX=""
 
 if [ -z "$OSCHECK_EXCLUDE_PREFIX" ]; then
-	OSCHECK_EXCLUDE_PREFIX="$(dirname $(readlink -f $0))/expunges/"
+	OSCHECK_EXCLUDE_PREFIX="$(dirname $(readlink -f $0))/../expunges/"
 fi
 
 REQS="gcc"
