@@ -62,6 +62,16 @@ WORKFLOW_ARGS += $(FSTESTS_ARGS)
 $(KDEVOPS_FSTESTS_CONFIG): $(KDEVOPS_FSTESTS_CONFIG_TEMPLATE) .config
 	$(Q)$(TOPDIR)/scripts/workflows/fstests/gen_fstests_config.sh
 
+fstests:
+	$(Q)ansible-playbook -i hosts playbooks/workloads_shared.yml
+	$(Q)ansible-playbook -i hosts playbooks/fstests.yml
+
+fstests-baseline:
+	$(Q)ansible-playbook -i hosts -l baseline playbooks/fstests.yml --tags run_tests --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml
+
+fstests-dev:
+	$(Q)ansible-playbook -i hosts -l dev playbooks/fstests.yml --tags run_tests --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml
+
 kdevops_fstests_install: $(KDEVOPS_FSTESTS_PROGS) $(KDEVOPS_FSTESTS_CONFIG)
 	@if [ $(ID) != "0" ]; then \
 		echo "Must run as root" ;\

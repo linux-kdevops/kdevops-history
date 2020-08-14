@@ -17,6 +17,12 @@ in just 4 commands:
   * `make bringup`
   * `make linux`
 
+To test a kernel against fstests, for example, if you enable fstests you can
+just run:
+
+  * `make fstests`
+  * `make fstests-baseline`
+
 Once kdevops is configured, there are 3 main parts to what kdevops will do
 for you:
 
