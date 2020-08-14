@@ -1,0 +1,57 @@
+menu "Shared workflow data partition"
+source "kconfigs/workflows/Kconfig.data_partition"
+endmenu
+
+menu "Shared workflow software"
+source "kconfigs/workflows/Kconfig.shared_software"
+endmenu
+
+config WORKFLOW_MAKE_CMD_OVERRIDE
+	bool "Override default make command"
+	default n
+	help
+	  We support different workflows which use the make command to build
+	  source code on the target systems. You can override here the default
+	  make command used to build on the target systems. By default we use:
+
+	    {{ make }} -j{{ ansible_processor_vcpus }}
+
+	  However this is known to not work as expected with containers.
+	  The fix is in commit 34db57a47f875d11c4068567b9ec7ace174ec4cf
+	  ("introduce fact "ansible_processor_nproc": number of usable
+	  vcpus #66569") but it will be a while before we see this propagate.
+	  This will be needed for containers. In the meantime you can
+	  override the make command with this option.
+
+if WORKFLOW_MAKE_CMD_OVERRIDE
+
+config WORKFLOW_MAKE_CMD
+	string "The make command to use when building"
+	default "make -j 16" if TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE
+	default "make -j 1" if TERRAFORM_AZURE_VM_SIZE_STANDARD_DS1_V2
+	default "make -j 4" if TERRAFORM_AZURE_VM_SIZE_STANDARD_DS3_V2
+	default "make -j 8" if VAGRANT
+	help
+	  The actual make command to use when building Linux. You want to
+	  optimize this as per the number of cores you have.
+
+endif
+
+config WORKFLOW_KDEVOPS_GIT
+	string "Git tree of kdevops to clone on targets"
+	default "https://github.com/mcgrof/kdevops.git"
+	help
+	  Some workflows want to also clone a version of kdevops on each target.
+	  An example of this is when using the fstests workflow, which carries
+	  a set of expunge lists to track known failures. Upon new failures the
+	  local expunge list grows, and so a 'git diff' against the kdevops git
+	  tree will reveal if there are any regressions against the known
+	  baseline.
+
+config WORKFLOW_KDEVOPS_GIT_DATA
+	string "The destination directory where to clone the git tree"
+	default "{{data_path}}/kdevops"
+	help
+	  This is the target location of where to clone the above git tree.
+	  Note that {{data_path}} corresponds to the location set by the
+	  configuration option CONFIG_WORKFLOW_DATA_PATH above.

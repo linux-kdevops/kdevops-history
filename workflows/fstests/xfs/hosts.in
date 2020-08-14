@@ -1,0 +1,53 @@
+[all]
+kdevops-xfs
+kdevops-xfs-nocrc
+kdevops-xfs-nocrc-512
+kdevops-xfs-reflink
+kdevops-xfs-reflink-1024
+kdevops-xfs-logdev
+kdevops-xfs-realtimedev
+kdevops-xfs-reflink-normapbt
+kdevops-xfs-dev
+kdevops-xfs-nocrc-dev
+kdevops-xfs-nocrc-512-dev
+kdevops-xfs-reflink-dev
+kdevops-xfs-reflink-1024-dev
+kdevops-xfs-logdev-dev
+kdevops-xfs-realtimedev-dev
+kdevops-xfs-reflink-normapbt-dev
+
+[all:vars]
+ansible_python_interpreter =  "@KDEVOPSPYTHONINTERPRETER@"
+
+[baseline]
+kdevops-xfs
+kdevops-xfs-nocrc
+kdevops-xfs-nocrc-512
+kdevops-xfs-reflink
+kdevops-xfs-reflink-1024
+kdevops-xfs-logdev
+kdevops-xfs-realtimedev
+kdevops-xfs-reflink-normapbt
+
+[baseline:vars]
+ansible_python_interpreter =  "@KDEVOPSPYTHONINTERPRETER@"
+
+[dev]
+kdevops-xfs-dev
+kdevops-xfs-nocrc-dev
+kdevops-xfs-nocrc-512-dev
+kdevops-xfs-reflink-dev
+kdevops-xfs-reflink-1024-dev
+kdevops-xfs-logdev-dev
+kdevops-xfs-realtimedev-dev
+kdevops-xfs-reflink-normapbt-dev
+
+[dev:vars]
+ansible_python_interpreter =  "@KDEVOPSPYTHONINTERPRETER@"
+
+[normap]
+kdevops-xfs-reflink-normapbt
+kdevops-xfs-reflink-normapbt-dev
+
+[normap:vars]
+ansible_python_interpreter =  "@KDEVOPSPYTHONINTERPRETER@"

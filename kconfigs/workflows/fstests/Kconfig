@@ -1,0 +1,231 @@
+if KDEVOPS_WORKFLOW_FSTESTS
+
+choice
+	prompt "Target filesystem to test"
+	default FSTESTS_XFS
+
+config FSTESTS_XFS
+	bool "xfs"
+	help
+	  This will target testing the xfs filesystem.
+
+config FSTESTS_BTRFS
+	bool "brfs"
+	help
+	  This will target testing the btrfs filesystem.
+
+endchoice
+
+config FSTESTS_FSTYP
+	string "The filesystem to test with fstests"
+	default "xfs" if FSTESTS_XFS
+	default "btrfs" if FSTESTS_BTRFS
+	help
+	  The filesystem to test. This will be automatically set depending on
+	  the above choice, you however can override this manually.
+
+config FSTESTS_GIT
+	string "The fstests git tree to clone"
+	default "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git"
+	help
+	  The fstests git tree to clone.
+
+config FSTESTS_DATA
+	string "Where to clone the fstests git tree to"
+	default "{{data_path}}/xfstests"
+	help
+	  This is the target location of where to clone the above git tree.
+	  Note that {{data_path}} corresponds to the location set by the
+	  configuration option CONFIG_WORKFLOW_DATA_PATH.
+
+config FSTESTS_DATA_TARGET
+	string "The target fstests install directory"
+	default "/var/lib/xfstests"
+	help
+	  The directory where fstests will be installed.
+
+choice
+	prompt "Strategy for device pool"
+	default FSTESTS_TESTDEV_SPARSEFILE_GENERATION
+
+config FSTESTS_TESTDEV_SPARSEFILE_GENERATION
+	bool "Create sparse files for test devices"
+	help
+	  When testing a filesystem with fstests you must provide the
+	  test devices to be used to test. By selecting this option
+	  sparse files will be created for you on a target path, and
+	  loopback devices will be set up for you so you can use these
+	  loopback devices to test the filesystem.
+
+	  This is useful if you don't really want to test creating a filesystem
+	  against real block devices or are constrained / limited by the amount
+	  of block devices you have. By using sparse files you are also
+	  reducing the amount of hard drive space you actually need to only the
+	  amount of actual space used by all the tests. This varies by the
+	  filesystem you are testing.
+
+	  We'll create 15 sparse files for you, and so you can run tests which
+	  require up to 15 block devices. The TEST_DEV is set to /dev/loop16.
+	  If a LOGWRITES_DEV is used this /dev/loop15 is used.
+	  If a SCRATCH_RTDEV is used this /dev/loop14 is used.
+
+	  The SCRATCH_DEV_POOL is set to these devices:
+
+	   /dev/loop5   /dev/loop6   /dev/loop6   /dev/loop7
+	   /dev/loop8   /dev/loop9   /dev/loop10  /dev/loop11
+
+	  With this strategy these loopback devices currently remain unused:
+
+	   /dev/loop12
+	   /dev/loop13
+
+endchoice
+
+if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
+
+config FSTESTS_SPARSE_DEV
+	string "Device to use to create a filesystem on for sparse files"
+	default "/dev/nvme1n1" if VAGRANT
+	default "/dev/nvme2n1" if TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE
+	default "/dev/nvme1n1" if TERRAFORM_GCE
+	default "/dev/sde" if TERRAFORM_AZURE
+	help
+	  The device to use to create a filesystem on where we will place
+	  sparse files.
+
+choice
+	prompt "Filesystem to use where sparse files will live"
+	default FSTESTS_SPARSE_XFS
+
+config FSTESTS_SPARSE_XFS
+	bool "xfs"
+	help
+	  This will target testing the xfs filesystem.
+
+config FSTESTS_SPARSE_BTRFS
+	bool "brfs"
+	help
+	  This will target testing the btrfs filesystem.
+
+config FSTESTS_SPARSE_EXT4
+	bool "ext4"
+	help
+	  This will target testing the ext4 filesystem.
+
+endchoice
+
+config FSTESTS_SPARSE_FSTYPE
+	string "Filesystem to use to create where the sparse files will live"
+	default "xfs" if FSTESTS_SPARSE_XFS
+	default "btrfs" if FSTESTS_SPARSE_BTRFS
+	default "ext4" if FSTESTS_SPARSE_EXT4
+	help
+	  The filesystem to use where we will place the generated sparse files.
+	  This is not the filesystem we will test, this is just where the sparse
+	  files used will live.
+
+config FSTESTS_SPARSE_LABEL
+	string "Filesystem label to use for the filesystem where sparsefiles live"
+	default "sparsefiles"
+	help
+	  The filesystem label to create and later use to mount the partition on
+	  the /etc/fstab file to which represents where sparsefiles live.
+
+config FSTESTS_SPARSE_FILE_PATH
+	string "Path to directory where to generate sparse files"
+	default "/media/sparsefiles"
+	help
+	  The directory where to create sparse files to be used to represent
+	  actual devices used.
+
+config FSTESTS_SPARSE_FILE_SIZE
+	string "Size of the sparse files to use per target device"
+	default "20G"
+	help
+	  The size of the sparse files to create, this is the -s argument passed
+	  to the command truncate.
+
+config FSTESTS_SPARSE_FILENAME_PREFIX
+	string "The sparse file name prefix to use"
+	default "sparse-disk"
+	help
+	  This is the prefix for the name of the sparse file to create.
+	  For instance if FSTESTS_SPARSE_FILE_PATH is set to /media/truncated
+	  and you set this prefix to sparse-disk, the first sparse file to create
+	  will be named /media/truncated/sparse-disk5. The name used is simply for
+	  pure convenience to the developer and to make it clear what type of
+	  file backing is provided for the loopback device.
+
+endif # FSTESTS_TESTDEV_SPARSEFILE_GENERATION
+
+config FSTESTS_TEST_DEV
+	string "The device to use TEST_DEV on fstests"
+	default "/dev/loop16" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
+	help
+	  To test with fstests one must set the TEST_DEV variable, this sets
+	  the TEST_DEV to use.
+
+config FSTESTS_TEST_DIR
+	string "The path to use for the fstests TEST_DIR variable"
+	default "/media/test"
+	help
+	  To test with fstests one must set the TEST_DEV variable, this sets
+	  the TEST_DEV to use.
+
+	# default $(shell, for i in $(seq 5 11) echo /dev/loop$i) if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
+config FSTESTS_SCRATCH_DEV_POOL
+	string "The list of devices to set in SCRATCH_DEV_POOL"
+	default "/dev/loop5 /dev/loop6 /dev/loop6 /dev/loop7 /dev/loop8 /dev/loop9 /dev/loop10 /dev/loop11" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
+	help
+	  To set of spare devices to use for the FSTESTS SCRATCH_DEV_POOL.
+
+config FSTESTS_SCRATCH_MNT
+	string "The path to use for the fstests SCRATCH_MNT variable"
+	default "/media/scratch"
+	help
+	  This sets the SCRATCH_MNT variable.
+
+config FSTESTS_LOGWRITES_DEV
+	string "The fstests LOGWRITES_DEV to use"
+	default "/dev/loop15" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
+	help
+	  To set of spare devices to use for the fstests SCRATCH_DEV_POOL.
+
+config FSTESTS_SCRATCH_LOGDEV
+	string "The fstests SCRATCH_LOGDEV to use"
+	default "/dev/loop15" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
+	help
+	  To set devices to use for the SCRATCH_LOGDEV.
+
+config FSTESTS_LOGWRITES_DEV
+	string "The fstests LOGWRITES_DEV to use"
+	default "/dev/loop15" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
+	help
+	  To set devices to use for the LOGWRITES_DEV.
+
+if FSTESTS_XFS
+
+config FSTESTS_SCRATCH_RTDEV
+	string "The fstests SCRATCH_RTDEV to use"
+	default "/dev/loop14" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
+	help
+	  To set devices to use for the SCRATCH_RTDEV.
+
+endif # FSTESTS_XFS
+
+config FSTESTS_SETUP_SYSTEM
+	bool "Help setup system if something is found missing or broken"
+	default y
+	help
+	  This adds adds users / groups if missing. Additionally if
+	  a service is not avaiable it ensures to start it. These quirks should
+	  all be moved as part of the ansible role for fstests eventually.
+
+config FSTESTS_RUN_TESTS
+	bool "Run fstests"
+	default y
+	help
+	  Disable this to only install dependencies for fstests, and so the
+	  full set of fstests won't be run.
+
+endif # KDEVOPS_WORKFLOW_FSTESTS

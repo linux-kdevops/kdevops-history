@@ -1,0 +1,49 @@
+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+---
+# tasks file for configuring postfix
+- name: Create postfix sasl passwd filej
+  become: yes
+  become_method: sudo
+  template:
+    src: sasl_passwd.j2
+    dest: /etc/postfix/sasl/sasl_passwd
+    owner: root
+    group: root
+    mode: 0600
+  tags: [ 'postfix', 'config' ]
+
+- name: Create postfix main.cf file
+  become: yes
+  become_method: sudo
+  template:
+    src: main.cf.j2
+    dest: /etc/postfix/main.cf
+    owner: root
+    group: root
+    mode: 0644
+  tags: [ 'postfix', 'config' ]
+
+- name: Run postfix postmap
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "postmap /etc/postfix/sasl/sasl_passwd"
+  tags: [ 'postfix', 'config']
+
+- name: Ensure sane postfix sasl_passwd.db file permissions
+  become: yes
+  become_method: sudo
+  file:
+    path: /etc/postfix/sasl/sasl_passwd.db
+    owner: root
+    group: root
+    mode: 0600
+  tags: [ 'postfix', 'config' ]
+
+- name: Restart postfix
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  service:
+    name: postfix
+    state: restarted

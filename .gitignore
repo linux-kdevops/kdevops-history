@@ -46,3 +46,5 @@ terraform/*/versions.tf
 terraform/openstack/clouds-public.yaml
 terraform/openstack/output_minicloud.tf
 terraform/openstack/update_ssh_config_minicloud.tf
+
+workflows/fstests/*/*.config

@@ -1,0 +1,119 @@
+config WORKFLOW_DATA_DEVICE
+	string "The device to use to create the workflow data parition"
+	default "/dev/nvme0n1" if VAGRANT
+	default "/dev/nvme1n1" if TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE
+	default "/dev/nvme0n1" if TERRAFORM_GCE
+	default "/dev/sdc" if TERRAFORM_AZURE
+	help
+	  Workflows require data to be passed onto each target host. When doing
+	  development or testing on target workflows you often want to keep
+	  around the data so you can reinstall the OS on a target host without
+	  loosing your workflow data. To help with this, workflow data is
+	  stored in a parition specifally designed to outlive the Operating
+	  System install. This lets you easily re-OS a system and keep the
+	  data workflow around.
+
+	  This options lets you specify the device name to use to create the
+	  workflow data partition used. The type of data placed on this
+	  partition conists of git trees cloned, for example the Linux kernel
+	  sources if you are developing on Linux, or the fstests git tree if
+	  you are testing fstests. Additionally configuration data used for
+	  your target workflows.
+
+config WORKFLOW_DATA_PATH
+	string "Directory path to place data for workflows"
+	default "/data"
+	help
+	  The data workflow is kept then in a location other than your default
+	  user home directory. Use this option to specify the path which we
+	  will use to place your workflow data. This will be the mount point
+	  for the new worfklow data partition created.
+
+config WORKFLOW_INFER_USER_AND_GROUP
+	bool "Infer user and group to use for the workflow data partition"
+	default y
+	help
+	  We place all target workflow data on a partition we create. We
+	  typically set the username and group ownership of that partition
+	  based on passed manual settings. Providing a good guess as defaults
+	  through kconfig about what the target user and group should be for the
+	  data partition for systems created with vagrant is easy, but this is
+	  not as easy when users are using terraform or bare metal. Instead of
+	  extending the possible sensible defaults for the target username and
+	  group to use for the data partition based the mechanism used for
+	  bringup or Linux distribution chosen, we also provide support to infer
+	  your target username and group settings based on the login user on the
+	  target system.
+
+	  You can safely enable this feature so we can do this inference. This
+	  helps not have to extend our defaults for a manual settings when
+	  users are using terraform.
+
+if !WORKFLOW_INFER_USER_AND_GROUP
+
+config WORKFLOW_DATA_USER
+	string "The username to use to chown on the target data workflow directory"
+	default "vagrant" if VAGRANT
+	default TERRAFORM_SSH_CONFIG_USER if TERRAFORM
+	help
+	  Manual setting for the username to chown the data workflow path.
+
+config WORKFLOW_DATA_GROUP
+	string "The group to use to chown on the target data workflow directory"
+	default "vagrant" if VAGRANT
+	default TERRAFORM_SSH_CONFIG_USER if TERRAFORM_AWS_AMI_DEBIAN || TERRAFORM_AZURE_IMAGE_PUBLISHER_DEBIAN
+	default "users" if !TERRAFORM_AWS_AMI_DEBIAN && !TERRAFORM_AZURE_IMAGE_PUBLISHER_DEBIAN
+	default "root" if !VAGRANT && !TERRAFORM_AWS_AMI_DEBIAN && !TERRAFORM_AZURE_IMAGE_PUBLISHER_DEBIAN
+	help
+	  Manual setting for the group to chgrp the data workflow path.
+
+	  We default to "vagrant" if you are using vagrant, otherwise we rely
+	  on the the assumption your distribution has the "users" group created
+	  for distributions where we are certain of that. If on debian based
+	  systems we assume the same group exists with the username you used
+	  to log in.
+
+	  This mechanism if not ideal for supporting all systems and so simply
+	  user the workflow user and group inference mechansim to support more
+	  distributions or images, and don't extend the defaults we provide for
+	  WORKFLOW_DATA_USER and WORKLOAD_DATA_GROUP.
+
+endif # WORKFLOW_INFER_USER_AND_GROUP
+
+choice
+	prompt "Filesystem for the workflow data partition"
+	default WORKFLOW_DATA_FSTYPE_XFS
+
+config WORKFLOW_DATA_FSTYPE_XFS
+	bool "xfs"
+	help
+	  Use the xfs filesystem.
+
+config WORKFLOW_DATA_FSTYPE_EXT4
+	bool "ext4"
+	help
+	  Use the ext4 filesystem.
+
+config WORKFLOW_DATA_FSTYPE_BTRFS
+	bool "btrfs"
+	help
+	  Use the btrfs filesystem.
+
+endchoice
+
+config WORKFLOW_DATA_FSTYPE
+	string "The filesystem target to use"
+	default "xfs" if WORKFLOW_DATA_FSTYPE_XFS
+	default "ext4" if WORKFLOW_DATA_FSTYPE_EXT4
+	default "btrfs" if WORKFLOW_DATA_FSTYPE_BTRFS
+	help
+	  The filesystem to use for the workflow data partition.
+
+config WORKFLOW_DATA_LABEL
+	string "The filesystem label to use"
+	default "data"
+	help
+	  The filesystem label to create and later use to mount the partition on
+	  the /etc/fstab file for the workflow data partition. Since the target
+	  device used to create the parition can vary system to system we use a
+	  label to ensure we find the partition.

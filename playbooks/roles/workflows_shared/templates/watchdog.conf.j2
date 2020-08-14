@@ -1,0 +1,69 @@
+# SPDX-License-Identifier GPL-2.0+ OR MIT
+# {{ ansible_managed }}
+
+{% if watchdog_device %}
+watchdog-device	   = {{watchdog_device}}
+{% endif %}
+{% if watchdog_admin %}
+admin              = {{watchdog_admin}}
+{% endif %}
+{% if watchdog_interval %}
+interval           = {{watchdog_interval}}
+{% endif %}
+{% if watchdog_realtime %}
+realtime           = {{ "yes" if watchdog_realtime == True else watchdog_realtime }}
+{% endif %}
+{% if watchdog_priority %}
+priority           = {{watchdog_priority}}
+{% endif %}
+{% if watchdog_logtick %}
+logtick            = {{watchdog_logtick}}
+{% endif %}
+{% if watchdog_log_dir %}
+log-dir	           = {{watchdog_log_dir}}
+{% endif %}
+{% for ping_addr in watchdog_ping_addrs %}
+ping               = {{ping_addr | ipaddr}}
+{% endfor %}
+{% for interface in watchdog_interfaces %}
+interface          = {{interface}}
+{% endfor %}
+{% for file in watchdog_files %}
+file               = {{file.name}}
+{% if file.change %}
+change             = {{file.change}}
+{% endif %}
+{% endfor %}
+{% for pidfile in watchdog_pidfiles %}
+pidfile            = {{pidfile}}
+{% endfor %}
+{% if watchdog_max_load_1 %}
+max-load-1         = {{watchdog_max_load_1}}
+{% endif %}
+{% if watchdog_max_load_5 %}
+max-load-5         = {{watchdog_max_load_5}}
+{% endif %}
+{% if watchdog_max_load_15 %}
+max-load-15        = {{watchdog_max_load_15}}
+{% endif %}
+{% if watchdog_min_memory %}
+min-memory         = {{watchdog_min_memory}}
+{% endif %}
+{% if watchdog_repair_binary %}
+repair-binary      = {{watchdog_repair_binary}}
+{% endif %}
+{% if watchdog_repair_timeout %}
+repair-timeout     = {{watchdog_repair_timeout}}
+{% endif %}
+{% if watchdog_test_binary %}
+test-binary        = {{watchdog_test_binary}}
+{% endif %}
+{% if watchdog_test_timeout %}
+test-timeout       = {{watchdog_test_timeout}}
+{% endif %}
+{% if watchdog_temperature_device %}
+temperature-device = {{watchdog_temperature_device}}
+{% endif %}
+{% if watchdog_max_temperature %}
+max-temperature    = 120
+{% endif %}

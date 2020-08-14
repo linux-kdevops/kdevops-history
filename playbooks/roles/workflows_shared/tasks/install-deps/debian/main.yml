@@ -1,0 +1,25 @@
+---
+- name: Install postfix and mailx to test settings
+  become: yes
+  become_method: sudo
+  apt:
+    name:
+      - postfix
+      - bsd-mailx
+    state: latest
+    update_cache: yes
+  when:
+    - workflow_install_postfix|bool
+  tags: [ 'postfix', 'deps' ]
+
+- name: Install watchdog package
+  become: yes
+  become_method: sudo
+  apt:
+    name:
+      - watchdog
+    state: latest
+    update_cache: yes
+  when:
+    - workflow_install_watchdog|bool
+  tags: [ 'watchdog', 'deps' ]

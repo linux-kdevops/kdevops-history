@@ -1,6 +1,52 @@
+config WORKFLOWS
+	bool "Enable different target workflows"
+	default y
+	help
+	  If you want to do something other than just bring up of target systems
+	  enable this option. For instance, you may want to easily boot linux
+	  and/or run fstests.
+
+if WORKFLOWS
+
+menu "Shared workflow configuration"
+source "kconfigs/workflows/Kconfig.shared"
+endmenu
+
+choice
+	prompt "Target workflow type"
+	default KDEVOPS_WORKFLOW_LINUX
+
+config KDEVOPS_WORKFLOW_LINUX
+	bool "Linux kernel development"
+	select BOOTLINUX
+	help
+	  If all you need to do is some basic kernel development where two
+	  you will use two target systems, a baseline and one for development,
+	  this option is for you. Only two target hosts will be brought up,
+	  and the only real work flow targetted will be for getting a specific
+	  version of Linux, applying patches if needed, compiling and booting
+	  into that respective kernel.
+
+config KDEVOPS_WORKFLOW_FSTESTS
+	bool "Linux fstests"
+	help
+	  Select this option if you are doing filesystem development and want.
+	  to target development for a filesystem and enable fstests so that
+	  you can test the filesystem.
+
+	  The fstests git tree will be cloned, and set up for you, and
+	  you will be able to run create a baseline for your target filesystem,
+	  and also test to ensure you don't regress that baseline. If a baseline
+	  already exists against your distribution you will be able to ensure
+	  you don't regress against development changes on your kernel.
+
+endchoice
+
+menu "Get and install Linux from git"
 config BOOTLINUX
 	bool "Options to get or install Linux from git"
-	default y
+	default y if KDEVOPS_WORKFLOW_LINUX
+	default n if KDEVOPS_WORKFLOW_FSTESTS
 	help
 	  This option will allow the 'make linux' target be usable for you
 	  to just get Linux from git, or to install it as well.
@@ -8,3 +54,12 @@ config BOOTLINUX
 	  Say y unless you don't want to have 'make linux' do anything.
 
 source "kconfigs/workflows/bootlinux/Kconfig"
+endmenu
+
+if KDEVOPS_WORKFLOW_FSTESTS
+menu "Configure and run fstests"
+source "kconfigs/workflows/fstests/Kconfig"
+endmenu
+endif # KDEVOPS_WORKFLOW_FSTESTS
+
+endif # WORKFLOWS

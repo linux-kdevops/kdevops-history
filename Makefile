@@ -6,11 +6,15 @@ PATCHLEVEL = 2
 SUBLEVEL = 1
 EXTRAVERSION = -rc1
 
-export KDEVOPS_EXTRA_VARS ?=		extra_vars.yaml
-export KDEVOPS_PLAYBOOKS_DIR :=		playbooks
-export KDEVOPS_HOSTFILE ?=		hosts
-export KDEVOPS_NODES :=			vagrant/kdevops_nodes.yaml
-export KDEVOPS_NODES_TEMPLATE :=	vagrant/kdevops_nodes.yaml.in
+export KDEVOPS_EXTRA_VARS ?=			extra_vars.yaml
+export KDEVOPS_PLAYBOOKS_DIR :=			playbooks
+export KDEVOPS_HOSTFILE ?=			hosts
+export KDEVOPS_NODES :=				vagrant/kdevops_nodes.yaml
+export KDEVOPS_NODES_TEMPLATE :=		vagrant/kdevops_nodes.yaml.in
+export KDEVOPS_FSTESTS_CONFIG :=
+export KDEVOPS_FSTESTS_CONFIG_TEMPLATE :=
+
+KDEVOPS_INSTALL_TARGETS :=
 
 all: deps
 
@@ -31,6 +35,10 @@ CFLAGS += $(INCLUDES)
 
 export KDEVOPS_HOSTS_TEMPLATE := $(KDEVOPS_HOSTFILE).in
 export KDEVOPS_HOSTS := $(KDEVOPS_HOSTFILE)
+
+# This will be used to generate our extra_args.yml file used to pass on
+# configuration data for ansible roles through kconfig.
+ANSIBLE_EXTRA_ARGS :=
 
 # kdevops-stage-1-y will be called first.
 # kdevops-stage-2-y will be called after we've deployed all the ansible
@@ -127,6 +135,67 @@ endif
 KDEVOPS_GEN_SSH_KEY := $(KDEVOPS_SSH_PRIVKEY)
 endif
 
+WORKFLOW_ARGS	:=
+ifeq (y,$(CONFIG_WORKFLOWS))
+# How we create the partition for the workflow data partition
+WORKFLOW_DATA_DEVICE:=$(subst ",,$(CONFIG_WORKFLOW_DATA_DEVICE))
+WORKFLOW_DATA_PATH:=$(subst ",,$(CONFIG_WORKFLOW_DATA_PATH))
+WORKFLOW_DATA_FSTYPE:=$(subst ",,$(CONFIG_WORKFLOW_DATA_FSTYPE))
+WORKFLOW_DATA_LABEL:=$(subst ",,$(CONFIG_WORKFLOW_DATA_LABEL))
+
+WORKFLOW_KDEVOPS_GIT:=$(subst ",,$(CONFIG_WORKFLOW_KDEVOPS_GIT))
+WORKFLOW_KDEVOPS_GIT_DATA:=$(subst ",,$(CONFIG_WORKFLOW_KDEVOPS_GIT_DATA))
+
+WORKFLOW_ARGS	+= data_device=$(WORKFLOW_DATA_DEVICE)
+WORKFLOW_ARGS	+= data_path=$(WORKFLOW_DATA_PATH)
+WORKFLOW_ARGS	+= data_fstype=$(WORKFLOW_DATA_FSTYPE)
+WORKFLOW_ARGS	+= data_label=$(WORKFLOW_DATA_LABEL)
+WORKFLOW_ARGS	+= kdevops_git=$(WORKFLOW_KDEVOPS_GIT)
+WORKFLOW_ARGS	+= kdevops_data=\"$(WORKFLOW_KDEVOPS_GIT_DATA)\"
+
+ifeq (y,$(CONFIG_WORKFLOW_EXTRA_SOFTWARE))
+
+ifeq (y,$(CONFIG_WORKFLOW_EXTRA_SOFTWARE_POSTFIX))
+WORKFLOW_ARGS	+= fstests_extra_install_postfix=True
+endif # CONFIG_WORKFLOW_EXTRA_SOFTWARE_POSTFIX
+
+ifeq (y,$(CONFIG_WORKFLOW_EXTRA_SOFTWARE_WATCHDOG))
+WORKFLOW_ARGS	+= fstests_extra_install_watchdog=True
+endif # CONFIG_WORKFLOW_EXTRA_SOFTWARE_WATCHDOG
+
+endif # CONFIG_WORKFLOW_EXTRA_SOFTWARE
+
+ifeq (y,$(CONFIG_WORKFLOW_MAKE_CMD_OVERRIDE))
+WORKFLOW_MAKE_CMD:=$(subst ",,$(CONFIG_WORKFLOW_MAKE_CMD))
+endif
+
+ifeq (y,$(CONFIG_WORKFLOW_INFER_USER_AND_GROUP))
+WORKFLOW_ARGS	+= infer_uid_and_group=True
+else
+WORKFLOW_DATA_USER:=$(subst ",,$(CONFIG_WORKFLOW_DATA_USER))
+WORKFLOW_DATA_GROUP:=$(subst ",,$(CONFIG_WORKFLOW_DATA_GROUP))
+
+WORKFLOW_ARGS	+= data_user=$(WORKFLOW_DATA_USER)
+WORKFLOW_ARGS	+= data_group=$(WORKFLOW_DATA_GROUP)
+
+endif # CONFIG_WORKFLOW_MAKE_CMD_OVERRIDE == y
+
+ifeq (y,$(CONFIG_WORKFLOW_EXTRA_SOFTWARE))
+
+ifeq (y,$(CONFIG_WORKFLOW_EXTRA_SOFTWARE_POSTFIX))
+WORKFLOW_ARGS += workflow_install_postfix=true
+else
+WORKFLOW_ARGS += workflow_install_postfix=false
+endif # CONFIG_WORKFLOW_EXTRA_SOFTWARE_POSTFIX
+
+ifeq (y,$(CONFIG_WORKFLOW_EXTRA_SOFTWARE_WATCHDOG))
+WORKFLOW_ARGS += workflow_install_watchdog=true
+else
+WORKFLOW_ARGS += workflow_install_watchdog=false
+endif # WORKFLOW_EXTRA_SOFTWARE_WATCHDOG
+
+endif # CONFIG_WORKFLOW_EXTRA_SOFTWARE
+
 BOOTLINUX_ARGS	:=
 ifeq (y,$(CONFIG_BOOTLINUX))
 TREE_URL:=$(subst ",,$(CONFIG_BOOTLINUX_TREE))
@@ -141,36 +210,20 @@ BOOTLINUX_ARGS	+= target_linux_tree=$(TREE_NAME)
 BOOTLINUX_ARGS	+= target_linux_tag=$(TREE_VERSION)
 BOOTLINUX_ARGS	+= target_linux_config=$(TREE_CONFIG)
 
-# How we create the partition for the linux clone
-BOOTLINUX_DATA_DEVICE:=$(subst ",,$(CONFIG_BOOTLINUX_DATA_DEVICE))
-BOOTLINUX_DATA_PATH:=$(subst ",,$(CONFIG_BOOTLINUX_DATA_PATH))
-BOOTLINUX_DATA_FSTYPE:=$(subst ",,$(CONFIG_BOOTLINUX_DATA_FSTYPE))
-BOOTLINUX_DATA_LABEL:=$(subst ",,$(CONFIG_BOOTLINUX_DATA_LABEL))
-
-BOOTLINUX_ARGS	+= data_device=$(BOOTLINUX_DATA_DEVICE)
-BOOTLINUX_ARGS	+= data_path=$(BOOTLINUX_DATA_PATH)
-BOOTLINUX_ARGS	+= data_fstype=$(BOOTLINUX_DATA_FSTYPE)
-BOOTLINUX_ARGS	+= data_label=$(BOOTLINUX_DATA_LABEL)
-
-ifeq (y,$(CONFIG_BOOTLINUX_MAKE_CMD_OVERRIDE))
-BOOTLINUX_MAKE_CMD:=$(subst ",,$(CONFIG_BOOTLINUX_MAKE_CMD))
-BOOTLINUX_ARGS	+= target_linux_make_cmd='$(BOOTLINUX_MAKE_CMD)'
+ifeq (y,$(CONFIG_WORKFLOW_MAKE_CMD_OVERRIDE))
+BOOTLINUX_ARGS	+= target_linux_make_cmd='$(WORKFLOW_MAKE_CMD)'
 endif
 
-ifeq (y,$(CONFIG_BOOTLINUX_INFER_USER_AND_GROUP))
-BOOTLINUX_ARGS	+= infer_uid_and_group=True
-else
-BOOTLINUX_DATA_USER:=$(subst ",,$(CONFIG_BOOTLINUX_DATA_USER))
-BOOTLINUX_DATA_GROUP:=$(subst ",,$(CONFIG_BOOTLINUX_DATA_GROUP))
+WORKFLOW_ARGS += $(BOOTLINUX_ARGS)
+endif # CONFIG_BOOTLINUX == y
 
-BOOTLINUX_ARGS	+= data_user=$(BOOTLINUX_DATA_USER)
-BOOTLINUX_ARGS	+= data_group=$(BOOTLINUX_DATA_GROUP)
-endif
+ifeq (y,$(CONFIG_KDEVOPS_WORKFLOW_FSTESTS))
+include workflows/fstests/Makefile
+endif # CONFIG_KDEVOPS_WORKFLOW_FSTESTS == y
 
-else
-endif
+endif # CONFIG_WORKFLOWS
 
-ANSIBLE_EXTRA_ARGS :=
+ANSIBLE_EXTRA_ARGS += $(WORKFLOW_ARGS)
 
 ifeq (y,$(CONFIG_TERRAFORM))
 SSH_CONFIG_USER:=$(subst ",,$(CONFIG_TERRAFORM_SSH_CONFIG_USER))
@@ -179,8 +232,6 @@ SSH_CONFIG_USER:=$(subst ",,$(CONFIG_TERRAFORM_SSH_CONFIG_USER))
 # we could then remove this entry.
 ANSIBLE_EXTRA_ARGS += data_home_dir=/home/${SSH_CONFIG_USER}
 endif
-
-ANSIBLE_EXTRA_ARGS += $(BOOTLINUX_ARGS)
 
 # We don't need the extra_args.yaml file all the time. *If* we know
 # we have changed a default variable though we can extend the arguments
@@ -218,7 +269,7 @@ export TOPDIR=./
 	false)
 
 define YAML_ENTRY
-$(1)
+$(1)$(2)$(3)$(4)$(5)$(6)$(7)
 
 endef
 
@@ -289,6 +340,7 @@ deps: \
 	$(KDEVOS_TERRAFORM_EXTRA_DEPS) \
 	$(KDEVOPS_REMOVE_KEY) \
 	$(KDEVOPS_GEN_SSH_KEY) \
+	$(KDEVOPS_FSTESTS_CONFIG) \
 	$(stage-1-y)
 	$(Q)$(KDEVOPS_STAGE_2_CMD)
 
@@ -296,6 +348,10 @@ PHONY += kdevops_install
 kdevops_install: $(KDEVOPS_NODES)
 	$(Q)ansible-galaxy install $(KDEVOPS_FORCE_ANSIBLE_ROLES) -r requirements.yml
 	$(Q)ansible-playbook -i $(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/kdevops_install.yml
+
+PHONY += install
+install: $(KDEVOPS_INSTALL_TARGETS)
+	$(Q)echo   Installed
 
 PHONY += linux
 linux: $(KDEVOPS_NODES)

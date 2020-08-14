@@ -1,0 +1,25 @@
+---
+- name: Install postfix and mailx to test settings
+  become: yes
+  become_method: sudo
+  yum:
+    update_cache: yes
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - postfix
+      - mailx
+  when:
+    - workflow_install_postfix|bool
+
+- name: Install watchdog
+  become: yes
+  become_method: sudo
+  yum:
+    update_cache: yes
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - watchdog
+  when:
+    - workflow_install_watchdog|bool

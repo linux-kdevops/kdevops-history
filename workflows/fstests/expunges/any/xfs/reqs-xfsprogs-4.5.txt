@@ -1,0 +1,2 @@
+# Requires mkfs.xfs v4.5
+xfs/096

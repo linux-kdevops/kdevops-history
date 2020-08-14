@@ -1,0 +1,48 @@
+---
+- name: Install build dependencies for fstests
+  become: yes
+  become_method: sudo
+  yum:
+    update_cache: yes
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - bison
+      - flex
+      - git-core
+      - automake
+      - gcc
+      - libuuid
+      - libuuid-devel
+      - quota
+      - make
+      - xfsprogs
+      - xfsprogs-devel
+      - xfsdump
+      - xfsprogs-xfs_scrub
+      - e2fsprogs
+      - btrfs-progs
+      - gawk
+      - util-linux
+      - uuid
+      - libuuid-devel
+      - acl
+      - bc
+      - dump
+      - indent
+      - libtool
+      - lvm2
+      - psmisc
+      - sed
+      - libacl
+      - libacl-devel
+      - libaio
+      - libaio-devel
+      - attr
+      - libattr-devel
+      - openssl-devel
+      - ca-certificates
+      - libcap
+      - gdbm-libs
+      - fio
+      - dbench

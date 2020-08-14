@@ -1,0 +1,1 @@
+generic/095 # bsc#1073755 warning

@@ -1,0 +1,15 @@
+# SPDX-License-Identifier GPL-2.0+
+---
+# Our sensible defaults for the fstests role.
+#
+# We default to not run tests.
+kdevops_run_fstests: False
+oscheck_fstyp: "xfs"
+
+# Ror instance you can use "-g quick" but note that this may produce
+# not results as all quick tests may be expunded.
+oscheck_extra_args: ""
+
+fstests_git: "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git"
+fstests_data: "{{ data_path }}/xfstests"
+fstests_data_target: "/var/lib/xfstests/"

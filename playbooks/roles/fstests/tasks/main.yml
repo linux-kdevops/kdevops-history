@@ -1,0 +1,207 @@
+---
+- name: Import optional extra_args file
+  include_vars: "{{ item }}"
+  ignore_errors: yes
+  with_first_found:
+    - files:
+      - "../extra_vars.yml"
+      - "../extra_vars.yaml"
+      - "../extra_vars.json"
+      skip: true
+  tags: vars
+
+# Distro specific
+- include: tasks/install-deps/main.yml
+
+- include_role:
+    name: create_data_partition
+  tags: [ 'oscheck', 'data_partition' ]
+
+- name: Create {{ truncated_path }} if needed
+  include_role:
+    name: mcgrof.create_partition
+  vars:
+    disk_setup_device: "{{ sparsefiles_device }}"
+    disk_setup_fstype: "{{ sparsefiles_fstype }}"
+    disk_setup_label : "{{ sparsefiles_label }}"
+    disk_setup_fs_opts: "{{ sparsefiles_fs_opts }}"
+    disk_setup_path: "{{ sparsefiles_path }}"
+    disk_setup_user: "{{ data_user }}"
+    disk_setup_group: "{{ data_group }}"
+  tags: [ 'oscheck', 'sparse_partition' ]
+
+- name: git clone kdevops
+  environment:
+    GIT_SSL_NO_VERIFY:  true
+  git:
+    repo: "{{ kdevops_git }}"
+    dest: "{{ kdevops_data }}"
+  tags: [ 'oscheck', 'install', 'git']
+
+- name: Copy over our .config
+  copy:
+    src: .config
+    dest: "{{ kdevops_data }}"
+  tags: [ 'oscheck', 'install', 'root', 'config']
+
+- name: Install kdevops as root
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  environment:
+    FSTYP:  "{{ fstests_fstyp }}"
+  command: "{{  make }} install"
+  tags: [ 'oscheck', 'install', 'root']
+  args:
+    chdir: "{{ kdevops_data }}"
+
+- name: git clone fstests
+  git:
+    repo: "{{ fstests_git }}"
+    dest: "{{ fstests_data }}"
+  tags: [ 'oscheck', 'git', 'fstests']
+
+- name: Build fstests
+  tags: [ 'oscheck', 'fstests', 'build']
+  make:
+    chdir: "{{ fstests_data }}"
+    params:
+      NUM_THREADS: "{{ make_num_jobs }}"
+
+- name: Install fstests
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "{{  make }} install"
+  tags: [ 'oscheck', 'fstests', 'install', 'root']
+  args:
+    chdir: "{{ fstests_data }}"
+
+- name: git pull latest kdevops to ensure expunge list is up to date
+  git:
+    repo: "{{ kdevops_git }}"
+    dest: "{{ kdevops_data }}"
+    update: yes
+    version: master
+  tags: [ 'oscheck', 'install', 'git', 'git_update', 'run_tests' ]
+
+- name: Reboot system before our test so we know everything is sane
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'reboot' ]
+  become: yes
+  become_method: sudo
+  reboot:
+
+- name: Clear out old results directory
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  file:
+    state: absent
+    path: "{{ fstests_data_target }}/results/"
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'clean_results' ]
+
+- name: Generate truncated disks using oscheck's gendisk.sh
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'gendisks' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "./gendisks.sh -d -m"
+  args:
+    chdir: "{{ fstests_data_target }}"
+  when:
+    - kdevops_run_fstests|bool
+
+- name: Run fstests using oscheck.sh {{ oscheck_extra_args }}
+  vars:
+    section: "{{ ansible_hostname | regex_replace('kdevops-') | regex_replace('-dev') | regex_replace('-', '_') }}"
+  tags: [ 'oscheck', 'fstests', 'run_tests' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "./oscheck.sh --test-section {{ section }} {{ oscheck_extra_args }}"
+  ignore_errors: yes
+  no_log: True
+  args:
+    chdir: "{{ fstests_data_target }}"
+  when:
+    - kdevops_run_fstests|bool
+
+- name: Clean up our localhost results directory and files
+  local_action: file path="{{ item }}" state=absent
+  with_items:
+    - "results"
+    - "xunit_results.txt"
+    - "bad_results.txt"
+  loop_control:
+    label: "{{ item }}"
+  run_once: true
+  tags: [ 'oscheck', 'fstests', 'copy_results', 'clean_local_results' ]
+
+- name: Look for xunit results files
+  tags: [ 'oscheck', 'fstests', 'copy_results', 'xunit' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  find:
+    paths: "{{ fstests_data_target }}"
+    recurse: yes
+    patterns: "*.xml"
+  register: xunit_files
+
+- name: Copy xunit results files
+  tags: [ 'oscheck', 'fstests', 'copy_results', 'xunit' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  fetch:
+    src: "{{ item.path }}"
+    dest: "{{ item.path | regex_replace(fstests_data_target | regex_escape()) }}"
+    flat: yes
+  with_items: "{{ xunit_files.files }}"
+  loop_control:
+    label: "{{ item.path | regex_replace(fstests_data_target | regex_escape()) }}"
+
+- name: Look for tests which failed
+  tags: [ 'oscheck', 'fstests', 'copy_results', 'failed_tests' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  find:
+    paths: "{{ fstests_data_target }}"
+    recurse: yes
+    patterns: "*.bad"
+  register: failed_tests
+
+- name: Copy data for tests that failed
+  tags: [ 'oscheck', 'fstests', 'copy_results', 'failed_tests' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  fetch:
+    src: "{{ item.path }}"
+    dest: "{{ item.path | regex_replace(fstests_data_target | regex_escape()) }}"
+    flat: yes
+  with_items: "{{ failed_tests.files }}"
+  loop_control:
+    label: "{{ item.path | regex_replace(fstests_data_target | regex_escape()) }}"
+
+- name: Print fstests results to xunit_results.txt on localhost
+  local_action: "shell ./python/gen_results_summary --results_file result.xml  --print_section --output_file xunit_results.txt results"
+  tags: [ 'oscheck', 'fstests', 'copy_results', 'print_results' ]
+  when:
+    - kdevops_run_fstests|bool
+  run_once: true
+
+- name: Print fstests bad results to bad_results.txt on localhost
+  local_action: "shell ./python/bad_files_summary.py xfs results > bad_results.txt"
+  tags: [ 'oscheck', 'fstests', 'copy_results', 'print_results' ]
+  when:
+    - kdevops_run_fstests|bool
+  run_once: true
+
+- name: Augment expunge list, just run git diff to see new failures found
+  local_action: "shell ./python/augment_expunge_list.py {{ oscheck_fstyp }} results ../expunges/"
+  tags: [ 'oscheck', 'fstests', 'copy_results', 'augment_expunge_list' ]
+  when:
+    - kdevops_run_fstests|bool
+  run_once: true
