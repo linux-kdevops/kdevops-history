@@ -207,7 +207,10 @@ def check_for_ltm(results_dir, props):
         remove_properties(props, 'FSTESTCFG')
         return True
     except IOError:
-        sys.exc_clear()
+        try:
+            sys.exc_clear()
+        except:
+            pass
         return False
 
 def gen_results_summary(results_dir, output_fn=None, merge_fn=None,

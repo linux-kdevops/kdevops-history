@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # Augment expunge list based on results directory
 #
@@ -13,7 +13,7 @@ import sys
 import subprocess
 
 oscheck_ansible_python_dir = os.path.dirname(os.path.abspath(__file__))
-oscheck_sort_expunge = oscheck_ansible_python_dir + "/../../scripts/sort-expunges.sh"
+oscheck_sort_expunge = oscheck_ansible_python_dir + "/../../../scripts/workflows/fstests/sort-expunges.sh"
 
 def append_line(output_file, test_failure_line):
     # We want to now add entries like generic/xxx where xxx are digits

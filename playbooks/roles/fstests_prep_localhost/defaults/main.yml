@@ -1,0 +1,3 @@
+# SPDX-License-Identifier GPL-2.0+
+---
+install_local_deps: True

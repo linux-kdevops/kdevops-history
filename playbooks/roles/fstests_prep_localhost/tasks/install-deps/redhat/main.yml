@@ -1,0 +1,10 @@
+---
+- name: Install local dependencies for fstests command and control
+  become: yes
+  become_method: sudo
+  yum:
+    update_cache: yes
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - python3-junitxml
