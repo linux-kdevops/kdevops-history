@@ -3,7 +3,16 @@
 
 source ${TOPDIR}/scripts/workflows/fstests/lib.sh
 
-export XFS_SECTIONS="crc nocrc nocrc_512 reflink reflink_1024 logdev rtdev"
+XFS_SECTIONS="crc"
+XFS_SECTIONS="$XFS_SECTIONS nocrc"
+XFS_SECTIONS="$XFS_SECTIONS nocrc_512"
+XFS_SECTIONS="$XFS_SECTIONS reflink"
+XFS_SECTIONS="$XFS_SECTIONS reflink"
+XFS_SECTIONS="$XFS_SECTIONS reflink_1024"
+XFS_SECTIONS="$XFS_SECTIONS logdev"
+XFS_SECTIONS="$XFS_SECTIONS rtdev"
+
+export XFS_SECTIONS
 
 add_host_entry()
 {
