@@ -15,7 +15,7 @@ add_host_entry()
 	echo "    ip: $SECOND_IP" >> $TARGET_FILE
 }
 
-xfs_generate_files()
+xfs_generate_nodes_file()
 {
 	TMP_INIT_NODE=$(mktemp)
 	if [ ! -f $TMP_INIT_NODE ]; then

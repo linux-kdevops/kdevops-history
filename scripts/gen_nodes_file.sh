@@ -13,7 +13,7 @@ GENERIC_SPLIT_START="workflows/fstests/kdevops_nodes_split_start.yaml.in"
 GENERIC_SPLIT_END="workflows/fstests/kdevops_nodes_split_end.yaml.in"
 
 if [[ "$CONFIG_WORKFLOW_DATA_FSTYPE_XFS" == "y" ]]; then
-	xfs_generate_files
+	xfs_generate_nodes_file
 else
 	cat_template_nodes_sed $KDEVOPS_NODES_TEMPLATE > $KDEVOPS_NODES
 fi
