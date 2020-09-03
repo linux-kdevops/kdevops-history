@@ -1,5 +1,5 @@
 [all]
-kdevops-xfs
+kdevops-xfs-crc
 kdevops-xfs-nocrc
 kdevops-xfs-nocrc-512
 kdevops-xfs-reflink
@@ -20,7 +20,7 @@ kdevops-xfs-reflink-normapbt-dev
 ansible_python_interpreter =  "@KDEVOPSPYTHONINTERPRETER@"
 
 [baseline]
-kdevops-xfs
+kdevops-xfs-crc
 kdevops-xfs-nocrc
 kdevops-xfs-nocrc-512
 kdevops-xfs-reflink
@@ -33,7 +33,7 @@ kdevops-xfs-reflink-normapbt
 ansible_python_interpreter =  "@KDEVOPSPYTHONINTERPRETER@"
 
 [dev]
-kdevops-xfs-dev
+kdevops-xfs-crc-dev
 kdevops-xfs-nocrc-dev
 kdevops-xfs-nocrc-512-dev
 kdevops-xfs-reflink-dev
