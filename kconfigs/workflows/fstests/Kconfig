@@ -75,11 +75,11 @@ config FSTESTS_XFS_BASELINE_AND_DEV
 if FSTESTS_XFS_MANUAL_COVERAGE
 
 config FSTESTS_XFS_SECTION_CRC
-	bool "Enable testing section: xfs"
+	bool "Enable testing section: xfs_crc"
 	default y
 	help
 	  This will create a host to test the baseline of fstests using the
-	  following configuration:
+	  following configuration, which enables CRC:
 
 	      [xfs]
 	      MKFS_OPTIONS='-f -m crc=1,reflink=0,rmapbt=0, -i sparse=0'
