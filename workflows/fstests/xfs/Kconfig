@@ -175,7 +175,10 @@ config FSTESTS_XFS_SECTION_RTDEV
 	default y
 	help
 	  This will create a host to test the baseline of fstests using the
-	  following configuration which enables the usage of real time device:
+	  which enables the realtime device. This is only useful if your kernel
+	  actually is built with CONFIG_XFS_RT=y which most distributions
+	  disable these days. This enables a host which will use the following
+	  configuration:
 
 	      [xfs_realtimedev]
 	      MKFS_OPTIONS="-f -lsize=1g"
