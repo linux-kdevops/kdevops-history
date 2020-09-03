@@ -43,6 +43,7 @@ USE_EXTERNAL=no
 LOGWRITES_DEV=@FSTESTSLOGWRITESDEV@
 FSTYP=xfs
 
+# reflink without online filesystem repair support
 [xfs_reflink_normapbt]
 MKFS_OPTIONS='-f -m reflink=1,rmapbt=0, -i sparse=1,'
 USE_EXTERNAL=no

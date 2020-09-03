@@ -6,8 +6,8 @@ config FSTESTS_XFS_MANUAL_COVERAGE
 	  range of supported features upstream on the Linux kernel for xfs,
 	  and for you to also be able to do development on each section
 	  concurrently. This consists of a total of 16 hosts created, disabling
-	  this option reduces let's you manually select only the sections you
-	  want to test. This is useful if for example you have reduces system
+	  this option let's you manually select only the sections you
+	  want to test. This is useful if for example you have reduced system
 	  resources or your target kernel does not enable certain features
 	  which you don't care to test for.
 
@@ -22,9 +22,10 @@ config FSTESTS_XFS_MANUAL_COVERAGE
 	  Today this consists of 8 different sections. Each section uses
 	  different mkfs.xfs commands which enable different features. By
 	  default we also rely on two spawned hosts per tested section, one
-	  used to establish a baseline and another for development purposes.
-	  Since a total of 8 xfs sections are currently tested with kdevops
-	  this means by default 16 hosts will be spawned to test xfs.
+	  used to establish a baseline and another for development purposes,
+	  if FSTESTS_XFS_BASELINE_AND_DEV is enabled. Since a total of 8 xfs
+	  sections are currently tested with kdevops this means by default 16
+	  hosts will be spawned to test xfs with x86_64.
 
 	  You can enable this to allow you to override the spawned hosts, to
 	  reduce the number of sections tested and spanwed hosts.
@@ -143,6 +144,32 @@ config FSTESTS_XFS_SECTION_REFLINK_1024
 
 	      [xfs_reflink]
 	      MKFS_OPTIONS='-f -m reflink=1,rmapbt=1, -i sparse=1,'
+	      FSTYP=xfs
+
+config FSTESTS_XFS_SECTION_REFLINK_NORMAPBT
+	bool "Enable testing section: xfs_reflink_normapbt"
+	default y
+	help
+	  This will create a host to test the baseline of fstests using the
+	  following configuration which enables reflink but disables the
+	  reverse-mapping btree index in each allocation group. One of the
+	  uses (and currently only) for this reverse-mapping btree index is
+	  to support online filesystem repairing. You may want to test this
+	  configuration if your distribution recommends to disable online
+	  filesystem checking or you don't want to support it but want to
+	  support reflink support.
+
+	  Reverse-mapping btree support for online filesystem checking became
+	  feature-complete as of the v5.3 kernel release and xfsprogs v5.3
+	  release, with a focus afterwards towards stabilization and performance
+	  optimization.
+
+	  If you have users which care about reflink support but do not want
+	  online filesystem repair support, you can enable this to test this
+	  filesystem configuration:
+
+	      [xfs_normapbt]
+	      MKFS_OPTIONS='-f -m reflink=1,rmapbt=0, -i sparse=1,'
 	      FSTYP=xfs
 
 endif # FSTESTS_XFS_SECTION_REFLINK_ENABLED
