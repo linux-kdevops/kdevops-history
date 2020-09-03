@@ -54,3 +54,4 @@ playbooks/python/workflows/fstests/gen_results_summary.pyc
 
 workflows/fstests/bad_results.txt
 workflows/fstests/results/
+workflows/fstests/*/hosts_generated.in

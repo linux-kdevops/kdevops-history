@@ -1,6 +1,8 @@
 #!/bin/bash
 # SPDX-License-Identifier: GPL-2.0
 
+source ${TOPDIR}/.config
+
 add_host_entry()
 {
 	TARGET_HOST=$1

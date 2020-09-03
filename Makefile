@@ -293,7 +293,7 @@ destroy_terraform:
 
 destroy: $(KDEVOPS_DESTROY_DEPS)
 
-$(KDEVOPS_HOSTS): .config
+$(KDEVOPS_HOSTS): .config $(KDEVOPS_HOSTS_TEMPLATE)
 	$(Q)$(TOPDIR)/scripts/gen_hosts.sh
 
 PHONY += remove-ssh-key

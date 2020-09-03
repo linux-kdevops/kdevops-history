@@ -26,7 +26,7 @@ export FSTYP:=$(subst ",,$(CONFIG_FSTESTS_FSTYP))
 KDEVOPS_FSTESTS_CONFIG := workflows/fstests/$(FSTYP)/$(FSTYP).config
 KDEVOPS_FSTESTS_CONFIG_TEMPLATE := $(KDEVOPS_FSTESTS_CONFIG).in
 KDEVOPS_NODES_TEMPLATE := workflows/fstests/$(FSTYP)/kdevops_nodes.yaml.in
-KDEVOPS_HOSTS_TEMPLATE := workflows/fstests/$(FSTYP)/hosts.in
+export KDEVOPS_HOSTS_TEMPLATE := workflows/fstests/$(FSTYP)/hosts_generated.in
 FSTESTS_DATA:=$(subst ",,$(CONFIG_FSTESTS_DATA))
 FSTESTS_DATA_TARGET:=$(subst ",,$(CONFIG_FSTESTS_DATA_TARGET))
 
@@ -59,8 +59,11 @@ FSTESTS_ARGS += sparsefiles_fs_opts='-L$(SPARSE_LABEL)'
 endif # CONFIG_FSTESTS_TESTDEV_SPARSEFILE_GENERATION == y
 WORKFLOW_ARGS += $(FSTESTS_ARGS)
 
+$(KDEVOPS_HOSTS_TEMPLATE): .config
+	$(Q)$(TOPDIR)/scripts/workflows/fstests/$(FSTYP)/gen_manual_hosts.sh
+
 $(KDEVOPS_FSTESTS_CONFIG): $(KDEVOPS_FSTESTS_CONFIG_TEMPLATE) .config
-	$(Q)$(TOPDIR)/scripts/workflows/fstests/gen_fstests_config.sh
+	$(Q)$(TOPDIR)/scripts/workflows/fstests/gen_fstests_config.sh $(KDEVOPS_FSTESTS_CONFIG)
 
 fstests:
 	$(Q)ansible-playbook -i hosts playbooks/workloads_shared.yml
