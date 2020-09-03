@@ -58,7 +58,7 @@ endmenu
 
 if KDEVOPS_WORKFLOW_FSTESTS
 menu "Configure and run fstests"
-source "kconfigs/workflows/fstests/Kconfig"
+source "workflows/fstests/Kconfig"
 endmenu
 endif # KDEVOPS_WORKFLOW_FSTESTS
 
