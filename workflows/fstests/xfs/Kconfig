@@ -57,6 +57,18 @@ config FSTESTS_XFS_SECTION_CRC
 	      MKFS_OPTIONS='-f -m crc=1,reflink=0,rmapbt=0, -i sparse=0'
 	      FSTYP=xfs
 
+config FSTESTS_XFS_SECTION_NOCRC_ENABLED
+	bool "Enable testing sections which don't have CRC enabled"
+	default y
+	help
+	  Enabling this option allows you to select a hosts to test which
+	  will allow you to test xfs without CRC enabled. Enable this if
+	  you care to support filesystems created on older kernels. TODO: We
+	  should document here arround what kernel release CRC flipped
+	  to being enabled by default.
+
+if FSTESTS_XFS_SECTION_NOCRC_ENABLED
+
 config FSTESTS_XFS_SECTION_NOCRC
 	bool "Enable testing section: xfs_nocrc"
 	default y
@@ -82,6 +94,18 @@ config FSTESTS_XFS_SECTION_NOCRC_512
 	      MKFS_OPTIONS='-f -m crc=0,reflink=0,rmapbt=0, -i sparse=0, -b size=512,'
 	      FSTYP=xfs
 
+endif # FSTESTS_XFS_SECTION_NOCRC_ENABLED
+
+config FSTESTS_XFS_SECTION_REFLINK_ENABLED
+	bool "Enable testing sections which have reflink enabled"
+	default y
+	help
+	  Enabling this option allows you to select a host used to testing
+	  reflink enabled filesystems. Enable this if you have support for
+	  reflinks on your distribution and you support it.
+
+if FSTESTS_XFS_SECTION_REFLINK_ENABLED
+
 config FSTESTS_XFS_SECTION_REFLINK
 	bool "Enable testing section: xfs_reflink"
 	default y
@@ -104,6 +128,8 @@ config FSTESTS_XFS_SECTION_REFLINK_1024
 	      [xfs_reflink]
 	      MKFS_OPTIONS='-f -m reflink=1,rmapbt=1, -i sparse=1,'
 	      FSTYP=xfs
+
+endif # FSTESTS_XFS_SECTION_REFLINK_ENABLED
 
 config FSTESTS_XFS_SECTION_EXTERNAL_LOGS
 	bool "Enable testing sections which use an external log device"
