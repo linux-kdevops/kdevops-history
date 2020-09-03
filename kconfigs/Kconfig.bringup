@@ -4,6 +4,7 @@ choice
 
 config VAGRANT
 	bool "Vagrant"
+	depends on TARGET_ARCH_X86_64
 	help
 	  This option will enable use of vagrant. Enable this if you want to
 	  use local virtualization technologies such as KVM with libvirt or
