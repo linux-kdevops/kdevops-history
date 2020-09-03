@@ -51,7 +51,8 @@ config FSTESTS_XFS_SECTION_CRC
 	default y
 	help
 	  This will create a host to test the baseline of fstests using the
-	  following configuration, which enables CRC:
+	  following configuration, which enables CRC, which was enabled by
+	  default as of the v3.2.3 xfsprogs release:
 
 	      [xfs]
 	      MKFS_OPTIONS='-f -m crc=1,reflink=0,rmapbt=0, -i sparse=0'
@@ -63,9 +64,13 @@ config FSTESTS_XFS_SECTION_NOCRC_ENABLED
 	help
 	  Enabling this option allows you to select a hosts to test which
 	  will allow you to test xfs without CRC enabled. Enable this if
-	  you care to support filesystems created on older kernels. TODO: We
-	  should document here arround what kernel release CRC flipped
-	  to being enabled by default.
+	  you care to support filesystems created on older kernels. XFS had
+	  CRC enabled by default as of the v3.2.3 xfsprogs release as of
+	  xfsprogs commit 566ebd5ae5fa ("mkfs: default to CRC enabled
+	  filesystems"), so all filesystems created with defaults prior
+	  to this xfsprogs will have been created without CRC enabled.
+	  You should enable this, so that you can ensure your kernel keeps
+	  properly supporting filesystems created on older systems.
 
 if FSTESTS_XFS_SECTION_NOCRC_ENABLED
 
@@ -103,6 +108,17 @@ config FSTESTS_XFS_SECTION_REFLINK_ENABLED
 	  Enabling this option allows you to select a host used to testing
 	  reflink enabled filesystems. Enable this if you have support for
 	  reflinks on your distribution and you support it.
+
+	  Reflink support blessed as stable as of the v4.16 kernel release.
+
+	  These filesystems configurations have reverse-mapping btree index
+	  for each allocation group (rmapbt) enabled by default, unless the
+	  section description for its entry explicitly mentions it is disabled.
+	  The reverse-mapping btree index support is currently only used for
+	  online filesystem checking, this however requires userespace tools
+	  support, and that mechanism became feature-complete only as of the
+	  v5.3 kernel release and xfsprogs v5.3 release, with a focus afterwards
+	  towards stabilization and performance optimization.
 
 if FSTESTS_XFS_SECTION_REFLINK_ENABLED
 
