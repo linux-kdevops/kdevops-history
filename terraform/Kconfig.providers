@@ -4,16 +4,19 @@ choice
 
 config TERRAFORM_GCE
 	bool "GCE - Google Cloud Engine"
+	depends on TARGET_ARCH_X86_64
 	help
 	  Enabling this means you are going to use GCE for your cloud solution.
 
 config TERRAFORM_AWS
 	bool "AWS - Amazon Web Services"
+	depends on TARGET_ARCH_X86_64
 	help
 	  Enabling this means you are going to use AWS for your cloud solution.
 
 config TERRAFORM_AZURE
 	bool "Azure"
+	depends on TARGET_ARCH_X86_64
 	help
 	  Enabling this means you are going to use Azure for your cloud
 	  solution.
