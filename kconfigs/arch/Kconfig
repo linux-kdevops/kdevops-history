@@ -8,4 +8,10 @@ config TARGET_ARCH_X86_64
 	  Enabling this will enable all features / workflows which depend on
 	  the x86_64 architecture.
 
+config TARGET_ARCH_PPC64LE
+	bool "ppc64le"
+	help
+	  Enabling this will enable all features / workflows which depend on
+	  the ppc64le architecture.
+
 endchoice

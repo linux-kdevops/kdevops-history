@@ -21,6 +21,7 @@ choice
 
 config TERRAFORM_OPENSTACK_MINICLOUD_TINY
 	bool "minicloud.tiny"
+	depends on TARGET_ARCH_PPC64LE
 	help
 	  This option will set the Openstack flavor to minicloud.tiny.
 
@@ -38,6 +39,7 @@ choice
 
 config TERRAFORM_OPENSTACK_IMAGE_DEBIAN_10_PPC64LE
 	bool "Debian 10 ppc64le"
+	depends on TARGET_ARCH_PPC64LE
 	help
 	  This option sets the image name to Debian 10 ppc64le.
 
