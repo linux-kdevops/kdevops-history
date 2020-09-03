@@ -13,6 +13,10 @@ XFS_SECTIONS="$XFS_SECTIONS reflink_normapbt"
 XFS_SECTIONS="$XFS_SECTIONS logdev"
 XFS_SECTIONS="$XFS_SECTIONS rtdev"
 
+if [[ "$CONFIG_FSTESTS_XFS_BASELINE_AND_DEV" == "y" ]]; then
+	XFS_SECTIONS="$XFS_SECTIONS bigblock"
+fi
+
 export XFS_SECTIONS
 
 add_host_entry()

@@ -10,8 +10,20 @@ config TARGET_ARCH_X86_64
 
 config TARGET_ARCH_PPC64LE
 	bool "ppc64le"
+	select HAVE_ARCH_64K_PAGES
 	help
 	  Enabling this will enable all features / workflows which depend on
 	  the ppc64le architecture.
 
 endchoice
+
+# Note: this means you have something like this on your target architecture
+# and respective kernel configuration:
+#
+# CONFIG_PPC_64K_PAGES=y
+# CONFIG_ARM64_64K_PAGES=y
+#
+# x86_64 currently lacks support for 64k pages. This HAVE_ARCH_64K_PAGES is
+# a kdevops'ism, it does not exist on the Linux kernel.
+config HAVE_ARCH_64K_PAGES
+        bool

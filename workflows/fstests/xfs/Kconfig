@@ -17,18 +17,24 @@ config FSTESTS_XFS_MANUAL_COVERAGE
 	  type of xfs configuration used when you created the filesystem. The
 	  fstests suite allows you to specify different configurations using
 	  "sections" on an fstests configuration file. We create then one host
-	  per target section on x86_64.
+	  per supported target section for each respective architecture.
 
-	  Today this consists of 8 different sections. Each section uses
-	  different mkfs.xfs commands which enable different features. By
-	  default we also rely on two spawned hosts per tested section, one
-	  used to establish a baseline and another for development purposes,
-	  if FSTESTS_XFS_BASELINE_AND_DEV is enabled. Since a total of 8 xfs
-	  sections are currently tested with kdevops this means by default 16
-	  hosts will be spawned to test xfs with x86_64.
+	  Today this consists of 8 different sections for x86_64, and 9 for
+	  ppc64le and aarc64.
+
+	  Each section uses different mkfs.xfs commands which enable different
+	  features. By default we also rely on two spawned hosts per tested
+	  section, one used to establish a baseline and another for
+	  development purposes, if FSTESTS_XFS_BASELINE_AND_DEV is enabled.
+	  Since a total of 8 xfs sections are currently supported on x86_64,
+	  this means by default 16 hosts will be spawned to test xfs with
+	  x86_64 unless FSTESTS_XFS_BASELINE_AND_DEV is used. Likewise for
+	  ppc64le and aarch64 this consists of 9 target xfs sections for
+	  a total of 18 hosts spawned if FSTESTS_XFS_BASELINE_AND_DEV is
+	  enabled.
 
 	  You can enable this to allow you to override the spawned hosts, to
-	  reduce the number of sections tested and spanwed hosts.
+	  reduce the number of sections tested and spawned hosts.
 
 config FSTESTS_XFS_BASELINE_AND_DEV
 	bool "Enable both a baseline and development system per target test"
@@ -215,5 +221,24 @@ config FSTESTS_XFS_SECTION_RTDEV
 	      FSTYP=xfs
 
 endif # FSTESTS_XFS_SECTION_EXTERNAL_LOGS
+
+config FSTESTS_XFS_SECTION_BIGBLOCK
+	bool "Enable testing section: xfs_bigblock"
+	default y
+	depends on HAVE_ARCH_64K_PAGES
+	help
+	  This will test an XFS filesystem with a 64k block size. This can only
+	  be used on architectures with a respective 64k page size support
+	  any of the followings have been enabled on the target kernel tested:
+
+	  For ppc64le:
+	  CONFIG_PPC_64K_PAGES=y
+
+	  For aarch64:
+	  CONFIG_ARM64_64K_PAGES=y
+
+	      [xfs_bigblock]
+	      MKFS_OPTIONS='-f -b size=65536'
+	      FSTYP=xfs
 
 endif # FSTESTS_XFS_MANUAL_COVERAGE
