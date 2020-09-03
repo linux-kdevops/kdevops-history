@@ -7,6 +7,7 @@ choice
 
 config VAGRANT_OPENSUSE_X86_64_TW
 	bool "opensuse/Tumbleweed.x86_64"
+	depends on TARGET_ARCH_X86_64
 	help
 	  Enable this to be able to select between the supported OpenSUSE
 	  Tumbleweed releases.

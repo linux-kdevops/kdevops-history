@@ -65,10 +65,11 @@ config TERRAFORM_AWS_AMI_OWNER
 
 choice
 	prompt "AWS name search"
-	default TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_X86_64
+	default TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_X86_64 if TARGET_ARCH_X86_64
 
 config TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_X86_64
 	bool "debian-stretch-hvm-x86_64-*"
+	depends on TARGET_ARCH_X86_64
 	help
 	  This option will set aws name search to debian-stretch-hvm-x86_64-*
 

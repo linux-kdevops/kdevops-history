@@ -1,0 +1,11 @@
+choice
+	prompt "Target architecture"
+	default TARGET_ARCH_X86_64
+
+config TARGET_ARCH_X86_64
+	bool "x86_64"
+	help
+	  Enabling this will enable all features / workflows which depend on
+	  the x86_64 architecture.
+
+endchoice

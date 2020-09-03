@@ -5,6 +5,10 @@
 
 mainmenu "$(PROJECT) $(PROJECTRELEASE)"
 
+menu "Target architecture"
+source "kconfigs/arch/Kconfig"
+endmenu
+
 menu "Bring up methods"
 source "kconfigs/Kconfig.bringup"
 endmenu

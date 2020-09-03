@@ -7,6 +7,7 @@ choice
 
 config VAGRANT_DEBIAN_BUSTER64
 	bool "debian/buster64"
+	depends on TARGET_ARCH_X86_64
 	help
 	  This option will set the target guest to debian/buster64.
 

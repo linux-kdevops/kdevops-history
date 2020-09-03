@@ -32,11 +32,13 @@ choice
 
 config TERRAFORM_GCE_MACHINE_N1_STANDARD_1
 	bool "n1-standard-1"
+	depends on TARGET_ARCH_X86_64
 	help
 	  This option will set the GCE machine type to n1-standard-1.
 
 config TERRAFORM_GCE_MACHINE_N1_STANDARD_8
 	bool "n1-standard-8"
+	depends on TARGET_ARCH_X86_64
 	help
 	  This option will set the GCE machine type to n1-standard-8.
 
@@ -75,6 +77,7 @@ choice
 
 config TERRAFORM_GCE_IMAGE_DEBIAN_10
 	bool "debian-cloud/debian-10"
+	depends on TARGET_ARCH_X86_64
 	help
 	  This option sets the gce image to debian-cloud/debian-10.
 

@@ -7,6 +7,7 @@ choice
 
 config VAGRANT_FEDORA_X86_64_32_CLOUD_BASE
 	bool "fedora/32-beta-cloud-base"
+	depends on TARGET_ARCH_X86_64
 	help
 	  This option will set the target guest to fedora/32-beta-cloud-base
 	  release 32.20200312.0

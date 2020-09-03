@@ -23,11 +23,13 @@ choice
 
 config TERRAFORM_AZURE_VM_SIZE_STANDARD_DS1_V2
 	bool "Standard_DS1_v2"
+	depends on TARGET_ARCH_X86_64
 	help
 	  This option will set the azure vm image size to Standard_DS1_v2.
 
 config TERRAFORM_AZURE_VM_SIZE_STANDARD_DS3_V2
 	bool "Standard_DS3_v2"
+	depends on TARGET_ARCH_X86_64
 	help
 	  This option will set the azure vm image size to Standard_DS3_v2.
 
@@ -82,6 +84,7 @@ choice
 
 config TERRAFORM_AZURE_IMAGE_OFFER_DEBIAN_10
 	bool "debian-10"
+	depends on TARGET_ARCH_X86_64
 	help
 	  This option sets the image offer from credativ to debian-10.
 
