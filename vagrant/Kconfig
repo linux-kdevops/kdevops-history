@@ -21,9 +21,10 @@ config VAGRANT_FEDORA
 
 endchoice
 
-source "vagrant/Kconfig.debian"
-source "vagrant/Kconfig.opensuse"
-source "vagrant/Kconfig.fedora"
+# This allows folks to adopt this project and expand without having
+# to add extra lines here. For instance folks can add a vagrant/Kconfig.foo
+# for distribution foo and it'll be picked up automatically.
+$(shell, ./scripts/kconfig_include.sh vagrant/)
 
 config VAGRANT_BOX
 	string "Vagrant box"
