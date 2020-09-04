@@ -316,7 +316,9 @@ $(KDEVOPS_TFVARS): $(KDEVOPS_TFVARS_TEMPLATE) .config
 PHONY += clean
 clean:
 	$(Q)$(MAKE) -f scripts/build.Makefile $@
-	$(Q)$(MAKE) -C terraform $@
+	@if [ -f terraform/Makefile ]; then \
+		$(MAKE) -C terraform/ $@ ;\
+	fi
 
 PHONY += mrproper
 mrproper:
