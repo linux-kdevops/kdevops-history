@@ -7,17 +7,17 @@ choice
 config VAGRANT_DEBIAN
 	bool "Debian"
 	help
-	  This option will set the target tuest to Debian.
+	  This option will set the target guest to Debian.
 
 config VAGRANT_OPENSUSE
 	bool "OpenSUSE"
 	help
-	  This option will set the target tuest to OpenSUSE.
+	  This option will set the target guest to OpenSUSE.
 
 config VAGRANT_FEDORA
 	bool "Fedora"
 	help
-	  This option will set the target tuest to Fedora.
+	  This option will set the target guest to Fedora.
 
 endchoice
 
