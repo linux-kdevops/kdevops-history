@@ -39,8 +39,8 @@ config VAGRANT_BOX_VERSION
 	default "1.0.20200714" if VAGRANT_OPENSUSE_X86_64_TW_1020200714
 	default "32.20200312.0" if VAGRANT_FEDORA_32_202003120
 	help
-	  The vagrant box version to use. Leave this empty if using
-	  debian/buster64.
+	  The vagrant box version to use. This is set for you depending on the
+	  image you select, so if you see this empty, leave it empty.
 
 config VAGRANT_LIBVIRT_INSTALL
 	bool "Installs libvirt"
