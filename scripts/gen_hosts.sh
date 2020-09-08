@@ -1,4 +1,5 @@
 #!/bin/bash
+# Generates the ansible hosts files for workflow agnostic setups.
 
 source ${TOPDIR}/.config
 source ${TOPDIR}/scripts/lib.sh
