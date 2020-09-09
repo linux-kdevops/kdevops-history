@@ -324,7 +324,9 @@ PHONY += mrproper
 mrproper:
 	$(Q)$(MAKE) -f scripts/build.Makefile clean
 	$(Q)$(MAKE) -f scripts/build.Makefile $@
-	$(Q)$(MAKE) -C terraform $@
+	@if [ -f terraform/Makefile ]; then \
+		$(Q)$(MAKE) -C terraform $@ ;\
+	fi
 	$(Q)rm -f terraform/*/terraform.tfvars
 	$(Q)rm -f $(KDEVOPS_NODES)
 	$(Q)rm -f .config .config.old
