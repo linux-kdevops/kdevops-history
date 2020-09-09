@@ -22,6 +22,7 @@ choice
 
 config VAGRANT_FEDORA_32_202003120
 	bool "fedora/32-beta-cloud-base 32.20200312.0"
+	select HAVE_VAGRANT_BOX_VERSION
 	help
 	  This option will set the target guest to fedora/32-beta-cloud-base
 	  release 32.20200312.0
