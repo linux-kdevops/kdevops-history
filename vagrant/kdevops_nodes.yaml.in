@@ -66,9 +66,9 @@ vagrant_global:
 # getting in the section always as pokeyman. As is below, with the above
 # ansible regex you'd get the digits.
 vagrant_boxes:
-  - name: kdevops
+  - name: @KDEVOPSHOSTSPREFIX@
     ip: 172.17.8.101
-  - name: kdevops-dev
+  - name: @KDEVOPSHOSTSPREFIX@-dev
     ip: 172.17.8.102
 
 ansible_playbooks:

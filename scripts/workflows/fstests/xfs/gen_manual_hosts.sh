@@ -32,7 +32,7 @@ add_ansible_hosts_by_section()
 		if [[ "$CONFIG_FSTESTS_XFS_MANUAL_COVERAGE" == "y" && $? -ne 0 ]]; then
 			continue
 		fi
-		TARGET_HOSTNAME="kdevops-xfs-${SECTION_HOSTNAME_POSTFIX}"
+		TARGET_HOSTNAME="${KDEVOPSHOSTSPREFIX}-xfs-${SECTION_HOSTNAME_POSTFIX}"
 
 		case "$TARGET_SECTION" in
 		all)
@@ -47,7 +47,7 @@ add_ansible_hosts_by_section()
 
 		if [[ "$CONFIG_FSTESTS_XFS_BASELINE_AND_DEV" == "y" ]]; then
 			SECTION_HOSTNAME_POSTFIX="$(echo $i | sed -e 's|_|-|')"
-			TARGET_HOSTNAME="kdevops-xfs-${SECTION_HOSTNAME_POSTFIX}-dev"
+			TARGET_HOSTNAME="${KDEVOPSHOSTSPREFIX}-xfs-${SECTION_HOSTNAME_POSTFIX}-dev"
 
 			case "$TARGET_SECTION" in
 			all)

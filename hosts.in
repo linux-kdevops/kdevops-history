@@ -1,16 +1,16 @@
 [all]
-kdevops
-kdevops-dev
+@KDEVOPSHOSTSPREFIX@
+@KDEVOPSHOSTSPREFIX@-dev
 
 [all:vars]
 ansible_python_interpreter =  "@KDEVOPSPYTHONINTERPRETER@"
 
 [baseline]
-kdevops
+@KDEVOPSHOSTSPREFIX@
 [baseline:vars]
 ansible_python_interpreter =  "@KDEVOPSPYTHONINTERPRETER@"
 
 [dev]
-kdevops-dev
+@KDEVOPSHOSTSPREFIX@-dev
 [dev:vars]
 ansible_python_interpreter =  "@KDEVOPSPYTHONINTERPRETER@"

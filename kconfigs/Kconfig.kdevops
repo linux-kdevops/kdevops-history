@@ -1,3 +1,11 @@
+config KDEVOPS_HOSTS_PREFIX
+	string "The hostname prefix to use for nodes"
+	default "kdevops"
+	  help
+	  Each node used has an associated hostname. We use a prefix to
+	  help distinguish projects / goals for a set of nodes. You can use
+	  this to override the hostname prefix used.
+
 menu "Getting kdevops ansible roles"
 source "kconfigs/Kconfig.kconfig_install"
 endmenu
