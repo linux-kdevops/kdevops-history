@@ -11,6 +11,7 @@ config VAGRANT_DEBIAN
 
 config VAGRANT_OPENSUSE
 	bool "OpenSUSE"
+	select HAVE_DISTRO_XFS_PREFERS_MANUAL if FSTESTS_XFS
 	help
 	  This option will set the target guest to OpenSUSE.
 
