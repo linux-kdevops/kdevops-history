@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-2.0
+
 source ${TOPDIR}/scripts/lib_terraform.sh
 source ${TOPDIR}/scripts/aws/lib.sh
 source ${TOPDIR}/scripts/gce/lib.sh

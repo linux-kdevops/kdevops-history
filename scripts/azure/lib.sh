@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0
 
 import_azure_terraform_vars()
 {

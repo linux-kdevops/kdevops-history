@@ -1,4 +1,6 @@
 #!/bin/bash
+# SPDX-License-Identifier: GPL-2.0
+
 # Generates the ansible hosts files for workflow agnostic setups.
 
 source ${TOPDIR}/.config

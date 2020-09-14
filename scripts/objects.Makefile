@@ -1,4 +1,6 @@
 # Generic rule, you can be more specific in your own makefiles.
+# SPDX-License-Identifier: GPL-2.0
+
 %.o: %.c *.h
 	$(CC) -c $(CPPFLAGS) $(CFLAGS) -o $@ $<
 
