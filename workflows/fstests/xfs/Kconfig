@@ -1,6 +1,42 @@
+# Distributions actively maintaining XFS support should select this and then
+# any be careful to select any of the other HAVE_DISTRO_XFS_* below so that
+# testers can know what to test for.
+config HAVE_DISTRO_XFS_PREFERS_MANUAL
+	bool
+	default n
+
+config HAVE_DISTRO_XFS_SUPPORTS_CRC
+	bool
+	default n
+
+config HAVE_DISTRO_XFS_IGNORES_NOCRC
+	bool
+	default n
+
+config HAVE_DISTRO_XFS_SUPPORTS_REFLINKS
+	bool
+	default n
+
+config HAVE_DISTRO_XFS_SUPPORTS_BIGBLOCKS
+	bool
+	default n
+
+config HAVE_DISTRO_XFS_SUPPORTS_EXTERNAL_LOG
+	bool
+	default n
+
+config HAVE_DISTRO_XFS_IGNORES_EXTERNAL_LOG
+	bool
+	default n
+
+config HAVE_DISTRO_XFS_SUPPORTS_RT
+	bool
+	default n
+
 config FSTESTS_XFS_MANUAL_COVERAGE
 	bool "Enable manual coverage selection"
-	default n
+	default y if HAVE_DISTRO_XFS_PREFERS_MANUAL
+	default n if !HAVE_DISTRO_XFS_PREFERS_MANUAL
 	help
 	  By default we aim to spawn enough hosts to cover testing the full
 	  range of supported features upstream on the Linux kernel for xfs,
@@ -55,7 +91,8 @@ if FSTESTS_XFS_MANUAL_COVERAGE
 
 config FSTESTS_XFS_SECTION_CRC
 	bool "Enable testing section: xfs_crc"
-	default y
+	default y if HAVE_DISTRO_XFS_SUPPORTS_CRC
+	default n if !HAVE_DISTRO_XFS_SUPPORTS_CRC
 	help
 	  This will create a host to test the baseline of fstests using the
 	  following configuration, which enables CRC, which was enabled by
@@ -67,7 +104,8 @@ config FSTESTS_XFS_SECTION_CRC
 
 config FSTESTS_XFS_SECTION_NOCRC_ENABLED
 	bool "Enable testing sections which don't have CRC enabled"
-	default y
+	default n if HAVE_DISTRO_XFS_IGNORES_NOCRC
+	default y if !HAVE_DISTRO_XFS_IGNORES_NOCRC
 	help
 	  Enabling this option allows you to select a hosts to test which
 	  will allow you to test xfs without CRC enabled. Enable this if
@@ -110,7 +148,8 @@ endif # FSTESTS_XFS_SECTION_NOCRC_ENABLED
 
 config FSTESTS_XFS_SECTION_REFLINK_ENABLED
 	bool "Enable testing sections which have reflink enabled"
-	default y
+	default y if HAVE_DISTRO_XFS_SUPPORTS_REFLINKS
+	default n if !HAVE_DISTRO_XFS_SUPPORTS_REFLINKS
 	help
 	  Enabling this option allows you to select a host used to testing
 	  reflink enabled filesystems. Enable this if you have support for
@@ -182,7 +221,8 @@ endif # FSTESTS_XFS_SECTION_REFLINK_ENABLED
 
 config FSTESTS_XFS_SECTION_EXTERNAL_LOGS
 	bool "Enable testing sections which use an external log device"
-	default y
+	default n if HAVE_DISTRO_XFS_IGNORES_EXTERNAL_LOG
+	default y if HAVE_DISTRO_XFS_SUPPORTS_EXTERNAL_LOG
 	help
 	  Enabling this option allows you to test xfs configuration which
 	  require the use of an external log device.
@@ -205,7 +245,8 @@ config FSTESTS_XFS_SECTION_LOGDEV
 
 config FSTESTS_XFS_SECTION_RTDEV
 	bool "Enable testing section: xfs_realtimedev"
-	default y
+	default y if HAVE_DISTRO_XFS_SUPPORTS_RT
+	default n if !HAVE_DISTRO_XFS_SUPPORTS_RT
 	help
 	  This will create a host to test the baseline of fstests using the
 	  which enables the realtime device. This is only useful if your kernel
@@ -224,7 +265,8 @@ endif # FSTESTS_XFS_SECTION_EXTERNAL_LOGS
 
 config FSTESTS_XFS_SECTION_BIGBLOCK
 	bool "Enable testing section: xfs_bigblock"
-	default y
+	default y if HAVE_DISTRO_XFS_SUPPORTS_BIGBLOCKS
+	default n if !HAVE_DISTRO_XFS_SUPPORTS_BIGBLOCKS
 	depends on HAVE_ARCH_64K_PAGES
 	help
 	  This will test an XFS filesystem with a 64k block size. This can only
@@ -247,7 +289,8 @@ if !FSTESTS_XFS_MANUAL_COVERAGE
 
 config FSTESTS_XFS_SECTION_BIGBLOCK
 	bool
-	default y
+	default y if HAVE_DISTRO_XFS_SUPPORTS_BIGBLOCKS
+	default n if !HAVE_DISTRO_XFS_SUPPORTS_BIGBLOCKS
 	depends on HAVE_ARCH_64K_PAGES
 
 endif # !FSTESTS_XFS_MANUAL_COVERAGE
