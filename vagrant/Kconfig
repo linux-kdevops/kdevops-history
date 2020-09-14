@@ -18,6 +18,7 @@ config VAGRANT_OPENSUSE
 
 config VAGRANT_FEDORA
 	bool "Fedora"
+	select HAVE_DISTRO_XFS_PREFERS_MANUAL if FSTESTS_XFS
 	help
 	  This option will set the target guest to Fedora.
 
