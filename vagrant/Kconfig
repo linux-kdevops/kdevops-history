@@ -1,5 +1,9 @@
 if VAGRANT
 
+config HAVE_SUSE_VAGRANT
+	bool
+	default $(shell, scripts/check_distro_kconfig.sh suse)
+
 choice
 	prompt "Vagrant Guest Linux distribution to use"
 	default VAGRANT_DEBIAN
@@ -18,6 +22,19 @@ config VAGRANT_OPENSUSE
 	help
 	  This option will set the target guest to OpenSUSE.
 
+config VAGRANT_SUSE
+	bool "SUSE"
+	depends on HAVE_SUSE_VAGRANT
+	select HAVE_CUSTOM_DISTRO_HOST_PREFIX
+	select HAVE_DISTRO_XFS_PREFERS_MANUAL if FSTESTS_XFS
+	select VAGRANT_INSTALL_PRIVATE_BOXES
+	help
+	  This option will set the target guest to SUSE. There is currently
+	  no scriptable way to download vagrant images, however the images
+	  are available for download via:
+
+	    https://suse.com/download
+
 config VAGRANT_FEDORA
 	bool "Fedora"
 	select HAVE_DISTRO_XFS_PREFERS_MANUAL if FSTESTS_XFS
@@ -34,11 +51,16 @@ source "vagrant/Kconfig.debian"
 source "vagrant/Kconfig.opensuse"
 source "vagrant/Kconfig.fedora"
 
+if HAVE_SUSE_VAGRANT
+source "vagrant/Kconfig.suse"
+endif # HAVE_SUSE_VAGRANT
+
 config VAGRANT_BOX
 	string "Vagrant box"
 	default "debian/buster64" if VAGRANT_DEBIAN_BUSTER64 || !VAGRANT
 	default "opensuse/Tumbleweed.x86_64" if VAGRANT_OPENSUSE_X86_64_TW
 	default "fedora/32-beta-cloud-base" if VAGRANT_FEDORA_X86_64_32_CLOUD_BASE
+	default VAGRANT_SUSE_BOX if VAGRANT_SUSE
 	help
 	  The vagrant box to use.
 
@@ -49,7 +71,7 @@ if HAVE_VAGRANT_BOX_URL
 
 config VAGRANT_BOX_URL
 	string
-	default ""
+	default VAGRANT_SUSE_BOX_URL if HAVE_SUSE_VAGRANT
 
 endif # HAVE_VAGRANT_BOX_URL
 
