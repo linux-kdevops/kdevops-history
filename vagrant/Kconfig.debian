@@ -17,4 +17,8 @@ config VAGRANT_DEBIAN_BUSTER64
 
 endchoice
 
+config VAGRANT_DEBIAN_BOX_SHORT
+	string
+	default "buster64" if VAGRANT_DEBIAN_BUSTER64
+
 endif # VAGRANT_DEBIAN

@@ -35,4 +35,8 @@ endchoice
 
 endif # VAGRANT_OPENSUSE_X86_64_TW
 
+config VAGRANT_OPENSUSE_BOX_SHORT
+	string
+	default "tw" if VAGRANT_OPENSUSE_X86_64_TW
+
 endif # VAGRANT_OPENSUSE

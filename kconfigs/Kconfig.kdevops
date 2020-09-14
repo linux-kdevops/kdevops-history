@@ -1,6 +1,37 @@
+config HAVE_CUSTOM_DISTRO_HOST_PREFIX
+	bool
+	default n
+
+config HAVE_DISTRO_PREFERS_CUSTOM_HOST_PREFIX
+	bool
+	default n
+
+config CUSTOM_DISTRO_HOST_PREFIX
+	string
+	depends on HAVE_CUSTOM_DISTRO_HOST_PREFIX
+	default VAGRANT_DEBIAN_BOX_SHORT if VAGRANT_DEBIAN
+	default VAGRANT_OPENSUSE_BOX_SHORT if VAGRANT_OPENSUSE
+
+config KDEVOPS_USE_DISTRO_HOSTS_PREFIX
+	bool "Use a distribution release code name as prefix for hosts"
+	default y if HAVE_DISTRO_PREFERS_CUSTOM_HOST_PREFIX
+	default n if !HAVE_DISTRO_PREFERS_CUSTOM_HOST_PREFIX
+	help
+	  Enable this option to use a short distribution release name for the
+	  target hosts. This is useful, if for example, you are using
+	  kdevops to run different hosts with different configurations and
+	  you want to distinguish each target with its specific release name.
+	  The preferred distribution release name is set per distribution and
+	  per release.
+
+	  Say yes here if you want to distinguish the relase you are using,
+	  and let the distribution selection pick the prefix for you
+	  instead of using the generic "kdevops" as the prefix.
+
 config KDEVOPS_HOSTS_PREFIX
 	string "The hostname prefix to use for nodes"
-	default "kdevops"
+	default "kdevops" if !KDEVOPS_USE_DISTRO_HOSTS_PREFIX
+	default CUSTOM_DISTRO_HOST_PREFIX if KDEVOPS_USE_DISTRO_HOSTS_PREFIX
 	  help
 	  Each node used has an associated hostname. We use a prefix to
 	  help distinguish projects / goals for a set of nodes. You can use
