@@ -247,6 +247,12 @@ else
 EXTRA_ARGS_BUILD_DEP :=
 endif
 
+ifeq (y,$(CONFIG_HAVE_VAGRANT_BOX_URL))
+VAGRANT_PRIVATE_BOX_DEPS := vagrant_private_box_install
+else
+PRIVATE_BOXES_ARGS :=
+endif
+
 export TOPDIR=./
 
 # disable built-in rules for this file
@@ -276,8 +282,17 @@ endef
 $(KDEVOPS_EXTRA_VARS): .config
 	@echo --- > $(KDEVOPS_EXTRA_VARS)
 	@$(foreach exp,$(ANSIBLE_EXTRA_ARGS),echo $(call YAML_ENTRY,$(subst =,: ,$(exp)) >> $(KDEVOPS_EXTRA_VARS)))
+	@if [[ "$(CONFIG_HAVE_VAGRANT_BOX_URL)" == "y" ]]; then \
+		echo "kdevops_install_vagrant_boxes: True" >> $(KDEVOPS_EXTRA_VARS) ;\
+		echo "vagrant_boxes:" >> $(KDEVOPS_EXTRA_VARS) ;\
+		echo "  - { name: '$(CONFIG_VAGRANT_BOX)', box_url: '$(CONFIG_VAGRANT_BOX_URL)' }" >> $(KDEVOPS_EXTRA_VARS) ;\
+	fi
 
-bringup_vagrant:
+vagrant_private_box_install:
+	$(Q)ansible-playbook -i \
+		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/install-vagrant-boxes.yml
+
+bringup_vagrant: $(VAGRANT_PRIVATE_BOX_DEPS)
 	$(Q)$(TOPDIR)/scripts/bringup_vagrant.sh
 
 bringup_terraform:

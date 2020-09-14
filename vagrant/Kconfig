@@ -42,6 +42,17 @@ config VAGRANT_BOX
 	help
 	  The vagrant box to use.
 
+config HAVE_VAGRANT_BOX_URL
+	bool
+
+if HAVE_VAGRANT_BOX_URL
+
+config VAGRANT_BOX_URL
+	string
+	default ""
+
+endif # HAVE_VAGRANT_BOX_URL
+
 if HAVE_VAGRANT_BOX_VERSION
 
 config VAGRANT_BOX_VERSION
