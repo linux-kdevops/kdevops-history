@@ -6,6 +6,7 @@ choice
 
 config VAGRANT_DEBIAN
 	bool "Debian"
+	select HAVE_DISTRO_XFS_PREFERS_MANUAL if FSTESTS_XFS
 	help
 	  This option will set the target guest to Debian.
 
