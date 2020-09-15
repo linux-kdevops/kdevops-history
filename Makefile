@@ -4,7 +4,7 @@ PROJECT = kdevops
 VERSION = 3
 PATCHLEVEL = 2
 SUBLEVEL = 2
-EXTRAVERSION = rc6
+EXTRAVERSION = rc7
 
 export KDEVOPS_EXTRA_VARS ?=			extra_vars.yaml
 export KDEVOPS_PLAYBOOKS_DIR :=			playbooks
