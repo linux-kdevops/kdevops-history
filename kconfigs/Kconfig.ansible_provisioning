@@ -41,10 +41,14 @@ config KDEVOPS_ANSIBLE_INVENTORY_FILE
 	help
 	  The file to use for the ansible inventory.
 
+config HAVE_DISTRO_PREFERS_ANSIBLE_PYTHON2
+	bool
+	default n
+
 config KDEVOPS_PYTHON_INTERPRETER
 	string "Which default python interpreter to use"
-	default "/usr/bin/python3" if !VAGRANT_OPENSUSE
-	default "/usr/bin/python2" if VAGRANT_OPENSUSE
+	default "/usr/bin/python2" if HAVE_DISTRO_PREFERS_ANSIBLE_PYTHON2
+	default "/usr/bin/python3" if !HAVE_DISTRO_PREFERS_ANSIBLE_PYTHON2
 	help
 	  The python interpreter must be specified clearly for each host when
 	  using ansible, otherwise you will run into odd issues if the
