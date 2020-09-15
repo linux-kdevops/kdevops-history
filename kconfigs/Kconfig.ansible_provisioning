@@ -1,5 +1,58 @@
+config HAVE_DISTRO_SUSE
+	bool
+	default n
+
+config HAVE_DISTRO_PREFERS_REGISTRATION
+	bool
+	default n
+
+config HAVE_DISTRO_REG_METHOD_TWOLINE
+	bool
+	default n
+
+config KDEVOPS_ENABLE_DISTRO_REGISTRATION
+	bool "Enable distribution registration"
+	default y if HAVE_DISTRO_PREFERS_REGISTRATION
+	default n if !HAVE_DISTRO_PREFERS_REGISTRATION
+	help
+	  Some distributions have a registration system which can be used to
+	  update the system or must be used to make a distribution useful.
+	  For those distributions this option can be enabled to complete the
+	  registration. Registration is handled by the kdevops devconfig ansible
+	  role.
+
+if KDEVOPS_ENABLE_DISTRO_REGISTRATION
+
+choice
+	prompt "Kdevops distribution registration method"
+	default KDEVOPS_DISTRO_REG_METHOD_TWOLINE
+
+config KDEVOPS_DISTRO_REG_METHOD_TWOLINE
+	bool "Twoline registration system"
+	default n
+	help
+	  The kdevops devconfig ansible role is used for the "twoline"
+	  distribution registration method. This method consists of depending
+	  on two lines on a playbooks/secret.yml file which we will generate,
+	  one line which enables the twoline registration method, and another
+	  line which contains the registration code to be used.
+
+endchoice
+
+endif # KDEVOPS_ENABLE_DISTRO_REGISTRATION
+
+if KDEVOPS_DISTRO_REG_METHOD_TWOLINE
+
+menu "Distribution twoline method registration configuration"
+source "kconfigs/Kconfig.reg_twoline"
+endmenu
+
+endif # KDEVOPS_DISTRO_REG_METHOD_TWOLINE
+
 config HAVE_DISTRO_PREFERS_DISABLE_ANSIBLE
 	bool
+	default y if HAVE_DISTRO_PREFERS_REGISTRATION
+	default n if !HAVE_DISTRO_PREFERS_REGISTRATION
 
 config KDEVOPS_ANSIBLE_PROVISION_ENABLE
 	bool "Enable ansible provisioning"

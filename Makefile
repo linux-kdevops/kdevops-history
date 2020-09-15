@@ -253,6 +253,12 @@ else
 VAGRANT_PRIVATE_BOX_DEPS :=
 endif
 
+ifeq (y,$(CONFIG_KDEVOPS_DISTRO_REG_METHOD_TWOLINE))
+KDEVOPS_TWOLINE_REGMETHOD_DEPS := playbooks/secret.yml
+else
+KDEVOPS_TWOLINE_REGMETHOD_DEPS :=
+endif
+
 export TOPDIR=./
 
 # disable built-in rules for this file
@@ -287,6 +293,15 @@ $(KDEVOPS_EXTRA_VARS): .config
 		echo "vagrant_boxes:" >> $(KDEVOPS_EXTRA_VARS) ;\
 		echo "  - { name: '$(CONFIG_VAGRANT_BOX)', box_url: '$(CONFIG_VAGRANT_BOX_URL)' }" >> $(KDEVOPS_EXTRA_VARS) ;\
 	fi
+
+playbooks/secret.yml:
+	@if [[ "$(CONFIG_KDEVOPS_REG_TWOLINE_REGCODE)" == "" ]]; then \
+		echo "Registration code is not set, this must be set for this configuration" ;\
+		exit 1 ;\
+	fi
+	@echo --- > $@
+	@echo "$(CONFIG_KDEVOPS_REG_TWOLINE_ENABLE_STRING): True" >> $@
+	@echo "$(CONFIG_KDEVOPS_REG_TWOLINE_REGCODE_VAR): $(CONFIG_KDEVOPS_REG_TWOLINE_REGCODE)" >> $@
 
 vagrant_private_box_install:
 	$(Q)ansible-playbook -i \
@@ -345,6 +360,7 @@ mrproper:
 	$(Q)rm -f terraform/*/terraform.tfvars
 	$(Q)rm -f $(KDEVOPS_NODES)
 	$(Q)rm -f .config .config.old
+	$(Q)rm -f playbooks/secret.yml
 	$(Q)rm -rf include
 
 PHONY += help
@@ -354,6 +370,7 @@ help:
 PHONY := deps
 deps: \
 	$(EXTRA_ARGS_BUILD_DEP) \
+	$(KDEVOPS_TWOLINE_REGMETHOD_DEPS) \
 	$(KDEVOPS_HOSTS) \
 	$(KDEVOPS_NODES) \
 	$(KDEVOS_TERRAFORM_EXTRA_DEPS) \
