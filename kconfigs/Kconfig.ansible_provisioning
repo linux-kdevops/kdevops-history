@@ -1,6 +1,10 @@
+config HAVE_DISTRO_PREFERS_DISABLE_ANSIBLE
+	bool
+
 config KDEVOPS_ANSIBLE_PROVISION_ENABLE
 	bool "Enable ansible provisioning"
-	default y
+	default n if HAVE_DISTRO_PREFERS_DISABLE_ANSIBLE
+	default y if !HAVE_DISTRO_PREFERS_DISABLE_ANSIBLE
 	help
 	  If enabled we will provision the target hosts with ansible as a last
 	  last step after bringup. For vagrant we use this to update your
