@@ -250,7 +250,7 @@ endif
 ifeq (y,$(CONFIG_HAVE_VAGRANT_BOX_URL))
 VAGRANT_PRIVATE_BOX_DEPS := vagrant_private_box_install
 else
-PRIVATE_BOXES_ARGS :=
+VAGRANT_PRIVATE_BOX_DEPS :=
 endif
 
 export TOPDIR=./
