@@ -89,7 +89,7 @@ endmenu
 endif # KDEVOPS_DISTRO_REG_METHOD_TWOLINE
 
 menu "Getting kdevops ansible roles"
-source "kconfigs/Kconfig.kconfig_install"
+source "kconfigs/Kconfig.kdevops_install"
 endmenu
 
 menu "Ansible post-bring up provisioning configuration"
