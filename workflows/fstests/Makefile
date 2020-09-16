@@ -25,12 +25,16 @@ FSTESTS_ARGS	:=
 export FSTYP:=$(subst ",,$(CONFIG_FSTESTS_FSTYP))
 KDEVOPS_FSTESTS_CONFIG := workflows/fstests/$(FSTYP)/$(FSTYP).config
 KDEVOPS_FSTESTS_CONFIG_TEMPLATE := $(KDEVOPS_FSTESTS_CONFIG).in
+
+KDEVOPS_WORKFLOW_FSTESTS_CLEAN += $(KDEVOPS_FSTESTS_CONFIG)
+
 # We don't use a nodes template for fstests, the file is generated from
 # a start file and post file. We set this to empty to ensure it doesn't
 # fall as a dependency.
 export KDEVOPS_NODES_TEMPLATE :=
 
 export KDEVOPS_HOSTS_TEMPLATE := workflows/fstests/$(FSTYP)/hosts_generated.in
+KDEVOPS_WORKFLOW_FSTESTS_CLEAN += $(KDEVOPS_HOSTS_TEMPLATE)
 FSTESTS_DATA:=$(subst ",,$(CONFIG_FSTESTS_DATA))
 FSTESTS_DATA_TARGET:=$(subst ",,$(CONFIG_FSTESTS_DATA_TARGET))
 

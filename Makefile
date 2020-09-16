@@ -217,6 +217,8 @@ endif
 WORKFLOW_ARGS += $(BOOTLINUX_ARGS)
 endif # CONFIG_BOOTLINUX == y
 
+KDEVOPS_WORKFLOW_FSTESTS_CLEAN :=
+
 ifeq (y,$(CONFIG_KDEVOPS_WORKFLOW_FSTESTS))
 include workflows/fstests/Makefile
 endif # CONFIG_KDEVOPS_WORKFLOW_FSTESTS == y
@@ -359,6 +361,7 @@ mrproper:
 	fi
 	$(Q)rm -f terraform/*/terraform.tfvars
 	$(Q)rm -f $(KDEVOPS_NODES)
+	$(Q)rm -f $(KDEVOPS_HOSTFILE) $(KDEVOPS_WORKFLOW_FSTESTS_CLEAN)
 	$(Q)rm -f .config .config.old
 	$(Q)rm -f playbooks/secret.yml
 	$(Q)rm -rf include
