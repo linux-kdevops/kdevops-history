@@ -101,9 +101,17 @@ config VAGRANT_BOX_VERSION
 
 endif # !HAVE_VAGRANT_BOX_VERSION
 
+config VAGRANT_FIRST_RUN
+	bool "Is this your first time trying to run vagrant?"
+	default n
+	help
+	  Enable this if this is the first time you are running vagrant.
+	  This will set some sensible defaults for you.
+
 config VAGRANT_LIBVIRT_INSTALL
 	bool "Installs libvirt"
-	default y
+	default y if VAGRANT_FIRST_RUN
+	default n if !VAGRANT_FIRST_RUN
 	help
 	  If this option is enabled then the ansible role which installs
 	  libvirt for you will be run. The goal will be to ensure you have
@@ -111,7 +119,8 @@ config VAGRANT_LIBVIRT_INSTALL
 
 config VAGRANT_LIBVIRT_CONFIGURE
 	bool "Configure libvirt so you spawn guests as a regular user"
-	default y
+	default y if VAGRANT_FIRST_RUN
+	default n if !VAGRANT_FIRST_RUN
 	help
 	  If this option is enabled then the ansible role which configures
 	  libvirt for you will be run. This typically just requires adding the
@@ -125,7 +134,8 @@ config VAGRANT_LIBVIRT_CONFIGURE
 
 config VAGRANT_LIBVIRT_VERIFY
 	bool "Verify that a user can spawn libvirt as a regular user"
-	default y
+	default y if VAGRANT_FIRST_RUN
+	default n if !VAGRANT_FIRST_RUN
 	help
 	  To enable a user to be able to spawn libvirt guests as a regular user
 	  a user is typically added to a few groups. These groups are not
