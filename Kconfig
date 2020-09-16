@@ -5,6 +5,26 @@
 
 mainmenu "$(PROJECT) $(PROJECTRELEASE)"
 
+config KDEVOPS_FIRST_RUN
+	bool "Is this your first time running kdevops on this system?"
+	default n
+	help
+	  When you run kdevops for the first time we can enable options
+	  to help you install software you may need, as well as do sanity
+	  checks for you. Enabling this option will set to the default to "y"
+	  for a series of entries which will help you with this first run.
+	  Enabling these are not required, they do however help.
+
+config KDEVOPS_JUST_UPDATED
+	bool "You have you just updated kdevops?"
+	default y if KDEVOPS_FIRST_RUN
+	default n if !KDEVOPS_FIRST_RUN
+	help
+	  If you have been running kdevops for a while but have just updated
+	  kdevops you may need a new set of ansible roles installed. Setting
+	  this to true will enable sensible defaults to ensure we check this
+	  for you.
+
 menu "Target architecture"
 source "kconfigs/arch/Kconfig"
 endmenu
