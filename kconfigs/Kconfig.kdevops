@@ -68,7 +68,6 @@ choice
 
 config KDEVOPS_DISTRO_REG_METHOD_TWOLINE
 	bool "Twoline registration system"
-	default n
 	help
 	  The kdevops devconfig ansible role is used for the "twoline"
 	  distribution registration method. This method consists of depending
