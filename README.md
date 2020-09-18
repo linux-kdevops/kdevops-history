@@ -88,6 +88,48 @@ To configure kdevops use:
 make menuconfig
 ```
 
+## Running kdevops for the first time
+
+Most dependencies are installed if you're running kdevops for the first time.
+To help with this we have an option on kconfig which you should enable if it is
+your first time running kdevops, the prompt is for CONFIG_KDEVOPS_FIRST_RUN:
+
+```
+"Is this your first time running kdevops on this system?"
+```
+
+This will enable a set of sensible defaults to help with your first run.
+This will also enable the option CONFIG_KDEVOPS_JUST_UPDATED which is prompted
+for with:
+
+```
+You have you just updated kdevops?
+```
+
+This will enable a few options which will ensure you get the ansible roles
+you need.
+
+You can safely disable both of these options after you've already run
+kdevops on a system once successfully, however if you upgrade kdevops later,
+enable CONFIG_KDEVOPS_JUST_UPDATED to ensure you get ansible roles updated
+in case the kdevops_install ansible role has been updated. You can verify this
+by checking the diff on requirements.yml.
+
+## Run make mrproper for each new fresh run
+
+There are several ways to clean a git tree, $(git clean -f -x -d) would be
+the paranoid way, however, given we have ansible roles deployed on your system,
+which install a few local files, you don't want to re-add them locally, so to
+clean a system after you've destroyed your setup with $(make destroy), you can
+just run:
+
+```
+make mrproper
+```
+
+This will remove all generated files, and your .config file, allowing you
+to run a new configuration and deployment.
+
 ## Getting help with configuration
 
 ```bash
@@ -103,6 +145,8 @@ run:
 ```bash
 make
 ```
+
+## Configuring kdevops
 
 ## Bring up nodes
 
