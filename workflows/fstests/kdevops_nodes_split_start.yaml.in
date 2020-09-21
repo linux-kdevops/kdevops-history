@@ -24,7 +24,6 @@ vagrant_global:
     # support for this upstream to Virtualbox.
     nvme_controller_per_disk: false
   libvirt_cfg:
-    machine_type: 'q35'
     nvme_disk_postfix: 'qcow2'
     nvme_disk_id_prefix: 'drv'
     # This lets the ansible role kdevops_vagrant try to infer your default
