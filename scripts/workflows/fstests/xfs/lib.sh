@@ -19,16 +19,6 @@ fi
 
 export XFS_SECTIONS
 
-add_host_entry()
-{
-	TARGET_HOST=$1
-	SECOND_IP=$2
-	TARGET_FILE=$3
-
-	echo "  - name: $TARGET_HOST" >> $TARGET_FILE
-	echo "    ip: $SECOND_IP" >> $TARGET_FILE
-}
-
 xfs_generate_nodes_file()
 {
 	TMP_INIT_NODE=$(mktemp)
@@ -62,7 +52,7 @@ xfs_generate_nodes_file()
 		TARGET_HOSTNAME="${KDEVOPSHOSTSPREFIX}-xfs-${SECTION_HOSTNAME_POSTFIX}"
 		add_host_entry $TARGET_HOSTNAME $SECOND_IP $TMP_INIT_NODE
 		let CURRENT_IP="$CURRENT_IP+1"
-		if [[ "$CONFIG_FSTESTS_XFS_BASELINE_AND_DEV" == "y" ]]; then
+		if [[ "$CONFIG_KDEVOPS_BASELINE_AND_DEV" == "y" ]]; then
 			SECTION_HOSTNAME_POSTFIX="$(echo $i | sed -e 's|_|-|')"
 			let IP_LAST_OCTET="$IP_LAST_OCTET_START+$CURRENT_IP"
 			SECOND_IP="${SECOND_IP_START}${IP_LAST_OCTET}"

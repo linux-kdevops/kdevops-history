@@ -41,6 +41,20 @@ config KDEVOPS_HOSTS_PREFIX
 	  help distinguish projects / goals for a set of nodes. You can use
 	  this to override the hostname prefix used.
 
+config KDEVOPS_BASELINE_AND_DEV
+	bool "Enable both a baseline and development system per target test"
+	default y
+	help
+	  By default two hosts are created, one to track a baseline, and another
+	  to do development on. If you want to reduce the amount of target hosts
+	  to only one disable this option, this would just means you have
+	  reboot to a different kernel if you want to switch between a baseline
+	  and a development kernel to test.
+
+	  If enabled, the host baseline will be created as well as the
+	  development host, the development hostname is the same as the baseline
+	  host but with an added "-dev" postfix.
+
 config HAVE_DISTRO_PREFERS_REGISTRATION
 	bool
 	default n

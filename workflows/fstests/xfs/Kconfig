@@ -61,31 +61,16 @@ config FSTESTS_XFS_MANUAL_COVERAGE
 	  Each section uses different mkfs.xfs commands which enable different
 	  features. By default we also rely on two spawned hosts per tested
 	  section, one used to establish a baseline and another for
-	  development purposes, if FSTESTS_XFS_BASELINE_AND_DEV is enabled.
+	  development purposes, if KDEVOPS_BASELINE_AND_DEV is enabled.
 	  Since a total of 8 xfs sections are currently supported on x86_64,
 	  this means by default 16 hosts will be spawned to test xfs with
-	  x86_64 unless FSTESTS_XFS_BASELINE_AND_DEV is used. Likewise for
+	  x86_64 unless KDEVOPS_BASELINE_AND_DEV is used. Likewise for
 	  ppc64le and aarch64 this consists of 9 target xfs sections for
-	  a total of 18 hosts spawned if FSTESTS_XFS_BASELINE_AND_DEV is
+	  a total of 18 hosts spawned if KDEVOPS_BASELINE_AND_DEV is
 	  enabled.
 
 	  You can enable this to allow you to override the spawned hosts, to
 	  reduce the number of sections tested and spawned hosts.
-
-config FSTESTS_XFS_BASELINE_AND_DEV
-	bool "Enable both a baseline and development system per target test"
-	default y
-	help
-	  By default a host is created for each target fstests for both to
-	  track a baseline and to do development. That is, two hosts are created
-	  per target test. If you are constrained with system resources disable
-	  this option and only one system will be created for you for each
-	  target test, and you can use that for both basline tracking and
-	  development. This just means you have reboot to a different kernel
-	  if you want to switch between a baseline and a development kernel
-	  to test. If enabled, the host baseline will be created as well as
-	  the development host, the development hostname is the same as the
-	  baseline host but with an added "-dev" postfix.
 
 if FSTESTS_XFS_MANUAL_COVERAGE
 

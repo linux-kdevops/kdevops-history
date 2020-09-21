@@ -8,12 +8,12 @@ source ${TOPDIR}/scripts/workflows/fstests/xfs/lib.sh
 VAGRANTBOX=$CONFIG_VAGRANT_BOX
 VBOXVERSION=$CONFIG_VAGRANT_BOX_VERSION
 
-# These are shared between filesystems
-GENERIC_SPLIT_START="workflows/fstests/kdevops_nodes_split_start.yaml.in"
-GENERIC_SPLIT_END="workflows/fstests/kdevops_nodes_split_end.yaml.in"
+# These are shared when possible, otherwise override for your workflow
+GENERIC_SPLIT_START="workflows/linux/kdevops_nodes_split_start.yaml.in"
+GENERIC_SPLIT_END="workflows/linux/kdevops_nodes_split_end.yaml.in"
 
 if [[ "$CONFIG_FSTESTS_XFS" == "y" ]]; then
 	xfs_generate_nodes_file
 else
-	cat_template_nodes_sed $KDEVOPS_NODES_TEMPLATE > $KDEVOPS_NODES
+	generic_generate_nodes_file
 fi

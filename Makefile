@@ -10,7 +10,11 @@ export KDEVOPS_EXTRA_VARS ?=			extra_vars.yaml
 export KDEVOPS_PLAYBOOKS_DIR :=			playbooks
 export KDEVOPS_HOSTFILE ?=			hosts
 export KDEVOPS_NODES :=				vagrant/kdevops_nodes.yaml
-export KDEVOPS_NODES_TEMPLATE :=		vagrant/kdevops_nodes.yaml.in
+
+KDEVOPS_NODES_TEMPLATES :=			workflows/linux/kdevops_nodes_split_start.yaml.in
+KDEVOPS_NODES_TEMPLATES +=			workflows/linux/kdevops_nodes_split_end.yaml.in
+export KDEVOPS_NODES_TEMPLATES
+
 export KDEVOPS_FSTESTS_CONFIG :=
 export KDEVOPS_FSTESTS_CONFIG_TEMPLATE :=
 
@@ -339,7 +343,7 @@ $(KDEVOPS_SSH_PRIVKEY): .config
 	$(NQ) Generating new public key: $(KDEVOPS_SSH_PUBKEY)
 	$(Q)$(TOPDIR)/scripts/gen_ssh_key.sh
 
-$(KDEVOPS_NODES): $(KDEVOPS_NODES_TEMPLATE) .config
+$(KDEVOPS_NODES): $(KDEVOPS_NODES_TEMPLATES) .config
 	$(Q)$(TOPDIR)/scripts/gen_nodes_file.sh
 
 $(KDEVOPS_TFVARS): $(KDEVOPS_TFVARS_TEMPLATE) .config

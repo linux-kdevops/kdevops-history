@@ -65,16 +65,3 @@ vagrant_global:
 # getting in the section always as pokeyman. As is below, with the above
 # ansible regex you'd get the digits.
 vagrant_boxes:
-  - name: @KDEVOPSHOSTSPREFIX@
-    ip: 172.17.8.101
-  - name: @KDEVOPSHOSTSPREFIX@-dev
-    ip: 172.17.8.102
-
-ansible_playbooks:
-  # If this file exists you can override any ansible variable there.
-  # This file is optional.
-  inventory: "../@INVENTORY@"
-  extra_vars: "../extra_vars.yml"
-  playbooks:
-    - name: "../@PLAYBOOKDIR@/update_ssh_config_vagrant.yml"
-    - name: "../@PLAYBOOKDIR@/@PROVISIONPLAYBOOK@"

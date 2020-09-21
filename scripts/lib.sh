@@ -109,3 +109,51 @@ cat_fstests_config_sed()
 		s|@FSTESTSSCRATCHRTDEV@|'$FSTESTSSCRATCHRTDEV'|g;
 		' | cat -s
 }
+
+add_host_entry()
+{
+	TARGET_HOST=$1
+	SECOND_IP=$2
+	TARGET_FILE=$3
+
+	echo "  - name: $TARGET_HOST" >> $TARGET_FILE
+	echo "    ip: $SECOND_IP" >> $TARGET_FILE
+}
+
+generic_generate_nodes_file()
+{
+	TMP_INIT_NODE=$(mktemp)
+	if [ ! -f $TMP_INIT_NODE ]; then
+		echo "Cannot create temporary file: $TMP_INIT_NODE do you have mktemp installed?"
+		exit 1
+	fi
+	TMP_FINAL_NODE=$(mktemp)
+	if [ ! -f $TMP_FINAL_NODE ]; then
+		echo "Cannot create temporary file: $TMP_FINAL_NODE"
+		exit 1
+	fi
+
+	cp $GENERIC_SPLIT_START $TMP_INIT_NODE
+
+	SECOND_IP_START="172.17.8."
+	IP_LAST_OCTET_START="100"
+	CURRENT_IP="1"
+	let IP_LAST_OCTET="$IP_LAST_OCTET_START+$CURRENT_IP"
+	SECOND_IP="${SECOND_IP_START}${IP_LAST_OCTET}"
+	TARGET_HOSTNAME="${KDEVOPSHOSTSPREFIX}"
+	add_host_entry $TARGET_HOSTNAME $SECOND_IP $TMP_INIT_NODE
+
+	let CURRENT_IP="$CURRENT_IP+1"
+	if [[ "$CONFIG_KDEVOPS_BASELINE_AND_DEV" == "y" ]]; then
+		let IP_LAST_OCTET="$IP_LAST_OCTET_START+$CURRENT_IP"
+		SECOND_IP="${SECOND_IP_START}${IP_LAST_OCTET}"
+		TARGET_HOSTNAME="${KDEVOPSHOSTSPREFIX}-dev"
+		add_host_entry $TARGET_HOSTNAME $SECOND_IP $TMP_INIT_NODE
+		let CURRENT_IP="$CURRENT_IP+1"
+	fi
+
+	cat $TMP_INIT_NODE $GENERIC_SPLIT_END > $TMP_FINAL_NODE
+	cat_template_nodes_sed $TMP_FINAL_NODE > $KDEVOPS_NODES
+
+	rm -f $TMP_INIT_NODE $TMP_FINAL_NODE
+}
