@@ -118,6 +118,10 @@ add_host_entry()
 
 	echo "  - name: $TARGET_HOST" >> $TARGET_FILE
 	echo "    ip: $SECOND_IP" >> $TARGET_FILE
+
+	if [[ "$CONFIG_HAVE_DISTRO_LACKS_SUPPORT_FOR_NVME" == "y" ]]; then
+		echo "    lacks_nvme_support: true:" >> $TARGET_FILE
+	fi
 }
 
 generic_generate_nodes_file()
