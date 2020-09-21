@@ -14,6 +14,10 @@ config HAVE_DISTRO_LACKS_SUPPORT_FOR_NVME
 	bool
 	default n
 
+config HAVE_DISTRO_LACKS_SUPPORT_FOR_VIRTIO_DRIVE
+	bool
+	default n
+
 config CUSTOM_DISTRO_HOST_PREFIX
 	string
 	depends on HAVE_CUSTOM_DISTRO_HOST_PREFIX
