@@ -23,7 +23,10 @@ This is typically how vagrant first removes the host entries it is about
 to provide an update for. In this case a backup file is going to be used.
 
 ```
-update_ssh_config.py ~/.ssh/config --backup_file ~/.ssh/config.bk --remove kdevops,kdevops-dev
+update_ssh_config.py \
+	~/.ssh/config \
+	--backup_file ~/.ssh/config.bk \
+	--remove kdevops,kdevops-dev
 ```
 
 Vagrant typically follows up and adds each host entry. The easy way to do
@@ -43,7 +46,15 @@ the hostname and IP addresses are provided. The identity file to use
 is provided.
 
 ```
-update_ssh_config.py --remove kdevops,kdevops-dev --hostname 51.242.126.149,183.167.235.81  --port 22 --identity ~/.ssh/my_new_tmp_key  ~/.ssh/config
+update_ssh_config.py \
+	--remove kdevops,kdevops-dev \
+	--hostname 51.179.84.243,52.195.142.18 \
+	--username mcgrof \
+	--port 22 \
+	--identity ~/.ssh/kdevops_terraform \
+	--addstrict \
+	--backup_file ~/.ssh/config.backup.kdevops.remove \
+	~/.ssh/config
 ```
 
 ## Rationale for using Python3
