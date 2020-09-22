@@ -3,7 +3,7 @@ choice
 	default VAGRANT
 
 config VAGRANT
-	bool "Vagrant"
+	bool "Vagrant for local virtualization (KVM / Virtualbox)"
 	depends on TARGET_ARCH_X86_64
 	help
 	  This option will enable use of vagrant. Enable this if you want to
@@ -15,7 +15,7 @@ config VAGRANT
 	    make deps
 
 config TERRAFORM
-	bool "Terraform"
+	bool "Terraform for cloud environments"
 	help
 	  This option will enable use of vagrant. Enable this if you want to
 	  use terraform to create nodes on a cloud environment such as:
