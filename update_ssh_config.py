@@ -1,11 +1,11 @@
 #!/usr/bin/python3
+# SPDX-License-Identifier: GPL-2.0
 
 import argparse
 import sys
 import os
 import re
 from shutil import copyfile
-
 
 def key_val(line):
     no_comment = line.split("#")[0]
