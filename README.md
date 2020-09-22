@@ -46,6 +46,25 @@ is provided.
 update_ssh_config.py --remove kdevops,kdevops-dev --hostname 51.242.126.149,183.167.235.81  --port 22 --identity ~/.ssh/my_new_tmp_key  ~/.ssh/config
 ```
 
+## Rationale for using Python3
+
+We explicitly rely on python3 because our current use case is vagrant and
+terraform users, and that software should be used on recent distributions,
+hopefully rolling distrubutions which get updated more often than not. Because
+modern distributions are expected to be used as your command and control, it
+is a safe assumption you must have python3 available.
+
+Also, some distributions, such as Debian testing as of September 2020, no longer
+have a `/usr/bin/python` symlink, and the
+[Debian Python Policy](https://www.debian.org/doc/packaging-manuals/python-policy/ch-python.html#s-interpreter)
+specifically requests that scripts do not use `/usr/bin/env`, do not use
+`/usr/bin/python` and instead use the exact version desired.
+
+If you'd like to add Python2 support feel free to add a python2 version file,
+maybe `update_ssh_config2.py` and just have your project symlink to it. The
+way vagrant and terraform will use this script is to symlink to the Python3
+version.
+
 ### Author
 
 [Luis Chamberlain](https://www.do-not-panic.com)
