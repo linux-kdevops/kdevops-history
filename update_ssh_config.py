@@ -199,7 +199,7 @@ class SshHost:
         remove_hosts(self)
 
 
-def main():
+def parse_args(args):
     parser = argparse.ArgumentParser()
     parser.add_argument('ssh_config', help='ssh configuration file to process')
     parser.add_argument('--addhost',
@@ -251,7 +251,11 @@ def main():
     parser.add_argument('--nobackup',
                         const=True, default=False, action="store_const",
                         help='Do not use a backup file')
-    args = parser.parse_args()
+    return parser.parse_args(args)
+
+
+def main():
+    args = parse_args(sys.argv[1:])
 
     if not args.remove and not args.addhost:
         print("Must specify addition or removal request")
