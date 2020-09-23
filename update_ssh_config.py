@@ -254,9 +254,7 @@ def parse_args(args):
     return parser.parse_args(args)
 
 
-def main():
-    args = parse_args(sys.argv[1:])
-
+def run_args(args):
     if not args.remove and not args.addhost:
         print("Must specify addition or removal request")
         sys.exit(0)
@@ -280,6 +278,11 @@ def main():
         add_vagrant_hosts(args)
     elif args.addhost:
         add_host(args)
+
+
+def main():
+    args = parse_args(sys.argv[1:])
+    run_args(args)
 
 
 if __name__ == "__main__":
