@@ -5,7 +5,23 @@ import argparse
 import sys
 import os
 import re
+import subprocess
 from shutil import copyfile
+
+
+class VagrantError(Exception):
+    pass
+
+
+class ExecutionError(VagrantError):
+    def __init__(self, errcode):
+        self.error_code = errcode
+
+
+def _check(process):
+    if process.returncode != 0:
+        raise ExecutionError(process.returncode)
+
 
 def key_val(line):
     no_comment = line.split("#")[0]
@@ -42,6 +58,65 @@ def remove_hosts(args):
     f.close()
 
 
+def add_vagrant_hosts(args):
+    process = subprocess.Popen(['vagrant', 'ssh-config'],
+                               stdout=subprocess.PIPE,
+                               close_fds=True, universal_newlines=True)
+    stdout = process.communicate()[0]
+    process.wait()
+    _check(process)
+
+    lines = stdout.splitlines()
+
+    addhost = ""
+    hostname = ""
+    username = ""
+    port = ""
+    identity = ""
+
+    # All vagrant hosts are strict, which allows us to skip checking all of
+    # the parameters which define this.
+    addstrict = True
+
+    last_host_added = ""
+    newhost = None
+
+    for line in lines:
+        if not line:
+            continue
+        kv = key_val(line)
+        if len(kv) > 1:
+            key, value = kv
+            if key.lower() == "host":
+                if addhost != "":
+                    newhost = SshHost(args.ssh_config, addhost, hostname,
+                                      username, port, identity, addstrict)
+                    newhost.call_add_host()
+                    last_host_added = addhost
+                addhost = value
+                hostname = ""
+                username = ""
+                port = ""
+                identity = ""
+                addstrict = True
+            if key.lower() == "hostname":
+                hostname = value
+            elif key.lower() == "user":
+                username = value
+            elif key.lower() == "port":
+                port = value
+            elif key.lower() == "identityfile":
+                identity = value
+
+    if last_host_added != addhost:
+        newhost = SshHost(args.ssh_config, addhost, hostname, username, port,
+                          identity, addstrict)
+        newhost.call_add_host()
+
+
+# We extend the SshHost with the variables which we add to our ArgumentParser
+# and which we use on this function so that we can pass to this function either
+# an ArgumentParser object or one of our SshHost objects
 def add_host(args):
     hosts = args.addhost.split(",")
     new_lines = list()
@@ -106,6 +181,24 @@ def add_host(args):
     f.close()
 
 
+class SshHost:
+    def __init__(self, ssh_config, name, hostname, username, port, identity,
+                 strict):
+        self.ssh_config = ssh_config
+        self.addhost = name
+        self.hostname = hostname
+        self.username = username
+        self.port = port
+        self.identity = identity
+        self.addstrict = strict
+
+    def call_add_host(self):
+        add_host(self)
+
+    def call_remove_hosts(self):
+        remove_hosts(self)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('ssh_config', help='ssh configuration file to process')
@@ -117,6 +210,16 @@ def main():
                         'will let you set a default port if non specified ' +
                         'but allow you to override ports per host. We refer ' +
                         'this entry as the shorthost.')
+    parser.add_argument('--addvagranthosts',
+                        const=True, default=False, action="store_const",
+                        help='Use this if you are want to add or augment the ' +
+                        'entries found from the output of the command ' +
+                        'vagrant ssh-config. You would typically use this if ' +
+                        'you are working with vagrant, and are in the ' +
+                        'vagrant directory. Only a few parameters are ' +
+                        'supported when augmenting the information installed ' +
+                        'per host, those are entries which vagrant does not ' +
+                        'add which you may need, for instance on older hosts')
     parser.add_argument('--hostname',
                         help='Used only on addition, the hostname to use for ' +
                         'this entry. If the shorhost specified was a comma ' +
@@ -168,7 +271,9 @@ def main():
     if args.remove:
         remove_hosts(args)
 
-    if args.addhost:
+    if args.addvagranthosts:
+        add_vagrant_hosts(args)
+    elif args.addhost:
         add_host(args)
 
 
