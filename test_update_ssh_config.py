@@ -112,6 +112,27 @@ class TestUpdateSshConfig(unittest.TestCase):
                             target_sshconfig_orig, shallow = False))
         self.assertTrue(cmp(target_sshconfig_copy,
                             target_sshconfig_res, shallow = False))
+    def test_0005_remove_hosts_similar(self):
+        this_function_name = inspect.stack()[0][3]
+        tests_names = get_test_files(this_function_name)
+        target_sshconfig = tests_names[0]
+        target_sshconfig_orig = tests_names[1]
+        target_sshconfig_copy = tests_names[2]
+        target_sshconfig_res = tests_names[3]
+        target_sshconfig_bk = tests_names[4]
+
+        copyfile(target_sshconfig_orig, target_sshconfig_copy)
+
+        args = parse_args([target_sshconfig_copy,
+                           '--backup_file',
+                           target_sshconfig_bk,
+                           '--remove',
+                           'kdevops,kdevops-dev'])
+        run_args(args)
+        self.assertTrue(cmp(target_sshconfig_bk,
+                            target_sshconfig_orig, shallow = False))
+        self.assertTrue(cmp(target_sshconfig_copy,
+                            target_sshconfig_res, shallow = False))
 
 
 if __name__ == '__main__':
