@@ -5,7 +5,7 @@ import unittest
 import re
 from filecmp import cmp
 import inspect
-#from os import remove
+from os import listdir, remove, path
 from shutil import copyfile
 from update_ssh_config import parse_args, run_args
 
@@ -133,7 +133,11 @@ class TestUpdateSshConfig(unittest.TestCase):
                             target_sshconfig_orig, shallow = False))
         self.assertTrue(cmp(target_sshconfig_copy,
                             target_sshconfig_res, shallow = False))
-
+    def tearDown(self):
+        files = listdir("tests")
+        for testfile in files:
+            if testfile.endswith(".copy") or testfile.endswith(".bk"):
+                remove(path.join("tests", testfile))
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
