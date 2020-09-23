@@ -204,37 +204,38 @@ def main():
     parser.add_argument('ssh_config', help='ssh configuration file to process')
     parser.add_argument('--addhost',
                         help='The host shortcut name you are adding. This ' +
-                        'can be a comma separated set of hosts and each host ' +
-                        'can have a port specified with a colon, if set it ' +
-                        'will override override the port set by --port. This ' +
+                        'can be a comma separated set of hosts and each host' +
+                        'can have a port specified with a colon, if set ' +
+                        'it will override override the port set by --port. ' +
                         'will let you set a default port if non specified ' +
                         'but allow you to override ports per host. We refer ' +
                         'this entry as the shorthost.')
     parser.add_argument('--addvagranthosts',
                         const=True, default=False, action="store_const",
-                        help='Use this if you are want to add or augment the ' +
-                        'entries found from the output of the command ' +
-                        'vagrant ssh-config. You would typically use this if ' +
-                        'you are working with vagrant, and are in the ' +
+                        help='Use this if you are want to add or augment ' +
+                        'the entries found from the output of the command ' +
+                        'vagrant ssh-config. You would typically use this ' +
+                        'if you are working with vagrant, and are in the ' +
                         'vagrant directory. Only a few parameters are ' +
-                        'supported when augmenting the information installed ' +
-                        'per host, those are entries which vagrant does not ' +
-                        'add which you may need, for instance on older hosts')
+                        'supported when augmenting the information ' +
+                        'installed per host, those are entries which ' +
+                        'vagrant does not add which you may need, for ' +
+                        'instance on older hosts')
     parser.add_argument('--hostname',
-                        help='Used only on addition, the hostname to use for ' +
-                        'this entry. If the shorhost specified was a comma ' +
-                        'separated list of hosts, then this can also be a ' +
-                        'comma separated list, in which case each shorthost ' +
-                        'index represents the hostname for that shorthost, ' +
-                        'and the number of both shorthosts and hostname must ' +
-                        'match.')
+                        help='Used only on addition, the hostname to use ' +
+                        'for this entry. If the shorhost specified was a ' +
+                        'comma separated list of hosts, then this can also ' +
+                        'be a comma separated list, in which case each ' +
+                        'shorthost index represents the hostname for that ' +
+                        'shorthost, and the number of both shorthosts and ' +
+                        'hostname must match.')
     parser.add_argument('--port',
                         help='Used only on addition, the port to use, ' +
                         'by default none is specified')
     parser.add_argument('--username',
                         help='Used only on addition, the username to use, ' +
-                        'default is none, so ssh will assumes your localhost ' +
-                        'username')
+                        'default is none, so ssh will assumes your ' +
+                        'localhost username')
     parser.add_argument('--identity',
                         help='Used only on addition, the host key to ' +
                         'use, the default is empty and so no file is provided')
