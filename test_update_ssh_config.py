@@ -28,7 +28,7 @@ def get_test_files(function_name):
     return test_names
 
 class TestUpdateSshConfig(unittest.TestCase):
-    def test_0001_remove_hosts(self):
+    def test_0001_remove_hosts_top(self):
         this_function_name = inspect.stack()[0][3]
         tests_names = get_test_files(this_function_name)
         target_sshconfig = tests_names[0]
@@ -70,7 +70,7 @@ class TestUpdateSshConfig(unittest.TestCase):
                             target_sshconfig_orig, shallow = False))
         self.assertTrue(cmp(target_sshconfig_copy,
                             target_sshconfig_res, shallow = False))
-    def test_0003_remove_hosts_top(self):
+    def test_0003_remove_hosts_bottom(self):
         this_function_name = inspect.stack()[0][3]
         tests_names = get_test_files(this_function_name)
         target_sshconfig = tests_names[0]
