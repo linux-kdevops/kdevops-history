@@ -361,7 +361,7 @@ mrproper:
 	$(Q)$(MAKE) -f scripts/build.Makefile clean
 	$(Q)$(MAKE) -f scripts/build.Makefile $@
 	@if [ -f terraform/Makefile ]; then \
-		$(Q)$(MAKE) -C terraform $@ ;\
+		$(MAKE) -C terraform clean ;\
 	fi
 	$(Q)rm -f terraform/*/terraform.tfvars
 	$(Q)rm -f $(KDEVOPS_NODES)
