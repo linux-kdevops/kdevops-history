@@ -34,6 +34,10 @@ this is to just run `vagrant ssh-config` and append this to your configuration.
 However, if modifications are needed beyond what vagrant provides, additional
 work is required.
 
+Contrary to the terraform use case we don't two operations to have to backups
+of the file since historically we started with the script only running for
+the removal operation, and the addition was done using an append command
+directly from the command line.
 
 ## The terraform use case
 
@@ -45,6 +49,9 @@ if the ports were different they can be separated by a comma, similar to how
 the hostname and IP addresses are provided. The identity file to use
 is provided.
 
+This is first used for the removal, the IP addresses are given, yet they
+are not processed for the removal:
+
 ```
 update_ssh_config.py \
 	--remove kdevops,kdevops-dev \
@@ -54,6 +61,41 @@ update_ssh_config.py \
 	--identity ~/.ssh/kdevops_terraform \
 	--addstrict \
 	--backup_file ~/.ssh/config.backup.kdevops.remove \
+	~/.ssh/config
+```
+
+Then a second call is issued for the addition. Two separate calls are
+made so that there is backup for the ssh configuration for both operations,
+one for removal and another for the addition.
+
+```
+update_ssh_config.py \
+	--addhost kdevops,kdevops-dev \
+	--hostname 51.179.84.243,52.195.142.18 \
+	--username mcgrof \
+	--port 22 \
+	--identity \
+	~/.ssh/kdevops_terraform \
+	--addstrict \
+	--backup_file ~/.ssh/config.backup.kdevops.add \
+	~/.ssh/config
+```
+
+Using two separate calls are however not needed, we split this for
+terraform to be careful, however one can combine both operations in one,
+and only use one backup file:
+
+```
+update_ssh_config.py \
+	--remove kdevops,kdevops-dev \
+	--addhost kdevops,kdevops-dev \
+	--hostname 51.179.84.243,52.195.142.18 \
+	--username mcgrof \
+	--port 22 \
+	--identity \
+	~/.ssh/kdevops_terraform \
+	--addstrict \
+	--backup_file ~/.ssh/config.backup.kdevops.add \
 	~/.ssh/config
 ```
 
