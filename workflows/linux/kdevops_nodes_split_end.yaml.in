@@ -3,7 +3,7 @@ ansible_playbooks:
   # If this file exists you can override any ansible variable there.
   # This file is optional.
   inventory: "../@INVENTORY@"
-  extra_vars: "../ansible/extra_vars.yml"
+  extra_vars: "../@PLAYBOOKDIR@/extra_vars.yml"
   playbooks:
     - name: "../@PLAYBOOKDIR@/update_ssh_config_vagrant.yml"
     - name: "../@PLAYBOOKDIR@/@PROVISIONPLAYBOOK@"
