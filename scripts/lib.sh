@@ -120,11 +120,11 @@ add_host_entry()
 	echo "    ip: $SECOND_IP" >> $TARGET_FILE
 
 	if [[ "$CONFIG_HAVE_DISTRO_LACKS_SUPPORT_FOR_NVME" == "y" ]]; then
-		echo "    lacks_nvme_support: true:" >> $TARGET_FILE
+		echo "    lacks_nvme_support: true" >> $TARGET_FILE
 	fi
 
 	if [[ "$CONFIG_HAVE_DISTRO_LACKS_SUPPORT_FOR_VIRTIO_DRIVE" == "y" ]]; then
-		echo "    lacks_drive_virtio: true:" >> $TARGET_FILE
+		echo "    lacks_drive_virtio: true" >> $TARGET_FILE
 	fi
 }
 
