@@ -171,7 +171,6 @@ class TestUpdateSshConfig(unittest.TestCase):
         target_sshconfig = tests_names[0]
         target_sshconfig_orig = tests_names[1]
         target_sshconfig_copy = tests_names[2]
-        target_sshconfig_res = tests_names[3]
 
         target_sshconfig_res_remove = target_sshconfig + '.remove.res'
         target_sshconfig_res_add = target_sshconfig + '.add.res'
@@ -300,7 +299,9 @@ class TestUpdateSshConfig(unittest.TestCase):
                            'kdevops,kdevops-dev',
                            '--addvagranthosts',
                            '--kexalgorithms',
-                           'diffie-hellman-group-exchange-sha1,diffie-hellman-group14-sha1,diffie-hellman-group1-sha1',
+                           'diffie-hellman-group-exchange-sha1,' +
+                           'diffie-hellman-group14-sha1,' +
+                           'diffie-hellman-group1-sha1',
                            '--emulatevagrantinput',
                            target_sshconfig_vagrant_input])
         run_args(args)
@@ -315,7 +316,6 @@ class TestUpdateSshConfig(unittest.TestCase):
         target_sshconfig = tests_names[0]
         target_sshconfig_orig = tests_names[1]
         target_sshconfig_copy = tests_names[2]
-        target_sshconfig_res = tests_names[3]
 
         target_sshconfig_res_remove = target_sshconfig + '.remove.res'
         target_sshconfig_res_add = target_sshconfig + '.add.res'
@@ -338,7 +338,9 @@ class TestUpdateSshConfig(unittest.TestCase):
                            '--identity',
                            '~alpha/.ssh/go',
                            '--kexalgorithms',
-                           'diffie-hellman-group-exchange-sha1,diffie-hellman-group14-sha1,diffie-hellman-group1-sha1',
+                           'diffie-hellman-group-exchange-sha1,' +
+                           'diffie-hellman-group14-sha1,' +
+                           'diffie-hellman-group1-sha1',
                            '--addstrict',
                            target_sshconfig_copy])
         run_args(args)
@@ -360,7 +362,9 @@ class TestUpdateSshConfig(unittest.TestCase):
                            '--identity',
                            '~alpha/.ssh/go',
                            '--kexalgorithms',
-                           'diffie-hellman-group-exchange-sha1,diffie-hellman-group14-sha1,diffie-hellman-group1-sha1',
+                           'diffie-hellman-group-exchange-sha1,' +
+                           'diffie-hellman-group14-sha1,' +
+                           'diffie-hellman-group1-sha1',
                            '--addstrict',
                            target_sshconfig_copy])
         run_args(args)
@@ -369,13 +373,11 @@ class TestUpdateSshConfig(unittest.TestCase):
         self.assertTrue(cmp(target_sshconfig_copy,
                             target_sshconfig_res_add, shallow=False))
 
-
     def tearDown(self):
         files = listdir("tests")
         for testfile in files:
             if testfile.endswith(".copy") or testfile.endswith(".bk"):
                 remove(path.join("tests", testfile))
-
 
 
 if __name__ == '__main__':
