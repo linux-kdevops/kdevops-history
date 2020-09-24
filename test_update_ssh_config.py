@@ -165,6 +165,62 @@ class TestUpdateSshConfig(unittest.TestCase):
         self.assertTrue(cmp(target_sshconfig_copy,
                             target_sshconfig_res, shallow=False))
 
+    def test_0007_add_remove_hosts_two_separate_ops_top(self):
+        this_function_name = inspect.stack()[0][3]
+        tests_names = get_test_files(this_function_name)
+        target_sshconfig = tests_names[0]
+        target_sshconfig_orig = tests_names[1]
+        target_sshconfig_copy = tests_names[2]
+        target_sshconfig_res = tests_names[3]
+
+        target_sshconfig_res_remove = target_sshconfig + '.remove.res'
+        target_sshconfig_res_add = target_sshconfig + '.add.res'
+
+        target_sshconfig_bk_remove = target_sshconfig + '.remove.bk'
+        target_sshconfig_bk_add = target_sshconfig + '.add.bk'
+
+        copyfile(target_sshconfig_orig, target_sshconfig_copy)
+
+        args = parse_args(['--remove',
+                           'kdevops,kdevops-dev',
+                           '--backup_file',
+                           target_sshconfig_bk_remove,
+                           '--username',
+                           'alpha',
+                           '--hostname',
+                           '51.179.89.243,52.195.142.19',
+                           '--port',
+                           '25',
+                           '--identity',
+                           '~alpha/.ssh/go',
+                           '--addstrict',
+                           target_sshconfig_copy])
+        run_args(args)
+        self.assertTrue(cmp(target_sshconfig_bk_remove,
+                            target_sshconfig_orig, shallow=False))
+        self.assertTrue(cmp(target_sshconfig_copy,
+                            target_sshconfig_res_remove, shallow=False))
+
+        args = parse_args(['--addhost',
+                           'kdevops,kdevops-dev',
+                           '--backup_file',
+                           target_sshconfig_bk_add,
+                           '--username',
+                           'alpha',
+                           '--hostname',
+                           '51.179.89.243,52.195.142.19',
+                           '--port',
+                           '25',
+                           '--identity',
+                           '~alpha/.ssh/go',
+                           '--addstrict',
+                           target_sshconfig_copy])
+        run_args(args)
+        self.assertTrue(cmp(target_sshconfig_bk_add,
+                            target_sshconfig_res_remove, shallow=False))
+        self.assertTrue(cmp(target_sshconfig_copy,
+                            target_sshconfig_res_add, shallow=False))
+
     def tearDown(self):
         files = listdir("tests")
         for testfile in files:

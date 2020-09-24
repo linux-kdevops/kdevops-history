@@ -99,6 +99,10 @@ update_ssh_config.py \
 	~/.ssh/config
 ```
 
+This is tested under test case:
+
+  * `test_0007_add_remove_hosts_two_separate_ops_top()`
+
 ## Rationale for using Python3
 
 We explicitly rely on python3 because our current use case is vagrant and
