@@ -102,6 +102,17 @@ This is tested under test case:
 
   * `test_0007_add_remove_hosts_two_separate_ops_top()`
 
+## Custom KexAlgorithms
+
+Certain old hosts require a custom KexAlgorithms entry to be added.
+To add that use the `--kexalgorithms` parameter. This is tested
+with the following test test cases:
+
+  * `0010_add_hosts_kexalgorithms_vagrant_emulate_top()`: to mimic the use
+    case if used by vagrant
+  * `0011_add_remove_hosts_two_separate_ops_kexalgorithms_top()`: to mimic the
+    use case if used by terraform
+
 ## Rationale for using Python3
 
 We explicitly rely on python3 because our current use case is vagrant and

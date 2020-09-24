@@ -78,6 +78,7 @@ def add_vagrant_hosts(args):
     username = ""
     port = ""
     identity = ""
+    kexalgorithms = None
 
     # All vagrant hosts are strict, which allows us to skip checking all of
     # the parameters which define this.
@@ -85,6 +86,9 @@ def add_vagrant_hosts(args):
 
     last_host_added = ""
     newhost = None
+
+    if args.kexalgorithms and args.kexalgorithms is not None:
+        kexalgorithms = args.kexalgorithms
 
     for line in lines:
         if not line:
@@ -95,7 +99,8 @@ def add_vagrant_hosts(args):
             if key.lower() == "host":
                 if addhost != "":
                     newhost = SshHost(args.ssh_config, addhost, hostname,
-                                      username, port, identity, addstrict)
+                                      username, port, identity, addstrict,
+                                      kexalgorithms)
                     newhost.call_add_host()
                     last_host_added = addhost
                 addhost = value
@@ -115,7 +120,7 @@ def add_vagrant_hosts(args):
 
     if last_host_added != addhost:
         newhost = SshHost(args.ssh_config, addhost, hostname, username, port,
-                          identity, addstrict)
+                          identity, addstrict, kexalgorithms)
         newhost.call_add_host()
 
 
@@ -173,6 +178,8 @@ def add_host(args):
             new_lines.append("\tPort %s\n" % (port))
         if args.identity:
             new_lines.append("\tIdentityFile %s\n" % (args.identity))
+        if args.kexalgorithms and args.kexalgorithms is not None:
+            new_lines.append("\tKexAlgorithms %s\n" % (args.kexalgorithms))
         if args.addstrict:
             new_lines.append("\tUserKnownHostsFile /dev/null\n")
             new_lines.append("\tStrictHostKeyChecking no\n")
@@ -188,7 +195,7 @@ def add_host(args):
 
 class SshHost:
     def __init__(self, ssh_config, name, hostname, username, port, identity,
-                 strict):
+                 strict, kexalgorithms):
         self.ssh_config = ssh_config
         self.addhost = name
         self.hostname = hostname
@@ -196,6 +203,7 @@ class SshHost:
         self.port = port
         self.identity = identity
         self.addstrict = strict
+        self.kexalgorithms = kexalgorithms
 
     def call_add_host(self):
         add_host(self)
@@ -249,6 +257,10 @@ def parse_args(args):
     parser.add_argument('--identity',
                         help='Used only on addition, the host key to ' +
                         'use, the default is empty and so no file is provided')
+    parser.add_argument('--kexalgorithms',
+                        help='Use this if you have a custom KexAlgorithms ' +
+                        'entry you want to add for the host entries. ' +
+                        'This is typically useful for older hosts.')
     parser.add_argument('--addstrict',
                         const=True, default=False, action="store_const",
                         help='Used only on addition, if set some extra ' +
