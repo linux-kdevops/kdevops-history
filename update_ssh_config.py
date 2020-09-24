@@ -59,14 +59,19 @@ def remove_hosts(args):
 
 
 def add_vagrant_hosts(args):
-    process = subprocess.Popen(['vagrant', 'ssh-config'],
-                               stdout=subprocess.PIPE,
-                               close_fds=True, universal_newlines=True)
-    stdout = process.communicate()[0]
-    process.wait()
-    _check(process)
-
-    lines = stdout.splitlines()
+    lines = None
+    if args.emulatevagrantinput:
+        f = open(args.emulatevagrantinput, "r")
+        lines = f.read().splitlines()
+        f.close()
+    else:
+        process = subprocess.Popen(['vagrant', 'ssh-config'],
+                                   stdout=subprocess.PIPE,
+                                   close_fds=True, universal_newlines=True)
+        stdout = process.communicate()[0]
+        process.wait()
+        _check(process)
+        lines = stdout.splitlines()
 
     addhost = ""
     hostname = ""
@@ -221,6 +226,11 @@ def parse_args(args):
                         'installed per host, those are entries which ' +
                         'vagrant does not add which you may need, for ' +
                         'instance on older hosts')
+    parser.add_argument('--emulatevagrantinput',
+                        help='Used for testing purposes only,' +
+                        'where we do not want to run vagrant ssh-config.' +
+                        'The parameter passed is an input file which ' +
+                        'emulates the command')
     parser.add_argument('--hostname',
                         help='Used only on addition, the hostname to use ' +
                         'for this entry. If the shorhost specified was a ' +

@@ -18,26 +18,25 @@ Below are example command line uses:
 
 ### The vagrant use case
 
-This will remove the hosts entries for two hosts, kdevops and kdevops-dev.
-This is typically how vagrant first removes the host entries it is about
-to provide an update for. In this case a backup file is going to be used.
+This will remove the hosts entries for two hosts, kdevops and kdevops-dev,
+and then it adds the hosts using the output from `vagrant ssh-config`. The
+output from the command `vagrant ssh-config` is processed by the script,
+to allow further extensions.
+
+A backup file is used, just for safe measures.
 
 ```
 update_ssh_config.py \
 	~/.ssh/config \
 	--backup_file ~/.ssh/config.bk \
-	--remove kdevops,kdevops-dev
+	--remove kdevops,kdevops-dev \
+	--addvagranthosts
 ```
 
-Vagrant typically follows up and adds each host entry. The easy way to do
-this is to just run `vagrant ssh-config` and append this to your configuration.
-However, if modifications are needed beyond what vagrant provides, additional
-work is required.
+Contrary to the terraform use case we don't perform two operations, and so
+we only use one backup file. This is tested under the test case:
 
-Contrary to the terraform use case we don't two operations to have to backups
-of the file since historically we started with the script only running for
-the removal operation, and the addition was done using an append command
-directly from the command line.
+  * `test_0009_add_hosts_vagrant_emulate_top()`
 
 ## The terraform use case
 
