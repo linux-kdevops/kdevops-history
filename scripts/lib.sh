@@ -149,6 +149,13 @@ generic_generate_nodes_file()
 	let IP_LAST_OCTET="$IP_LAST_OCTET_START+$CURRENT_IP"
 	SECOND_IP="${SECOND_IP_START}${IP_LAST_OCTET}"
 	TARGET_HOSTNAME="${KDEVOPSHOSTSPREFIX}"
+	if [[ "$TARGET_HOSTNAME" == "" ]]; then
+		echo "Empty hostname, you probably forgot to define the"
+		echo "CUSTOM_DISTRO_HOST_PREFIX for your distribution, fix"
+		echo "that and try again".
+
+		exit 1
+	fi
 	add_host_entry $TARGET_HOSTNAME $SECOND_IP $TMP_INIT_NODE
 
 	let CURRENT_IP="$CURRENT_IP+1"
