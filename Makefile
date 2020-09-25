@@ -245,14 +245,23 @@ ANSIBLE_EXTRA_ARGS += use_kexalgorithms=True
 ANSIBLE_EXTRA_ARGS += kexalgorithms=$(SSH_KEXALGORITHMS)
 endif
 
-# We don't need the extra_args.yaml file all the time. *If* we know
-# we have changed a default variable though we can extend the arguments
-# on ANSIBLE_EXTRA_ARGS and all these will be used to create the file
-# for you. If this file is empty you don't need it. All of our ansible
-# kdevops roles check for this file without you having to specify it as
-# an extra_args=@extra_args.yaml file. This helps us with allowing users
-# call ansible on the command line themselves, instead of using the make
-# constructs we have built here.
+ifeq (y,$(CONFIG_KDEVOPS_TRY_REFRESH_REPOS))
+ANSIBLE_EXTRA_ARGS += devconfig_try_refresh_repos=True
+endif
+
+ifeq (y,$(CONFIG_KDEVOPS_TRY_UPDATE_SYSTEMS))
+ANSIBLE_EXTRA_ARGS += devconfig_try_upgrade=True
+endif
+
+ifeq (y,$(CONFIG_KDEVOPS_TRY_INSTALL_KDEV_TOOLS))
+ANSIBLE_EXTRA_ARGS += devconfig_try_install_kdevtools=True
+endif
+
+# We may not need the extra_args.yaml file all the time.  If this file is empty
+# you don't need it. All of our ansible kdevops roles check for this file
+# without you having to specify it as an extra_args=@extra_args.yaml file. This
+# helps us with allowing users call ansible on the command line themselves,
+# instead of using the make constructs we have built here.
 ifneq (,$(ANSIBLE_EXTRA_ARGS))
 EXTRA_ARGS_BUILD_DEP := $(KDEVOPS_EXTRA_VARS)
 else

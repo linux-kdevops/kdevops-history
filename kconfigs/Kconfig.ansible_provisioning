@@ -4,18 +4,12 @@ config HAVE_DISTRO_PREFERS_DISABLE_ANSIBLE
 
 config KDEVOPS_ANSIBLE_PROVISION_ENABLE
 	bool "Enable ansible provisioning"
-	default n if HAVE_DISTRO_PREFERS_DISABLE_ANSIBLE
-	default y if !HAVE_DISTRO_PREFERS_DISABLE_ANSIBLE
+	default n if HAVE_DISTRO_PREFERS_DISABLE_ANSIBLE || !KDEVOPS_TRY_REFRESH_REPOS
+	default y if !HAVE_DISTRO_PREFERS_DISABLE_ANSIBLE || KDEVOPS_TRY_REFRESH_REPOS
 	help
 	  If enabled we will provision the target hosts with ansible as a last
-	  last step after bringup. For vagrant we use this to update your
-	  ~/.ssh/config with the provisioned hosts, followed by calling the
-	  final provisioning configured playbook, which is configurable, see
-	  CONFIG_KDEVOPS_ANSIBLE_INVENTORY_FILE.
-
-	  When using terraform your ~/.ssh/config is updated through a terraform
-	  module instead, and so enabling this option on terraform will only
-	  enable calling the CONFIG_KDEVOPS_ANSIBLE_INVENTORY_FILE playbook.
+	  last step after bringup. This playbook used to provision is
+	  configurable refer to CONFIG_KDEVOPS_ANSIBLE_INVENTORY_FILE.
 
 if KDEVOPS_ANSIBLE_PROVISION_ENABLE
 
@@ -23,16 +17,10 @@ config KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK
 	string "The name of the ansible playbook file to use when provisioning"
 	default "devconfig.yml"
 	  help
-	  The final provisioned playbook to run after bringup. We strive to
-	  only do two work items after bringup through as part of the
-	  'make bringup' target:
-
-	    o update your ssh configuration file with the hosts
-	    o run one provisioning ansible playbook
-
-	  For this reason we only allow specifying one playbook to provision.
-	  If users want to add more playbooks, new make targets can be added
-	  to kdevops.
+	  The final provisioned playbook to run after bringup. We try to not do
+	  much on bringup, for this reason we only allow specifying one
+	  playbook to do provisioning. If users want to add more playbooks,
+	  new make targets can be added to kdevops for more workflows.
 
 config KDEVOPS_PLAYBOOK_DIR
 	string "The directory for the ansible playbooks to use"
@@ -73,4 +61,3 @@ config KDEVOPS_PYTHON_OLD_INTERPRETER
 	  KDEVOPSPYTHONOLDINTERPRETER value on your hosts.in file on old
 	  systems so that this gets properly placed.
 endif # KDEVOPS_ANSIBLE_PROVISION_ENABLE
-
