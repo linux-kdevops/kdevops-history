@@ -4,6 +4,7 @@ choice
 
 config VAGRANT
 	bool "Vagrant for local virtualization (KVM / Virtualbox)"
+	select KDEVOPS_SSH_CONFIG_UPDATE_STRICT
 	depends on TARGET_ARCH_X86_64
 	help
 	  This option will enable use of vagrant. Enable this if you want to

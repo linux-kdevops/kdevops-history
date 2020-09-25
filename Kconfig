@@ -29,6 +29,10 @@ menu "Target architecture"
 source "kconfigs/arch/Kconfig"
 endmenu
 
+menu "SSH update configuration"
+source "kconfigs/Kconfig.ssh"
+endmenu
+
 menu "Bring up goals"
 source "kconfigs/Kconfig.bringup.goals"
 endmenu
