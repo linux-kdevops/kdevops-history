@@ -28,7 +28,7 @@ A backup file is used, just for safe measures.
 ```
 update_ssh_config.py \
 	~/.ssh/config \
-	--backup_file ~/.ssh/config.bk \
+	--backup_file ~/.ssh/config.backup.kdevops.vagrant \
 	--remove kdevops,kdevops-dev \
 	--addvagranthosts
 ```
@@ -40,32 +40,8 @@ we only use one backup file. This is tested under the test case:
 
 ## The terraform use case
 
-Terraform will also remove the hosts, but at the same time, it will then also
-add the hosts, using parameters specified on the command line. In this example
-it is going to add the hosts kdevops, and kdevops-dev, using the IP addresses
-provided. The port is the same, and so only one port entry is given, however
-if the ports were different they can be separated by a comma, similar to how
-the hostname and IP addresses are provided. The identity file to use
-is provided.
-
-This is first used for the removal, the IP addresses are given, yet they
-are not processed for the removal:
-
-```
-update_ssh_config.py \
-	--remove kdevops,kdevops-dev \
-	--hostname 51.179.84.243,52.195.142.18 \
-	--username mcgrof \
-	--port 22 \
-	--identity ~/.ssh/kdevops_terraform \
-	--addstrict \
-	--backup_file ~/.ssh/config.backup.kdevops.remove \
-	~/.ssh/config
-```
-
-Then a second call is issued for the addition. Two separate calls are
-made so that there is backup for the ssh configuration for both operations,
-one for removal and another for the addition.
+Terraform does the same, both removal and addition in one shot, but it passes
+the parameters on the command line:
 
 ```
 update_ssh_config.py \
@@ -76,31 +52,13 @@ update_ssh_config.py \
 	--identity \
 	~/.ssh/kdevops_terraform \
 	--addstrict \
-	--backup_file ~/.ssh/config.backup.kdevops.add \
-	~/.ssh/config
-```
-
-Using two separate calls are however not needed, we split this for
-terraform to be careful, however one can combine both operations in one,
-and only use one backup file:
-
-```
-update_ssh_config.py \
-	--remove kdevops,kdevops-dev \
-	--addhost kdevops,kdevops-dev \
-	--hostname 51.179.84.243,52.195.142.18 \
-	--username mcgrof \
-	--port 22 \
-	--identity \
-	~/.ssh/kdevops_terraform \
-	--addstrict \
-	--backup_file ~/.ssh/config.backup.kdevops.add \
+	--backup_file ~/.ssh/config.backup.kdevops.terraform \
 	~/.ssh/config
 ```
 
 This is tested under test case:
 
-  * `test_0007_add_remove_hosts_two_separate_ops_top()`
+  * `test_0008_add_remove_hosts_one_shot_top()`
 
 ## Custom KexAlgorithms
 
