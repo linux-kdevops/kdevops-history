@@ -1,0 +1,34 @@
+config KDEVOPS_TRY_REFRESH_REPOS
+	bool "Try to refresh repositories on bringup?"
+	default n
+	help
+	  Bring up typically just consists of having the systems accessible
+	  via ssh. However, most of these systems are pretty bare bones and
+	  useless right after bring up, likely with stale repositories or
+	  software. Enabling this option will only try to update the
+	  repositories. If you require registration to update your repositories
+	  that implies we will try to register your system if you enable that.
+	  You will need to enable this option to install any packages through
+	  the automated system on kdevops.
+
+	  Disabling this is a good idea if all you want to do is test raw
+	  bring up of kdevops.
+
+config KDEVOPS_TRY_UPDATE_SYSTEMS
+	bool "Try to update target hosts on bringup?"
+	depends on KDEVOPS_TRY_REFRESH_REPOS
+	default n
+	help
+	  Bring up typically just consists of having the systems accessible
+	  via ssh. However, most of these systems are pretty bare bones and
+	  useless right after bring up. Enabling this will try to update your
+	  target systems to their respective latest.
+
+config KDEVOPS_TRY_INSTALL_KDEV_TOOLS
+	bool "Try to install kernel development tools on bringup?"
+	depends on KDEVOPS_TRY_REFRESH_REPOS
+	default n
+	help
+	  Enabling this will try to install a slew of known packages which
+	  most kernel developers might prefer to have installed on target
+	  systems.
