@@ -257,6 +257,11 @@ ifeq (y,$(CONFIG_KDEVOPS_TRY_INSTALL_KDEV_TOOLS))
 ANSIBLE_EXTRA_ARGS += devconfig_try_install_kdevtools=True
 endif
 
+ifeq (y,$(CONFIG_KDEVOPS_SSH_CONFIG_UPDATE))
+SSH_CONFIG_FILE:=$(subst ",,$(CONFIG_KDEVOPS_SSH_CONFIG))
+ANSIBLE_EXTRA_ARGS += sshconfig=$(CONFIG_KDEVOPS_SSH_CONFIG)
+endif
+
 # We may not need the extra_args.yaml file all the time.  If this file is empty
 # you don't need it. All of our ansible kdevops roles check for this file
 # without you having to specify it as an extra_args=@extra_args.yaml file. This
