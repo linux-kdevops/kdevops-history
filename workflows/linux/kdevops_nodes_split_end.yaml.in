@@ -5,5 +5,4 @@ ansible_playbooks:
   inventory: "../@INVENTORY@"
   extra_vars: "../@PLAYBOOKDIR@/extra_vars.yml"
   playbooks:
-    - name: "../@PLAYBOOKDIR@/update_ssh_config_vagrant.yml"
     - name: "../@PLAYBOOKDIR@/@PROVISIONPLAYBOOK@"

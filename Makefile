@@ -315,6 +315,10 @@ vagrant_private_box_install:
 
 bringup_vagrant: $(VAGRANT_PRIVATE_BOX_DEPS)
 	$(Q)$(TOPDIR)/scripts/bringup_vagrant.sh
+	$(Q)ansible-playbook --connection=local \
+		--inventory localhost, \
+		playbooks/update_ssh_config_vagrant.yml \
+		-e 'ansible_python_interpreter=/usr/bin/python3'
 
 bringup_terraform:
 	$(Q)$(TOPDIR)/scripts/bringup_terraform.sh
