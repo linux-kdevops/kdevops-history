@@ -18,11 +18,20 @@ config HAVE_DISTRO_LACKS_SUPPORT_FOR_VIRTIO_DRIVE
 	bool
 	default n
 
+config HAVE_DISTRO_REQUIRES_CUSTOM_SSH_KEXALGORITHMS
+	bool
+	default n
+
 config CUSTOM_DISTRO_HOST_PREFIX
 	string
 	depends on HAVE_CUSTOM_DISTRO_HOST_PREFIX
 	default VAGRANT_DEBIAN_BOX_SHORT if VAGRANT_DEBIAN
 	default VAGRANT_OPENSUSE_BOX_SHORT if VAGRANT_OPENSUSE
+
+config CUSTOM_SSH_KEXALGORITHMS
+	string
+	depends on HAVE_DISTRO_REQUIRES_CUSTOM_SSH_KEXALGORITHMS
+	default VAGRANT_SUSE_CUSTOM_SSH_KEXALGORITHMS if VAGRANT_SUSE
 
 config KDEVOPS_USE_DISTRO_HOSTS_PREFIX
 	bool "Use a distribution release code name as prefix for hosts"
@@ -48,6 +57,14 @@ config KDEVOPS_HOSTS_PREFIX
 	  Each node used has an associated hostname. We use a prefix to
 	  help distinguish projects / goals for a set of nodes. You can use
 	  this to override the hostname prefix used.
+
+config KDEVOPS_CUSTOM_SSH_KEXALGORITHMS
+	string "The custom ssh config KexAlgorithms string to use"
+	depends on HAVE_DISTRO_REQUIRES_CUSTOM_SSH_KEXALGORITHMS
+	default CUSTOM_SSH_KEXALGORITHMS
+	  help
+	  Some distributions, such as older distributions, may require a custom
+	  ssh configuration entry for the KexAlgorithms parameter.
 
 config KDEVOPS_BASELINE_AND_DEV
 	bool "Enable both a baseline and development system per target test"

@@ -239,6 +239,11 @@ SSH_CONFIG_USER:=$(subst ",,$(CONFIG_TERRAFORM_SSH_CONFIG_USER))
 ANSIBLE_EXTRA_ARGS += data_home_dir=/home/${SSH_CONFIG_USER}
 endif
 
+ifeq (y,$(CONFIG_HAVE_DISTRO_REQUIRES_CUSTOM_SSH_KEXALGORITHMS))
+SSH_KEXALGORITHMS:=$(subst ",,$(CONFIG_KDEVOPS_CUSTOM_SSH_KEXALGORITHMS))
+ANSIBLE_EXTRA_ARGS += kexalgorithms=$(SSH_KEXALGORITHMS)
+endif
+
 # We don't need the extra_args.yaml file all the time. *If* we know
 # we have changed a default variable though we can extend the arguments
 # on ANSIBLE_EXTRA_ARGS and all these will be used to create the file
