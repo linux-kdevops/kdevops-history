@@ -45,6 +45,10 @@ config KDEVOPS_SSH_CONFIG_UPDATE_BACKUP
 	default y
 	help
 	  This will create a backup of your ssh configuration file prior to
-	  doing the update for you.
+	  doing the update for you. The filename for the backup will be:
+
+	    ~/.ssh/config.backup.kdevops.$method
+
+	  where $method is either vagrant or terraform.
 
 endif # KDEVOPS_SSH_CONFIG_UPDATE
