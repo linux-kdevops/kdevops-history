@@ -1,3 +1,13 @@
+if !KDEVOPS_ANSIBLE_PROVISION_ENABLE
+
+config KDEVOPS_PLAYBOOK_DIR
+	string
+	default $(shell, echo $KDEVOPS_PLAYBOOKS_DIR)
+	help
+	  The directory where ansible playbooks are found.
+
+endif # KDEVOPS_ANSIBLE_PROVISION_ENABLE
+
 config HAVE_DISTRO_PREFERS_DISABLE_ANSIBLE
 	bool
 	default n

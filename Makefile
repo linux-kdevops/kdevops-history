@@ -3,7 +3,7 @@
 PROJECT = kdevops
 VERSION = 3
 PATCHLEVEL = 5
-SUBLEVEL = 1
+SUBLEVEL = 2
 EXTRAVERSION = rc1
 
 export KDEVOPS_EXTRA_VARS ?=			extra_vars.yaml
@@ -285,6 +285,10 @@ else
 KDEVOPS_TWOLINE_REGMETHOD_DEPS :=
 endif
 
+ifeq (y,$(CONFIG_KDEVOPS_ENABLE_DISTRO_EXTRA_ADDONS))
+KDEVOPS_EXTRA_ADDON_SOURCE:=$(subst ",,$(CONFIG_KDEVOPS_EXTRA_ADDON_SOURCE))
+endif
+
 export TOPDIR=./
 
 # disable built-in rules for this file
@@ -319,6 +323,10 @@ $(KDEVOPS_EXTRA_VARS): .config
 		echo "vagrant_boxes:" >> $(KDEVOPS_EXTRA_VARS) ;\
 		echo "  - { name: '$(CONFIG_VAGRANT_BOX)', box_url: '$(CONFIG_VAGRANT_BOX_URL)' }" >> $(KDEVOPS_EXTRA_VARS) ;\
 	fi
+	@if [[ "$(CONFIG_KDEVOPS_ENABLE_DISTRO_EXTRA_ADDONS)" == "y" ]]; then \
+		echo "devconfig_repos_addon: True" >> $(KDEVOPS_EXTRA_VARS) ;\
+		cat $(KDEVOPS_EXTRA_ADDON_SOURCE) >> $(KDEVOPS_EXTRA_VARS) ;\
+	fi
 
 playbooks/secret.yml:
 	@if [[ "$(CONFIG_KDEVOPS_REG_TWOLINE_REGCODE)" == "" ]]; then \
@@ -328,6 +336,11 @@ playbooks/secret.yml:
 	@echo --- > $@
 	@echo "$(CONFIG_KDEVOPS_REG_TWOLINE_ENABLE_STRING): True" >> $@
 	@echo "$(CONFIG_KDEVOPS_REG_TWOLINE_REGCODE_VAR): $(CONFIG_KDEVOPS_REG_TWOLINE_REGCODE)" >> $@
+
+ifeq (y,$(CONFIG_KDEVOPS_ENABLE_DISTRO_EXTRA_ADDONS))
+$(KDEVOPS_EXTRA_ADDON_DEST): .config $(KDEVOPS_EXTRA_ADDON_SOURCE)
+	@$(Q)cp $(KDEVOPS_EXTRA_ADDON_SOURCE) $(KDEVOPS_EXTRA_ADDON_DEST)
+endif
 
 vagrant_private_box_install:
 	$(Q)ansible-playbook -i \
@@ -393,7 +406,7 @@ mrproper:
 	$(Q)rm -f $(KDEVOPS_NODES)
 	$(Q)rm -f $(KDEVOPS_HOSTFILE) $(KDEVOPS_WORKFLOW_FSTESTS_CLEAN)
 	$(Q)rm -f .config .config.old
-	$(Q)rm -f playbooks/secret.yml
+	$(Q)rm -f playbooks/secret.yml $(KDEVOPS_EXTRA_ADDON_DEST)
 	$(Q)rm -rf include
 
 PHONY += help

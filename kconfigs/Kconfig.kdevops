@@ -80,6 +80,18 @@ config KDEVOPS_BASELINE_AND_DEV
 	  development host, the development hostname is the same as the baseline
 	  host but with an added "-dev" postfix.
 
+config HAVE_DISTRO_SUPPORTS_EXTRA_ADDON
+	bool
+	default n
+
+config HAVE_DISTRO_PREFERS_EXTRA_ADDON
+	bool
+	default n
+
+config HAVE_DISTRO_SUPPORTS_REGISTRATION
+	bool
+	default n
+
 config HAVE_DISTRO_PREFERS_REGISTRATION
 	bool
 	default n
@@ -88,16 +100,31 @@ config HAVE_DISTRO_REG_METHOD_TWOLINE
 	bool
 	default n
 
+choice
+	prompt "Kdevops enterprise distro post-bringup work"
+	default KDEVOPS_ENABLE_DISTRO_REGISTRATION if HAVE_DISTRO_PREFERS_REGISTRATION
+	default KDEVOPS_ENABLE_DISTRO_EXTRA_ADDONS if HAVE_DISTRO_PREFERS_EXTRA_ADDON
+	depends on HAVE_DISTRO_SUPPORTS_REGISTRATION || HAVE_DISTRO_SUPPORTS_EXTRA_ADDON
+
 config KDEVOPS_ENABLE_DISTRO_REGISTRATION
 	bool "Enable distribution registration"
-	default y if HAVE_DISTRO_PREFERS_REGISTRATION
-	default n if !HAVE_DISTRO_PREFERS_REGISTRATION
+	depends on HAVE_DISTRO_SUPPORTS_REGISTRATION
 	help
 	  Some distributions have a registration system which can be used to
 	  update the system or must be used to make a distribution useful.
 	  For those distributions this option can be enabled to complete the
 	  registration. Registration is handled by the kdevops devconfig ansible
 	  role.
+
+config KDEVOPS_ENABLE_DISTRO_EXTRA_ADDONS
+	bool "Enable distribution extra addons"
+	depends on HAVE_DISTRO_SUPPORTS_EXTRA_ADDON
+	help
+	  Some distributions have private internal URLs for package repositories
+	  as an alternative to registration. This is useful for R&D of some
+	  Enterprise Linux distributions.
+
+endchoice
 
 if KDEVOPS_ENABLE_DISTRO_REGISTRATION
 
@@ -125,6 +152,15 @@ source "kconfigs/Kconfig.reg_twoline"
 endmenu
 
 endif # KDEVOPS_DISTRO_REG_METHOD_TWOLINE
+
+if KDEVOPS_ENABLE_DISTRO_EXTRA_ADDONS
+
+config KDEVOPS_EXTRA_ADDON_SOURCE
+	string
+	depends on HAVE_DISTRO_SUSE
+	default VAGRANT_SUSE_EXTRA_ADDON_SOURCE if VAGRANT
+
+endif # KDEVOPS_ENABLE_DISTRO_EXTRA_ADDONS
 
 menu "Getting kdevops ansible roles"
 source "kconfigs/Kconfig.kdevops_install"
