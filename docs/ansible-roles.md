@@ -1,21 +1,18 @@
-# Public ansible role documentation
+# Local ansible role documentation
 
-The following public roles are used, and so have respective upstream
-documentation which can be used if one wants to modify how the role
-runs with additional tags or extra variables from the command line.
-the `kdevops_install` is in charged of installing the rest of the
-ansible rolls for you so your project only needs to track that single
-ansible role to embrace kdevops.
+The following local ansible roles are used:
 
-  * [kdevops_install](https://github.com/mcgrof/kdevops_install)
-  * [create_partition](https://github.com/mcgrof/create_partition)
-  * [update_ssh_config_vagrant](https://github.com/mcgrof/update_ssh_config_vagrant)
-  * [devconfig](https://github.com/mcgrof/devconfig)
-  * [bootlinux](https://github.com/mcgrof/bootlinux)
-  * [kdevops_vagrant](https://github.com/mcgrof/kdevops_vagrant)
-  * [kdevops_terraform](https://github.com/mcgrof/kdevops_terraform)
+  * [create_partition](./playbooks/roles/create_partition/README.md)
+  * [update_ssh_config_vagrant](./playbooks/roles/update_ssh_config_vagrant/README.md)
+  * [devconfig](./playbooks/roles/devconfig/README.md)
+  * [bootlinux](./playbooks/roles/bootlinux/README.md)
+  * [install_terraform/](./playbooks/roles/install_terraform/README.md)
+  * [install_vagrant/](./playbooks/roles/install_vagrant/README.md)
+  * [install_vagrant_boxes](./playbooks/roles/install_vagrant_boxes/README.md)
+  * [libvirt_user](./playbooks/roles/libvirt_user/README.md)
+  * [update_ssh_config_vagrant](./playbooks/roles/update_ssh_config_vagrant/README.md)
+  * create_data_partition: creates the data parition, uses the creat_partition role
+  * fstests_prep_localhost: used to install command and control dependencies
+  * fstests: used to run the fstests workflow
 
-Kernel configuration files are tracked in the [bootlinux](https://github.com/mcgrof/bootlinux)
-role. If you need to update a kernel configuration for whatever reason, please
-submit a patch for the [bootlinux](https://github.com/mcgrof/bootlinux)
-role upstream.
+Kernel configuration files are tracked in the bootlinux role.

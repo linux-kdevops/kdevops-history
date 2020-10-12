@@ -1,7 +1,7 @@
 # kdevops
 
 kdevops provides a devops environment for Linux kernel development and testing.
-It makes heavy use of public ansible galaxy roles and optionally lets you use
+It makes heavy use of local ansible roles and optionally lets you use
 vagrant or terraform. kdevops is Linux distribution agnostic, and also supports
 OS X. It aims at letting you configure these tools and bring up a set
 of nodes for Linux kernel development as fast as possible.
@@ -99,21 +99,9 @@ your first time running kdevops, the prompt is for CONFIG_KDEVOPS_FIRST_RUN:
 ```
 
 This will enable a set of sensible defaults to help with your first run.
-This will also enable the option CONFIG_KDEVOPS_JUST_UPDATED which is prompted
-for with:
 
-```
-You have you just updated kdevops?
-```
-
-This will enable a few options which will ensure you get the ansible roles
-you need.
-
-You can safely disable both of these options after you've already run
-kdevops on a system once successfully, however if you upgrade kdevops later,
-enable CONFIG_KDEVOPS_JUST_UPDATED to ensure you get ansible roles updated
-in case the kdevops_install ansible role has been updated. You can verify this
-by checking the diff on requirements.yml.
+You can safely this option after you've already run kdevops on a system once
+successfully.
 
 ## Run make mrproper for each new fresh run
 
@@ -190,7 +178,6 @@ make destroy
 
 Below are sections which get into technical details of how kdevops works.
 
-  * [One ansible role to rule them all](docs/one-ansible-role.md)
   * [kconfig integration](docs/kconfig-integration.md)
   * [Motivation behind kdevops](docs/motivations.md)
   * [Linux distribution support](docs/linux-distro-support.md)
