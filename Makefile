@@ -303,11 +303,7 @@ export TOPDIR=./
 	echo "|     make oldconfig"					;\
 	echo "|     make menuconfig"					;\
 	echo "|"							;\
-	echo "| To use defaults you can use:" 				;\
-	(cd defconfigs ; for f in $$(ls) ; do				\
-		echo "|     make defconfig-$$f"				;\
-	done )								;\
-	echo "\--"							;\
+	make -f scripts/build.Makefile help                             ;\
 	false)
 
 define YAML_ENTRY

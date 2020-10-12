@@ -42,7 +42,7 @@ help:
 	@echo "allyesconfig       - enables all bells and whistles"
 	@echo "allnoconfig        - disables all bells and whistles"
 	@echo "randconfig         - random configuration"
-	@echo "defconfig-*        - Use a default config, pick one from defconfig directory"
+	@echo "defconfig-*        - If you have files in the defconfig directory use default config from there"
 
 .PHONY: clean
 clean:

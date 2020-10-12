@@ -19,12 +19,16 @@ version-check: include/config/project.release
 PHONY += help
 help:
 	@$(MAKE) -s -C scripts/kconfig help
-	@echo "Defaults configs:"					;\
-	(cd defconfigs ; for f in $$(ls) ; do				\
-		echo "defconfig-$$f"					;\
-	done )
-	@echo "Debugging"
-	@echo "version-check      - demos version release functionality"
-	@echo "clean              - cleans all output files"
+	@(                                                              \
+	if [ -d defconfigs ]; then					\
+	  echo "Default configs:"					;\
+	  (cd defconfigs ; for f in $$(ls) ; do				\
+		  echo "defconfig-$$f"					;\
+	  done)                                                         ;\
+	fi                                                              ;\
+	echo "Debugging"                                                ;\
+	echo "version-check      - demos version release functionality" ;\
+	echo "clean              - cleans all output files"             ;\
+	)
 
 .PHONY: $(PHONY)
