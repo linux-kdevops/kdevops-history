@@ -162,10 +162,6 @@ config KDEVOPS_EXTRA_ADDON_SOURCE
 
 endif # KDEVOPS_ENABLE_DISTRO_EXTRA_ADDONS
 
-menu "Getting kdevops ansible roles"
-source "kconfigs/Kconfig.kdevops_install"
-endmenu
-
 menu "Ansible post-bring up provisioning configuration"
 source "kconfigs/Kconfig.ansible_provisioning"
 endmenu

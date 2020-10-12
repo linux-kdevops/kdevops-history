@@ -1,0 +1,23 @@
+# SPDX-License-Identifier GPL-2.0+
+---
+
+# You can override these
+vagrant_version: "2.2.6"
+
+# Ignores using distro packages and installs from zip file instead
+force_install_zip: False
+
+# Forces to install even if it is already present
+force_install_if_present: False
+
+# Set this to True and create a map with the sle_distro_end_map variable
+# if you are working with unreleased distros, which have no public OBS URLs yet.
+sle_custom_repo_distro_end: False
+
+# Example boxes with URLs. You would override this.
+#
+# For instance, for SLE 15.2 we'd want to use:
+# https://download.opensuse.org/repositories/Virtualization:/vagrant/SLE_15-SP1/
+# for now, as we have no public release on obs for 15.2 yet.
+sle_distro_end_map:
+  - { obs_project_name: 'Virtualization:vagrant', ansible_distribution_version: '15.2', repo_distro_end: '15-SP1' }

@@ -14,15 +14,3 @@ crash.log
 terraform-provider-yaml_*
 */terraform-provider-yaml_*
 */crash.log
-
-*/.gitignore
-*/Makefile
-*/main.tf
-*/output.tf
-*/provider.tf
-*/shared.tf
-*/update_ssh_config.tf
-*/vars.tf
-
-
-*/templates

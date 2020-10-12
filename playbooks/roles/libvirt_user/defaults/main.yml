@@ -1,0 +1,7 @@
+# SPDX-License-Identifier GPL-2.0+
+---
+only_install: False
+only_verify_user: False
+
+skip_install: False
+skip_configuration: False

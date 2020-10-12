@@ -18,34 +18,8 @@ include/
 
 # You can override role specific stuff on these
 ansible/roles/*/vars/main.yml
-extra_vars.yml
 
 python/*.pyc
-vagrant/Vagrantfile
-
-playbooks/bootlinux.yml
-playbooks/devconfig.yml
-playbooks/install-vagrant-boxes.yml
-playbooks/install_terraform.yml
-playbooks/install_vagrant.yml
-playbooks/kdevops_terraform.yml
-playbooks/kdevops_vagrant.yml
-playbooks/libvirt_user.yml
-playbooks/update_ssh_config_vagrant.yml
-
-Makefile.kdevops
-kdevops_requirements.yml
-
-terraform/Makefile
-terraform/shared.tf
-terraform/globals.mk
-terraform/ansible_provision_cmd.tpl
-terraform/*/ansible_provision_cmd.tpl
-terraform/*/versions.tf
-
-terraform/openstack/clouds-public.yaml
-terraform/openstack/output_minicloud.tf
-terraform/openstack/update_ssh_config_minicloud.tf
 
 workflows/fstests/*/*.config
 

@@ -1,0 +1,30 @@
+# SPDX-License-Identifier GPL-2.0+
+---
+
+# Your target home directory
+data_home_dir: "/home/vagrant"
+
+# On your own system
+dev_gitconfig_src: "~/.gitconfig"
+# Where we copy it to
+dev_gitconfig_dest: "{{ data_home_dir }}/.gitconfig"
+
+# The bash script we check for on the virtual machine
+dev_bash_config:  "{{ data_home_dir }}/.bashrc"
+dev_bash_config_root:  "/root/.bashrc"
+
+dev_bash_config_hacks_name: "enhance-bash"
+dev_bash_config_hacks_src: "~/.{{ dev_bash_config_hacks_name }}"
+dev_bash_config_hacks_generic: "~/.{{ dev_bash_config_hacks_name }}"
+dev_bash_config_hacks_dest: "{{ data_home_dir }}/.{{ dev_bash_config_hacks_name }}"
+dev_bash_config_hacks_root: "/root/.{{ dev_bash_config_hacks_name }}"
+
+devconfig_try_refresh_repos: False
+devconfig_try_upgrade: False
+devconfig_try_install_kdevtools: False
+
+devconfig_repos_addon: False
+devconfig_repos_addon_list:
+
+suse_register_system: False
+suse_registration_code: 0

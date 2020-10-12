@@ -1,0 +1,17 @@
+---
+- name: Verify terraform installation
+  command: "which terraform"
+  register: terraform_present
+  changed_when: terraform_present.rc == 1
+  failed_when: terraform_present.rc != 0 and terraform_present.rc != 1
+  tags: [ 'terraform', 'verify' ]
+
+- name: Downlaod terraform from the latest release and install locally
+  become: yes
+  become_method: sudo
+  unarchive:
+    src: https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip
+    dest: /usr/local/bin
+    remote_src: yes
+  when:
+    - force_install_if_present|bool or terraform_present.rc != 0

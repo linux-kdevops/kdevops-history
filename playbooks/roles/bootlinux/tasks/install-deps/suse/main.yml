@@ -1,0 +1,31 @@
+---
+- name: Install Linux kernel build dependencies for SUSE sources
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - bison
+      - flex
+      - git-core
+      - gcc
+      - make
+      - gawk
+      - bc
+      - dump
+      - sed
+      - libopenssl-devel
+      - libelf-devel
+      - diffutils
+      - net-tools
+      - ncurses-devel
+      - xfsprogs
+      - e2fsprogs
+      - btrfsprogs
+      - ntfs-3g
+      - mdadm
+      - rpcbind
+      - portmap
+      - hwinfo
+      - open-iscsi
+    extra_args: '--allow-vendor-change'
+    disable_recommends: no

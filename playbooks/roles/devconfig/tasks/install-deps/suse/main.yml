@@ -1,0 +1,293 @@
+---
+- name: Set generic SUSE specific distro facts
+  set_fact:
+    is_sle: '{{ (ansible_distribution == "SLES") or (ansible_distribution == "SLED") }}'
+    is_leap: '{{ "Leap" in ansible_distribution }}'
+    is_tumbleweed: '{{ "openSUSE Tumbleweed" == ansible_distribution }}'
+
+- name: Set SLE specific version labels to make checks easier
+  set_fact:
+    is_sle10: '{{ ansible_distribution_major_version == "10" }}'
+    is_sle11: '{{ ansible_distribution_major_version == "11" }}'
+    is_sle12: '{{ ansible_distribution_major_version == "12" }}'
+    is_sle15: '{{ ansible_distribution_major_version == "15" }}'
+    is_sle10sp3: '{{ ansible_distribution_version == "10.3" }}'
+    is_sle11sp1: '{{ ansible_distribution_version == "11.1" }}'
+    is_sle11sp4: '{{ ansible_distribution_version == "11.4" }}'
+    is_sle12sp1: '{{ ansible_distribution_version == "12.1" }}'
+    is_sle12sp3: '{{ ansible_distribution_version == "12.3" }}'
+    is_sle15sp2: '{{ ansible_distribution_version == "15.2" }}'
+  when:
+    - is_sle|bool
+
+- name: The default is to assume we have figured out how to add repos for each
+  set_fact:
+    repos_will_be_added: true
+
+- name: Disable things which require a repo to be set but that cannot be done
+  set_fact:
+    repos_will_be_added: false
+  when:
+    - not devconfig_repos_addon|bool
+    - is_sle|bool
+    - is_sle10|bool or is_sle11|bool
+
+- name: The default is to assume we are not on sle11 or sle10
+  set_fact:
+    sle10_or_11: false
+
+- name: Are we on SLE11 or SLE10?
+  set_fact:
+    sle10_or_11: true
+  when:
+    - is_sle|bool
+    - is_sle10|bool or is_sle11|bool
+
+- name: The default is to assume all distros supports nvme-utils
+  set_fact:
+    lacks_nvme_utils: false
+
+- name: Does this release lack nvme-utils
+  set_fact:
+    lacks_nvme_utils: true
+  when:
+    - is_sle|bool
+    - is_sle10|bool or is_sle11|bool or is_sle12sp1|bool
+
+- name: The default is to assume all distros supports git-core
+  set_fact:
+    lacks_git_core: false
+
+- name: Does this release lack git-core
+  set_fact:
+    lacks_git_core: true
+  when:
+    - is_sle|bool
+    - is_sle10|bool or is_sle11|bool or is_sle12sp1|bool or is_sle12sp3|bool
+
+- name: Does this release use the package name git assume false
+  set_fact:
+    use_git_package: false
+
+# This needs perl-Error, so fix that first
+- name: Does this release use the package name git
+  set_fact:
+    use_git_package: true
+  when:
+    - is_sle|bool
+    - is_sle12sp3|bool
+    - false
+
+- name: The default is to assume all distros supports xfsdump
+  set_fact:
+    lacks_xfsdump: false
+
+- name: Does this release lack xfsdump
+  set_fact:
+    lacks_xfsdump: true
+  when:
+    - is_sle|bool
+    - is_sle10|bool or is_sle11|bool
+
+- name: The default is to assume all distros have fio on the main repo
+  set_fact:
+    lacks_fio_main_repo: False
+
+# SLES12-SP1 has fio but on ses/2.1/x86_64 repo, and you need another
+# registration key for that. We simply skip fio on it, but only if
+# registering a system. If we use internal repos, it likely *should*
+# be available.
+- name: Does this release lack fio on the main repository
+  set_fact:
+    lacks_fio_main_repo: True
+  when:
+    - is_sle|bool
+    - is_sle10|bool or is_sle11|bool or is_sle12sp1|bool or is_sle12sp3|bool or is_sle12sp5|bool
+    - suse_register_system|bool or devconfig_repos_addon|bool
+
+- name: Verify SLE/SLED systems are being registered
+  fail:
+    msg: "System is SLE/SLED, must include SUSE registration info on playbooks/secret.yml with suse_register_system and suse_registration_code variables set."
+  when:
+    - not devconfig_repos_addon|bool
+    - 'is_sle|bool'
+    - 'not suse_register_system|bool'
+
+- name: Prepare packages source list and register machine
+  become: yes
+  become_method: sudo
+  script:
+    cmd: "{{ role_path }}/scripts/prepare_suse_repos.sh --register-system-code {{ suse_registration_code }}"
+  when:
+    - suse_register_system|bool
+    - repos_will_be_added|bool
+    - suse_registration_code != 0
+
+- name: Register for python2 module product when needed
+  become: yes
+  become_method: sudo
+  command: "SUSEConnect -p sle-module-python2/{{ ansible_distribution_version }}/{{ ansible_architecture }}"
+  when:
+    - suse_register_system|bool
+    - repos_will_be_added|bool
+    - suse_registration_code != 0
+    - is_sle15sp2|bool
+
+- name: Add extra addon repositories when enabled
+  become: yes
+  become_method: sudo
+  script:
+    cmd: "{{ role_path }}/scripts/add-suse-repo-if-not-found.sh {{ item.url }} {{ item.name }}"
+  with_items:
+    - "{{ devconfig_repos_addon_list }}"
+  loop_control:
+    label: "Adding repo {{ item.name }}"
+  when:
+    - devconfig_repos_addon|bool
+
+- name: Install missing python-xml for releases that need it manually
+  become: yes
+  become_method: sudo
+  command:
+    cmd: "zypper in -y python-xml"
+    warn: no
+  when:
+    - (suse_register_system|bool and suse_registration_code != 0) or devconfig_repos_addon|bool
+    - repos_will_be_added|bool
+    - is_sle15sp2|bool
+
+- name: Prepare packages source list
+  become: yes
+  become_method: sudo
+  script:
+    cmd: "{{ role_path }}/scripts/prepare_suse_repos.sh"
+  when:
+    - not suse_register_system|bool
+    - not is_sle|bool
+    - repos_will_be_added|bool
+
+- name: Do full upgrade
+  become: yes
+  become_method: sudo
+  zypper:
+    state: dist-upgrade
+    name: '*'
+  when:
+    - repos_will_be_added|bool
+    - devconfig_try_upgrade|bool
+
+- name: Install nvme tools
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - nvme-cli
+    state: present
+  when:
+    - repos_will_be_added|bool
+    - not lacks_nvme_utils|bool
+    - devconfig_try_install_kdevtools|bool
+
+- name: Install fio when possible
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - fio
+    state: present
+  when:
+    - repos_will_be_added|bool
+    - not lacks_fio_main_repo|bool
+    - devconfig_try_install_kdevtools|bool
+
+- name: Install git-core when possible
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - git-core
+    state: present
+  when:
+    - repos_will_be_added|bool
+    - not lacks_git_core|bool
+    - devconfig_try_install_kdevtools|bool
+
+- name: Install git when possible
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - git
+    state: present
+  when:
+    - repos_will_be_added|bool
+    - use_git_package|bool
+    - devconfig_try_install_kdevtools|bool
+
+- name: Install xfsdump when possible
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - xfsdump
+    state: present
+  when:
+    - repos_will_be_added|bool
+    - not lacks_xfsdump|bool
+    - devconfig_try_install_kdevtools|bool
+
+- name: Install packages on newer distro when possible
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - bison
+      - libaio-devel
+      - gcc
+    state: present
+  when:
+    - repos_will_be_added|bool
+    - not lacks_git_core|bool
+    - devconfig_try_install_kdevtools|bool
+
+# sle12sp3 needs m4 to install flex, fix that first
+- name: Install packages not available on sle11 or sle10
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - dump
+      - flex
+      - ncurses-devel
+    state: present
+  when:
+    - repos_will_be_added|bool
+    - not sle10_or_11|bool
+    - not is_sle12sp3|bool
+    - devconfig_try_install_kdevtools|bool
+
+# fix this for sle12sp3
+- name: Install packages we typically care about
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - e2fsprogs
+      - xfsprogs
+      - lvm2
+      - make
+      - gawk
+      - libtool
+      - psmisc
+      - sed
+      - vim
+      - screen
+      - diffutils
+      - net-tools
+      - openssh
+      - bc
+    state: present
+  when:
+    - not is_sle12sp3|bool
+    - repos_will_be_added|bool
+    - devconfig_try_install_kdevtools|bool

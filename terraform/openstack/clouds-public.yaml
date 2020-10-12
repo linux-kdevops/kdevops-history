@@ -1,0 +1,19 @@
+clouds:
+ minicloud:
+  auth:
+    auth_url: http://minicloud.parqtec.unicamp.br:5000/v3/
+    project_name: maria.quijote
+    user_domain_name: Default
+    project_domain_name: Default
+    username: maria.quijote
+    password: verysecret
+    # Set to True in your clouds.yaml to disable SSL certification verification
+    # if you really need it.
+    # verify: False
+  region_name: RegionOne
+  regions:
+    - name: RegionOne
+      values:
+        networks:
+          - name: public
+            routes_externally: true

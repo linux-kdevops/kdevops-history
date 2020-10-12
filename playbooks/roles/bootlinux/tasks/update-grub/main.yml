@@ -1,0 +1,9 @@
+---
+# tasks to install update-grub
+- name: Distro specific update of your grub boot file
+  import_tasks: debian.yml
+  when: ansible_facts['os_family']|lower == 'debian'
+- import_tasks: suse.yml
+  when: ansible_facts['os_family']|lower == 'suse'
+- import_tasks: redhat.yml
+  when: ansible_facts['os_family']|lower == 'redhat'

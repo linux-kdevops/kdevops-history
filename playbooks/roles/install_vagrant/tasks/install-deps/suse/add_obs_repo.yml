@@ -1,0 +1,137 @@
+---
+- name: Verify obs_project_name is defined
+  fail:
+    msg: Fail when the OBS project name is not set
+  when: obs_project_name is not defined
+
+- name: Set SUSE repo specific distro facts
+  set_fact:
+    obs_url: "https://build.opensuse.org/"
+    obs_project_no_collon: "{{ obs_project_name | lower | replace(':', '_') }}"
+
+- name: Set OBS pubkey file location
+  set_fact:
+    obs_project_signkey: "/usr/local/share/{{ obs_project_no_collon }}.pub"
+
+- name: ensure that /usr/local/share/ is a directory
+  file:
+    path: /usr/local/share/
+    state: directory
+
+- block:
+    - name: Set pubkey URL
+      set_fact:
+        pubkey_url: "{{ obs_url }}projects/{{ obs_project_name }}/public_key"
+
+    - name: fetch the repository's public key
+      become: yes
+      become_method: sudo
+      get_url:
+        url: "{{ pubkey_url }}"
+        validate_certs: yes
+        dest: "{{ obs_project_signkey }}"
+
+  when: obs_project_gpg_key is not defined
+
+- name: copy the repository's public key to the remote machine
+  become: yes
+  become_method: sudo
+  copy:
+    src: "{{ obs_project_gpg_key }}"
+    dest: "{{ obs_project_signkey }}"
+  when: obs_project_gpg_key is defined
+
+- name: import the signkey into the rpm key database
+  become: yes
+  become_method: sudo
+  rpm_key:
+    state: present
+    key: "{{ obs_project_signkey }}"
+
+- block:
+    - name: set Leap repository names
+      set_fact:
+        repo_distro_end: "openSUSE_Leap_{{ ansible_distribution_version }}"
+      when: 'is_leap | bool'
+
+    - name: set Tumbleweed repository names
+      set_fact:
+        repo_distro_end: "openSUSE_Tumbleweed"
+      when: 'is_tumbleweed | bool'
+
+    - name: set SLE repository names
+      set_fact:
+        repo_distro_end: "SLE_{{ ansible_distribution_version | replace('.', '_SP') }}"
+      when: 'is_sle | bool'
+
+  when: obs_project_repository_name is not defined
+
+- name: Set obs project repo URL
+  set_fact:
+    obs_project_repo_base: "{{ obs_url | replace('build', 'download') }}repositories/{{ obs_project_name | replace(':', ':/') }}/"
+
+- name: Forced SLE custom distro end name to a temporary name from config file
+  set_fact:
+    repo_distro_end: "{{ repo.repo_distro_end }}"
+  with_items:
+    - "{{ sle_distro_end_map }}"
+  loop_control:
+    loop_var: repo
+  when:
+    - 'sle_custom_repo_distro_end | bool'
+    - 'is_sle | bool'
+    - ansible_distribution_version == repo.ansible_distribution_version
+    - obs_project_name == repo.obs_project_name
+
+- name: try to fetch the obs project .repo file
+  become: yes
+  become_method: sudo
+  get_url:
+    url: "{{ obs_project_repo_base }}/{{ repo_distro_end }}/{{ obs_project_name }}.repo"
+    dest: /dev/null
+    force: yes
+  register: default_end_fetch
+  ignore_errors: true
+  changed_when: false
+
+- block:
+    - name: Set distro end name for tumbleweed
+      set_fact:
+        repo_distro_end: openSUSE_Factory
+      when: 'is_tumbleweed | bool'
+
+    - name: Set distro end name for SLE
+      set_fact:
+        repo_distro_end: "SLE_{{ ansible_distribution_version | replace('.', '-SP') }}"
+      when: 'is_sle | bool'
+
+    - name: try to fetch the project .repo file again
+      become: yes
+      become_method: sudo
+      get_url:
+        url: "{{ obs_project_repo_base }}/{{ repo_distro_end }}/{{ obs_project_name }}.repo"
+        dest: /dev/null
+        force: yes
+      register: second_end_fetch
+      changed_when: false
+      ignore_errors: true
+
+    - name: Set repo end name for SLE when second end fetch fails
+      set_fact:
+        repo_distro_end: "SLE-{{ ansible_distribution_version | replace('.', '-SP') }}"
+      when: '(is_sle | bool) and (second_end_fetch.failed | bool)'
+
+  when: 'default_end_fetch.failed | bool'
+
+- name: Set obs project repo URL
+  set_fact:
+    obs_project_repo_url: "{{ obs_project_repo_base }}/{{ repo_distro_end }}"
+
+- name: add the repository
+  become: yes
+  become_method: sudo
+  zypper_repository:
+    repo: "{{ obs_project_repo_url }}"
+    name: "{{ obs_project_no_collon }}"
+    state: present
+    runrefresh: yes

@@ -1,0 +1,63 @@
+# Perhaps you use a different location for these. These helpers
+# allow your project to define these and just include this file.
+KDEVOPS_TERRAFORM_DIR ?=	terraform
+KDEVOPS_PLAYBOOKS_DIR ?=	playbooks
+KDEVOPS_HOSTFILE ?=		hosts
+
+kdevops_all: kdevops_deps
+PHONY := kdevops_all
+
+kdevops_terraform_deps:
+	@$(Q)ansible-playbook -i $(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/install_terraform.yml
+	@$(Q)ansible-playbook -i $(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/kdevops_terraform.yml
+	@if [ -d $(KDEVOPS_TERRAFORM_DIR) ]; then \
+		make -C $(KDEVOPS_TERRAFORM_DIR) deps; \
+	fi
+PHONY += kdevops_terraform_deps
+
+kdevops_vagrant_install_vagrant:
+	@$(Q)ansible-playbook -i $(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/install_vagrant.yml
+
+kdevops_vagrant_install_libvirt:
+	@$(Q)ansible-playbook -i $(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/libvirt_user.yml -e "skip_configuration=True"
+
+kdevops_vagrant_configure_libvirt:
+	@$(Q)ansible-playbook -i $(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/libvirt_user.yml -e "skip_install=True"
+
+kdevops_vagrant_verify_vagrant:
+	@$(Q)which vagrant
+
+kdevops_vagrant_deps: \
+		kdevops_vagrant_install_vagrant \
+		kdevops_vagrant_install_libvirt \
+		kdevops_vagrant_configure_libvirt \
+		kdevops_vagrant_verify_vagrant
+
+PHONY += kdevops_vagrant_deps
+KDEVOPS_VAGRANT_WORK := kdevops_vagrant_deps
+
+kdevops_vagrant_boxes:
+	@ansible-playbook -i $(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/install_vagrant_boxes.yml
+PHONY += kdevops_vagrant_boxes
+KDEVOPS_VAGRANT_WORK += kdevops_vagrant_boxes
+
+kdevops_verify_vagrant_user:
+	@ansible-playbook -i $(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/libvirt_user.yml -e "only_verify_user=True"
+PHONY += kdevops_verify_vagrant_user
+KDEVOPS_VAGRANT_WORK += kdevops_verify_vagrant_user
+
+kdevops_deps: kdevops_terraform_deps $(KDEVOPS_VAGRANT_WORK)
+	@echo Installed dependencies
+PHONY += kdevops_deps
+
+kdevops_terraform_clean:
+	@if [ -d $(KDEVOPS_TERRAFORM_DIR) ]; then \
+		make -C $(KDEVOPS_TERRAFORM_DIR) clean ; \
+	fi
+PHONY += kdevops_terraform_clean
+
+kdevops_clean: kdevops_terraform_clean
+	@echo Cleaned up
+PHONY += kdevops_clean
+
+.PHONY: $(PHONY)

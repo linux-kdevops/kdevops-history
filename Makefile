@@ -44,27 +44,17 @@ export KDEVOPS_HOSTS := $(KDEVOPS_HOSTFILE)
 # configuration data for ansible roles through kconfig.
 ANSIBLE_EXTRA_ARGS :=
 
-# kdevops-stage-1-y will be called first.
-# kdevops-stage-2-y will be called after we've deployed all the ansible
-# roles.
 ifeq (,$(wildcard $(CURDIR)/.config))
 else
-stage-1-$(CONFIG_INSTALL_ANSIBLE_KDEVOPS)	:= kdevops_install
-stage-2-$(CONFIG_INSTALL_ANSIBLE_KDEVOPS_ROLES)	+= kdevops_ansible_deps
+# stage-2-y targets gets called after all local config files have been generated
 stage-2-$(CONFIG_TERRAFORM)			+= kdevops_terraform_deps
 stage-2-$(CONFIG_VAGRANT)			+= kdevops_vagrant_install_vagrant
 stage-2-$(CONFIG_VAGRANT_LIBVIRT_INSTALL)	+= kdevops_vagrant_install_libvirt
 stage-2-$(CONFIG_VAGRANT_LIBVIRT_CONFIGURE)	+= kdevops_vagrant_configure_libvirt
-stage-2-$(CONFIG_VAGRANT)			+= kdevops_vagrant_get_Vagrantfile
+stage-2-$(CONFIG_VAGRANT)			+= kdevops_vagrant_verify_vagrant
 stage-2-$(CONFIG_VAGRANT_INSTALL_PRIVATE_BOXES)	+= kdevops_vagrant_boxes
 stage-2-$(CONFIG_VAGRANT_LIBVIRT_VERIFY)	+= kdevops_verify_vagrant_user
 KDEVOPS_STAGE_2_CMD := $(MAKE) -f Makefile.kdevops $(stage-2-y)
-endif
-
-ifeq (y,$(CONFIG_FORCE_INSTALL_ANSIBLE_KDEVOPS))
-export KDEVOPS_FORCE_ANSIBLE_ROLES := --force
-else
-export KDEVOPS_FORCE_ANSIBLE_ROLES :=
 endif
 
 KDEVOPS_BRING_UP_DEPS :=
@@ -419,13 +409,7 @@ deps: \
 	$(KDEVOPS_REMOVE_KEY) \
 	$(KDEVOPS_GEN_SSH_KEY) \
 	$(KDEVOPS_FSTESTS_CONFIG) \
-	$(stage-1-y)
-	$(Q)$(KDEVOPS_STAGE_2_CMD)
-
-PHONY += kdevops_install
-kdevops_install: $(KDEVOPS_NODES)
-	$(Q)ansible-galaxy install $(KDEVOPS_FORCE_ANSIBLE_ROLES) -r requirements.yml
-	$(Q)ansible-playbook -i $(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/kdevops_install.yml
+	$(KDEVOPS_STAGE_2_CMD)
 
 PHONY += install
 install: $(KDEVOPS_INSTALL_TARGETS)

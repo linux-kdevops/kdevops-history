@@ -1,0 +1,6 @@
+---
+# Example boxes with URLs. You would override this.
+kdevops_install_vagrant_boxes: False
+vagrant_boxes:
+  - { name: 'suse/sle12sp5.x86_64', box_url: 'http://example.com/SLE-12-SP5-Vagrant-GM/SLES12-SP5-Vagrant.x86_64-12.5-libvirt-GM.vagrant.libvirt.box' }
+  - { name: 'suse/sle15sp2.x86_64', box_url: 'http://example.com/SLES15-SP2-Vagrant.x86_64-15.2-libvirt-Snapshot2.vagrant.libvirt.box' }

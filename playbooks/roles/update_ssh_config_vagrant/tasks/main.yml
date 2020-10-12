@@ -1,0 +1,54 @@
+---
+- name: Import optional extra_args file
+  include_vars: "{{ item }}"
+  ignore_errors: yes
+  with_first_found:
+    - files:
+      - "../extra_vars.yml"
+      - "../extra_vars.yaml"
+      - "../extra_vars.json"
+      skip: true
+  tags: vars
+
+- name: Set kexalgorithms preference
+  set_fact:
+    custom_ssh_kexalgorithms: '--kexalgorithms {{ kexalgorithms  }}'
+  when:
+    - use_kexalgorithms|bool
+
+- name: Ignoring kexalgorithms
+  set_fact:
+    custom_ssh_kexalgorithms: ''
+  when:
+    - not use_kexalgorithms|bool
+
+- name: Get target hosts
+  shell: |
+    set -o pipefail
+    if [ -d .vagrant ]; then
+        vagrant ssh-config | sed '/^[[:space:]]*$/d' | grep ^Host | awk '{print $2}' | sed  ':a;N;$!ba;s/\n/,/g'
+    else
+        echo You are not in a directory with a .vagrant directory
+        exit 1
+    fi
+  args:
+    executable: /bin/bash
+    chdir: "{{ vagrant_dir }}"
+  register: target_hosts_comma
+  changed_when: "target_hosts_comma.rc == 0"
+
+- name: Set vagrant python extra args
+  set_fact:
+    update_extra_args: '--remove {{ target_hosts_comma.stdout }} --addvagranthosts {{ custom_ssh_kexalgorithms }}'
+
+- name: Update {{ sshconfig }} with hosts entries for vagrant
+  delegate_to: localhost
+  shell: |
+    set -o pipefail
+    {{ role_path }}/python/update_ssh_config.py {{ sshconfig }} --backup_file {{ sshconfig_backup }} {{ update_extra_args }}
+  args:
+    executable: /bin/bash
+    chdir: "{{ vagrant_dir }}"
+  register: add_entry
+  changed_when: "add_entry.rc == 0"
+  run_once: true

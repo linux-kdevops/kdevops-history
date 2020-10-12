@@ -1,0 +1,44 @@
+---
+# Install dependenciesfor oscheck on Red Hat based systems
+- name: Refresh cache and upgrade all present packages
+  become: yes
+  become_method: sudo
+  yum:
+    update_cache: yes
+    name: '*'
+  when:
+    - devconfig_try_upgrade|bool
+
+- name: Install packages we typically care about
+  become: yes
+  become_method: sudo
+  yum:
+    update_cache: yes
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - bison
+      - flex
+      - git-core
+      - e2fsprogs
+      - xfsprogs
+      - xfsdump
+      - lvm2
+      - gcc
+      - make
+      - gawk
+      - bc
+      - dump
+      - libtool
+      - psmisc
+      - sed
+      - vim
+      - screen
+      - fio
+      - libaio-devel
+      - diffutils
+      - net-tools
+      - ncurses-devel
+      - openssh-server
+  when:
+    - devconfig_try_install_kdevtools|bool

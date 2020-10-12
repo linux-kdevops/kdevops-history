@@ -1,0 +1,78 @@
+---
+- name: Verify vagrant installation
+  command: "which vagrant"
+  register: vagrant_present
+  changed_when: vagrant_present.rc == 1
+  failed_when: vagrant_present.rc != 0 and vagrant_present.rc != 1
+  tags: [ 'vagrant', 'verify' ]
+
+- name: Update apt cache
+  become: yes
+  become_method: sudo
+  apt:
+    update_cache: yes
+  when:
+    - not force_install_zip|bool
+    - force_install_if_present|bool or vagrant_present.rc != 0
+  tags: install
+
+- name: Install vagrant and vagrant-libvirt
+  become: yes
+  become_method: sudo
+  apt:
+    name:
+      - vagrant
+      - vagrant-libvirt
+    state: present
+  when:
+    - not force_install_zip|bool
+    - force_install_if_present|bool or vagrant_present.rc != 0
+  tags: install
+
+- name: Downlaod vagrant from the latest release and install locally
+  become: yes
+  become_method: sudo
+  unarchive:
+    src: https://releases.hashicorp.com/vagrant/{{ vagrant_version }}/vagrant_{{ vagrant_version }}_linux_amd64.zip
+    dest: /usr/local/bin
+    remote_src: yes
+  when:
+    - force_install_zip|bool
+    - force_install_if_present|bool or vagrant_present.rc != 0
+
+# This is a major heck, alas, vagrant plugin subset commands do not have any
+# easy way to confirm if a plugin is installed in a straight forward way.
+# Otherwise, we'd install vagrant-libvirt without checking, and even if
+# that is installed the latest version, this takes *forever*.
+- name: Check if the vagrant plugin vagrant-libvirt is installed
+  shell: |
+    set -o pipefail
+    vagrant status
+  args:
+    executable: /bin/bash
+    chdir: "{{ role_path }}"
+  register: plugin_check
+  changed_when: plugin_check.rc == 0
+  failed_when: plugin_check.rc != 0 and plugin_check.rc != 1
+  run_once: true
+  when:
+    - force_install_zip|bool
+
+- name: Install vagrant-libvirt build dependencies
+  become: yes
+  become_method: sudo
+  apt:
+    name:
+      - vagrant
+      - ruby-libvirt
+    state: build-dep
+  when:
+    - force_install_zip|bool and plugin_check.rc != 0
+
+- name: Installs the libvirt vagrant plugin
+  command: "vagrant plugin install vagrant-libvirt"
+  register: cmd_done
+  changed_when: "cmd_done.rc == 0"
+  when:
+    - force_install_zip|bool
+    - plugin_check.rc != 0

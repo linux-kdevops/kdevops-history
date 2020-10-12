@@ -1,0 +1,8 @@
+---
+- name: distribution specific setup
+  import_tasks: debian/main.yml
+  when: ansible_facts['os_family']|lower == 'debian'
+- import_tasks: suse/main.yml
+  when: ansible_facts['os_family']|lower == 'suse'
+- import_tasks: redhat/main.yml
+  when: ansible_facts['os_family']|lower == 'redhat'

@@ -1,0 +1,98 @@
+---
+- name: Import optional extra_args file
+  include_vars: "{{ item }}"
+  ignore_errors: yes
+  with_first_found:
+    - files:
+      - "../extra_vars.yml"
+      - "../extra_vars.yaml"
+      - "../extra_vars.json"
+      skip: true
+  tags: vars
+
+# Distro specific
+- name: Install dependencies
+  import_tasks: install-deps/main.yml
+
+# Distro agnostic stuff goes below
+
+- name: check if the developer has a git config
+  delegate_to: localhost
+  stat:
+    path={{ dev_gitconfig_src }}
+  run_once: true
+  register: dev_git_config_file
+
+- name: copy the developer's gitconfig *iff* it exists
+  copy:
+    src={{ dev_gitconfig_src }}
+    dest={{ dev_gitconfig_dest }}
+  when: dev_git_config_file.stat.exists
+
+- name: copy the developer's gitconfig *iff* it exists to root
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  copy:
+    src={{ dev_gitconfig_dest }}
+    dest=/root/
+    remote_src=yes
+  when: dev_git_config_file.stat.exists
+
+- name: check if the developer has a configuration file with favorite bash hacks
+  delegate_to: localhost
+  stat:
+    path={{ dev_bash_config_hacks_src }}
+  register: dev_bash_config_file
+
+- name: copy the developer's favorite bash hacks over *iff* it exists
+  copy:
+    src={{ dev_bash_config_hacks_src }}
+    dest={{ dev_bash_config_hacks_dest }}
+  when: dev_bash_config_file.stat.exists
+  register: dev_bash_config_file_copied
+
+- name: source the developer's bash hack script
+  shell: |
+    SOURCE_BASH_HACKS="test -s {{ dev_bash_config_hacks_generic }}  && . {{ dev_bash_config_hacks_generic }} || true"
+    if [ -f {{ dev_bash_config }} ]; then
+      if ! grep "{{ dev_bash_config_hacks_name }}" {{ dev_bash_config }}  2>&1 > /dev/null ; then
+        echo "$SOURCE_BASH_HACKS" >> {{ dev_bash_config }}
+      fi
+    else
+      echo "#!/bin/bash" >> {{ dev_bash_config }}
+      echo "$SOURCE_BASH_HACKS" >> {{ dev_bash_config }}
+      chmod 755 {{ dev_bash_config }}
+    fi
+  args:
+    executable: /bin/bash
+  when: dev_bash_config_file_copied is success
+
+- name: copy the developer's favorite bash hacks over for root *iff* it exists
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  copy:
+    src={{ dev_bash_config_hacks_src }}
+    dest=/root/
+  when: dev_bash_config_file.stat.exists
+  register: dev_bash_config_file_copied_root
+
+- name: source the developer's bash hack script for root
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  shell: |
+    SOURCE_BASH_HACKS="test -s {{ dev_bash_config_hacks_generic }}  && . {{ dev_bash_config_hacks_generic }} || true"
+    if [ -f {{ dev_bash_config_root }} ]; then
+      if ! grep "{{ dev_bash_config_hacks_name }}" {{ dev_bash_config_root }}  2>&1 > /dev/null ; then
+        echo "$SOURCE_BASH_HACKS" >> {{ dev_bash_config_root }}
+      fi
+    else
+      echo "#!/bin/bash" >> {{ dev_bash_config_root }}
+      echo "$SOURCE_BASH_HACKS" >> {{ dev_bash_config_root }}
+      chmod 755 {{ dev_bash_config_root }}
+    fi
+  args:
+    executable: /bin/bash
+  when: dev_bash_config_file_copied_root is success
