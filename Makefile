@@ -33,6 +33,7 @@ Q=@
 NQ=echo
 endif
 
+include Makefile.subtrees
 include scripts/kconfig.Makefile
 INCLUDES = -I include/
 CFLAGS += $(INCLUDES)
