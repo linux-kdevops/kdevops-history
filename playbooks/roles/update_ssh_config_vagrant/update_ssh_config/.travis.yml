@@ -1,0 +1,12 @@
+language: python
+python:
+    - "3.6"
+script:
+   - make test
+   - make flake8
+notifications:
+  email:
+    recipients:
+    - mcgrof@kernel.org
+    on_success: never
+    on_failure: always
