@@ -54,7 +54,6 @@ stage-2-$(CONFIG_TERRAFORM)			+= kdevops_terraform_deps
 stage-2-$(CONFIG_VAGRANT)			+= kdevops_vagrant_install_vagrant
 stage-2-$(CONFIG_VAGRANT_LIBVIRT_INSTALL)	+= kdevops_vagrant_install_libvirt
 stage-2-$(CONFIG_VAGRANT_LIBVIRT_CONFIGURE)	+= kdevops_vagrant_configure_libvirt
-stage-2-$(CONFIG_VAGRANT)			+= kdevops_vagrant_verify_vagrant
 stage-2-$(CONFIG_VAGRANT_INSTALL_PRIVATE_BOXES)	+= kdevops_vagrant_boxes
 stage-2-$(CONFIG_VAGRANT_LIBVIRT_VERIFY)	+= kdevops_verify_vagrant_user
 KDEVOPS_STAGE_2_DEPS				+= kdevops_stage_2

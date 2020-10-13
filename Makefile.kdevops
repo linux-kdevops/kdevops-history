@@ -24,14 +24,10 @@ kdevops_vagrant_install_libvirt:
 kdevops_vagrant_configure_libvirt:
 	@$(Q)ansible-playbook -i $(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/libvirt_user.yml -e "skip_install=True"
 
-kdevops_vagrant_verify_vagrant:
-	@$(Q)which vagrant > /dev/null
-
 kdevops_vagrant_deps: \
 		kdevops_vagrant_install_vagrant \
 		kdevops_vagrant_install_libvirt \
-		kdevops_vagrant_configure_libvirt \
-		kdevops_vagrant_verify_vagrant
+		kdevops_vagrant_configure_libvirt
 
 PHONY += kdevops_vagrant_deps
 KDEVOPS_VAGRANT_WORK := kdevops_vagrant_deps
