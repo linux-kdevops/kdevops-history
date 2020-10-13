@@ -9,7 +9,6 @@ PHONY := kdevops_all
 
 kdevops_terraform_deps:
 	@$(Q)ansible-playbook -i $(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/install_terraform.yml
-	@$(Q)ansible-playbook -i $(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/kdevops_terraform.yml
 	@$(Q)if [ -d $(KDEVOPS_TERRAFORM_DIR) ]; then \
 		make -C $(KDEVOPS_TERRAFORM_DIR) deps; \
 	fi
