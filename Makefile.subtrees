@@ -1,6 +1,4 @@
 # If you need to use a git subtree, please add it here.
-all: refresh
-
 add-remotes:
 	git remote add update_ssh_config https://github.com/mcgrof/update_ssh_config.git
 
