@@ -26,11 +26,11 @@ MAKEFLAGS += --no-print-directory
 SHELL := /bin/bash
 
 ifeq ($(V),1)
-Q=
-NQ=true
+export Q=
+export NQ=true
 else
-Q=@
-NQ=echo
+export Q=@
+export NQ=echo
 endif
 
 include Makefile.subtrees
@@ -45,6 +45,8 @@ export KDEVOPS_HOSTS := $(KDEVOPS_HOSTFILE)
 # configuration data for ansible roles through kconfig.
 ANSIBLE_EXTRA_ARGS :=
 
+KDEVOPS_STAGE_2_DEPS				+=
+
 ifeq (,$(wildcard $(CURDIR)/.config))
 else
 # stage-2-y targets gets called after all local config files have been generated
@@ -55,7 +57,11 @@ stage-2-$(CONFIG_VAGRANT_LIBVIRT_CONFIGURE)	+= kdevops_vagrant_configure_libvirt
 stage-2-$(CONFIG_VAGRANT)			+= kdevops_vagrant_verify_vagrant
 stage-2-$(CONFIG_VAGRANT_INSTALL_PRIVATE_BOXES)	+= kdevops_vagrant_boxes
 stage-2-$(CONFIG_VAGRANT_LIBVIRT_VERIFY)	+= kdevops_verify_vagrant_user
-KDEVOPS_STAGE_2_CMD := $(MAKE) -f Makefile.kdevops $(stage-2-y)
+KDEVOPS_STAGE_2_DEPS				+= kdevops_stage_2
+
+kdevops_stage_2: .config
+	$(Q)$(MAKE) -f Makefile.kdevops $(stage-2-y)
+
 endif
 
 KDEVOPS_BRING_UP_DEPS :=
@@ -378,7 +384,7 @@ $(KDEVOPS_TFVARS): $(KDEVOPS_TFVARS_TEMPLATE) .config
 PHONY += clean
 clean:
 	$(Q)$(MAKE) -f scripts/build.Makefile $@
-	@if [ -f terraform/Makefile ]; then \
+	@$(Q)if [ -f terraform/Makefile ]; then \
 		$(MAKE) -C terraform/ $@ ;\
 	fi
 
@@ -386,7 +392,7 @@ PHONY += mrproper
 mrproper:
 	$(Q)$(MAKE) -f scripts/build.Makefile clean
 	$(Q)$(MAKE) -f scripts/build.Makefile $@
-	@if [ -f terraform/Makefile ]; then \
+	@$(Q)if [ -f terraform/Makefile ]; then \
 		$(MAKE) -C terraform clean ;\
 	fi
 	$(Q)rm -f terraform/*/terraform.tfvars
@@ -398,7 +404,7 @@ mrproper:
 
 PHONY += help
 help:
-	$(MAKE) -f scripts/build.Makefile $@
+	$(Q)$(MAKE) -f scripts/build.Makefile $@
 
 PHONY := deps
 deps: \
@@ -410,7 +416,7 @@ deps: \
 	$(KDEVOPS_REMOVE_KEY) \
 	$(KDEVOPS_GEN_SSH_KEY) \
 	$(KDEVOPS_FSTESTS_CONFIG) \
-	$(KDEVOPS_STAGE_2_CMD)
+	$(KDEVOPS_STAGE_2_DEPS)
 
 PHONY += install
 install: $(KDEVOPS_INSTALL_TARGETS)
