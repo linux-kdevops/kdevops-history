@@ -33,7 +33,7 @@ declare -a CHECK_ARGS
 
 if [ -z "$OSCHECK_INCLUDE_PATH" ]; then
 	OSCHECK_DIR="$(dirname $(readlink -f $0))"
-	OSCHECK_INCLUDE_PATH="${OSCHECK_DIR}/osfiles"
+	OSCHECK_INCLUDE_PATH="${OSCHECK_DIR}/../osfiles"
 fi
 
 if [ $(id -u) != "0" ]; then
