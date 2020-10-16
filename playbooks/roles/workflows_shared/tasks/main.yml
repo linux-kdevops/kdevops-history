@@ -20,4 +20,5 @@
 
 - include: tasks/configure-watchdog.yml
   when:
+    - suports_watchdog|bool
     - workflow_install_watchdog|bool

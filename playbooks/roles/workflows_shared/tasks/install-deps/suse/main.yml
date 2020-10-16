@@ -4,6 +4,8 @@
     is_sle: '{{ (ansible_distribution == "SLES") or (ansible_distribution == "SLED") }}'
     is_leap: '{{ "Leap" in ansible_distribution }}'
     is_tumbleweed: '{{ "openSUSE Tumbleweed" == ansible_distribution }}'
+    postfix_setgid_group: "maildrop"
+    suports_watchdog: False
 
 - name: Set SLE specific version labels to make checks easier
   set_fact:
@@ -54,3 +56,4 @@
   when:
     - repos_present|bool
     - workflow_install_watchdog|bool
+    - not is_sle|bool

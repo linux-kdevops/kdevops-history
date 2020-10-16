@@ -60,6 +60,9 @@ recipient_delimiter = +
 inet_interfaces = all
 inet_protocols = all
 
+setgid_group = {{ postfix_setgid_group }}
+daemon_directory = {{ postfix_daemon_directory }}
+
 # Enable SASL authentication
 smtp_sasl_auth_enable = yes
 # Disallow methods that allow anonymous authentication
