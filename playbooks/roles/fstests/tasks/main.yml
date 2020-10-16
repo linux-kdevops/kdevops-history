@@ -78,6 +78,8 @@
     chdir: "{{ fstests_data }}"
 
 - name: git pull latest kdevops to ensure expunge list is up to date
+  environment:
+    GIT_SSL_NO_VERIFY:  true
   git:
     repo: "{{ kdevops_git }}"
     dest: "{{ kdevops_data }}"
