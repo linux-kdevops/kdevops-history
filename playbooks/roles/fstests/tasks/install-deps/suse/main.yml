@@ -87,7 +87,6 @@
       - gawk
       - util-linux
       - uuidd
-      - uuid-devel
       - acl
       - bc
       - dump
@@ -103,9 +102,7 @@
       - attr
       - libattr-devel
       - openssl-devel
-      - ca-certificates-suse
       - libcap-progs
-      - libgdbm6
       - fio
     state: present
   when:
