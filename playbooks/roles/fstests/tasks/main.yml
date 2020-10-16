@@ -40,8 +40,8 @@
 
 - name: Copy over our .config
   copy:
-    src: .config
-    dest: "{{ kdevops_data }}"
+    src: "{{ playbook_dir }}/../.config"
+    dest: "{{ kdevops_dir }}"
   tags: [ 'oscheck', 'install', 'root', 'config']
 
 - name: Install kdevops as root
