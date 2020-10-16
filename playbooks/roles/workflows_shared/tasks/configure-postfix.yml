@@ -1,6 +1,15 @@
 # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
 ---
 # tasks file for configuring postfix
+- name: Create the postfix/sasl directory
+  become: yes
+  become_method: sudo
+  file:
+    path: /etc/postfix/sasl/
+    state: directory
+    mode: 0600
+  tags: [ 'postfix', 'config' ]
+
 - name: Create postfix sasl passwd filej
   become: yes
   become_method: sudo
