@@ -23,6 +23,7 @@ python/*.pyc
 
 workflows/fstests/*/*.config
 
+playbooks/secret.yml
 playbooks/python/workflows/fstests/__pycache__/
 playbooks/python/workflows/fstests/gen_results_summary.pyc
 
