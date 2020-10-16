@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source /etc/os-release
+
 REGISTER_SYSTEM="false"
 REG_CODE=""
 
@@ -55,6 +57,17 @@ if [ "$(grep '^ID=' /etc/os-release | sed '/opensuse/d')" != "" ]; then
 	if [ "$REGISTER_SYSTEM" == "true" ]; then
 		set +e # (need to `set +e` as the SUSEConnect can fail)
 		SUSEConnect --regcode $REG_CODE
+		REGISTERED=$?
+		if [[ "$REGISTERED" -eq "0" ]] then
+			case "$VERSION" in
+			"15-SP2")
+				 SUSEConnect --product sle-module-desktop-applications/15.2/x86_64
+				 SUSEConnect --product sle-module-development-tools/15.2/x86_64
+				;;
+			*)
+				;;
+			esac
+		fi
 		set -e
 		if [ "${name}" = "SLED" ]; then
 			nvidia_repo_id=$(zypper repos|grep -i nvidia|awk -F"|" '{ print $1 }')
