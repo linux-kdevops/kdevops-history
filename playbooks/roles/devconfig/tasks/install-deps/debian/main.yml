@@ -31,6 +31,13 @@
   when:
     - devconfig_try_upgrade|bool
 
+- name: Reboot system to make the new kernel and modules take effect
+  become: yes
+  become_method: sudo
+  reboot:
+  when:
+    - devconfig_try_upgrade|bool
+
 - name: Install our generic dependencies
   become: yes
   become_method: sudo

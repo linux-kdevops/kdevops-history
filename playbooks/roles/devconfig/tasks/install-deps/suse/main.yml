@@ -176,6 +176,14 @@
     - repos_will_be_added|bool
     - devconfig_try_upgrade|bool
 
+- name: Reboot system to make the new kernel and modules take effect
+  become: yes
+  become_method: sudo
+  reboot:
+  when:
+    - repos_will_be_added|bool
+    - devconfig_try_upgrade|bool
+
 - name: Install nvme tools
   become: yes
   become_method: sudo

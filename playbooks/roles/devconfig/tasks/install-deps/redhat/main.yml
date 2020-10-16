@@ -9,6 +9,13 @@
   when:
     - devconfig_try_upgrade|bool
 
+- name: Reboot system to make the new kernel and modules take effect
+  become: yes
+  become_method: sudo
+  reboot:
+  when:
+    - devconfig_try_upgrade|bool
+
 - name: Install packages we typically care about
   become: yes
   become_method: sudo
