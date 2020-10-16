@@ -33,6 +33,9 @@ config VAGRANT_SUSE
 	select HAVE_DISTRO_PREFERS_EXTRA_ADDON
 	select HAVE_DISTRO_REG_METHOD_TWOLINE
 	select VAGRANT_INSTALL_PRIVATE_BOXES
+	select HAVE_CUSTOM_KDEVOPS_GIT
+	select HAVE_CUSTOM_KDEVOPS_GIT_DATA
+	select HAVE_CUSTOM_KDEVOPS_DIR
 	help
 	  This option will set the target guest to SUSE. There is currently
 	  no scriptable way to download vagrant images, however the images

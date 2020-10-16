@@ -53,7 +53,7 @@
   command: "{{  make }} install"
   tags: [ 'oscheck', 'install', 'root']
   args:
-    chdir: "{{ kdevops_data }}"
+    chdir: "{{ kdevops_dir }}"
 
 - name: git clone fstests
   git:

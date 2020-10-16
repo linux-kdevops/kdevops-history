@@ -6,6 +6,18 @@ menu "Shared workflow software"
 source "kconfigs/workflows/Kconfig.shared_software"
 endmenu
 
+config HAVE_CUSTOM_KDEVOPS_GIT
+	bool
+	default n
+
+config HAVE_CUSTOM_KDEVOPS_GIT_DATA
+	bool
+	default n
+
+config HAVE_CUSTOM_KDEVOPS_DIR
+	bool
+	default n
+
 config WORKFLOW_MAKE_CMD_OVERRIDE
 	bool "Override default make command"
 	default n
@@ -39,7 +51,8 @@ endif
 
 config WORKFLOW_KDEVOPS_GIT
 	string "Git tree of kdevops to clone on targets"
-	default "https://github.com/mcgrof/kdevops.git"
+	default "https://github.com/mcgrof/kdevops.git" if !HAVE_CUSTOM_KDEVOPS_GIT
+	default CUSTOM_KDEVOPS_GIT if HAVE_CUSTOM_KDEVOPS_GIT
 	help
 	  Some workflows want to also clone a version of kdevops on each target.
 	  An example of this is when using the fstests workflow, which carries
@@ -50,8 +63,14 @@ config WORKFLOW_KDEVOPS_GIT
 
 config WORKFLOW_KDEVOPS_GIT_DATA
 	string "The destination directory where to clone the git tree"
-	default "{{data_path}}/kdevops"
+	default "{{data_path}}/kdevops" if !HAVE_CUSTOM_KDEVOPS_GIT_DATA
+	default CUSTOM_KDEVOPS_GIT_DATA if HAVE_CUSTOM_KDEVOPS_GIT_DATA
 	help
 	  This is the target location of where to clone the above git tree.
 	  Note that {{data_path}} corresponds to the location set by the
 	  configuration option CONFIG_WORKFLOW_DATA_PATH above.
+
+config WORKFLOW_KDEVOPS_DIR
+	string
+	default WORKFLOW_KDEVOPS_GIT_DATA if !HAVE_CUSTOM_KDEVOPS_DIR
+	default CUSTOM_KDEVOPS_DIR if HAVE_CUSTOM_KDEVOPS_DIR
