@@ -17,7 +17,7 @@ add_ansible_hosts_by_section()
 	TARGET_PYTHON_INTERPRETER=$2
 	TARGET_SECTION=$3
 
-	if [[ "$TARGET_SECTION" == "dev" && "$CONFIG_FSTESTS_XFS_BASELINE_AND_DEV" != "y" ]]; then
+	if [[ "$TARGET_SECTION" == "dev" && "$CONFIG_KDEVOPS_BASELINE_AND_DEV" != "y" ]]; then
 		return
 	fi
 
@@ -45,7 +45,7 @@ add_ansible_hosts_by_section()
 			;;
 		esac
 
-		if [[ "$CONFIG_FSTESTS_XFS_BASELINE_AND_DEV" == "y" ]]; then
+		if [[ "$CONFIG_KDEVOPS_BASELINE_AND_DEV" == "y" ]]; then
 			SECTION_HOSTNAME_POSTFIX="$(echo $i | sed -e 's|_|-|')"
 			TARGET_HOSTNAME="${KDEVOPSHOSTSPREFIX}-xfs-${SECTION_HOSTNAME_POSTFIX}-dev"
 
