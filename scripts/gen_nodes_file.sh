@@ -10,7 +10,6 @@ VBOXVERSION=$CONFIG_VAGRANT_BOX_VERSION
 
 # These are shared when possible, otherwise override for your workflow
 GENERIC_SPLIT_START="workflows/linux/kdevops_nodes_split_start.yaml.in"
-GENERIC_SPLIT_END="workflows/linux/kdevops_nodes_split_end.yaml.in"
 
 if [[ "$CONFIG_FSTESTS_XFS" == "y" ]]; then
 	xfs_generate_nodes_file

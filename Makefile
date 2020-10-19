@@ -287,6 +287,8 @@ ifeq (y,$(CONFIG_KDEVOPS_ENABLE_DISTRO_EXTRA_ADDONS))
 KDEVOPS_EXTRA_ADDON_SOURCE:=$(subst ",,$(CONFIG_KDEVOPS_EXTRA_ADDON_SOURCE))
 endif
 
+KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK:=$(subst ",,$(CONFIG_KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK))
+
 export TOPDIR=./
 
 # disable built-in rules for this file
@@ -348,6 +350,9 @@ bringup_vagrant: $(VAGRANT_PRIVATE_BOX_DEPS)
 			playbooks/update_ssh_config_vagrant.yml \
 			-e 'ansible_python_interpreter=/usr/bin/python3' ;\
 	fi
+	$(Q)if [[ "$(CONFIG_KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK)" != "" ]]; then \
+	$(Q)ansible-playbook -i \
+		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/$(KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK)
 
 bringup_terraform:
 	$(Q)$(TOPDIR)/scripts/bringup_terraform.sh

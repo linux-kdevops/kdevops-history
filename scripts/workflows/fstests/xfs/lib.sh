@@ -62,7 +62,7 @@ xfs_generate_nodes_file()
 		fi
 	done
 
-	cat $TMP_INIT_NODE $GENERIC_SPLIT_END > $TMP_FINAL_NODE
+	cat $TMP_INIT_NODE > $TMP_FINAL_NODE
 	cat_template_nodes_sed $TMP_FINAL_NODE > $KDEVOPS_NODES
 
 	rm -f $TMP_INIT_NODE $TMP_FINAL_NODE
