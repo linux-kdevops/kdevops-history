@@ -12,7 +12,6 @@ export KDEVOPS_HOSTFILE ?=			hosts
 export KDEVOPS_NODES :=				vagrant/kdevops_nodes.yaml
 
 KDEVOPS_NODES_TEMPLATES :=			workflows/linux/kdevops_nodes_split_start.yaml.in
-KDEVOPS_NODES_TEMPLATES +=			workflows/linux/kdevops_nodes_split_end.yaml.in
 export KDEVOPS_NODES_TEMPLATES
 
 export KDEVOPS_FSTESTS_CONFIG :=
@@ -351,8 +350,9 @@ bringup_vagrant: $(VAGRANT_PRIVATE_BOX_DEPS)
 			-e 'ansible_python_interpreter=/usr/bin/python3' ;\
 	fi
 	$(Q)if [[ "$(CONFIG_KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK)" != "" ]]; then \
-	$(Q)ansible-playbook -i \
-		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/$(KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK)
+		ansible-playbook -i \
+			$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/$(KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK) ;\
+	fi
 
 bringup_terraform:
 	$(Q)$(TOPDIR)/scripts/bringup_terraform.sh
