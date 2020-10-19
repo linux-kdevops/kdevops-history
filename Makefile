@@ -338,7 +338,7 @@ endif
 
 vagrant_private_box_install:
 	$(Q)ansible-playbook -i \
-		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/install-vagrant-boxes.yml
+		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/install_vagrant_boxes.yml
 
 bringup_vagrant: $(VAGRANT_PRIVATE_BOX_DEPS)
 	$(Q)$(TOPDIR)/scripts/bringup_vagrant.sh
