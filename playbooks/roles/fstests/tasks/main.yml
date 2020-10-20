@@ -167,6 +167,8 @@
   with_items: "{{ xunit_files.files }}"
   loop_control:
     label: "{{ item.path | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
+  when:
+    - xunit_files.matched > 0
 
 - name: Look for tests which failed
   tags: [ 'oscheck', 'fstests', 'copy_results', 'failed_tests' ]
@@ -191,24 +193,34 @@
   with_items: "{{ failed_tests.files }}"
   loop_control:
     label: "{{ item.path | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
+  when:
+    - failed_tests.matched > 0
 
-- name: Print fstests results to xunit_results.txt on localhost
+- name: Print fstests results to xunit_results.txt on localhost if xunit xml file was found
   local_action: "shell ./python/workflows/fstests/gen_results_summary --results_file result.xml  --print_section --output_file {{ fstests_results_target }}/results/xunit_results.txt {{ fstests_results_target }}/results"
   tags: [ 'oscheck', 'fstests', 'copy_results', 'print_results' ]
   when:
-    - kdevops_run_fstests|bool
+    - xunit_files.matched > 0
   run_once: true
 
 - name: Print fstests bad results to bad_results.txt on localhost
   local_action: "shell ./python/workflows/fstests/bad_files_summary.py xfs {{ fstests_results_target }}/results > {{ fstests_results_target }}/bad_results.txt"
   tags: [ 'oscheck', 'fstests', 'copy_results', 'print_results' ]
   when:
-    - kdevops_run_fstests|bool
+    - failed_tests.matched > 0
   run_once: true
 
 - name: Augment expunge list, just run git diff to see new failures found
   local_action: "shell ./python/workflows/fstests/augment_expunge_list.py {{ oscheck_fstyp }} {{ fstests_results_target }}/results {{ fstests_results_target }}/expunges/"
   tags: [ 'oscheck', 'fstests', 'copy_results', 'augment_expunge_list' ]
   when:
-    - kdevops_run_fstests|bool
+    - failed_tests.matched > 0
   run_once: true
+
+- name: Inform user if no failures have been found
+  tags: [ 'oscheck', 'fstests', 'copy_results', 'augment_expunge_list' ]
+  debug:
+    msg: No *.bad or xunit xml files were found on the target host
+  when:
+    - failed_tests.matched == 0
+    - xunit_files.matched == 0
