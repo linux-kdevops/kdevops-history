@@ -58,7 +58,7 @@ if [ "$(grep '^ID=' /etc/os-release | sed '/opensuse/d')" != "" ]; then
 		set +e # (need to `set +e` as the SUSEConnect can fail)
 		SUSEConnect --regcode $REG_CODE
 		REGISTERED=$?
-		if [[ "$REGISTERED" -eq "0" ]] then
+		if [[ "$REGISTERED" -eq "0" ]]; then
 			case "$VERSION" in
 			"15-SP2")
 				 SUSEConnect --product sle-module-desktop-applications/15.2/x86_64
