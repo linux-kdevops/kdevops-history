@@ -142,7 +142,7 @@
   with_items:
     - "{{ devconfig_repos_addon_list }}"
   loop_control:
-    label: "Adding repo {{ item.name }}"
+    label: "Adding repo"
   when:
     - devconfig_repos_addon|bool
 
