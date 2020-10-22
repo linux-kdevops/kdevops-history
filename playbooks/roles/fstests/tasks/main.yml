@@ -113,6 +113,19 @@
   when:
     - kdevops_run_fstests|bool
 
+- name: Check and verify fstests dependencies are met prior to running fstests
+  vars:
+    section: "{{ ansible_hostname | regex_replace('kdevops-') | regex_replace('-dev') | regex_replace('-', '_') }}"
+  tags: [ 'oscheck', 'fstests', 'run_tests' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "./oscheck.sh --check-deps"
+  args:
+    chdir: "{{ fstests_data_target }}"
+  when:
+    - kdevops_run_fstests|bool
+
 - name: Run fstests using oscheck.sh {{ oscheck_extra_args }}
   vars:
     section: "{{ ansible_hostname | regex_replace('kdevops-') | regex_replace('-dev') | regex_replace('-', '_') }}"

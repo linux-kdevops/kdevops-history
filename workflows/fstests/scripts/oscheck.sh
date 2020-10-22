@@ -296,7 +296,7 @@ check_services()
 
 check_reqs()
 {
-	RET=0
+	R=0
 	if [ "$DRY_RUN" = "true" ]; then
 		return
 	fi
@@ -307,7 +307,7 @@ check_reqs()
 			if [ "$FSTESTS_SETUP_SYSTEM" = "y" ]; then
 				groupadd $g
 			fi
-			RET=1
+			R=1
 		fi
 	done
 
@@ -321,7 +321,7 @@ check_reqs()
 				fi
 				useradd $u $USE_GROUP
 			fi
-			RET=1
+			R=1
 		fi
 	done
 
@@ -344,16 +344,15 @@ check_reqs()
 	for req in $REQS; do
 		if ! which $req > /dev/null 2>&1 ; then
 			echo "ERROR: $req is required for complete testing." >&2
-			RET=1
+			R=1
 		fi
 	done
 
 	check_services
 	if [ $? -ne 0 ]; then
-		RET=1
+		R=1
 	fi
-
-	return $RET
+	return $R
 }
 
 check_mount()
@@ -473,13 +472,17 @@ oscheck_read_osfile_and_includes
 oscheck_distro_kernel_check
 
 check_reqs
-if [ $? -ne 0 ]; then
-	exit
-fi
-
+DEPS_RET=$?
 if [ "$ONLY_CHECK_DEPS" == "true" ]; then
 	echo "Finished checking for dependencies"
-	exit 0
+fi
+
+if [ $DEPS_RET -ne 0 ]; then
+	exit $DEPS_RET
+else
+	if [ "$ONLY_CHECK_DEPS" == "true" ]; then
+		exit 0
+	fi
 fi
 
 oscheck_get_progs_version
