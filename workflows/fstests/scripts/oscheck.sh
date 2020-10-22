@@ -468,11 +468,93 @@ oscheck_distro_kernel_check()
 	fi
 }
 
+check_check()
+{
+	if [ ! -e ./check ]; then
+		echo "Must run within fstests tree, assuming you are just setting up"
+		echo "Bailing. Keep running this until all requirements are met above"
+		return 1
+	fi
+	return 0
+}
+
+check_config()
+{
+	CONFIG_RET=0
+	if [ -e /proc/config.gz ]; then
+		for opt in CONFIG_DM_FLAKEY CONFIG_FAULT_INJECTION CONFIG_FAULT_INJECTION_DEBUG_FS; do
+			if ! zgrep -q "${opt}=" /proc/config.gz; then
+				CONFIG_RET=1
+				echo "WARNING: ${opt} is required for testing i/o failures." >&2
+			fi
+		done
+	fi
+	return $CONFIG_RET
+}
+
+check_test_dev_setup()
+{
+	DEV_SETUP_RET=0
+	eval $(grep '^TEST_DEV=' configs/$HOST.config)
+	eval $(grep '^TEST_DIR=' configs/$HOST.config)
+	if [ "$DRY_RUN" = "true" ]; then
+		return
+	fi
+
+	if [[ ! -f $TEST_DEV ]]; then
+		echo "$TEST_DEV is not present"
+		DEV_SETUP_RET=1
+	fi
+	return $DEV_SETUP_RET
+}
+
+check_dev_pool()
+{
+	DEV_POOL_RET=0
+	if [ -e configs/$HOST.config ]; then
+		eval $(grep '^SCRATCH_DEV_POOL=' configs/$HOST.config)
+		NDEVS=$(echo $SCRATCH_DEV_POOL|wc -w)
+		if [ "$NDEVS" -lt 5 ]; then
+			DEV_POOL_RET=1
+			echo "WARNING: Minimum of 5 devices required for full coverage." >&2
+		fi
+	fi
+	return $DEV_POOL_RET
+}
+
 oscheck_read_osfile_and_includes
 oscheck_distro_kernel_check
 
 check_reqs
 DEPS_RET=$?
+if [ $DEPS_RET -ne 0 ]; then
+	exit $DEPS_RET
+fi
+
+check_check
+DEPS_RET=$?
+if [ $DEPS_RET -ne 0 ]; then
+	exit $DEPS_RET
+fi
+
+check_config
+DEPS_RET=$?
+if [ $DEPS_RET -ne 0 ]; then
+	exit $DEPS_RET
+fi
+
+check_test_dev_setup
+DEPS_RET=$?
+if [ $DEPS_RET -ne 0 ]; then
+	exit $DEPS_RET
+fi
+
+check_dev_pool
+DEPS_RET=$?
+if [ $DEPS_RET -ne 0 ]; then
+	exit $DEPS_RET
+fi
+
 if [ "$ONLY_CHECK_DEPS" == "true" ]; then
 	echo "Finished checking for dependencies"
 fi
@@ -487,31 +569,12 @@ fi
 
 oscheck_get_progs_version
 
-if [ ! -e ./check ]; then
-	echo "Must run within fstests tree, assuming you are just setting up"
-	echo "Bailing. Keep running this until all requirements are met above"
-	exit
-fi
-
-if [ -e /proc/config.gz ]; then
-	for opt in CONFIG_DM_FLAKEY CONFIG_FAULT_INJECTION CONFIG_FAULT_INJECTION_DEBUG_FS; do
-		if ! zgrep -q "${opt}=" /proc/config.gz; then
-			echo "WARNING: ${opt} is required for testing i/o failures." >&2
-		fi
-	done
-fi
-
 oscheck_test_dev_setup()
 {
 	eval $(grep '^TEST_DEV=' configs/$HOST.config)
 	eval $(grep '^TEST_DIR=' configs/$HOST.config)
 	if [ "$DRY_RUN" = "true" ]; then
 		return
-	fi
-
-	if [[ ! -f $TEST_DEV ]]; then
-		echo "$TEST_DEV is not present"
-		exit 1
 	fi
 
 	blkid -t TYPE=$FSTYP $TEST_DEV /dev/null
@@ -529,12 +592,6 @@ oscheck_test_dev_setup()
 }
 
 if [ -e configs/$HOST.config ]; then
-	eval $(grep '^SCRATCH_DEV_POOL=' configs/$HOST.config)
-	NDEVS=$(echo $SCRATCH_DEV_POOL|wc -w)
-	if [ "$NDEVS" -lt 5 ]; then
-		echo "WARNING: Minimum of 5 devices required for full coverage." >&2
-	fi
-
 	oscheck_test_dev_setup
 fi
 
