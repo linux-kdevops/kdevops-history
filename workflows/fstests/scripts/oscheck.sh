@@ -501,7 +501,7 @@ check_test_dev_setup()
 		return
 	fi
 
-	if [[ ! -f $TEST_DEV ]]; then
+	if [[ ! -e $TEST_DEV ]]; then
 		echo "$TEST_DEV is not present"
 		DEV_SETUP_RET=1
 	fi
