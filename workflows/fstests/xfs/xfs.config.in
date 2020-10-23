@@ -8,7 +8,7 @@ SCRATCH_MNT=@FSTESTSSCRATCHMNT@
 RESULT_BASE=$PWD/results/$HOST/$(uname -r)
 
 # Matches what we expect to be default on the latests xfsprogs
-[xfs]
+[xfs_crc]
 MKFS_OPTIONS='-f -m crc=1,reflink=0,rmapbt=0, -i sparse=0'
 USE_EXTERNAL=no
 LOGWRITES_DEV=@FSTESTSLOGWRITESDEV@
