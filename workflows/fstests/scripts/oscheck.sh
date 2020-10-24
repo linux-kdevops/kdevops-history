@@ -835,6 +835,41 @@ check_dev_pool()
 	return $DEV_POOL_RET
 }
 
+check_sections()
+{
+	ALL_RUN_SECTIONS_FOUND=0
+	if [ ! -e configs/$HOST.config ];
+		return 0;
+	fi
+	ALL_FS_SECTIONS=$(grep "^\[" configs/$HOST.config | sed -e 's|\[||' | sed -e 's|\]||' | grep -v default)
+	for s in $RUN_SECTIONS; do
+		SECTION="$s"
+		if [ "${SECTION}" != "${FSTYP}" ]; then
+			if [ ! -z "$FAST_TEST" ]; then
+				if [ "$ONLY_TEST_SECTION" != "" ]; then
+					continue
+				fi
+			fi
+			echo $SECTION | grep -q ^${FSTYP}
+			if [ $? -ne 0 ]; then
+				SECTION="${FSTYP}_${s}"
+			fi
+		fi
+		RUN_SECTION_FOUND=0
+		for valid_section in $ALL_RUN_SECTIONS_FOUND; do
+			if [ "$SECTION" == "$valid_section" ]; then
+				RUN_SECTION_FOUND=1
+			fi
+		done
+		if [ $RUN_SECTION_FOUND -ne 1 ]; then
+			echo "Invalid section: $SECTION"
+			echo "This section name is not present on the file configs/$HOST.config"
+			ALL_RUN_SECTIONS_FOUND=1
+		fi
+	done
+	return $ALL_RUN_SECTIONS_FOUND
+}
+
 SKIP_GROUPS=
 
 oscheck_read_osfile_and_includes
@@ -877,6 +912,12 @@ if [ $DEPS_RET -ne 0 ]; then
 fi
 
 check_dev_pool
+DEPS_RET=$?
+if [ $DEPS_RET -ne 0 ]; then
+	exit $DEPS_RET
+fi
+
+check_sections
 DEPS_RET=$?
 if [ $DEPS_RET -ne 0 ]; then
 	exit $DEPS_RET
