@@ -83,6 +83,9 @@ fstests-baseline:
 fstests-baseline-skip-kdevops-update:
 	$(Q)ansible-playbook -i hosts -l baseline playbooks/fstests.yml --tags run_tests,copy_results --skip-tags git_update --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml
 
+fstests-baseline-run-oscheck-only:
+	$(Q)ansible-playbook -i hosts -l baseline playbooks/fstests.yml --tags run_tests,copy_results --skip-tags git_update,reboot,clean_results --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml
+
 fstests-dev:
 	$(Q)ansible-playbook -i hosts -l dev playbooks/fstests.yml --tags run_tests,copy_results --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml
 
