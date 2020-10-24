@@ -856,14 +856,15 @@ check_sections()
 			fi
 		fi
 		RUN_SECTION_FOUND=0
-		for valid_section in $ALL_RUN_SECTIONS_FOUND; do
-			if [ "$SECTION" == "$valid_section" ]; then
+		for valid_section in $ALL_FS_SECTIONS; do
+			if [[ "$SECTION" == "$valid_section" ]]; then
 				RUN_SECTION_FOUND=1
 			fi
 		done
 		if [ $RUN_SECTION_FOUND -ne 1 ]; then
 			echo "Invalid section: $SECTION"
 			echo "This section name is not present on the file configs/$HOST.config"
+			echo "Valid sections: $ALL_FS_SECTIONS"
 			ALL_RUN_SECTIONS_FOUND=1
 		fi
 	done
