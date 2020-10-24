@@ -412,202 +412,6 @@ oscheck_systemctl_restart_ypbind()
 	fi
 }
 
-# If you don't have the /etc/os-release we try to use lsb_release
-oscheck_read_osfile_and_includes()
-{
-	if [ -e $OS_FILE ]; then
-		eval $(grep '^ID=' $OS_FILE)
-		export OSCHECK_ID="$ID"
-		oscheck_include_os_files
-		oscheck_run_osfile_read
-	else
-		which lsb_release 2>/dev/null
-		if [ $? -eq 0 ]; then
-			export OSCHECK_ID="$(lsb_release -i -s | tr '[A-Z]' '[a-z]')"
-			oscheck_include_os_files
-			oscheck_run_osfile_read
-		fi
-	fi
-}
-
-os_has_distro_kernel_check_handle()
-{
-	if [ ! -e $OS_FILE ]; then
-		return 1
-	fi
-	declare -f ${OSCHECK_ID}_distro_kernel_check > /dev/null;
-	return $?
-}
-
-oscheck_distro_kernel_check()
-{
-	os_has_distro_kernel_check_handle
-	if [ $? -eq 0 ] ; then
-		${OSCHECK_ID}_distro_kernel_check
-		if [ $? -ne 0 ] ; then
-			OSCHECK_CUSTOM_KERNEL="true"
-			if [ "$ONLY_QUESTION_DISTRO_KERNEL" = "true" ]; then
-				echo "You are not running a distribution packaged kernel:"
-				uname -a
-				exit 1
-			fi
-			if [ "$OSCHECK_ONLY_RUN_DISTRO_KERNEL" == "true" ]; then
-				echo "Not running a distro kernel, skipping..."
-				echo "If you want to run this test disable:"
-				echo "OSCHECK_ONLY_RUN_DISTRO_KERNEL"
-				exit 1
-			fi
-			echo "Running custom kernel: $(uname -a)"
-		else
-			if [ "$ONLY_QUESTION_DISTRO_KERNEL" = "true" ]; then
-				echo "Running distro kernel"
-				uname -a
-				exit 0
-			fi
-		fi
-	fi
-}
-
-check_check()
-{
-	if [ ! -e ./check ]; then
-		echo "Must run within fstests tree, assuming you are just setting up"
-		echo "Bailing. Keep running this until all requirements are met above"
-		return 1
-	fi
-	return 0
-}
-
-check_config()
-{
-	CONFIG_RET=0
-	if [ -e /proc/config.gz ]; then
-		for opt in CONFIG_DM_FLAKEY CONFIG_FAULT_INJECTION CONFIG_FAULT_INJECTION_DEBUG_FS; do
-			if ! zgrep -q "${opt}=" /proc/config.gz; then
-				CONFIG_RET=1
-				echo "WARNING: ${opt} is required for testing i/o failures." >&2
-			fi
-		done
-	fi
-	return $CONFIG_RET
-}
-
-check_test_dev_setup()
-{
-	DEV_SETUP_RET=0
-	eval $(grep '^TEST_DEV=' configs/$HOST.config)
-	eval $(grep '^TEST_DIR=' configs/$HOST.config)
-	if [ "$DRY_RUN" = "true" ]; then
-		return
-	fi
-
-	if [[ ! -e $TEST_DEV ]]; then
-		echo "$TEST_DEV is not present"
-		DEV_SETUP_RET=1
-	fi
-	return $DEV_SETUP_RET
-}
-
-check_dev_pool()
-{
-	DEV_POOL_RET=0
-	if [ -e configs/$HOST.config ]; then
-		eval $(grep '^SCRATCH_DEV_POOL=' configs/$HOST.config)
-		NDEVS=$(echo $SCRATCH_DEV_POOL|wc -w)
-		if [ "$NDEVS" -lt 5 ]; then
-			DEV_POOL_RET=1
-			echo "WARNING: Minimum of 5 devices required for full coverage." >&2
-		fi
-	fi
-	return $DEV_POOL_RET
-}
-
-oscheck_read_osfile_and_includes
-oscheck_distro_kernel_check
-
-check_reqs
-DEPS_RET=$?
-if [ $DEPS_RET -ne 0 ]; then
-	exit $DEPS_RET
-fi
-
-check_check
-DEPS_RET=$?
-if [ $DEPS_RET -ne 0 ]; then
-	exit $DEPS_RET
-fi
-
-check_config
-DEPS_RET=$?
-if [ $DEPS_RET -ne 0 ]; then
-	exit $DEPS_RET
-fi
-
-check_test_dev_setup
-DEPS_RET=$?
-if [ $DEPS_RET -ne 0 ]; then
-	exit $DEPS_RET
-fi
-
-check_dev_pool
-DEPS_RET=$?
-if [ $DEPS_RET -ne 0 ]; then
-	exit $DEPS_RET
-fi
-
-if [ "$ONLY_CHECK_DEPS" == "true" ]; then
-	echo "Finished checking for dependencies"
-fi
-
-if [ $DEPS_RET -ne 0 ]; then
-	exit $DEPS_RET
-else
-	if [ "$ONLY_CHECK_DEPS" == "true" ]; then
-		exit 0
-	fi
-fi
-
-oscheck_get_progs_version
-
-oscheck_test_dev_setup()
-{
-	eval $(grep '^TEST_DEV=' configs/$HOST.config)
-	eval $(grep '^TEST_DIR=' configs/$HOST.config)
-	if [ "$DRY_RUN" = "true" ]; then
-		return
-	fi
-
-	blkid -t TYPE=$FSTYP $TEST_DEV /dev/null
-	if [[ $? -ne 0 ]]; then
-		mkfs.$FSTYP -f $TEST_DEV
-	fi
-
-	if [[ ! -d  $TEST_DIR ]]; then
-		mkdir -p $TEST_DIR
-	fi
-	check_mount $TEST_DIR
-	if [ $? -ne 0 ]; then
-		mount $TEST_DEV $TEST_DIR
-	fi
-}
-
-if [ -e configs/$HOST.config ]; then
-	oscheck_test_dev_setup
-fi
-
-tmp=/tmp/$$
-_cleanup() {
-	echo "Done"
-}
-
-trap "_cleanup; exit \$status" 0 1 2 3 15
-
-SKIP_GROUPS=
-
-if [ -z "$FSTYP" ]; then
-	FSTYP=xfs
-fi
-
 # queue_tests - a way to group test to run with a custom section
 #
 # Often times may want to run all tests with multiple sections. This can
@@ -895,11 +699,208 @@ oscheck_run_sections()
 	done
 }
 
+oscheck_test_dev_setup()
+{
+	eval $(grep '^TEST_DEV=' configs/$HOST.config)
+	eval $(grep '^TEST_DIR=' configs/$HOST.config)
+	if [ "$DRY_RUN" = "true" ]; then
+		return
+	fi
+
+	blkid -t TYPE=$FSTYP $TEST_DEV /dev/null
+	if [[ $? -ne 0 ]]; then
+		mkfs.$FSTYP -f $TEST_DEV
+	fi
+
+	if [[ ! -d  $TEST_DIR ]]; then
+		mkdir -p $TEST_DIR
+	fi
+	check_mount $TEST_DIR
+	if [ $? -ne 0 ]; then
+		mount $TEST_DEV $TEST_DIR
+	fi
+}
+
+_cleanup() {
+	echo "Done"
+}
+
+# If you don't have the /etc/os-release we try to use lsb_release
+oscheck_read_osfile_and_includes()
+{
+	if [ -e $OS_FILE ]; then
+		eval $(grep '^ID=' $OS_FILE)
+		export OSCHECK_ID="$ID"
+		oscheck_include_os_files
+		oscheck_run_osfile_read
+	else
+		which lsb_release 2>/dev/null
+		if [ $? -eq 0 ]; then
+			export OSCHECK_ID="$(lsb_release -i -s | tr '[A-Z]' '[a-z]')"
+			oscheck_include_os_files
+			oscheck_run_osfile_read
+		fi
+	fi
+}
+
+os_has_distro_kernel_check_handle()
+{
+	if [ ! -e $OS_FILE ]; then
+		return 1
+	fi
+	declare -f ${OSCHECK_ID}_distro_kernel_check > /dev/null;
+	return $?
+}
+
+oscheck_distro_kernel_check()
+{
+	os_has_distro_kernel_check_handle
+	if [ $? -eq 0 ] ; then
+		${OSCHECK_ID}_distro_kernel_check
+		if [ $? -ne 0 ] ; then
+			OSCHECK_CUSTOM_KERNEL="true"
+			if [ "$ONLY_QUESTION_DISTRO_KERNEL" = "true" ]; then
+				echo "You are not running a distribution packaged kernel:"
+				uname -a
+				exit 1
+			fi
+			if [ "$OSCHECK_ONLY_RUN_DISTRO_KERNEL" == "true" ]; then
+				echo "Not running a distro kernel, skipping..."
+				echo "If you want to run this test disable:"
+				echo "OSCHECK_ONLY_RUN_DISTRO_KERNEL"
+				exit 1
+			fi
+			echo "Running custom kernel: $(uname -a)"
+		else
+			if [ "$ONLY_QUESTION_DISTRO_KERNEL" = "true" ]; then
+				echo "Running distro kernel"
+				uname -a
+				exit 0
+			fi
+		fi
+	fi
+}
+
+check_check()
+{
+	if [ ! -e ./check ]; then
+		echo "Must run within fstests tree, assuming you are just setting up"
+		echo "Bailing. Keep running this until all requirements are met above"
+		return 1
+	fi
+	return 0
+}
+
+check_config()
+{
+	CONFIG_RET=0
+	if [ -e /proc/config.gz ]; then
+		for opt in CONFIG_DM_FLAKEY CONFIG_FAULT_INJECTION CONFIG_FAULT_INJECTION_DEBUG_FS; do
+			if ! zgrep -q "${opt}=" /proc/config.gz; then
+				CONFIG_RET=1
+				echo "WARNING: ${opt} is required for testing i/o failures." >&2
+			fi
+		done
+	fi
+	return $CONFIG_RET
+}
+
+check_test_dev_setup()
+{
+	DEV_SETUP_RET=0
+	eval $(grep '^TEST_DEV=' configs/$HOST.config)
+	eval $(grep '^TEST_DIR=' configs/$HOST.config)
+	if [ "$DRY_RUN" = "true" ]; then
+		return
+	fi
+
+	if [[ ! -e $TEST_DEV ]]; then
+		echo "$TEST_DEV is not present"
+		DEV_SETUP_RET=1
+	fi
+	return $DEV_SETUP_RET
+}
+
+check_dev_pool()
+{
+	DEV_POOL_RET=0
+	if [ -e configs/$HOST.config ]; then
+		eval $(grep '^SCRATCH_DEV_POOL=' configs/$HOST.config)
+		NDEVS=$(echo $SCRATCH_DEV_POOL|wc -w)
+		if [ "$NDEVS" -lt 5 ]; then
+			DEV_POOL_RET=1
+			echo "WARNING: Minimum of 5 devices required for full coverage." >&2
+		fi
+	fi
+	return $DEV_POOL_RET
+}
+
+SKIP_GROUPS=
+
+oscheck_read_osfile_and_includes
+oscheck_distro_kernel_check
+
+if [ -z "$FSTYP" ]; then
+	FSTYP=xfs
+fi
+
 oscheck_handle_skipping_group
 oscheck_queue_sections
-RUN_SECTIONS="${FSTYP} ${EXTRA_SECTIONS}"
+RUN_SECTIONS="${EXTRA_SECTIONS}"
 if [ "$ONLY_TEST_SECTION" != "" ]; then
 	RUN_SECTIONS="$ONLY_TEST_SECTION"
 	echo "Only testing section: $ONLY_TEST_SECTION"
 fi
+
+check_reqs
+DEPS_RET=$?
+if [ $DEPS_RET -ne 0 ]; then
+	exit $DEPS_RET
+fi
+
+check_check
+DEPS_RET=$?
+if [ $DEPS_RET -ne 0 ]; then
+	exit $DEPS_RET
+fi
+
+check_config
+DEPS_RET=$?
+if [ $DEPS_RET -ne 0 ]; then
+	exit $DEPS_RET
+fi
+
+check_test_dev_setup
+DEPS_RET=$?
+if [ $DEPS_RET -ne 0 ]; then
+	exit $DEPS_RET
+fi
+
+check_dev_pool
+DEPS_RET=$?
+if [ $DEPS_RET -ne 0 ]; then
+	exit $DEPS_RET
+fi
+
+if [ "$ONLY_CHECK_DEPS" == "true" ]; then
+	echo "Finished checking for dependencies"
+fi
+
+if [ $DEPS_RET -ne 0 ]; then
+	exit $DEPS_RET
+else
+	if [ "$ONLY_CHECK_DEPS" == "true" ]; then
+		exit 0
+	fi
+fi
+
+oscheck_get_progs_version
+
+if [ -e configs/$HOST.config ]; then
+	oscheck_test_dev_setup
+fi
+
+tmp=/tmp/$$
+trap "_cleanup; exit \$status" 0 1 2 3 15
+
 oscheck_run_sections
