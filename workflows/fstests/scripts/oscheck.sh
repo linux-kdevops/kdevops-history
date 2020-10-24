@@ -838,7 +838,7 @@ check_dev_pool()
 check_sections()
 {
 	ALL_RUN_SECTIONS_FOUND=0
-	if [ ! -e configs/$HOST.config ];
+	if [ ! -e configs/$HOST.config ]; then
 		return 0;
 	fi
 	ALL_FS_SECTIONS=$(grep "^\[" configs/$HOST.config | sed -e 's|\[||' | sed -e 's|\]||' | grep -v default)
