@@ -259,6 +259,13 @@ SSH_CONFIG_FILE:=$(subst ",,$(CONFIG_KDEVOPS_SSH_CONFIG))
 ANSIBLE_EXTRA_ARGS += sshconfig=$(CONFIG_KDEVOPS_SSH_CONFIG)
 endif
 
+ifeq (y,$(CONFIG_KDEVOPS_USE_DISTRO_HOSTS_PREFIX))
+KDEVOPS_HOSTS_PREFIX:=$(subst ",,$(CONFIG_KDEVOPS_HOSTS_PREFIX))
+ANSIBLE_EXTRA_ARGS += kdevops_host_prefix=$(KDEVOPS_HOSTS_PREFIX)
+else
+ANSIBLE_EXTRA_ARGS += kdevops_host_prefix=kdevops
+endif
+
 # We may not need the extra_args.yaml file all the time.  If this file is empty
 # you don't need it. All of our ansible kdevops roles check for this file
 # without you having to specify it as an extra_args=@extra_args.yaml file. This
