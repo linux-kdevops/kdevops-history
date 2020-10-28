@@ -90,10 +90,10 @@ fstests-dev:
 	$(Q)ansible-playbook -i hosts -l dev playbooks/fstests.yml --tags run_tests,copy_results --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml
 
 fstests-baseline-results:
-	$(Q)ansible-playbook -i hosts -l baseline playbooks/fstests.yml --tags copy_results --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml
+	$(Q)ansible-playbook -i hosts -l baseline playbooks/fstests.yml --tags copy_results,print_results --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml
 
 fstests-dev-results:
-	$(Q)ansible-playbook -i hosts -l dev playbooks/fstests.yml --tags copy_results --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml
+	$(Q)ansible-playbook -i hosts -l dev playbooks/fstests.yml --tags copy_results,print_results --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml
 
 kdevops_fstests_install: $(KDEVOPS_FSTESTS_PROGS) $(KDEVOPS_FSTESTS_CONFIG)
 	@if [ $(ID) != "0" ]; then \
