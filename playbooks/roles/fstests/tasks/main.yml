@@ -226,8 +226,6 @@
 - name: Augment expunge list, just run git diff to see new failures found
   local_action: "shell ./python/workflows/fstests/augment_expunge_list.py {{ oscheck_fstyp }} {{ fstests_results_target }}/results {{ fstests_results_target }}/expunges/"
   tags: [ 'oscheck', 'fstests', 'copy_results', 'augment_expunge_list' ]
-  when:
-    - failed_tests.matched > 0
   run_once: true
 
 - name: Inform user if no failures have been found
