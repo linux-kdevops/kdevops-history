@@ -139,6 +139,8 @@ def print_summary(out_f, testsuite, verbose, print_section):
         out_f.write('%d errors, ' % errors)
     if skipped > 0:
         out_f.write('%d skipped, ' % skipped)
+    if runtime is None:
+        runtime = 0
     out_f.write('%d seconds\n' % runtime)
     if verbose:
         for test_case in testsuite:
