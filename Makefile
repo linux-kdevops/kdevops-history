@@ -10,6 +10,7 @@ export KDEVOPS_EXTRA_VARS ?=			extra_vars.yaml
 export KDEVOPS_PLAYBOOKS_DIR :=			playbooks
 export KDEVOPS_HOSTFILE ?=			hosts
 export KDEVOPS_NODES :=				vagrant/kdevops_nodes.yaml
+export PYTHONUNBUFFERED=1
 
 KDEVOPS_NODES_TEMPLATES :=			workflows/linux/kdevops_nodes_split_start.yaml.in
 export KDEVOPS_NODES_TEMPLATES
