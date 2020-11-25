@@ -188,10 +188,9 @@ def add_host(args):
             new_lines.append("\tLogLevel FATAL\n")
         count = count + 1
 
-    f = open(args.ssh_config, "a")
-    f.write("".join([x for x in new_lines]))
-    f.close()
-
+    with open(args.ssh_config, 'r') as original: data = original.read()
+    new_data = "".join([x for x in new_lines])
+    with open(args.ssh_config, 'w') as modified: modified.write(new_data + data)
 
 class SshHost:
     def __init__(self, ssh_config, name, hostname, username, port, identity,

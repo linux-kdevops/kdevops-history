@@ -1,3 +1,25 @@
+Host kdevops
+	HostName 51.179.89.243
+	User alpha
+	Port 25
+	IdentityFile ~alpha/.ssh/go
+	KexAlgorithms diffie-hellman-group-exchange-sha1,diffie-hellman-group14-sha1,diffie-hellman-group1-sha1
+	UserKnownHostsFile /dev/null
+	StrictHostKeyChecking no
+	PasswordAuthentication no
+	IdentitiesOnly yes
+	LogLevel FATAL
+Host kdevops-dev
+	HostName 52.195.142.19
+	User alpha
+	Port 25
+	IdentityFile ~alpha/.ssh/go
+	KexAlgorithms diffie-hellman-group-exchange-sha1,diffie-hellman-group14-sha1,diffie-hellman-group1-sha1
+	UserKnownHostsFile /dev/null
+	StrictHostKeyChecking no
+	PasswordAuthentication no
+	IdentitiesOnly yes
+	LogLevel FATAL
 Host *
 	ServerAliveInterval 60
 	ServerAliveCountMax 2
@@ -31,25 +53,3 @@ Host starwars-dev
   IdentityFile /home/mcgrof/devel/kdevops/vagrant/.vagrant/machines/starwars-dev/libvirt/private_key
   IdentitiesOnly yes
   LogLevel FATAL
-Host kdevops
-	HostName 51.179.89.243
-	User alpha
-	Port 25
-	IdentityFile ~alpha/.ssh/go
-	KexAlgorithms diffie-hellman-group-exchange-sha1,diffie-hellman-group14-sha1,diffie-hellman-group1-sha1
-	UserKnownHostsFile /dev/null
-	StrictHostKeyChecking no
-	PasswordAuthentication no
-	IdentitiesOnly yes
-	LogLevel FATAL
-Host kdevops-dev
-	HostName 52.195.142.19
-	User alpha
-	Port 25
-	IdentityFile ~alpha/.ssh/go
-	KexAlgorithms diffie-hellman-group-exchange-sha1,diffie-hellman-group14-sha1,diffie-hellman-group1-sha1
-	UserKnownHostsFile /dev/null
-	StrictHostKeyChecking no
-	PasswordAuthentication no
-	IdentitiesOnly yes
-	LogLevel FATAL

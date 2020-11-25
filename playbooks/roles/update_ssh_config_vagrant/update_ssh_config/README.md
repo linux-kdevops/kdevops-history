@@ -16,6 +16,28 @@ the same python script. They bring in this code using a git subtree.
 
 Below are example command line uses:
 
+## Adding hosts to the top
+
+Note that as noted on the reported [issue#3](https://github.com/mcgrof/kdevops/issues/3)
+[ssh_config(5)](https://man7.org/linux/man-pages/man5/ssh_config.5.html)
+man page states that we should add entries at the top:
+
+```
+Since the first obtained value for each parameter is used, more host-specific
+declarations should be given near the beginning of the file, and general
+defaults at the end.
+```
+
+This project adheres to this best practice.
+
+## Tests
+
+To run tests:
+
+```bash
+make test
+```
+
 ### The vagrant use case
 
 This will remove the hosts entries for two hosts, kdevops and kdevops-dev,
