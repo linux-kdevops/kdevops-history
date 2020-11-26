@@ -373,6 +373,35 @@ class TestUpdateSshConfig(unittest.TestCase):
         self.assertTrue(cmp(target_sshconfig_copy,
                             target_sshconfig_res_add, shallow=False))
 
+    def test_0012_add_remove_hosts_empty_file(self):
+        this_function_name = inspect.stack()[0][3]
+        tests_names = get_test_files(this_function_name)
+        target_sshconfig_orig = tests_names[1]
+        target_sshconfig_copy = tests_names[2]
+        target_sshconfig_res = tests_names[3]
+        target_sshconfig_bk = tests_names[4]
+
+        args = parse_args(['--remove',
+                           'kdevops,kdevops-dev',
+                           '--addhost',
+                           'kdevops,kdevops-dev',
+                           '--backup_file',
+                           target_sshconfig_bk,
+                           '--username',
+                           'alpha',
+                           '--hostname',
+                           '51.179.89.243,52.195.142.19',
+                           '--port',
+                           '25',
+                           '--identity',
+                           '~alpha/.ssh/go',
+                           '--addstrict',
+                           target_sshconfig_copy])
+        run_args(args)
+        self.assertTrue(cmp(target_sshconfig_copy,
+                            target_sshconfig_res, shallow=False))
+        self.assertTrue(not path.exists(target_sshconfig_bk))
+
     def tearDown(self):
         files = listdir("tests")
         for testfile in files:
