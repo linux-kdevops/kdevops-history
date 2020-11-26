@@ -9,7 +9,7 @@ locals {
 
 module "ssh_config_update_host_entries_minicloud" {
   source  = "mcgrof/add-host-ssh-config/kdevops"
-  version = "2.3.0"
+  version = "2.3.1"
 
   ssh_config = var.ssh_config
   update_ssh_config_enable = local.limit_count_minicloud > 0 ? "true" : ""
