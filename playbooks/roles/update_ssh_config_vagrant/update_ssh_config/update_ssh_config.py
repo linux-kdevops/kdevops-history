@@ -190,9 +190,20 @@ def add_host(args):
             new_lines.append("\tLogLevel FATAL\n")
         count = count + 1
 
-    with open(args.ssh_config, 'r') as original: data = original.read()
+    data = ""
+    all_data = None
+    if os.path.exists(args.ssh_config):
+        f = open(args.ssh_config, "r")
+        data = f.read()
+        f.close()
+
     new_data = "".join([x for x in new_lines])
-    with open(args.ssh_config, 'w') as modified: modified.write(new_data + data)
+    all_data = new_data + data
+
+    f = open(args.ssh_config, 'w')
+    f.write(all_data)
+    f.close()
+
 
 class SshHost:
     def __init__(self, ssh_config, name, hostname, username, port, identity,
@@ -278,12 +289,14 @@ def parse_args(args):
 
 
 def run_args(args):
+    skip_remove_and_backup = False
     if not args.remove and not args.addhost:
         print("Must specify addition or removal request")
         sys.exit(0)
 
     if not os.path.isfile(args.ssh_config):
-        sys.exit(0)
+        args.nobackup = True
+        skip_remove_and_backup = True
 
     backup_file = args.ssh_config + '.kdevops.bk'
     if args.backup_file:
@@ -291,10 +304,10 @@ def run_args(args):
     if args.nobackup:
         backup_file = None
 
-    if backup_file:
+    if not skip_remove_and_backup and backup_file:
         copyfile(args.ssh_config, backup_file)
 
-    if args.remove:
+    if not skip_remove_and_backup and args.remove:
         remove_hosts(args)
 
     if args.addvagranthosts:
