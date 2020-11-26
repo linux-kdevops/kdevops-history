@@ -163,13 +163,15 @@ def add_host(args):
                 port = ports[count]
             else:
                 port = args.port
-        new_lines.append("Host %s\n" % (host))
         if len(hostnames) > 1:
             hostname = hostnames[count]
         elif args.hostname:
             hostname = args.hostname
         if hostname:
+            new_lines.append("Host %s %s\n" % (host, hostname))
             new_lines.append("\tHostName %s\n" % (hostname))
+        else:
+            new_lines.append("Host %s\n" % (host))
         if port == "" and args.port:
             port = args.port
         if args.username:
