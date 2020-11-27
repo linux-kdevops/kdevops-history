@@ -75,7 +75,7 @@ $(KDEVOPS_FSTESTS_CONFIG): $(KDEVOPS_FSTESTS_CONFIG_TEMPLATE) .config
 
 fstests:
 	$(Q)ansible-playbook -i hosts playbooks/workloads_shared.yml
-	$(Q)ansible-playbook -i hosts playbooks/fstests.yml
+	$(Q)ansible-playbook -i hosts playbooks/fstests.yml --skip-tags run_tests,copy_results
 
 fstests-baseline:
 	$(Q)ansible-playbook -i hosts -l baseline playbooks/fstests.yml --tags run_tests,copy_results --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml
