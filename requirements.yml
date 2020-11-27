@@ -1,6 +1,0 @@
-# http://docs.ansible.com/galaxy.html#installing-multiple-roles-from-a-file
-# The skinny: ansible-galaxy install --force -r requirements.yml
-
-- src: mcgrof.kdevops_install
-  name: mcgrof.kdevops_install
-  version: v3.5.2

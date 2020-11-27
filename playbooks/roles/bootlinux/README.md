@@ -55,7 +55,7 @@ Role Variables
 Dependencies
 ------------
 
-As defined in requirements.yml.
+None.
 
 Example Playbook
 ----------------
