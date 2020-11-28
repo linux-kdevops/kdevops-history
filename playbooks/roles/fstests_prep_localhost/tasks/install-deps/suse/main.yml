@@ -38,6 +38,7 @@
   zypper:
     name:
       - python3-junit-xml
+      - python3-pip
     state: present
   when:
     - repos_present|bool

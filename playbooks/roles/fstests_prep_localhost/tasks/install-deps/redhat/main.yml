@@ -8,6 +8,7 @@
   vars:
     packages:
       - python3-junitxml
+      - python-pip
 
 - name: Install junitparser
   become: yes

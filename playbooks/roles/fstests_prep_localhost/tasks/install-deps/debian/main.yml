@@ -5,6 +5,7 @@
   apt:
     name:
       - python3-junitxml
+      - python3-pip
 
 - name: Install junitparser
   become: yes
