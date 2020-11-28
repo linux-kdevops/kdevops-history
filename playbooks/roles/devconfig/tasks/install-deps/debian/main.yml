@@ -82,6 +82,7 @@
     dest: /etc/snmp/snmpd.conf
   when:
     - devconfig_try_install_kdevtools|bool
+  tags: snmpd
 
 - name: Enable snmpd service
   become: yes
@@ -90,6 +91,7 @@
     name: snmpd
     enabled: yes
     masked: no
+  tags: snmpd
 
 - name: Start snmpd service
   become: yes
@@ -97,3 +99,4 @@
   systemd:
     name: snmpd
     state: started
+  tags: snmpd

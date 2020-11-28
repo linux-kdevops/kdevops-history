@@ -311,6 +311,7 @@
     - is_sle15sp2|bool
     - repos_will_be_added|bool
     - devconfig_try_install_kdevtools|bool
+  tags: snmpd
 
 - name: Set up snmp
   become: yes
@@ -322,6 +323,7 @@
     - is_sle15sp2|bool
     - repos_will_be_added|bool
     - devconfig_try_install_kdevtools|bool
+  tags: snmpd
 
 - name: Enable snmpd service
   become: yes
@@ -330,6 +332,7 @@
     name: snmpd
     enabled: yes
     masked: no
+  tags: snmpd
 
 - name: Start snmpd service
   become: yes
@@ -337,3 +340,4 @@
   systemd:
     name: snmpd
     state: started
+  tags: snmpd
