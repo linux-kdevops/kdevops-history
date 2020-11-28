@@ -4,6 +4,7 @@
     is_sle: '{{ (ansible_distribution == "SLES") or (ansible_distribution == "SLED") }}'
     is_leap: '{{ "Leap" in ansible_distribution }}'
     is_tumbleweed: '{{ "openSUSE Tumbleweed" == ansible_distribution }}'
+  tags: snmpd
 
 - name: Set SLE specific version labels to make checks easier
   set_fact:
@@ -20,10 +21,12 @@
     is_sle15sp2: '{{ ansible_distribution_version == "15.2" }}'
   when:
     - is_sle|bool
+  tags: snmpd
 
 - name: The default is to assume we have figured out how to add repos for each
   set_fact:
     repos_will_be_added: true
+  tags: snmpd
 
 - name: Disable things which require a repo to be set but that cannot be done
   set_fact:
@@ -32,10 +35,12 @@
     - not devconfig_repos_addon|bool
     - is_sle|bool
     - is_sle10|bool or is_sle11|bool
+  tags: snmpd
 
 - name: The default is to assume we are not on sle11 or sle10
   set_fact:
     sle10_or_11: false
+  tags: snmpd
 
 - name: Are we on SLE11 or SLE10?
   set_fact:
@@ -43,6 +48,7 @@
   when:
     - is_sle|bool
     - is_sle10|bool or is_sle11|bool
+  tags: snmpd
 
 - name: The default is to assume all distros supports nvme-utils
   set_fact:
