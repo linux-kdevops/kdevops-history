@@ -322,3 +322,18 @@
     - is_sle15sp2|bool
     - repos_will_be_added|bool
     - devconfig_try_install_kdevtools|bool
+
+- name: Enable snmpd service
+  become: yes
+  become_method: sudo
+  systemd:
+    name: snmpd
+    enabled: yes
+    masked: no
+
+- name: Start snmpd service
+  become: yes
+  become_method: sudo
+  systemd:
+    name: snmpd
+    state: started
