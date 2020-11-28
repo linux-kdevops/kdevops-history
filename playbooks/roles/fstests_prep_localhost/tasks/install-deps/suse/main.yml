@@ -44,7 +44,9 @@
     - install_local_deps|bool
   tags: [ 'local_deps' ]
 
-- name: Install local dependencies for fstests command and control using pip
+- name: Install junitparser
+  become: yes
+  become_method: sudo
   pip:
     name:
       - junitparser

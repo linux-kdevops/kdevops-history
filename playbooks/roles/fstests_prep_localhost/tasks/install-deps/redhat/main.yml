@@ -8,3 +8,13 @@
   vars:
     packages:
       - python3-junitxml
+
+- name: Install junitparser
+  become: yes
+  become_method: sudo
+  pip:
+    name:
+      - junitparser
+  when:
+    - install_local_deps|bool
+  tags: [ 'local_deps' ]
