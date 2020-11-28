@@ -54,6 +54,7 @@ def main():
             test_type = bad_file_list[bad_file_list_len-1]
             section = bad_file_list[bad_file_list_len-2]
             kernel = bad_file_list[bad_file_list_len-3]
+            hostname = bad_file_list[bad_file_list_len-4]
 
             bad_file_parts = bad_file.split(".")
             bad_file_part_len = len(bad_file_parts) - 1
@@ -66,9 +67,24 @@ def main():
             expunge_kernel_dir = args.outputdir + '/' + kernel + '/' + args.filesystem + '/'
             output_dir = expunge_kernel_dir + 'unassigned/'
             output_file = output_dir + section + '.txt'
+            shortcut_kernel_dir = None
+            shortcut_dir = None
+            shortcut_file = None
+
+            if hostname.startswith("sles"):
+                ksplit = kernel.split(".")
+                shortcut_kernel = ksplit[0] + "." + ksplit[1] + "." + ksplit[2]
+                shortcut_kernel_dir = args.outputdir + '/' + shortcut_kernel + '/' + args.filesystem + '/'
+                shortcut_dir = shortcut_kernel_dir + 'unassigned/'
+                shortcut_file = shortcut_dir + section + '.txt'
 
             if not os.path.isdir(output_dir):
-                os.makedirs(output_dir)
+                if os.path.isdir(shortcut_dir):
+                    output_dir = shortcut_dir
+                    output_file = shortcut_file
+                    expunge_kernel_dir = shortcut_kernel_dir
+                else:
+                    os.makedirs(output_dir)
 
             if not os.path.isfile(output_file):
                 sys.stdout.write("%s %s new failure found file was empty\n" % (section, test_failure_line))
