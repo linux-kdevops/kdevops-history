@@ -87,5 +87,5 @@
   become_method: sudo
   systemd:
     name: snmpd
-    state: started
+    state: restarted
   tags: snmpd
