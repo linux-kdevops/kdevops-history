@@ -128,3 +128,21 @@
     state: present
   when:
     - is_sle15sp2|bool or is_sle15sp3|bool
+
+- name:  add benchmark repo for sles15-sp2
+  become: yes
+  become_method: sudo
+  script:
+    cmd: "{{ role_path }}/scripts/add-suse-repo-if-not-found.sh http://download.opensuse.org/repositories/benchmark/SLE_15_SP2/ benchmark benchmark"
+  when:
+    - is_sle15sp2|bool
+
+- name: Install dbench for sles15-sp2
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - dbench
+    state: present
+  when:
+    - is_sle15sp2|bool
