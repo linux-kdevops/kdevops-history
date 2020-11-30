@@ -2,6 +2,10 @@
 *.o
 *.retry
 
+log.txt
+logtime.txt
+run.sh
+
 hosts
 extra_vars.yaml
 extra_vars.yml
