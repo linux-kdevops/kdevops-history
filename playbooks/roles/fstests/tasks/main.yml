@@ -126,14 +126,14 @@
   when:
     - kdevops_run_fstests|bool
 
-- name: Run fstests using ./oscheck.sh --test-section {{ section }} {{ oscheck_extra_args }}
+- name: Run fstests using ./oscheck.sh --print-done --test-section {{ section }} {{ oscheck_extra_args }}
   vars:
     section: "{{ ansible_hostname | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
   tags: [ 'oscheck', 'fstests', 'run_tests' ]
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
-  command: "./oscheck.sh --test-section {{ section }} {{ oscheck_extra_args }}"
+  command: "./oscheck.sh --print-done --test-section {{ section }} {{ oscheck_extra_args }}"
   ignore_errors: yes
   no_log: True
   args:

@@ -9,6 +9,7 @@ VERBOSE="false"
 ONLY_TEST_SECTION=""
 ONLY_CHECK_DEPS="false"
 ONLY_QUESTION_DISTRO_KERNEL="false"
+PRINT_DONE="false"
 
 # Used to do a sanity check that the section we are running a test
 # for has all intended files part of its expunge list. Updated per
@@ -53,6 +54,7 @@ oscheck_usage()
 	echo "--is-distro     - Only checks if the kernel detected is a distro kernel or not, does not run any tests"
 	echo "--custom-kernel - Only checks if the kernel detected is a distro kernel or not, does not run any tests"
 	echo "--fast-tests    - Run oscheck's interpretation of what fast test are"
+	echo "--print-done    - Echo into /dev/kmsg when we're done with run fstests done/000 at time'"
 	echo "--verbose       - Be verbose when debugging"
 	echo ""
 	echo "Note that all parameters which we do not understand we'll just"
@@ -115,6 +117,10 @@ parse_args()
 		--help)
 			oscheck_usage
 			exit
+			;;
+		--print-done)
+			PRINT_DONE="true"
+			shift
 			;;
 		*)
 			copy_to_check_arg $key
@@ -697,6 +703,10 @@ oscheck_run_sections()
 		OSCHECK_CMD="./check -s ${SECTION} -R xunit $_SKIP_GROUPS $EXPUNGE_FLAGS $CHECK_ARGS"
 		oscheck_run_cmd
 	done
+	if [[ "$PRINT_DONE" == "true" ]]; then
+		NOW=$(date --rfc-3339='seconds' | awk -F"+" '{print $1}')
+		echo "run fstests done/000 at $NOW" > /dev/kmsg
+	fi
 }
 
 oscheck_test_dev_setup()
