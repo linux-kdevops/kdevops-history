@@ -9,6 +9,7 @@ VERBOSE="false"
 ONLY_TEST_SECTION=""
 ONLY_CHECK_DEPS="false"
 ONLY_QUESTION_DISTRO_KERNEL="false"
+PRINT_START="false"
 PRINT_DONE="false"
 
 # Used to do a sanity check that the section we are running a test
@@ -54,7 +55,8 @@ oscheck_usage()
 	echo "--is-distro     - Only checks if the kernel detected is a distro kernel or not, does not run any tests"
 	echo "--custom-kernel - Only checks if the kernel detected is a distro kernel or not, does not run any tests"
 	echo "--fast-tests    - Run oscheck's interpretation of what fast test are"
-	echo "--print-done    - Echo into /dev/kmsg when we're done with run fstests done/000 at time'"
+	echo "--print-start   - Echo into /dev/kmsg when we've started with run fstests fstestsstart/000 at time'"
+	echo "--print-done    - Echo into /dev/kmsg when we're done with run fstests fstestsdone/000 at time'"
 	echo "--verbose       - Be verbose when debugging"
 	echo ""
 	echo "Note that all parameters which we do not understand we'll just"
@@ -117,6 +119,10 @@ parse_args()
 		--help)
 			oscheck_usage
 			exit
+			;;
+		--print-start)
+			PRINT_START="true"
+			shift
 			;;
 		--print-done)
 			PRINT_DONE="true"
@@ -671,6 +677,10 @@ oscheck_run_cmd()
 
 oscheck_run_sections()
 {
+	if [[ "$PRINT_START" == "true" ]]; then
+		NOW=$(date --rfc-3339='seconds' | awk -F"+" '{print $1}')
+		echo "run fstests fstestsstart/000 at $NOW" > /dev/kmsg
+	fi
 	for s in $RUN_SECTIONS; do
 		SECTION="$s"
 		# If you specified to run only one section we run it.
@@ -705,7 +715,7 @@ oscheck_run_sections()
 	done
 	if [[ "$PRINT_DONE" == "true" ]]; then
 		NOW=$(date --rfc-3339='seconds' | awk -F"+" '{print $1}')
-		echo "run fstests done/000 at $NOW" > /dev/kmsg
+		echo "run fstests fstestsdone/000 at $NOW" > /dev/kmsg
 	fi
 }
 
