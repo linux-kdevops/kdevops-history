@@ -126,6 +126,10 @@
   when:
     - kdevops_run_fstests|bool
 
+- name: Print uname for each host
+  tags: [ 'oscheck', 'fstests', 'run_tests' ]
+  debug: var=ansible_kernel
+
 - name: Run fstests using ./oscheck.sh --print-done --test-section {{ section }} {{ oscheck_extra_args }}
   vars:
     section: "{{ ansible_hostname | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
