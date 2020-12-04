@@ -126,6 +126,37 @@
   when:
     - kdevops_run_fstests|bool
 
+- name: Set the path where we collect our fstests results
+  set_fact:
+    fstests_results_target: "../workflows/fstests/"
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'checktime' ]
+
+- name: Look for prior check.time files on {{ fstests_data_target }}
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'checktime' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  find:
+    paths: "{{ fstests_data_target }}"
+    recurse: yes
+    patterns: "check.time"
+  register: checktime_files
+
+- name: Copy prior check.time files from {{ fstests_data_target }}
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'checktime' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  fetch:
+    src: "{{ item.path }}"
+    dest: "{{ fstests_results_target }}/{{ item.path | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
+    flat: yes
+  with_items: "{{ checktime_files.files }}"
+  loop_control:
+    label: "{{ item.path | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
+  when:
+    - checktime_files.matched > 0
+
 - name: Print uname for each host
   tags: [ 'oscheck', 'fstests', 'run_tests' ]
   debug: var=ansible_kernel
@@ -160,6 +191,32 @@
     label: "{{ item }}"
   run_once: true
   tags: [ 'oscheck', 'fstests', 'copy_results', 'clean_local_results' ]
+
+- name: Look for the just run check.time files on {{ fstests_data_target }}
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'checktime' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  find:
+    paths: "{{ fstests_data_target }}"
+    recurse: yes
+    patterns: "check.time"
+  register: checktime_files
+
+- name: Copy the latest run check.time files from {{ fstests_data_target }}
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'checktime' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  fetch:
+    src: "{{ item.path }}"
+    dest: "{{ fstests_results_target }}/{{ item.path | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
+    flat: yes
+  with_items: "{{ checktime_files.files }}"
+  loop_control:
+    label: "{{ item.path | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
+  when:
+    - checktime_files.matched > 0
 
 - name: Look for xunit results files on {{ fstests_data_target }}
   tags: [ 'oscheck', 'fstests', 'copy_results', 'xunit' ]
