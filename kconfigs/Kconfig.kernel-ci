@@ -1,0 +1,87 @@
+config KERNEL_CI
+	bool "Enable kernel continous integration"
+	default n
+	help
+	  If you have the goal to run a test not just once but in an ongoing
+	  basis to verify if you have found a regression by updating your kernel
+	  in between each test loop you are essentially doing kernel continous
+	  integration (kernel-ci) and can enable this to assist you with this.
+	  Enabling this will allow you to run test loops per workflow, for
+	  instance, if such workflows support kernel-ci. Workflows support
+	  kernel-ci by implementing a Makefile target for a test with a "loop"
+	  postfix. For instance, to run the fstests kernel-ci loop you would
+	  just run:
+
+	    make fstests-baseline-loop
+
+	  Enable this option if you want to enable and configure certain
+	  kernel-ci features.
+
+if KERNEL_CI
+
+config KERNEL_CI_EMAIL_REPORT
+	bool "Enable sending a report on faillure"
+	default n
+	help
+	  Enable this so that a report will be emailed in case of a failure.
+
+if KERNEL_CI_EMAIL_REPORT
+
+choice
+	prompt "kernel-ci email sending method"
+	default KERNEL_CI_EMAIL_METHOD_SSH
+
+config KERNEL_CI_EMAIL_METHOD_LOCAL
+	bool "Send email by running mail command locally"
+	help
+	  Assume smtp is configured already on the localhost where kdevops is
+	  running and that we can rely on the mail command to send emails.
+
+config KERNEL_CI_EMAIL_METHOD_SSH
+	bool "Send email by running ssh and mail command"
+	select KDEVOPS_SSH_CONFIG_UPDATE_STRICT
+	help
+	  Instead of configuring the localhost where kdevops is running
+	  with smtp to send mail you can choose this option to instead ssh
+	  into a target host which has smtp configured so you can send an
+	  email report from it. You are highly encouraged to set up a
+	  password protected ssh key, and for you to unlock that key
+	  only for the shell instance where kdevops will run. You can do
+	  this for example as follows, assuming you are running the
+	  fstests kernel-ci baseline loop:
+
+	    ssh-agent bash
+	    ssh-add ~/.ssh/target
+	    make fstests-baseline-loop
+
+endchoice
+
+if KERNEL_CI_EMAIL_METHOD_SSH
+
+config KERNEL_CI_EMAIL_SSH_HOST
+	string "The name of the host to ssh to send email report"
+	default "localhost"
+	  help
+	  The host to use to ssh into to send an email report. You should
+	  ideally have the host configured to log into using a password
+	  protected ssh key, and prior to running your kernel-ci loop
+	  you should unlock the key using ssh-agent, and ssh-add. For instance
+	  if testing the fstests baseline loop you would use:
+
+	    ssh-agent bash
+	    ssh-add ~/.ssh/target
+	    make fstests-baseline-loop
+
+endif # KERNEL_CI_EMAIL_METHOD_SSH
+
+config KERNEL_CI_EMAIL_RCPT
+	string "Who to send email report to"
+	default $(shell, echo $USER)
+	  help
+	  Comma separated list of users to send the kernel-ci loop email
+	  report to. These are the recipients of the kernel-ci test loop
+	  report.
+
+endif # KERNEL_CI_EMAIL_REPORT
+
+endif # KERNEL_CI

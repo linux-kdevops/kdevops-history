@@ -165,3 +165,7 @@ endif # KDEVOPS_ENABLE_DISTRO_EXTRA_ADDONS
 menu "Ansible post-bring up provisioning configuration"
 source "kconfigs/Kconfig.ansible_provisioning"
 endmenu
+
+menu "Kernel continous integration configuration"
+source "kconfigs/Kconfig.kernel-ci"
+endmenu
