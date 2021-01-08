@@ -18,6 +18,7 @@ run_loop()
 		echo "git status:" >> $KERNEL_CI_FAIL_LOG
 		git status >> $KERNEL_CI_FAIL_LOG
 		echo "Results:" >> $KERNEL_CI_FAIL_LOG
+
 		XUNIT_FAIL="no"
 		if [ -f workflows/fstests/results/xunit_results.txt ]; then
 			cat workflows/fstests/results/xunit_results.txt >> $KERNEL_CI_FAIL_LOG
@@ -27,10 +28,14 @@ run_loop()
 				XUNIT_FAIL="yes"
 			fi
 		fi
+
 		DIFF_COUNT=$(git diff workflows/fstests/expunges/ | wc -l)
-		if [[ "$DIFF_COUNT" -ne 0 || $XUNIT_FAIL=="yes" ]]; then
-			echo "Test  $COUNT: FAILED!" >> $KERNEL_CI_FAIL_LOG
+		if [[ "$DIFF_COUNT" -ne 0 ]]; then
 			echo "Detected a failure as reported by differences in our expunge list" >> $KERNEL_CI_FAIL_LOG
+		fi
+
+		if [[ "$DIFF_COUNT" -ne 0 || "$XUNIT_FAIL" =="yes" ]]; then
+			echo "Test  $COUNT: FAILED!" >> $KERNEL_CI_FAIL_LOG
 			echo "== Test loop count $COUNT" >> $KERNEL_CI_FAIL_LOG
 			echo "$(git describe)" >> $KERNEL_CI_FAIL_LOG
 			git diff >> $KERNEL_CI_FAIL_LOG
