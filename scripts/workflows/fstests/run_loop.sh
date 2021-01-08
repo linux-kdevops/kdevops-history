@@ -34,7 +34,7 @@ run_loop()
 			echo "Detected a failure as reported by differences in our expunge list" >> $KERNEL_CI_FAIL_LOG
 		fi
 
-		if [[ "$DIFF_COUNT" -ne 0 || "$XUNIT_FAIL" =="yes" ]]; then
+		if [[ "$DIFF_COUNT" -ne 0 || "$XUNIT_FAIL" == "yes" ]]; then
 			echo "Test  $COUNT: FAILED!" >> $KERNEL_CI_FAIL_LOG
 			echo "== Test loop count $COUNT" >> $KERNEL_CI_FAIL_LOG
 			echo "$(git describe)" >> $KERNEL_CI_FAIL_LOG
