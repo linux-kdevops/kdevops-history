@@ -15,6 +15,7 @@ KERNEL_CI_FAIL_FILE=".kernel-ci.fail"
 KERNEL_CI_OK_FILE=".kernel-ci.ok"
 KERNEL_CI_FULL_LOG=".kernel-ci.log"
 KERNEL_CI_FAIL_LOG=".kernel-ci.fail.log"
+KERNEL_CI_DIFF_LOG=".kernel-ci.diff.log"
 KERNEL_CI_LOGTIME=".kernel-ci.logtime.loop"
 KERNEL_CI_LOGTIME_FULL=".kernel-ci.logtime.full"
 

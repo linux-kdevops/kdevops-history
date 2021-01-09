@@ -23,6 +23,10 @@ echo "-------------------------------------------" >> $KERNEL_CI_LOGTIME_FULL
 echo "Full run time of kernel-ci loop:" >> $KERNEL_CI_LOGTIME_FULL
 cat $KERNEL_CI_LOGTIME_FULL >> $KERNEL_CI_FAIL_LOG
 
+echo "-------------------------------------------" >> $KERNEL_CI_DIFF_LOG
+echo "Full run time of kernel-ci loop:" >> $KERNEL_CI_DIFF_LOG
+cat $KERNEL_CI_LOGTIME_FULL >> $KERNEL_CI_DIFF_LOG
+
 if [[ "$CONFIG_KERNEL_CI_EMAIL_REPORT" != "y" ]]; then
 	if [[ -f $KERNEL_CI_FAIL_FILE ]]; then
 		FAIL_LOOP="$(cat $KERNEL_CI_FAIL_FILE)"
@@ -45,9 +49,9 @@ if [[ -f $KERNEL_CI_FAIL_FILE ]]; then
 	FAIL_LOOP="$(cat $KERNEL_CI_FAIL_FILE)"
 	SUBJECT="$SUBJECT_PREFIX $FAIL_LOOP"
 	if [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_LOCAL" == "y" ]]; then
-		cat $KERNEL_CI_FAIL_LOG | mail -s "$SUBJECT" $RCPT
+		cat $KERNEL_CI_DIFF_LOG | mail -s "$SUBJECT" $RCPT
 	elif [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_SSH" == "y" ]]; then
-		cat $KERNEL_CI_FAIL_LOG | ssh $SSH_TARGET 'mail -s "'$SUBJECT'"' $RCPT
+		cat $KERNEL_CI_DIFF_LOG | ssh $SSH_TARGET 'mail -s "'$SUBJECT'"' $RCPT
 	fi
 	echo $SUBJECT
 	exit 1
