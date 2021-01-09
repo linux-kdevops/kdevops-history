@@ -10,7 +10,7 @@ config FSTESTS_XFS
 	  This will target testing the xfs filesystem.
 
 config FSTESTS_BTRFS
-	bool "brfs"
+	bool "btrfs"
 	help
 	  This will target testing the btrfs filesystem.
 
@@ -31,6 +31,14 @@ source "workflows/fstests/xfs/Kconfig"
 endmenu
 
 endif # FSTESTS_XFS
+
+if FSTESTS_BTRFS
+
+menu "Configure how to test btrfs"
+source "workflows/fstests/btrfs/Kconfig"
+endmenu
+
+endif # FSTESTS_BTRFS
 
 config FSTESTS_GIT
 	string "The fstests git tree to clone"

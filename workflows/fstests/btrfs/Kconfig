@@ -1,0 +1,69 @@
+# Distributions actively maintaining btrfs support should select this and then
+# be careful to select any of the other HAVE_DISTRO_BTRFS_* below so that
+# testers can know what to test for.
+config HAVE_DISTRO_BTRFS_PREFERS_MANUAL
+	bool
+	default n
+
+config HAVE_DISTRO_BTRFS_DISABLES_RAID56
+	bool
+	default n
+
+config FSTESTS_BTRFS_MANUAL_COVERAGE
+	bool "Enable manual coverage selection"
+	default y if HAVE_DISTRO_BTRFS_PREFERS_MANUAL
+	default n if !HAVE_DISTRO_BTRFS_PREFERS_MANUAL
+	help
+	  By default we aim to spawn enough hosts to cover testing the full
+	  range of supported features upstream on the Linux kernel for btrfs,
+	  and for you to also be able to do development on each section
+	  concurrently. Distributions however may override sensible defaults
+	  and only support certain features. Enabling this option lets you
+	  select and test only specific configurations.
+
+	  By default we enables all tests, but certain distributions may
+	  disable certain features and as such don't need to run certain
+	  type of tests.
+
+	  You can enable this to allow you to override the default test
+	  coverage.
+
+if FSTESTS_BTRFS_MANUAL_COVERAGE
+
+config FSTESTS_BTRFS_ENABLES_RAID56
+	bool "Enable testing raid 5 and raid 6 support"
+	default y if !HAVE_DISTRO_BTRFS_DISABLES_RAID56
+	default n if HAVE_DISTRO_BTRFS_DISABLES_RAID56
+	help
+	  This will create a host to test the baseline of fstests using the
+	  following configuration, which enables CRC, which was enabled by
+	  default as of the v3.2.3 xfsprogs release:
+
+	      [xfs]
+	      MKFS_OPTIONS='-f -m crc=1,reflink=0,rmapbt=0, -i sparse=0'
+	      FSTYP=xfs
+
+config FSTESTS_BTRFS_SECTION_RAID56_ENABLED
+	bool "Enable testing section: btrfs_raid56"
+	default y if FSTESTS_BTRFS_ENABLES_RAID56
+	default n if !FSTESTS_BTRFS_ENABLES_RAID56
+	help
+	  Enabling this will test btrfs assuming raid 5 and raid 6 are
+	  enabled and supported on your kernel.
+
+config FSTESTS_BTRFS_SECTION_RAID56_DISABLED
+	bool "Enable testing section: btrfs_noraid56"
+	default y
+	help
+	  Raid 5 and 6 have known issues on btrfs, and so somoe distributions
+	  opt out of supporting it. If you disable raid 5 and 6 support you
+	  want to enable testing this section as it will ensure you skip out
+	  on tests which are related to only raid 5 or 6. We currently have an
+	  expunge list which we use to ensure you don't run tests related to
+	  raid 5 or 6.
+
+	  If you enable raid 5 and 6 support, you can enable testing this
+	  section, however the results will just be a subset of the results
+	  from testing section btrfs_raid56.
+
+endif # !FSTESTS_BTRFS_MANUAL_COVERAGE

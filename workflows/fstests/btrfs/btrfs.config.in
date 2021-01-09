@@ -1,0 +1,16 @@
+# Edit to suit your local system and install in <fstests>/configs/$HOST.config
+[default]
+TEST_DEV=@FSTESTSTESTDEV@
+TEST_DIR=@FSTESTSDIR@
+SCRATCH_DEV_POOL="@FSTESTSSCRATCHDEVPOOL@"
+
+SCRATCH_MNT=@FSTESTSSCRATCHMNT@
+RESULT_BASE=$PWD/results/$HOST/$(uname -r)
+
+[btrfs_raid56]
+MKFS_OPTIONS='-f'
+FSTYP=btrfs
+
+[btrfs_noraid56]
+MKFS_OPTIONS='-f'
+FSTYP=btrfs
