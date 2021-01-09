@@ -16,6 +16,15 @@
 
 # Distro agnostic stuff goes below
 
+- name: Ensure /etc/hostname is set
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  template:
+    src: hostname
+    dest: /etc/hostname
+  tags: hostname
+
 - name: check if the developer has a git config
   delegate_to: localhost
   stat:
