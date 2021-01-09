@@ -1,6 +1,7 @@
 config WORKFLOW_EXTRA_SOFTWARE
 	bool "Allow the installation and configuration of additional software"
-	default y
+	default n if VAGRANT_DEBIAN
+	default y if !VAGRANT_DEBIAN
 	help
 	  Enabling this option will allow you to install and configure extra
 	  software on the target system which may be useful for a slew of
