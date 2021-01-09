@@ -33,6 +33,7 @@ kdevops_vagrant_configure_libvirt:
 	@$(Q)ansible-playbook --connection=local \
 		--inventory localhost, \
 		$(KDEVOPS_PLAYBOOKS_DIR)/libvirt_user.yml -e "skip_install=True" \
+		-e 'running_user=$(USER)' \
 		-e 'ansible_python_interpreter=/usr/bin/python3'
 
 kdevops_vagrant_deps: \
