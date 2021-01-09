@@ -8,20 +8,32 @@ kdevops_all: kdevops_deps
 PHONY := kdevops_all
 
 kdevops_terraform_deps:
-	@$(Q)ansible-playbook -i $(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/install_terraform.yml
+	@$(Q)ansible-playbook --connection=local \
+		--inventory localhost, \
+		$(KDEVOPS_PLAYBOOKS_DIR)/install_terraform.yml \
+		-e 'ansible_python_interpreter=/usr/bin/python3'
 	@$(Q)if [ -d $(KDEVOPS_TERRAFORM_DIR) ]; then \
 		make -C $(KDEVOPS_TERRAFORM_DIR) deps; \
 	fi
 PHONY += kdevops_terraform_deps
 
 kdevops_vagrant_install_vagrant:
-	@$(Q)ansible-playbook -i $(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/install_vagrant.yml
+	@$(Q)ansible-playbook --connection=local \
+		--inventory localhost, \
+		$(KDEVOPS_PLAYBOOKS_DIR)/install_vagrant.yml \
+		-e 'ansible_python_interpreter=/usr/bin/python3'
 
 kdevops_vagrant_install_libvirt:
-	@$(Q)ansible-playbook -i $(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/libvirt_user.yml -e "skip_configuration=True"
+	@$(Q)ansible-playbook --connection=local \
+		--inventory localhost, \
+		$(KDEVOPS_PLAYBOOKS_DIR)/libvirt_user.yml -e "skip_configuration=True" \
+		-e 'ansible_python_interpreter=/usr/bin/python3'
 
 kdevops_vagrant_configure_libvirt:
-	@$(Q)ansible-playbook -i $(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/libvirt_user.yml -e "skip_install=True"
+	@$(Q)ansible-playbook --connection=local \
+		--inventory localhost, \
+		$(KDEVOPS_PLAYBOOKS_DIR)/libvirt_user.yml -e "skip_install=True" \
+		-e 'ansible_python_interpreter=/usr/bin/python3'
 
 kdevops_vagrant_deps: \
 		kdevops_vagrant_install_vagrant \
@@ -32,12 +44,19 @@ PHONY += kdevops_vagrant_deps
 KDEVOPS_VAGRANT_WORK := kdevops_vagrant_deps
 
 kdevops_vagrant_boxes:
-	@$(Q)ansible-playbook -i $(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/install_vagrant_boxes.yml
+	@$(Q)ansible-playbook --connection=local \
+		--inventory localhost, \
+		$(KDEVOPS_PLAYBOOKS_DIR)/install_vagrant_boxes.yml \
+		-e 'ansible_python_interpreter=/usr/bin/python3'
 PHONY += kdevops_vagrant_boxes
 KDEVOPS_VAGRANT_WORK += kdevops_vagrant_boxes
 
 kdevops_verify_vagrant_user:
-	@$(Q)ansible-playbook -i $(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/libvirt_user.yml -e "only_verify_user=True"
+	@$(Q)ansible-playbook --connection=local \
+		--inventory localhost, \
+		$(KDEVOPS_PLAYBOOKS_DIR)/libvirt_user.yml -e "only_verify_user=True" \
+		-e 'ansible_python_interpreter=/usr/bin/python3'
+
 PHONY += kdevops_verify_vagrant_user
 KDEVOPS_VAGRANT_WORK += kdevops_verify_vagrant_user
 
