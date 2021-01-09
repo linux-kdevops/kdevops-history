@@ -8,6 +8,23 @@
     append: yes
   when: 'not only_verify_user|bool'
 
+- name: Check if apparmor_status exists
+  stat:
+    path: /usr/sbin/apparmor_status
+  register: apparmor_file_stat_result
+  when: 'only_verify_user|bool'
+
+- name: Verify if apparmor is disabled when applicable
+  become: yes
+  become_method: sudo
+  command:
+    cmd: /usr/sbin/apparmor_status --enabled
+  register: apparmor_check
+  failed_when: apparmor_check.rc == 0
+  when:
+    - 'only_verify_user|bool'
+    - 'apparmor_file_stat_result.stat.exists'
+
 - name: Verifies user's effective group allows to run libvirt/kvm without being root
   shell: groups | grep {{ item }}
   with_items:
