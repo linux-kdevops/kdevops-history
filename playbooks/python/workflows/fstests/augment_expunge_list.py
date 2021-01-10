@@ -79,7 +79,7 @@ def main():
                 shortcut_file = shortcut_dir + section + '.txt'
 
             if not os.path.isdir(output_dir):
-                if os.path.isdir(shortcut_dir):
+                if shortcut_dir and os.path.isdir(shortcut_dir):
                     output_dir = shortcut_dir
                     output_file = shortcut_file
                     expunge_kernel_dir = shortcut_kernel_dir
