@@ -289,6 +289,25 @@
   tags: [ 'oscheck', 'fstests', 'copy_results', 'augment_expunge_list' ]
   run_once: true
 
+- name: Print fstests new expunge files for {{ fstests_fstyp }} which are not yet committed
+  local_action: "shell ./python/workflows/fstests/get_new_expunge_files.py {{ fstests_fstyp }} {{ fstests_results_target }}/expunges/ > {{ fstests_results_target }}/new_expunge_files.txt"
+  tags: [ 'oscheck', 'fstests', 'copy_results', 'print_results', 'augment_expunge_list' ]
+  run_once: true
+
+- name: Get stat of new files not yet committed, ie, new expunge files
+  local_action: stat path="{{ fstests_results_target }}/new_expunge_files.txt"
+  register: new_expunge_files_stat
+  run_once: true
+  tags: [ 'oscheck', 'fstests', 'copy_results', 'print_results', 'augment_expunge_list' ]
+
+- name: Inform user if new expunge files have been found
+  run_once: true
+  tags: [ 'oscheck', 'fstests', 'copy_results', 'augment_expunge_list' ]
+  debug:
+    msg: "New expunge files found in: {{ fstests_results_target | regex_replace('^../', '') }}new_expunge_files.txt"
+  when:
+    - new_expunge_files_stat.stat.size != 0
+
 - name: Inform user if no failures have been found
   tags: [ 'oscheck', 'fstests', 'copy_results', 'augment_expunge_list' ]
   debug:
@@ -296,3 +315,4 @@
   when:
     - failed_tests.matched == 0
     - xunit_files.matched == 0
+    - new_expunge_files_stat.stat.size != 0

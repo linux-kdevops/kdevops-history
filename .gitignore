@@ -30,8 +30,10 @@ workflows/fstests/*/*.config
 
 playbooks/secret.yml
 playbooks/python/workflows/fstests/__pycache__/
+playbooks/python/workflows/fstests/lib/__pycache__/
 playbooks/python/workflows/fstests/gen_results_summary.pyc
 
+workflows/fstests/new_expunge_files.txt
 workflows/fstests/bad_results.txt
 workflows/fstests/results/
 workflows/fstests/*/hosts_generated.in
