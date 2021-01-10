@@ -4,7 +4,6 @@
 #
 # We default to not run tests.
 kdevops_run_fstests: False
-oscheck_fstyp: "xfs"
 
 # Ror instance you can use "-g quick" but note that this may produce
 # not results as all quick tests may be expunded.
