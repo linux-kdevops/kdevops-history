@@ -45,7 +45,22 @@ run_loop()
 			echo "" >> $KERNEL_CI_DIFF_LOG
 		fi
 
-		if [[ "$DIFF_COUNT" -ne 0 || "$XUNIT_FAIL" == "yes" ]]; then
+		NEW_EXPUNGE_FILES="no"
+		if [[ -f workflows/fstests/new_expunge_files.txt && "$(wc -l workflows/fstests/new_expunge_files.txt | awk '{print $1}')" -ne 0 ]]; then
+			NEW_EXPUNGE_FILES="yes"
+			echo "Detected a failure since new expunge files were found which are not commited into git" >> $KERNEL_CI_DIFF_LOG
+			echo "New expunge file found, listing output below:" >> $KERNEL_CI_DIFF_LOG
+			for i in $(cat workflows/fstests/new_expunge_files.txt); do
+				echo "$i :"
+				if [[ -f $i ]]; then
+					cat $i >> $KERNEL_CI_DIFF_LOG
+				else
+					echo "Error: $i listed as new but its not found.." >> $KERNEL_CI_DIFF_LOG
+				fi
+			done
+		fi
+
+		if [[ "$DIFF_COUNT" -ne 0 || "$XUNIT_FAIL" == "yes" || "$NEW_EXPUNGE_FILES" == "yes" ]]; then
 			echo "Test  $COUNT: FAILED!" >> $KERNEL_CI_DIFF_LOG
 			echo "== Test loop count $COUNT" >> $KERNEL_CI_DIFF_LOG
 			echo "$(git describe)" >> $KERNEL_CI_DIFF_LOG
