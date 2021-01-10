@@ -23,17 +23,26 @@ run_loop()
 
 		XUNIT_FAIL="no"
 		if [ -f workflows/fstests/results/xunit_results.txt ]; then
-			cat workflows/fstests/results/xunit_results.txt >> $KERNEL_CI_FAIL_LOG
 			grep -q Failures workflows/fstests/results/xunit_results.txt
 			if [[ $? -eq 0 ]]; then
-				echo "Detected a failure as reportd by xunit" >> $KERNEL_CI_DIFF_LOG
+				echo "Detected a failure as reported by xunit:" >> $KERNEL_CI_DIFF_LOG
+				cat workflows/fstests/results/xunit_results.txt >> $KERNEL_CI_DIFF_LOG
 				XUNIT_FAIL="yes"
+			else
+				echo "No failures detected by xunit:" >> $KERNEL_CI_DIFF_LOG
+				cat workflows/fstests/results/xunit_results.txt >> $KERNEL_CI_FAIL_LOG
 			fi
 		fi
 
 		DIFF_COUNT=$(git diff workflows/fstests/expunges/ | wc -l)
 		if [[ "$DIFF_COUNT" -ne 0 ]]; then
 			echo "Detected a failure as reported by differences in our expunge list" >> $KERNEL_CI_DIFF_LOG
+		elif [[ "$XUNIT_FAIL" == "yes" ]]; then
+			echo "" >> $KERNEL_CI_DIFF_LOG
+			echo "Although xunit detects an error, no test bad file found. This is" >> $KERNEL_CI_DIFF_LOG
+			echo "likely due to a test which xunit reports as failed causing a" >> $KERNEL_CI_DIFF_LOG
+			echo "kernel warning." >> $KERNEL_CI_DIFF_LOG
+			echo "" >> $KERNEL_CI_DIFF_LOG
 		fi
 
 		if [[ "$DIFF_COUNT" -ne 0 || "$XUNIT_FAIL" == "yes" ]]; then
