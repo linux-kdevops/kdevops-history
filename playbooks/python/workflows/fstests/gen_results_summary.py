@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-2.0
+
 """The gen_results_summary module generates a summary report given a
 results directory.
 
