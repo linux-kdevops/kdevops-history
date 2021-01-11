@@ -19,8 +19,8 @@ fi
 SUBJECT_PREFIX="kernel-ci: fstests failure for $FSTYPE on test loop "
 
 /usr/bin/time -f %E -o $KERNEL_CI_LOGTIME_FULL $KERNEL_CI_LOOP
-echo "-------------------------------------------" >> $KERNEL_CI_LOGTIME_FULL
-echo "Full run time of kernel-ci loop:" >> $KERNEL_CI_LOGTIME_FULL
+echo "-------------------------------------------" >> $KERNEL_CI_FAIL_LOG
+echo "Full run time of kernel-ci loop:" >> $KERNEL_CI_FAIL_LOG
 cat $KERNEL_CI_LOGTIME_FULL >> $KERNEL_CI_FAIL_LOG
 
 echo "-------------------------------------------" >> $KERNEL_CI_DIFF_LOG
