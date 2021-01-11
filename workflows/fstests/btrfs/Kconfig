@@ -43,7 +43,7 @@ config FSTESTS_BTRFS_ENABLES_RAID56
 	      MKFS_OPTIONS='-f -m crc=1,reflink=0,rmapbt=0, -i sparse=0'
 	      FSTYP=xfs
 
-config FSTESTS_BTRFS_SECTION_RAID56_ENABLED
+config FSTESTS_BTRFS_SECTION_RAID56
 	bool "Enable testing section: btrfs_raid56"
 	default y if FSTESTS_BTRFS_ENABLES_RAID56
 	default n if !FSTESTS_BTRFS_ENABLES_RAID56
@@ -51,7 +51,7 @@ config FSTESTS_BTRFS_SECTION_RAID56_ENABLED
 	  Enabling this will test btrfs assuming raid 5 and raid 6 are
 	  enabled and supported on your kernel.
 
-config FSTESTS_BTRFS_SECTION_RAID56_DISABLED
+config FSTESTS_BTRFS_SECTION_NORAID56
 	bool "Enable testing section: btrfs_noraid56"
 	default y
 	help
