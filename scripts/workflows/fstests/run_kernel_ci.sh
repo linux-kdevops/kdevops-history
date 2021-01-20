@@ -156,10 +156,12 @@ kernel_ci_watchdog_loop()
 				echo "all tests as otherwise we'd never have this test complete." >> $KERNEL_CI_WATCHDOG_FAIL_LOG
 				if [[ "$HUNG_FOUND" == "True" ]]; then
 					echo "Hung hosts found:" >> $KERNEL_CI_WATCHDOG_FAIL_LOG
+					grep runtime $KERNEL_CI_WATCHDOG_RESULTS >> $KERNEL_CI_WATCHDOG_FAIL_LOG
 					cat $KERNEL_CI_WATCHDOG_HUNG >> $KERNEL_CI_WATCHDOG_FAIL_LOG
 				fi
 				if [[ "$TIMEOUT_FOUND" == "True" ]]; then
 					echo "Hosts we timed out on:" >> $KERNEL_CI_WATCHDOG_FAIL_LOG
+					grep runtime $KERNEL_CI_WATCHDOG_RESULTS >> $KERNEL_CI_WATCHDOG_FAIL_LOG
 					cat $KERNEL_CI_WATCHDOG_TIMEOUT >> $KERNEL_CI_WATCHDOG_FAIL_LOG
 				fi
 				for i in $(awk '{print $1}' $KERNEL_CI_WATCHDOG_RESULTS | egrep -v "runtime|Hostname"); do
