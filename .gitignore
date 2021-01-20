@@ -37,5 +37,6 @@ workflows/fstests/new_expunge_files.txt
 workflows/fstests/bad_results.txt
 workflows/fstests/results/
 workflows/fstests/*/hosts_generated.in
+workflows/fstests/.begin
 
 .kernel-ci.*
