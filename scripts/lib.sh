@@ -18,6 +18,14 @@ KERNEL_CI_FAIL_LOG=".kernel-ci.fail.log"
 KERNEL_CI_DIFF_LOG=".kernel-ci.diff.log"
 KERNEL_CI_LOGTIME=".kernel-ci.logtime.loop"
 KERNEL_CI_LOGTIME_FULL=".kernel-ci.logtime.full"
+KERNEL_CI_WATCHDOG_RESULTS_NEW=".kernel-ci.status.new"
+KERNEL_CI_WATCHDOG_RESULTS=".kernel-ci.status"
+
+KERNEL_CI_WATCHDOG_FAIL_LOG=".kernel-ci.watchdog.fail.log"
+KERNEL_CI_WATCHDOG_HUNG=".kernel-ci.watchdog.hung"
+KERNEL_CI_WATCHDOG_TIMEOUT=".kernel-ci.watchdog.timeout"
+
+FSTESTS_STARTED_FILE="${TOPDIR}/workflows/fstests/.begin"
 
 if [[ "$CONFIG_KDEVOPS_WORKFLOW_FSTESTS" == "y" ]]; then
 	FSTYP="$CONFIG_FSTESTS_FSTYP"

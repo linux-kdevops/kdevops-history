@@ -86,7 +86,7 @@ fstests-baseline:
 	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/fstests.yml --tags run_tests,copy_results --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml
 
 fstests-baseline-loop:
-	$(Q)$(FSTEST_KERNEL_CI_LOOP)
+	$(Q)$(FSTEST_KERNEL_CI_LOOP) baseline
 
 fstests-baseline-skip-kdevops-update:
 	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/fstests.yml --tags run_tests,copy_results --skip-tags git_update --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml

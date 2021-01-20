@@ -161,6 +161,13 @@
   tags: [ 'oscheck', 'fstests', 'run_tests' ]
   debug: var=ansible_kernel
 
+- name: Hint to watchdog tests are about to kick off
+  local_action: file path="{{ fstests_results_target }}/.begin" state=touch
+  tags: [ 'oscheck', 'fstests', 'run_tests' ]
+  when:
+    - kdevops_run_fstests|bool
+  run_once: true
+
 - name: Run fstests using ./oscheck.sh --print-done --test-section {{ section }} {{ oscheck_extra_args }}
   vars:
     section: "{{ ansible_hostname | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
@@ -175,6 +182,13 @@
     chdir: "{{ fstests_data_target }}"
   when:
     - kdevops_run_fstests|bool
+
+- name: Remove watchdog hint that tests have started
+  local_action: file path="{{ fstests_results_target }}/.begin" state=absent
+  tags: [ 'oscheck', 'fstests', 'run_tests' ]
+  when:
+    - kdevops_run_fstests|bool
+  run_once: true
 
 - name: Set the path where we collect our fstests results and have our expunge list
   set_fact:

@@ -24,6 +24,126 @@ config FSTESTS_FSTYP
 	  The filesystem to test. This will be automatically set depending on
 	  the above choice, you however can override this manually.
 
+config FSTESTS_WATCHDOG
+	bool "Enable kdevops fstests watchdog"
+	default y if HAVE_DISTRO_PREFERS_FSTESTS_WATCHDOG
+	default n if !HAVE_DISTRO_PREFERS_FSTESTS_WATCHDOG
+	depends on KERNEL_CI
+	help
+	  Enable the fstests watchdog which lets you keep tabs on progress
+	  of fstests on different spawned systems.
+
+	  Enabling this option will allow the kdevops fstests_watchdog.py to
+	  run and log into the workflows/fstests/watchdog/$FSTYP.txt the status
+	  of all known tests.
+
+	  It is safe to enable as no action is taken by default, it is just
+	  informational. If you however don't even want this information logged
+	  you can disable this.
+
+if FSTESTS_WATCHDOG
+
+config FSTESTS_WATCHDOG_CHECK_TIME
+	int "How often to run the festests_watchdog in seconds"
+	default 5
+	help
+	  How often to trigger running the fstests watchdog, in seconds.
+
+config FSTESTS_WATCHDOG_MAX_NEW_TEST_TIME
+	int "Max minutes to wait for a new test before assuming a hang"
+	default DISTRO_FSTESTS_WATCHDOG_MAX_NEW_FSTEST_TIME if HAVE_DISTRO_FSTESTS_WATCHDOG_MAX_NEW_TEST_TIME
+	default 60 if !HAVE_DISTRO_FSTESTS_WATCHDOG_MAX_NEW_TEST_TIME
+	help
+	  Max value of time in minutes a new test should take before assuming
+	  the test is hung.
+
+	  Once a test has completed or failed fstests captures the amount of
+	  seconds it took to run that test on a file called check.time. This
+	  file consists of two columns, the first with the test name and the
+	  second column with the amount of time in seconds it took to run a
+	  test. When we run a test for the first time there is no known prior
+	  last test time, as there would be no check.time files present from a
+	  prior run.
+
+	  The amount of time it takes to run a test will also depend highly on
+	  the system, drive and filesystem you are running the test on and so
+	  check.time values are completely system specific. However, we can
+	  often run into a test which is hung but fstests seems to keep running,
+	  without providing feedback about a possibly hung test. In order to
+	  tell if a test is hung we must define a value for max time any new test
+	  can take. This value is system specific and so must be defined by the
+	  person configuring the test, however sensible default values are
+	  defined.
+
+	  The kdevops fstests_watchdog.py uses this max value to know when a
+	  test is on a system is hung for a test's first run. If a test had
+	  already completed before, and so had an entry for the test on the
+	  last test's check.time file for the target system, other heuristics
+	  are used.
+
+	  Setting this value is only informational, so that fstests_watchdog.py
+	  can print a status of "hung" suspect when it finds a test goes over
+	  this value on a first run.
+
+config FSTESTS_WATCHDOG_HUNG_MULTIPLIER_LONG_TESTS
+	int "Multiplier for amount of time before assuming a test is hung"
+	default 10
+	help
+	  If we know a test took 1 minute the last time we ran it, setting the
+	  multiplier to 10 will let the watchdog decide a test is hung if 10
+	  minutes have passed and the test has not completed yet.
+
+	  This multiplier is only used for tests for which we have a prior
+	  last run time and that run time is greater than 30 seconds.
+
+config FSTESTS_WATCHDOG_HUNG_FAST_TEST_MAX_TIME
+	int "Max time in minutes to wait before declaring quick tests as hung"
+	default 5
+	help
+	  If we know a test took between 1 second and 30 seconds to run in a
+	  prior test we can safely assign a timeout value in minutes for these
+	  quick tests for which we will let run before allowing the fstests
+	  watchdog to assume the test is hung.
+
+config FSTESTS_WATCHDOG_RESET_HUNG_SYSTEMS
+	bool "Enable kdevops fstests watchdog to deal with hung systems"
+	default y if HAVE_DISTRO_PREFERS_FSTESTS_WATCHDOG_RESET
+	default n if !HAVE_DISTRO_PREFERS_FSTESTS_WATCHDOG_RESET
+	depends on VAGRANT
+	help
+	  Enable the fstest watchdog to deal with hung tests. If this option is
+	  enabled, kdevops will reset all systems after a hang is detected,
+	  given we'd otherwise never finish the set of fstests.
+
+	  The tests which caused the hangs found will be logged.
+
+	  Only results for tests which already completed will be available.
+	  There are two types of hangs possible, a test taking longer than
+	  expected, and a timeout occurred where we can no longer ssh into
+	  the target system. We use the file .kernel-ci.hung to track the first,
+	  while we use the .kernel-ci.timeout to track the later.
+
+	  We must reset all systems to enable a smooth start if someone wants
+	  to try again.
+
+	  This feature is currently experimental, and will likely be replaced
+	  once we get a controller to dispatch tests from within ansible.
+	  In the future we'd a tasks time limit will be provided to ansible
+	  individually, and so we'd be able to keep track within ansible of
+	  which task failed to finish on the time given. Without this we're
+	  left to our own whims to properly quiesce ansible, and this is not
+	  easy. This is the experimental aspect of this feature. You may still
+	  find lingering associated tasks running. Its up to you to figure out
+	  which ones are associted to the filesystem you are testing on the
+	  given start directory entry point.
+
+	  We currently only enable this for vagrant provisioning, given we have
+	  to figure out a unified way to express a reset for cloud solution and
+	  also figure out a way to enable this for bare metal. For vagrant we
+	  currently use 'virsh reset' and so this works only if on libvirt.
+
+endif # FSTESTS_WATCHDOG
+
 if FSTESTS_XFS
 
 menu "Configure how to test XFS"
