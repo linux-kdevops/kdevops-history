@@ -17,6 +17,11 @@ for i in $PID_LIST; do
 		continue
 	fi
 
+	grep -q run_kernel_ci /proc/$i/cmdline
+	if [[ $? -eq 0 ]]; then
+		continue
+	fi
+
 	grep -q ansible-playbook /proc/$i/cmdline
 	if [[ $? -eq 0 ]]; then
 		kill -SIGTERM -- -${i}
