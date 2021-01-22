@@ -9,6 +9,15 @@ from itertools import chain
 class FstestsError(Exception):
     pass
 
+def fstests_check_pid(host):
+    pid = kssh.first_process_name_pid(host, "check")
+    if pid <= 0:
+        return pid
+    dir = "/proc/" + str(pid)  + "/cwd/tests"
+    if kssh.dir_exists(host, dir):
+        return pid
+    return 0
+
 def get_fstest_host(host, basedir, kernel, section, config):
     stall_suspect = False
     latest_dmesg_fstest_line = kssh.get_last_fstest(host)
@@ -16,6 +25,11 @@ def get_fstest_host(host, basedir, kernel, section, config):
         return (None, None, None, None, False)
     if latest_dmesg_fstest_line == "Timeout":
         return (None, None, None, None, True)
+    check_pid = fstests_check_pid(host)
+    if check_pid < 0:
+        return (None, None, None, None, True)
+    elif check_pid == 0:
+        return (None, None, None, None, False)
 
     last_test = latest_dmesg_fstest_line.split("at ")[0]
     last_test = last_test.replace(" ", "")

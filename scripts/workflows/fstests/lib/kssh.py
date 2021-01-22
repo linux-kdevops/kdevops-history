@@ -16,6 +16,52 @@ def _check(process):
     if process.returncode != 0:
         raise ExecutionError(process.returncode)
 
+def dir_exists(host, dirname):
+    cmd = ['ssh', host,
+           'sudo',
+           'ls', '-ld',
+           dirname ]
+    process = subprocess.Popen(cmd,
+                               stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                               close_fds=True, universal_newlines=True)
+    data = None
+    try:
+        data = process.communicate(timeout=1)
+    except subprocess.TimeoutExpired:
+        return False
+    else:
+        stdout = data[0]
+        process.wait()
+        if process.returncode == 0:
+            return True
+        else:
+            return False
+
+def first_process_name_pid(host, process_name):
+    cmd = ['ssh', host,
+           'sudo',
+           'ps', '-ef',
+           '|', 'grep', '-v', 'grep',
+           '|', 'grep', process_name,
+           '|', 'awk', '\'{print $2}\'',
+           '|', 'tail', '-1' ]
+    process = subprocess.Popen(cmd,
+                               stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                               close_fds=True, universal_newlines=True)
+    data = None
+    try:
+        data = process.communicate(timeout=1)
+    except subprocess.TimeoutExpired:
+        return -1
+    else:
+        stdout = data[0]
+        process.wait()
+        if process.returncode != 0:
+            return -1
+        if stdout == "":
+            return 0
+        return int(stdout)
+
 def get_uname(host):
     cmd = ['ssh', host, 'uname', '-r' ]
     process = subprocess.Popen(cmd,
