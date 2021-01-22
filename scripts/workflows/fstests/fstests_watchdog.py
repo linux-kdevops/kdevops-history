@@ -78,7 +78,7 @@ def _main():
         sys.stdout.write("%s does not exist\n" % (args.hostfile))
         sys.exit(1)
 
-    dotconfig = os.path.dirname(args.hostfile) + '/.config'
+    dotconfig = os.path.dirname(os.path.abspath(args.hostfile)) + '/.config'
     config = fstests.get_config(dotconfig)
     if not config:
         sys.stdout.write("%s does not exist\n" % (dotconfig))
