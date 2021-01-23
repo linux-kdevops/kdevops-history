@@ -18,28 +18,35 @@ kernel_ci_post_process()
 		cat $KERNEL_CI_WATCHDOG_FAIL_LOG >> $KERNEL_CI_FAIL_LOG
 		cat $KERNEL_CI_WATCHDOG_FAIL_LOG >> $KERNEL_CI_DIFF_LOG
 	fi
-	echo "-------------------------------------------" >> $KERNEL_CI_FAIL_LOG
-	echo "Full run time of kernel-ci loop:" >> $KERNEL_CI_FAIL_LOG
-	cat $KERNEL_CI_LOGTIME_FULL >> $KERNEL_CI_FAIL_LOG
 
-	echo "-------------------------------------------" >> $KERNEL_CI_DIFF_LOG
-	echo "Full run time of kernel-ci loop:" >> $KERNEL_CI_DIFF_LOG
-	cat $KERNEL_CI_LOGTIME_FULL >> $KERNEL_CI_DIFF_LOG
+	if [[ ! -s $KERNEL_CI_LOGTIME_FULL ]]; then
+		echo "-------------------------------------------" >> $KERNEL_CI_FAIL_LOG
+		echo "Full run time of kernel-ci loop:" >> $KERNEL_CI_FAIL_LOG
+		cat $KERNEL_CI_LOGTIME_FULL >> $KERNEL_CI_FAIL_LOG
+
+		echo "-------------------------------------------" >> $KERNEL_CI_DIFF_LOG
+		echo "Full run time of kernel-ci loop:" >> $KERNEL_CI_DIFF_LOG
+		cat $KERNEL_CI_LOGTIME_FULL >> $KERNEL_CI_DIFF_LOG
+	fi
 
 	if [[ "$CONFIG_KERNEL_CI_EMAIL_REPORT" != "y" ]]; then
 		if [[ -f $KERNEL_CI_FAIL_FILE ]]; then
 			FAIL_LOOP="$(cat $KERNEL_CI_FAIL_FILE)"
 			SUBJECT="$SUBJECT_PREFIX $FAIL_LOOP"
 			echo $SUBJECT
-			echo "Full run time of kernel-ci loop:"
-			cat $KERNEL_CI_LOGTIME_FULL
+			if [[ ! -s $KERNEL_CI_LOGTIME_FULL ]]; then
+				echo "Full run time of kernel-ci loop:"
+				cat $KERNEL_CI_LOGTIME_FULL
+			fi
 			exit 1
 		elif [[ -f $KERNEL_CI_OK_FILE ]]; then
 			LOOP_COUNT=$(cat $KERNEL_CI_OK_FILE)
 			SUBJECT="kernel-ci: fstests $FSTYPE never failed after $LOOP_COUNT test loops"
 			echo $SUBJECT
-			echo "Full run time of kernel-ci loop:"
-			cat $KERNEL_CI_LOGTIME_FULL
+			if [[ ! -s $KERNEL_CI_LOGTIME_FULL ]]; then
+				echo "Full run time of kernel-ci loop:"
+				cat $KERNEL_CI_LOGTIME_FULL
+			fi
 			exit 0
 		fi
 	fi
@@ -84,9 +91,9 @@ kernel_ci_post_process()
 		SUBJECT="kernel-ci: fstests $FSTYPE failed on a hung test on the first loop"
 		cat $KERNEL_CI_WATCHDOG_FAIL_LOG
 		if [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_LOCAL" == "y" ]]; then
-			cat $KERNEL_CI_FAIL_LOG | mail -s "$SUBJECT" $RCPT
+			cat $KERNEL_CI_DIFF_LOG | mail -s "$SUBJECT" $RCPT
 		elif [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_SSH" == "y" ]]; then
-			cat $KERNEL_CI_FAIL_LOG | ssh $SSH_TARGET 'mail -s "'$SUBJECT'"' $RCPT
+			cat $KERNEL_CI_DIFF_LOG | ssh $SSH_TARGET 'mail -s "'$SUBJECT'"' $RCPT
 		fi
 		exit 1
 	else
@@ -146,7 +153,7 @@ kernel_ci_watchdog_loop()
 			rm -f $KERNEL_CI_WATCHDOG_TIMEOUT
 		fi
 
-		if [[ "$CONFIG_FSTESTS_WATCHDOG_RESET_HUNG_SYSTEMS" == "y" ]]; then
+		if [[ "$CONFIG_FSTESTS_WATCHDOG_KILL_TASKS_ON_HANG" == "y" ]]; then
 			if [[ "$HUNG_FOUND" == "True" || "$TIMEOUT_FOUND" == "True" ]]; then
 				${TOPDIR}/scripts/workflows/fstests/kill_pids.sh 2> /dev/null
 				echo "The kdevops fstests watchdog detected hung or timed out hosts, stopping" >> $KERNEL_CI_WATCHDOG_FAIL_LOG
@@ -164,11 +171,13 @@ kernel_ci_watchdog_loop()
 					grep runtime $KERNEL_CI_WATCHDOG_RESULTS >> $KERNEL_CI_WATCHDOG_FAIL_LOG
 					cat $KERNEL_CI_WATCHDOG_TIMEOUT >> $KERNEL_CI_WATCHDOG_FAIL_LOG
 				fi
-				for i in $(awk '{print $1}' $KERNEL_CI_WATCHDOG_RESULTS | egrep -v "runtime|Hostname"); do
-					sudo virsh reset vagrant_$i
-				done
-				echo "We reset all systems so you should be able to access all systems now," >> $KERNEL_CI_WATCHDOG_FAIL_LOG
-				echo "however there may be lingering ansible processes, wait for them or kill them." >> $KERNEL_CI_WATCHDOG_FAIL_LOG
+				if [[ "$CONFIG_FSTESTS_WATCHDOG_RESET_HUNG_SYSTEMS" == "y" ]]; then
+					for i in $(awk '{print $1}' $KERNEL_CI_WATCHDOG_RESULTS | egrep -v "runtime|Hostname"); do
+						sudo virsh reset vagrant_$i
+						echo -e "\nReset all your associated systems:" >> $KERNEL_CI_WATCHDOG_FAIL_LOG
+						echo -e "\t$i" >> $KERNEL_CI_WATCHDOG_FAIL_LOG
+					done
+				fi
 				break
 			fi
 		fi

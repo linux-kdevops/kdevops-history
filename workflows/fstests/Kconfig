@@ -105,37 +105,32 @@ config FSTESTS_WATCHDOG_HUNG_FAST_TEST_MAX_TIME
 	  quick tests for which we will let run before allowing the fstests
 	  watchdog to assume the test is hung.
 
+config FSTESTS_WATCHDOG_KILL_TASKS_ON_HANG
+	bool "Enable killing local tasks on hang detection"
+	default y if HAVE_DISTRO_PREFERS_FSTESTS_WATCHDOG_KILL
+	default n if !HAVE_DISTRO_PREFERS_FSTESTS_WATCHDOG_KILL
+	help
+	  Enable the fstest watchdog to kill local controller tasks and if
+	  enabled send a report if a hang / timeout occurs but leave the
+	  systems which are hung / timed out alive for further inspection.
+
 config FSTESTS_WATCHDOG_RESET_HUNG_SYSTEMS
 	bool "Enable kdevops fstests watchdog to deal with hung systems"
 	default y if HAVE_DISTRO_PREFERS_FSTESTS_WATCHDOG_RESET
 	default n if !HAVE_DISTRO_PREFERS_FSTESTS_WATCHDOG_RESET
 	depends on VAGRANT
+	depends on FSTESTS_WATCHDOG_KILL_TASKS_ON_HANG
 	help
-	  Enable the fstest watchdog to deal with hung tests. If this option is
-	  enabled, kdevops will reset all systems after a hang is detected,
-	  given we'd otherwise never finish the set of fstests.
+	  If this option is enabled, kdevops will reset all systems after a
+	  hang is detected.
 
-	  The tests which caused the hangs found will be logged.
-
-	  Only results for tests which already completed will be available.
-	  There are two types of hangs possible, a test taking longer than
-	  expected, and a timeout occurred where we can no longer ssh into
-	  the target system. We use the file .kernel-ci.hung to track the first,
-	  while we use the .kernel-ci.timeout to track the later.
-
-	  We must reset all systems to enable a smooth start if someone wants
-	  to try again.
-
-	  This feature is currently experimental, and will likely be replaced
-	  once we get a controller to dispatch tests from within ansible.
-	  In the future we'd a tasks time limit will be provided to ansible
-	  individually, and so we'd be able to keep track within ansible of
-	  which task failed to finish on the time given. Without this we're
-	  left to our own whims to properly quiesce ansible, and this is not
-	  easy. This is the experimental aspect of this feature. You may still
-	  find lingering associated tasks running. Its up to you to figure out
-	  which ones are associted to the filesystem you are testing on the
-	  given start directory entry point.
+	  The tests which caused the hangs found will be logged. Enabling
+	  this is only desirable if you don't care to manually inspect
+	  hosed systems when a hang happens. This may be useful in the
+	  future if we enable automatic tasks which create a baseline for
+	  you, for instance, but for this to be more useful, we'd likely
+	  have to also implement a way to try to capture kernel logs
+	  before a reset.
 
 	  We currently only enable this for vagrant provisioning, given we have
 	  to figure out a unified way to express a reset for cloud solution and
