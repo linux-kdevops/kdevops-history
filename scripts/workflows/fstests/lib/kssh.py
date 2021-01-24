@@ -26,7 +26,7 @@ def dir_exists(host, dirname):
                                close_fds=True, universal_newlines=True)
     data = None
     try:
-        data = process.communicate(timeout=1)
+        data = process.communicate(timeout=60)
     except subprocess.TimeoutExpired:
         return False
     else:
@@ -50,7 +50,7 @@ def first_process_name_pid(host, process_name):
                                close_fds=True, universal_newlines=True)
     data = None
     try:
-        data = process.communicate(timeout=1)
+        data = process.communicate(timeout=60)
     except subprocess.TimeoutExpired:
         return -1
     else:
@@ -69,7 +69,7 @@ def get_uname(host):
                                close_fds=True, universal_newlines=True)
     data = None
     try:
-        data = process.communicate(timeout=1)
+        data = process.communicate(timeout=60)
     except subprocess.TimeoutExpired:
         return "Timeout"
     else:
@@ -91,7 +91,7 @@ def get_last_fstest(host):
                                close_fds=True, universal_newlines=True)
     data = None
     try:
-        data = process.communicate(timeout=1)
+        data = process.communicate(timeout=60)
     except subprocess.TimeoutExpired:
         return "Timeout"
     else:
@@ -117,7 +117,7 @@ def get_current_time(host):
                                close_fds=True, universal_newlines=True)
     data = None
     try:
-        data = process.communicate(timeout=1)
+        data = process.communicate(timeout=60)
     except subprocess.TimeoutExpired:
         return "Timeout"
     else:
