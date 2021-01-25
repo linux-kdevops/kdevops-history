@@ -27,10 +27,10 @@ config BOOTLINUX_TREE
 	help
 	  The Linux git tree to use.
 
-config BOOTLINUX_TREE_VERSION
+config BOOTLINUX_TREE_TAG
 	string "Git tree branch / tag / sha1sum to use"
-	default "4.19" if BOOTLINUX_TREE_LINUS
-	default "4.19.133" if BOOTLINUX_TREE_STABLE
+	default "v4.19" if BOOTLINUX_TREE_LINUS
+	default "v4.19.133" if BOOTLINUX_TREE_STABLE
 	default "next-20201111" if BOOTLINUX_TREE_NEXT
 	help
 	  The git branch / tag or sha1sum to use.

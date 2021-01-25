@@ -203,13 +203,15 @@ ifeq (y,$(CONFIG_BOOTLINUX))
 TREE_URL:=$(subst ",,$(CONFIG_BOOTLINUX_TREE))
 TREE_NAME:=$(notdir $(TREE_URL))
 TREE_NAME:=$(subst .git,,$(TREE_NAME))
-TREE_VERSION:=$(subst ",,$(CONFIG_BOOTLINUX_TREE_VERSION))
+TREE_TAG:=$(subst ",,$(CONFIG_BOOTLINUX_TREE_TAG))
+
+
 TREE_CONFIG:=config-$(TREE_VERSION)
 
 # Describes the Linux clone
 BOOTLINUX_ARGS	+= target_linux_git=$(TREE_URL)
 BOOTLINUX_ARGS	+= target_linux_tree=$(TREE_NAME)
-BOOTLINUX_ARGS	+= target_linux_tag=$(TREE_VERSION)
+BOOTLINUX_ARGS	+= target_linux_tag=$(TREE_TAG)
 BOOTLINUX_ARGS	+= target_linux_config=$(TREE_CONFIG)
 
 ifeq (y,$(CONFIG_WORKFLOW_MAKE_CMD_OVERRIDE))

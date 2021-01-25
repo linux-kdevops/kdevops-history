@@ -76,7 +76,7 @@ Yes you can later add use a different tag for the kernel revision from the
 command line, and even add an extra patch to test on top a kernel:
 
 ```
-ansible-playbook -i hosts -l dev --extra-vars "target_linux_version=4.19.21 target_linux_extra_patch=try-v4.19.20-fixes-20190716-v1.patch" bootlinux.yml
+ansible-playbook -i hosts -l dev --extra-vars "target_linux_tag=v4.19.21 target_linux_extra_patch=try-v4.19.20-fixes-20190716-v1.patch" bootlinux.yml
 ```
 
 You would place the `pend-v4.19.58-fixes-20190716-v2.patch` file into the

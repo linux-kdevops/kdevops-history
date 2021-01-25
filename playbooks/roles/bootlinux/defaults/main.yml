@@ -19,10 +19,9 @@ target_linux_git: "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.
 target_linux_tree: "linux-stable"
 target_linux_dir_path: "{{ data_path }}/{{ target_linux_tree }}"
 
-target_linux_version:  "4.19.133"
-target_linux_tag: "v{{ target_linux_version }}"
+target_linux_tag: "v4.19.133"
 target_linux_delta_file:
-target_linux_config: "config-{{ target_linux_version }}"
+target_linux_config: "config-{{ target_linux_tag }}"
 make: "make"
 # Once ansible v2.10 becomes available we can move on to using
 # ansible_processor_nproc but that was merged in 2020:
