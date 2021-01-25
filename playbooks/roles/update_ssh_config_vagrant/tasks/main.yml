@@ -37,6 +37,16 @@
   register: target_hosts_comma
   changed_when: "target_hosts_comma.rc == 0"
 
+- name: verify sshconfig directory exists
+  delegate_to: localhost
+  local_action: file path="{{ sshconfig | dirname }}" state=directory
+  run_once: true
+
+- name: verify sshconfig file exists
+  delegate_to: localhost
+  local_action: file path="{{ sshconfig }}" state=touch
+  run_once: true
+
 - name: Set vagrant python extra args
   set_fact:
     update_extra_args: '--remove {{ target_hosts_comma.stdout }} --addvagranthosts {{ custom_ssh_kexalgorithms }}'
