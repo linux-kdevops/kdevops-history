@@ -206,7 +206,7 @@ TREE_NAME:=$(subst .git,,$(TREE_NAME))
 TREE_TAG:=$(subst ",,$(CONFIG_BOOTLINUX_TREE_TAG))
 
 
-TREE_CONFIG:=config-$(TREE_VERSION)
+TREE_CONFIG:=config-$(TREE_TAG)
 
 # Describes the Linux clone
 BOOTLINUX_ARGS	+= target_linux_git=$(TREE_URL)
