@@ -96,6 +96,12 @@ To uninstall a kernel:
 ansible-playbook -i hosts -l dev --tags uninstall-linux --extra-vars "uninstall_kernel_ver=4.19.58+" bootlinux.yml
 ```
 
+To ensure you can get the grub prompt:
+
+```bash
+ansible-playbook -i hosts --tags console,vars --extra-vars "manual_update_grub=y" playbooks/bootlinux.ym
+```
+
 The ansible bootlinux role relies on the create_partition role to create a data
 partition where we can stuff code, and compile it. To test that aspect of
 the bootlinux role you can run:
