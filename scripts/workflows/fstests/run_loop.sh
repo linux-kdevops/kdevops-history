@@ -76,6 +76,10 @@ run_loop()
 		fi
 		echo $COUNT > $KERNEL_CI_OK_FILE
 		let COUNT=$COUNT+1
+		if [[ "$CONFIG_KERNEL_CI_ENABLE_STEADY_STATE" == "y" &&
+		      "$COUNT" -gt "$CONFIG_KERNEL_CI_STEADY_STATE_GOAL" ]]; then
+			exit 0
+		fi
 		sleep 1
 	done
 }

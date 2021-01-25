@@ -19,8 +19,36 @@ config KERNEL_CI
 
 if KERNEL_CI
 
+config KERNEL_CI_ENABLE_STEADY_STATE
+	bool "Bound kernel-ci tests with a steady-state goal"
+	default y
+	help
+	  Enable this so that tests don't run forever in a loop if no issues
+	  are found, instead, the kernel-ci loop will bail once a certain number
+	  of full loops have passed without failures. We refer to this goal as
+	  a kernel-ci steady-state test goal. Although the goal can be workflow
+	  specific, for now we define a generic goal which can be used by all
+	  workflows.
+
+	  If you don't enable this, and the test you are running won't ever run
+	  into a failure, you'll have the test run forever.
+
+if KERNEL_CI_ENABLE_STEADY_STATE
+
+config KERNEL_CI_STEADY_STATE_GOAL
+	int "Generic kernel-ci steady-state goal"
+	default 100
+	help
+	  The maximum number of possitive successes to have before bailing out
+	  a kernel-ci loop and report success. This value is currently used for
+	  all workflows. A value of 100 means 100 tests will run before we
+	  bail out and report we have achieved steady state for the workflow
+	  being tested.
+
+endif # KERNEL_CI_ENABLE_STEADY_STATE
+
 config KERNEL_CI_EMAIL_REPORT
-	bool "Enable sending a report on faillure"
+	bool "Enable sending a report on failure"
 	default n
 	help
 	  Enable this so that a report will be emailed in case of a failure.

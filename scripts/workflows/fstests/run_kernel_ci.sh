@@ -68,10 +68,10 @@ kernel_ci_post_process()
 		exit 1
 	elif [[ -f $KERNEL_CI_OK_FILE ]]; then
 		LOOP_COUNT=$(cat $KERNEL_CI_OK_FILE)
-		SUBJECT="kernel-ci: fstests $FSTYPE never failed after $LOOP_COUNT test loops"
+		SUBJECT="kernel-ci: fstests on $FSTYPE achieved steady-state goal of $LOOP_COUNT test loops!"
 
 		if [[  -f $KERNEL_CI_WATCHDOG_FAIL_LOG ]]; then
-			SUBJECT="kernel-ci: fstests $FSTYPE after $LOOP_COUNT test loops on a hang"
+			SUBJECT="kernel-ci: fstests on $FSTYPE detected a hang after $LOOP_COUNT test loops"
 		fi
 
 		if [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_LOCAL" == "y" ]]; then
