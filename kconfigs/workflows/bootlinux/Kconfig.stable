@@ -1,7 +1,7 @@
 if BOOTLINUX_STABLE
 
 choice
-	prompt "Linust stable tree to use"
+	prompt "Linux stable tree to use"
 	default BOOTLINUX_TREE_STABLE
 
 config BOOTLINUX_TREE_LINUS
