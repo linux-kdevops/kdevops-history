@@ -51,8 +51,7 @@ config FSTESTS_WATCHDOG_CHECK_TIME
 
 config FSTESTS_WATCHDOG_MAX_NEW_TEST_TIME
 	int "Max minutes to wait for a new test before assuming a hang"
-	default DISTRO_FSTESTS_WATCHDOG_MAX_NEW_FSTEST_TIME if HAVE_DISTRO_FSTESTS_WATCHDOG_MAX_NEW_TEST_TIME
-	default 60 if !HAVE_DISTRO_FSTESTS_WATCHDOG_MAX_NEW_TEST_TIME
+	default 60
 	help
 	  Max value of time in minutes a new test should take before assuming
 	  the test is hung.
