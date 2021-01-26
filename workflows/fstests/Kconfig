@@ -1,4 +1,4 @@
-if KDEVOPS_WORKFLOW_FSTESTS
+if KDEVOPS_WORKFLOW_ENABLE_FSTESTS
 
 choice
 	prompt "Target filesystem to test"
@@ -359,4 +359,4 @@ config FSTESTS_RUN_TESTS
 	  Disable this to only install dependencies for fstests, and so the
 	  full set of fstests won't be run.
 
-endif # KDEVOPS_WORKFLOW_FSTESTS
+endif # KDEVOPS_WORKFLOW_ENABLE_FSTESTS

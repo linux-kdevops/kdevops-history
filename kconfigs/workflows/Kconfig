@@ -12,9 +12,18 @@ menu "Shared workflow configuration"
 source "kconfigs/workflows/Kconfig.shared"
 endmenu
 
+config KDEVOPS_WORKFLOW_ENABLE_FSTESTS
+	bool
+	default n
+
 choice
 	prompt "Target workflow type"
 	default KDEVOPS_WORKFLOW_LINUX
+
+config KDEVOPS_WORKFLOW_NONE
+	bool "None - simply bringing systems up"
+	help
+	  If you are not doing much you can enable this.
 
 config KDEVOPS_WORKFLOW_LINUX
 	bool "Linux kernel development"
@@ -27,8 +36,9 @@ config KDEVOPS_WORKFLOW_LINUX
 	  version of Linux, applying patches if needed, compiling and booting
 	  into that respective kernel.
 
-config KDEVOPS_WORKFLOW_FSTESTS
+config KDEVOPS_WORKFLOW_FSTESTS_ONLY
 	bool "Linux fstests"
+	select KDEVOPS_WORKFLOW_ENABLE_FSTESTS
 	help
 	  Select this option if you are doing filesystem development and want.
 	  to target development for a filesystem and enable fstests so that
@@ -40,13 +50,20 @@ config KDEVOPS_WORKFLOW_FSTESTS
 	  already exists against your distribution you will be able to ensure
 	  you don't regress against development changes on your kernel.
 
+config KDEVOPS_WORKFLOW_FSTESTS_LINUX
+	bool "Linux fstests on a custom Linux kernel build"
+	select BOOTLINUX
+	select KDEVOPS_WORKFLOW_ENABLE_FSTESTS
+	help
+	  Enable this if you want to run fstests on a kernel we are going to
+	  help you build.
+
 endchoice
 
 menu "Get and install Linux from git"
 config BOOTLINUX
-	bool "Options to get or install Linux from git"
-	default y if KDEVOPS_WORKFLOW_LINUX
-	default n if KDEVOPS_WORKFLOW_FSTESTS
+	bool "Enable getting and installing Linux from git"
+	default n
 	help
 	  This option will allow the 'make linux' target be usable for you
 	  to just get Linux from git, or to install it as well.
@@ -56,10 +73,10 @@ config BOOTLINUX
 source "kconfigs/workflows/bootlinux/Kconfig"
 endmenu
 
-if KDEVOPS_WORKFLOW_FSTESTS
+if KDEVOPS_WORKFLOW_ENABLE_FSTESTS
 menu "Configure and run fstests"
 source "workflows/fstests/Kconfig"
 endmenu
-endif # KDEVOPS_WORKFLOW_FSTESTS
+endif # KDEVOPS_WORKFLOW_ENABLE_FSTESTS
 
 endif # WORKFLOWS
