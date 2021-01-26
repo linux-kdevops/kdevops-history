@@ -3,7 +3,7 @@ if VAGRANT_DEBIAN
 
 choice
 	prompt "Debian release to use"
-	default VAGRANT_DEBIAN_BUSTER64
+	default VAGRANT_DEBIAN_TESTING64
 
 config VAGRANT_DEBIAN_BUSTER64
 	bool "debian/buster64"
@@ -16,14 +16,27 @@ config VAGRANT_DEBIAN_BUSTER64
 	help
 	  This option will set the target guest to debian/buster64.
 
+config VAGRANT_DEBIAN_TESTING64
+	bool "debian/testing64"
+	select HAVE_DISTRO_XFS_SUPPORTS_CRC if FSTESTS_XFS
+	select HAVE_DISTRO_XFS_SUPPORTS_EXTERNAL_LOG if FSTESTS_XFS
+	select HAVE_DISTRO_XFS_SUPPORTS_REFLINKS if FSTESTS_XFS
+	select HAVE_DISTRO_XFS_SUPPORTS_BIGBLOCKS if FSTESTS_XFS
+	select HAVE_VAGRANT_PREFER_KERNEL_CI_SUBJECT_TOPIC
+	depends on TARGET_ARCH_X86_64
+	help
+	  This option will set the target guest to debian/testing64.
+
 endchoice
 
 config VAGRANT_DEBIAN_BOX_SHORT
 	string
 	default "buster64" if VAGRANT_DEBIAN_BUSTER64
+	default "testing64" if VAGRANT_DEBIAN_TESTING64
 
 config VAGRANT_PREFERRED_KERNEL_CI_SUBJECT_TOPIC
 	string
 	default "debian/buster64" if VAGRANT_DEBIAN_BUSTER64
+	default "debian/testing64" if VAGRANT_DEBIAN_TESTING64
 
 endif # VAGRANT_DEBIAN
