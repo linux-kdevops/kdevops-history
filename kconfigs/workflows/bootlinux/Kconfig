@@ -19,6 +19,12 @@ endchoice
 source "kconfigs/workflows/bootlinux/Kconfig.stable"
 source "kconfigs/workflows/bootlinux/Kconfig.dev"
 
+config BOOTLINUX_TREE_NAME
+	string "Linux tree name"
+	default "linux" if BOOTLINUX_TREE_LINUS
+	default "linux-stable" if BOOTLINUX_TREE_STABLE
+	default "linux-next" if BOOTLINUX_TREE_NEXT
+
 config BOOTLINUX_TREE
 	string "Linux git tree URL"
 	default "git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git" if BOOTLINUX_TREE_LINUS

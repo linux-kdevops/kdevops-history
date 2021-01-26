@@ -1,5 +1,9 @@
 if VAGRANT
 
+config HAVE_VAGRANT_PREFER_KERNEL_CI_SUBJECT_PREFIX
+	bool
+	default n
+
 config HAVE_SUSE_VAGRANT
 	bool
 	default $(shell, scripts/check_distro_kconfig.sh suse)

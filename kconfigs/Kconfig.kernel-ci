@@ -55,6 +55,56 @@ config KERNEL_CI_EMAIL_REPORT
 
 if KERNEL_CI_EMAIL_REPORT
 
+config KERNEL_CI_ADD_CUSTOM_SUBJECT_TOPIC
+	bool "Enable a custom kernel-ci subject topic for email reports"
+	default y if BOOTLINUX || HAVE_VAGRANT_PREFER_KERNEL_CI_SUBJECT_TOPIC
+	help
+	  Enable this so that you can customize the subject slightly for
+	  kernel-ci email reports. The email subject prefix will always
+	  start with "kernel-ci: ", if this is enabled we allow you to
+	  slightly configure this. Otherwise the standard "kernel-ci: "
+	  subject prefix will be used.
+
+	  You want to enable this if you are using kernel-ci for different
+	  things, such as testing a distribution kernel but also a stable
+	  or linux-next kernel, so that you can distinguish for which kernel
+	  the report is for.
+
+if KERNEL_CI_ADD_CUSTOM_SUBJECT_TOPIC
+
+config KERNEL_CI_SUBJECT_TOPIC
+	string "Main email subject topic prefix to use"
+	default "" if !BOOTLINUX && !HAVE_VAGRANT_PREFER_KERNEL_CI_SUBJECT_TOPIC
+	default VAGRANT_PREFERRED_KERNEL_CI_SUBJECT_TOPIC if !BOOTLINUX && HAVE_VAGRANT_PREFER_KERNEL_CI_SUBJECT_TOPIC
+	default BOOTLINUX_TREE_NAME if BOOTLINUX
+	help
+	  Email kernel-ci subject will include the git tree name you are using.
+	  This is set in the BOOTLINUX_TREE_NAME kconfig variable. For instance,
+	  if you decided to build and boot into a linux stable tree the
+	  subject for the kernel-ci email will start with:
+
+	    kernel-ci linux-stable:
+
+config KERNEL_CI_ADD_CUSTOM_SUBJECT_TOPIC_TAG
+	bool "Add git tag to kernel-ci subject topic"
+	default y if BOOTLINUX
+	depends on BOOTLINUX
+	help
+	  Enable this so that the kernel-ci subject topic will also have
+	  the git tag used. For intance, if you have enabled to build and
+	  boot  into linux-next tag next-20210126, and you also enabled this
+	  option, the KERNEL_CI_SUBJECT_TOPIC will be set to "linux-next" and
+	  the subject for the kernel-ci email will start with:
+
+	    kernel-ci linux-next next-20210126:
+
+	  If you do not enable this, then the subject for the kernel-ci email
+	  will start only with:
+
+	    kernel-ci linux-next:
+
+endif # KERNEL_CI_ADD_CUSTOM_SUBJECT_TOPIC
+
 choice
 	prompt "kernel-ci email sending method"
 	default KERNEL_CI_EMAIL_METHOD_SSH

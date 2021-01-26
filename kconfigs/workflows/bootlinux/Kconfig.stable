@@ -34,6 +34,6 @@ config BOOTLINUX_STABLE_V510
 
 endchoice
 
-endif
+endif # BOOTLINUX_TREE_STABLE
 
 endif # BOOTLINUX_STABLE

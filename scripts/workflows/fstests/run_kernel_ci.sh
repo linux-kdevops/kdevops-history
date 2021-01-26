@@ -4,11 +4,22 @@
 source ${TOPDIR}/.config
 source ${TOPDIR}/scripts/lib.sh
 
+kernel_ci_subject_topic()
+{
+	if [[ "$CONFIG_KERNEL_CI_ADD_CUSTOM_SUBJECT_TOPIC" != "y" ]]; then
+		echo "kernel-ci"
+	elif [[ "$CONFIG_KERNEL_CI_ADD_CUSTOM_SUBJECT_TOPIC_TAG" == "y" ]]; then
+		echo "kernel-ci $CONFIG_KERNEL_CI_SUBJECT_TOPIC $CONFIG_BOOTLINUX_TREE_TAG"
+	else
+		echo "kernel-ci $CONFIG_KERNEL_CI_SUBJECT_TOPIC"
+	fi
+}
+
 FSTYPE="$CONFIG_FSTESTS_FSTYP"
 RCPT="ignore@test.com"
 SSH_TARGET="ignore"
 KERNEL_CI_LOOP="${TOPDIR}/scripts/workflows/fstests/run_loop.sh"
-SUBJECT_PREFIX="kernel-ci: fstests failure for $FSTYPE on test loop "
+SUBJECT_PREFIX="$(kernel_ci_subject_topic): fstests failure for $FSTYPE on test loop "
 KERNEL_CI_LOOP_PID=0
 TARGET_HOSTS=$1
 
@@ -41,7 +52,7 @@ kernel_ci_post_process()
 			exit 1
 		elif [[ -f $KERNEL_CI_OK_FILE ]]; then
 			LOOP_COUNT=$(cat $KERNEL_CI_OK_FILE)
-			SUBJECT="kernel-ci: fstests $FSTYPE never failed after $LOOP_COUNT test loops"
+			SUBJECT="$(kernel_ci_subject_topic) fstests $FSTYPE never failed after $LOOP_COUNT test loops"
 			echo $SUBJECT
 			if [[ ! -s $KERNEL_CI_LOGTIME_FULL ]]; then
 				echo "Full run time of kernel-ci loop:"
@@ -68,10 +79,10 @@ kernel_ci_post_process()
 		exit 1
 	elif [[ -f $KERNEL_CI_OK_FILE ]]; then
 		LOOP_COUNT=$(cat $KERNEL_CI_OK_FILE)
-		SUBJECT="kernel-ci: fstests on $FSTYPE achieved steady-state goal of $LOOP_COUNT test loops!"
+		SUBJECT="$(kernel_ci_subject_topic): fstests on $FSTYPE achieved steady-state goal of $LOOP_COUNT test loops!"
 
 		if [[  -f $KERNEL_CI_WATCHDOG_FAIL_LOG ]]; then
-			SUBJECT="kernel-ci: fstests on $FSTYPE detected a hang after $LOOP_COUNT test loops"
+			SUBJECT="$(kernel_ci_subject_topic): fstests on $FSTYPE detected a hang after $LOOP_COUNT test loops"
 		fi
 
 		if [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_LOCAL" == "y" ]]; then
@@ -88,7 +99,7 @@ kernel_ci_post_process()
 			exit 0
 		fi
 	elif [[  -f $KERNEL_CI_WATCHDOG_FAIL_LOG ]]; then
-		SUBJECT="kernel-ci: fstests $FSTYPE failed on a hung test on the first loop"
+		SUBJECT="$(kernel_ci_subject_topic): fstests $FSTYPE failed on a hung test on the first loop"
 		cat $KERNEL_CI_WATCHDOG_FAIL_LOG
 		if [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_LOCAL" == "y" ]]; then
 			cat $KERNEL_CI_DIFF_LOG | mail -s "$SUBJECT" $RCPT
@@ -102,7 +113,7 @@ kernel_ci_post_process()
 		echo "created if no failure was found. We did not find either file."
 		echo "This is an unexpected situation."
 
-		SUBJECT="kernel-ci: fstests $FSTYPE exited in an unexpection situation"
+		SUBJECT="$(kernel_ci_subject_topic): fstests $FSTYPE exited in an unexpection situation"
 		if [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_LOCAL" == "y" ]]; then
 			cat $KERNEL_CI_LOGTIME_FULL | mail -s "$SUBJECT" $RCPT
 		elif [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_SSH" == "y" ]]; then
