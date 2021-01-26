@@ -57,7 +57,7 @@ if KERNEL_CI_EMAIL_REPORT
 
 config KERNEL_CI_ADD_CUSTOM_SUBJECT_TOPIC
 	bool "Enable a custom kernel-ci subject topic for email reports"
-	default y if BOOTLINUX || HAVE_VAGRANT_PREFER_KERNEL_CI_SUBJECT_TOPIC
+	default y if BOOTLINUX || VAGRANT
 	help
 	  Enable this so that you can customize the subject slightly for
 	  kernel-ci email reports. The email subject prefix will always
@@ -74,8 +74,8 @@ if KERNEL_CI_ADD_CUSTOM_SUBJECT_TOPIC
 
 config KERNEL_CI_SUBJECT_TOPIC
 	string "Main email subject topic prefix to use"
-	default "" if !BOOTLINUX && !HAVE_VAGRANT_PREFER_KERNEL_CI_SUBJECT_TOPIC
-	default VAGRANT_PREFERRED_KERNEL_CI_SUBJECT_TOPIC if !BOOTLINUX && HAVE_VAGRANT_PREFER_KERNEL_CI_SUBJECT_TOPIC
+	default "" if !BOOTLINUX && !VAGRANT
+	default VAGRANT_PREFERRED_KERNEL_CI_SUBJECT_TOPIC if !BOOTLINUX && VAGRANT
 	default BOOTLINUX_TREE_NAME if BOOTLINUX
 	help
 	  Email kernel-ci subject will include the git tree name you are using.

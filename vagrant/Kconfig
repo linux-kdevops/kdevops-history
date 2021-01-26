@@ -1,9 +1,5 @@
 if VAGRANT
 
-config HAVE_VAGRANT_PREFER_KERNEL_CI_SUBJECT_PREFIX
-	bool
-	default n
-
 config HAVE_SUSE_VAGRANT
 	bool
 	default $(shell, scripts/check_distro_kconfig.sh suse)
@@ -76,6 +72,11 @@ config VAGRANT_BOX
 	default VAGRANT_SUSE_BOX if VAGRANT_SUSE
 	help
 	  The vagrant box to use.
+
+config VAGRANT_PREFERRED_KERNEL_CI_SUBJECT_TOPIC
+	string
+	default VAGRANT_BOX if VAGRANT_DEBIAN_BUSTER64
+
 
 config HAVE_VAGRANT_BOX_URL
 	bool
