@@ -19,6 +19,7 @@
     is_sle12sp3: '{{ ansible_distribution_version == "12.3" }}'
     is_sle12sp5: '{{ ansible_distribution_version == "12.5" }}'
     is_sle15sp2: '{{ ansible_distribution_version == "15.2" }}'
+    is_sle15sp3: '{{ ansible_distribution_version == "15.3" }}'
   when:
     - is_sle|bool
   tags: snmpd
@@ -138,7 +139,7 @@
     - suse_register_system|bool
     - repos_will_be_added|bool
     - suse_registration_code != 0
-    - is_sle15sp2|bool
+    - is_sle15|bool
 
 - name: Add extra addon repositories when enabled
   become: yes
@@ -161,7 +162,7 @@
   when:
     - (suse_register_system|bool and suse_registration_code != 0) or devconfig_repos_addon|bool
     - repos_will_be_added|bool
-    - is_sle15sp2|bool
+    - is_sle15|bool
 
 - name: Prepare packages source list
   become: yes
@@ -314,7 +315,7 @@
     name:
       - net-snmp
   when:
-    - is_sle15sp2|bool
+    - is_sle15|bool
     - repos_will_be_added|bool
     - devconfig_try_install_kdevtools|bool
   tags: snmpd
@@ -326,7 +327,7 @@
     src: snmpd.conf
     dest: /etc/snmp/snmpd.conf
   when:
-    - is_sle15sp2|bool
+    - is_sle15|bool
     - repos_will_be_added|bool
     - devconfig_try_install_kdevtools|bool
   tags: snmpd
