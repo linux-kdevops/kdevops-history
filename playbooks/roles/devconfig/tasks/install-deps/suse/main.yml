@@ -4,7 +4,7 @@
     is_sle: '{{ (ansible_distribution == "SLES") or (ansible_distribution == "SLED") }}'
     is_leap: '{{ "Leap" in ansible_distribution }}'
     is_tumbleweed: '{{ "openSUSE Tumbleweed" == ansible_distribution }}'
-  tags: snmpd
+  tags: [ 'vars' ]
 
 - name: Set SLE specific version labels to make checks easier
   set_fact:
@@ -22,7 +22,7 @@
     is_sle15sp3: '{{ ansible_distribution_version == "15.3" }}'
   when:
     - is_sle|bool
-  tags: snmpd
+  tags: [ 'vars' ]
 
 - name: The default is to assume we have figured out how to add repos for each
   set_fact:
@@ -36,7 +36,7 @@
     - not devconfig_repos_addon|bool
     - is_sle|bool
     - is_sle10|bool or is_sle11|bool
-  tags: snmpd
+  tags: [ 'vars' ]
 
 - name: The default is to assume we are not on sle11 or sle10
   set_fact:
@@ -49,11 +49,12 @@
   when:
     - is_sle|bool
     - is_sle10|bool or is_sle11|bool
-  tags: snmpd
+  tags: [ 'vars' ]
 
 - name: The default is to assume all distros supports nvme-utils
   set_fact:
     lacks_nvme_utils: false
+  tags: [ 'vars' ]
 
 - name: Does this release lack nvme-utils
   set_fact:
@@ -61,10 +62,12 @@
   when:
     - is_sle|bool
     - is_sle10|bool or is_sle11|bool or is_sle12sp1|bool
+  tags: [ 'vars' ]
 
 - name: The default is to assume all distros supports git-core
   set_fact:
     lacks_git_core: false
+  tags: [ 'vars' ]
 
 - name: Does this release lack git-core
   set_fact:
@@ -72,10 +75,12 @@
   when:
     - is_sle|bool
     - is_sle10|bool or is_sle11|bool or is_sle12sp1|bool or is_sle12sp3|bool
+  tags: [ 'vars' ]
 
 - name: Does this release use the package name git assume false
   set_fact:
     use_git_package: false
+  tags: [ 'vars' ]
 
 # This needs perl-Error, so fix that first
 - name: Does this release use the package name git
@@ -85,10 +90,12 @@
     - is_sle|bool
     - is_sle12sp3|bool
     - false
+  tags: [ 'vars' ]
 
 - name: The default is to assume all distros supports xfsdump
   set_fact:
     lacks_xfsdump: false
+  tags: [ 'vars' ]
 
 - name: Does this release lack xfsdump
   set_fact:
@@ -96,10 +103,12 @@
   when:
     - is_sle|bool
     - is_sle10|bool or is_sle11|bool
+  tags: [ 'vars' ]
 
 - name: The default is to assume all distros have fio on the main repo
   set_fact:
     lacks_fio_main_repo: False
+  tags: [ 'vars' ]
 
 # SLES12-SP1 has fio but on ses/2.1/x86_64 repo, and you need another
 # registration key for that. We simply skip fio on it, but only if
@@ -112,6 +121,7 @@
     - is_sle|bool
     - is_sle10|bool or is_sle11|bool or is_sle12sp1|bool or is_sle12sp3|bool or is_sle12sp5|bool
     - suse_register_system|bool or devconfig_repos_addon|bool
+  tags: [ 'vars' ]
 
 - name: Verify SLE/SLED systems are being registered
   fail:
