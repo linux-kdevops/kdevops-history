@@ -339,6 +339,10 @@
     name: snmpd
     enabled: yes
     masked: no
+  when:
+    - is_sle15|bool
+    - repos_will_be_added|bool
+    - devconfig_try_install_kdevtools|bool
   tags: snmpd
 
 - name: Start snmpd service
@@ -347,4 +351,8 @@
   systemd:
     name: snmpd
     state: restarted
+  when:
+    - is_sle15|bool
+    - repos_will_be_added|bool
+    - devconfig_try_install_kdevtools|bool
   tags: snmpd
