@@ -366,3 +366,15 @@
     - repos_will_be_added|bool
     - devconfig_try_install_kdevtools|bool
   tags: snmpd
+
+- name: Install kdump
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - kdump
+  when:
+    - is_sle15|bool
+    - repos_will_be_added|bool
+    - devconfig_try_install_kdevtools|bool
+  tags: kdump
