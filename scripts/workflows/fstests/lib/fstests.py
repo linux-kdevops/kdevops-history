@@ -20,6 +20,8 @@ def fstests_check_pid(host):
 
 def get_fstest_host(host, basedir, kernel, section, config):
     stall_suspect = False
+    if kernel == "Uname-issue":
+        return (None, None, None, None, True)
     latest_dmesg_fstest_line = kssh.get_last_fstest(host)
     if latest_dmesg_fstest_line is None:
         return (None, None, None, None, False)
