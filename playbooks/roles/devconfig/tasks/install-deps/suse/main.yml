@@ -378,3 +378,86 @@
     - repos_will_be_added|bool
     - devconfig_try_install_kdevtools|bool
   tags: kdump
+
+- name: get kdump calibration high
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  shell: kdumptool calibrate | grep ^High | awk '{print $2}'
+  register: kdump_high
+  when:
+    - is_sle15|bool
+    - repos_will_be_added|bool
+    - devconfig_try_install_kdevtools|bool
+  tags: kdump
+
+- name: get kdump calibration low
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  shell: kdumptool calibrate | grep ^Low | awk '{print $2}'
+  register: kdump_low
+  when:
+    - is_sle15|bool
+    - repos_will_be_added|bool
+    - devconfig_try_install_kdevtools|bool
+  tags: kdump
+
+- name: Update grub configuration to add kdump knobs
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT='
+    line: crashkernel={{ kdump_high.stdout }}M,high crashkernel={{ kdump_low.stdout }}M,low
+    insertafter: GRUB_CMDLINE_LINUX_DEFAULT=
+  when:
+    - is_sle15|bool
+    - repos_will_be_added|bool
+    - devconfig_try_install_kdevtools|bool
+  tags: [ 'kdump' ]
+
+- name: Update your boot grub file so kdump changes take effect
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "update-bootloader --refresh"
+  register: grub_update
+  changed_when: "grub_update.rc == 0"
+  when:
+    - is_sle15|bool
+    - repos_will_be_added|bool
+    - devconfig_try_install_kdevtools|bool
+  tags: [ 'kdump' ]
+
+- name: Reboot system to ensure kdump is effective
+  become: yes
+  become_method: sudo
+  reboot:
+  tags: [ 'kdump' ]
+
+- name: Enable kdump service
+  become: yes
+  become_method: sudo
+  systemd:
+    name: kdump
+    enabled: yes
+    masked: no
+  when:
+    - is_sle15|bool
+    - repos_will_be_added|bool
+    - devconfig_try_install_kdevtools|bool
+  tags: kdump
+
+- name: Start kdump service
+  become: yes
+  become_method: sudo
+  systemd:
+    name: kdump
+    state: restarted
+  when:
+    - is_sle15|bool
+    - repos_will_be_added|bool
+    - devconfig_try_install_kdevtools|bool
+  tags: kdump
