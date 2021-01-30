@@ -27,7 +27,7 @@
 - name: The default is to assume we have figured out how to add repos for each
   set_fact:
     repos_will_be_added: true
-  tags: snmpd
+  tags: vars
 
 - name: Disable things which require a repo to be set but that cannot be done
   set_fact:
