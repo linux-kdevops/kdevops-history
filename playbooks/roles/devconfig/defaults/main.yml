@@ -28,3 +28,5 @@ devconfig_repos_addon_list:
 
 suse_register_system: False
 suse_registration_code: 0
+
+devconfig_enable_console: False

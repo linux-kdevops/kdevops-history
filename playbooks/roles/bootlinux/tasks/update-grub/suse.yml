@@ -5,4 +5,4 @@
   command: "update-bootloader --refresh"
   register: grub_update
   changed_when: "grub_update.rc == 0"
-  tags: [ 'linux', 'manual-update-grub' ]
+  tags: [ 'linux', 'manual-update-grub', 'console' ]

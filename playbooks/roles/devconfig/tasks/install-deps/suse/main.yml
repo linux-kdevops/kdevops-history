@@ -435,6 +435,14 @@
     - devconfig_try_install_kdevtools|bool
   tags: [ 'kdump' ]
 
+- name: Update your boot grub file if necessary
+  import_tasks: update-grub/main.yml
+  when:
+    - not kdump_grep.changed
+    - is_sle15|bool
+    - repos_will_be_added|bool
+    - devconfig_try_install_kdevtools|bool
+
 - name: Reboot system to ensure kdump is effective
   become: yes
   become_method: sudo

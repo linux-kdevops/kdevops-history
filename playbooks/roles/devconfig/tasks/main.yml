@@ -105,3 +105,245 @@
   args:
     executable: /bin/bash
   when: dev_bash_config_file_copied_root is success
+
+- name: check to see if system has grub2
+  stat:
+    path=/etc/default/grub
+  register: grub2_config_file
+  tags: [ 'console' ]
+
+- name: Check to see if the grub GRUB_CMDLINE_LINUX is present
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  register: grub_cmdline_linux_grep
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^(GRUB_CMDLINE_LINUX=\")(.*)'
+    line: ''
+  check_mode: yes
+  when:
+    - grub2_config_file.stat.exists
+    - devconfig_enable_console|bool
+  tags: [ 'console' ]
+
+- name: Check to see if the grub GRUB_CMDLINE_LINUX is empty
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  register: cmdline_linux_empty_grep
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^(GRUB_CMDLINE_LINUX)=\"\"'
+    line: ''
+  check_mode: yes
+  when:
+    - grub2_config_file.stat.exists
+    - grub_cmdline_linux_grep.changed
+    - devconfig_enable_console|bool
+  tags: [ 'console' ]
+
+- name: Check to see if the console is already configured on your grub config
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  register: console_grep
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^(GRUB_CMDLINE_LINUX=\")(.*)(\s*)console(.*)'
+    line: ''
+  check_mode: yes
+  when:
+    - grub2_config_file.stat.exists
+    - grub_cmdline_linux_grep.changed
+    - devconfig_enable_console|bool
+  tags: [ 'console' ]
+
+- name: Update grub configuration to add console kernel parameters
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^(GRUB_CMDLINE_LINUX=\")((\s*)(.*)*)(\s*)"$'
+    backrefs: yes
+    line: '\1\2 {{ devconfig_kernel_console }}"'
+  when:
+    - grub2_config_file.stat.exists
+    - devconfig_enable_console|bool
+    - not console_grep.changed
+    - not cmdline_linux_empty_grep.changed
+  tags: [ 'console' ]
+
+- name: Add new grub console kernel parameters to your empty GRUB_CMDLINE_LINUX
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^(GRUB_CMDLINE_LINUX)=\"\"'
+    line: 'GRUB_CMDLINE_LINUX="{{ devconfig_kernel_console }}"'
+  when:
+    - grub2_config_file.stat.exists
+    - grub_cmdline_linux_grep.changed
+    - cmdline_linux_empty_grep.changed
+    - devconfig_enable_console|bool
+    - cmdline_linux_empty_grep.changed
+    - not console_grep.changed
+  tags: [ 'console' ]
+
+- name: Add new grub GRUB_CMDLINE_LINUX with console kernel parameters
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  lineinfile:
+    path: /etc/default/grub
+    insertafter: EOF
+    regexp: '^(GRUB_CMDLINE_LINUX=\")(.*)'
+    line: 'GRUB_CMDLINE_LINUX="{{ devconfig_kernel_console }}"'
+  when:
+    - grub2_config_file.stat.exists
+    - not grub_cmdline_linux_grep.changed
+    - devconfig_enable_console|bool
+  tags: [ 'console' ]
+
+- name: Check to see if the grub timeout is defined in your configuration
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  register: grub_timeout_grep
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^(GRUB_TIMEOUT=)(.*)'
+    line: ''
+  check_mode: yes
+  when:
+    - grub2_config_file.stat.exists
+    - devconfig_enable_console|bool
+  tags: [ 'console' ]
+
+- name: Update grub timeout
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^(GRUB_TIMEOUT=)(.*)'
+    line: 'GRUB_TIMEOUT={{ devconfig_grub_timeout }}'
+  when:
+    - grub2_config_file.stat.exists
+    - devconfig_enable_console|bool
+    - grub_timeout_grep.changed
+  tags: [ 'console' ]
+
+- name: Add grub timeout
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  lineinfile:
+    path: /etc/default/grub
+    insertafter: EOF
+    regexp: '^(GRUB_TIMEOUT=)(.*)'
+    line: 'GRUB_TIMEOUT={{ devconfig_grub_timeout }}'
+  when:
+    - grub2_config_file.stat.exists
+    - devconfig_enable_console|bool
+    - not grub_timeout_grep
+  tags: [ 'console' ]
+
+- name: Check to see if the grub serial command is defined
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  register: serial_command_grep
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^(GRUB_SERIAL_COMMAND=\")(.*)'
+    line: ''
+  check_mode: yes
+  when:
+    - grub2_config_file.stat.exists
+    - devconfig_enable_console|bool
+  tags: [ 'console' ]
+
+- name: Update grub configuration to add grub console parameters if set
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^(GRUB_SERIAL_COMMAND=\")((\s*)(.*)*)(\s*)"$'
+    backrefs: yes
+    line: '\1{{ devconfig_grub_console }}"'
+  when:
+    - grub2_config_file.stat.exists
+    - devconfig_enable_console|bool
+    - serial_command_grep.changed
+  tags: [ 'console' ]
+
+- name: Add grub console parameters
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  lineinfile:
+    path: /etc/default/grub
+    insertafter: EOF
+    regexp: '^(GRUB_SERIAL_COMMAND=\")(.*)'
+    line: 'GRUB_SERIAL_COMMAND="{{ devconfig_grub_console }}"'
+  when:
+    - grub2_config_file.stat.exists
+    - devconfig_enable_console|bool
+    - not serial_command_grep.changed
+  tags: [ 'console' ]
+
+- name: Check to see if the grub terminal settings is defined
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  register: grub_terminal_grep
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^(GRUB_TERMINAL)=(.*)'
+    line: ''
+  check_mode: yes
+  when:
+    - grub2_config_file.stat.exists
+    - devconfig_enable_console|bool
+  tags: [ 'console' ]
+
+- name: Update grub terminal to be serial
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^(GRUB_TERMINAL=)(.*)$'
+    backrefs: yes
+    line: '\1serial'
+  when:
+    - grub2_config_file.stat.exists
+    - devconfig_enable_console|bool
+    - grub_terminal_grep.changed
+  tags: [ 'console' ]
+
+- name: Add grub terminal setting
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  lineinfile:
+    path: /etc/default/grub
+    insertafter: EOF
+    regexp: '^(GRUB_TERMINAL=)(.*)$'
+    line: 'GRUB_TERMINAL=serial'
+  when:
+    - grub2_config_file.stat.exists
+    - devconfig_enable_console|bool
+    - not grub_terminal_grep.changed
+  tags: [ 'console' ]
+
+- name: Update your boot grub file if necessary
+  import_tasks: update-grub/main.yml
+  when:
+    - grub2_config_file.stat.exists
+    - devconfig_enable_console|bool
+    - not console_grep.changed

@@ -32,6 +32,48 @@ config KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK
 	  playbook to do provisioning. If users want to add more playbooks,
 	  new make targets can be added to kdevops for more workflows.
 
+config KDEVOPS_DEVCONFIG_ENABLE
+	bool
+	default y
+	depends on KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK="devconfig.yml"
+
+config KDEVOPS_DEVCONFIG_ENABLE_CONSOLE
+	bool "Enable console setup"
+	default y
+	depends on KDEVOPS_DEVCONFIG_ENABLE
+	  help
+	  Enable this so that we configure and enable console serial settings
+          for you on /etc/default/grub.
+
+if KDEVOPS_DEVCONFIG_ENABLE_CONSOLE
+
+config KDEVOPS_DEVCONFIG_KERNEL_CONSOLE_SETTINGS
+	string "Kernel command line console kernel parameters to use"
+	default "console=tty0 console=tty1 console=ttyS0,38400n8"
+	  help
+          Linux kernel console kernel parameters to use. This will be appended
+	  to the grub configuration file /etc/default/grub on the variable
+          GRUB_CMDLINE_LINUX_DEFAULT, if and only if you did not have any
+          console settings already set.
+
+config KDEVOPS_DEVCONFIG_GRUB_SERIAL_COMMAND
+	string "Grub specific serial settings"
+	default "serial --speed=38400 --unit=0 --parity=no --stop=1"
+	  help
+          Grub console settings to use. This will be appended to the grub
+          configuration file /etc/default/grub on the variable
+          GRUB_SERIAL_COMMAND, if and only if we did change the your console
+          settings as per the above configured kernel parameters passed.
+
+config KDEVOPS_GRUB_TIMEOUT
+	int "Grub timeout"
+	default 2
+	  help
+          Grub timeout to wait for user interaction to let you pick another
+          kernel or boot options.
+
+endif # KDEVOPS_DEVCONFIG_ENABLE_CONSOLE
+
 config KDEVOPS_PLAYBOOK_DIR
 	string "The directory for the ansible playbooks to use"
 	default $(shell, echo $KDEVOPS_PLAYBOOKS_DIR)
