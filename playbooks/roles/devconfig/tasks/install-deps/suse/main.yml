@@ -24,6 +24,24 @@
     - is_sle|bool
   tags: [ 'vars' ]
 
+- name: Set SLE specific version labels to make checks easier when not SLE
+  set_fact:
+    is_sle10: False
+    is_sle11: False
+    is_sle12: False
+    is_sle15: False
+    is_sle10sp3: False
+    is_sle11sp1: False
+    is_sle11sp4: False
+    is_sle12sp1: False
+    is_sle12sp3: False
+    is_sle12sp5: False
+    is_sle15sp2: False
+    is_sle15sp3: False
+  when:
+    - not is_sle|bool
+  tags: [ 'vars' ]
+
 - name: The default is to assume we have figured out how to add repos for each
   set_fact:
     repos_will_be_added: true
