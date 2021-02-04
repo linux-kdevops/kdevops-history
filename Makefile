@@ -420,7 +420,7 @@ mrproper:
 	$(Q)rm -f terraform/*/terraform.tfvars
 	$(Q)rm -f $(KDEVOPS_NODES)
 	$(Q)rm -f $(KDEVOPS_HOSTFILE) $(KDEVOPS_WORKFLOW_FSTESTS_CLEAN)
-	$(Q)rm -f .config .config.old
+	$(Q)rm -f .config .config.old extra_vars.yaml
 	$(Q)rm -f playbooks/secret.yml $(KDEVOPS_EXTRA_ADDON_DEST)
 	$(Q)rm -rf include
 
