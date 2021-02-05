@@ -1,7 +1,6 @@
 config WORKFLOW_EXTRA_SOFTWARE
 	bool "Allow the installation and configuration of additional software"
-	default n if VAGRANT_DEBIAN
-	default y if !VAGRANT_DEBIAN
+	default n
 	help
 	  Enabling this option will allow you to install and configure extra
 	  software on the target system which may be useful for a slew of
@@ -16,7 +15,7 @@ if WORKFLOW_EXTRA_SOFTWARE
 
 config WORKFLOW_EXTRA_SOFTWARE_POSTFIX
 	bool "Install and configure postfix"
-	default y
+	default n
 	help
 	  Enabling this option will install and configure postfix on the
 	  targets systems. We'll also install mailx to allow users to easily
@@ -24,7 +23,7 @@ config WORKFLOW_EXTRA_SOFTWARE_POSTFIX
 
 config WORKFLOW_EXTRA_SOFTWARE_WATCHDOG
 	bool "Install watchhdog"
-	default y
+	default n
 	help
 	  Enabling this option will install a watchdog, and allow you to
 	  configure it. This is useful if you want to have triggers of things
