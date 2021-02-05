@@ -336,6 +336,20 @@
     - repos_will_be_added|bool
     - devconfig_try_install_kdevtools|bool
 
+- name: Set default values for if we install snmp / kdump
+  set_fact:
+    install_snmp: False
+    install_kdump: False
+  tags: [ 'vars' ]
+
+- name: Set if we install snmp / kdump
+  set_fact:
+    install_snmp: True
+    install_kdump: True
+  when:
+    - is_sle15|bool or is_tumbleweed
+  tags: [ 'vars' ]
+
 - name: Install snmp
   become: yes
   become_method: sudo
@@ -343,7 +357,7 @@
     name:
       - net-snmp
   when:
-    - is_sle15|bool
+    - install_snmp|bool
     - repos_will_be_added|bool
     - devconfig_try_install_kdevtools|bool
   tags: snmpd
@@ -355,7 +369,7 @@
     src: snmpd.conf
     dest: /etc/snmp/snmpd.conf
   when:
-    - is_sle15|bool
+    - install_snmp|bool
     - repos_will_be_added|bool
     - devconfig_try_install_kdevtools|bool
   tags: snmpd
@@ -368,7 +382,7 @@
     enabled: yes
     masked: no
   when:
-    - is_sle15|bool
+    - install_snmp|bool
     - repos_will_be_added|bool
     - devconfig_try_install_kdevtools|bool
   tags: snmpd
@@ -380,7 +394,7 @@
     name: snmpd
     state: restarted
   when:
-    - is_sle15|bool
+    - install_snmp|bool
     - repos_will_be_added|bool
     - devconfig_try_install_kdevtools|bool
   tags: snmpd
@@ -392,7 +406,7 @@
     name:
       - kdump
   when:
-    - is_sle15|bool
+    - install_kdump|bool
     - repos_will_be_added|bool
     - devconfig_try_install_kdevtools|bool
   tags: kdump
@@ -404,7 +418,7 @@
   shell: kdumptool calibrate | grep ^High | awk '{print $2}'
   register: kdump_high
   when:
-    - is_sle15|bool
+    - install_kdump|bool
     - repos_will_be_added|bool
     - devconfig_try_install_kdevtools|bool
   tags: kdump
@@ -416,7 +430,7 @@
   shell: kdumptool calibrate | grep ^Low | awk '{print $2}'
   register: kdump_low
   when:
-    - is_sle15|bool
+    - install_kdump|bool
     - repos_will_be_added|bool
     - devconfig_try_install_kdevtools|bool
   tags: kdump
@@ -432,7 +446,7 @@
     line: ''
   check_mode: yes
   when:
-    - is_sle15|bool
+    - install_kdump|bool
     - repos_will_be_added|bool
     - devconfig_try_install_kdevtools|bool
   tags: [ 'kdump' ]
@@ -448,7 +462,7 @@
     line: '\1\2 crashkernel={{ kdump_high.stdout }}M,high crashkernel={{ kdump_low.stdout }}M,low"'
   when:
     - not kdump_grep.changed
-    - is_sle15|bool
+    - install_kdump|bool
     - repos_will_be_added|bool
     - devconfig_try_install_kdevtools|bool
   tags: [ 'kdump' ]
@@ -457,7 +471,7 @@
   import_tasks: update-grub/main.yml
   when:
     - not kdump_grep.changed
-    - is_sle15|bool
+    - install_kdump|bool
     - repos_will_be_added|bool
     - devconfig_try_install_kdevtools|bool
 
@@ -475,7 +489,7 @@
     enabled: yes
     masked: no
   when:
-    - is_sle15|bool
+    - install_kdump|bool
     - repos_will_be_added|bool
     - devconfig_try_install_kdevtools|bool
   tags: kdump
@@ -487,7 +501,7 @@
     name: kdump
     state: restarted
   when:
-    - is_sle15|bool
+    - install_kdump|bool
     - repos_will_be_added|bool
     - devconfig_try_install_kdevtools|bool
   tags: kdump
