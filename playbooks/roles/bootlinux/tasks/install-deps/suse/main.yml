@@ -27,5 +27,4 @@
       - portmap
       - hwinfo
       - open-iscsi
-    extra_args: '--allow-vendor-change'
     disable_recommends: no
