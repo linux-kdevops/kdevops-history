@@ -152,16 +152,34 @@
   when:
     - kdevops_run_fstests|bool
 
-- name: Generate truncated disks using oscheck's gendisk.sh
+- name: Generate loopback disks using sparefiles with gendisk.sh
   tags: [ 'oscheck', 'fstests', 'run_tests', 'gendisks' ]
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
   command: "./gendisks.sh -d -m"
+  register: gendisk_cmd
   args:
     chdir: "{{ fstests_data_target }}"
+  environment:
+    FSTYP: "{{ fstests_fstyp }}"
+    FSTESTS_SPARSE_FILE_PATH: "{{ sparsefiles_path }}"
+    FSTESTS_SETUP_SYSTEM: "{{ fstests_setup_system }}"
+    FSTESTS_TESTDEV_SPARSEFILE_GENERATION: "{{ sparsefiles_generation }}"
+    FSTESTS_SPARSE_FILE_SIZE: "{{ sparsefiles_size }}"
+    FSTESTS_SPARSE_FILENAME_PREFIX: "{{ sparsefiles_filename_prefix }}"
+    TEST_DEV: "{{ fstests_test_dev }}"
   when:
     - kdevops_run_fstests|bool
+    - sparsefiles_generation == "y"
+
+- name: Capture gendisk output
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'gendisks' ]
+  debug:
+    msg: "{{ gendisk_cmd.stdout_lines }}"
+  when:
+    - kdevops_run_fstests|bool
+    - fstests_debug|bool
 
 - name: Check and verify fstests dependencies are met prior to running fstests
   vars:
@@ -173,6 +191,14 @@
   command: "./oscheck.sh --check-deps --test-section {{ section }}"
   args:
     chdir: "{{ fstests_data_target }}"
+  environment:
+    FSTYP: "{{ fstests_fstyp }}"
+    FSTESTS_SPARSE_FILE_PATH: "{{ sparsefiles_path }}"
+    FSTESTS_SETUP_SYSTEM: "{{ fstests_setup_system }}"
+    FSTESTS_TESTDEV_SPARSEFILE_GENERATION: "{{ sparsefiles_generation }}"
+    FSTESTS_SPARSE_FILE_SIZE: "{{ sparsefiles_size }}"
+    FSTESTS_SPARSE_FILENAME_PREFIX: "{{ sparsefiles_filename_prefix }}"
+    TEST_DEV: "{{ fstests_test_dev }}"
   when:
     - kdevops_run_fstests|bool
 
@@ -230,6 +256,14 @@
   no_log: True
   args:
     chdir: "{{ fstests_data_target }}"
+  environment:
+    FSTYP: "{{ fstests_fstyp }}"
+    FSTESTS_SPARSE_FILE_PATH: "{{ sparsefiles_path }}"
+    FSTESTS_SETUP_SYSTEM: "{{ fstests_setup_system }}"
+    FSTESTS_TESTDEV_SPARSEFILE_GENERATION: "{{ sparsefiles_generation }}"
+    FSTESTS_SPARSE_FILE_SIZE: "{{ sparsefiles_size }}"
+    FSTESTS_SPARSE_FILENAME_PREFIX: "{{ sparsefiles_filename_prefix }}"
+    TEST_DEV: "{{ fstests_test_dev }}"
   when:
     - kdevops_run_fstests|bool
 

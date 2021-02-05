@@ -12,3 +12,10 @@ oscheck_extra_args: ""
 fstests_git: "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git"
 fstests_data: "{{ data_path }}/xfstests"
 fstests_data_target: "/var/lib/xfstests/"
+fstests_setup_system: "n"
+fstests_test_dev: "/dev/null"
+sparsefiles_generation: False
+sparsefiles_size: 0
+sparsefiles_filename_prefix: "sparse-disk"
+
+fstests_debug: False
