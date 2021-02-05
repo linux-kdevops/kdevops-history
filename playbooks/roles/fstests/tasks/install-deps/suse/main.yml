@@ -21,6 +21,22 @@
   when:
     - is_sle|bool
 
+- name: Set SLE specific version labels to make checks easier when not SLE
+  set_fact:
+    is_sle10: False
+    is_sle11: False
+    is_sle12: False
+    is_sle15: False
+    is_sle10sp3: False
+    is_sle11sp1: False
+    is_sle11sp4: False
+    is_sle12sp1: False
+    is_sle12sp3: False
+    is_sle15sp2: False
+    is_sle15sp3: False
+  when:
+    - not is_sle|bool
+
 - name: By default we assume we have figured out how to add repos on a release
   set_fact:
     repos_present: true
