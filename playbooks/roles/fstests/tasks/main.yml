@@ -129,7 +129,7 @@
   failed_when: not section_grep.changed
   lineinfile:
     path: /var/lib/xfstests/configs/.config
-    regexp: "\\[btrfs_raid56\\]$"
+    regexp: "\\[{{ section }}\\]$"
     line: ''
   check_mode: yes
   when:
