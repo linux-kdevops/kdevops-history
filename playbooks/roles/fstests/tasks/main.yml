@@ -102,6 +102,22 @@
     path: "{{ fstests_data_target }}/results/"
   tags: [ 'oscheck', 'fstests', 'run_tests', 'clean_results' ]
 
+- name: Add missing groups for fstests
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'checktime' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  group:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - sys
+    - fsgqa
+  loop_control:
+    label: "Ensuring the group {{ item }} exists"
+  when:
+    - kdevops_run_fstests|bool
+
 - name: Generate truncated disks using oscheck's gendisk.sh
   tags: [ 'oscheck', 'fstests', 'run_tests', 'gendisks' ]
   become: yes
