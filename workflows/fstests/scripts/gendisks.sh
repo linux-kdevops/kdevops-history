@@ -104,6 +104,7 @@ else
 	error="no"
 	if [ -z $FSTYP ]; then
 		echo "FSTYP environment variable is required to be set when the -m argument is used"
+		error="yes"
 	fi
 	if [ -z $TEST_DEV ]; then
 		echo "TEST_DEV environment variable is required to be set when the -m argument is used"
