@@ -152,6 +152,9 @@
   when:
     - kdevops_run_fstests|bool
 
+# We have to set the environment variables explicitly because some distros
+# or systems might have on /etc/sudeors env_reset enabled, which gives us
+# as root a clean slate of variables.
 - name: Generate loopback disks using sparefiles with gendisk.sh
   tags: [ 'oscheck', 'fstests', 'run_tests', 'gendisks' ]
   become: yes
