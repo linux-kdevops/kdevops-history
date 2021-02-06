@@ -75,7 +75,7 @@ def main():
                 distribution.write("%d,%d,%f\n" % (k, v, 100 * v / num_tests))
                 v_total += v
 
-            if num_tests != v_total
+            if num_tests != v_total:
                 sys.stdout.write("Unexpected error, total tests: %d but computed sum test: %d\n" % (num_tests, v_total))
 
 
