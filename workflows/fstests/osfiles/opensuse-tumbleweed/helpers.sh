@@ -1,6 +1,6 @@
 #!/bin/bash
 
-opensuse-leap_read_osfile()
+opensuse-tumbleweed_read_osfile()
 {
 	eval $(grep '^VERSION_ID=' $OS_FILE)
 	eval $(grep '^PRETTY_NAME=' $OS_FILE)
@@ -14,7 +14,7 @@ opensuse-leap_read_osfile()
 	fi
 }
 
-opensuse-leap_special_expunges()
+opensuse-tumbleweed_special_expunges()
 {
 	case "$VERSION_ID" in
 	2019*) # on 4.19.* kernel
@@ -28,7 +28,7 @@ opensuse-leap_special_expunges()
 	esac
 }
 
-opensuse-leap_skip_groups()
+opensuse-tumbleweed_skip_groups()
 {
 	case "$VERSION_ID" in
 	2019*) # on 4.19.* kernel
@@ -48,7 +48,7 @@ opensuse-leap_skip_groups()
 	done
 }
 
-opensuse-leap_queue_sections()
+opensuse-tumbleweed_queue_sections()
 {
 	case "$VERSION_ID" in
 	# Note: CONFIG_XFS_RT is not enabled as of OpenSUSE Leap 15
@@ -72,7 +72,7 @@ opensuse-leap_queue_sections()
 	fi
 }
 
-opensuse-leap_restart_ypbind()
+opensuse-tumbleweed_restart_ypbind()
 {
 	which ypbind 2 >/dev/null
 	if [ $? -ne 0 ]; then
@@ -86,7 +86,7 @@ opensuse-leap_restart_ypbind()
 	esac
 }
 
-opensuse-leap_distro_kernel_check()
+opensuse-tumbleweed_distro_kernel_check()
 {
 	KERNEL_BOOT_CONFIG="/boot/config-$(uname -r)"
 	if [ ! -e $KERNEL_BOOT_CONFIG ]; then
