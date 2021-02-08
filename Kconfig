@@ -31,10 +31,10 @@ menu "Bring up methods"
 source "kconfigs/Kconfig.bringup"
 endmenu
 
-menu "Kdevops configuration"
-source "kconfigs/Kconfig.kdevops"
-endmenu
-
 menu "Target workflows"
 source "kconfigs/workflows/Kconfig"
+endmenu
+
+menu "Kdevops configuration"
+source "kconfigs/Kconfig.kdevops"
 endmenu
