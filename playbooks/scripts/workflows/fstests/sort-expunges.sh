@@ -24,5 +24,7 @@ fi
 FILES=$(find $DIR -name \*.txt)
 
 for i in $FILES; do
-	cat $i | sort | tee $i > /dev/null
+	TMP=${i}.tmp
+	cat $i | sort | uniq > $TMP
+	mv $TMP $i
 done
