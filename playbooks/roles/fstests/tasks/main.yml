@@ -59,6 +59,8 @@
   git:
     repo: "{{ fstests_git }}"
     dest: "{{ fstests_data }}"
+    update: yes
+    version: master
   tags: [ 'oscheck', 'git', 'fstests']
 
 - name: Build fstests
