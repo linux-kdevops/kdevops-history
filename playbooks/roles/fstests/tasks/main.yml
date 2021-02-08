@@ -391,6 +391,8 @@
   local_action: "shell ./python/workflows/fstests/fstests-checktime-distribution.py {{ fstests_results_target }}/results"
   tags: [ 'oscheck', 'fstests', 'copy_results', 'augment_expunge_list' ]
   run_once: true
+  when:
+    - checktime_files.matched > 0
 
 - name: Augment expunge list for {{ fstests_fstyp }}, just run git diff after this to see new failures found
   local_action: "shell ./python/workflows/fstests/augment_expunge_list.py {{ fstests_fstyp }} {{ fstests_results_target }}/results {{ fstests_results_target }}/expunges/"
