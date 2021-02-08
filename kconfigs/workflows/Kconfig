@@ -18,7 +18,7 @@ config KDEVOPS_WORKFLOW_ENABLE_FSTESTS
 
 choice
 	prompt "Target workflow type"
-	default KDEVOPS_WORKFLOW_LINUX
+	default KDEVOPS_WORKFLOW_NONE
 
 config KDEVOPS_WORKFLOW_NONE
 	bool "None - simply bringing systems up"
