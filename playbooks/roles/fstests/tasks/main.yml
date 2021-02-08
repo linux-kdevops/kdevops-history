@@ -294,7 +294,7 @@
   tags: [ 'oscheck', 'fstests', 'copy_results', 'clean_local_results' ]
 
 - name: Look for the check.time files on {{ fstests_data_target }}
-  tags: [ 'oscheck', 'fstests', 'run_tests', 'checktime' ]
+  tags: [ 'oscheck', 'fstests', 'copy_results', 'checktime' ]
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -305,7 +305,7 @@
   register: checktime_files
 
 - name: Copy the latest run check.time files from {{ fstests_data_target }}
-  tags: [ 'oscheck', 'fstests', 'run_tests', 'checktime' ]
+  tags: [ 'oscheck', 'fstests', 'copy_results', 'checktime' ]
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
