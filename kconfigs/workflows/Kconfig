@@ -33,6 +33,21 @@ config WORKFLOW_LINUX_CUSTOM
 
 endchoice
 
+if WORKFLOW_LINUX_CUSTOM
+menu "Get and install Linux from git"
+config BOOTLINUX
+	bool "Enable getting and installing Linux from git"
+	default n
+	help
+	  This option will allow the 'make linux' target be usable for you
+	  to just get Linux from git, or to install it as well.
+
+	  Say y unless you don't want to have 'make linux' do anything.
+
+source "kconfigs/workflows/bootlinux/Kconfig"
+endmenu
+endif # WORKFLOW_LINUX_CUSTOM
+
 config WORKFLOWS_TESTS
 	bool "Enable selection of test workflows"
 	default n
@@ -54,19 +69,6 @@ config KDEVOPS_WORKFLOW_ENABLE_FSTESTS
 	  you don't regress against development changes on your kernel.
 
 endif # WORKFLOWS_TESTS
-
-menu "Get and install Linux from git"
-config BOOTLINUX
-	bool "Enable getting and installing Linux from git"
-	default n
-	help
-	  This option will allow the 'make linux' target be usable for you
-	  to just get Linux from git, or to install it as well.
-
-	  Say y unless you don't want to have 'make linux' do anything.
-
-source "kconfigs/workflows/bootlinux/Kconfig"
-endmenu
 
 if KDEVOPS_WORKFLOW_ENABLE_FSTESTS
 menu "Configure and run fstests"
