@@ -14,12 +14,18 @@ config FSTESTS_BTRFS
 	help
 	  This will target testing the btrfs filesystem.
 
+config FSTESTS_EXT4
+	bool "ext4"
+	help
+	  This will target testing the ext4 filesystem.
+
 endchoice
 
 config FSTESTS_FSTYP
 	string "The filesystem to test with fstests"
 	default "xfs" if FSTESTS_XFS
 	default "btrfs" if FSTESTS_BTRFS
+	default "ext4" if FSTESTS_EXT4
 	help
 	  The filesystem to test. This will be automatically set depending on
 	  the above choice, you however can override this manually.
@@ -153,6 +159,14 @@ source "workflows/fstests/btrfs/Kconfig"
 endmenu
 
 endif # FSTESTS_BTRFS
+
+if FSTESTS_EXT4
+
+menu "Configure how to test ext4"
+source "workflows/fstests/ext4/Kconfig"
+endmenu
+
+endif # FSTESTS_EXT4
 
 config FSTESTS_GIT
 	string "The fstests git tree to clone"
