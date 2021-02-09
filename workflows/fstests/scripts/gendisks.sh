@@ -114,5 +114,9 @@ else
 	if [ "$error" == "yes" ]; then
 		exit 1
 	fi
-	mkfs.$FSTYP -f $TEST_DEV
+	FORCE_ARGS=""
+	if [[ "$FSTYP" != "ext4" ]]; then
+		FORCE_ARGS="-f"
+	fi
+	mkfs.$FSTYP $FORCE_ARGS $TEST_DEV
 fi

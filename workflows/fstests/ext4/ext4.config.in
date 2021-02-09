@@ -8,5 +8,5 @@ SCRATCH_MNT=@FSTESTSSCRATCHMNT@
 RESULT_BASE=$PWD/results/$HOST/$(uname -r)
 
 [ext4_defaults]
-MKFS_OPTIONS='-f'
+MKFS_OPTIONS=''
 FSTYP=ext4
