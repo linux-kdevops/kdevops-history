@@ -1,0 +1,174 @@
+---
+- name: Set generic SUSE specific distro facts
+  set_fact:
+    is_sle: '{{ (ansible_distribution == "SLES") or (ansible_distribution == "SLED") }}'
+    is_leap: '{{ "Leap" in ansible_distribution }}'
+    is_tumbleweed: '{{ "openSUSE Tumbleweed" == ansible_distribution }}'
+
+- name: Set SLE specific version labels to make checks easier
+  set_fact:
+    is_sle10: '{{ ansible_distribution_major_version == "10" }}'
+    is_sle11: '{{ ansible_distribution_major_version == "11" }}'
+    is_sle12: '{{ ansible_distribution_major_version == "12" }}'
+    is_sle15: '{{ ansible_distribution_major_version == "15" }}'
+    is_sle10sp3: '{{ ansible_distribution_version == "10.3" }}'
+    is_sle11sp1: '{{ ansible_distribution_version == "11.1" }}'
+    is_sle11sp4: '{{ ansible_distribution_version == "11.4" }}'
+    is_sle12sp1: '{{ ansible_distribution_version == "12.1" }}'
+    is_sle12sp3: '{{ ansible_distribution_version == "12.3" }}'
+    is_sle15sp2: '{{ ansible_distribution_version == "15.2" }}'
+    is_sle15sp3: '{{ ansible_distribution_version == "15.3" }}'
+  when:
+    - is_sle|bool
+
+- name: Set SLE specific version labels to make checks easier when not SLE
+  set_fact:
+    is_sle10: False
+    is_sle11: False
+    is_sle12: False
+    is_sle15: False
+    is_sle10sp3: False
+    is_sle11sp1: False
+    is_sle11sp4: False
+    is_sle12sp1: False
+    is_sle12sp3: False
+    is_sle15sp2: False
+    is_sle15sp3: False
+  when:
+    - not is_sle|bool
+
+- name: By default we assume we have figured out how to add repos on a release
+  set_fact:
+    repos_present: true
+
+- name: Lets us disable things which require a zypper repo present
+  set_fact:
+    repos_present: false
+  when:
+    - is_sle|bool
+    - is_sle10|bool or is_sle11|bool
+
+- name: The default is to assume all distros supports nvme-utils
+  set_fact:
+    lacks_nvme_utils: false
+
+- name: Does this release lack nvme-utils
+  set_fact:
+    lacks_nvme_utils: true
+  when:
+    - is_sle|bool
+    - is_sle10|bool or is_sle11|bool or is_sle12sp1|bool
+
+- name: Install nvme tools
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - nvme-cli
+    state: present
+  when:
+    - repos_present|bool
+    - not lacks_nvme_utils|bool
+
+- name: Install nvme tools
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - nvme-cli
+    state: present
+  when:
+    - repos_present|bool
+    - not lacks_nvme_utils|bool
+
+- name: Install build dependencies for fstests
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - bison
+      - flex
+      - git-core
+      - automake
+      - gcc
+      - libuuid1
+      - libuuid-devel
+      - quota
+      - make
+      - xfsprogs
+      - xfsprogs-devel
+      - xfsdump
+      - e2fsprogs
+      - btrfsprogs
+      - gawk
+      - util-linux
+      - uuidd
+      - acl
+      - bc
+      - dump
+      - indent
+      - libtool
+      - lvm2
+      - psmisc
+      - sed
+      - libacl1
+      - libacl-devel
+      - libaio1
+      - libaio-devel
+      - attr
+      - libattr-devel
+      - openssl-devel
+      - libcap-progs
+      - fio
+    state: present
+  when:
+    - repos_present|bool
+
+- name: Install tumblweed packages
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - libgdbm6
+      - dbench
+    state: present
+  when:
+    - is_tumbleweed|bool
+
+- name: Install sle15 sp2 and sp3 packages
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - libgdbm4
+    state: present
+  when:
+    - is_sle15sp2|bool or is_sle15sp3|bool
+
+- name: The default is to assume we do not want to add the benchmark repo
+  set_fact:
+    add_benchmark_repo: False
+
+- name: Does this release require the sles15sp2 benchmark repo
+  set_fact:
+    add_benchmark_repo: True
+  when:
+    - is_sle15sp2|bool or is_sle15sp3|bool
+
+- name:  add benchmark sles15sp2 opensuse repo when needed
+  become: yes
+  become_method: sudo
+  script:
+    cmd: "{{ role_path }}/scripts/add-suse-repo-if-not-found.sh http://download.opensuse.org/repositories/benchmark/SLE_15_SP2/ benchmark benchmark"
+  when:
+    - add_benchmark_repo|bool
+
+- name: Install dbench for sles15-sp2
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - dbench
+    state: present
+  when:
+    - add_benchmark_repo|bool

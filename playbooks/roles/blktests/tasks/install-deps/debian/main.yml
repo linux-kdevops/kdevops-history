@@ -1,0 +1,61 @@
+---
+- name: Install nvme tools
+  become: yes
+  become_method: sudo
+  apt:
+    name:
+      - nvme-cli
+
+- name: Install blktests build dependencies
+  become: yes
+  become_method: sudo
+  apt:
+    name:
+      - bison
+      - flex
+      - git
+      - automake
+      - libuuid1
+      - quota
+      - make
+      - xfsprogs
+      - xfsdump
+      - e2fsprogs
+      - btrfs-progs
+      - gawk
+      - uuid-runtime
+      - acl
+      - bc
+      - dump
+      - indent
+      - libtool
+      - lvm2
+      - psmisc
+      - sed
+      - libacl1
+      - libacl1-dev
+      - libaio1
+      - uuid-dev
+      - uuid-runtime
+      - attr
+      - libattr1
+      - libattr1-dev
+      - gdbm-l10n
+      - libgdbm-dev
+      - libssl-dev
+      - xfslibs-dev
+      - fio
+      - dbench
+      - libcap2-bin
+      - libtool
+      - gcc
+      - nbd-server
+      - nbd-client
+      - multipath-tools
+      - libaio-dev
+      - g++
+      - parted
+      - libnl-utils
+    state: present
+    update_cache: yes
+  tags: [ 'blktests', 'deps' ]

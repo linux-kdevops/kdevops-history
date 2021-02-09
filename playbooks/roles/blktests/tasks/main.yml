@@ -1,0 +1,225 @@
+---
+- name: Import optional extra_args file
+  include_vars: "{{ item }}"
+  ignore_errors: yes
+  with_first_found:
+    - files:
+      - "../extra_vars.yml"
+      - "../extra_vars.yaml"
+      - "../extra_vars.json"
+      skip: true
+  tags: vars
+
+# Distro specific
+- include: tasks/install-deps/main.yml
+
+- include_role:
+    name: create_data_partition
+  tags: [ 'data_partition' ]
+
+- name: git clone kdevops
+  environment:
+    GIT_SSL_NO_VERIFY:  true
+  git:
+    repo: "{{ kdevops_git }}"
+    dest: "{{ kdevops_data }}"
+    update: yes
+    version: master
+  tags: [ 'install', 'git']
+
+- name: Copy over our .config
+  copy:
+    src: "{{ playbook_dir }}/../.config"
+    dest: "{{ kdevops_dir }}"
+  tags: [ 'install', 'root', 'config']
+
+- name: git clone blktrace
+  git:
+    repo: "{{ blktrace_git }}"
+    dest: "{{ blktrace_data }}"
+    update: yes
+    version: master
+  tags: [ 'git', 'blktests', 'blktrace' ]
+
+- name: Build blktrace
+  tags: [ 'blktests', 'build', 'bltkrace' ]
+  make:
+    chdir: "{{ blktrace_data }}"
+    params:
+      NUM_THREADS: "{{ make_num_jobs }}"
+
+- name: Install blktrace
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "{{  make }} install"
+  tags: [ 'blktests', 'install', 'root', 'blktrace' ]
+  args:
+    chdir: "{{ blktrace_data }}"
+
+- name: git clone blktests
+  git:
+    repo: "{{ blktests_git }}"
+    dest: "{{ blktests_data }}"
+    update: yes
+    version: master
+  tags: [ 'git', 'blktests']
+
+- name: Build blktests
+  tags: [ 'blktests', 'build']
+  make:
+    chdir: "{{ blktests_data }}"
+    params:
+      NUM_THREADS: "{{ make_num_jobs }}"
+
+- name: Install blktests
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "{{  make }} install"
+  tags: [ 'blktests', 'install', 'root']
+  args:
+    chdir: "{{ blktests_data }}"
+
+- name: git pull latest kdevops to ensure expunge list is up to date
+  environment:
+    GIT_SSL_NO_VERIFY:  true
+  git:
+    repo: "{{ kdevops_git }}"
+    dest: "{{ kdevops_data }}"
+    update: yes
+    version: master
+  tags: [ 'install', 'git', 'git_update', 'run_tests' ]
+
+- name: Reboot system before our test so we know everything is sane
+  tags: [ 'blktests', 'run_tests', 'reboot' ]
+  become: yes
+  become_method: sudo
+  reboot:
+
+- name: Set the path where we collect our blktests results
+  set_fact:
+    blktests_results_target: "../workflows/blktests/results/"
+  tags: [ 'blktests', 'run_tests', 'copy_results', 'prior_run', 'print_results' , 'augment_expunge_list' ]
+
+- name: Set the path where we collect blktests expunges
+  set_fact:
+    blktests_expunges_target: "../workflows/blktests/expunges/"
+  tags: [ 'blktests', 'run_tests', 'copy_results', 'prior_run', 'print_results' , 'augment_expunge_list' ]
+
+- name: Print uname for each host
+  tags: [ 'blktests', 'run_tests' ]
+  debug: var=ansible_kernel
+
+- name: Get used target kernel version
+  tags: [ 'blktests', 'copy_results', 'augment_expunge_list' ]
+  command: "uname -r"
+  register: uname_cmd
+
+- name: Document used target kernel version
+  local_action: "shell echo {{ uname_cmd.stdout_lines | regex_replace('\\]') | regex_replace('\\[') }} > {{ blktests_results_target }}/last-kernel.txt"
+  tags: [ 'blktests', 'copy_results', 'augment_expunge_list' ]
+  run_once: true
+
+- name: Load configfs module
+  tags: [ 'blktests', 'run_tests', 'configfs' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "modprobe configfs"
+  when:
+    - kdevops_run_blktests|bool
+
+- name: Clear out old results directory on target hosts
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  file:
+    state: absent
+    path: "{{ blktests_data_target }}/results/"
+  tags: [ 'blktests', 'run_tests', 'clean_results' ]
+
+- name: Hint to watchdog tests are about to kick off
+  local_action: file path="{{ blktests_results_target }}/.begin" state=touch
+  tags: [ 'blktests', 'run_tests' ]
+  when:
+    - kdevops_run_blktests|bool
+  run_once: true
+
+- name: Run blktests using ./oscheck.sh --print-done --test-group {{ group }} {{ oscheck_extra_args }}
+  vars:
+    group: "{{ ansible_ssh_host | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
+  tags: [ 'blktests', 'run_tests' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "./oscheck.sh --print-start --print-done --test-group {{ group }} {{ oscheck_extra_args }}"
+  ignore_errors: yes
+  no_log: True
+  args:
+    chdir: "{{ blktests_data_target }}"
+  environment:
+    TEST_DEVS: "{{ blktests_test_devs }}"
+  when:
+    - kdevops_run_blktests|bool
+
+- name: Remove watchdog hint that tests have started
+  local_action: file path="{{ blktests_results_target }}/.begin" state=absent
+  tags: [ 'blktests', 'run_tests' ]
+  when:
+    - kdevops_run_blktests|bool
+  run_once: true
+
+- name: Clean up our localhost results/last-run directory
+  local_action: file path="{{ blktests_results_target }}/{{ item }}" state=absent
+  with_items:
+    - "last-run"
+  loop_control:
+    label: "{{ item }}"
+  run_once: true
+  tags: [ 'blktests', 'copy_results', 'clean_local_results' ]
+
+- name: Look for results for the last run
+  tags: [ 'blktests', 'copy_results' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  find:
+    paths: "{{ blktests_data_target }}/results/"
+    recurse: yes
+    patterns: "*"
+  register: last_run_results
+
+- name: Copy all test results
+  tags: [ 'blktests', 'copy_results' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  fetch:
+    src: "{{ item.path }}"
+    dest: "{{ blktests_results_target }}/last-run/{{ item.path | regex_replace(blktests_data_target + 'results/' | regex_escape()) | regex_replace('^/', '') }}"
+    flat: yes
+  with_items: "{{ last_run_results.files }}"
+  loop_control:
+    label: "{{ item.path | regex_replace(blktests_data_target + 'results/' | regex_escape()) | regex_replace('^/', '') }}"
+  when:
+    - last_run_results.matched > 0
+
+- name: Augment expunge list just run git diff after this to see new failures found
+  local_action: "shell ./python/workflows/blktests/augment_expunge_list.py {{ blktests_results_target }}/last-run/ {{ blktests_expunges_target }}"
+  tags: [ 'blktests', 'copy_results', 'augment_expunge_list' ]
+  run_once: true
+
+- name: Print blktests new expunge files for which are not yet committed
+  local_action: "shell ./python/workflows/blktests/get_new_expunge_files.py {{ blktests_expunges_target }}"
+  register: new_expunges
+  tags: [ 'blktests', 'copy_results', 'print_results', 'augment_expunge_list' ]
+  run_once: true
+
+- name: Inform user if new expunge files have been found
+  run_once: true
+  tags: [ 'blktests', 'copy_results', 'augment_expunge_list' ]
+  debug:
+    msg: "New expunge files found: {{ new_expunges.stdout_lines }}"
+  when:
+    - new_expunges.stdout != 0

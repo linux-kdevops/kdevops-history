@@ -18,6 +18,9 @@ export KDEVOPS_NODES_TEMPLATES
 export KDEVOPS_FSTESTS_CONFIG :=
 export KDEVOPS_FSTESTS_CONFIG_TEMPLATE :=
 
+export KDEVOPS_BLKTESTS_CONFIG :=
+export KDEVOPS_BLKTESTS_CONFIG_TEMPLATE :=
+
 KDEVOPS_INSTALL_TARGETS :=
 
 all: deps
@@ -227,6 +230,10 @@ ifeq (y,$(CONFIG_KDEVOPS_WORKFLOW_ENABLE_FSTESTS))
 include workflows/fstests/Makefile
 endif # CONFIG_KDEVOPS_WORKFLOW_ENABLE_FSTESTS == y
 
+ifeq (y,$(CONFIG_KDEVOPS_WORKFLOW_ENABLE_BLKTESTS))
+include workflows/blktests/Makefile
+endif # CONFIG_KDEVOPS_WORKFLOW_ENABLE_BLKTESTS == y
+
 endif # CONFIG_WORKFLOWS
 
 ANSIBLE_EXTRA_ARGS += $(WORKFLOW_ARGS)
@@ -337,6 +344,9 @@ $(KDEVOPS_EXTRA_VARS): .config
 	@if [[ "$(CONFIG_KDEVOPS_DEVCONFIG_ENABLE_CONSOLE)" == "y" ]]; then \
 		echo "devconfig_kernel_console: '$(CONFIG_KDEVOPS_DEVCONFIG_KERNEL_CONSOLE_SETTINGS)'" >> $(KDEVOPS_EXTRA_VARS) ;\
 		echo "devconfig_grub_console: '$(CONFIG_KDEVOPS_DEVCONFIG_GRUB_SERIAL_COMMAND)'" >> $(KDEVOPS_EXTRA_VARS) ;\
+	fi
+	@if [[ "$(CONFIG_KDEVOPS_WORKFLOW_ENABLE_BLKTESTS)" == "y" ]]; then \
+		echo "blktests_test_devs: '$(CONFIG_BLKTESTS_TEST_DEVS)'" >> $(KDEVOPS_EXTRA_VARS) ;\
 	fi
 
 playbooks/secret.yml:

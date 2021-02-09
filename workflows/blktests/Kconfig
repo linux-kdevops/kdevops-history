@@ -1,0 +1,280 @@
+if KDEVOPS_WORKFLOW_ENABLE_BLKTESTS
+
+config BLKTESTS_WATCHDOG
+	bool "Enable kdevops blktests watchdog"
+	default y if HAVE_DISTRO_PREFERS_BLKTESTS_WATCHDOG
+	default n if !HAVE_DISTRO_PREFERS_BLKTESTS_WATCHDOG
+	depends on KERNEL_CI
+	help
+	  Enable the blktests watchdog which lets you keep tabs on progress
+	  of blktets on different spawned systems.
+
+	  Enabling this option will allow the kdevops blktests_watchdog.py to
+	  run and log into the workflows/blktests/watchdog/all.txt the status
+	  of all known tests.
+
+	  It is safe to enable as no action is taken by default, it is just
+	  informational. If you however don't even want this information logged
+	  you can disable this.
+
+if BLKTESTS_WATCHDOG
+
+config BLKTESTS_WATCHDOG_CHECK_TIME
+	int "How often to run the blktests in seconds"
+	default 5
+	help
+	  How often to trigger running the blktests watchdog, in seconds.
+
+config BLKTESTS_WATCHDOG_MAX_NEW_TEST_TIME
+	int "Max minutes to wait for a new test before assuming a hang"
+	default 60
+	help
+	  Max value of time in minutes a new test should take before assuming
+	  the test is hung.
+
+	  Once a test has completed or failed blktests captures the amount of
+	  seconds it took to run that test on a file called check.time. This
+	  file consists of two columns, the first with the test name and the
+	  second column with the amount of time in seconds it took to run a
+	  test. When we run a test for the first time there is no known prior
+	  last test time, as there would be no check.time files present from a
+	  prior run.
+
+	  The amount of time it takes to run a test will also depend highly on
+	  the system, drive and filesystem you are running the test on and so
+	  check.time values are completely system specific. However, we can
+	  often run into a test which is hung but blktests seems to keep running,
+	  without providing feedback about a possibly hung test. In order to
+	  tell if a test is hung we must define a value for max time any new test
+	  can take. This value is system specific and so must be defined by the
+	  person configuring the test, however sensible default values are
+	  defined.
+
+	  The kdevops blktests_watchdog.py uses this max value to know when a
+	  test is on a system is hung for a test's first run. If a test had
+	  already completed before, and so had an entry for the test on the
+	  last test's check.time file for the target system, other heuristics
+	  are used.
+
+	  Setting this value is only informational, so that blktests_watchdog.py
+	  can print a status of "hung" suspect when it finds a test goes over
+	  this value on a first run.
+
+config BLKTESTS_WATCHDOG_HUNG_MULTIPLIER_LONG_TESTS
+	int "Multiplier for amount of time before assuming a test is hung"
+	default 10
+	help
+	  If we know a test took 1 minute the last time we ran it, setting the
+	  multiplier to 10 will let the watchdog decide a test is hung if 10
+	  minutes have passed and the test has not completed yet.
+
+	  This multiplier is only used for tests for which we have a prior
+	  last run time and that run time is greater than 30 seconds.
+
+config BLKTESTS_WATCHDOG_HUNG_FAST_TEST_MAX_TIME
+	int "Max time in minutes to wait before declaring quick tests as hung"
+	default 5
+	help
+	  If we know a test took between 1 second and 30 seconds to run in a
+	  prior test we can safely assign a timeout value in minutes for these
+	  quick tests for which we will let run before allowing the blktests
+	  watchdog to assume the test is hung.
+
+config BLKTESTS_WATCHDOG_KILL_TASKS_ON_HANG
+	bool "Enable killing local tasks on hang detection"
+	default y if HAVE_DISTRO_PREFERS_BLKTESTS_WATCHDOG_KILL
+	default n if !HAVE_DISTRO_PREFERS_BLKTESTS_WATCHDOG_KILL
+	help
+	  Enable the fstest watchdog to kill local controller tasks and if
+	  enabled send a report if a hang / timeout occurs but leave the
+	  systems which are hung / timed out alive for further inspection.
+
+config BLKTESTS_WATCHDOG_RESET_HUNG_SYSTEMS
+	bool "Enable kdevops blktests watchdog to deal with hung systems"
+	default y if HAVE_DISTRO_PREFERS_BLKTESTS_WATCHDOG_RESET
+	default n if !HAVE_DISTRO_PREFERS_BLKTESTS_WATCHDOG_RESET
+	depends on VAGRANT
+	depends on BLKTESTS_WATCHDOG_KILL_TASKS_ON_HANG
+	help
+	  If this option is enabled, kdevops will reset all systems after a
+	  hang is detected.
+
+	  The tests which caused the hangs found will be logged. Enabling
+	  this is only desirable if you don't care to manually inspect
+	  hosed systems when a hang happens. This may be useful in the
+	  future if we enable automatic tasks which create a baseline for
+	  you, for instance, but for this to be more useful, we'd likely
+	  have to also implement a way to try to capture kernel logs
+	  before a reset.
+
+	  We currently only enable this for vagrant provisioning, given we have
+	  to figure out a unified way to express a reset for cloud solution and
+	  also figure out a way to enable this for bare metal. For vagrant we
+	  currently use 'virsh reset' and so this works only if on libvirt.
+
+endif # BLKTESTS_WATCHDOG
+
+config BLKTESTS_GIT
+	string "The blktests git tree to clone"
+	default "https://github.com/osandov/blktests.git"
+	help
+	  The blktests git tree to clone.
+
+config BLKTESTS_DATA
+	string "Where to clone the blktests git tree to"
+	default "{{data_path}}/blktests"
+	help
+	  This is the target location of where to clone the blktests git tree.
+	  Note that {{data_path}} corresponds to the location set by the
+	  configuration option CONFIG_WORKFLOW_DATA_PATH.
+
+config BLKTRACE_GIT
+	string "The blktrace git tree to clone"
+	default "git://git.kernel.dk/blktrace"
+	help
+	  The blktrace git tree to clone.
+
+config BLKTRACE_DATA
+	string "Where to clone the blktrace git tree to"
+	default "{{data_path}}/blktrace"
+	help
+	  This is the target location of where to clone the blktrace git tree.
+	  Note that {{data_path}} corresponds to the location set by the
+	  configuration option CONFIG_WORKFLOW_DATA_PATH.
+
+config BLKTESTS_DATA_TARGET
+	string "The target blktests install directory"
+	default "/usr/local/blktests/"
+	help
+	  The directory where blktests will be installed.
+
+config BLKTESTS_TEST_DEVS
+	string "The devices to use for TEST_DEVS on blktests"
+	default "/dev/nvme2n1 /dev/nvme3n1"
+	help
+	  To test with blktests one must set the TEST_DEVS variable, this sets
+	  the TEST_DEVS to use.
+
+menu "Configure what to test in blktests"
+
+# Distributions actively maintaining the block layer would enable this and
+# then be selective of the areas they want to enable testing for.
+config HAVE_DISTRO_BLKTESTS_PREFERS_MANUAL
+	bool
+	default n
+
+config HAVE_DISTRO_BLKTESTS_TEST_BLOCK
+	bool
+	default y
+
+config HAVE_DISTRO_BLKTESTS_TEST_LOOP
+	bool
+	default y
+
+config HAVE_DISTRO_BLKTESTS_TEST_META
+	bool
+	default y
+
+config HAVE_DISTRO_BLKTESTS_TEST_NBD
+	bool
+	default n
+
+config HAVE_DISTRO_BLKTESTS_TEST_NVME
+	bool
+	default n
+
+config HAVE_DISTRO_BLKTESTS_TEST_NVMEMP
+	bool
+	default n
+
+config HAVE_DISTRO_BLKTESTS_TEST_SCSI
+	bool
+	default n
+
+config HAVE_DISTRO_BLKTESTS_TEST_SRP
+	bool
+	default n
+
+config HAVE_DISTRO_BLKTESTS_TEST_ZBD
+	bool
+	default n
+
+config BLKTESTS_MANUAL_COVERAGE
+	bool "Enable manual coverage selection"
+	default y if HAVE_DISTRO_BLKTESTS_PREFERS_MANUAL
+	default n if !HAVE_DISTRO_BLKTESTS_PREFERS_MANUAL
+	help
+	  By default we aim to spawn enough hosts to cover testing the full
+	  set of supported tests. If you are sure you don't need to test
+	  certain things, enabling this option lets you disable them here.
+
+if BLKTESTS_MANUAL_COVERAGE
+
+config BLKTESTS_SECTION_BLOCK
+	bool "Block layer"
+	default y if HAVE_DISTRO_BLKTESTS_TEST_BLOCK
+	default n if !HAVE_DISTRO_BLKTESTS_TEST_BLOCK
+	help
+	  This will create a host to test the block layer.
+
+config BLKTESTS_SECTION_LOOP
+	bool "Loopback"
+	default y if HAVE_DISTRO_BLKTESTS_TEST_LOOP
+	default n if !HAVE_DISTRO_BLKTESTS_TEST_LOOP
+	help
+	  This will create a host to test the loopback block driver.
+
+config BLKTESTS_SECTION_META
+	bool "Meta"
+	default y if HAVE_DISTRO_BLKTESTS_TEST_META
+	default n if !HAVE_DISTRO_BLKTESTS_TEST_META
+	help
+	  This will create a host to test metas stuff.
+
+config BLKTESTS_SECTION_NBD
+	bool "nbd"
+	default y if HAVE_DISTRO_BLKTESTS_TEST_NBD
+	default n if !HAVE_DISTRO_BLKTESTS_TEST_NBD
+	help
+	  This will create a host to test the nbd block driver.
+
+config BLKTESTS_SECTION_NVME
+	bool "nvme"
+	default y if HAVE_DISTRO_BLKTESTS_TEST_NVME
+	default n if !HAVE_DISTRO_BLKTESTS_TEST_NVME
+	help
+	  This will create a host to test nvme.
+
+config BLKTESTS_SECTION_NVMEMP
+	bool "nvme multipath"
+	default y if HAVE_DISTRO_BLKTESTS_TEST_NVMEMP
+	default n if !HAVE_DISTRO_BLKTESTS_TEST_NVMEMP
+	help
+	  This will create a host to test nvme.
+
+config BLKTESTS_SECTION_SCSI
+	bool "scsi"
+	default y if HAVE_DISTRO_BLKTESTS_TEST_SCSI
+	default n if !HAVE_DISTRO_BLKTESTS_TEST_SCSI
+	help
+	  This will create a host to test scsi.
+
+config BLKTESTS_SECTION_SRP
+	bool "srp"
+	default y if HAVE_DISTRO_BLKTESTS_TEST_SRP
+	default n if !HAVE_DISTRO_BLKTESTS_TEST_SRP
+	help
+	  This will create a host to test srp.
+
+config BLKTESTS_SECTION_ZBD
+	bool "zone block devices"
+	default y if HAVE_DISTRO_BLKTESTS_TEST_ZBD
+	default n if !HAVE_DISTRO_BLKTESTS_TEST_ZBD
+	help
+	  This will create a host to test zone block devices.
+
+endif # BLKTESTS_MANUAL_COVERAGE
+
+endmenu
+
+endif # KDEVOPS_WORKFLOW_ENABLE_BLKTESTS

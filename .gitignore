@@ -16,6 +16,7 @@ extra_vars.json
 
 scripts/kconfig/.mconf-cfg
 scripts/workflows/fstests/lib/__pycache__/
+scripts/workflows/blktests/lib/__pycache__/
 
 vagrant/kdevops_nodes.yaml
 
@@ -38,5 +39,10 @@ workflows/fstests/bad_results.txt
 workflows/fstests/results/
 workflows/fstests/*/hosts_generated.in
 workflows/fstests/.begin
+
+workflows/blktests/hosts_generated.in
+workflows/blktests/.begin
+workflows/blktests/results/last-run/
+workflows/blktests/results/last-kernel.txt
 
 .kernel-ci.*
