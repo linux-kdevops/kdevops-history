@@ -721,8 +721,8 @@ oscheck_run_sections()
 
 oscheck_test_dev_setup()
 {
-	eval $(grep '^TEST_DEV=' configs/$HOST.config)
-	eval $(grep '^TEST_DIR=' configs/$HOST.config)
+	eval $(grep '^TEST_DEV=' configs/.config)
+	eval $(grep '^TEST_DIR=' configs/.config)
 	if [ "$DRY_RUN" = "true" ]; then
 		return
 	fi
@@ -828,8 +828,8 @@ check_config()
 check_test_dev_setup()
 {
 	DEV_SETUP_RET=0
-	eval $(grep '^TEST_DEV=' configs/$HOST.config)
-	eval $(grep '^TEST_DIR=' configs/$HOST.config)
+	eval $(grep '^TEST_DEV=' configs/.config)
+	eval $(grep '^TEST_DIR=' configs/.config)
 	if [ "$DRY_RUN" = "true" ]; then
 		return
 	fi
@@ -844,8 +844,8 @@ check_test_dev_setup()
 check_dev_pool()
 {
 	DEV_POOL_RET=0
-	if [ -e configs/$HOST.config ]; then
-		eval $(grep '^SCRATCH_DEV_POOL=' configs/$HOST.config)
+	if [ -e configs/.config ]; then
+		eval $(grep '^SCRATCH_DEV_POOL=' configs/.config)
 		NDEVS=$(echo $SCRATCH_DEV_POOL|wc -w)
 		if [ "$NDEVS" -lt 5 ]; then
 			DEV_POOL_RET=1
@@ -858,10 +858,10 @@ check_dev_pool()
 check_sections()
 {
 	ALL_RUN_SECTIONS_FOUND=0
-	if [ ! -e configs/$HOST.config ]; then
+	if [ ! -e configs/.config ]; then
 		return 0;
 	fi
-	ALL_FS_SECTIONS=$(grep "^\[" configs/$HOST.config | sed -e 's|\[||' | sed -e 's|\]||' | grep -v default)
+	ALL_FS_SECTIONS=$(grep "^\[" configs/.config | sed -e 's|\[||' | sed -e 's|\]||' | grep -v default)
 	for s in $RUN_SECTIONS; do
 		SECTION="$s"
 		if [ "${SECTION}" != "${FSTYP}" ]; then
@@ -883,7 +883,7 @@ check_sections()
 		done
 		if [ $RUN_SECTION_FOUND -ne 1 ]; then
 			echo "Invalid section: $SECTION"
-			echo "This section name is not present on the file configs/$HOST.config"
+			echo "This section name is not present on the file configs/.config"
 			echo "Valid sections: $ALL_FS_SECTIONS"
 			ALL_RUN_SECTIONS_FOUND=1
 		fi
@@ -958,7 +958,7 @@ fi
 
 oscheck_get_progs_version
 
-if [ -e configs/$HOST.config ]; then
+if [ -e configs/.config ]; then
 	oscheck_test_dev_setup
 fi
 
