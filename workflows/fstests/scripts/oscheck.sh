@@ -861,7 +861,7 @@ check_sections()
 	if [ ! -e configs/.config ]; then
 		return 0;
 	fi
-	ALL_FS_SECTIONS=$(grep "^\[" configs/.config | sed -e 's|\[||' | sed -e 's|\]||' | grep -v default)
+	ALL_FS_SECTIONS=$(grep "^\[" configs/.config | grep -v "^\[default\]" | sed -e 's|\[||' | sed -e 's|\]||')
 	for s in $RUN_SECTIONS; do
 		SECTION="$s"
 		if [ "${SECTION}" != "${FSTYP}" ]; then
