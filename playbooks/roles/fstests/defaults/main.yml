@@ -17,5 +17,6 @@ fstests_test_dev: "/dev/null"
 sparsefiles_generation: False
 sparsefiles_size: 0
 sparsefiles_filename_prefix: "sparse-disk"
+fstests_test_dir: "/media/test"
 
 fstests_debug: False
