@@ -16,6 +16,10 @@ FS=$CONFIG_FSTESTS_FSTYP
 STRING='CONFIG_FSTESTS_FSTYP='
 PID_LIST=$(ps -fu $USER | awk '{print $2}')
 
+if [[ "$LIST_ONLY" != "true" ]]; then
+	touch $MANUAL_KILL_NOTICE_FILE
+fi
+
 list_pid()
 {
 	if [[ "$2" == "kill" ]]; then
@@ -103,3 +107,7 @@ for i in $PID_LIST; do
 		kill -SIGTERM ${i} 2>/dev/null
 	fi
 done
+
+if [[ "$LIST_ONLY" != "true" ]]; then
+	rm -f $MANUAL_KILL_NOTICE_FILE
+fi

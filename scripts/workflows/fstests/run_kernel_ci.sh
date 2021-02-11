@@ -25,6 +25,9 @@ TARGET_HOSTS=$1
 
 kernel_ci_post_process()
 {
+	if [[ -f $MANUAL_KILL_NOTICE_FILE ]]; then
+		exit 1
+	fi
 	if [[ -f $KERNEL_CI_WATCHDOG_FAIL_LOG ]]; then
 		cat $KERNEL_CI_WATCHDOG_FAIL_LOG >> $KERNEL_CI_FAIL_LOG
 		cat $KERNEL_CI_WATCHDOG_FAIL_LOG >> $KERNEL_CI_DIFF_LOG
@@ -127,6 +130,9 @@ kernel_ci_watchdog_loop()
 {
 	WATCHDOG_SLEEP_TIME=$CONFIG_FSTESTS_WATCHDOG_CHECK_TIME
 	while true; do
+		if [[ -f $MANUAL_KILL_NOTICE_FILE ]]; then
+			exit 1
+		fi
 		HUNG_FOUND="False"
 		TIMEOUT_FOUND="False"
 		rm -f $KERNEL_CI_WATCHDOG_FAIL_LOG $KERNEL_CI_WATCHDOG_HUNG $KERNEL_CI_WATCHDOG_TIMEOUT
