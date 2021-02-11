@@ -139,7 +139,12 @@ kernel_ci_watchdog_loop()
 
 		if [[ ! -f $FSTESTS_STARTED_FILE ]]; then
 			if [[ ! -d /proc/$KERNEL_CI_LOOP_PID ]]; then
-				echo "PID ($KERNEL_CI_LOOP_PID) for $KERNEL_CI_LOOP process no longer found, bailing watchdog"
+				# If $KERNEL_CI_FAIL_FILE doesn't exist and we have the $KERNEL_CI_OK_FILE file
+				# we've reached steady state, so don't send extra information to stdout to
+				# avoid confusing the user.
+				if [[ -f $KERNEL_CI_FAIL_FILE || ! -f $KERNEL_CI_OK_FILE ]]; then
+					echo "PID ($KERNEL_CI_LOOP_PID) for $KERNEL_CI_LOOP process no longer found, bailing watchdog"
+				fi
 				break
 			fi
 			sleep $WATCHDOG_SLEEP_TIME
