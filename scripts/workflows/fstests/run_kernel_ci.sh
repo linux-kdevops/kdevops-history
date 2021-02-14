@@ -83,7 +83,11 @@ kernel_ci_post_process()
 	elif [[ -f $KERNEL_CI_OK_FILE ]]; then
 		LOOP_COUNT=$(cat $KERNEL_CI_OK_FILE)
 		SUBJECT="$(kernel_ci_subject_topic): fstests on $FSTYPE achieved steady-state goal of $LOOP_COUNT test loops!"
-
+		GOAL="$CONFIG_KERNEL_CI_STEADY_STATE_GOAL"
+		if [[ "$CONFIG_KERNEL_CI_ENABLE_STEADY_STATE" == "y" &&
+		      "$LOOP_COUNT" -lt "$CONFIG_KERNEL_CI_STEADY_STATE_GOAL" ]]; then
+			SUBJECT="$(kernel_ci_subject_topic): fstests on $FSTYPE bailed out on loop $LOOP_COUNT before steady-state goal of $GOAL!"
+                fi
 		if [[  -f $KERNEL_CI_WATCHDOG_FAIL_LOG ]]; then
 			SUBJECT="$(kernel_ci_subject_topic): fstests on $FSTYPE detected a hang after $LOOP_COUNT test loops"
 		fi
