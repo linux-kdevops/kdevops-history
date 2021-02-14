@@ -95,15 +95,6 @@
   become_method: sudo
   reboot:
 
-- name: Clear out old results directory
-  become: yes
-  become_flags: 'su - -c'
-  become_method: sudo
-  file:
-    state: absent
-    path: "{{ fstests_data_target }}/results/"
-  tags: [ 'oscheck', 'fstests', 'run_tests', 'clean_results' ]
-
 - name: Add missing groups for fstests
   tags: [ 'oscheck', 'fstests', 'run_tests', 'checktime' ]
   become: yes
@@ -239,6 +230,15 @@
     label: "{{ item.path | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
   when:
     - checktime_files.matched > 0
+
+- name: Clear out old results directory
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  file:
+    state: absent
+    path: "{{ fstests_data_target }}/results/"
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'clean_results' ]
 
 - name: Print uname for each host
   tags: [ 'oscheck', 'fstests', 'run_tests' ]
