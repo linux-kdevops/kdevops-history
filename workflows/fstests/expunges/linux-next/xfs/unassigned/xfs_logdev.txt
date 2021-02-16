@@ -50,6 +50,7 @@ generic/512
 generic/520
 generic/526
 generic/527
+generic/531
 generic/534
 generic/535
 generic/547
