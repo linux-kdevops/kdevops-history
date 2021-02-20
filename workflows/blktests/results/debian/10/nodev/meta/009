@@ -1,0 +1,6 @@
+reason	dmesg
+runtime	0.064s
+date	2021-02-19 19:04:20
+description	check dmesg
+exit_status	0
+status	fail
