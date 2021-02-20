@@ -150,7 +150,7 @@ config BLKTESTS_DATA_TARGET
 
 config BLKTESTS_TEST_DEVS
 	string "The devices to use for TEST_DEVS on blktests"
-	default "/dev/nvme2n1 /dev/nvme3n1"
+	default "/dev/nvme2n1"
 	help
 	  To test with blktests one must set the TEST_DEVS variable, this sets
 	  the TEST_DEVS to use.
