@@ -91,6 +91,19 @@
     version: master
   tags: [ 'install', 'git', 'git_update', 'run_tests' ]
 
+- name: Create a symbolic links needed
+  become: yes
+  become_method: sudo
+  file:
+    src: "{{ kdevops_data}}/workflows/blktests/scripts/{{ item }}"
+    dest: "{{ blktests_data_target }}/{{ item }}"
+    state: link
+  with_items:
+    - "oscheck.sh"
+  loop_control:
+    label: "{{ item }}"
+  tags: [ 'blktests', 'install' ]
+
 - name: Reboot system before our test so we know everything is sane
   tags: [ 'blktests', 'run_tests', 'reboot' ]
   become: yes
