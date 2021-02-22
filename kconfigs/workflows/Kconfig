@@ -1,6 +1,7 @@
 config WORKFLOWS
 	bool "Enable different target workflows"
 	default y
+	select KDEVOPS_ANSIBLE_PROVISION_ENABLE
 	help
 	  If you want to do something other than just bring up of target systems
 	  enable this option. For instance, you may want to easily boot linux
