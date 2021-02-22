@@ -148,7 +148,7 @@
 
 - name: Run blktests using ./oscheck.sh --print-done --test-group {{ group }} {{ oscheck_extra_args }}
   vars:
-    group: "{{ ansible_ssh_host | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
+    group: "{{ ansible_ssh_host | regex_replace('blktests-') | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"D
   tags: [ 'blktests', 'run_tests' ]
   become: yes
   become_flags: 'su - -c'
