@@ -29,7 +29,6 @@ add_ansible_hosts_by_section()
 
 	KCONFIG_SECTION_PREFIX="CONFIG_BLKTESTS_SECTION_"
 	for i in $BLKTESTS_SECTIONS; do
-		echo $i hey fucker
 		SECTION_POSTFIX="${i^^}"
 		SECTION="${KCONFIG_SECTION_PREFIX}${SECTION_POSTFIX}"
 		SECTION_HOSTNAME_POSTFIX="$(echo $i | sed -e 's|_|-|')"
