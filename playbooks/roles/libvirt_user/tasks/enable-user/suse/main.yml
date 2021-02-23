@@ -3,7 +3,7 @@
   become: yes
   become_method: sudo
   user:
-    name: "{{ ansible_user }}"
+    name: "{{ ansible_env.USER }}"
     groups: libvirt,kvm,qemu
     append: yes
   when: 'not only_verify_user|bool'
