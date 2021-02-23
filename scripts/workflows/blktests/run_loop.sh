@@ -20,46 +20,21 @@ run_loop()
 
 		rm -f $KERNEL_CI_DIFF_LOG
 
-		XUNIT_FAIL="no"
-		if [ -f workflows/blktests/results/xunit_results.txt ]; then
-			grep -q Failures workflows/blktests/results/xunit_results.txt
-			if [[ $? -eq 0 ]]; then
-				echo "Detected a failure as reported by xunit:" >> $KERNEL_CI_DIFF_LOG
-				cat workflows/blktests/results/xunit_results.txt >> $KERNEL_CI_DIFF_LOG
-				XUNIT_FAIL="yes"
-			else
-				echo "No failures detected by xunit:" >> $KERNEL_CI_DIFF_LOG
-				cat workflows/blktests/results/xunit_results.txt >> $KERNEL_CI_FAIL_LOG
-			fi
-		fi
-
 		DIFF_COUNT=$(git diff workflows/blktests/expunges/ | wc -l)
 		if [[ "$DIFF_COUNT" -ne 0 ]]; then
 			echo "Detected a failure as reported by differences in our expunge list" >> $KERNEL_CI_DIFF_LOG
-		elif [[ "$XUNIT_FAIL" == "yes" ]]; then
-			echo "" >> $KERNEL_CI_DIFF_LOG
-			echo "Although xunit detects an error, no test bad file found. This is" >> $KERNEL_CI_DIFF_LOG
-			echo "likely due to a test which xunit reports as failed causing a" >> $KERNEL_CI_DIFF_LOG
-			echo "kernel warning." >> $KERNEL_CI_DIFF_LOG
-			echo "" >> $KERNEL_CI_DIFF_LOG
 		fi
 
 		NEW_EXPUNGE_FILES="no"
-		if [[ -f workflows/blktests/new_expunge_files.txt && "$(wc -l workflows/blktests/new_expunge_files.txt | awk '{print $1}')" -ne 0 ]]; then
+		NEW_EXPUNGES=$(${TOPDIR}/playbooks/python/workflows/blktests/get_new_expunge_files.py workflows/blktests/expunges/)
+		if [[ "$(echo $NEW_EXPUNGES | wc -l | awk '{print $1}')" -ne 0 ]]; then
 			NEW_EXPUNGE_FILES="yes"
 			echo "Detected a failure since new expunge files were found which are not commited into git" >> $KERNEL_CI_DIFF_LOG
 			echo "New expunge file found, listing output below:" >> $KERNEL_CI_DIFF_LOG
-			for i in $(cat workflows/blktests/new_expunge_files.txt); do
-				echo "$i :"
-				if [[ -f $i ]]; then
-					cat $i >> $KERNEL_CI_DIFF_LOG
-				else
-					echo "Error: $i listed as new but its not found.." >> $KERNEL_CI_DIFF_LOG
-				fi
-			done
+			echo $NEW_EXPUNGES >> $KERNEL_CI_DIFF_LOG
 		fi
 
-		if [[ "$DIFF_COUNT" -ne 0 || "$XUNIT_FAIL" == "yes" || "$NEW_EXPUNGE_FILES" == "yes" ]]; then
+		if [[ "$DIFF_COUNT" -ne 0 || "$NEW_EXPUNGE_FILES" == "yes" ]]; then
 			echo "Test  $COUNT: FAILED!" >> $KERNEL_CI_DIFF_LOG
 			echo "== Test loop count $COUNT" >> $KERNEL_CI_DIFF_LOG
 			echo "$(git describe)" >> $KERNEL_CI_DIFF_LOG

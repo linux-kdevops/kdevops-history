@@ -15,7 +15,6 @@ kernel_ci_subject_topic()
 	fi
 }
 
-FSTYPE="$CONFIG_FSTESTS_FSTYP"
 RCPT="ignore@test.com"
 SSH_TARGET="ignore"
 KERNEL_CI_LOOP="${TOPDIR}/scripts/workflows/blktests/run_loop.sh"
@@ -131,7 +130,7 @@ kernel_ci_watchdog_loop()
 		TIMEOUT_FOUND="False"
 		rm -f $KERNEL_CI_WATCHDOG_FAIL_LOG $KERNEL_CI_WATCHDOG_HUNG $KERNEL_CI_WATCHDOG_TIMEOUT
 
-		if [[ ! -f $FSTESTS_STARTED_FILE ]]; then
+		if [[ ! -f $BLKTESTS_STARTED_FILE ]]; then
 			if [[ ! -d /proc/$KERNEL_CI_LOOP_PID ]]; then
 				echo "PID ($KERNEL_CI_LOOP_PID) for $KERNEL_CI_LOOP process no longer found, bailing watchdog"
 				break

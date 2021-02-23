@@ -28,6 +28,7 @@ KERNEL_CI_WATCHDOG_HUNG=".kernel-ci.watchdog.hung"
 KERNEL_CI_WATCHDOG_TIMEOUT=".kernel-ci.watchdog.timeout"
 
 FSTESTS_STARTED_FILE="${TOPDIR}/workflows/fstests/.begin"
+BLKTESTS_STARTED_FILE="${TOPDIR}/workflows/blktests/.begin"
 
 if [[ "$CONFIG_KDEVOPS_WORKFLOW_FSTESTS" == "y" ]]; then
 	FSTYP="$CONFIG_FSTESTS_FSTYP"

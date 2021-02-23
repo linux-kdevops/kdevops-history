@@ -49,7 +49,7 @@ blktests-baseline:
 	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/blktests.yml --tags run_tests,copy_results --extra-vars '{ kdevops_run_blktests: True }' --extra-vars=@./extra_vars.yaml
 
 blktests-baseline-loop:
-	$(Q)$(FSTEST_KERNEL_CI_LOOP) baseline
+	$(Q)$(BLKTEST_KERNEL_CI_LOOP) baseline
 
 blktests-baseline-skip-kdevops-update:
 	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/blktests.yml --tags run_tests,copy_results --skip-tags git_update --extra-vars '{ kdevops_run_blktests: True }' --extra-vars=@./extra_vars.yaml
