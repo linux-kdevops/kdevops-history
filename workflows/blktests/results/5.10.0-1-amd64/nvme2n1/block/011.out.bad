@@ -1,0 +1,19 @@
+Running block/011
+fio: ioengines.c:323: td_io_queue: Assertion `(io_u->flags & IO_U_F_FLIGHT) == 0' failed.
+fio: ioengines.c:323: td_io_queue: Assertion `(io_u->flags & IO_U_F_FLIGHT) == 0' failed.
+fio: ioengines.c:323: td_io_queue: Assertion `(io_u->flags & IO_U_F_FLIGHT) == 0' failed.
+fio: ioengines.c:323: td_io_queue: Assertion `(io_u->flags & IO_U_F_FLIGHT) == 0' failed.
+fio: ioengines.c:323: td_io_queue: Assertion `(io_u->flags & IO_U_F_FLIGHT) == 0' failed.
+fio: ioengines.c:323: td_io_queue: Assertion `(io_u->flags & IO_U_F_FLIGHT) == 0' failed.
+fio: ioengines.c:323: td_io_queue: Assertion `(io_u->flags & IO_U_F_FLIGHT) == 0' failed.
+fio: ioengines.c:323: td_io_queue: Assertion `(io_u->flags & IO_U_F_FLIGHT) == 0' failed.
+fio: pid=3236, got signal=6
+fio: pid=3237, got signal=6
+fio: pid=3238, got signal=6
+fio: pid=3239, got signal=6
+fio: pid=3240, got signal=6
+fio: pid=3241, got signal=6
+fio: pid=3242, got signal=6
+fio: pid=3243, got signal=6
+fio: file hash not empty on exit
+Test complete

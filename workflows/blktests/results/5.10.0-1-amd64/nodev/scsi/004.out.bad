@@ -1,0 +1,4 @@
+Running scsi/004
+Input/output error
+grep: /proc/scsi/scsi_debug/2: No such file or directory
+Test complete

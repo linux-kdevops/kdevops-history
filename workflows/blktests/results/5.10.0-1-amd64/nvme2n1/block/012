@@ -1,0 +1,6 @@
+runtime	0.014s
+description	check that a read-only block device fails writes
+exit_status	0
+reason	output
+date	2021-02-22 17:06:16
+status	fail

@@ -1,0 +1,6 @@
+runtime	0.001s
+description	produce lots of bad output
+exit_status	0
+reason	output
+date	2021-02-22 17:00:10
+status	fail
