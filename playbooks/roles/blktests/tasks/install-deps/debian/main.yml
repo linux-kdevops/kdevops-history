@@ -5,6 +5,7 @@
   apt:
     name:
       - nvme-cli
+    update_cache: yes
 
 - name: Install blktests build dependencies
   become: yes
@@ -49,6 +50,7 @@
       - libcap2-bin
       - libtool
       - gcc
+      - git
       - nbd-server
       - nbd-client
       - multipath-tools
