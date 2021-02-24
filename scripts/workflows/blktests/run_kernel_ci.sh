@@ -149,7 +149,7 @@ kernel_ci_watchdog_loop()
 		fi
 
 		echo calling blktests_watchdog.py to output into $KERNEL_CI_WATCHDOG_RESULTS_NEW >> $KERNEL_CI_WATCHDOG_LOG
-		./scripts/workflows/fstests/blktests_watchdog.py ./hosts $TARGET_HOSTS > $KERNEL_CI_WATCHDOG_RESULTS_NEW
+		./scripts/workflows/blktests/blktests_watchdog.py ./hosts $TARGET_HOSTS > $KERNEL_CI_WATCHDOG_RESULTS_NEW
 		# Use the KERNEL_CI_WATCHDOG_RESULTS file to get fast results
 		cp $KERNEL_CI_WATCHDOG_RESULTS_NEW $KERNEL_CI_WATCHDOG_RESULTS
 
