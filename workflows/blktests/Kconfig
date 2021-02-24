@@ -90,14 +90,15 @@ config BLKTESTS_WATCHDOG_KILL_TASKS_ON_HANG
 	  systems which are hung / timed out alive for further inspection.
 
 config BLKTESTS_WATCHDOG_RESET_HUNG_SYSTEMS
-	bool "Enable kdevops blktests watchdog to deal with hung systems"
+	bool "Reset systems when the watchdog detects they are hung"
 	default y if HAVE_DISTRO_PREFERS_BLKTESTS_WATCHDOG_RESET
 	default n if !HAVE_DISTRO_PREFERS_BLKTESTS_WATCHDOG_RESET
 	depends on VAGRANT
 	depends on BLKTESTS_WATCHDOG_KILL_TASKS_ON_HANG
 	help
 	  If this option is enabled, kdevops will reset all systems after a
-	  hang is detected.
+	  hang is detected. This is a bad idea unless you know what you are
+	  doing, ie, if this is option is enabled for you automatically.
 
 	  The tests which caused the hangs found will be logged. Enabling
 	  this is only desirable if you don't care to manually inspect
