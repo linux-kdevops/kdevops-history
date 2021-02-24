@@ -26,13 +26,16 @@ run_loop()
 		fi
 
 		NEW_EXPUNGE_FILES="no"
-		NEW_EXPUNGES=$(${TOPDIR}/playbooks/python/workflows/blktests/get_new_expunge_files.py workflows/blktests/expunges/)
-		if [[ "$(echo $NEW_EXPUNGES | wc -l | awk '{print $1}')" -ne 0 ]]; then
+		${TOPDIR}/playbooks/python/workflows/blktests/get_new_expunge_files.py workflows/blktests/expunges/ > .tmp.new_expunges
+		NEW_EXPUNGE_FILE_COUNT=$(cat .tmp.new_expunges | wc -l | awk '{print $1}')
+		if [[ $NEW_EXPUNGE_FILE_COUNT -ne 0 ]]; then
 			NEW_EXPUNGE_FILES="yes"
 			echo "Detected a failure since new expunge files were found which are not commited into git" >> $KERNEL_CI_DIFF_LOG
 			echo "New expunge file found, listing output below:" >> $KERNEL_CI_DIFF_LOG
-			echo $NEW_EXPUNGES >> $KERNEL_CI_DIFF_LOG
+			cat .tmp.new_expunges >> $KERNEL_CI_DIFF_LOG
+			rm -f .tmp.new_expunges
 		fi
+		rm -f .tmp.new_expunges
 
 		if [[ "$DIFF_COUNT" -ne 0 || "$NEW_EXPUNGE_FILES" == "yes" ]]; then
 			echo "Test  $COUNT: FAILED!" >> $KERNEL_CI_DIFF_LOG
