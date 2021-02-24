@@ -30,7 +30,14 @@ grep -q "$BOX_SEARCH" $TMP_FILE
 if [ $? -eq 0 ] ; then
 	exit 0
 else
-	vagrant box add --name $BOX $BOX_URL
+	NAME_ARGS=""
+	echo $BOX_URL | grep -q json$
+	# Sadly we cannot rename boxes in json format, so we must stick to
+	# what is given.
+	if [[ $? -ne 0 ]]; then
+		NAME_ARGS="--name $BOX"
+	fi
+	vagrant box add --provider=libvirt --insecure $NAME_ARGS $BOX_URL
 	RET=$?
 	# We use a special return value to indicate change to the
 	# ansible script, so that it can tell a change has occurred.
