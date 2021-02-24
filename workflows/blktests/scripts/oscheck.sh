@@ -186,12 +186,8 @@ oscheck_run_osfile_read()
 	fi
 }
 
-oscheck_add_expunge_if_exists_no_dups()
+oscheck_add_expunge_no_dups()
 {
-	if [[ ! -e tests/$1 ]]; then
-		return 1
-	fi
-
 	echo $EXPUNGE_TESTS | grep -q "$1" 2>&1 > /dev/null
 	if [[ $? -eq 0 ]]; then
 		return 3
@@ -201,6 +197,16 @@ oscheck_add_expunge_if_exists_no_dups()
 	EXPUNGE_TESTS="$EXPUNGE_TESTS ${1}"
 	let EXPUNGE_TESTS_COUNT=$EXPUNGE_TESTS_COUNT+1
 	return 0
+}
+
+
+oscheck_add_expunge_if_exists_no_dups()
+{
+	if [[ ! -e tests/$1 ]]; then
+		return 1
+	fi
+	oscheck_add_expunge_no_dups $1
+	return $?
 }
 
 os_has_special_expunges()
@@ -255,6 +261,19 @@ oscheck_get_group_files()
 			echo "$ENTRY is not a test present on your version of blktests"
 		fi
 	done
+	OSCHECK_EXPUNGE_FILE="$(dirname $(readlink -f $0))/../expunges/$(uname -r)/failures.txt"
+	if [[ "$EXPUNGE_LIST" = "true" ]]; then
+		echo "Looking to see if $OSCHECK_EXPUNGE_FILE exists and has any entries we may have missed ..."
+	fi
+	if [[ -f $OSCHECK_EXPUNGE_FILE ]]; then
+		if [[ "$EXPUNGE_LIST" = "true" ]]; then
+			echo "$OSCHECK_EXPUNGE_FILE exists, processing its expunges ..."
+		fi
+		BAD_EXPUNGES=$(cat $OSCHECK_EXPUNGE_FILE| awk '{print $1}')
+		for i in $BAD_EXPUNGES; do
+			oscheck_add_expunge_no_dups $i
+		done
+	fi
 }
 
 oscheck_count_check()
