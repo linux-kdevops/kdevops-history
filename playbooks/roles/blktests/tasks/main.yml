@@ -228,6 +228,11 @@
   tags: [ 'blktests', 'copy_results', 'augment_expunge_list' ]
   run_once: true
 
+- name: Copy last-run files to results directory for target kernel and in place only bad and dmesg files
+  local_action: "shell ./python/workflows/blktests/gen-results-dir.py"
+  tags: [ 'blktests', 'copy_results', 'print_results', 'augment_expunge_list' ]
+  run_once: true
+
 - name: Print blktests new expunge files for which are not yet committed
   local_action: "shell ./python/workflows/blktests/get_new_expunge_files.py {{ blktests_expunges_target }}"
   register: new_expunges
