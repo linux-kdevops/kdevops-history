@@ -132,6 +132,7 @@ kernel_ci_post_process()
 
 kernel_ci_watchdog_loop()
 {
+	echo starting watchdog loop >> $KERNEL_CI_WATCHDOG_LOG
 	WATCHDOG_SLEEP_TIME=$CONFIG_FSTESTS_WATCHDOG_CHECK_TIME
 	while true; do
 		if [[ -f $MANUAL_KILL_NOTICE_FILE ]]; then
@@ -139,6 +140,7 @@ kernel_ci_watchdog_loop()
 		fi
 		HUNG_FOUND="False"
 		TIMEOUT_FOUND="False"
+		echo watchdog loop work >> $KERNEL_CI_WATCHDOG_LOG
 		rm -f $KERNEL_CI_WATCHDOG_FAIL_LOG $KERNEL_CI_WATCHDOG_HUNG $KERNEL_CI_WATCHDOG_TIMEOUT
 
 		if [[ ! -f $FSTESTS_STARTED_FILE ]]; then
@@ -151,6 +153,7 @@ kernel_ci_watchdog_loop()
 				fi
 				break
 			fi
+			echo watchdog does not yet see start file $BLKTESTS_STARTED_FILE so waiting $WATCHDOG_SLEEP_TIME seconds >> $KERNEL_CI_WATCHDOG_LOG
 			sleep $WATCHDOG_SLEEP_TIME
 			continue
 		fi
@@ -161,6 +164,7 @@ kernel_ci_watchdog_loop()
 			break
 		fi
 
+		echo calling blktests_watchdog.py to output into $KERNEL_CI_WATCHDOG_RESULTS_NEW >> $KERNEL_CI_WATCHDOG_LOG
 		./scripts/workflows/fstests/fstests_watchdog.py ./hosts $TARGET_HOSTS > $KERNEL_CI_WATCHDOG_RESULTS_NEW
 		# Use the KERNEL_CI_WATCHDOG_RESULTS file to get fast results
 		cp $KERNEL_CI_WATCHDOG_RESULTS_NEW $KERNEL_CI_WATCHDOG_RESULTS
@@ -230,9 +234,12 @@ fi
 KERNEL_CI_LOOP_PID=$!
 
 if [[ "$CONFIG_FSTESTS_WATCHDOG" != "y" ]]; then
+	echo Skipping watchdog and just waiting for kernel-ci PID to complete >> $KERNEL_CI_WATCHDOG_LOG
 	wait
 else
+	echo Kicking off watchdog loop >> $KERNEL_CI_WATCHDOG_LOG
 	kernel_ci_watchdog_loop
+	echo Completed watchdog loop >> $KERNEL_CI_WATCHDOG_LOG
 fi
 
 kernel_ci_post_process

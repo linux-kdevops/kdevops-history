@@ -38,7 +38,7 @@ run_loop()
 			echo "Test  $COUNT: FAILED!" >> $KERNEL_CI_DIFF_LOG
 			echo "== Test loop count $COUNT" >> $KERNEL_CI_DIFF_LOG
 			echo "$(git describe)" >> $KERNEL_CI_DIFF_LOG
-			git diff >> $KERNEL_CI_DIFF_LOG
+			git diff workflows/blktests/expunges/ >> $KERNEL_CI_DIFF_LOG
 			cat $KERNEL_CI_DIFF_LOG >> $KERNEL_CI_FAIL_LOG
 			cat $KERNEL_CI_FAIL_LOG >> $KERNEL_CI_FULL_LOG
 			echo $COUNT > $KERNEL_CI_FAIL_FILE

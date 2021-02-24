@@ -20,6 +20,8 @@ KERNEL_CI_FAIL_LOG=".kernel-ci.fail.log"
 KERNEL_CI_DIFF_LOG=".kernel-ci.diff.log"
 KERNEL_CI_LOGTIME=".kernel-ci.logtime.loop"
 KERNEL_CI_LOGTIME_FULL=".kernel-ci.logtime.full"
+
+KERNEL_CI_WATCHDOG_LOG=".kernel-ci.watchdog.log"
 KERNEL_CI_WATCHDOG_RESULTS_NEW=".kernel-ci.status.new"
 KERNEL_CI_WATCHDOG_RESULTS=".kernel-ci.status"
 

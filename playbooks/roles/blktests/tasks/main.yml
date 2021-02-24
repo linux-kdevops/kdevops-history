@@ -110,6 +110,11 @@
   become_method: sudo
   reboot:
 
+- name: Set the path to blktests workflow
+  set_fact:
+    blktests_workflow_target: "../workflows/blktests/"
+  tags: [ 'blktests', 'run_tests', 'copy_results', 'prior_run', 'print_results' , 'augment_expunge_list' ]
+
 - name: Set the path where we collect our blktests results
   set_fact:
     blktests_results_target: "../workflows/blktests/results/"
@@ -153,7 +158,7 @@
   tags: [ 'blktests', 'run_tests', 'clean_results' ]
 
 - name: Hint to watchdog tests are about to kick off
-  local_action: file path="{{ blktests_results_target }}/.begin" state=touch
+  local_action: file path="{{ blktests_workflow_target }}/.begin" state=touch
   tags: [ 'blktests', 'run_tests' ]
   when:
     - kdevops_run_blktests|bool
@@ -177,7 +182,7 @@
     - kdevops_run_blktests|bool
 
 - name: Remove watchdog hint that tests have started
-  local_action: file path="{{ blktests_results_target }}/.begin" state=absent
+  local_action: file path="{{ blktests_workflow_target }}/.begin" state=absent
   tags: [ 'blktests', 'run_tests' ]
   when:
     - kdevops_run_blktests|bool
