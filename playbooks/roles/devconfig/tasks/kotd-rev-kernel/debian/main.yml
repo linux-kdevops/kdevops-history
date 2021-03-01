@@ -1,0 +1,30 @@
+---
+- name: Allow for distro source change / upgrade
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "apt-get update  --allow-releaseinfo-change"
+  register: release_info_changed
+  changed_when: "release_info_changed.rc == 0"
+  args:
+    warn: no
+  tags: [ 'apt', 'release-info-change' ]
+  when:
+    - devconfig_try_upgrade|bool
+
+- name: Update apt cache and do dist-upgrade
+  become: yes
+  become_method: sudo
+  apt:
+    update_cache: yes
+    upgrade: full
+  tags: [ 'apt', 'cache' ]
+  when:
+    - devconfig_try_upgrade|bool
+
+- name: Reboot system to make the new kernel and modules take effect
+  become: yes
+  become_method: sudo
+  reboot:
+  when:
+    - devconfig_try_upgrade|bool

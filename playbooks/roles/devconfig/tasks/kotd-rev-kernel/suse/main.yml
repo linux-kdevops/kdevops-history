@@ -1,0 +1,99 @@
+---
+- name: Set generic SUSE specific distro facts
+  set_fact:
+    is_sle: '{{ (ansible_distribution == "SLES") or (ansible_distribution == "SLED") }}'
+    is_leap: '{{ "Leap" in ansible_distribution }}'
+    is_tumbleweed: '{{ "openSUSE Tumbleweed" == ansible_distribution }}'
+  tags: [ 'vars' ]
+
+- name: Set SLE specific version labels to make checks easier
+  set_fact:
+    is_sle10: '{{ ansible_distribution_major_version == "10" }}'
+    is_sle11: '{{ ansible_distribution_major_version == "11" }}'
+    is_sle12: '{{ ansible_distribution_major_version == "12" }}'
+    is_sle15: '{{ ansible_distribution_major_version == "15" }}'
+    is_sle10sp3: '{{ ansible_distribution_version == "10.3" }}'
+    is_sle11sp1: '{{ ansible_distribution_version == "11.1" }}'
+    is_sle11sp4: '{{ ansible_distribution_version == "11.4" }}'
+    is_sle12sp1: '{{ ansible_distribution_version == "12.1" }}'
+    is_sle12sp3: '{{ ansible_distribution_version == "12.3" }}'
+    is_sle12sp5: '{{ ansible_distribution_version == "12.5" }}'
+    is_sle15sp2: '{{ ansible_distribution_version == "15.2" }}'
+    is_sle15sp3: '{{ ansible_distribution_version == "15.3" }}'
+  when:
+    - is_sle|bool
+  tags: [ 'vars' ]
+
+- name: Set SLE specific version labels to make checks easier when not SLE
+  set_fact:
+    is_sle10: False
+    is_sle11: False
+    is_sle12: False
+    is_sle15: False
+    is_sle10sp3: False
+    is_sle11sp1: False
+    is_sle11sp4: False
+    is_sle12sp1: False
+    is_sle12sp3: False
+    is_sle12sp5: False
+    is_sle15sp2: False
+    is_sle15sp3: False
+  when:
+    - not is_sle|bool
+  tags: [ 'vars' ]
+
+- name: The default is to assume we can add repos for a release
+  set_fact:
+    repos_can_be_added: true
+  tags: vars
+
+- name: Disable things which require a repo to be set but that cannot be done
+  set_fact:
+    repos_can_be_added: false
+  when:
+    - is_sle|bool
+    - is_sle10|bool or is_sle11|bool
+  tags: [ 'vars' ]
+
+- name: The default is to assume we are not on sle11 or sle10
+  set_fact:
+    sle10_or_11: false
+  tags: snmpd
+
+- name: Are we on SLE11 or SLE10?
+  set_fact:
+    sle10_or_11: true
+  when:
+    - is_sle|bool
+    - is_sle10|bool or is_sle11|bool
+  tags: [ 'vars' ]
+
+- name: Add extra addon repositories when enabled
+  become: yes
+  become_method: sudo
+  script:
+    cmd: "{{ role_path }}/scripts/add-suse-repo-if-not-found.sh {{ devconfig_kotd_repo }} {{ devconfig_kotd_repo_name }}"
+  when:
+    - devconfig_enable_kotd|bool
+    - repos_can_be_added|bool
+    - devconfig_has_kotd_repo|bool
+  tags: [ 'kotd' ]
+
+- name: Install kotd
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - kernel-default
+    update_cache: yes
+    state: latest
+    force: yes
+  when:
+    - devconfig_enable_kotd|bool
+  tags: [ 'kotd' ]
+
+- name: Reboot into kotd
+  tags: [ 'kotd' ]
+  become: yes
+  become_method: sudo
+  reboot:

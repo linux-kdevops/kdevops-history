@@ -74,3 +74,37 @@ config WORKFLOW_KDEVOPS_DIR
 	string
 	default WORKFLOW_KDEVOPS_GIT_DATA if !HAVE_CUSTOM_KDEVOPS_DIR
 	default CUSTOM_KDEVOPS_DIR if HAVE_CUSTOM_KDEVOPS_DIR
+
+config WORKFLOW_KOTD_ENABLE
+	bool "Enable KOTD - Kernel of the day reving"
+	depends on WORKFLOW_LINUX_DISTRO
+	default n
+	help
+	  When doing target testing on a Linux distribution it is often useful
+	  to be able to update the distribution kernel to the latest available
+	  version for a release. This may be as simple as an update of a package
+	  however distributions may also have special repositories designed to
+	  be updated more regularly than the general release repository.
+	  Enabling this option will add such kotd repository if the distribution
+	  had one, and as a last step will try to install the very latest kernel
+	  available for the distribution.
+
+	  This may be useful in combination of using a kdevops kernel-ci loop:
+	  once steady state has been achieved one can simply update the kernel
+	  and re-run the kernel-ci loop to ensure no regressions have been
+	  found on the latest kernel.
+
+config HAVE_DISTRO_CUSTOM_KOTD_REPO
+	bool
+	default n
+
+config CUSTOM_DISTRO_KOTD_REPO
+	string "Distribution KOTD repository"
+	depends on WORKFLOW_KOTD_ENABLE
+	depends on HAVE_DISTRO_CUSTOM_KOTD_REPO
+	default VAGRANT_SUSE_KOTD_REPO if VAGRANT_SUSE
+
+config CUSTOM_DISTRO_KOTD_REPO_NAME
+	string "Distribution KOTD repository name"
+	depends on HAVE_DISTRO_CUSTOM_KOTD_REPO
+	default VAGRANT_SUSE_KOTD_REPO_NAME if VAGRANT_SUSE

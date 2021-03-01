@@ -1,0 +1,34 @@
+---
+- name: Import optional user secret specific variables
+  include_vars: "{{ item }}"
+  ignore_errors: yes
+  with_first_found:
+    - files:
+      - "secret.yml"
+      skip: true
+  tags: vars
+
+- name: Import optional distribution specific variables
+  include_vars: "{{ item }}"
+  ignore_errors: yes
+  with_first_found:
+    - files:
+      - "{{ ansible_facts['os_family']|lower }}.yml"
+      skip: true
+  tags: vars
+
+# tasks to setup up repos, register system if needed and install
+# preferred devtools packages.
+- name: Distribution specific setup
+  import_tasks: debian/main.yml
+  when:
+    - ansible_facts['os_family']|lower == 'debian'
+    - devconfig_try_refresh_repos|bool
+- import_tasks: suse/main.yml
+  when:
+    - ansible_facts['os_family']|lower == 'suse'
+    - devconfig_try_refresh_repos|bool
+- import_tasks: redhat/main.yml
+  when:
+    - ansible_facts['os_family']|lower == 'redhat'
+    - devconfig_try_refresh_repos|bool

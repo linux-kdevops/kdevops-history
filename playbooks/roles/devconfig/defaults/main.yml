@@ -30,3 +30,7 @@ suse_register_system: False
 suse_registration_code: 0
 
 devconfig_enable_console: False
+devconfig_enable_kotd: False
+devconfig_has_kotd_repo: False
+devconfig_kotd_repo: "http://ignore.com"
+devconfig_kotd_repo_name: "ignore"

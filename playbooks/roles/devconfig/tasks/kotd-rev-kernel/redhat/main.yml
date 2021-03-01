@@ -1,0 +1,17 @@
+---
+# Install dependenciesfor oscheck on Red Hat based systems
+- name: Refresh cache and upgrade all present packages
+  become: yes
+  become_method: sudo
+  yum:
+    update_cache: yes
+    name: '*'
+  when:
+    - devconfig_try_upgrade|bool
+
+- name: Reboot system to make the new kernel and modules take effect
+  become: yes
+  become_method: sudo
+  reboot:
+  when:
+    - devconfig_try_upgrade|bool

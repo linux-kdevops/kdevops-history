@@ -347,3 +347,9 @@
     - grub2_config_file.stat.exists
     - devconfig_enable_console|bool
     - not console_grep.changed
+
+- name: Rev the kernel to the latest distribution kotd
+  import_tasks: kotd-rev-kernel/main.yml
+  when:
+    - devconfig_enable_kotd|bool
+  tags: [ 'kotd' ]

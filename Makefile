@@ -275,6 +275,20 @@ SSH_CONFIG_FILE:=$(subst ",,$(CONFIG_KDEVOPS_SSH_CONFIG))
 ANSIBLE_EXTRA_ARGS += sshconfig=$(CONFIG_KDEVOPS_SSH_CONFIG)
 endif
 
+ANSIBLE_CMD_KOTD_ENABLE := false
+ifeq (y,$(CONFIG_WORKFLOW_KOTD_ENABLE))
+ANSIBLE_EXTRA_ARGS += devconfig_enable_kotd=True
+ifeq (y,$(CONFIG_HAVE_DISTRO_CUSTOM_KOTD_REPO))
+KOTD_REPO:=$(subst ",,$(CONFIG_CUSTOM_DISTRO_KOTD_REPO))
+KOTD_REPO_NAME:=$(subst ",,$(CONFIG_CUSTOM_DISTRO_KOTD_REPO_NAME))
+ANSIBLE_EXTRA_ARGS += devconfig_has_kotd_repo=True
+ANSIBLE_EXTRA_ARGS += devconfig_kotd_repo=$(KOTD_REPO)
+ANSIBLE_EXTRA_ARGS += devconfig_kotd_repo_name=$(KOTD_REPO_NAME)
+endif # HAVE_DISTRO_CUSTOM_KOTD_REPO
+ANSIBLE_CMD_KOTD_ENABLE :=
+endif # WORKFLOW_KOTD_ENABLE
+
+
 KDEVOPS_HOSTS_PREFIX:=$(subst ",,$(CONFIG_KDEVOPS_HOSTS_PREFIX))
 ANSIBLE_EXTRA_ARGS += kdevops_host_prefix=$(KDEVOPS_HOSTS_PREFIX)
 
@@ -412,6 +426,15 @@ $(KDEVOPS_NODES): $(KDEVOPS_NODES_TEMPLATES) .config
 
 $(KDEVOPS_TFVARS): $(KDEVOPS_TFVARS_TEMPLATE) .config
 	$(Q)$(TOPDIR)/scripts/gen_tfvars.sh
+
+kotd: $(KDEVOPS_HOSTS) .config
+	$(Q)$(ANSIBLE_CMD_KOTD_ENABLE)ansible-playbook -f 30 -i hosts playbooks/devconfig.yml --tags vars,kotd --extra-vars=@./extra_vars.yaml
+
+kotd-baseline: $(KDEVOPS_HOSTS) .config
+	$(Q)$(ANSIBLE_CMD_KOTD_ENABLE)ansible-playbook -f 30 -i hosts -l baseline playbooks/devconfig.yml --tags vars,kotd --extra-vars=@./extra_vars.yaml
+
+kotd-dev: $(KDEVOPS_HOSTS) .config
+	$(Q)$(ANSIBLE_CMD_KOTD_ENABLE)ansible-playbook -f 30 -i hosts -l dev playbooks/devconfig.yml --tags vars,kotd --extra-vars=@./extra_vars.yaml
 
 PHONY += clean
 clean:
