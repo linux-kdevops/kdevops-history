@@ -17,6 +17,22 @@
       skip: true
   tags: vars
 
+- name: Set the path where we collect our kotd updates
+  set_fact:
+    kotd_uname_before: "../.kotd.uname-before.txt"
+    kotd_uname_after:  "../.kotd.uname-after.txt"
+  tags: [ 'vars' ]
+
+- name: Get used target kernel version prior to reving kernel
+  tags: [ 'kotd' ]
+  command: "uname -r"
+  register: uname_cmd
+
+- name: Document used target kernel version prior to reving kernel
+  local_action: "shell echo {{ uname_cmd.stdout_lines | regex_replace('\\]') | regex_replace('\\[') }} > {{ kotd_uname_before }}"
+  tags: [ 'kotd' ]
+  run_once: true
+
 # tasks to setup up repos, register system if needed and install
 # preferred devtools packages.
 - name: Distribution specific setup
@@ -32,3 +48,13 @@
   when:
     - ansible_facts['os_family']|lower == 'redhat'
     - devconfig_try_refresh_repos|bool
+
+- name: Get used target kernel version after reving kernel
+  tags: [ 'kotd' ]
+  command: "uname -r"
+  register: uname_cmd
+
+- name: Document used target kernel version after reving kernel
+  local_action: "shell echo {{ uname_cmd.stdout_lines | regex_replace('\\]') | regex_replace('\\[') }} > {{ kotd_uname_after }}"
+  tags: [ 'kotd' ]
+  run_once: true

@@ -79,8 +79,10 @@ endif # CONFIG_FSTESTS_TESTDEV_SPARSEFILE_GENERATION == y
 WORKFLOW_ARGS += $(FSTESTS_ARGS)
 
 FSTEST_KERNEL_CI_LOOP := false
+FSTEST_KERNEL_CI_LOOP_KOTD := false
 ifeq (y,$(CONFIG_KERNEL_CI))
 FSTEST_KERNEL_CI_LOOP := scripts/workflows/fstests/run_kernel_ci.sh
+FSTEST_KERNEL_CI_LOOP_KOTD := scripts/workflows/fstests/run_kernel_ci_kotd.sh
 endif # CONFIG_KERNEL_CI
 
 $(KDEVOPS_HOSTS_TEMPLATE): .config
@@ -98,6 +100,9 @@ fstests-baseline:
 
 fstests-baseline-loop:
 	$(Q)$(FSTEST_KERNEL_CI_LOOP) baseline
+
+fstests-baseline-kernelci:
+	$(Q)$(FSTEST_KERNEL_CI_LOOP_KOTD) baseline
 
 fstests-baseline-skip-kdevops-update:
 	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/fstests.yml --tags run_tests,copy_results --skip-tags git_update --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml

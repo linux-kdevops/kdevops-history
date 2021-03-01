@@ -46,3 +46,4 @@ workflows/blktests/results/last-run/
 workflows/blktests/results/last-kernel.txt
 
 .kernel-ci.*
+.kotd.*

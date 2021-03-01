@@ -34,8 +34,10 @@ BLKTESTS_ARGS += blktests_data_target='$(BLKTESTS_DATA_TARGET)'
 WORKFLOW_ARGS += $(BLKTESTS_ARGS)
 
 BLKTEST_KERNEL_CI_LOOP := false
+BLKTEST_KERNEL_CI_LOOP_KOTD := false
 ifeq (y,$(CONFIG_KERNEL_CI))
 BLKTEST_KERNEL_CI_LOOP := scripts/workflows/blktests/run_kernel_ci.sh
+BLKTEST_KERNEL_CI_LOOP_KOTD := scripts/workflows/blktests/run_kernel_ci_kotd.sh
 endif # CONFIG_KERNEL_CI
 
 $(KDEVOPS_HOSTS_TEMPLATE): .config
@@ -50,6 +52,9 @@ blktests-baseline:
 
 blktests-baseline-loop:
 	$(Q)$(BLKTEST_KERNEL_CI_LOOP) baseline
+
+blktests-baseline-kernelci:
+	$(Q)$(BLKTEST_KERNEL_CI_LOOP_KOTD) baseline
 
 blktests-baseline-skip-kdevops-update:
 	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/blktests.yml --tags run_tests,copy_results --skip-tags git_update --extra-vars '{ kdevops_run_blktests: True }' --extra-vars=@./extra_vars.yaml
