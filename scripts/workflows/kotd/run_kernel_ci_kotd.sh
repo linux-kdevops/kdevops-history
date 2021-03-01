@@ -8,8 +8,6 @@ fi
 TARGET_WORKFLOW="$(basename $(dirname $0))"
 echo $TARGET_WORKFLOW
 
-exit 0
-
 if [[ ! -f ${TOPDIR}/.config || ! -f ${TOPDIR}/scripts/lib.sh ]]; then
 	echo "Unconfigured system"
 	exit 1
