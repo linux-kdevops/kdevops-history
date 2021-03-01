@@ -46,7 +46,7 @@ while true; do
 			KERNEL_BEFORE="$(cat $KOTD_BEFORE)"
 			kotd_log "KOTD before: $KERNEL_BEFORE"
 		fi
-		if [[ -f $KOTD_AFTER]]; then
+		if [[ -f $KOTD_AFTER ]]; then
 			KERNEL_AFTER="$(cat $KOTD_BEFORE)"
 			kotd_log "KOTD after: $KERNEL_AFTER"
 		fi
@@ -62,7 +62,7 @@ while true; do
 		KERNEL_BEFORE="$(cat $KOTD_BEFORE)"
 		kotd_log "KOTD before: $KERNEL_BEFORE"
 	fi
-	if [[ -f $KOTD_AFTER]]; then
+	if [[ -f $KOTD_AFTER ]]; then
 		KERNEL_AFTER="$(cat $KOTD_BEFORE)"
 		kotd_log "KOTD after: $KERNEL_AFTER"
 	fi
