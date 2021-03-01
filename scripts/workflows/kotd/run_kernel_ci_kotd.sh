@@ -6,7 +6,6 @@ if [[ "$TOPDIR" == "" ]]; then
 fi
 
 TARGET_WORKFLOW="$(basename $(dirname $0))"
-echo $TARGET_WORKFLOW
 
 if [[ ! -f ${TOPDIR}/.config || ! -f ${TOPDIR}/scripts/lib.sh ]]; then
 	echo "Unconfigured system"
@@ -39,7 +38,7 @@ while true; do
 	kotd_log "---------------------------------"
 
 	kotd_log "Going to try to rev kernel"
-	/usr/bin/time -f %E -o $KOTD_LOGTIME_FULL make kotd-${TARGET_HOSTS}
+	/usr/bin/time -p -o $KOTD_LOGTIME_FULL make kotd-${TARGET_HOSTS}
 	if [[ $? -ne 0 ]]; then
 		kotd_log "failed running: make kotd-$TARGET_HOSTS"
 		if [[ -f $KOTD_BEFORE ]]; then
@@ -68,7 +67,7 @@ while true; do
 	fi
 
 	kotd_log "Going to try to run the $TARGET_WORKFLOW kernel-ci loop"
-	/usr/bin/time -f %E -o $KOTD_LOGTIME_FULL make $TARGET_WORKFLOW-${TARGET_HOSTS}-loop
+	/usr/bin/time -p -o $KOTD_LOGTIME_FULL make $TARGET_WORKFLOW-${TARGET_HOSTS}-loop
 	if [[ $? -ne 0 ]]; then
 		kotd_log "failed running: make $TARGET_WORKFLOW-${TARGET_HOSTS}-loop"
 		THIS_KOTD_LOGTIME=$(cat $KOTD_LOGTIME_FULL)
