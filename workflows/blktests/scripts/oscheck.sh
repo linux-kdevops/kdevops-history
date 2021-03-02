@@ -231,10 +231,10 @@ oscheck_get_group_files()
 	if [ "$EXPUNGE_LIST" = "true" ]; then
 		echo "Looking for files which we should expunge in directory $BLOCK_EXCLUDE_DIR ..."
 	fi
-	if [[ ! -d $BLOCK_EXCLUDE_DIR ]]; then
-		return
+	BAD_FILES=""
+	if [[ -d $BLOCK_EXCLUDE_DIR ]]; then
+		BAD_FILES=$(find $BLOCK_EXCLUDE_DIR -type f \( -iname \*.bad -o -iname \*.dmesg \) | sed -e 's|'$BLOCK_EXCLUDE_DIR'||')
 	fi
-	BAD_FILES=$(find $BLOCK_EXCLUDE_DIR -type f \( -iname \*.bad -o -iname \*.dmesg \) | sed -e 's|'$BLOCK_EXCLUDE_DIR'||')
 	for i in $BAD_FILES; do
 		COLS=$(echo $i | awk -F"/" '{print NF}')
 		if [[ $COLS -ne 3 ]]; then
