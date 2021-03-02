@@ -81,7 +81,7 @@
     - repos_present|bool
     - not lacks_nvme_utils|bool
 
-- name: Install build dependencies for fstests
+- name: Install build dependencies for blktests
   become: yes
   become_method: sudo
   zypper:
@@ -106,7 +106,6 @@
       - acl
       - bc
       - dump
-      - indent
       - libtool
       - lvm2
       - psmisc
@@ -120,6 +119,10 @@
       - openssl-devel
       - libcap-progs
       - fio
+      - multipath-tools
+      - gcc-c++
+      - parted
+      - libnl-config
     state: present
   when:
     - repos_present|bool
@@ -163,7 +166,7 @@
   when:
     - add_benchmark_repo|bool
 
-- name: Install dbench for sles15-sp2
+- name: Install dbench when needed
   become: yes
   become_method: sudo
   zypper:
@@ -172,3 +175,87 @@
     state: present
   when:
     - add_benchmark_repo|bool
+
+- name: Does this release require the sles15sp2 benchmark repo
+  set_fact:
+    nbd_git: "https://github.com/NetworkBlockDevice/nbd.git"
+    nbd_data: "{{data_path}}/nbd"
+  when:
+    - is_sle15sp2|bool or is_sle15sp3|bool
+
+- name: The default is to assume we do not want to to compile nbd manually
+  set_fact:
+    compile_nbd: False
+
+- name: Set when we need to compile nbd
+  set_fact:
+    compile_nbd: True
+  when:
+    - is_sle15sp2|bool or is_sle15sp3|bool
+
+- name: Install build dependencies for nbd
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - glib2-devel
+    state: present
+  when:
+    - repos_present|bool
+    - compile_nbd|bool
+
+- name: git clone nbd
+  git:
+    repo: "{{ nbd_git }}"
+    dest: "{{ nbd_data }}"
+    update: yes
+    version: master
+  when:
+    - repos_present|bool
+    - compile_nbd|bool
+  tags: [ 'git', 'blktests', 'nbd' ]
+
+- name: Skip documentation for nbd as we lack the requirement of docbook2man
+  file:
+    path: "{{ nbd_data }}/man/{{ item }}"
+    state: touch
+  with_items:
+    - "nbd-client.8.sh.in"
+    - "nbd-server.5.sh.in"
+    - "nbd-server.1.sh.in"
+    - "nbd-trdump.1.sh.in"
+    - "nbdtab.5.sh.in"
+  loop_control:
+    label: "Faking generation of documentation for nbd{{ item }}"
+  tags: [ 'blktests', 'nbd' ]
+  when:
+    - repos_present|bool
+    - compile_nbd|bool
+
+- name: run autogen for nbd
+  command: "./autogen.sh"
+  tags: [ 'blktests', 'nbd' ]
+  args:
+    chdir: "{{ nbd_data }}"
+
+- name: run configure for nbd
+  command: "./configure"
+  tags: [ 'blktests', 'nbd' ]
+  args:
+    chdir: "{{ nbd_data }}"
+
+- name: Build nbd
+  tags: [ 'git', 'blktests', 'nbd' ]
+  make:
+    chdir: "{{ nbd_data }}"
+    params:
+      NUM_THREADS: "{{ make_num_jobs }}"
+
+- name: Install nbd
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "{{  make }} install"
+  tags: [ 'git', 'blktests', 'nbd' ]
+  args:
+    chdir: "{{ nbd_data }}"
