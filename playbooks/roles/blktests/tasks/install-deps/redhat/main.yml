@@ -1,5 +1,5 @@
 ---
-- name: Install build dependencies for fstests
+- name: Install build dependencies for blktests
   become: yes
   become_method: sudo
   yum:

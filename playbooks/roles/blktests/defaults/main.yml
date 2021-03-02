@@ -1,21 +1,15 @@
 # SPDX-License-Identifier GPL-2.0+
 ---
-# Our sensible defaults for the fstests role.
+# Our sensible defaults for the blktests role.
 #
 # We default to not run tests.
-kdevops_run_fstests: False
+kdevops_run_blktests: False
 
 # Ror instance you can use "-g quick" but note that this may produce
 # not results as all quick tests may be expunded.
 oscheck_extra_args: ""
 
-fstests_git: "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git"
-fstests_data: "{{ data_path }}/xfstests"
-fstests_data_target: "/var/lib/xfstests/"
-fstests_setup_system: "n"
-fstests_test_dev: "/dev/null"
-sparsefiles_generation: False
-sparsefiles_size: 0
-sparsefiles_filename_prefix: "sparse-disk"
-
-fstests_debug: False
+blktests_git: "https://github.com/osandov/blktests.git"
+blktets_data: "{{ data_path }}/blktests"
+blktests_data_target: "/usr/local/blktests/"
+blktests_test_devs: "/dev/null"
