@@ -95,7 +95,7 @@
   become: yes
   become_method: sudo
   file:
-    src: "{{ kdevops_data}}/workflows/blktests/scripts/{{ item }}"
+    src: "{{ kdevops_dir }}/workflows/blktests/scripts/{{ item }}"
     dest: "{{ blktests_data_target }}/{{ item }}"
     state: link
   with_items:
