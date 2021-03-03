@@ -17,6 +17,7 @@ extra_vars.json
 scripts/kconfig/.mconf-cfg
 scripts/workflows/fstests/lib/__pycache__/
 scripts/workflows/blktests/lib/__pycache__/
+scripts/workflows/lib/__pycache__/
 
 vagrant/kdevops_nodes.yaml
 
