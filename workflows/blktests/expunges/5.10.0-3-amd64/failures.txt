@@ -3,5 +3,6 @@ block/012
 meta/005
 meta/006
 meta/009
+nbd/002
 nbd/003 # causes a hang after runnning a few times
 scsi/004
