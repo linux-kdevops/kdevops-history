@@ -72,6 +72,7 @@ while true; do
 		kotd_log "failed running: make $TARGET_WORKFLOW-${TARGET_HOSTS}-loop"
 		THIS_KOTD_LOGTIME=$(cat $KOTD_LOGTIME)
 		kotd_log "$TARGET_WORKFLOW kernel-ci work failed after this amount of time: $THIS_KOTD_LOGTIME"
+		exit 1
 	fi
 	THIS_KOTD_LOGTIME=$(cat $KOTD_LOGTIME)
 	kotd_log "Completed kernel-ci loop work for $TARGET_WORKFLOW successfully after this amount of time: $THIS_KOTD_LOGTIME"
