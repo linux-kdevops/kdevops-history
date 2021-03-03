@@ -85,7 +85,7 @@ def get_test(host, suite):
     run_string = "run " + suite
     cmd = ['ssh', host,
            'sudo',
-           'journalctl', '-k',
+           'dmesg',
            '|', 'grep', '"' + run_string + '"',
            '|', 'awk', '-F"' + run_string + ' "', '\'{print $2}\'',
            '|', 'tail', '-1' ]
