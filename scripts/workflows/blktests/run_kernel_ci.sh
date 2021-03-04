@@ -24,6 +24,9 @@ TARGET_HOSTS=$1
 
 kernel_ci_post_process()
 {
+	if [[ -f $MANUAL_KILL_NOTICE_FILE ]]; then
+		exit 1
+	fi
 	if [[ -f $KERNEL_CI_WATCHDOG_FAIL_LOG ]]; then
 		cat $KERNEL_CI_WATCHDOG_FAIL_LOG >> $KERNEL_CI_FAIL_LOG
 		cat $KERNEL_CI_WATCHDOG_FAIL_LOG >> $KERNEL_CI_DIFF_LOG

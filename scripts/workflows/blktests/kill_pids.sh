@@ -12,6 +12,10 @@ if [[ "$CALL" == "list_pids.sh" ]]; then
 	LIST_ONLY="true"
 fi
 
+if [[ "$LIST_ONLY" != "true" ]]; then
+	touch $MANUAL_KILL_NOTICE_FILE
+fi
+
 STRING='CONFIG_KDEVOPS_WORKFLOW_ENABLE_BLKTESTS=y'
 PID_LIST=$(ps -fu $USER | awk '{print $2}')
 
@@ -102,3 +106,7 @@ for i in $PID_LIST; do
 		kill -SIGTERM ${i} 2>/dev/null
 	fi
 done
+
+if [[ "$LIST_ONLY" != "true" ]]; then
+	rm -f $MANUAL_KILL_NOTICE_FILE
+fi
