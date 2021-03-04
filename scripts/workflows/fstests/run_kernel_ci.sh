@@ -28,6 +28,14 @@ kernel_ci_post_process()
 	if [[ -f $MANUAL_KILL_NOTICE_FILE ]]; then
 		exit 1
 	fi
+	if [[ "$CONFIG_WORKFLOW_KOTD_ENABLE" == "y" ]]; then
+		if [[ -f $KOTD_LOG ]]; then
+			cat $KOTD_LOG $KERNEL_CI_FAIL_LOG > $KOTD_TMP
+			cp $KOTD_TMP $KERNEL_CI_FAIL_LOG
+			cp $KOTD_TMP $KERNEL_CI_DIFF_LOG
+			rm -f $KOTD_TMP
+		fi
+	fi
 	if [[ -f $KERNEL_CI_WATCHDOG_FAIL_LOG ]]; then
 		cat $KERNEL_CI_WATCHDOG_FAIL_LOG >> $KERNEL_CI_FAIL_LOG
 		cat $KERNEL_CI_WATCHDOG_FAIL_LOG >> $KERNEL_CI_DIFF_LOG
