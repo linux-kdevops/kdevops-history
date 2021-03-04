@@ -62,13 +62,20 @@ while true; do
 	THIS_KOTD_LOGTIME=$(cat $KOTD_LOGTIME)
 	kotd_log "KOTD reving work succeeded after this amount of time: $THIS_KOTD_LOGTIME"
 
+	KERNEL_BEFORE=""
 	if [[ -f $KOTD_BEFORE ]]; then
 		KERNEL_BEFORE="$(cat $KOTD_BEFORE)"
 		kotd_log "KOTD before: $KERNEL_BEFORE"
 	fi
+	KERNEL_AFTER=""
 	if [[ -f $KOTD_AFTER ]]; then
 		KERNEL_AFTER="$(cat $KOTD_BEFORE)"
 		kotd_log "KOTD after:  $KERNEL_AFTER"
+		if [[ "$KERNEL_BEFORE" == "$KERNEL_AFTER" ]]; then
+			kotd_log "KOTD no updates were made, kernel remains identical"
+		else
+			kotd_log "KOTD kernel was updated"
+		fi
 	fi
 
 	if [[ "$CONFIG_KERNEL_CI_ENABLE_STEADY_STATE" == "y" ]]; then
