@@ -68,7 +68,7 @@ while true; do
 	fi
 	if [[ -f $KOTD_AFTER ]]; then
 		KERNEL_AFTER="$(cat $KOTD_BEFORE)"
-		kotd_log "KOTD after: $KERNEL_AFTER"
+		kotd_log "KOTD after:  $KERNEL_AFTER"
 	fi
 
 	if [[ "$CONFIG_KERNEL_CI_ENABLE_STEADY_STATE" == "y" ]]; then
