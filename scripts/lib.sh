@@ -30,8 +30,8 @@ KERNEL_CI_WATCHDOG_HUNG=".kernel-ci.watchdog.hung"
 KERNEL_CI_WATCHDOG_TIMEOUT=".kernel-ci.watchdog.timeout"
 
 KOTD_LOG=".kotd.log"
-KOTD_BEFORE=".kotd.uname-before.log"
-KOTD_AFTER=".kotd.uname-after.log"
+KOTD_BEFORE=".kotd.uname-before.txt"
+KOTD_AFTER=".kotd.uname-after.txt"
 KOTD_LOGTIME=".kotd.logtime"
 
 FSTESTS_STARTED_FILE="${TOPDIR}/workflows/fstests/.begin"
