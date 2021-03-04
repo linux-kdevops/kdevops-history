@@ -17,6 +17,11 @@ source ${TOPDIR}/scripts/lib.sh
 
 rm -f ${TOPDIR}/.kotd.*
 
+if [[ "$CONFIG_KERNEL_CI" != "y" ]]; then
+	echo "Must enable CONFIG_KERNEL_CI to use this feature"
+	exit 1
+fi
+
 TARGET_HOSTS="baseline"
 if [[ "$1" != "" ]]; then
 	TARGET_HOSTS=$1
@@ -66,7 +71,11 @@ while true; do
 		kotd_log "KOTD after: $KERNEL_AFTER"
 	fi
 
-	kotd_log "Going to try to run the $TARGET_WORKFLOW kernel-ci loop"
+	if [[ "$CONFIG_KERNEL_CI_ENABLE_STEADY_STATE" == "y" ]]; then
+		kotd_log "Running the $TARGET_WORKFLOW kernel-ci loop with a steady state goal of $CONFIG_KERNEL_CI_STEADY_STATE_GOAL"
+	else
+		kotd_log "Running the $TARGET_WORKFLOW kernel-ci loop with no steady state goal set"
+	fi
 	/usr/bin/time -f %E -o $KOTD_LOGTIME make $TARGET_WORKFLOW-${TARGET_HOSTS}-loop
 	if [[ $? -ne 0 ]]; then
 		kotd_log "failed running: make $TARGET_WORKFLOW-${TARGET_HOSTS}-loop"
