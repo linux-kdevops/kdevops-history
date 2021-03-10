@@ -99,10 +99,6 @@ for i in $PID_LIST; do
 			continue
 		fi
 	fi
-	FS_TARGET=$(grep $STRING $CONFIG_TARGET | awk -F"=" '{print $2}' | sed -e 's|"||g')
-	if [[ "$FS" != "$FS_TARGET" ]]; then
-		continue
-	fi
 
 	grep -q run_kernel_ci /proc/$i/cmdline
 	if [[ $? -eq 0 ]]; then
