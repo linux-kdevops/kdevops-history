@@ -180,7 +180,7 @@ kernel_ci_watchdog_loop()
 
 		if [[ "$CONFIG_BLKTESTS_WATCHDOG_KILL_TASKS_ON_HANG" == "y" ]]; then
 			if [[ "$HUNG_FOUND" == "True" || "$TIMEOUT_FOUND" == "True" ]]; then
-				${TOPDIR}/scripts/workflows/blktests/kill_pids.sh 2> /dev/null
+				${TOPDIR}/scripts/workflows/blktests/kill_pids.sh --watchdog-mode 2> /dev/null
 				echo "The kdevops blktests watchdog detected hung or timed out hosts, stopping" >> $KERNEL_CI_WATCHDOG_FAIL_LOG
 				echo "all tests as otherwise we'd never have this test complete, so we killed PID $KERNEL_CI_LOOP_PID." >> $KERNEL_CI_WATCHDOG_FAIL_LOG
 				echo "" >> $KERNEL_CI_WATCHDOG_FAIL_LOG

@@ -15,6 +15,38 @@ fi
 STRING='IGNORE'
 FS=""
 TARGET_WORFKLOW=""
+WATCHDOG_MODE="False"
+
+usage()
+{
+	echo "$0 - lists / kills workflow processes"
+	echo "--help          - Shows this menu"
+	echo "--watchdog-mode - To be used if running from within the watchdog"
+}
+
+parse_args()
+{
+	while [[ ${#1} -gt 0 ]]; do
+		key="$1"
+
+		case $key in
+		--watchdog-mode)
+			WATCHDOG_MODE="true"
+			shift
+			;;
+		--help)
+			usage
+			exit
+			;;
+		*)
+			usage
+			exit
+			;;
+		esac
+	done
+}
+
+parse_args $@
 
 if [[ "$CONFIG_KDEVOPS_WORKFLOW_ENABLE_FSTESTS" == "y" ]]; then
 	FS=$CONFIG_FSTESTS_FSTYP
@@ -31,7 +63,10 @@ fi
 PID_LIST=$(ps -fu $USER | awk '{print $2}')
 
 if [[ "$LIST_ONLY" != "true" ]]; then
-	touch $MANUAL_KILL_NOTICE_FILE
+	# On a manually called kill we want to avoid spamming folks.
+	if [[ "$WATCHDOG_MODE" != "true" ]]; then
+		touch $MANUAL_KILL_NOTICE_FILE
+	fi
 fi
 
 list_pid()
