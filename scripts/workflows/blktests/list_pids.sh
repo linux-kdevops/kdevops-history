@@ -1,1 +1,1 @@
-kill_pids.sh
+../generic/kill_pids.sh
