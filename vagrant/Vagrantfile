@@ -147,9 +147,7 @@ qemu_group_auto = global_data['libvirt_cfg']['qemu_group_auto']
 if qemu_group_auto
   if File.exists?('/etc/debian_version')
     qemu_group = 'libvirt-qemu'
-  elsif File.exists?('/etc/redhat-release') or File.exists?('/etc/centos-release')
-    qemu_group = 'qemu'
-  elsif File.exists?('/etc/SuSE-release') or File.exists?('/etc/SUSE-brand')
+  else
     qemu_group = 'qemu'
   end
 end
