@@ -38,7 +38,7 @@ config BOOTLINUX_TREE_TAG
 	default "v4.19" if BOOTLINUX_TREE_LINUS
 	default "v4.19.133" if BOOTLINUX_STABLE_V419
 	default "v5.10.16" if BOOTLINUX_STABLE_V510
-	default "next-20210304" if BOOTLINUX_TREE_NEXT
+	default "next-20210810" if BOOTLINUX_TREE_NEXT
 	help
 	  The git branch / tag or sha1sum to use.
 
