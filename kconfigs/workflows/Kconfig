@@ -55,6 +55,17 @@ config WORKFLOWS_TESTS
 
 if WORKFLOWS_TESTS
 
+config WORKFLOWS_TESTS_DEMOS
+	bool "Enable demo workflows"
+	help
+	 If you are a new developer to kdevops this is where you can look at
+	 for simple examples of workflows. Although these are considered
+	 hello-world simple in nature, some of them are actually useful tests.
+
+if WORKFLOWS_TESTS_DEMOS
+source "kconfigs/workflows/Kconfig.demo"
+endif
+
 choice
 	prompt "Target Linux test workflow"
 	default KDEVOPS_WORKFLOW_ENABLE_NONE

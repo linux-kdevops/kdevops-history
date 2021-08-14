@@ -46,5 +46,7 @@ workflows/blktests/.begin
 workflows/blktests/results/last-run/
 workflows/blktests/results/last-kernel.txt
 
+workflows/demos/reboot-limit/results/
+
 .kernel-ci.*
 .kotd.*

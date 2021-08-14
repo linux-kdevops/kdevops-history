@@ -1,0 +1,211 @@
+---
+- name: Import optional extra_args file
+  include_vars: "{{ item }}"
+  ignore_errors: yes
+  with_first_found:
+    - files:
+      - "../extra_vars.yml"
+      - "../extra_vars.yaml"
+      - "../extra_vars.json"
+      skip: true
+  tags: vars
+
+- include_role:
+    name: create_data_partition
+  tags: [ 'data_partition' ]
+
+- name: create the reboot-limit data collection directory for each host
+  become: yes
+  become_method: sudo
+  file:
+    path: "{{ reboot_limit_data }}/{{ ansible_ssh_host }}"
+    state: directory
+  tags: [ 'install', 'first_run' ]
+
+- name: Set the file to collect systemctl-analyze results
+  become: yes
+  become_method: sudo
+  set_fact:
+    reboot_limit_analyze_file: "{{ reboot_limit_data}}/{{ ansible_ssh_host }}/{{ reboot_limits_systemctl_analyze_log }}"
+  tags: [ 'run_tests', 'vars' ]
+
+- name: Set the file to collect the reboot count
+  become: yes
+  become_method: sudo
+  set_fact:
+    reboot_limit_count_file: "{{ reboot_limit_data}}/{{ ansible_ssh_host }}/{{ reboot_limits_count_log }}"
+  tags: [ 'run_tests', 'read_count', 'vars' ]
+
+- name: Delete old results directory files if a reset was called
+  become: yes
+  become_method: sudo
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ reboot_limit_analyze_file }}"
+    - "{{ reboot_limit_count_file }}"
+  loop_control:
+    label: "{{ item | regex_replace(reboot_limit_data | regex_escape()) | regex_replace('^/', '') }}"
+  tags: [ 'reset' ]
+
+- name: Print uname for each host
+  tags: [ 'run_tests' ]
+  debug: var=ansible_kernel
+
+- name: Set the path where we collect our local reboot-limit results
+  set_fact:
+    reboot_limit_local_results_dir: "../workflows/demos/reboot-limit/results"
+  tags: [ 'vars' ]
+
+- name: Clean up our localhost results directory and files as we are on boot number {{ reboot_limit_count }}
+  local_action: file path="{{ reboot_limit_local_results_dir }}/" state=absent
+  run_once: true
+  tags: [ 'clean_local_results', 'first_run' ]
+
+- name: Create the local results directory
+  local_action: file path="{{ reboot_limit_local_results_dir }}/" state=directory
+  run_once: true
+  tags: [ 'first_run' ]
+
+- name: Hint to our watchdog our reboot-limit tests are about to kick off
+  local_action: file path="{{ reboot_limit_local_results_dir }}/.begin" state=touch
+  tags: [ 'run_tests' ]
+  run_once: true
+
+- name: Run the reboot test using the ansible reboot module
+  become: yes
+  become_method: sudo
+  reboot:
+  when:
+    - reboot_limit_test_type == "ansible"
+  tags: [ 'run_tests' ]
+
+- name: Run the reboot test using systemctl reboot
+  become: yes
+  become_method: sudo
+  command: "systemctl reboot"
+  when:
+    - reboot_limit_test_type == "systemctl_reboot"
+  tags: [ 'run_tests' ]
+
+- name: Run the reboot test using systemctl kexec
+  become: yes
+  become_method: sudo
+  command: "systemctl kexec"
+  when:
+    - reboot_limit_test_type == "systemctl_kexec"
+  tags: [ 'run_tests' ]
+
+- name: Check if the reboot limit count variable file exists
+  become: yes
+  become_method: sudo
+  stat:
+    path: "{{ reboot_limit_count_file }}"
+  register: reboot_limit_reg_count_file
+  tags: [ 'run_tests', 'read_count', 'vars' ]
+
+- name: Read last boot count variable file
+  become: yes
+  become_method: sudo
+  slurp:
+    src: "{{ reboot_limit_count_file }}"
+  register: reboot_limit_last_count
+  when:
+    - reboot_limit_reg_count_file.stat.exists
+  tags: [ 'run_tests' , 'read_count', 'vars' ]
+
+- name: Set the current boot count into a variable
+  set_fact:
+    reboot_limit_count: "{{ reboot_limit_last_count['content'] | b64decode | int }}"
+  tags: [ 'run_tests' , 'read_count', 'vars' ]
+  when:
+    - reboot_limit_reg_count_file.stat.exists
+
+- name: Adjust the local boot count variable if we rebooted OK
+  set_fact:
+    reboot_limit_count: "{{ reboot_limit_count | int + 1 }}"
+  tags: [ 'run_tests' , 'read_count' ]
+  when:
+    - reboot_limit_reg_count_file.stat.exists
+
+- name: Set the current boot count into a variable when no prior boot test exists
+  set_fact:
+    reboot_limit_count: 1
+  tags: [ 'run_tests' , 'read_count', 'vars' ]
+  when:
+    - not reboot_limit_reg_count_file.stat.exists
+
+- name: Enable sysrq key if we're about to force a crash
+  become: yes
+  become_method: sudo
+  shell: echo 1 > /proc/sys/kernel/sysrq
+  tags: [ 'run_tests' , 'read_count', 'vars', 'crash-check' ]
+  when:
+    - reboot_limit_boot_count_crash_enable
+    - ((reboot_limit_count | int % reboot_limit_boot_crash_count | int) == 0)
+
+- name: Force a crash if we were asked to
+  become: yes
+  become_method: sudo
+  shell: echo c > /proc/sysrq-trigger
+  ignore_errors: true
+  tags: [ 'run_tests' , 'read_count', 'vars', 'crash-check' ]
+  when:
+    - reboot_limit_boot_count_crash_enable
+    - ((reboot_limit_count | int % reboot_limit_boot_crash_count | int) == 0)
+
+- name: Write current updated boot count variable file to be {{ reboot_limit_count }}
+  become: yes
+  become_method: sudo
+  copy:
+    content: "{{ reboot_limit_count }}"
+    dest: "{{ reboot_limit_count_file }}"
+  when:
+    - reboot_limit_reg_count_file.stat.exists
+  tags: [ 'run_tests' , 'read_count' ]
+
+- name: Create last boot count variable file if it does not exist
+  become: yes
+  become_method: sudo
+  copy:
+    content: "1"
+    dest: "{{ reboot_limit_count_file }}"
+  when:
+    - not reboot_limit_reg_count_file.stat.exists
+  tags: [ 'run_tests' , 'read_count' ]
+
+- name: Collect systemctl-analyze results
+  become: yes
+  become_method: sudo
+  command: "systemd-analyze"
+  register: systemd_analyze_cmd
+  when:
+    - reboot_limit_enable_systemd_analyze|bool
+  tags: [ 'run_tests' ]
+
+- name: Append systemctl-analyze output
+  become: yes
+  become_method: sudo
+  tags: [ 'run_tests' ]
+  lineinfile:
+    path: "{{ reboot_limit_analyze_file }}"
+    line: "{{ systemd_analyze_cmd.stdout }}"
+    create: yes
+  when:
+    - reboot_limit_enable_systemd_analyze|bool
+
+- name: Copy the latest results over when we're done
+  tags: [ 'copy_results' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  fetch:
+    src: "{{ item }}"
+    dest: "{{ reboot_limit_local_results_dir }}/{{ item | regex_replace(reboot_limit_data | regex_escape()) | regex_replace('^/', '') }}"
+    flat: yes
+  with_items:
+    - "{{ reboot_limit_analyze_file }}"
+    - "{{ reboot_limit_count_file }}"
+  loop_control:
+    label: "{{ item | regex_replace(reboot_limit_data | regex_escape()) | regex_replace('^/', '') }}"

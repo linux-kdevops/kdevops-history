@@ -35,8 +35,10 @@ KOTD_BEFORE=".kotd.uname-before.txt"
 KOTD_AFTER=".kotd.uname-after.txt"
 KOTD_LOGTIME=".kotd.logtime"
 
+# These started files are used by optional manual watchdog tools.
 FSTESTS_STARTED_FILE="${TOPDIR}/workflows/fstests/.begin"
 BLKTESTS_STARTED_FILE="${TOPDIR}/workflows/blktests/.begin"
+REBOOT_LIMIT_STARTED_FILE="${TOPDIR}/workflows/demos/reboot-limit/.begin"
 
 if [[ "$CONFIG_KDEVOPS_WORKFLOW_FSTESTS" == "y" ]]; then
 	FSTYP="$CONFIG_FSTESTS_FSTYP"

@@ -234,6 +234,10 @@ ifeq (y,$(CONFIG_KDEVOPS_WORKFLOW_ENABLE_BLKTESTS))
 include workflows/blktests/Makefile
 endif # CONFIG_KDEVOPS_WORKFLOW_ENABLE_BLKTESTS == y
 
+ifeq (y,$(CONFIG_WORKFLOWS_REBOOT_LIMIT))
+include workflows/demos/reboot-limit/Makefile
+endif # CONFIG_WORKFLOWS_REBOOT_LIMIT == y
+
 endif # CONFIG_WORKFLOWS
 
 ANSIBLE_EXTRA_ARGS += $(WORKFLOW_ARGS)
