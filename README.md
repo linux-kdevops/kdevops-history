@@ -191,8 +191,9 @@ Below are sections which get into technical details of how kdevops works.
 License
 -------
 
-This work is licensed under the GPLv2, refer to the [LICENSE](./LICENSE) file
+This work is licensed under the copyleft-next-0.3.1, refer to the [LICENSE](./LICENSE) file
 for details. Please stick to SPDX annotations for file license annotations.
-If a file has no SPDX annotation the GPLv2 applies. We keep SPDX annotations
+If a file has no SPDX annotation the copyleft-next-0.3.1 applies. We keep SPDX annotations
 with permissive licenses to ensure upstream projects we embraced under
 permissive licenses can benefit from our changes to their respective files.
+Likewise GPLv2 files are allowed as copyleft-next-0.3.1 is GPLv2 compatible.

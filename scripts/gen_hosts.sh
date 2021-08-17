@@ -1,5 +1,5 @@
 #!/bin/bash
-# SPDX-License-Identifier: GPL-2.0
+# SPDX-License-Identifier: copyleft-next-0.3.1
 
 # Generates the ansible hosts files for workflow agnostic setups.
 

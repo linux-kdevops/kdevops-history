@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# SPDX-License-Identifier: GPL-2.0
+# SPDX-License-Identifier: copyleft-next-0.3.1
 
 # Trim results only keeping *.bad *.dmesg and respective files and move these
 # to their respective kernel directory. This makes it easy when generating

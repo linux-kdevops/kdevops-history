@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: GPL-2.0
+# SPDX-License-Identifier: copyleft-next-0.3.1
 
 kconfig_y_to_true_false()
 {

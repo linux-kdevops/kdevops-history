@@ -1,4 +1,4 @@
-# SPDX-License-Identifier GPL-2.0+
+# SPDX-License-Identifier copyleft-next-0.3.1
 ---
 # Our sensible defaults for the common shared workflows role.
 workflow_install_postfix: false
