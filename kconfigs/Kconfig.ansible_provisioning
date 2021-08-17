@@ -74,6 +74,36 @@ config KDEVOPS_GRUB_TIMEOUT
 
 endif # KDEVOPS_DEVCONFIG_ENABLE_CONSOLE
 
+config KDEVOPS_DEVCONFIG_ENABLE_SYSTEMD_WATCHDOG
+	bool "Enable systemd watchdog setup"
+	default y
+	depends on KDEVOPS_DEVCONFIG_ENABLE
+	  help
+	  Enable this to allow you to configure your systemd watchdog configuration.
+	  For details refer to: https://www.freedesktop.org/software/systemd/man/systemd-system.conf.html
+
+if KDEVOPS_DEVCONFIG_ENABLE_SYSTEMD_WATCHDOG
+
+config KDEVOPS_DEVCONFIG_SYSTEMD_WATCHDOG_TIMEOUT_RUNTIME
+	string "Configures the RuntimeWatchdogSec settting"
+	default "5min"
+	  help
+          Configures the systemd watchdog RuntimeWatchdogSec setting.
+
+config KDEVOPS_DEVCONFIG_SYSTEMD_WATCHDOG_TIMEOUT_REBOOT
+	string "Configures the RebootWatchdogSec settting"
+	default "10min"
+	  help
+          Configures the systemd watchdog RebootWatchdogSec setting.
+
+config KDEVOPS_DEVCONFIG_SYSTEMD_WATCHDOG_TIMEOUT_KEXEC
+	string "Configures the KexecWatchdogSec settting"
+	default "5min"
+	  help
+          Configures the systemd watchdog KexecWatchdogSec setting.
+
+endif # KDEVOPS_DEVCONFIG_ENABLE_SYSTEMD_WATCHDOG
+
 config KDEVOPS_PLAYBOOK_DIR
 	string "The directory for the ansible playbooks to use"
 	default $(shell, echo $KDEVOPS_PLAYBOOKS_DIR)

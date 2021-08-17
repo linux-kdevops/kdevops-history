@@ -359,6 +359,11 @@ $(KDEVOPS_EXTRA_VARS): .config
 		echo "devconfig_kernel_console: '$(CONFIG_KDEVOPS_DEVCONFIG_KERNEL_CONSOLE_SETTINGS)'" >> $(KDEVOPS_EXTRA_VARS) ;\
 		echo "devconfig_grub_console: '$(CONFIG_KDEVOPS_DEVCONFIG_GRUB_SERIAL_COMMAND)'" >> $(KDEVOPS_EXTRA_VARS) ;\
 	fi
+	@if [[ "$(CONFIG_KDEVOPS_DEVCONFIG_ENABLE_SYSTEMD_WATCHDOG)" == "y" ]]; then \
+		echo "devconfig_systemd_watchdog_runtime_timeout: '$(CONFIG_KDEVOPS_DEVCONFIG_SYSTEMD_WATCHDOG_TIMEOUT_RUNTIME)'" >> $(KDEVOPS_EXTRA_VARS) ;\
+		echo "devconfig_systemd_watchdog_reboot_timeout: '$(CONFIG_KDEVOPS_DEVCONFIG_SYSTEMD_WATCHDOG_TIMEOUT_REBOOT)'" >> $(KDEVOPS_EXTRA_VARS) ;\
+		echo "devconfig_systemd_watchdog_kexec_timeout: '$(CONFIG_KDEVOPS_DEVCONFIG_SYSTEMD_WATCHDOG_TIMEOUT_KEXEC)'" >> $(KDEVOPS_EXTRA_VARS) ;\
+	fi
 	@if [[ "$(CONFIG_KDEVOPS_WORKFLOW_ENABLE_BLKTESTS)" == "y" ]]; then \
 		echo "blktests_test_devs: '$(CONFIG_BLKTESTS_TEST_DEVS)'" >> $(KDEVOPS_EXTRA_VARS) ;\
 	fi

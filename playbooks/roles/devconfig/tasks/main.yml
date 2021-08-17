@@ -348,6 +348,54 @@
     - devconfig_enable_console|bool
     - not console_grep.changed
 
+- name: enables systemd's watchdog
+  stat:
+    path=/etc/systemd/system.conf
+  register: systemd_config_file
+  tags: [ 'systemd_watchdog' ]
+
+- name: Add systemd watchdog RuntimeWatchdogSec setting
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  lineinfile:
+    path=/etc/systemd/system.conf
+    insertafter: EOF
+    regexp: '^(RuntimeWatchdogSec=)(.*)$'
+    line: 'RuntimeWatchdogSec={{ devconfig_systemd_watchdog_runtime_timeout }}'
+  when:
+    - systemd_config_file.stat.exists
+    - devconfig_enable_systemd_watchdog|bool
+  tags: [ 'systemd_watchdog' ]
+
+- name: Add systemd watchdog RebootWatchdogSec setting
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  lineinfile:
+    path=/etc/systemd/system.conf
+    insertafter: EOF
+    regexp: '^(RebootWatchdogSec=)(.*)$'
+    line: 'RebootWatchdogSec={{ devconfig_systemd_watchdog_reboot_timeout }}'
+  when:
+    - systemd_config_file.stat.exists
+    - devconfig_enable_systemd_watchdog|bool
+  tags: [ 'systemd_watchdog' ]
+
+- name: Add systemd watchdog KExecWatchdogSec setting
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  lineinfile:
+    path=/etc/systemd/system.conf
+    insertafter: EOF
+    regexp: '^(KExecWatchdogSec=)(.*)$'
+    line: 'KExecWatchdogSec={{ devconfig_systemd_watchdog_kexec_timeout }}'
+  when:
+    - systemd_config_file.stat.exists
+    - devconfig_enable_systemd_watchdog|bool
+  tags: [ 'systemd_watchdog' ]
+
 - name: Rev the kernel to the latest distribution kotd
   import_tasks: kotd-rev-kernel/main.yml
   when:
