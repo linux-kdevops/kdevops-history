@@ -23,12 +23,12 @@
   import_tasks: debian/main.yml
   when:
     - ansible_facts['os_family']|lower == 'debian'
-    - devconfig_try_refresh_repos|bool
+    - devconfig_try_refresh_repos|bool or devconfig_try_install_kdevtools|bool
 - import_tasks: suse/main.yml
   when:
     - ansible_facts['os_family']|lower == 'suse'
-    - devconfig_try_refresh_repos|bool
+    - devconfig_try_refresh_repos|bool or devconfig_try_install_kdevtools|bool
 - import_tasks: redhat/main.yml
   when:
     - ansible_facts['os_family']|lower == 'redhat'
-    - devconfig_try_refresh_repos|bool
+    - devconfig_try_refresh_repos|bool or devconfig_try_install_kdevtools|bool
