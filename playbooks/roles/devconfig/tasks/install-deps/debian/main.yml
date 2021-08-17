@@ -91,3 +91,13 @@
     name: snmpd
     state: restarted
   tags: snmpd
+
+- name: Install and sets up kdump
+  become: yes
+  become_method: sudo
+  apt:
+    name:
+      - kdump-tools
+  when:
+    - devconfig_try_install_kdevtools|bool
+  tags: kdump
