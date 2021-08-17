@@ -143,6 +143,22 @@
     - devconfig_enable_console|bool
   tags: [ 'console' ]
 
+- name: Check to see if the consoleblank is used
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  register: console_blank_grep
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^(GRUB_CMDLINE_LINUX=\")(.*)(\s*)consoleblank(.*)'
+    line: ''
+  check_mode: yes
+  when:
+    - grub2_config_file.stat.exists
+    - grub_cmdline_linux_grep.changed
+    - devconfig_enable_console|bool
+  tags: [ 'console' ]
+
 - name: Check to see if the console is already configured on your grub config
   become: yes
   become_flags: 'su - -c'
@@ -172,6 +188,22 @@
     - grub2_config_file.stat.exists
     - devconfig_enable_console|bool
     - not console_grep.changed
+    - not cmdline_linux_empty_grep.changed
+  tags: [ 'console' ]
+
+- name: Update grub configuration to add console kernel parameters for consoleblank configs
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^(GRUB_CMDLINE_LINUX=\")((\s*)(.*)*)(\s*)"$'
+    backrefs: yes
+    line: '\1 {{ devconfig_kernel_console }}"'
+  when:
+    - grub2_config_file.stat.exists
+    - devconfig_enable_console|bool
+    - console_blank_grep.changed|bool
     - not cmdline_linux_empty_grep.changed
   tags: [ 'console' ]
 
@@ -346,7 +378,7 @@
   when:
     - grub2_config_file.stat.exists
     - devconfig_enable_console|bool
-    - not console_grep.changed
+    - not console_grep.changed or console_blank_grep.changed
 
 - name: enables systemd's watchdog
   stat:
