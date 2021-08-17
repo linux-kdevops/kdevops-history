@@ -44,6 +44,7 @@
       - git
       - e2fsprogs
       - xfsprogs
+      - btrfs-progs
       - lvm2
       - gcc
       - make

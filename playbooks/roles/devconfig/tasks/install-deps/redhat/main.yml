@@ -29,6 +29,7 @@
       - git-core
       - e2fsprogs
       - xfsprogs
+      - btrfs-progs
       - xfsdump
       - lvm2
       - gcc

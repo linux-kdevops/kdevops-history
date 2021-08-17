@@ -318,6 +318,7 @@
     name:
       - e2fsprogs
       - xfsprogs
+      - btrfsprogs
       - lvm2
       - make
       - gawk
