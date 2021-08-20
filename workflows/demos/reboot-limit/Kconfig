@@ -1,5 +1,5 @@
 config WORKFLOWS_REBOOT_LIMIT
-	bool "Test how many reboots a system can go through without issue"
+	bool "Reboot-limit"
 	select KDEVOPS_TRY_REFRESH_REPOS
 	select KDEVOPS_TRY_INSTALL_KDEV_TOOLS
 	select KDEVOPS_DEVCONFIG_ENABLE_CONSOLE
@@ -16,6 +16,7 @@ config WORKFLOWS_REBOOT_LIMIT
 
 if WORKFLOWS_REBOOT_LIMIT
 
+menu "Configure and reboot-limit"
 choice
 	prompt "Reboot test type"
 	default REBOOT_LIMIT_TYPE_ANSIBLE
@@ -99,4 +100,5 @@ config REBOOT_LIMIT_ENABLE_SYSTEMD_ANALYZE
 
 endif # REBOOT_LIMIT_ENABLE_DATA_COLLECTION
 
+endmenu
 endif # WORKFLOWS_REBOOT_LIMIT
