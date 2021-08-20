@@ -66,16 +66,72 @@ if WORKFLOWS_TESTS_DEMOS
 source "kconfigs/workflows/Kconfig.demo"
 endif
 
+config WORKFLOWS_LINUX_TESTS
+	bool "Linux subsystem tests"
+	help
+	 Enable this to allow let you select which Linux test frameworks you
+	 want to enable. These are tests for specific subsystems.
+
+if WORKFLOWS_LINUX_TESTS
+
+config WORKFLOWS_DEDICATED_WORKFLOW
+	bool "Are you only targetting one subsystem test?"
+	default y
+	help
+	 Enable this to if you are only wanting to test one main Linux
+	 subsystem. If you enable this, a subsystem test in kdevops might
+	 then allow you to grow the number of nodes you are to use to cover
+	 all aspects of that subsystem. If you want to test two major subsystems
+	 then you'd end up spawning nodes for both subsystems and we don't
+	 support that yet. But if you do want to test more than one subsystem,
+	 and disable this dedicated workflow option, you'd only get two default
+	 nodes spawned.
+
+	 If you disable this you the respective subsystem target test baseline
+	 targets may not work as they are intended to work with a node setup
+	 dedicated to only one subsystem test. In other words, if you disable
+	 this option you are on your own, good luck!
+
+if WORKFLOWS_DEDICATED_WORKFLOW
+
 choice
-	prompt "Target Linux test workflow"
+	prompt "Dedicated target Linux test workflow"
 	default KDEVOPS_WORKFLOW_ENABLE_NONE
 
 config KDEVOPS_WORKFLOW_ENABLE_NONE
 	bool "None"
 	help
-	  This essentially disables all workflow tests.
+	 This essentially disables all workflow tests.
 
-config KDEVOPS_WORKFLOW_ENABLE_FSTESTS
+config KDEVOPS_WORKFLOW_DEDICATE_FSTESTS
+	bool "fstests"
+	select KDEVOPS_WORKFLOW_ENABLE_FSTESTS
+	help
+	  This will dedicate your configuration only to fstests.
+
+	  Select this option if you are doing filesystem development and want
+	  to target development for a filesystem and enable fstests so that
+	  you can test the filesystem.
+
+	  The fstests git tree will be cloned, and set up for you, and
+	  you will be able to run create a baseline for your target filesystem,
+	  and also test to ensure you don't regress that baseline. If a baseline
+	  already exists against your distribution you will be able to ensure
+	  you don't regress against development changes on your kernel.
+
+config KDEVOPS_WORKFLOW_DEDICATE_BLKTESTS
+	bool "blktests"
+	select KDEVOPS_WORKFLOW_ENABLE_BLKTESTS
+	help
+	  This will dedicate your configuration only to blktests.
+
+endchoice
+
+endif
+
+if !WORKFLOWS_DEDICATED_WORKFLOW
+
+config KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_FSTESTS
 	bool "fstests"
 	help
 	  Select this option if you are doing filesystem development and want
@@ -88,14 +144,24 @@ config KDEVOPS_WORKFLOW_ENABLE_FSTESTS
 	  already exists against your distribution you will be able to ensure
 	  you don't regress against development changes on your kernel.
 
-config KDEVOPS_WORKFLOW_ENABLE_BLKTESTS
+config KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_BLKTESTS
 	bool "blktests"
 	help
 	  Select this option if you are doing block layer development and want
 	  to run blktests. The git tree for blktests will be git clone and
 	  setup for you.
 
-endchoice
+endif # !WORKFLOWS_DEDICATED_WORKFLOW
+
+config KDEVOPS_WORKFLOW_ENABLE_FSTESTS
+	bool
+	default y if KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_FSTESTS || KDEVOPS_WORKFLOW_DEDICATE_FSTESTS
+
+config KDEVOPS_WORKFLOW_ENABLE_BLKTESTS
+	bool
+	default y if KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_BLKTESTS || KDEVOPS_WORKFLOW_DEDICATE_BLKTESTS
+
+endif # WORKFLOWS_LINUX_TESTS
 
 endif # WORKFLOWS_TESTS
 

@@ -28,13 +28,18 @@ KDEVOPS_FSTESTS_CONFIG_TEMPLATE := $(KDEVOPS_FSTESTS_CONFIG).in
 
 KDEVOPS_WORKFLOW_FSTESTS_CLEAN += $(KDEVOPS_FSTESTS_CONFIG)
 
+ifeq (y,$(CONFIG_WORKFLOWS_DEDICATED_WORKFLOW))
 # We don't use a nodes template for fstests, the file is generated from
 # a start file and post file. We set this to empty to ensure it doesn't
 # fall as a dependency.
+#
+# If you disable WORKFLOWS_DEDICATED_WORKFLOW you are on your own!
 export KDEVOPS_NODES_TEMPLATE :=
 
 export KDEVOPS_HOSTS_TEMPLATE := workflows/fstests/$(FSTYP)/hosts_generated.in
 KDEVOPS_WORKFLOW_FSTESTS_CLEAN += $(KDEVOPS_HOSTS_TEMPLATE)
+endif
+
 FSTESTS_DATA:=$(subst ",,$(CONFIG_FSTESTS_DATA))
 FSTESTS_DATA_TARGET:=$(subst ",,$(CONFIG_FSTESTS_DATA_TARGET))
 
@@ -85,8 +90,10 @@ FSTEST_KERNEL_CI_LOOP := scripts/workflows/fstests/run_kernel_ci.sh
 FSTEST_KERNEL_CI_LOOP_KOTD := scripts/workflows/fstests/run_kernel_ci_kotd.sh
 endif # CONFIG_KERNEL_CI
 
+ifeq (y,$(CONFIG_WORKFLOWS_DEDICATED_WORKFLOW))
 $(KDEVOPS_HOSTS_TEMPLATE): .config
 	$(Q)$(TOPDIR)/scripts/workflows/fstests/$(FSTYP)/gen_manual_hosts.sh
+endif
 
 $(KDEVOPS_FSTESTS_CONFIG): $(KDEVOPS_FSTESTS_CONFIG_TEMPLATE) .config
 	$(Q)$(TOPDIR)/scripts/workflows/fstests/gen_fstests_config.sh $(KDEVOPS_FSTESTS_CONFIG)

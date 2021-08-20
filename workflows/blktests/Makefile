@@ -7,13 +7,17 @@ ID=$(shell id -u)
 
 BLKTESTS_ARGS	:=
 
+ifeq (y,$(CONFIG_WORKFLOWS_DEDICATED_WORKFLOW))
 # We don't use a nodes template for blktests, the file is generated from
 # a start file and post file. We set this to empty to ensure it doesn't
 # fall as a dependency.
+#
+# If you disable WORKFLOWS_DEDICATED_WORKFLOW you are on your own!
 export KDEVOPS_NODES_TEMPLATE :=
 
 export KDEVOPS_HOSTS_TEMPLATE := workflows/blktests/hosts_generated.in
 KDEVOPS_WORKFLOW_BLKTESTS_CLEAN += $(KDEVOPS_HOSTS_TEMPLATE)
+endif
 
 BLKTESTS_GIT:=$(subst ",,$(CONFIG_BLKTESTS_GIT))
 BLKTESTS_DATA:=$(subst ",,$(CONFIG_BLKTESTS_DATA))
@@ -40,8 +44,10 @@ BLKTEST_KERNEL_CI_LOOP := scripts/workflows/blktests/run_kernel_ci.sh
 BLKTEST_KERNEL_CI_LOOP_KOTD := scripts/workflows/blktests/run_kernel_ci_kotd.sh
 endif # CONFIG_KERNEL_CI
 
+ifeq (y,$(CONFIG_WORKFLOWS_DEDICATED_WORKFLOW))
 $(KDEVOPS_HOSTS_TEMPLATE): .config
 	$(Q)$(TOPDIR)/scripts/workflows/blktests/gen_manual_hosts.sh
+endif
 
 blktests:
 	$(Q)ansible-playbook -f 30 -i hosts playbooks/workloads_shared.yml
