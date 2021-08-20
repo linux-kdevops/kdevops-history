@@ -75,7 +75,7 @@ help:
 	@echo "blktests-baseline-kernelci               - Run blktests kernel-ci loop"
 	@echo ""
 	@echo "reboot-limit options:"
-	@echo "reboot-limit                             - Sets up the /data/reboot-limit directory
+	@echo "reboot-limit                             - Sets up the /data/reboot-limit directory"
 	@echo "reboot-limit-baseline                    - Run the reboot-linit test on baseline hosts and collect results"
 	@echo "reboot-limit-baseline-reset              - Reset the test boot counter for baseline"
 	@echo "reboot-limit-dev                         - Run the reboot-limti test on dev hosts and collect results"
