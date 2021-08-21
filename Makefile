@@ -68,63 +68,24 @@ kdevops_stage_2: .config
 
 endif
 
+# These should be set as non-empty if you want any generic bring up
+# targets to come up.
 KDEVOPS_BRING_UP_DEPS :=
 KDEVOPS_DESTROY_DEPS :=
+
+KDEVOS_TERRAFORM_EXTRA_DEPS :=
+ifeq (y,$(CONFIG_TERRAFORM))
+include scripts/terraform.Makefile
+endif # CONFIG_TERRAFORM
 
 ifeq (y,$(CONFIG_VAGRANT))
 KDEVOPS_BRING_UP_DEPS := bringup_vagrant
 KDEVOPS_DESTROY_DEPS := destroy_vagrant
 endif
 
-ifeq (y,$(CONFIG_TERRAFORM))
-KDEVOPS_BRING_UP_DEPS := bringup_terraform
-KDEVOPS_DESTROY_DEPS := destroy_terraform
-endif
-
 ifneq (,$(KDEVOPS_BRING_UP_DEPS))
 include scripts/bringup.Makefile
 endif
-
-export KDEVOPS_CLOUD_PROVIDER=aws
-ifeq (y,$(CONFIG_TERRAFORM_AWS))
-endif
-ifeq (y,$(CONFIG_TERRAFORM_GCE))
-export KDEVOPS_CLOUD_PROVIDER=gce
-endif
-ifeq (y,$(CONFIG_TERRAFORM_AZURE))
-export KDEVOPS_CLOUD_PROVIDER=azure
-endif
-ifeq (y,$(CONFIG_TERRAFORM_OPENSTACK))
-export KDEVOPS_CLOUD_PROVIDER=openstack
-endif
-
-TFVARS_TEMPLATE_DIR=terraform/templates
-TFVARS_FILE_NAME=terraform.tfvars
-TFVARS_FILE_POSTFIX=$(TFVARS_FILE_NAME).in
-
-KDEVOPS_TFVARS_TEMPLATE=$(TFVARS_TEMPLATE_DIR)/$(KDEVOPS_CLOUD_PROVIDER)/$(TFVARS_FILE_POSTFIX)
-KDEVOPS_TFVARS=terraform/$(KDEVOPS_CLOUD_PROVIDER)/$(TFVARS_FILE_NAME)
-
-KDEVOS_TERRAFORM_EXTRA_DEPS :=
-ifeq (y,$(CONFIG_TERRAFORM))
-
-ifeq (y,$(CONFIG_TERRAFORM_AWS))
-KDEVOS_TERRAFORM_EXTRA_DEPS += $(KDEVOPS_TFVARS)
-endif
-
-ifeq (y,$(CONFIG_TERRAFORM_AZURE))
-KDEVOS_TERRAFORM_EXTRA_DEPS += $(KDEVOPS_TFVARS)
-endif
-
-ifeq (y,$(CONFIG_TERRAFORM_GCE))
-KDEVOS_TERRAFORM_EXTRA_DEPS += $(KDEVOPS_TFVARS)
-endif
-
-ifeq (y,$(CONFIG_TERRAFORM_OPENSTACK))
-KDEVOS_TERRAFORM_EXTRA_DEPS += $(KDEVOPS_TFVARS)
-endif
-
-endif # CONFIG_TERRAFORM
 
 # This will always exist, so the dependency is no set unless we have
 # a key to generate.
@@ -229,14 +190,6 @@ endif # CONFIG_WORKFLOWS_REBOOT_LIMIT == y
 endif # CONFIG_WORKFLOWS
 
 ANSIBLE_EXTRA_ARGS += $(WORKFLOW_ARGS)
-
-ifeq (y,$(CONFIG_TERRAFORM))
-SSH_CONFIG_USER:=$(subst ",,$(CONFIG_TERRAFORM_SSH_CONFIG_USER))
-# XXX: add support to auto-infer in devconfig role as we did with the bootlinux
-# role. Then we can re-use the same infer_uid_and_group=True variable and
-# we could then remove this entry.
-ANSIBLE_EXTRA_ARGS += data_home_dir=/home/${SSH_CONFIG_USER}
-endif
 
 ifeq (y,$(CONFIG_HAVE_DISTRO_REQUIRES_CUSTOM_SSH_KEXALGORITHMS))
 SSH_KEXALGORITHMS:=$(subst ",,$(CONFIG_KDEVOPS_CUSTOM_SSH_KEXALGORITHMS))
@@ -382,16 +335,10 @@ bringup_vagrant: $(VAGRANT_PRIVATE_BOX_DEPS)
 			$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/$(KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK) ;\
 	fi
 
-bringup_terraform:
-	$(Q)$(TOPDIR)/scripts/bringup_terraform.sh
-
 bringup: $(KDEVOPS_BRING_UP_DEPS)
 
 destroy_vagrant:
 	$(Q)$(TOPDIR)/scripts/destroy_vagrant.sh
-
-destroy_terraform:
-	$(Q)$(TOPDIR)/scripts/destroy_terraform.sh
 
 destroy: $(KDEVOPS_DESTROY_DEPS)
 
