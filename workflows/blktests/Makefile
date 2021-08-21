@@ -1,3 +1,8 @@
+# SPDX-License-Identifier: copyleft-next-0.3.1
+
+export KDEVOPS_BLKTESTS_CONFIG :=
+export KDEVOPS_BLKTESTS_CONFIG_TEMPLATE :=
+
 KDEVOPS_INSTALL_TARGETS += kdevops_blktests_install
 KDEVOPS_BLKTESTS_SCRIPTS_PATH=workflows/blktests/scripts
 

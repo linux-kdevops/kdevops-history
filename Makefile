@@ -15,9 +15,6 @@ export PYTHONUNBUFFERED=1
 KDEVOPS_NODES_TEMPLATES :=			workflows/linux/kdevops_nodes_split_start.yaml.in
 export KDEVOPS_NODES_TEMPLATES
 
-export KDEVOPS_BLKTESTS_CONFIG :=
-export KDEVOPS_BLKTESTS_CONFIG_TEMPLATE :=
-
 KDEVOPS_INSTALL_TARGETS :=
 
 all: deps
