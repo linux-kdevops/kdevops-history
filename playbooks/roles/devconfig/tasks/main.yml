@@ -391,7 +391,7 @@
   become_flags: 'su - -c'
   become_method: sudo
   lineinfile:
-    path=/etc/systemd/system.conf
+    path: /etc/systemd/system.conf
     insertafter: EOF
     regexp: '^(RuntimeWatchdogSec=)(.*)$'
     line: 'RuntimeWatchdogSec={{ devconfig_systemd_watchdog_runtime_timeout }}'
@@ -405,7 +405,7 @@
   become_flags: 'su - -c'
   become_method: sudo
   lineinfile:
-    path=/etc/systemd/system.conf
+    path: /etc/systemd/system.conf
     insertafter: EOF
     regexp: '^(RebootWatchdogSec=)(.*)$'
     line: 'RebootWatchdogSec={{ devconfig_systemd_watchdog_reboot_timeout }}'
@@ -419,7 +419,7 @@
   become_flags: 'su - -c'
   become_method: sudo
   lineinfile:
-    path=/etc/systemd/system.conf
+    path: /etc/systemd/system.conf
     insertafter: EOF
     regexp: '^(KExecWatchdogSec=)(.*)$'
     line: 'KExecWatchdogSec={{ devconfig_systemd_watchdog_kexec_timeout }}'
