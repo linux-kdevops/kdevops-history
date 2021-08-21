@@ -25,6 +25,7 @@ KDEVOPS_INSTALL_TARGETS :=
 
 all: deps
 
+DEFAULT_DEPS :=
 MAKEFLAGS += --no-print-directory
 SHELL := /bin/bash
 HELP_TARGETS := kconfig-help-menu
@@ -96,9 +97,7 @@ include scripts/ssh.Makefile
 # helps us with allowing users call ansible on the command line themselves,
 # instead of using the make constructs we have built here.
 ifneq (,$(ANSIBLE_EXTRA_ARGS))
-EXTRA_ARGS_BUILD_DEP := $(KDEVOPS_EXTRA_VARS)
-else
-EXTRA_ARGS_BUILD_DEP :=
+DEFAULT_DEPS += $(KDEVOPS_EXTRA_VARS)
 endif
 
 ifeq (y,$(CONFIG_KDEVOPS_DISTRO_REG_METHOD_TWOLINE))
@@ -204,7 +203,7 @@ help: $(HELP_TARGETS)
 
 PHONY += deps
 deps: \
-	$(EXTRA_ARGS_BUILD_DEP) \
+	$(DEFAULT_DEPS) \
 	$(KDEVOPS_TWOLINE_REGMETHOD_DEPS) \
 	$(KDEVOPS_HOSTS) \
 	$(KDEVOPS_NODES) \
