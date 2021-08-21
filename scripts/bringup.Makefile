@@ -9,7 +9,7 @@ stage-2-$(CONFIG_VAGRANT_LIBVIRT_INSTALL)	+= kdevops_vagrant_install_libvirt
 stage-2-$(CONFIG_VAGRANT_LIBVIRT_CONFIGURE)	+= kdevops_vagrant_configure_libvirt
 stage-2-$(CONFIG_VAGRANT_INSTALL_PRIVATE_BOXES)	+= kdevops_vagrant_boxes
 stage-2-$(CONFIG_VAGRANT_LIBVIRT_VERIFY)	+= kdevops_verify_vagrant_user
-KDEVOPS_STAGE_2_DEPS				+= kdevops_stage_2
+DEFAULT_DEPS += kdevops_stage_2
 
 kdevops_stage_2: .config
 	$(Q)$(MAKE) -f Makefile.kdevops $(stage-2-y)

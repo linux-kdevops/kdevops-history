@@ -193,9 +193,7 @@ PHONY += help
 help: $(HELP_TARGETS)
 
 PHONY += deps
-deps: \
-	$(DEFAULT_DEPS) \
-	$(KDEVOPS_STAGE_2_DEPS)
+deps: $(DEFAULT_DEPS)
 
 PHONY += install
 install: $(KDEVOPS_INSTALL_TARGETS)
