@@ -69,7 +69,17 @@ kdevops_stage_2: .config
 endif
 
 # These should be set as non-empty if you want any generic bring up
-# targets to come up.
+# targets to come up. We support 2 bring up methods:
+#
+#  - vagrant: for kvm/virtualbox
+#  - terraform: for any cloud provider
+#
+# If you are using bare metal, you don't do bring up, or you'd
+# likely do this yourself. What you *might* need if working
+# with bare metal is provisioning, but our workflows targets
+# provide that. The devconfig ansible role can be also augmented
+# to support many different custom provisioning preferences outside
+# of the scope of workflows. With things like kdump, etc.
 KDEVOPS_BRING_UP_DEPS :=
 KDEVOPS_DESTROY_DEPS :=
 
@@ -79,8 +89,7 @@ include scripts/terraform.Makefile
 endif # CONFIG_TERRAFORM
 
 ifeq (y,$(CONFIG_VAGRANT))
-KDEVOPS_BRING_UP_DEPS := bringup_vagrant
-KDEVOPS_DESTROY_DEPS := destroy_vagrant
+include scripts/vagrant.Makefile
 endif
 
 ifneq (,$(KDEVOPS_BRING_UP_DEPS))
@@ -239,12 +248,6 @@ else
 EXTRA_ARGS_BUILD_DEP :=
 endif
 
-ifeq (y,$(CONFIG_HAVE_VAGRANT_BOX_URL))
-VAGRANT_PRIVATE_BOX_DEPS := vagrant_private_box_install
-else
-VAGRANT_PRIVATE_BOX_DEPS :=
-endif
-
 ifeq (y,$(CONFIG_KDEVOPS_DISTRO_REG_METHOD_TWOLINE))
 KDEVOPS_TWOLINE_REGMETHOD_DEPS := playbooks/secret.yml
 else
@@ -318,27 +321,7 @@ $(KDEVOPS_EXTRA_ADDON_DEST): .config $(KDEVOPS_EXTRA_ADDON_SOURCE)
 	@$(Q)cp $(KDEVOPS_EXTRA_ADDON_SOURCE) $(KDEVOPS_EXTRA_ADDON_DEST)
 endif
 
-vagrant_private_box_install:
-	$(Q)ansible-playbook -i \
-		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/install_vagrant_boxes.yml
-
-bringup_vagrant: $(VAGRANT_PRIVATE_BOX_DEPS)
-	$(Q)$(TOPDIR)/scripts/bringup_vagrant.sh
-	$(Q)if [[ "$(CONFIG_KDEVOPS_SSH_CONFIG_UPDATE)" == "y" ]]; then \
-		ansible-playbook --connection=local \
-			--inventory localhost, \
-			playbooks/update_ssh_config_vagrant.yml \
-			-e 'ansible_python_interpreter=/usr/bin/python3' ;\
-	fi
-	$(Q)if [[ "$(CONFIG_KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK)" != "" ]]; then \
-		ansible-playbook -i \
-			$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/$(KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK) ;\
-	fi
-
 bringup: $(KDEVOPS_BRING_UP_DEPS)
-
-destroy_vagrant:
-	$(Q)$(TOPDIR)/scripts/destroy_vagrant.sh
 
 destroy: $(KDEVOPS_DESTROY_DEPS)
 
