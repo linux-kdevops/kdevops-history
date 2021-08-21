@@ -18,3 +18,14 @@ endif # WORKFLOW_KOTD_ENABLE
 
 KDEVOPS_HOSTS_PREFIX:=$(subst ",,$(CONFIG_KDEVOPS_HOSTS_PREFIX))
 ANSIBLE_EXTRA_ARGS += kdevops_host_prefix=$(KDEVOPS_HOSTS_PREFIX)
+
+PHONY += remove-ssh-key
+remove-ssh-key:
+	$(NQ) Removing key pair for $(KDEVOPS_SSH_PRIVKEY)
+	$(Q)rm -f $(KDEVOPS_SSH_PRIVKEY)
+	$(Q)rm -f $(KDEVOPS_SSH_PUBKEY)
+
+$(KDEVOPS_SSH_PRIVKEY): .config
+	$(NQ) Generating new private key: $(KDEVOPS_SSH_PRIVKEY)
+	$(NQ) Generating new public key: $(KDEVOPS_SSH_PUBKEY)
+	$(Q)$(TOPDIR)/scripts/gen_ssh_key.sh

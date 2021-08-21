@@ -169,17 +169,6 @@ endif
 $(KDEVOPS_HOSTS): .config $(KDEVOPS_HOSTS_TEMPLATE)
 	$(Q)$(TOPDIR)/scripts/gen_hosts.sh
 
-PHONY += remove-ssh-key
-remove-ssh-key:
-	$(NQ) Removing key pair for $(KDEVOPS_SSH_PRIVKEY)
-	$(Q)rm -f $(KDEVOPS_SSH_PRIVKEY)
-	$(Q)rm -f $(KDEVOPS_SSH_PUBKEY)
-
-$(KDEVOPS_SSH_PRIVKEY): .config
-	$(NQ) Generating new private key: $(KDEVOPS_SSH_PRIVKEY)
-	$(NQ) Generating new public key: $(KDEVOPS_SSH_PUBKEY)
-	$(Q)$(TOPDIR)/scripts/gen_ssh_key.sh
-
 $(KDEVOPS_NODES): $(KDEVOPS_NODES_TEMPLATES) .config
 	$(Q)$(TOPDIR)/scripts/gen_nodes_file.sh
 
