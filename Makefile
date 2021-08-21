@@ -43,7 +43,6 @@ endif
 # This will always exist, so the dependency is no set unless we have
 # a key to generate.
 KDEVOPS_GEN_SSH_KEY :=
-KDEVOPS_REMOVE_KEY :=
 
 include Makefile.subtrees
 include scripts/kconfig.Makefile
@@ -203,7 +202,6 @@ help: $(HELP_TARGETS)
 PHONY += deps
 deps: \
 	$(DEFAULT_DEPS) \
-	$(KDEVOPS_REMOVE_KEY) \
 	$(KDEVOPS_GEN_SSH_KEY) \
 	$(KDEVOPS_FSTESTS_CONFIG) \
 	$(KDEVOPS_STAGE_2_DEPS)
