@@ -23,4 +23,10 @@ linux-help-menu:
 	@echo "linux              - Git clones a linux git tree, build linux and reboots into it"
 	@echo ""
 
+PHONY += linux
+linux: $(KDEVOPS_NODES)
+	$(Q)ansible-playbook -i \
+		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
+		--extra-vars="$(BOOTLINUX_ARGS)"
+
 HELP_TARGETS+=linux-help-menu

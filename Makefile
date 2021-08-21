@@ -218,9 +218,4 @@ PHONY += install
 install: $(KDEVOPS_INSTALL_TARGETS)
 	$(Q)echo   Installed
 
-PHONY += linux
-linux: $(KDEVOPS_NODES)
-	$(Q)ansible-playbook -i \
-		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
-		--extra-vars="$(BOOTLINUX_ARGS)"
 .PHONY: $(PHONY)
