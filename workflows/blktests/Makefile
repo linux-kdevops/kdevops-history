@@ -44,6 +44,13 @@ BLKTEST_KERNEL_CI_LOOP := scripts/workflows/blktests/run_kernel_ci.sh
 BLKTEST_KERNEL_CI_LOOP_KOTD := scripts/workflows/blktests/run_kernel_ci_kotd.sh
 endif # CONFIG_KERNEL_CI
 
+EXTRA_VAR_INPUTS += extend-extra-args-blktests
+
+extend-extra-args-blktests:
+	@if [[ "$(CONFIG_KDEVOPS_WORKFLOW_ENABLE_BLKTESTS)" == "y" ]]; then \
+		echo "blktests_test_devs: '$(CONFIG_BLKTESTS_TEST_DEVS)'" >> $(KDEVOPS_EXTRA_VARS) ;\
+	fi
+
 ifeq (y,$(CONFIG_WORKFLOWS_DEDICATED_WORKFLOW))
 $(KDEVOPS_HOSTS_TEMPLATE): .config
 	$(Q)$(TOPDIR)/scripts/workflows/blktests/gen_manual_hosts.sh

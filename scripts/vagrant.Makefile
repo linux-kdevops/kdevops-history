@@ -9,6 +9,15 @@ else
 VAGRANT_PRIVATE_BOX_DEPS :=
 endif
 
+EXTRA_VAR_INPUTS += extend-extra-args-vagrant
+
+extend-extra-args-vagrant:
+	@if [[ "$(CONFIG_HAVE_VAGRANT_BOX_URL)" == "y" ]]; then \
+		echo "kdevops_install_vagrant_boxes: True" >> $(KDEVOPS_EXTRA_VARS) ;\
+		echo "vagrant_boxes:" >> $(KDEVOPS_EXTRA_VARS) ;\
+		echo "  - { name: '$(CONFIG_VAGRANT_BOX)', box_url: '$(CONFIG_VAGRANT_BOX_URL)' }" >> $(KDEVOPS_EXTRA_VARS) ;\
+	fi
+
 vagrant_private_box_install:
 	$(Q)ansible-playbook -i \
 		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/install_vagrant_boxes.yml

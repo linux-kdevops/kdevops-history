@@ -28,6 +28,7 @@ all: deps
 MAKEFLAGS += --no-print-directory
 SHELL := /bin/bash
 HELP_TARGETS := kconfig-help-menu
+EXTRA_VAR_INPUTS := most_extra_vars
 PHONY += kconfig-help-menu
 
 ifeq ($(V),1)
@@ -134,30 +135,18 @@ $(1)
 
 endef
 
-$(KDEVOPS_EXTRA_VARS): .config
+# We can transform most of .config things we need to using
+# looping on ANSIBLE_EXTRA_ARGS and converting those with
+# this target. If you need to do more complex fancy stuff
+# extend the EXTRA_VAR_INPUTS variable in your workflow with
+# your custom stuff.
+most_extra_vars:
 	@echo --- > $(KDEVOPS_EXTRA_VARS)
 	@$(foreach exp,$(ANSIBLE_EXTRA_ARGS),echo $(call YAML_ENTRY,$(subst =,: ,$(exp)) >> $(KDEVOPS_EXTRA_VARS)))
-	@if [[ "$(CONFIG_HAVE_VAGRANT_BOX_URL)" == "y" ]]; then \
-		echo "kdevops_install_vagrant_boxes: True" >> $(KDEVOPS_EXTRA_VARS) ;\
-		echo "vagrant_boxes:" >> $(KDEVOPS_EXTRA_VARS) ;\
-		echo "  - { name: '$(CONFIG_VAGRANT_BOX)', box_url: '$(CONFIG_VAGRANT_BOX_URL)' }" >> $(KDEVOPS_EXTRA_VARS) ;\
-	fi
-	@if [[ "$(CONFIG_KDEVOPS_ENABLE_DISTRO_EXTRA_ADDONS)" == "y" ]]; then \
-		echo "devconfig_repos_addon: True" >> $(KDEVOPS_EXTRA_VARS) ;\
-		cat $(KDEVOPS_EXTRA_ADDON_SOURCE) >> $(KDEVOPS_EXTRA_VARS) ;\
-	fi
-	@if [[ "$(CONFIG_KDEVOPS_DEVCONFIG_ENABLE_CONSOLE)" == "y" ]]; then \
-		echo "devconfig_kernel_console: '$(CONFIG_KDEVOPS_DEVCONFIG_KERNEL_CONSOLE_SETTINGS)'" >> $(KDEVOPS_EXTRA_VARS) ;\
-		echo "devconfig_grub_console: '$(CONFIG_KDEVOPS_DEVCONFIG_GRUB_SERIAL_COMMAND)'" >> $(KDEVOPS_EXTRA_VARS) ;\
-	fi
-	@if [[ "$(CONFIG_KDEVOPS_DEVCONFIG_ENABLE_SYSTEMD_WATCHDOG)" == "y" ]]; then \
-		echo "devconfig_systemd_watchdog_runtime_timeout: '$(CONFIG_KDEVOPS_DEVCONFIG_SYSTEMD_WATCHDOG_TIMEOUT_RUNTIME)'" >> $(KDEVOPS_EXTRA_VARS) ;\
-		echo "devconfig_systemd_watchdog_reboot_timeout: '$(CONFIG_KDEVOPS_DEVCONFIG_SYSTEMD_WATCHDOG_TIMEOUT_REBOOT)'" >> $(KDEVOPS_EXTRA_VARS) ;\
-		echo "devconfig_systemd_watchdog_kexec_timeout: '$(CONFIG_KDEVOPS_DEVCONFIG_SYSTEMD_WATCHDOG_TIMEOUT_KEXEC)'" >> $(KDEVOPS_EXTRA_VARS) ;\
-	fi
-	@if [[ "$(CONFIG_KDEVOPS_WORKFLOW_ENABLE_BLKTESTS)" == "y" ]]; then \
-		echo "blktests_test_devs: '$(CONFIG_BLKTESTS_TEST_DEVS)'" >> $(KDEVOPS_EXTRA_VARS) ;\
-	fi
+
+PHONY += $(EXTRA_VAR_INPUTS)
+
+$(KDEVOPS_EXTRA_VARS): .config $(EXTRA_VAR_INPUTS)
 
 playbooks/secret.yml:
 	@if [[ "$(CONFIG_KDEVOPS_REG_TWOLINE_REGCODE)" == "" ]]; then \
