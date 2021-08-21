@@ -27,6 +27,8 @@ all: deps
 
 MAKEFLAGS += --no-print-directory
 SHELL := /bin/bash
+HELP_TARGETS := kconfig-help-menu
+PHONY += kconfig-help-menu
 
 ifeq ($(V),1)
 export Q=
@@ -77,6 +79,10 @@ endif
 ifeq (y,$(CONFIG_TERRAFORM))
 KDEVOPS_BRING_UP_DEPS := bringup_terraform
 KDEVOPS_DESTROY_DEPS := destroy_terraform
+endif
+
+ifneq (,$(KDEVOPS_BRING_UP_DEPS))
+include scripts/bringup.Makefile
 endif
 
 export KDEVOPS_CLOUD_PROVIDER=aws
@@ -203,6 +209,7 @@ endif # CONFIG_WORKFLOW_EXTRA_SOFTWARE
 
 BOOTLINUX_ARGS	:=
 ifeq (y,$(CONFIG_BOOTLINUX))
+include workflows/linux/Makefile
 TREE_URL:=$(subst ",,$(CONFIG_BOOTLINUX_TREE))
 TREE_NAME:=$(notdir $(TREE_URL))
 TREE_NAME:=$(subst .git,,$(TREE_NAME))
@@ -466,11 +473,16 @@ mrproper:
 	$(Q)rm -f playbooks/secret.yml $(KDEVOPS_EXTRA_ADDON_DEST)
 	$(Q)rm -rf include
 
-PHONY += help
-help:
-	$(Q)$(MAKE) -f scripts/build.Makefile $@
+kconfig-help-menu:
+	$(Q)$(MAKE) -s -C scripts/kconfig help
+	$(Q)$(MAKE) -f scripts/build.Makefile help
 
-PHONY := deps
+PHONY += $(HELP_TARGETS)
+
+PHONY += help
+help: $(HELP_TARGETS)
+
+PHONY += deps
 deps: \
 	$(EXTRA_ARGS_BUILD_DEP) \
 	$(KDEVOPS_TWOLINE_REGMETHOD_DEPS) \

@@ -76,3 +76,18 @@ blktests-baseline-results:
 
 blktests-dev-results:
 	$(Q)ansible-playbook -f 30 -i hosts -l dev playbooks/blktests.yml --tags copy_results,print_results --extra-vars '{ kdevops_run_blktests: True }' --extra-vars=@./extra_vars.yaml
+
+blktests-help-menu:
+	@echo "blktests options:"
+	@echo "blktests                                 - Git clones blktests, builds and install it"
+	@echo "blktests-baseline                        - Run blktests on baseline hosts and collect results"
+	@echo "blktests-dev                             - Run fstests on dev hosts and collect results"
+	@echo "blktests-baseline-results                - Only collect results for baseline hosts"
+	@echo "blktests-dev-results                     - Only collect results for dev hosts"
+	@echo "blktests-baseline-skip-kdevops-update    - Run fstests but skip updating kdevops"
+	@echo "blktests-baseline-run-oscheck-only       - Only run oscheck"
+	@echo "blktests-baseline-loop                   - Run blktests in a loop until a failure is found or steady state is reached"
+	@echo "blktests-baseline-kernelci               - Run blktests kernel-ci loop"
+	@echo ""
+
+HELP_TARGETS += blktests-help-menu

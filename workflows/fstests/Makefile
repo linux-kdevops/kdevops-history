@@ -168,3 +168,18 @@ kdevops_fstests_install: $(KDEVOPS_FSTESTS_PROGS) $(KDEVOPS_FSTESTS_CONFIG)
 	@install $(KDEVOPS_FSTESTS_CONFIG) $(TARGET_CONFIG)
 	@echo INSTALL $(HOSTNAME_CONFIG)  $(FSTESTS_CONFIGS)/.config
 	@install $(KDEVOPS_FSTESTS_CONFIG) $(FSTESTS_CONFIGS)/.config
+
+fstests-help-menu:
+	@echo "fstests options:"
+	@echo "fstests                                 - Git clones fstests, builds and install it"
+	@echo "fstests-baseline                        - Run fstests on baseline hosts and collect results"
+	@echo "fstests-dev                             - Run fstests on dev hosts and collect results"
+	@echo "fstests-baseline-results                - Only collect results for baseline hosts"
+	@echo "fstests-dev-results                     - Only collect results for dev hosts"
+	@echo "fstests-baseline-skip-kdevops-update    - Run fstests but skip updating kdevops"
+	@echo "fstests-baseline-run-oscheck-only       - Only run oscheck"
+	@echo "fstests-baseline-loop                   - Run fstests in a loop until a failure is found or steady state is reached"
+	@echo "fstests-baseline-kernelci               - Run fstests kernel-ci loop"
+	@echo ""
+
+HELP_TARGETS += fstests-help-menu

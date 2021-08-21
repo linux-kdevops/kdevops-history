@@ -18,17 +18,18 @@ version-check: include/config/project.release
 
 PHONY += help
 help:
-	@$(Q)$(MAKE) -s -C scripts/kconfig help
 	@(                                                              \
+	echo "" 							;\
+	echo "Generic build targets:" ;\
 	if [ -d defconfigs ]; then					\
 	  echo "Default configs:"					;\
 	  (cd defconfigs ; for f in $$(ls) ; do				\
 		  echo "defconfig-$$f"					;\
 	  done)                                                         ;\
 	fi                                                              ;\
-	echo "Debugging"                                                ;\
 	echo "version-check      - demos version release functionality" ;\
 	echo "clean              - cleans all output files"             ;\
+	echo ""                                                         ;\
 	)
 
 .PHONY: $(PHONY)

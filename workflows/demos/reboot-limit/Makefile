@@ -174,3 +174,14 @@ reboot-limit-dev-kernelci:
 
 reboot-limit-dev-reset:
 	$(Q)ansible-playbook -f 30 -i hosts -l dev playbooks/reboot-limit.yml --tags vars,reset --extra-vars=@./extra_vars.yaml
+
+reboot-limit-help-menu:
+	@echo "reboot-limit options:"
+	@echo "reboot-limit                             - Sets up the /data/reboot-limit directory"
+	@echo "reboot-limit-baseline                    - Run the reboot-linit test on baseline hosts and collect results"
+	@echo "reboot-limit-baseline-reset              - Reset the test boot counter for baseline"
+	@echo "reboot-limit-dev                         - Run the reboot-limti test on dev hosts and collect results"
+	@echo "reboot-limit-baseline-kernelci           - Run the reboot-limit kernel-ci loop"
+	@echo ""
+
+HELP_TARGETS += reboot-limit-help-menu
