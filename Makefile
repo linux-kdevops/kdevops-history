@@ -40,10 +40,6 @@ export Q=@
 export NQ=echo
 endif
 
-# This will always exist, so the dependency is no set unless we have
-# a key to generate.
-KDEVOPS_GEN_SSH_KEY :=
-
 include Makefile.subtrees
 include scripts/kconfig.Makefile
 INCLUDES = -I include/
@@ -202,7 +198,6 @@ help: $(HELP_TARGETS)
 PHONY += deps
 deps: \
 	$(DEFAULT_DEPS) \
-	$(KDEVOPS_GEN_SSH_KEY) \
 	$(KDEVOPS_FSTESTS_CONFIG) \
 	$(KDEVOPS_STAGE_2_DEPS)
 
