@@ -92,10 +92,6 @@ ifeq (y,$(CONFIG_VAGRANT))
 include scripts/vagrant.Makefile
 endif
 
-ifneq (,$(KDEVOPS_BRING_UP_DEPS))
-include scripts/bringup.Makefile
-endif
-
 # This will always exist, so the dependency is no set unless we have
 # a key to generate.
 KDEVOPS_GEN_SSH_KEY :=
@@ -321,9 +317,9 @@ $(KDEVOPS_EXTRA_ADDON_DEST): .config $(KDEVOPS_EXTRA_ADDON_SOURCE)
 	@$(Q)cp $(KDEVOPS_EXTRA_ADDON_SOURCE) $(KDEVOPS_EXTRA_ADDON_DEST)
 endif
 
-bringup: $(KDEVOPS_BRING_UP_DEPS)
-
-destroy: $(KDEVOPS_DESTROY_DEPS)
+ifneq (,$(KDEVOPS_BRING_UP_DEPS))
+include scripts/bringup.Makefile
+endif
 
 $(KDEVOPS_HOSTS): .config $(KDEVOPS_HOSTS_TEMPLATE)
 	$(Q)$(TOPDIR)/scripts/gen_hosts.sh
