@@ -86,26 +86,8 @@ endif # CONFIG_WORKFLOWS
 
 ANSIBLE_EXTRA_ARGS += $(WORKFLOW_ARGS)
 
-ifeq (y,$(CONFIG_HAVE_DISTRO_REQUIRES_CUSTOM_SSH_KEXALGORITHMS))
-SSH_KEXALGORITHMS:=$(subst ",,$(CONFIG_KDEVOPS_CUSTOM_SSH_KEXALGORITHMS))
-ANSIBLE_EXTRA_ARGS += use_kexalgorithms=True
-ANSIBLE_EXTRA_ARGS += kexalgorithms=$(SSH_KEXALGORITHMS)
-endif
-
 include scripts/devconfig.Makefile
-
-ifeq (y,$(CONFIG_KDEVOPS_SSH_CONFIG_UPDATE))
-SSH_CONFIG_FILE:=$(subst ",,$(CONFIG_KDEVOPS_SSH_CONFIG))
-ANSIBLE_EXTRA_ARGS += sshconfig=$(CONFIG_KDEVOPS_SSH_CONFIG)
-endif
-
-ANSIBLE_CMD_KOTD_ENABLE := echo KOTD disabled so not running: 
-ifeq (y,$(CONFIG_WORKFLOW_KOTD_ENABLE))
-include scripts/kotd.Makefile
-endif # WORKFLOW_KOTD_ENABLE
-
-KDEVOPS_HOSTS_PREFIX:=$(subst ",,$(CONFIG_KDEVOPS_HOSTS_PREFIX))
-ANSIBLE_EXTRA_ARGS += kdevops_host_prefix=$(KDEVOPS_HOSTS_PREFIX)
+include scripts/ssh.Makefile
 
 # We may not need the extra_args.yaml file all the time.  If this file is empty
 # you don't need it. All of our ansible kdevops roles check for this file
