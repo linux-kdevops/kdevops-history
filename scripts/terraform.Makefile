@@ -44,6 +44,19 @@ SSH_CONFIG_USER:=$(subst ",,$(CONFIG_TERRAFORM_SSH_CONFIG_USER))
 # we could then remove this entry.
 ANSIBLE_EXTRA_ARGS += data_home_dir=/home/${SSH_CONFIG_USER}
 
+ifeq (y,$(CONFIG_TERRAFORM_SSH_CONFIG_GENKEY))
+export KDEVOPS_SSH_PUBKEY:=$(subst ",,$(CONFIG_TERRAFORM_SSH_CONFIG_PUBKEY_FILE))
+# We have to do shell expansion. Oh, life is so hard.
+export KDEVOPS_SSH_PUBKEY:=$(subst ~,$(HOME),$(KDEVOPS_SSH_PUBKEY))
+export KDEVOPS_SSH_PRIVKEY:=$(basename $(KDEVOPS_SSH_PUBKEY))
+
+ifeq (y,$(CONFIG_TERRAFORM_SSH_CONFIG_GENKEY_OVERWRITE))
+KDEVOPS_REMOVE_KEY = remove-ssh-key
+endif
+
+KDEVOPS_GEN_SSH_KEY := $(KDEVOPS_SSH_PRIVKEY)
+endif # CONFIG_TERRAFORM_SSH_CONFIG_GENKEY
+
 bringup_terraform:
 	$(Q)$(TOPDIR)/scripts/bringup_terraform.sh
 

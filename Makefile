@@ -38,6 +38,11 @@ export Q=@
 export NQ=echo
 endif
 
+# This will always exist, so the dependency is no set unless we have
+# a key to generate.
+KDEVOPS_GEN_SSH_KEY :=
+KDEVOPS_REMOVE_KEY :=
+
 include Makefile.subtrees
 include scripts/kconfig.Makefile
 INCLUDES = -I include/
@@ -72,24 +77,6 @@ endif # CONFIG_TERRAFORM
 
 ifeq (y,$(CONFIG_VAGRANT))
 include scripts/vagrant.Makefile
-endif
-
-# This will always exist, so the dependency is no set unless we have
-# a key to generate.
-KDEVOPS_GEN_SSH_KEY :=
-KDEVOPS_REMOVE_KEY :=
-
-ifeq (y,$(CONFIG_TERRAFORM_SSH_CONFIG_GENKEY))
-export KDEVOPS_SSH_PUBKEY:=$(subst ",,$(CONFIG_TERRAFORM_SSH_CONFIG_PUBKEY_FILE))
-# We have to do shell expansion. Oh, life is so hard.
-export KDEVOPS_SSH_PUBKEY:=$(subst ~,$(HOME),$(KDEVOPS_SSH_PUBKEY))
-export KDEVOPS_SSH_PRIVKEY:=$(basename $(KDEVOPS_SSH_PUBKEY))
-
-ifeq (y,$(CONFIG_TERRAFORM_SSH_CONFIG_GENKEY_OVERWRITE))
-KDEVOPS_REMOVE_KEY = remove-ssh-key
-endif
-
-KDEVOPS_GEN_SSH_KEY := $(KDEVOPS_SSH_PRIVKEY)
 endif
 
 WORKFLOW_ARGS	:=
