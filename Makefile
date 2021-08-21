@@ -172,9 +172,6 @@ $(KDEVOPS_HOSTS): .config $(KDEVOPS_HOSTS_TEMPLATE)
 $(KDEVOPS_NODES): $(KDEVOPS_NODES_TEMPLATES) .config
 	$(Q)$(TOPDIR)/scripts/gen_nodes_file.sh
 
-$(KDEVOPS_TFVARS): $(KDEVOPS_TFVARS_TEMPLATE) .config
-	$(Q)$(TOPDIR)/scripts/gen_tfvars.sh
-
 PHONY += clean
 clean:
 	$(Q)$(MAKE) -f scripts/build.Makefile $@

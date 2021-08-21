@@ -63,3 +63,5 @@ bringup_terraform:
 destroy_terraform:
 	$(Q)$(TOPDIR)/scripts/destroy_terraform.sh
 
+$(KDEVOPS_TFVARS): $(KDEVOPS_TFVARS_TEMPLATE) .config
+	$(Q)$(TOPDIR)/scripts/gen_tfvars.sh
