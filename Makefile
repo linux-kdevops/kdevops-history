@@ -163,9 +163,11 @@ ifneq (,$(KDEVOPS_BRING_UP_DEPS))
 include scripts/bringup.Makefile
 endif
 
+DEFAULT_DEPS += $(KDEVOPS_HOSTS)
 $(KDEVOPS_HOSTS): .config $(KDEVOPS_HOSTS_TEMPLATE)
 	$(Q)$(TOPDIR)/scripts/gen_hosts.sh
 
+DEFAULT_DEPS += $(KDEVOPS_NODES)
 $(KDEVOPS_NODES): $(KDEVOPS_NODES_TEMPLATES) .config
 	$(Q)$(TOPDIR)/scripts/gen_nodes_file.sh
 
@@ -202,8 +204,6 @@ help: $(HELP_TARGETS)
 PHONY += deps
 deps: \
 	$(DEFAULT_DEPS) \
-	$(KDEVOPS_HOSTS) \
-	$(KDEVOPS_NODES) \
 	$(KDEVOS_TERRAFORM_EXTRA_DEPS) \
 	$(KDEVOPS_REMOVE_KEY) \
 	$(KDEVOPS_GEN_SSH_KEY) \
