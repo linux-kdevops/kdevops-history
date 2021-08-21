@@ -15,9 +15,6 @@ export PYTHONUNBUFFERED=1
 KDEVOPS_NODES_TEMPLATES :=			workflows/linux/kdevops_nodes_split_start.yaml.in
 export KDEVOPS_NODES_TEMPLATES
 
-export KDEVOPS_FSTESTS_CONFIG :=
-export KDEVOPS_FSTESTS_CONFIG_TEMPLATE :=
-
 export KDEVOPS_BLKTESTS_CONFIG :=
 export KDEVOPS_BLKTESTS_CONFIG_TEMPLATE :=
 
@@ -198,7 +195,6 @@ help: $(HELP_TARGETS)
 PHONY += deps
 deps: \
 	$(DEFAULT_DEPS) \
-	$(KDEVOPS_FSTESTS_CONFIG) \
 	$(KDEVOPS_STAGE_2_DEPS)
 
 PHONY += install
