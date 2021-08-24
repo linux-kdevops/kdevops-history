@@ -112,6 +112,22 @@
   register: grub2_config_file
   tags: [ 'console' ]
 
+- name: check to see if stupid /etc/default/grub.d/15_timeout.cfg exists
+  stat:
+    path=/etc/default/grub.d/15_timeout.cfg
+  register: stupid_cloud_grub_timeout
+  when:
+    - devconfig_enable_console|bool
+  tags: [ 'console' ]
+
+- name: remove stupid cloud /etc/default/grub.d/15_timeout.cfg
+  file:
+    path: /etc/default/grub.d/15_timeout.cfg
+    state: absent
+  when:
+    - devconfig_enable_console|bool
+  tags: [ 'console' ]
+
 - name: Check to see if the grub GRUB_CMDLINE_LINUX is present
   become: yes
   become_flags: 'su - -c'
