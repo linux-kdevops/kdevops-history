@@ -1,0 +1,8 @@
+syntax on
+set mouse=r
+colorscheme elflord
+set cc=80
+hi ColorColumn ctermbg=lightblue guibg=lightblue
+filetype indent plugin on
+au FileType python setlocal tabstop=8 expandtab shiftwidth=4 softtabstop=4
+set backspace=indent,eol,start

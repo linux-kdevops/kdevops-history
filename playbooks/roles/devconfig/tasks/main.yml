@@ -48,6 +48,38 @@
     remote_src=yes
   when: dev_git_config_file.stat.exists
 
+- name: check if the system has a user vimrc file
+  stat:
+    path=~/.vimrc
+  register: dev_vimrc_file
+  tags: vimrc
+
+- name: Copy over our default kernel hacking vimrc
+  template:
+    src: vimrc
+    dest: ~/.vimrc
+  tags: vimrc
+  when: not dev_vimrc_file.stat.exists
+
+- name: check if the system has a user vimrc file as root
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  stat:
+    path=~/.vimrc
+  register: dev_root_vimrc_file
+  tags: vimrc
+
+- name: Copy over our default kernel hacking vimrc for root
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  template:
+    src: vimrc
+    dest: ~/.vimrc
+  tags: vimrc
+  when: not dev_root_vimrc_file.stat.exists
+
 - name: check if the developer has a configuration file with favorite bash hacks
   delegate_to: localhost
   stat:
