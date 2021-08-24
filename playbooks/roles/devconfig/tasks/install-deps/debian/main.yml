@@ -34,6 +34,7 @@
   become_method: sudo
   apt:
     name:
+      - grub2
       - nvme-cli
       - ssh
       - bison
