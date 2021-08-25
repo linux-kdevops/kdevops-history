@@ -187,7 +187,8 @@ config FSTESTS_DATA_TARGET
 	string "The target fstests install directory"
 	default "/var/lib/xfstests"
 	help
-	  The directory where fstests will be installed.
+	  The directory where fstests will be installed. Modifying this probably
+	  won't work well yet.
 
 choice
 	prompt "Strategy for device pool"
