@@ -177,7 +177,7 @@ config FSTESTS_GIT
 
 config FSTESTS_DATA
 	string "Where to clone the fstests git tree to"
-	default "{{data_path}}/xfstests"
+	default "{{data_path}}/fstests"
 	help
 	  This is the target location of where to clone the above git tree.
 	  Note that {{data_path}} corresponds to the location set by the
