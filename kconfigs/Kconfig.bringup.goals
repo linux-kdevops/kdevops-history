@@ -1,6 +1,19 @@
+config HAVE_DISTRO_PREFERS_REFRESH
+	bool
+	default n
+
+config HAVE_DISTRO_PREFERS_UPDATE
+	bool
+	default n
+
+config HAVE_DISTRO_PREFERS_INSTALL_KDEVTOOLS
+	bool
+	default n
+
 config KDEVOPS_TRY_REFRESH_REPOS
 	bool "Try to refresh repositories on bringup?"
-	default n
+	default n if !HAVE_DISTRO_PREFERS_REFRESH
+	default y if HAVE_DISTRO_PREFERS_REFRESH
 	help
 	  Bring up typically just consists of having the systems accessible
 	  via ssh. However, most of these systems are pretty bare bones and
@@ -17,7 +30,8 @@ config KDEVOPS_TRY_REFRESH_REPOS
 config KDEVOPS_TRY_UPDATE_SYSTEMS
 	bool "Try to update target hosts on bringup?"
 	depends on KDEVOPS_TRY_REFRESH_REPOS
-	default n
+	default n if !HAVE_DISTRO_PREFERS_UPDATE
+	default y if HAVE_DISTRO_PREFERS_UPDATE
 	help
 	  Bring up typically just consists of having the systems accessible
 	  via ssh. However, most of these systems are pretty bare bones and
@@ -27,7 +41,8 @@ config KDEVOPS_TRY_UPDATE_SYSTEMS
 config KDEVOPS_TRY_INSTALL_KDEV_TOOLS
 	bool "Try to install kernel development tools on bringup?"
 	depends on KDEVOPS_TRY_REFRESH_REPOS
-	default n
+	default n if !HAVE_DISTRO_PREFERS_INSTALL_KDEVTOOLS
+	default y if HAVE_DISTRO_PREFERS_INSTALL_KDEVTOOLS
 	help
 	  Enabling this will try to install a slew of known packages which
 	  most kernel developers might prefer to have installed on target
