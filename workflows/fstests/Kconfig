@@ -249,7 +249,7 @@ config FSTESTS_SPARSE_XFS
 	  This will target testing the xfs filesystem.
 
 config FSTESTS_SPARSE_BTRFS
-	bool "brfs"
+	bool "btrfs"
 	help
 	  This will target testing the btrfs filesystem.
 
