@@ -16,7 +16,8 @@ config KDEVOPS_REG_TWOLINE_REGCODE_VAR
 
 config KDEVOPS_REG_TWOLINE_REGCODE
 	string "Registration code"
-	default "KDEVOPS-UNSET-REGCODE"
+	default $(shell, scripts/get_distro_regcode.sh suse) if HAVE_DISTRO_SUSE
+	default "KDEVOPS-UNSET-REGCODE" if !HAVE_DISTRO_SUSE
 	help
 	  The twoline method will create a file playbooks/secret.yml, the
 	  string set here is the actual registration code value.
