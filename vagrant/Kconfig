@@ -6,7 +6,8 @@ config HAVE_SUSE_VAGRANT
 
 choice
 	prompt "Vagrant Guest Linux distribution to use"
-	default VAGRANT_DEBIAN
+	default VAGRANT_DEBIAN if !HAVE_SUSE_VAGRANT
+	default VAGRANT_SUSE if HAVE_SUSE_VAGRANT
 
 config VAGRANT_DEBIAN
 	bool "Debian"
