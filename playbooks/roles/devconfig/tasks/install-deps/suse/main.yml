@@ -20,6 +20,7 @@
     is_sle12sp5: '{{ ansible_distribution_version == "12.5" }}'
     is_sle15sp2: '{{ ansible_distribution_version == "15.2" }}'
     is_sle15sp3: '{{ ansible_distribution_version == "15.3" }}'
+    is_sle15sp4: '{{ ansible_distribution_version == "15.4" }}'
   when:
     - is_sle|bool
   tags: [ 'vars' ]
@@ -38,6 +39,7 @@
     is_sle12sp5: False
     is_sle15sp2: False
     is_sle15sp3: False
+    is_sle15sp4: False
   when:
     - not is_sle|bool
   tags: [ 'vars' ]
@@ -159,6 +161,28 @@
     - repos_will_be_added|bool
     - suse_registration_code != 0
 
+- name: Assume we have the python2 product for sles15sp first
+  set_fact:
+    sle15_has_python2_product: True
+  when:
+    - suse_register_system|bool
+    - repos_will_be_added|bool
+    - suse_registration_code != 0
+    - is_sle15|bool
+  tags: [ 'vars' ]
+
+- name: Disable the python2 product for sles15sp4
+  set_fact:
+    sle15_has_python2_product: False
+  when:
+    - suse_register_system|bool
+    - repos_will_be_added|bool
+    - suse_registration_code != 0
+    - is_sle15|bool
+    - is_sle15sp4|bool
+  tags: [ 'vars' ]
+
+
 - name: Register for python2 module product when needed
   become: yes
   become_method: sudo
@@ -168,6 +192,7 @@
     - repos_will_be_added|bool
     - suse_registration_code != 0
     - is_sle15|bool
+    - sle15_has_python2_product|bool
 
 - name: Add extra addon repositories when enabled
   become: yes
