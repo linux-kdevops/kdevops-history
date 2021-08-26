@@ -178,13 +178,6 @@
   when:
     - add_benchmark_repo|bool
 
-- name: Does this release require the sles15sp2 benchmark repo
-  set_fact:
-    nbd_git: "https://github.com/NetworkBlockDevice/nbd.git"
-    nbd_data: "{{data_path}}/nbd"
-  when:
-    - is_sle15sp2|bool or is_sle15sp3|bool or is_sle15sp4|bool
-
 - name: The default is to assume we do not want to to compile nbd manually
   set_fact:
     compile_nbd: False

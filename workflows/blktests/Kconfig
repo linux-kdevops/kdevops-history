@@ -143,6 +143,23 @@ config BLKTRACE_DATA
 	  Note that {{data_path}} corresponds to the location set by the
 	  configuration option CONFIG_WORKFLOW_DATA_PATH.
 
+config NBD_GIT
+	string "The nbd git tree to clone when needed"
+	default "https://github.com/NetworkBlockDevice/nbd.git"
+	help
+	  Some distributions do not carry the nbd server or client packages.
+	  If your distribution is one of those then you'll need to build
+	  nbd from source. This git tree then is only used on distributions
+	  which need to compile nbd from source.
+
+config NBD_DATA
+	string "Where to clone the nbd git tree to"
+	default "{{data_path}}/nbd"
+	help
+	  This is the target location of where we'll cone the nbd git tree to.
+	  Note that {{data_path}} corresponds to the location set by the
+	  configuration option CONFIG_WORKFLOW_DATA_PATH.
+
 config BLKTESTS_DATA_TARGET
 	string "The target blktests install directory"
 	default "/usr/local/blktests/"
