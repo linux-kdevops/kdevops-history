@@ -18,6 +18,7 @@
     is_sle12sp3: '{{ ansible_distribution_version == "12.3" }}'
     is_sle15sp2: '{{ ansible_distribution_version == "15.2" }}'
     is_sle15sp3: '{{ ansible_distribution_version == "15.3" }}'
+    is_sle15sp4: '{{ ansible_distribution_version == "15.4" }}'
   when:
     - is_sle|bool
 
@@ -34,6 +35,7 @@
     is_sle12sp3: False
     is_sle15sp2: False
     is_sle15sp3: False
+    is_sle15sp4: False
   when:
     - not is_sle|bool
 
@@ -146,7 +148,7 @@
       - libgdbm4
     state: present
   when:
-    - is_sle15sp2|bool or is_sle15sp3|bool
+    - is_sle15sp2|bool or is_sle15sp3|bool or is_sle15sp4|bool
 
 - name: The default is to assume we do not want to add the benchmark repo
   set_fact:
@@ -156,7 +158,7 @@
   set_fact:
     add_benchmark_repo: True
   when:
-    - is_sle15sp2|bool or is_sle15sp3|bool
+    - is_sle15sp2|bool or is_sle15sp3|bool or is_sle15sp4|bool
 
 - name:  add benchmark sles15sp2 opensuse repo when needed
   become: yes
@@ -181,7 +183,7 @@
     nbd_git: "https://github.com/NetworkBlockDevice/nbd.git"
     nbd_data: "{{data_path}}/nbd"
   when:
-    - is_sle15sp2|bool or is_sle15sp3|bool
+    - is_sle15sp2|bool or is_sle15sp3|bool or is_sle15sp4|bool
 
 - name: The default is to assume we do not want to to compile nbd manually
   set_fact:
@@ -191,7 +193,7 @@
   set_fact:
     compile_nbd: True
   when:
-    - is_sle15sp2|bool or is_sle15sp3|bool
+    - is_sle15sp2|bool or is_sle15sp3|bool or is_sle15sp4|bool
 
 - name: Install build dependencies for nbd
   become: yes
