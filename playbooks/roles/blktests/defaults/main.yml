@@ -15,4 +15,5 @@ blktests_data_target: "/usr/local/blktests/"
 blktests_test_devs: "/dev/null"
 
 nbd_git: "https://github.com/NetworkBlockDevice/nbd.git"
+nbd_version: "nbd-3.21"
 nbd_data: "{{data_path}}/nbd"

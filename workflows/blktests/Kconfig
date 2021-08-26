@@ -145,14 +145,18 @@ config BLKTRACE_DATA
 
 config NBD_GIT
 	string "The nbd git tree to clone when needed"
-	default "https://github.com/NetworkBlockDevice/nbd.git" if !GIT_ALTERNATIVES
-	default "https://github.com/linux-kdevops/nbd.git" if GIT_LINUX_KDEVOPS_GITHUB
-	default "https://gitlab.com/linux-kdevops/nbd.git" if GIT_LINUX_KDEVOPS_GITLAB
+	default "https://github.com/NetworkBlockDevice/nbd.git"
 	help
 	  Some distributions do not carry the nbd server or client packages.
 	  If your distribution is one of those then you'll need to build
 	  nbd from source. This git tree then is only used on distributions
 	  which need to compile nbd from source.
+
+config NBD_VERSION
+	string "nbd tag to use to compile"
+	default "nbd-3.21"
+	help
+	  This specifies the git version to use"
 
 config NBD_DATA
 	string "Where to clone the nbd git tree to"

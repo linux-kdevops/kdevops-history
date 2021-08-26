@@ -65,7 +65,6 @@ config GIT_ALTERNATIVES
 	  below:
 
 	   * fstests
-	   * nbd
 
 	  If you don't see a git tree above, it means that this option
 	  (GIT_ALTERNATIVES) will not affect how we use that tree.

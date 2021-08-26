@@ -31,6 +31,7 @@ BLKTRACE_GIT:=$(subst ",,$(CONFIG_BLKTRACE_GIT))
 BLKTRACE_DATA:=$(subst ",,$(CONFIG_BLKTRACE_DATA))
 
 NBD_GIT:=$(subst ",,$(CONFIG_NBD_GIT))
+NBD_VERSION:=$(subst ",,$(CONFIG_NBD_VERSION))
 NBD_DATA:=$(subst ",,$(CONFIG_NBD_DATA))
 
 BLKTESTS_DATA_TARGET:=$(subst ",,$(CONFIG_BLKTESTS_DATA_TARGET))
@@ -42,6 +43,7 @@ BLKTESTS_ARGS += blktrace_git='$(BLKTRACE_GIT)'
 BLKTESTS_ARGS += blktrace_data=\"$(BLKTRACE_DATA)\"
 
 BLKTESTS_ARGS += nbd_git='$(NBD_GIT)'
+BLKTESTS_ARGS += nbd_version=$(NBD_VERSION)
 BLKTESTS_ARGS += nbd_data=\"$(NBD_DATA)\"
 
 BLKTESTS_ARGS += blktests_data_target='$(BLKTESTS_DATA_TARGET)'

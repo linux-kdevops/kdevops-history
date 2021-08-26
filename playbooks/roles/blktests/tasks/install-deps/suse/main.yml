@@ -204,7 +204,7 @@
     repo: "{{ nbd_git }}"
     dest: "{{ nbd_data }}"
     update: yes
-    version: master
+    version: "{{ nbd_version }}"
   when:
     - repos_present|bool
     - compile_nbd|bool
