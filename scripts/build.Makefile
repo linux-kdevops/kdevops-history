@@ -20,13 +20,14 @@ PHONY += help
 help:
 	@(                                                              \
 	echo "" 							;\
-	echo "Generic build targets:" ;\
 	if [ -d defconfigs ]; then					\
-	  echo "Default configs:"					;\
+	echo "Default defconfigs you can use:"                          ;\
 	  (cd defconfigs ; for f in $$(ls) ; do				\
 		  echo "defconfig-$$f"					;\
 	  done)                                                         ;\
+	echo ""                                                         ;\
 	fi                                                              ;\
+	echo "Generic build targets:" ;\
 	echo "version-check      - demos version release functionality" ;\
 	echo "clean              - cleans all output files"             ;\
 	echo ""                                                         ;\
