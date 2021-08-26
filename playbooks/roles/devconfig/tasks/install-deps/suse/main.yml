@@ -331,6 +331,7 @@
       - net-tools
       - openssh
       - bc
+      - vim-data
     state: present
   when:
     - not is_sle12sp3|bool
