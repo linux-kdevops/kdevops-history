@@ -48,6 +48,17 @@
     - is_sle|bool
     - is_sle10|bool or is_sle11|bool
 
+- name: The default is to assume all distros have the indent package
+  set_fact:
+    has_indent: True
+
+- name: Does this release lack indent
+  set_fact:
+    has_indent: False
+  when:
+    - is_sle|bool
+    - is_sle15sp3|bool
+
 - name: The default is to assume all distros supports nvme-utils
   set_fact:
     lacks_nvme_utils: false
@@ -106,7 +117,6 @@
       - acl
       - bc
       - dump
-      - indent
       - libtool
       - lvm2
       - psmisc
@@ -123,6 +133,17 @@
     state: present
   when:
     - repos_present|bool
+
+- name: Install indent when we have it
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - indent
+    state: present
+  when:
+    - repos_present|bool
+    - has_indent|bool
 
 - name: Install tumblweed packages
   become: yes
