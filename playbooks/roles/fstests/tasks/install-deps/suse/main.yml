@@ -59,8 +59,7 @@
     has_indent: False
   when:
     - is_sle|bool
-    - is_sle15sp3|bool
-    - is_sle15sp4|bool
+    - is_sle15sp3|bool or is_sle15sp4|bool
 
 - name: The default is to assume all distros supports nvme-utils
   set_fact:
