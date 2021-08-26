@@ -171,7 +171,9 @@ endif # FSTESTS_EXT4
 
 config FSTESTS_GIT
 	string "The fstests git tree to clone"
-	default "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git"
+	default "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git" if !GIT_ALTERNATIVES
+	default "https://github.com/linux-kdevops/fstests.git" if GIT_LINUX_KDEVOPS_GITHUB
+	default "https://gitlab.com/linux-kdevops/fstests.git" if GIT_LINUX_KDEVOPS_GITLAB
 	help
 	  The fstests git tree to clone.
 
