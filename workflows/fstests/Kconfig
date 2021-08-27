@@ -1,5 +1,17 @@
 if KDEVOPS_WORKFLOW_ENABLE_FSTESTS
 
+config HAVE_DISTRO_PREFERS_FSTESTS_WATCHDOG
+	bool
+	default n
+
+config HAVE_DISTRO_PREFERS_FSTESTS_WATCHDOG_KILL
+	bool
+	default n
+
+config HAVE_DISTRO_PREFERS_FSTESTS_WATCHDOG_RESET
+	bool
+	default n
+
 choice
 	prompt "Target filesystem to test"
 	default FSTESTS_XFS
