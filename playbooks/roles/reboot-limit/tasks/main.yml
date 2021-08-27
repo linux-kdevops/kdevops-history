@@ -27,14 +27,14 @@
   become_method: sudo
   set_fact:
     reboot_limit_analyze_file: "{{ reboot_limit_data}}/{{ ansible_ssh_host }}/{{ reboot_limits_systemctl_analyze_log }}"
-  tags: [ 'run_tests', 'vars' ]
+  tags: [ 'vars' ]
 
 - name: Set the file to collect the reboot count
   become: yes
   become_method: sudo
   set_fact:
     reboot_limit_count_file: "{{ reboot_limit_data}}/{{ ansible_ssh_host }}/{{ reboot_limits_count_log }}"
-  tags: [ 'run_tests', 'read_count', 'vars' ]
+  tags: [ 'read_count', 'vars' ]
 
 - name: Delete old results directory files if a reset was called
   become: yes
