@@ -1,5 +1,17 @@
 if KDEVOPS_WORKFLOW_ENABLE_BLKTESTS
 
+config HAVE_DISTRO_PREFERS_BLKTESTS_WATCHDOG
+	bool
+	default n
+
+config HAVE_DISTRO_PREFERS_BLKTESTS_WATCHDOG_KILL
+	bool
+	default n
+
+config HAVE_DISTRO_PREFERS_BLKTESTS_WATCHDOG_RESET
+	bool
+	default n
+
 config BLKTESTS_WATCHDOG
 	bool "Enable kdevops blktests watchdog"
 	default y if HAVE_DISTRO_PREFERS_BLKTESTS_WATCHDOG
