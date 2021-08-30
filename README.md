@@ -85,7 +85,6 @@ Below are sections which get into technical details of how kdevops works.
   * [Linux distribution support](docs/linux-distro-support.md)
   * [Overriding all ansible role options with one file](docs/ansible-override.md)
   * [Parts to kdevops](docs/parts-to-kdevops.md)
-  * [kdevops projects](docs/kdevops-projects.md)
   * [kdevops vagrant support](docs/kdevops-vagrant.md)
   * [kdevops terraform support](docs/kdevops-terraform.md)
   * [kdevops ansible roles](docs/ansible-roles.md)
