@@ -118,4 +118,4 @@ version.
 
 ### License
 
-This module is released under the GPLv2.
+copyleft-next-0.3.1

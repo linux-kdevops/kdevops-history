@@ -63,12 +63,7 @@ Below is an example playbook task:
     - role: devconfig
 ```
 
-For further examples refer to one of this role's users, the
-[https://github.com/mcgrof/kdevops](kdevops) project or the
-[https://github.com/mcgrof/oscheck](oscheck) project from where
-this code originally came from.
-
 License
 -------
 
-GPLv2
+copyleft-next-0.3.1

@@ -41,4 +41,3 @@ Currently supported target Linux distributions:
    * OpenSUSE Tumbleweed
    * Fedora 32
    * SUSE Linux
-

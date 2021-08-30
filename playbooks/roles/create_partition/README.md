@@ -65,4 +65,4 @@ this code originally came from.
 License
 -------
 
-GPLv2
+copyleft-next-0.3.1

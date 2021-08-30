@@ -133,4 +133,4 @@ really needs a new config, we then just add a new file.
 License
 -------
 
-GPLv2
+copyleft-next-0.3.1

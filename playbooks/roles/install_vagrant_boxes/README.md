@@ -43,4 +43,4 @@ have access to:
 License
 -------
 
-GPLv2
+copyleft-next-0.3.1

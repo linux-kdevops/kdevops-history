@@ -37,7 +37,7 @@ workflow you can just run:
   * `make fstests`
   * `make fstests-baseline`
 
-### Start running blktets in 2 commands
+### Start running blktests in 2 commands
 
 To test a kernel against fstests, for example, if you enable the blktests
 workflow you can just run:
@@ -84,10 +84,9 @@ Below are sections which get into technical details of how kdevops works.
   * [Motivation behind kdevops](docs/motivations.md)
   * [Linux distribution support](docs/linux-distro-support.md)
   * [Overriding all ansible role options with one file](docs/ansible-override.md)
-  * [Parts to kdevops](docs/parts-to-kdevops.md)
   * [kdevops vagrant support](docs/kdevops-vagrant.md)
   * [kdevops terraform support](docs/kdevops-terraform.md)
-  * [kdevops ansible roles](docs/ansible-roles.md)
+  * [kdevops local ansible roles](docs/ansible-roles.md)
 
 License
 -------

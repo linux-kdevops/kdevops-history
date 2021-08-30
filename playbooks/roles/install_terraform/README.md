@@ -61,4 +61,4 @@ installation, you can use:
 License
 -------
 
-GPLv2
+copyleft-next-0.3.1

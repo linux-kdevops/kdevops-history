@@ -1,6 +1,6 @@
 # Vagrant support - localized VMs
 
-Read the [kdevops_vagrant](https://github.com/mcgrof/kdevops_vagrant)
+Read the [kdevops_vagrant](playbooks/roles/install_vagrant/README.md)
 documentation, then come here and read this.
 
 Vagrant is used to easily deploy non-cloud virtual machines. Below are
@@ -59,25 +59,17 @@ which supports nvme is required.
 To ramp up your guests with vagrant:
 
 ```bash
-make deps
-cd vagrant/
-vagrant up
+make
+make bringup
 ```
 
-The last step in the above will also run the ansible roles configured to at
-least get ansible working afterwards, this is known as `vagrant provisioning`.
-The playbooks which will run during `vagrant provisioning` are configured
-at the end of the node yml file. As of today we only kick off two ansible roles
-as part of the `vagrant provisioning` process:
+The last step in the above `make bringup will also run the ansible roles
+configured to at least get ansible working afterwards, this is known as
+`vagrant provisioning`.  The playbooks which will run during `vagrant
+provisioning` are
 
-  * [update_ssh_config_vagrant](https://github.com/mcgrof/update_ssh_config_vagrant)
-  * [devconfig](https://github.com/mcgrof/devconfig)
-
-If you just want to run the `vagrant provisioning` step you can run:
-
-```bash
-vagrant up --provision
-```
+  * [update_ssh_config_vagrant](playbooks/roles/update_ssh_config_vagrant/README.md)
+  * [devconfig](playbooks/roles/devconfig/README.md)
 
 We purposely don't run any more ansible roles because we want to encourage
 ansible to be used manually as a next step. This would allow the next step
@@ -121,4 +113,3 @@ export KDEVOPS_VAGRANT_LIMIT_NUM_BOXES=1
 
 This will ensure only the first host, for example, would be created and
 provisioned.
-

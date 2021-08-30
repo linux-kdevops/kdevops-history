@@ -43,4 +43,4 @@ Below is an example playbook, say a bootlinux.yml file:
 License
 -------
 
-GPLv2
+copyleft-next-0.3.1

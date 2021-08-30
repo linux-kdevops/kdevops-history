@@ -50,4 +50,4 @@ For further examples refer to one of this role's users, the
 License
 -------
 
-GPLv2
+copyleft-next-0.3.1
