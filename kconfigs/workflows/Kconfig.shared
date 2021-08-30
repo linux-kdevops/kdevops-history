@@ -2,10 +2,6 @@ menu "Shared workflow data partition"
 source "kconfigs/workflows/Kconfig.data_partition"
 endmenu
 
-menu "Shared workflow software"
-source "kconfigs/workflows/Kconfig.shared_software"
-endmenu
-
 config HAVE_CUSTOM_KDEVOPS_GIT
 	bool
 	default n

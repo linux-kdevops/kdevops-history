@@ -70,7 +70,6 @@ $(KDEVOPS_HOSTS_TEMPLATE): .config
 endif
 
 blktests:
-	$(Q)ansible-playbook -f 30 -i hosts playbooks/workloads_shared.yml
 	$(Q)ansible-playbook -f 30 -i hosts playbooks/blktests.yml --skip-tags run_tests,copy_results
 
 blktests-baseline:

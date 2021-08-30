@@ -16,9 +16,6 @@ data_fstype: "xfs"
 data_label: "data"
 data_fs_opts: "-L {{ data_label }}"
 
-fstests_extra_install_postfix: False
-fstests_extra_install_watchdog: False
-
 # Full path to make command if you want to override
 make: "make"
 make_num_jobs: "$(nproc --all)"

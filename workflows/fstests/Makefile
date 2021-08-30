@@ -107,7 +107,6 @@ $(KDEVOPS_FSTESTS_CONFIG): $(KDEVOPS_FSTESTS_CONFIG_TEMPLATE) .config
 	$(Q)$(TOPDIR)/scripts/workflows/fstests/gen_fstests_config.sh $(KDEVOPS_FSTESTS_CONFIG)
 
 fstests:
-	$(Q)ansible-playbook -f 30 -i hosts playbooks/workloads_shared.yml
 	$(Q)ansible-playbook -f 30 -i hosts playbooks/fstests.yml --skip-tags run_tests,copy_results
 
 fstests-baseline:

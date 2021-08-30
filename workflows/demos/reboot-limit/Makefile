@@ -97,26 +97,24 @@ endif # CONFIG_KERNEL_CI
 # have anything to really keep persistant on the target node, but for the sake
 # of an example we will copy a few files over.
 #
-# To ensure you have data which will be persistant on the nodes you can run
-# as part of the first target the playbooks/workloads_shared.yml playbook
-# which will setup the /data/ partition on each node. If you don't have
-# to have persistant data this is not needed. We enable it just for
-# demonstration purposes as most workflows might need it. In our case
-# the /data partition will be used if you enabled data colletion through
-# CONFIG_REBOOT_LIMIT_ENABLE_DATA_COLLECTION. The only supported method of
-# data colletion right now is systemd-analyze data results.
+# To ensure you have data which will be persistant on the nodes you first
+# ansible task should be to include the extra extra_vars.yaml and then after
+# that to include create_data_partition playbook. This will setup the /data/
+# partition on each node. If you don't have to have persistant data this is not
+# needed. We enable it just for demonstration purposes as most workflows might
+# need it. In our case the /data partition will be used if you enabled data
+# colletion through CONFIG_REBOOT_LIMIT_ENABLE_DATA_COLLECTION. The only
+# supported method of data colletion right now is systemd-analyze data results.
 #
 # The playbook reboot-limit.yml is used to run all tasks defined except those
 # with tags "run_tests" or "copy_results".
 reboot-limit:
-	$(Q)ansible-playbook -f 30 -i hosts playbooks/workloads_shared.yml
 	$(Q)ansible-playbook -f 30 -i hosts playbooks/reboot-limit.yml --skip-tags run_tests,copy_results
 
-# kdevops supports generic workflows such as the workloads_shared.yml. Another
-# example is that of enabling you to then use the /data/ partition
-# to git clone linux, compile linux, install it and reboot into it, with the
-# linux workflow. These workflows don't have a "baseline" test, they just have
-# a target. In the case of linux, its just 'make linux'.
+# kdevops supports generic workflows such as the enabling you to then use the
+# /data/ partition to git clone linux, compile linux, install it and reboot
+# into it, with the linux workflow. These workflows don't have a "baseline"
+# test, they just have a target. In the case of linux, its just 'make linux'.
 #
 # If you are working a test workflow though, you may want to define a baseline
 # target on your Makefile. kdevops Makefile targets with a postfix of -baseline
