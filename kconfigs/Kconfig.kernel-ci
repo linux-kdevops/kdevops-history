@@ -1,6 +1,6 @@
 config KERNEL_CI
 	bool "Enable kernel continous integration"
-	default n
+	default y
 	help
 	  If you have the goal to run a test not just once but in an ongoing
 	  basis to verify if you have found a regression by updating your kernel
