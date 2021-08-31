@@ -12,15 +12,31 @@ import argparse
 import os
 import sys
 import subprocess
+import configparser
+from itertools import chain
 
 oscheck_ansible_python_dir = os.path.dirname(os.path.abspath(__file__))
 oscheck_sort_expunge = oscheck_ansible_python_dir + "/../../../scripts/workflows/fstests/sort-expunges.sh"
+top_dir = oscheck_ansible_python_dir + "/../../../../"
 
 def append_line(output_file, test_failure_line):
     # We want to now add entries like generic/xxx where xxx are digits
     output = open(output_file, "a+")
     output.write("%s\n" % test_failure_line)
     output.close()
+
+def is_config_bool_true(config, name):
+    if name in config and config[name].strip('\"') == "y":
+        return True
+    return False
+
+def get_config(dotconfig):
+    config = configparser.ConfigParser(allow_no_value=True, strict=False, interpolation=None)
+    with open(dotconfig) as lines:
+        lines = chain(("[top]",), lines)
+        config.read_file(lines)
+        return config["top"]
+    return None
 
 def main():
     parser = argparse.ArgumentParser(description='Augments expunge list for oscheck')
@@ -37,6 +53,11 @@ def main():
     expunge_kernel_dir = ""
 
 #    all_files = os.listdir(args.results)
+    dotconfig = top_dir + '/.config'
+    config = get_config(dotconfig)
+    if not config:
+        sys.stdout.write("%s does not exist\n" % (dotconfig))
+        sys.exit(1)
 
     bad_files = []
     for root, dirs, all_files in os.walk(args.results):
@@ -86,7 +107,7 @@ def main():
         shortcut_dir = None
         shortcut_file = None
 
-        if hostname.startswith("sles"):
+        if is_config_bool_true(config, "CONFIG_VAGRANT_SUSE"):
             ksplit = kernel.split(".")
             shortcut_kernel = ksplit[0] + "." + ksplit[1] + "." + ksplit[2]
             shortcut_kernel_dir = args.outputdir + '/' + shortcut_kernel + '/' + args.filesystem + '/'
