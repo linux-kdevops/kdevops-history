@@ -24,7 +24,7 @@ kernel_ci_subject_topic()
 RCPT="ignore@test.com"
 SSH_TARGET="ignore"
 KERNEL_CI_LOOP="${TOPDIR}/scripts/workflows/demos/reboot-limit/run_loop.sh"
-SUBJECT_PREFIX="$(kernel_ci_subject_topic): reboot-limit failure on test loop "
+SUBJECT_PREFIX="$(kernel_ci_subject_topic) on $(hostname): reboot-limit failure on test loop "
 KERNEL_CI_LOOP_PID=0
 TARGET_HOSTS=$1
 

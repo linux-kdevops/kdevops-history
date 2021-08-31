@@ -19,7 +19,7 @@ FSTYPE="$CONFIG_FSTESTS_FSTYP"
 RCPT="ignore@test.com"
 SSH_TARGET="ignore"
 KERNEL_CI_LOOP="${TOPDIR}/scripts/workflows/fstests/run_loop.sh"
-SUBJECT_PREFIX="$(kernel_ci_subject_topic): fstests failure for $FSTYPE on test loop "
+SUBJECT_PREFIX="$(kernel_ci_subject_topic) on $(hostname): fstests failure for $FSTYPE on test loop "
 KERNEL_CI_LOOP_PID=0
 TARGET_HOSTS=$1
 

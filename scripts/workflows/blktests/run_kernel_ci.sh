@@ -18,7 +18,7 @@ kernel_ci_subject_topic()
 RCPT="ignore@test.com"
 SSH_TARGET="ignore"
 KERNEL_CI_LOOP="${TOPDIR}/scripts/workflows/blktests/run_loop.sh"
-SUBJECT_PREFIX="$(kernel_ci_subject_topic): blktests failure on test loop "
+SUBJECT_PREFIX="$(kernel_ci_subject_topic) on $(hostname): blktests failure on test loop "
 KERNEL_CI_LOOP_PID=0
 TARGET_HOSTS=$1
 
