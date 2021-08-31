@@ -13,18 +13,18 @@ source ${TOPDIR}/scripts/lib.sh
 kernel_ci_subject_topic()
 {
 	if [[ "$CONFIG_KERNEL_CI_ADD_CUSTOM_SUBJECT_TOPIC" != "y" ]]; then
-		echo "kernel-ci"
+		echo "kernel-ci on $(hostname)"
 	elif [[ "$CONFIG_KERNEL_CI_ADD_CUSTOM_SUBJECT_TOPIC_TAG" == "y" ]]; then
-		echo "kernel-ci $CONFIG_KERNEL_CI_SUBJECT_TOPIC $CONFIG_BOOTLINUX_TREE_TAG"
+		echo "kernel-ci on $(hostname) $CONFIG_KERNEL_CI_SUBJECT_TOPIC $CONFIG_BOOTLINUX_TREE_TAG"
 	else
-		echo "kernel-ci $CONFIG_KERNEL_CI_SUBJECT_TOPIC"
+		echo "kernel-ci on $(hostname) $CONFIG_KERNEL_CI_SUBJECT_TOPIC"
 	fi
 }
 
 RCPT="ignore@test.com"
 SSH_TARGET="ignore"
 KERNEL_CI_LOOP="${TOPDIR}/scripts/workflows/demos/reboot-limit/run_loop.sh"
-SUBJECT_PREFIX="$(kernel_ci_subject_topic) on $(hostname): reboot-limit failure on test loop "
+SUBJECT_PREFIX="$(kernel_ci_subject_topic): reboot-limit failure on test loop "
 KERNEL_CI_LOOP_PID=0
 TARGET_HOSTS=$1
 
