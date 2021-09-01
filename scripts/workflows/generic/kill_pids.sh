@@ -55,6 +55,9 @@ if [[ "$CONFIG_KDEVOPS_WORKFLOW_ENABLE_FSTESTS" == "y" ]]; then
 elif [[ "$CONFIG_KDEVOPS_WORKFLOW_ENABLE_BLKTESTS" == "y" ]]; then
 	STRING='CONFIG_KDEVOPS_WORKFLOW_ENABLE_BLKTESTS=y'
 	TARGET_WORFKLOW="blktests"
+elif [[ "$CONFIG_WORKFLOWS_REBOOT_LIMIT" == "y" ]]; then
+	STRING='CONFIG_WORKFLOWS_REBOOT_LIMIT=y'
+	TARGET_WORFKLOW="reboot-limit"
 else
 	echo "Unsupported currently configured target workflow"
 	exit
