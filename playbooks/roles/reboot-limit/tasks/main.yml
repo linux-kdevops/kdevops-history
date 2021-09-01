@@ -67,6 +67,7 @@
 - name: Run the reboot loop
   include_tasks: do-reboot.yml
   with_sequence: count={{ reboot_limit_max }}
+  tags: [ 'run_tests' ]
 
 - name: Copy the latest results over when we're done
   tags: [ 'copy_results' ]
