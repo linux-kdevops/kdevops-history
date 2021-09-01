@@ -81,9 +81,6 @@ while true; do
 		fi
 	fi
 
-	kotd_log "Running the $TARGET_WORKFLOW workflow reset"
-	/usr/bin/time -f %E -o $KOTD_LOGTIME make $TARGET_WORKFLOW-${TARGET_HOSTS}-reset
-
 	if [[ "$CONFIG_KERNEL_CI_ENABLE_STEADY_STATE" == "y" ]]; then
 		kotd_log "Running the $TARGET_WORKFLOW kernel-ci loop with a steady state goal of $CONFIG_KERNEL_CI_STEADY_STATE_GOAL"
 	else
