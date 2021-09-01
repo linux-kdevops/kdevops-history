@@ -31,6 +31,11 @@ def is_config_bool_true(config, name):
         return True
     return False
 
+def config_string(config, name):
+    if name in config:
+        return config[name].strip('\"')
+    return None
+
 def get_config(dotconfig):
     config = configparser.ConfigParser(allow_no_value=True, strict=False, interpolation=None)
     with open(dotconfig) as lines:
@@ -90,7 +95,6 @@ def main():
 
         # f may be results/last-run/nodev/meta/006.out.bad
         # f may be results/last-run/nodev/meta/009.dmesg
-        # where xxx are digits
         bad_file_list = f.split("/")
         bad_file_list_len = len(bad_file_list) - 1
         bad_file =      bad_file_list[bad_file_list_len]
@@ -125,7 +129,7 @@ def main():
         test_failure_line = test_group + '/' + bad_file_test_number
 
         # now to stuff this into expunge files such as:
-        # path/4.19.17/xfs/unassigned/xfs_nocrc.txt
+        # expunges/sles/15.3/failures.txt
         expunge_kernel_dir = args.outputdir + '/' + kernel + '/'
         output_dir = expunge_kernel_dir
         output_file = output_dir + expunge_name
@@ -134,25 +138,21 @@ def main():
         shortcut_file = None
 
         if is_config_bool_true(config, "CONFIG_VAGRANT_SUSE"):
+            # If kotd is enabled we assume you have the latest kernel and
+            # all new results are relevant to that release.
             if is_config_bool_true(config, "CONFIG_WORKFLOW_KOTD_ENABLE"):
-                sles_host_parts = hostname.split("sles")
-                if len(sles_host_parts) <= 1:
-                    sys.stderr.write("Invalid hostname: %s\n" % hostname)
-                    sys.exit(1)
-                sles_release_parts = sles_host_parts[1].split("-" + args.filesystem)
-                sles_release_name = sles_release_parts[0]
+                sles_release_name = config_string(config, "CONFIG_KDEVOPS_HOSTS_PREFIX")
                 sles_release_parts = sles_release_name.split("sp")
                 if len(sles_release_parts) <= 1:
                     sys.stderr.write("Unexpected sles_release_name: %s\n" % sles_release_name)
                     sys.exit(1)
-                sles_point_release = sles_release_parts[0] + "." + sles_release_parts[1]
+                sles_point_release = sles_release_parts[0].split("sles")[1] + "." + sles_release_parts[1]
 
                 # This becomes generic release directory, not specific to any
                 # kernel.
-                shortcut_kernel_dir = args.outputdir + '/' + "sles/" + sles_point_release + '/' + args.filesystem + '/'
-
-                shortcut_dir = shortcut_kernel_dir + 'unassigned/'
-                shortcut_file = shortcut_dir + section + '.txt'
+                shortcut_dir = args.outputdir + '/' + "sles/" + sles_point_release + '/'
+                shortcut_kernel_dir = shortcut_dir
+                shortcut_file = shortcut_dir + expunge_name
             else:
                 ksplit = kernel.split(".")
                 shortcut_kernel = ksplit[0] + "." + ksplit[1] + "." + ksplit[2]
