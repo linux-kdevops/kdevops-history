@@ -46,6 +46,13 @@ config REBOOT_LIMIT_TEST_TYPE
 	default "systemctl_reboot" if REBOOT_LIMIT_TYPE_SYSTEMD_REBOOT
 	default "systemctl_kexec" if REBOOT_LIMIT_TYPE_SYSTEMD_KEXEC
 
+config REBOOT_LIMIT_BOOT_MAX
+	int "How many reboots should we do to consider reboots OK?"
+	default 100
+	help
+	  This will make the make reboot-limit-baseline consist of the number
+	  specified of reboots.
+
 config REBOOT_LIMIT_WATCHDOG
 	bool "Enable a watchdog for the reboot-limit test"
 	help

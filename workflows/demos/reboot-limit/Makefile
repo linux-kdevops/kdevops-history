@@ -55,16 +55,12 @@ REBOOT_LIMIT_ARGS += reboot_limit_enable_systemd_analyze=True
 endif
 endif
 
-# kdevops kernel-ci already has definitions for a maximum number of
-# tests we expect to pass without failure, so let's re-use that.
-ifeq (y,$(CONFIG_KERNEL_CI_ENABLE_STEADY_STATE))
-REBOOT_LIMIT_MAX:=$(subst ",,$(CONFIG_KERNEL_CI_STEADY_STATE_GOAL))
+# This defines how many times we believe running a reboot should mean
+# it works OK. Note that if enabling kernel-ci the steady state there
+# is separate. And so if this reboot_limit_max is 100 and steady state
+# is 100, we'd have to reboot 10,000 times before reaching steady state.
+REBOOT_LIMIT_MAX:=$(subst ",,$(CONFIG_REBOOT_LIMIT_BOOT_MAX))
 REBOOT_LIMIT_ARGS += reboot_limit_max='$(REBOOT_LIMIT_MAX)'
-else
-# WORKFLOWS_REBOOT_LIMIT selects KERNEL_CI_ENABLE_STEADY_STATE so
-# this else branch really cannot happen
-REBOOT_LIMIT_ARGS += reboot_limit_max='0'
-endif
 
 ifeq (y,$(CONFIG_REBOOT_LIMIT_BOOT_COUNT_CRASH_ENABLE))
 REBOOT_LIMIT_ARGS += reboot_limit_boot_count_crash_enable=True
@@ -123,11 +119,7 @@ reboot-limit:
 # reboot-limit test, it will reboot the system and ensure things are OK.
 #
 # The end goal though is to see how many times the system can reboot without
-# an issue. For this we can simply rely on the kdevops kernel-ci definition
-# by letting users set the CONFIG_KERNEL_CI_STEADY_STATE_GOAL and have scripts
-# which run the reboot-limit kernel-ci loop script (REBOOT_LIMIT_KERNEL_CI_LOOP)
-# at least up to the steady state goal. The kernel-ci loop script is workflow
-# specific. We'll implement our own and demonstrate how to do that.
+# an issue. For this we rely on the setting of CONFIG_REBOOT_LIMIT_MAX.
 #
 # By default, if virtualization is used, two guests are created for you, one
 # for working on the baseline and one for development purposes. You associate
@@ -141,7 +133,7 @@ reboot-limit:
 # use the vars tag to ensure we get variables defined which we construct on the
 # fly.
 reboot-limit-baseline:
-	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/reboot-limit.yml --tags vars,first_run --extra-vars=@./extra_vars.yaml
+	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/reboot-limit.yml --tags vars,first_run,reset --extra-vars=@./extra_vars.yaml
 	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/reboot-limit.yml --tags vars,run_tests,copy_results --extra-vars=@./extra_vars.yaml
 
 # Once you know the baseline works, you may want to run the baseline in a loop
@@ -161,7 +153,7 @@ reboot-limit-baseline-reset:
 
 # Below are the corresponding dev targets
 reboot-limit-dev-baseline:
-	$(Q)ansible-playbook -f 30 -i hosts -l dev playbooks/reboot-limit.yml --tags vars,first_run --extra-vars=@./extra_vars.yaml
+	$(Q)ansible-playbook -f 30 -i hosts -l dev playbooks/reboot-limit.yml --tags vars,first_run,reset --extra-vars=@./extra_vars.yaml
 	$(Q)ansible-playbook -f 30 -i hosts -l dev playbooks/reboot-limit.yml --tags vars,run_tests,copy_results --extra-vars=@./extra_vars.yaml
 
 reboot-limit-dev-loop:
