@@ -1,3 +1,7 @@
+config HAVE_KERNEL_CI_CUSTOM_DEFAULTS
+	bool
+	default n
+
 config KERNEL_CI
 	bool "Enable kernel continous integration"
 	default y
@@ -49,7 +53,8 @@ endif # KERNEL_CI_ENABLE_STEADY_STATE
 
 config KERNEL_CI_EMAIL_REPORT
 	bool "Enable sending a report on failure"
-	default n
+	default n if !HAVE_KERNEL_CI_CUSTOM_DEFAULTS
+	default KERNEL_CI_DEFAULT_ENABLE_EMAIL_REPORT if HAVE_KERNEL_CI_CUSTOM_DEFAULTS
 	help
 	  Enable this so that a report will be emailed in case of a failure.
 
@@ -138,7 +143,8 @@ if KERNEL_CI_EMAIL_METHOD_SSH
 
 config KERNEL_CI_EMAIL_SSH_HOST
 	string "The name of the host to ssh to send email report"
-	default "localhost"
+	default "localhost" if !HAVE_KERNEL_CI_CUSTOM_DEFAULTS
+	default KERNEL_CI_DEFAULT_EMAIL_SSH_HOST if HAVE_KERNEL_CI_CUSTOM_DEFAULTS
 	  help
 	  The host to use to ssh into to send an email report. You should
 	  ideally have the host configured to log into using a password
@@ -155,6 +161,8 @@ endif # KERNEL_CI_EMAIL_METHOD_SSH
 config KERNEL_CI_EMAIL_MODIFY_FROM
 	bool "Modify default from address"
 	select KDEVOPS_SSH_CONFIG_UPDATE_STRICT
+	default n if !HAVE_KERNEL_CI_CUSTOM_DEFAULTS
+	default KERNEL_CI_DEFAULT_MODIFY_FROM if HAVE_KERNEL_CI_CUSTOM_DEFAULTS
 	help
 	  If you would like to modify the default from address used to send
 	  the report enable this.
@@ -162,14 +170,16 @@ config KERNEL_CI_EMAIL_MODIFY_FROM
 config KERNEL_CI_EMAIL_FROM
 	string "Who to send the email from"
 	depends on KERNEL_CI_EMAIL_MODIFY_FROM
-	default $(shell, echo $USER)
+	default $(shell, echo $USER) if !HAVE_KERNEL_CI_CUSTOM_DEFAULTS
+	default KERNEL_CI_DEFAULT_EMAIL_FROM if HAVE_KERNEL_CI_CUSTOM_DEFAULTS
 	  help
 	  The email to pass on to mailx -S from="" setting. This will be used
 	  to modify the from address of the email report sent.
 
 config KERNEL_CI_EMAIL_RCPT
 	string "Who to send email report to"
-	default $(shell, echo $USER)
+	default $(shell, echo $USER) if !HAVE_KERNEL_CI_CUSTOM_DEFAULTS
+	default KERNEL_CI_DEFAULT_MAIL_RCPT if HAVE_KERNEL_CI_CUSTOM_DEFAULTS
 	  help
 	  Comma separated list of users to send the kernel-ci loop email
 	  report to. These are the recipients of the kernel-ci test loop
