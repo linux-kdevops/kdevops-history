@@ -61,9 +61,16 @@ if [ "$(grep '^ID=' /etc/os-release | sed '/opensuse/d')" != "" ]; then
 		if [[ "$REGISTERED" -eq "0" ]]; then
 			case "$VERSION" in
 			"15-SP2")
-				 SUSEConnect --product sle-module-desktop-applications/15.2/x86_64
-				 SUSEConnect --product sle-module-development-tools/15.2/x86_64
+				SUSEConnect --product sle-module-desktop-applications/15.2/x86_64
+				SUSEConnect --product sle-module-development-tools/15.2/x86_64
 				;;
+			"15-SP3")
+				SUSEConnect --product sle-module-desktop-applications/15.3/x86_64
+				SUSEConnect --product sle-module-development-tools/15.3/x86_64
+				;;
+			"15-SP4")
+				SUSEConnect --product sle-module-desktop-applications/15.4/x86_64
+				SUSEConnect --product sle-module-development-tools/15.4/x86_64
 			*)
 				;;
 			esac
