@@ -71,6 +71,7 @@ if [ "$(grep '^ID=' /etc/os-release | sed '/opensuse/d')" != "" ]; then
 			"15-SP4")
 				SUSEConnect --product sle-module-desktop-applications/15.4/x86_64
 				SUSEConnect --product sle-module-development-tools/15.4/x86_64
+				;;
 			*)
 				;;
 			esac
