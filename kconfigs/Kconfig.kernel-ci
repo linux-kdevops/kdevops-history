@@ -162,7 +162,7 @@ config KERNEL_CI_EMAIL_MODIFY_FROM
 	bool "Modify default from address"
 	select KDEVOPS_SSH_CONFIG_UPDATE_STRICT
 	default n if !HAVE_KERNEL_CI_CUSTOM_DEFAULTS
-	default KERNEL_CI_DEFAULT_MODIFY_FROM if HAVE_KERNEL_CI_CUSTOM_DEFAULTS
+	default KERNEL_CI_DEFAULT_EMAIL_MODIFY_FROM if HAVE_KERNEL_CI_CUSTOM_DEFAULTS
 	help
 	  If you would like to modify the default from address used to send
 	  the report enable this.
@@ -179,7 +179,7 @@ config KERNEL_CI_EMAIL_FROM
 config KERNEL_CI_EMAIL_RCPT
 	string "Who to send email report to"
 	default $(shell, echo $USER) if !HAVE_KERNEL_CI_CUSTOM_DEFAULTS
-	default KERNEL_CI_DEFAULT_MAIL_RCPT if HAVE_KERNEL_CI_CUSTOM_DEFAULTS
+	default KERNEL_CI_DEFAULT_EMAIL_RCPT if HAVE_KERNEL_CI_CUSTOM_DEFAULTS
 	  help
 	  Comma separated list of users to send the kernel-ci loop email
 	  report to. These are the recipients of the kernel-ci test loop
