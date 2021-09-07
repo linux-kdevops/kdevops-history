@@ -41,7 +41,8 @@ if KERNEL_CI_ENABLE_STEADY_STATE
 
 config KERNEL_CI_STEADY_STATE_GOAL
 	int "Generic kernel-ci steady-state goal"
-	default 100
+	default 100 if !HAVE_KERNEL_CI_CUSTOM_DEFAULTS
+	default KERNEL_CI_DEFAULT_STEADY_STATE_GOAL if HAVE_KERNEL_CI_CUSTOM_DEFAULTS
 	help
 	  The maximum number of possitive successes to have before bailing out
 	  a kernel-ci loop and report success. This value is currently used for
