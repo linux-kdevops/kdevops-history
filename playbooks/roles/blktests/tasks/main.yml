@@ -109,6 +109,7 @@
   become: yes
   become_method: sudo
   reboot:
+    post_reboot_delay: 10
 
 - name: Set the path to blktests workflow
   set_fact:

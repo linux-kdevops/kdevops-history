@@ -94,6 +94,7 @@
   become: yes
   become_method: sudo
   reboot:
+    post_reboot_delay: 10
 
 - name: Add missing groups for fstests
   tags: [ 'oscheck', 'fstests', 'run_tests', 'checktime' ]
