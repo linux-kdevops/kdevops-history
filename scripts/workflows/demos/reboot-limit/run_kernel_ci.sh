@@ -22,6 +22,7 @@ kernel_ci_subject_topic()
 }
 
 RCPT="ignore@test.com"
+MAIL_FROM_MOD=""
 SSH_TARGET="ignore"
 KERNEL_CI_LOOP="${TOPDIR}/scripts/workflows/demos/reboot-limit/run_loop.sh"
 SUBJECT_PREFIX="$(kernel_ci_subject_topic): reboot-limit failure on test loop "
@@ -87,9 +88,9 @@ kernel_ci_post_process()
 		fi
 
 		if [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_LOCAL" == "y" ]]; then
-			cat $KERNEL_CI_DIFF_LOG | mail -s "$SUBJECT" $RCPT
+			cat $KERNEL_CI_DIFF_LOG | mail -s "$SUBJECT" $MAIL_FROM_MOD $RCPT
 		elif [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_SSH" == "y" ]]; then
-			cat $KERNEL_CI_DIFF_LOG | ssh $SSH_TARGET 'mail -s "'$SUBJECT'"' $RCPT
+			cat $KERNEL_CI_DIFF_LOG | ssh $SSH_TARGET 'mail -s "'$SUBJECT'"' $MAIL_FROM_MOD $RCPT
 		fi
 		echo $SUBJECT
 		exit 1
@@ -106,9 +107,9 @@ kernel_ci_post_process()
 		fi
 
 		if [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_LOCAL" == "y" ]]; then
-			cat $KERNEL_CI_FAIL_LOG | mail -s "$SUBJECT" $RCPT
+			cat $KERNEL_CI_FAIL_LOG | mail -s "$SUBJECT" $MAIL_FROM_MOD $RCPT
 		elif [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_SSH" == "y" ]]; then
-			cat $KERNEL_CI_FAIL_LOG | ssh $SSH_TARGET 'mail -s "'$SUBJECT'"' $RCPT
+			cat $KERNEL_CI_FAIL_LOG | ssh $SSH_TARGET 'mail -s "'$SUBJECT'"' $MAIL_FROM_MOD $RCPT
 		fi
 
 		echo "$SUBJECT"
@@ -122,9 +123,9 @@ kernel_ci_post_process()
 		SUBJECT="$(kernel_ci_subject_topic): reboot-limit test failed due to a hung task on the first loop"
 		cat $KERNEL_CI_WATCHDOG_FAIL_LOG
 		if [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_LOCAL" == "y" ]]; then
-			cat $KERNEL_CI_DIFF_LOG | mail -s "$SUBJECT" $RCPT
+			cat $KERNEL_CI_DIFF_LOG | mail -s "$SUBJECT" $MAIL_FROM_MOD $RCPT
 		elif [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_SSH" == "y" ]]; then
-			cat $KERNEL_CI_DIFF_LOG | ssh $SSH_TARGET 'mail -s "'$SUBJECT'"' $RCPT
+			cat $KERNEL_CI_DIFF_LOG | ssh $SSH_TARGET 'mail -s "'$SUBJECT'"' $MAIL_FROM_MOD $RCPT
 		fi
 		exit 1
 	else
@@ -135,9 +136,9 @@ kernel_ci_post_process()
 
 		SUBJECT="$(kernel_ci_subject_topic): reboot-limit test exited in an unexpection situation"
 		if [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_LOCAL" == "y" ]]; then
-			cat $KERNEL_CI_LOGTIME_FULL | mail -s "$SUBJECT" $RCPT
+			cat $KERNEL_CI_LOGTIME_FULL | mail -s "$SUBJECT" $MAIL_FROM_MOD $RCPT
 		elif [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_SSH" == "y" ]]; then
-			cat $KERNEL_CI_LOGTIME_FULL | ssh $SSH_TARGET 'mail -s "'$SUBJECT'"' $RCPT
+			cat $KERNEL_CI_LOGTIME_FULL | ssh $SSH_TARGET 'mail -s "'$SUBJECT'"' $MAIL_FROM_MOD $RCPT
 		fi
 		exit 1
 	fi

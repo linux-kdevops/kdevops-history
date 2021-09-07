@@ -152,6 +152,21 @@ config KERNEL_CI_EMAIL_SSH_HOST
 
 endif # KERNEL_CI_EMAIL_METHOD_SSH
 
+config KERNEL_CI_EMAIL_MODIFY_FROM
+	bool "Modify default from address"
+	select KDEVOPS_SSH_CONFIG_UPDATE_STRICT
+	help
+	  If you would like to modify the default from address used to send
+	  the report enable this.
+
+config KERNEL_CI_EMAIL_FROM
+	string "Who to send the email from"
+	depends on KERNEL_CI_EMAIL_MODIFY_FROM
+	default $(shell, echo $USER)
+	  help
+	  The email to pass on to mailx -S from="" setting. This will be used
+	  to modify the from address of the email report sent.
+
 config KERNEL_CI_EMAIL_RCPT
 	string "Who to send email report to"
 	default $(shell, echo $USER)
