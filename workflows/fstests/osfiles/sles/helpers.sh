@@ -23,15 +23,24 @@ sles_special_expunges()
 			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/xfs/maybe-broken.txt"
 			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/xfs/xfsprogs-maintainer.txt"
 		fi
+		if [ "$FSTYP" = "ext4" ] ; then
+			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/ext4/xfstests-bld-expunges.txt"
+		fi
 		;;
 	15.3) # on 5.3 kernel
 		if [ "$FSTYP" = "xfs" ] ; then
 			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/xfs/xfsprogs-maintainer.txt"
 		fi
+		if [ "$FSTYP" = "ext4" ] ; then
+			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/ext4/xfstests-bld-expunges.txt"
+		fi
 		;;
 	15.4)
 		if [ "$FSTYP" = "xfs" ] ; then
 			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/xfs/xfsprogs-maintainer.txt"
+		fi
+		if [ "$FSTYP" = "ext4" ] ; then
+			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/ext4/xfstests-bld-expunges.txt"
 		fi
 		;;
 	esac

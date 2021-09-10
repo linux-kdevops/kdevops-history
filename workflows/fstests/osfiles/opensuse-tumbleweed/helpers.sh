@@ -29,10 +29,16 @@ opensuse-tumbleweed_special_expunges()
 		if [ "$FSTYP" = "xfs" ] ; then
 			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/xfs/xfsprogs-maintainer.txt"
 		fi
+		if [ "$FSTYP" = "ext4" ] ; then
+			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/ext4/xfstests-bld-expunges.txt"
+		fi
 		;;
 	2021*) # on 4.19.* kernel
 		if [ "$FSTYP" = "xfs" ] ; then
 			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/xfs/xfsprogs-maintainer.txt"
+		fi
+		if [ "$FSTYP" = "ext4" ] ; then
+			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/ext4/xfstests-bld-expunges.txt"
 		fi
 		;;
 	esac
