@@ -24,6 +24,16 @@ sles_special_expunges()
 			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/xfs/xfsprogs-maintainer.txt"
 		fi
 		;;
+	15.3) # on 5.3 kernel
+		if [ "$FSTYP" = "xfs" ] ; then
+			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/xfs/xfsprogs-maintainer.txt"
+		fi
+		;;
+	15.4)
+		if [ "$FSTYP" = "xfs" ] ; then
+			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/xfs/xfsprogs-maintainer.txt"
+		fi
+		;;
 	esac
 }
 
