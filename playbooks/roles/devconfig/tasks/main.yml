@@ -145,6 +145,9 @@
   tags: [ 'console' ]
 
 - name: check to see if stupid /etc/default/grub.d/15_timeout.cfg exists
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
   stat:
     path=/etc/default/grub.d/15_timeout.cfg
   register: stupid_cloud_grub_timeout
@@ -153,6 +156,9 @@
   tags: [ 'console' ]
 
 - name: remove stupid cloud /etc/default/grub.d/15_timeout.cfg
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
   file:
     path: /etc/default/grub.d/15_timeout.cfg
     state: absent
