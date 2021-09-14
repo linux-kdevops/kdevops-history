@@ -46,16 +46,28 @@ parse_args()
 	done
 }
 
+TARGET_WORFKLOW="$(basename $(dirname $0))"
+
 parse_args $@
 
-if [[ "$CONFIG_KDEVOPS_WORKFLOW_ENABLE_FSTESTS" == "y" ]]; then
+if [[ "$TARGET_WORFKLOW" == "fstests" ]]; then
+	if [[ "$CONFIG_KDEVOPS_WORKFLOW_ENABLE_FSTESTS" != "y" ]]; then
+		echo "CONFIG_KDEVOPS_WORKFLOW_ENABLE_FSTESTS is disabled skipping"
+		exit 1
+	fi
 	FS=$CONFIG_FSTESTS_FSTYP
 	STRING='CONFIG_FSTESTS_FSTYP='
-	TARGET_WORFKLOW="fstests"
-elif [[ "$CONFIG_KDEVOPS_WORKFLOW_ENABLE_BLKTESTS" == "y" ]]; then
+elif [[ "$TARGET_WORFKLOW" == "fstests" ]]; then
+	if [[ "$CONFIG_KDEVOPS_WORKFLOW_ENABLE_BLKTESTS" != "y" ]]; then
+		echo "CONFIG_KDEVOPS_WORKFLOW_ENABLE_BLKTESTS is disabled skipping"
+		exit 1
+	fi
 	STRING='CONFIG_KDEVOPS_WORKFLOW_ENABLE_BLKTESTS=y'
-	TARGET_WORFKLOW="blktests"
-elif [[ "$CONFIG_WORKFLOWS_REBOOT_LIMIT" == "y" ]]; then
+elif [[ "$TARGET_WORFKLOW" == "reboot-limit" ]]; then
+	if [[ "$CONFIG_WORKFLOWS_REBOOT_LIMIT" != "y" ]]; then
+		echo "CONFIG_WORKFLOWS_REBOOT_LIMIT is disabled skipping"
+		exit 1
+	fi
 	STRING='CONFIG_WORKFLOWS_REBOOT_LIMIT=y'
 	TARGET_WORFKLOW="reboot-limit"
 else
@@ -91,7 +103,7 @@ for i in $PID_LIST; do
 	if [[ ! -f  $CONFIG_TARGET ]]; then
 		continue
 	fi
-	if [[ "$CONFIG_KDEVOPS_WORKFLOW_ENABLE_FSTESTS" == "y" ]]; then
+	if [[ "$TARGET_WORFKLOW" == "fstests" ]]; then
 		FS_TARGET=$(grep $STRING $CONFIG_TARGET | awk -F"=" '{print $2}' | sed -e 's|"||g')
 		if [[ "$FS" != "$FS_TARGET" ]]; then
 			continue
