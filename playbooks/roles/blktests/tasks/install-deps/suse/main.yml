@@ -140,12 +140,13 @@
   when:
     - is_tumbleweed|bool
 
-- name: Install sle15 sp2 and sp3 packages
+- name: Install sle15 sp2 and sp3 sp4 packages
   become: yes
   become_method: sudo
   zypper:
     name:
       - libgdbm4
+      - autoconf-archive
     state: present
   when:
     - is_sle15sp2|bool or is_sle15sp3|bool or is_sle15sp4|bool
