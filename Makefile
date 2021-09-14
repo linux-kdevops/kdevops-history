@@ -75,6 +75,12 @@ endif # CONFIG_WORKFLOWS
 
 ANSIBLE_EXTRA_ARGS += $(WORKFLOW_ARGS)
 
+POSTFIX_SETUP_ARGS :=
+ifeq (y,$(CONFIG_SETUP_POSTFIX_EMAIL_RELAY))
+include Makefile.postfix
+endif # CONFIG_SETUP_POSTFIX_EMAIL_RELAY
+ANSIBLE_EXTRA_ARGS += $(POSTFIX_SETUP_ARGS)
+
 include scripts/devconfig.Makefile
 include scripts/ssh.Makefile
 
