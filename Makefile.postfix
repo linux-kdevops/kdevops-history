@@ -4,3 +4,11 @@ POSTFIX_RELAY_HOST:=$(subst ",,$(CONFIG_SETUP_POSTFIX_EMAIL_RELAY_HOST))
 
 POSTFIX_SETUP_ARGS += postfix_relay_host_setup=True
 POSTFIX_SETUP_ARGS += postfix_relay_host=$(POSTFIX_RELAY_HOST)
+
+kdevops_postfix_setup_relay:
+	@$(Q)ansible-playbook --connection=local \
+		--inventory localhost, \
+		$(KDEVOPS_PLAYBOOKS_DIR)/playbooks/postfix_relay_host.yml \
+		-e 'ansible_python_interpreter=/usr/bin/python3'
+PHONY += kdevos_postfix_setup_relay
+LOCALHOST_SETUP_WORK += kdevops_postfix_setup_relay

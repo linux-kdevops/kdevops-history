@@ -3,6 +3,7 @@
 KDEVOPS_TERRAFORM_DIR ?=	terraform
 KDEVOPS_PLAYBOOKS_DIR ?=	playbooks
 KDEVOPS_HOSTFILE ?=		hosts
+KDEVOPS_LOCAL_WORK :=
 
 kdevops_all: kdevops_deps
 PHONY := kdevops_all
