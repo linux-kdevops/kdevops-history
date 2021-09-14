@@ -32,8 +32,8 @@
     regexp: '^(relayhost)(.*)'
     line: 'relayhost = {{ postfix_relay_host }}'
   when:
-    - postfix_config_main_file.stat.exists
     - postfix_relay_host_setup|bool
+    - postfix_config_main_file.stat.exists
   tags: [ 'postfix' ]
 
 - name: Enable and restart postfix service
@@ -45,6 +45,6 @@
     state: restarted
     masked: no
   when:
-    - postfix_config_main_file.stat.exists
     - postfix_relay_host_setup|bool
+    - postfix_config_main_file.stat.exists
   tags: postfix
