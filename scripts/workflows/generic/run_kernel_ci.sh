@@ -1,6 +1,12 @@
 #!/bin/bash
 # SPDX-License-Identifier: copyleft-next-0.3.1
 
+# Part of the kdevops kernel-ci. This script is in charge of running the
+# script which runs the workflow up to the CONFIG_KERNEL_CI_STEADY_STATE_GOAL,
+# and then batching out a workflow specific watchdog -- if one was requested --
+# (refer to kernel_ci_watchdog_loop()) and finally doing post-processing
+# to try to make sense of what the results are (see kernel_ci_post_process())
+
 source ${TOPDIR}/.config
 source ${TOPDIR}/scripts/lib.sh
 
