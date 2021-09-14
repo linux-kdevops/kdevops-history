@@ -1,6 +1,9 @@
 #!/bin/bash
 # SPDX-License-Identifier: copyleft-next-0.3.1
 
+# Part of kdevops kernel-ci, this script is in charge of updateing your
+# kernel after each kernel-ci loop.
+
 if [[ "$TOPDIR" == "" ]]; then
 	TOPDIR=$PWD
 fi
