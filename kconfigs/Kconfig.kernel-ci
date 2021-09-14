@@ -2,6 +2,14 @@ config HAVE_KERNEL_CI_CUSTOM_DEFAULTS
 	bool
 	default n
 
+if !HAVE_KERNEL_CI_CUSTOM_DEFAULTS
+
+config KERNEL_CI_DEFAULT_STEADY_STATE_GOAL
+	int
+	default 100
+
+endif
+
 config KERNEL_CI
 	bool "Enable kernel continous integration"
 	default y
