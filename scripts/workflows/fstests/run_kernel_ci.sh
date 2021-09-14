@@ -82,11 +82,7 @@ kernel_ci_post_process()
 			SUBJECT="$SUBJECT and watchdog picked up a hang"
 		fi
 
-		if [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_LOCAL" == "y" ]]; then
-			cat $KERNEL_CI_DIFF_LOG | mail -s "$SUBJECT" $MAIL_FROM_MOD $RCPT
-		elif [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_SSH" == "y" ]]; then
-			cat $KERNEL_CI_DIFF_LOG | ssh $SSH_TARGET 'mail -s "'$SUBJECT'"' $MAIL_FROM_MOD $RCPT
-		fi
+		cat $KERNEL_CI_DIFF_LOG | mail -s "'$SUBJECT'" $MAIL_FROM_MOD $RCPT
 		echo $SUBJECT
 		exit 1
 	elif [[ -f $KERNEL_CI_OK_FILE ]]; then
@@ -101,12 +97,7 @@ kernel_ci_post_process()
 			SUBJECT="$(kernel_ci_subject_topic): fstests on $FSTYPE detected a hang after $LOOP_COUNT test loops"
 		fi
 
-		if [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_LOCAL" == "y" ]]; then
-			cat $KERNEL_CI_FAIL_LOG | mail -s "$SUBJECT" $MAIL_FROM_MOD $RCPT
-		elif [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_SSH" == "y" ]]; then
-			cat $KERNEL_CI_FAIL_LOG | ssh $SSH_TARGET 'mail -s "'$SUBJECT'"' $MAIL_FROM_MOD $RCPT
-		fi
-
+		cat $KERNEL_CI_FAIL_LOG | mail -s "'$SUBJECT'" $MAIL_FROM_MOD $RCPT
 		echo "$SUBJECT"
 
 		if [[  -f $KERNEL_CI_WATCHDOG_FAIL_LOG ]]; then
@@ -117,11 +108,7 @@ kernel_ci_post_process()
 	elif [[  -f $KERNEL_CI_WATCHDOG_FAIL_LOG ]]; then
 		SUBJECT="$(kernel_ci_subject_topic): fstests $FSTYPE failed on a hung test on the first loop"
 		cat $KERNEL_CI_WATCHDOG_FAIL_LOG
-		if [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_LOCAL" == "y" ]]; then
-			cat $KERNEL_CI_DIFF_LOG | mail -s "$SUBJECT" $MAIL_FROM_MOD $RCPT
-		elif [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_SSH" == "y" ]]; then
-			cat $KERNEL_CI_DIFF_LOG | ssh $SSH_TARGET 'mail -s "'$SUBJECT'"' $MAIL_FROM_MOD $RCPT
-		fi
+		cat $KERNEL_CI_DIFF_LOG | mail -s "'$SUBJECT'" $MAIL_FROM_MOD $RCPT
 		exit 1
 	else
 		echo "The kernel-ci loop will create the file $KERNEL_CI_FAIL_FILE if"
@@ -130,11 +117,7 @@ kernel_ci_post_process()
 		echo "This is an unexpected situation."
 
 		SUBJECT="$(kernel_ci_subject_topic): fstests $FSTYPE exited in an unexpection situation"
-		if [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_LOCAL" == "y" ]]; then
-			cat $KERNEL_CI_LOGTIME_FULL | mail -s "$SUBJECT" $MAIL_FROM_MOD $RCPT
-		elif [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_SSH" == "y" ]]; then
-			cat $KERNEL_CI_LOGTIME_FULL | ssh $SSH_TARGET 'mail -s "'$SUBJECT'"' $MAIL_FROM_MOD $RCPT
-		fi
+		cat $KERNEL_CI_LOGTIME_FULL | mail -s "'$SUBJECT'" $MAIL_FROM_MOD $RCPT
 		exit 1
 	fi
 }
@@ -230,9 +213,6 @@ rm -f $FSTESTS_STARTED_FILE
 
 if [[ "$CONFIG_KERNEL_CI_EMAIL_REPORT" == "y" ]]; then
 	RCPT="$CONFIG_KERNEL_CI_EMAIL_RCPT"
-	if [[ "$CONFIG_KERNEL_CI_EMAIL_METHOD_SSH" == "y" ]]; then
-		SSH_TARGET="$CONFIG_KERNEL_CI_EMAIL_SSH_HOST"
-	fi
 fi
 
 if [[ "$CONFIG_KERNEL_CI_EMAIL_MODIFY_FROM" == "y" ]]; then

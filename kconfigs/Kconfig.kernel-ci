@@ -119,54 +119,6 @@ config KERNEL_CI_ADD_CUSTOM_SUBJECT_TOPIC_TAG
 
 endif # KERNEL_CI_ADD_CUSTOM_SUBJECT_TOPIC
 
-choice
-	prompt "kernel-ci email sending method"
-	default KERNEL_CI_EMAIL_METHOD_SSH
-
-config KERNEL_CI_EMAIL_METHOD_LOCAL
-	bool "Send email by running mail command locally"
-	help
-	  Assume smtp is configured already on the localhost where kdevops is
-	  running and that we can rely on the mail command to send emails.
-
-config KERNEL_CI_EMAIL_METHOD_SSH
-	bool "Send email by running ssh and mail command"
-	select KDEVOPS_SSH_CONFIG_UPDATE_STRICT
-	help
-	  Instead of configuring the localhost where kdevops is running
-	  with smtp to send mail you can choose this option to instead ssh
-	  into a target host which has smtp configured so you can send an
-	  email report from it. You are highly encouraged to set up a
-	  password protected ssh key, and for you to unlock that key
-	  only for the shell instance where kdevops will run. You can do
-	  this for example as follows, assuming you are running the
-	  fstests kernel-ci baseline loop:
-
-	    ssh-agent bash
-	    ssh-add ~/.ssh/target
-	    make fstests-baseline-loop
-
-endchoice
-
-if KERNEL_CI_EMAIL_METHOD_SSH
-
-config KERNEL_CI_EMAIL_SSH_HOST
-	string "The name of the host to ssh to send email report"
-	default "localhost" if !HAVE_KERNEL_CI_CUSTOM_DEFAULTS
-	default KERNEL_CI_DEFAULT_EMAIL_SSH_HOST if HAVE_KERNEL_CI_CUSTOM_DEFAULTS
-	  help
-	  The host to use to ssh into to send an email report. You should
-	  ideally have the host configured to log into using a password
-	  protected ssh key, and prior to running your kernel-ci loop
-	  you should unlock the key using ssh-agent, and ssh-add. For instance
-	  if testing the fstests baseline loop you would use:
-
-	    ssh-agent bash
-	    ssh-add ~/.ssh/target
-	    make fstests-baseline-loop
-
-endif # KERNEL_CI_EMAIL_METHOD_SSH
-
 config KERNEL_CI_EMAIL_MODIFY_FROM
 	bool "Modify default from address"
 	select KDEVOPS_SSH_CONFIG_UPDATE_STRICT
