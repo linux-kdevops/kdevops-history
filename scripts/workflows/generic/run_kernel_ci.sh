@@ -12,7 +12,7 @@ source ${TOPDIR}/scripts/lib.sh
 
 TARGET_WORFKLOW="$(basename $(dirname $0))"
 TARGET_WORFKLOW_DIR="$TARGET_WORFKLOW"
-grep -q demos $0
+echo $0 | grep -q demos
 if [[ $? -eq 0 ]]; then
 	TARGET_WORFKLOW_DIR="demos/$TARGET_WORFKLOW"
 fi
