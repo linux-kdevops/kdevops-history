@@ -55,6 +55,15 @@
   args:
     chdir: "{{ kdevops_dir }}"
 
+- name: Remove any old fstests as we always clone a fresh tree
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  file:
+    path: "{{ fstests_data }}"
+    state: absent
+  tags: [ 'oscheck', 'git', 'fstests']
+
 - name: git clone fstests
   git:
     repo: "{{ fstests_git }}"

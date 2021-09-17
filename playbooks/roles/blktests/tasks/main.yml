@@ -33,6 +33,15 @@
     dest: "{{ kdevops_dir }}"
   tags: [ 'install', 'root', 'config']
 
+- name: Remove any old blktrace as we always clone a fresh tree
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  file:
+    path: "{{ blktrace_data }}"
+    state: absent
+  tags: [ 'git', 'blktests', 'blktrace' ]
+
 - name: git clone blktrace
   git:
     repo: "{{ blktrace_git }}"
@@ -56,6 +65,15 @@
   tags: [ 'blktests', 'install', 'root', 'blktrace' ]
   args:
     chdir: "{{ blktrace_data }}"
+
+- name: Remove any old blktets as we always clone a fresh tree
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  file:
+    path: "{{ blktests_data }}"
+    state: absent
+  tags: [ 'git', 'blktests']
 
 - name: git clone blktests
   git:
