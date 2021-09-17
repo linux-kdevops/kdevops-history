@@ -12,6 +12,7 @@
   become: yes
   become_method: sudo
   reboot:
+    post_reboot_delay: 10
   when:
     - reboot_limit_test_type == "ansible"
   tags: [ 'run_tests' ]
