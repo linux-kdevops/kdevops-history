@@ -32,6 +32,11 @@ config BOOTLINUX_STABLE_V510
 	help
 	  Automatically enable the latest supported linux-5.10.y kernel.
 
+config BOOTLINUX_STABLE_V514
+	bool "linux-5.14.y"
+	help
+	  Automatically enable the latest supported linux-5.14.y kernel.
+
 endchoice
 
 endif # BOOTLINUX_TREE_STABLE
