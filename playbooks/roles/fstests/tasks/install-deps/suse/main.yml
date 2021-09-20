@@ -16,6 +16,7 @@
     is_sle11sp4: '{{ ansible_distribution_version == "11.4" }}'
     is_sle12sp1: '{{ ansible_distribution_version == "12.1" }}'
     is_sle12sp3: '{{ ansible_distribution_version == "12.3" }}'
+    is_sle12sp5: '{{ ansible_distribution_version == "12.5" }}'
     is_sle15sp2: '{{ ansible_distribution_version == "15.2" }}'
     is_sle15sp3: '{{ ansible_distribution_version == "15.3" }}'
     is_sle15sp4: '{{ ansible_distribution_version == "15.4" }}'
@@ -33,6 +34,7 @@
     is_sle11sp4: False
     is_sle12sp1: False
     is_sle12sp3: False
+    is_sle12sp5: False
     is_sle15sp2: False
     is_sle15sp3: False
     is_sle15sp4: False
@@ -172,11 +174,19 @@
   set_fact:
     add_benchmark_repo: False
 
-- name: Does this release require the sles15sp2 benchmark repo
+- name: Does this release require the benchmark repo
   set_fact:
     add_benchmark_repo: True
   when:
-    - is_sle15sp2|bool or is_sle15sp3|bool or is_sle15sp4|bool
+    - is_sle15sp2|bool or is_sle15sp3|bool or is_sle15sp4|bool or is_sle12sp5|bool
+
+- name:  add benchmark sles12sp5 opensuse repo when needed
+  become: yes
+  become_method: sudo
+  script:
+    cmd: "{{ role_path }}/scripts/add-suse-repo-if-not-found.sh http://download.opensuse.org/repositories/benchmark/SLE_12_SP5/ benchmark benchmark"
+  when:
+    - is_sle12sp5|bool
 
 - name:  add benchmark sles15sp2 opensuse repo when needed
   become: yes
@@ -184,7 +194,15 @@
   script:
     cmd: "{{ role_path }}/scripts/add-suse-repo-if-not-found.sh http://download.opensuse.org/repositories/benchmark/SLE_15_SP2/ benchmark benchmark"
   when:
-    - add_benchmark_repo|bool
+    - is_sle15sp2|bool
+
+- name:  add benchmark sles15sp3 opensuse repo when needed
+  become: yes
+  become_method: sudo
+  script:
+    cmd: "{{ role_path }}/scripts/add-suse-repo-if-not-found.sh http://download.opensuse.org/repositories/benchmark/SLE_15_SP3/ benchmark benchmark"
+  when:
+    - is_sle15sp3|bool or is_sle15sp4|bool
 
 - name: Install dbench for sles15-sp2
   become: yes
