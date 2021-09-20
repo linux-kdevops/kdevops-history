@@ -1,7 +1,7 @@
 #!/bin/bash
 # SPDX-License-Identifier: copyleft-next-0.3.1
 
-# Part of kdevops kernel-ci, this script is in charge of updateing your
+# Part of kdevops kernel-ci, this script is in charge of updating your
 # kernel after each kernel-ci loop.
 
 if [[ "$TOPDIR" == "" ]]; then
@@ -40,10 +40,15 @@ KOTD_LOOP_COUNT=1
 
 kotd_log "Begin KOTD work"
 
-while true; do
+kotd_rev_kernel()
+{
 	kotd_log "***********************************************************"
 	kotd_log "Begin KOTD loop #$KOTD_LOOP_COUNT"
 	kotd_log "---------------------------------"
+
+	if [[ "$CONFIG_WORKFLOW_KOTD_ENABLE" != "y" ]]; then
+		return
+	fi
 
 	kotd_log "Going to try to rev kernel"
 	/usr/bin/time -f %E -o $KOTD_LOGTIME make kotd-${TARGET_HOSTS}
@@ -80,7 +85,10 @@ while true; do
 			kotd_log "KOTD kernel was updated"
 		fi
 	fi
+}
 
+while true; do
+	kotd_rev_kernel
 	if [[ "$CONFIG_KERNEL_CI_ENABLE_STEADY_STATE" == "y" ]]; then
 		kotd_log "Running the $TARGET_WORKFLOW kernel-ci loop with a steady state goal of $CONFIG_KERNEL_CI_STEADY_STATE_GOAL"
 	else
