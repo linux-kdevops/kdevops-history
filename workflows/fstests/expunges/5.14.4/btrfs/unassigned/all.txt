@@ -19,3 +19,5 @@ generic/563
 generic/564
 generic/643
 generic/647 # korg#214473
+generic/648
+shared/298
