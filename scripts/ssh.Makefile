@@ -11,11 +11,6 @@ SSH_CONFIG_FILE:=$(subst ",,$(CONFIG_KDEVOPS_SSH_CONFIG))
 ANSIBLE_EXTRA_ARGS += sshconfig=$(CONFIG_KDEVOPS_SSH_CONFIG)
 endif
 
-ANSIBLE_CMD_KOTD_ENABLE := echo KOTD disabled so not running: 
-ifeq (y,$(CONFIG_WORKFLOW_KOTD_ENABLE))
-include scripts/kotd.Makefile
-endif # WORKFLOW_KOTD_ENABLE
-
 KDEVOPS_HOSTS_PREFIX:=$(subst ",,$(CONFIG_KDEVOPS_HOSTS_PREFIX))
 ANSIBLE_EXTRA_ARGS += kdevops_host_prefix=$(KDEVOPS_HOSTS_PREFIX)
 

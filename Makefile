@@ -86,6 +86,12 @@ ANSIBLE_EXTRA_ARGS += $(POSTFIX_SETUP_ARGS)
 include scripts/devconfig.Makefile
 include scripts/ssh.Makefile
 
+ANSIBLE_CMD_KOTD_ENABLE := echo KOTD disabled so not running: 
+ifeq (y,$(CONFIG_WORKFLOW_KOTD_ENABLE))
+include scripts/kotd.Makefile
+endif # WORKFLOW_KOTD_ENABLE
+
+
 # We may not need the extra_args.yaml file all the time.  If this file is empty
 # you don't need it. All of our ansible kdevops roles check for this file
 # without you having to specify it as an extra_args=@extra_args.yaml file. This
