@@ -13,6 +13,8 @@ generic/470
 generic/482
 generic/564
 shared/298
+xfs/008 # failure rate 1/2
+xfs/014 # failure rate 1/2
 xfs/026
 xfs/027
 xfs/045
