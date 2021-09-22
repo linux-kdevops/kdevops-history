@@ -18,7 +18,6 @@ btrfs/219
 btrfs/220
 btrfs/223
 btrfs/229
-generic/079
 generic/228
 generic/260
 generic/394
