@@ -135,7 +135,7 @@
     - fsgqa
     - daemon
   loop_control:
-    label: "Ensuring the group {{ item }} exists"
+    label: "Ensuring the user {{ item }} exists"
   when:
     - kdevops_run_fstests|bool
 
