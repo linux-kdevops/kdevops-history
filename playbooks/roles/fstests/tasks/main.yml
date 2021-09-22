@@ -116,6 +116,7 @@
   with_items:
     - sys
     - fsgqa
+    - daemon
   loop_control:
     label: "Ensuring the group {{ item }} exists"
   when:
