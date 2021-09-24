@@ -86,6 +86,7 @@
     name:
       - kernel-default
     update_cache: yes
+    allow_vendor_change: yes
     state: latest
     force: yes
   when:
