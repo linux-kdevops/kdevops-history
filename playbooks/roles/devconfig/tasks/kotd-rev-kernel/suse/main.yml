@@ -87,6 +87,8 @@
       - kernel-default
     update_cache: yes
     allow_vendor_change: yes
+    disable_recommends: no
+    force_resolution: yes
     state: latest
     force: yes
   when:
