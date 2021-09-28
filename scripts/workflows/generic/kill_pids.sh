@@ -57,7 +57,7 @@ if [[ "$TARGET_WORFKLOW" == "fstests" ]]; then
 	fi
 	FS=$CONFIG_FSTESTS_FSTYP
 	STRING='CONFIG_FSTESTS_FSTYP='
-elif [[ "$TARGET_WORFKLOW" == "fstests" ]]; then
+elif [[ "$TARGET_WORFKLOW" == "blktests" ]]; then
 	if [[ "$CONFIG_KDEVOPS_WORKFLOW_ENABLE_BLKTESTS" != "y" ]]; then
 		echo "CONFIG_KDEVOPS_WORKFLOW_ENABLE_BLKTESTS is disabled skipping"
 		exit 1
