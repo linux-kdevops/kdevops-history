@@ -27,6 +27,7 @@
     is_sle10: False
     is_sle11: False
     is_sle12: False
+    is_sle12sp5: False
     is_sle15: False
     is_sle10sp3: False
     is_sle11sp1: False
