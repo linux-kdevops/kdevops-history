@@ -274,6 +274,21 @@ oscheck_get_group_files()
 			oscheck_add_expunge_no_dups $i
 		done
 	fi
+	if [ -e $OS_FILE ]; then
+		OSCHECK_EXPUNGE_FILE="$(dirname $(readlink -f $0))/../expunges/${OSCHECK_ID}/${VERSION_ID}/failures.txt"
+		if [[ "$EXPUNGE_LIST" = "true" ]]; then
+			echo "Looking to see if $OSCHECK_EXPUNGE_FILE exists and has any entries we may have missed ..."
+		fi
+		if [[ -f $OSCHECK_EXPUNGE_FILE ]]; then
+			if [[ "$EXPUNGE_LIST" = "true" ]]; then
+				echo "$OSCHECK_EXPUNGE_FILE exists, processing its expunges ..."
+			fi
+			BAD_EXPUNGES=$(cat $OSCHECK_EXPUNGE_FILE| awk '{print $1}')
+			for i in $BAD_EXPUNGES; do
+				oscheck_add_expunge_no_dups $i
+			done
+		fi
+	fi
 }
 
 oscheck_count_check()
