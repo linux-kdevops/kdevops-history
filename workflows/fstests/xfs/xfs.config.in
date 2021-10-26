@@ -6,6 +6,7 @@ SCRATCH_DEV_POOL="@FSTESTSSCRATCHDEVPOOL@"
 
 SCRATCH_MNT=@FSTESTSSCRATCHMNT@
 RESULT_BASE=$PWD/results/$HOST/$(uname -r)
+DUMP_CORRUPT_FS=1
 
 # Matches what we expect to be default on the latests xfsprogs
 [xfs_crc]
