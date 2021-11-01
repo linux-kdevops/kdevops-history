@@ -1,4 +1,15 @@
 ---
+- name: Ensure required /media/ directories are created
+  become: yes
+  become_method: sudo
+  file:
+    state: directory
+    path: "/media/{{ item }}"
+  with_items:
+    - scratch
+    - "{{ sparsefiles_path }}"
+    - test
+
 # tasks to install dependencies for oscheck
 - name: oscheck distribution ospecific setup
   import_tasks: tasks/install-deps/debian/main.yml
