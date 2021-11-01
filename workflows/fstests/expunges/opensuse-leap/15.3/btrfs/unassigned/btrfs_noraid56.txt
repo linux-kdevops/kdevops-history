@@ -1,0 +1,99 @@
+btrfs/004
+btrfs/006 # kernel warning?
+btrfs/007
+btrfs/011
+btrfs/027
+btrfs/028 # failure after 10 tests
+btrfs/048
+btrfs/060
+btrfs/061 # raid56
+btrfs/062
+btrfs/063
+btrfs/064 # raid56
+btrfs/065 # kernel warning?
+btrfs/066
+btrfs/067
+btrfs/068
+btrfs/069 # raid56
+btrfs/070 # raid56
+btrfs/071 # raid56
+btrfs/072 # raid56
+btrfs/073 # raid56
+btrfs/074 # raid56
+btrfs/100 # kernel warning?
+btrfs/101 # kernel warning?
+btrfs/125 # raid56
+btrfs/148 # raid56
+btrfs/154 # kernel warning?
+btrfs/156 # no space issue
+btrfs/157 # raid56
+btrfs/158 # raid56
+btrfs/161
+btrfs/162
+btrfs/163
+btrfs/170
+btrfs/173
+btrfs/174
+btrfs/176 # kernel warning?
+btrfs/184
+btrfs/193
+btrfs/195 # invalid argument during balancing
+btrfs/197
+btrfs/198 # devices missing
+btrfs/199 # trim issue?
+btrfs/200
+btrfs/201
+btrfs/202
+btrfs/204
+btrfs/205
+btrfs/207
+btrfs/208
+btrfs/214 # kernel warning?
+btrfs/216
+btrfs/218
+btrfs/219 # kernel warning?
+btrfs/220
+btrfs/221
+btrfs/222
+btrfs/223 # kernel warning?
+btrfs/225
+btrfs/227 # kernel warning?
+btrfs/229 # regression on sles15sp3?
+btrfs/233
+btrfs/235
+btrfs/238
+btrfs/240
+btrfs/241
+generic/013 # attribute removal
+generic/068
+generic/070 # attribute removal
+generic/102 # failing after 2 runs
+generic/108 # bsc#1183124 scsi_debug not unloading failure rate is 1/(36 + (x * 100))
+generic/118 # bsc#1183462 umount target busy
+generic/224 # failure rate 1/25 + x (100) once on 5.3.18-212.g33835b2-default
+generic/228 # kernel warning?
+generic/260 # kernel warning?
+generic/269 # hang after 69 loops 20210216135833.piqokqomcktecwco@ergon.do-not-panic.com
+generic/335 # bsc#1190680
+generic/394 # kernel warning?
+generic/416 # known failure
+generic/424 # some attribute failures
+generic/475 # WARNING in cow_file_range - free_space_inode passed to that function because we do fallback_to_cow
+generic/476 # ENOSPC while adding checksum, likely still unfixed even in upstream
+generic/484 # kernel warning?
+generic/528 # bsc#1181363
+generic/546 # Fixed by a94d1d0cb3bf btrfs: Flush before reflinking any extent to prevent NOCOW write falling back to COW without data reservation
+generic/554 # Fixed by 96e6e8f4a68d ("vfs: add missing checks to copy_file_range")
+generic/562 # ENOSPC from block rsv, failure during cloning. Fixed by 9cba40a693e6 ("Btrfs: factor out extent dropping code from hole punch handler") and 690a5dbfc513 ("Btrfs: fix ENOSPC errors, leading to transaction aborts, when cloning extents")
+generic/564 # fixed by 96e6e8f4a68d ("vfs: add missing checks to copy_file_range")
+generic/569 # swap support, likely missing in our kernel
+generic/570 # swap support, likely missing in our kernel
+generic/604 # fixed by 48cfa61b58a1 ("btrfs: fix mount failure caused by race with umount")
+generic/610 # fixed by 8fccebfa534c ("btrfs: fix metadata reservation for fallocate that leads to transaction aborts")
+generic/614 # too new, filipe's mmap patch
+generic/615 # too new, filipe's zero block patch
+generic/619 # fails after 20 tries
+generic/628
+generic/640
+generic/643 # bsc#1190627
+shared/298 # kernel warning?

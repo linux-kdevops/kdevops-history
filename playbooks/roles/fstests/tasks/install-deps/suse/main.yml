@@ -160,6 +160,18 @@
   when:
     - is_tumbleweed|bool
 
+- name: Install leap packages
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - libgdbm4
+      - dbench
+      - dbench4
+    state: present
+  when:
+    - is_leap|bool
+
 - name: Install sle15 sp2 and sp3 packages
   become: yes
   become_method: sudo
