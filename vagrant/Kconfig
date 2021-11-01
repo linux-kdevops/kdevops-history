@@ -24,6 +24,7 @@ config VAGRANT_OPENSUSE
 	select HAVE_CUSTOM_DISTRO_HOST_PREFIX
 	select HAVE_DISTRO_XFS_PREFERS_MANUAL if FSTESTS_XFS
 	select HAVE_DISTRO_PREFERS_ANSIBLE_PYTHON2 if !HAVE_DISTRO_PREFERS_DISABLE_ANSIBLE && KDEVOPS_ANSIBLE_PROVISION_ENABLE
+	select HAVE_DISTRO_PREFERS_CUSTOM_HOST_PREFIX
 	help
 	  This option will set the target guest to OpenSUSE.
 
@@ -76,6 +77,7 @@ config VAGRANT_BOX
 	default "debian/buster64" if VAGRANT_DEBIAN_BUSTER64
 	default "opensuse/Tumbleweed.x86_64" if VAGRANT_OPENSUSE_X86_64_TW
 	default "fedora/32-beta-cloud-base" if VAGRANT_FEDORA_X86_64_32_CLOUD_BASE
+	default "opensuse/Leap-15.3.x86_64" if VAGRANT_OPENSUSE_X86_64_LEAP_15_3
 	default VAGRANT_SUSE_BOX if VAGRANT_SUSE
 	help
 	  The vagrant box to use.
