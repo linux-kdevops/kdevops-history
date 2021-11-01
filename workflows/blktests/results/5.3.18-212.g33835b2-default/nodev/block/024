@@ -1,0 +1,6 @@
+status	fail
+description	do I/O faster than a jiffy and check iostats times
+runtime	2.646s
+reason	output
+date	2021-03-04 23:31:20
+exit_status	0

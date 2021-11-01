@@ -1,0 +1,6 @@
+status	fail
+description	try various loop device block sizes
+runtime	0.774s
+reason	output
+date	2021-03-04 00:56:06
+exit_status	0
