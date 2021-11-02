@@ -14,3 +14,4 @@ generic/566
 generic/587
 generic/600
 generic/601
+generic/622 # failure rate: 1/42
