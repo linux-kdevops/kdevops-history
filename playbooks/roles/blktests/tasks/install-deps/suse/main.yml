@@ -217,7 +217,7 @@
   set_fact:
     compile_nbd: True
   when:
-    - is_sle15sp2|bool or is_sle15sp3|bool or is_sle15sp4|bool
+    - is_sle15sp2|bool or is_sle15sp3|bool or is_sle15sp4|bool or is_leap|bool
 
 - name: Install build dependencies for nbd
   become: yes
