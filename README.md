@@ -71,7 +71,7 @@ Below is kdevops' recommended documentation reading.
   * [kdevops first run](docs/kdevops-first-run.md)
   * [kdevops running make](docs/running-make.md)
   * [kdevops running make bringup](docs/running-make-bringup.md)
-  * [kdevops example workflow: running make linux](kdevops-make-linux.md)
+  * [kdevops example workflow: running make linux](docs/kdevops-make-linux.md)
   * [kdevops running make destroy](docs/kdevops-make-destroy.md)
   * [kdevops make mrproper](docs/kdevops-restarting-from-scratch.md)
 
