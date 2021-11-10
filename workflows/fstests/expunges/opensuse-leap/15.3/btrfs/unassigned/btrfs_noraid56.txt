@@ -74,6 +74,7 @@ generic/224 # failure rate 1/25 + x (100) once on 5.3.18-212.g33835b2-default
 generic/228 # kernel warning?
 generic/260 # kernel warning?
 generic/269 # hang after 69 loops 20210216135833.piqokqomcktecwco@ergon.do-not-panic.com
+generic/273 # bsc#1192534 kernel warning
 generic/335 # bsc#1190680
 generic/394 # kernel warning?
 generic/416 # known failure
