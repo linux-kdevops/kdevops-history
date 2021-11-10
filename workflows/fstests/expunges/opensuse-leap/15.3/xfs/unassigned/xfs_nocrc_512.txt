@@ -18,7 +18,6 @@ xfs/071
 xfs/104 # bsc#1180735
 xfs/144 # bsc#1190629
 xfs/149
-xfs/175 # bsc#1190630
 xfs/191-input-validation
 xfs/266
 xfs/273

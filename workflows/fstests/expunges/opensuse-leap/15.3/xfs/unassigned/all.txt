@@ -20,7 +20,6 @@ xfs/008 # bsc#1180783
 xfs/020 # bsc#1178756
 xfs/033 # bsc#1181413
 xfs/144 # bsc#1189982
-xfs/175 # bsc#1189983
 xfs/259 # bsc#1171825
 xfs/279 # bsc#1183124 scsi_debug removal issue
 xfs/297 # hang with no panic on xfs_crc
