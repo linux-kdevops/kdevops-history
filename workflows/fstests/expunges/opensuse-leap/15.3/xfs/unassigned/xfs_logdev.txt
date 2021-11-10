@@ -74,7 +74,6 @@ xfs/046
 xfs/059
 xfs/060
 xfs/149
-xfs/156 # bsc#1189984
 xfs/191-input-validation
 xfs/194
 xfs/199
