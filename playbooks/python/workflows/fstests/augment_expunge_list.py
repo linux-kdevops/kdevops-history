@@ -133,6 +133,32 @@ def main():
                 shortcut_kernel_dir = args.outputdir + '/' + shortcut_kernel + '/' + args.filesystem + '/'
                 shortcut_dir = shortcut_kernel_dir + 'unassigned/'
                 shortcut_file = shortcut_dir + section + '.txt'
+        elif is_config_bool_true(config, "CONFIG_VAGRANT_OPENSUSE"):
+            if is_config_bool_true(config, "CONFIG_WORKFLOW_KOTD_ENABLE") and "leap" in hostname:
+                leap_host_parts = hostname.split("leap")
+                if len(leap_host_parts) <= 1:
+                    sys.stderr.write("Invalid hostname: %s\n" % hostname)
+                    sys.exit(1)
+                leap_release_parts = leap_host_parts[1].split("-" + args.filesystem)
+                leap_release_name = leap_release_parts[0]
+                leap_release_parts = leap_release_name.split("sp")
+                if len(leap_release_parts) <= 1:
+                    sys.stderr.write("Unexpected sles_release_name: %s\n" % leap_release_name)
+                    sys.exit(1)
+                leap_point_release = leap_release_parts[0] + "." + leap_release_parts[1]
+
+                # This becomes generic release directory, not specific to any
+                # kernel.
+                shortcut_kernel_dir = args.outputdir + '/' + "opensuse-leap/" + leap_point_release + '/' + args.filesystem + '/'
+
+                shortcut_dir = shortcut_kernel_dir + 'unassigned/'
+                shortcut_file = shortcut_dir + section + '.txt'
+            else:
+                ksplit = kernel.split(".")
+                shortcut_kernel = ksplit[0] + "." + ksplit[1] + "." + ksplit[2]
+                shortcut_kernel_dir = args.outputdir + '/' + shortcut_kernel + '/' + args.filesystem + '/'
+                shortcut_dir = shortcut_kernel_dir + 'unassigned/'
+                shortcut_file = shortcut_dir + section + '.txt'
 
         if not os.path.isdir(output_dir):
             if shortcut_dir and os.path.isdir(shortcut_dir):
