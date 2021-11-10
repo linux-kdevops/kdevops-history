@@ -79,6 +79,7 @@ config VAGRANT_BOX
 	default "opensuse/Tumbleweed.x86_64" if VAGRANT_OPENSUSE_X86_64_TW
 	default "fedora/32-beta-cloud-base" if VAGRANT_FEDORA_X86_64_32_CLOUD_BASE
 	default "opensuse/Leap-15.3.x86_64" if VAGRANT_OPENSUSE_X86_64_LEAP_15_3
+	default "Leap-15.4.x86_64" if VAGRANT_OPENSUSE_X86_64_LEAP_15_4
 	default VAGRANT_SUSE_BOX if VAGRANT_SUSE
 	help
 	  The vagrant box to use.
@@ -95,7 +96,9 @@ if HAVE_VAGRANT_BOX_URL
 
 config VAGRANT_BOX_URL
 	string
+	depends on HAVE_VAGRANT_BOX_URL
 	default VAGRANT_SUSE_BOX_URL if HAVE_SUSE_VAGRANT
+	default "https://download.opensuse.org/repositories/Virtualization:/Appliances:/Images:/openSUSE-Leap-15.4/images/boxes/Leap-15.4.x86_64.json" if VAGRANT_OPENSUSE_X86_64_LEAP_15_4
 
 endif # HAVE_VAGRANT_BOX_URL
 
