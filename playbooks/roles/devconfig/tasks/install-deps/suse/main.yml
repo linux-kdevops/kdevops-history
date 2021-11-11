@@ -215,6 +215,7 @@
   when:
     - (suse_register_system|bool and suse_registration_code != 0) or devconfig_repos_addon|bool
     - repos_will_be_added|bool
+    - not is_sle15sp4|bool
     - is_sle15|bool
 
 - name: Prepare packages source list
