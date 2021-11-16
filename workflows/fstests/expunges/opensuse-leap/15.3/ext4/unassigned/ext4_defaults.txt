@@ -11,4 +11,3 @@ generic/484 # bsc#1190321
 generic/493 # skip as ext4 does not support dedupe
 generic/528 # bsc#1192263 failure rate: 1/300
 generic/569 # bsc#1190321
-generic/626 # bsc#1192528
