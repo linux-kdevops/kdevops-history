@@ -36,7 +36,9 @@ def main():
                 continue
             pwd = os.getcwd()
             if git.is_new_file(f):
-                short_file = f.split("../")[1]
+                short_file = f
+                if "../" in f:
+                    short_file = f.split("../")[1]
                 sys.stdout.write("%s\n" % (short_file))
 
 if __name__ == '__main__':
