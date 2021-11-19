@@ -154,16 +154,29 @@
   when:
     - is_tumbleweed|bool
 
-- name: Install sle15 sp2 and sp3 sp4 packages
+- name: Install libgdbm4
   become: yes
   become_method: sudo
   zypper:
     name:
       - libgdbm4
+    state: present
+  when:
+    - is_sle15sp2|bool or is_sle15sp3|bool or sle15sp4|bool
+
+# If we ever upgrade the git for nbd we'll need
+# to find way to get autoconf-archive for sles15sp4
+# as it is required...
+- name: Install autoconf-archive for building nbd
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
       - autoconf-archive
     state: present
   when:
-    - is_sle15sp2|bool or is_sle15sp3|bool or is_sle15sp4|bool
+    - not sle15sp4|bool
+    - is_sle15sp2|bool or is_sle15sp3|bool
 
 - name: The default is to assume we do not want to add the benchmark repo
   set_fact:
