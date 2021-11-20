@@ -75,14 +75,6 @@ endif # CONFIG_WORKFLOWS
 
 ANSIBLE_EXTRA_ARGS += $(WORKFLOW_ARGS)
 
-LOCALHOST_SETUP_WORK :=
-
-POSTFIX_SETUP_ARGS :=
-ifeq (y,$(CONFIG_SETUP_POSTFIX_EMAIL_RELAY))
-include Makefile.postfix
-endif # CONFIG_SETUP_POSTFIX_EMAIL_RELAY
-ANSIBLE_EXTRA_ARGS += $(POSTFIX_SETUP_ARGS)
-
 include scripts/devconfig.Makefile
 include scripts/ssh.Makefile
 
@@ -90,7 +82,6 @@ ANSIBLE_CMD_KOTD_ENABLE := echo KOTD disabled so not running:
 ifeq (y,$(CONFIG_WORKFLOW_KOTD_ENABLE))
 include scripts/kotd.Makefile
 endif # WORKFLOW_KOTD_ENABLE
-
 
 # We may not need the extra_args.yaml file all the time.  If this file is empty
 # you don't need it. All of our ansible kdevops roles check for this file
@@ -100,6 +91,19 @@ endif # WORKFLOW_KOTD_ENABLE
 ifneq (,$(ANSIBLE_EXTRA_ARGS))
 DEFAULT_DEPS += $(KDEVOPS_EXTRA_VARS)
 endif
+
+# To not clutter the top level Makefile, work which requires to be made
+# on the localhost can be augmented on the LOCALHOST_SETUP_WORK variable.
+# This will run after the extra_vars.yaml file is created and so you can
+# rely on it. The work in LOCALHOST_SETUP_WORK is run when you just run
+# make with no arguments.
+LOCALHOST_SETUP_WORK :=
+
+POSTFIX_SETUP_ARGS :=
+ifeq (y,$(CONFIG_SETUP_POSTFIX_EMAIL_RELAY))
+include Makefile.postfix
+endif # CONFIG_SETUP_POSTFIX_EMAIL_RELAY
+ANSIBLE_EXTRA_ARGS += $(POSTFIX_SETUP_ARGS)
 
 ifeq (y,$(CONFIG_KDEVOPS_DISTRO_REG_METHOD_TWOLINE))
 DEFAULT_DEPS += playbooks/secret.yml
