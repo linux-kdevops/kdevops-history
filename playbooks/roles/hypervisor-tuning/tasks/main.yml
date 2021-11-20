@@ -1,0 +1,75 @@
+---
+- name: Import optional extra_args file
+  include_vars: "{{ item }}"
+  ignore_errors: yes
+  with_first_found:
+    - files:
+      - "../extra_vars.yml"
+      - "../extra_vars.yaml"
+      - "../extra_vars.json"
+      skip: true
+  when:
+    - hypervisor_tunning_enabled|bool
+  tags: [ 'vars', 'hypervisor' ]
+
+- name: check to see if ksm file exists /sys/kernel/mm/ksm/run
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  stat:
+    path=/sys/kernel/mm/ksm/run
+  register: ksm_enable_file
+  when:
+    - hypervisor_tunning_ksm_enable|bool
+  tags: [ 'postfix' ]
+
+- name: Enable ksm
+  become: yes
+  become_method: sudo
+  shell: echo 1 > /sys/kernel/mm/ksm/run
+  tags: [ 'postfix' ]
+  when:
+    - ksm_enable_file.stat.exists
+    - hypervisor_tunning_enabled|bool
+
+- name: check to see if zswap enable file exists /sys/module/zswap/parameters/enabled
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  stat:
+    path=/sys/module/zswap/parameters/enabled
+  register: zswap_enable_file
+  when:
+    - hypervisor_tunning_zswap_enable|bool
+  tags: [ 'postfix' ]
+
+- name: check to see if zswap max pool percent file exists /sys/module/zswap/parameters/max_pool_percent
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  stat:
+    path=/sys/module/zswap/parameters/max_pool_percent
+  register: zswap_max_pool_percent_file
+  when:
+    - hypervisor_tunning_zswap_enable|bool
+  tags: [ 'postfix' ]
+
+- name: configure zswap max pool percent to desired setting
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  shell: echo {{ hypervisor_tunning_zswap_max_pool_percent }} > /sys/module/zswap/parameters/max_pool_percent
+  register: zswap_max_pool_percent_file
+  when:
+    - hypervisor_tunning_zswap_enable|bool
+    - zswap_max_pool_percent_file.stat.exists
+  tags: [ 'postfix' ]
+
+- name: Enable zswap
+  become: yes
+  become_method: sudo
+  shell: echo 1 > /sys/module/zswap/parameters/enabled
+  tags: [ 'postfix' ]
+  when:
+    - zswap_enable_file.stat.exists
+    - hypervisor_tunning_zswap_enable|bool
