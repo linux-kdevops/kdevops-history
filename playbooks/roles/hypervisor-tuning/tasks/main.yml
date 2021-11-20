@@ -21,13 +21,13 @@
   register: ksm_enable_file
   when:
     - hypervisor_tunning_ksm_enable|bool
-  tags: [ 'postfix' ]
+  tags: [ 'hypervisor' ]
 
 - name: Enable ksm
   become: yes
   become_method: sudo
   shell: echo 1 > /sys/kernel/mm/ksm/run
-  tags: [ 'postfix' ]
+  tags: [ 'hypervisor' ]
   when:
     - ksm_enable_file.stat.exists
     - hypervisor_tunning_enabled|bool
@@ -41,7 +41,7 @@
   register: zswap_enable_file
   when:
     - hypervisor_tunning_zswap_enable|bool
-  tags: [ 'postfix' ]
+  tags: [ 'hypervisor' ]
 
 - name: check to see if zswap max pool percent file exists /sys/module/zswap/parameters/max_pool_percent
   become: yes
@@ -52,7 +52,7 @@
   register: zswap_max_pool_percent_file
   when:
     - hypervisor_tunning_zswap_enable|bool
-  tags: [ 'postfix' ]
+  tags: [ 'hypervisor' ]
 
 - name: configure zswap max pool percent to desired setting
   become: yes
@@ -63,13 +63,13 @@
   when:
     - hypervisor_tunning_zswap_enable|bool
     - zswap_max_pool_percent_file.stat.exists
-  tags: [ 'postfix' ]
+  tags: [ 'hypervisor' ]
 
 - name: Enable zswap
   become: yes
   become_method: sudo
   shell: echo 1 > /sys/module/zswap/parameters/enabled
-  tags: [ 'postfix' ]
+  tags: [ 'hypervisor' ]
   when:
     - zswap_enable_file.stat.exists
     - hypervisor_tunning_zswap_enable|bool
