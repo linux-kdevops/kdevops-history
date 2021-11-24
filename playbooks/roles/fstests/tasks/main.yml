@@ -106,7 +106,7 @@
     post_reboot_delay: 10
 
 - name: Add missing groups for fstests
-  tags: [ 'oscheck', 'fstests', 'run_tests', 'checktime' ]
+  tags: [ 'oscheck', 'fstests', 'install', 'root']
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -119,11 +119,9 @@
     - daemon
   loop_control:
     label: "Ensuring the group {{ item }} exists"
-  when:
-    - kdevops_run_fstests|bool
 
 - name: Add missing users if not present
-  tags: [ 'oscheck', 'fstests', 'run_tests', 'checktime' ]
+  tags: [ 'oscheck', 'fstests', 'install', 'root']
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -135,10 +133,9 @@
   with_items:
     - fsgqa
     - daemon
+    - nobody
   loop_control:
     label: "Ensuring the user {{ item }} exists"
-  when:
-    - kdevops_run_fstests|bool
 
 - name: Verify section name {{ section }} exists on fstests config file /var/lib/xfstests/configs/.config
   vars:
