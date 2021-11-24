@@ -39,10 +39,10 @@ The following is an example of test configuration requirements for just
 testing one filesystem, in this case XFS. Keep in mind we will be testing
 all supported filesystems.
 
-![kernel-ci-xfs-host](images/kernel-ci-host-xfs.png)
+![kernel-ci-xfs-host](/images/kernel-ci-host-xfs.png)
 
 ## kernel-ci host requirements diagram
 
 The following is what this ends up looking like for the kernel-ci host:
 
-![kernel-ci-host](images/kernel-ci-host.png)
+![kernel-ci-host](/images/kernel-ci-host.png)

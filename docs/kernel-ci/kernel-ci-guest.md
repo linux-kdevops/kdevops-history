@@ -124,4 +124,4 @@ will be our bottlenceck we hope that the truncated files will be on a fast
 storage medium, the faster, the better. The following is what this ends up
 looking like:
 
-![kernel-ci-guest](images/kernel-ci-guest-v3.png)
+![kernel-ci-guest](/images/kernel-ci-guest-v3.png)

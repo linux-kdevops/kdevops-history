@@ -143,4 +143,4 @@ against the baseline of each kernel, that is there is confidence to that degree
 that the baseline represents all known current fstests failures, and could in
 theory capture errors with failure rates up that that number.
 
-![kernel-ci-steady-state-chart](images/kernel-ci-chart.png)
+![kernel-ci-steady-state-chart](/images/kernel-ci-chart.png)
