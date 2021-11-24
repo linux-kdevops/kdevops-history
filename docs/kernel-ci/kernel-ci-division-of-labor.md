@@ -23,8 +23,7 @@ as in /usr/bin/diff, between an existing baseline of already known failures.
 With this methodology a new regression then might look something like the
 following in an email report:
 
-[source,bash]
-----
+```bash
 Date: Wed, 22 Sep 2021 16:29:58 +0200
 From: kernel-ci@lists.suse.com
 To: kernel-ci@lists.suse.com
@@ -44,7 +43,7 @@ index 372bc7c..a3e74c7 100644
  generic/600
  generic/601
 +generic/622
-----
+```
 
 In a kdevops setup with steady state set to 100, what this tells us is that
 fstests test generic/622 failed after running fstests fully without failure
