@@ -61,4 +61,4 @@ enable kdevops kernel-ci and using it.
   * [kernel-ci steady state goals](kernel-ci-steady-state-goal.md)
   * [Targetting tests based on commit IDs or branches](kernel-ci-test-trigger-code-inferences.md)
   * [Appreciating kernel-ci division of labor](kernel-ci-division-of-labor.md)
-  * [Evaluating use of a digital ledger](kernel-ci-division-of-labor.md)
+  * [Evaluating use of a digital ledger](kernel-ci-digital-ledger.md)
