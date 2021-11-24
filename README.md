@@ -75,10 +75,21 @@ Below is kdevops' recommended documentation reading.
   * [kdevops running make destroy](docs/kdevops-make-destroy.md)
   * [kdevops make mrproper](docs/kdevops-restarting-from-scratch.md)
 
+# kdevops kernel-ci support
+
+kdevops supports its own kernel continous integration support, so to allow
+Linux developers and Linux distributions to keep track of issues present in
+any of supported kdevops workflows and be able to tell when new regressions
+are detected. Documentation for this follows:
+
+  * [kdevops kernel-ci](docs/kernel-ci/README.md)
+
 # Underneath the kdevops hood
 
 Below are sections which get into technical details of how kdevops works.
 
+  * [A case for truncated files with loopback block devices](docs/testing-with-loopback.md)
+  * [Seeing more issues with loopback / truncated files setup](docs/seeing-more-issues.md)
   * [adding a new workflow to kdevops](docs/adding-a-new-workflow.md)
   * [kconfig integration](docs/kconfig-integration.md)
   * [Motivation behind kdevops](docs/motivations.md)
