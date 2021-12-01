@@ -88,6 +88,7 @@ are detected. Documentation for this follows:
 
 Below are sections which get into technical details of how kdevops works.
 
+  * [Why vagrant is used for virtualization](docs/why-vagrant.md)
   * [A case for truncated files with loopback block devices](docs/testing-with-loopback.md)
   * [Seeing more issues with loopback / truncated files setup](docs/seeing-more-issues.md)
   * [adding a new workflow to kdevops](docs/adding-a-new-workflow.md)
@@ -98,6 +99,7 @@ Below are sections which get into technical details of how kdevops works.
   * [kdevops vagrant support](docs/kdevops-vagrant.md)
   * [kdevops terraform support](docs/kdevops-terraform.md)
   * [kdevops local ansible roles](docs/ansible-roles.md)
+  * [Tutorial on building your own custom vagrant boxes](docs/custom-vagrant-boxes.md)
 
 License
 -------
