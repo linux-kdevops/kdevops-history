@@ -11,7 +11,7 @@ LXDIALOG := lxdialog/checklist.o lxdialog/inputbox.o lxdialog/menubox.o lxdialog
 
 default: mconf
 
-common-objs :=  confdata.o expr.o lexer.lex.o menu.o parser.tab.o \
+common-objs := confdata.o expr.o menu.o parser.tab.o lexer.lex.c \
                    preprocess.o symbol.o util.o
 
 parser.tab.c: parser.y
