@@ -16,7 +16,7 @@ include .config
 endif
 
 # Kconfig filechk magic helper
-include Kbuild.include
+include scripts/kconfig/Kbuild.include
 
 PROJECTVERSION = $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBLEVEL),.$(SUBLEVEL)))$(EXTRAVERSION)
 # Picks up the project version and appends it with any dirty information in
