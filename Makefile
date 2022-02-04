@@ -11,11 +11,14 @@ LXDIALOG := lxdialog/checklist.o lxdialog/inputbox.o lxdialog/menubox.o lxdialog
 
 default: mconf
 
-zconf.tab.c: zconf.y
-	@bison -ozconf.tab.c -t -l zconf.y
-	@flex -ozconf.lex.c -L zconf.l
+common-objs :=  confdata.o expr.o lexer.lex.o menu.o parser.tab.o \
+                   preprocess.o symbol.o util.o
 
-conf: conf.o zconf.tab.o
+parser.tab.c: parser.y
+	@bison -oparser.tab.c --defines=parser.tab.h -t -l parser.y
+	@flex -olexer.lex.c -L lexer.l
+
+conf: conf.o $(common-objs)
 	$(CC) -o conf $^
 
 mconf_CFLAGS :=  $(shell test -f $(CURDIR)/.mconf-cfg && . $(CURDIR)/.mconf-cfg && echo $$cflags) -DLOCALE
@@ -35,11 +38,11 @@ endef
 .%conf-cfg: %conf-cfg.sh
 	$(call filechk,conf_cfg)
 
-MCONF_DEPS := mconf.o zconf.tab.c $(LXDIALOG)
+MCONF_DEPS := mconf.o $(LXDIALOG) $(common-objs)
 mconf: .mconf-cfg conf $(MCONF_DEPS)
 	$(CC) -o mconf $(MCONF_DEPS) $(mconf_LDFLAGS)
 
-NCONF_DEPS := nconf.o nconf.gui.o zconf.tab.c
+NCONF_DEPS := nconf.o nconf.gui.o parser.tab.c
 nconf: .nconf-cfg conf $(NCONF_DEPS)
 	$(CC) -o nconf $(NCONF_DEPS) $(nconf_LDFLAGS)
 
@@ -55,5 +58,5 @@ help:
 
 .PHONY: clean
 clean:
-	@rm -f conf mconf conf *.o lxdialog/*.o *.o zconf.tab.c .mconf-cfg
+	@rm -f conf mconf conf *.o lxdialog/*.o *.o parser.tab.c .mconf-cfg
 	@rm -rf *.o.d

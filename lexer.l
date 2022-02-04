@@ -1,20 +1,22 @@
-%option nostdinit noyywrap never-interactive full ecs
-%option 8bit nodefault yylineno
-%x COMMAND HELP STRING PARAM ASSIGN_VAL
-%{
+/* SPDX-License-Identifier: GPL-2.0 */
 /*
  * Copyright (C) 2002 Roman Zippel <zippel@linux-m68k.org>
- * Released under the terms of the GNU GPL v2.0.
  */
+%option nostdinit noyywrap never-interactive full ecs
+%option 8bit nodefault yylineno
+%x ASSIGN_VAL HELP STRING
+%{
 
 #include <assert.h>
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 
 #include "lkc.h"
+#include "parser.tab.h"
+
+#define YY_DECL		static int yylex1(void)
 
 #define START_STRSIZE	16
 
@@ -23,6 +25,8 @@ static struct {
 	int lineno;
 } current_pos;
 
+static int prev_prev_token = T_EOL;
+static int prev_token = T_EOL;
 static char *text;
 static int text_size, text_asize;
 
@@ -31,7 +35,7 @@ struct buffer {
 	YY_BUFFER_STATE state;
 };
 
-struct buffer *current_buf;
+static struct buffer *current_buf;
 
 static int last_ts, first_ts;
 
@@ -73,64 +77,79 @@ static void warn_ignored_character(char chr)
 {
 	fprintf(stderr,
 	        "%s:%d:warning: ignoring unsupported character '%c'\n",
-	        zconf_curname(), zconf_lineno(), chr);
+	        current_file->name, yylineno, chr);
 }
 %}
 
 n	[A-Za-z0-9_-]
 
 %%
-	int str = 0;
-	int ts, i;
+	char open_quote = 0;
 
-[ \t]*#.*\n	|
-[ \t]*\n	{
-	return T_EOL;
-}
-[ \t]*#.*
-
-
-[ \t]+	{
-	BEGIN(COMMAND);
-}
-
-.	{
-	unput(yytext[0]);
-	BEGIN(COMMAND);
-}
-
-
-<COMMAND>{
-	{n}+	{
-		const struct kconf_id *id = kconf_id_lookup(yytext, yyleng);
-		current_pos.file = current_file;
-		current_pos.lineno = yylineno;
-		if (id && id->flags & TF_COMMAND) {
-			BEGIN(PARAM);
-			yylval.id = id;
-			return id->token;
-		}
-		alloc_string(yytext, yyleng);
-		yylval.string = text;
-		return T_VARIABLE;
-	}
-	({n}|$)+	{
-		/* this token includes at least one '$' */
-		yylval.string = expand_token(yytext, yyleng);
-		if (strlen(yylval.string))
-			return T_VARIABLE;
-		free(yylval.string);
-	}
-	"="	{ BEGIN(ASSIGN_VAL); yylval.flavor = VAR_RECURSIVE; return T_ASSIGN; }
-	":="	{ BEGIN(ASSIGN_VAL); yylval.flavor = VAR_SIMPLE; return T_ASSIGN; }
-	"+="	{ BEGIN(ASSIGN_VAL); yylval.flavor = VAR_APPEND; return T_ASSIGN; }
-	[[:blank:]]+
-	.	warn_ignored_character(*yytext);
-	\n	{
-		BEGIN(INITIAL);
-		return T_EOL;
-	}
-}
+#.*			/* ignore comment */
+[ \t]*			/* whitespaces */
+\\\n			/* escaped new line */
+\n			return T_EOL;
+"bool"			return T_BOOL;
+"choice"		return T_CHOICE;
+"comment"		return T_COMMENT;
+"config"		return T_CONFIG;
+"def_bool"		return T_DEF_BOOL;
+"def_tristate"		return T_DEF_TRISTATE;
+"default"		return T_DEFAULT;
+"depends"		return T_DEPENDS;
+"endchoice"		return T_ENDCHOICE;
+"endif"			return T_ENDIF;
+"endmenu"		return T_ENDMENU;
+"help"			return T_HELP;
+"hex"			return T_HEX;
+"if"			return T_IF;
+"imply"			return T_IMPLY;
+"int"			return T_INT;
+"mainmenu"		return T_MAINMENU;
+"menu"			return T_MENU;
+"menuconfig"		return T_MENUCONFIG;
+"modules"		return T_MODULES;
+"on"			return T_ON;
+"optional"		return T_OPTIONAL;
+"prompt"		return T_PROMPT;
+"range"			return T_RANGE;
+"select"		return T_SELECT;
+"source"		return T_SOURCE;
+"string"		return T_STRING;
+"tristate"		return T_TRISTATE;
+"visible"		return T_VISIBLE;
+"||"			return T_OR;
+"&&"			return T_AND;
+"="			return T_EQUAL;
+"!="			return T_UNEQUAL;
+"<"			return T_LESS;
+"<="			return T_LESS_EQUAL;
+">"			return T_GREATER;
+">="			return T_GREATER_EQUAL;
+"!"			return T_NOT;
+"("			return T_OPEN_PAREN;
+")"			return T_CLOSE_PAREN;
+":="			return T_COLON_EQUAL;
+"+="			return T_PLUS_EQUAL;
+\"|\'			{
+				open_quote = yytext[0];
+				new_string();
+				BEGIN(STRING);
+			}
+{n}+			{
+				alloc_string(yytext, yyleng);
+				yylval.string = text;
+				return T_WORD;
+			}
+({n}|$)+		{
+				/* this token includes at least one '$' */
+				yylval.string = expand_token(yytext, yyleng);
+				if (strlen(yylval.string))
+					return T_WORD;
+				free(yylval.string);
+			}
+.			warn_ignored_character(*yytext);
 
 <ASSIGN_VAL>{
 	[^[:blank:]\n]+.*	{
@@ -142,71 +161,17 @@ n	[A-Za-z0-9_-]
 	.
 }
 
-<PARAM>{
-	"&&"	return T_AND;
-	"||"	return T_OR;
-	"("	return T_OPEN_PAREN;
-	")"	return T_CLOSE_PAREN;
-	"!"	return T_NOT;
-	"="	return T_EQUAL;
-	"!="	return T_UNEQUAL;
-	"<="	return T_LESS_EQUAL;
-	">="	return T_GREATER_EQUAL;
-	"<"	return T_LESS;
-	">"	return T_GREATER;
-	\"|\'	{
-		str = yytext[0];
-		new_string();
-		BEGIN(STRING);
-	}
-	\n	BEGIN(INITIAL); return T_EOL;
-	({n}|[/.])+	{
-		const struct kconf_id *id = kconf_id_lookup(yytext, yyleng);
-		if (id && id->flags & TF_PARAM) {
-			yylval.id = id;
-			return id->token;
-		}
-		alloc_string(yytext, yyleng);
-		yylval.string = text;
-		return T_WORD;
-	}
-	({n}|[/.$])+	{
-		/* this token includes at least one '$' */
-		yylval.string = expand_token(yytext, yyleng);
-		if (strlen(yylval.string))
-			return T_WORD;
-		free(yylval.string);
-	}
-	#.*	/* comment */
-	\\\n	;
-	[[:blank:]]+
-	.	warn_ignored_character(*yytext);
-	<<EOF>> {
-		BEGIN(INITIAL);
-	}
-}
-
 <STRING>{
 	"$".*	append_expanded_string(yytext);
-	[^$'"\\\n]+/\n	{
-		append_string(yytext, yyleng);
-		yylval.string = text;
-		return T_WORD_QUOTE;
-	}
 	[^$'"\\\n]+	{
 		append_string(yytext, yyleng);
-	}
-	\\.?/\n	{
-		append_string(yytext + 1, yyleng - 1);
-		yylval.string = text;
-		return T_WORD_QUOTE;
 	}
 	\\.?	{
 		append_string(yytext + 1, yyleng - 1);
 	}
 	\'|\"	{
-		if (str == yytext[0]) {
-			BEGIN(PARAM);
+		if (open_quote == yytext[0]) {
+			BEGIN(INITIAL);
 			yylval.string = text;
 			return T_WORD_QUOTE;
 		} else
@@ -216,16 +181,22 @@ n	[A-Za-z0-9_-]
 		fprintf(stderr,
 			"%s:%d:warning: multi-line strings not supported\n",
 			zconf_curname(), zconf_lineno());
+		unput('\n');
 		BEGIN(INITIAL);
-		return T_EOL;
+		yylval.string = text;
+		return T_WORD_QUOTE;
 	}
 	<<EOF>>	{
 		BEGIN(INITIAL);
+		yylval.string = text;
+		return T_WORD_QUOTE;
 	}
 }
 
 <HELP>{
 	[ \t]+	{
+		int ts, i;
+
 		ts = 0;
 		for (i = 0; i < yyleng; i++) {
 			if (yytext[i] == '\t')
@@ -271,6 +242,12 @@ n	[A-Za-z0-9_-]
 }
 
 <<EOF>>	{
+	BEGIN(INITIAL);
+
+	if (prev_token != T_EOL && prev_token != T_HELPTEXT)
+		fprintf(stderr, "%s:%d:warning: no new line at end of file\n",
+			current_file->name, yylineno);
+
 	if (current_file) {
 		zconf_endfile();
 		return T_EOL;
@@ -280,6 +257,41 @@ n	[A-Za-z0-9_-]
 }
 
 %%
+
+/* second stage lexer */
+int yylex(void)
+{
+	int token;
+
+repeat:
+	token = yylex1();
+
+	if (prev_token == T_EOL || prev_token == T_HELPTEXT) {
+		if (token == T_EOL) {
+			/* Do not pass unneeded T_EOL to the parser. */
+			goto repeat;
+		} else {
+			/*
+			 * For the parser, update file/lineno at the first token
+			 * of each statement. Generally, \n is a statement
+			 * terminator in Kconfig, but it is not always true
+			 * because \n could be escaped by a backslash.
+			 */
+			current_pos.file = current_file;
+			current_pos.lineno = yylineno;
+		}
+	}
+
+	if (prev_prev_token == T_EOL && prev_token == T_WORD &&
+	    (token == T_EQUAL || token == T_COLON_EQUAL || token == T_PLUS_EQUAL))
+		BEGIN(ASSIGN_VAL);
+
+	prev_prev_token = prev_token;
+	prev_token = token;
+
+	return token;
+}
+
 static char *expand_token(const char *in, size_t n)
 {
 	char *out;
@@ -363,7 +375,8 @@ FILE *zconf_fopen(const char *name)
 	if (!f && name != NULL && name[0] != '/') {
 		env = getenv(SRCTREE);
 		if (env) {
-			sprintf(fullname, "%s/%s", env, name);
+			snprintf(fullname, sizeof(fullname),
+				 "%s/%s", env, name);
 			f = fopen(fullname, "r");
 		}
 	}
