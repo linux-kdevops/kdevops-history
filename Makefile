@@ -6,6 +6,10 @@ PATCHLEVEL = 3
 SUBLEVEL = 3
 EXTRAVERSION =
 
+export KCONFIG_DIR=$(CURDIR)/scripts/kconfig
+include $(KCONFIG_DIR)/kconfig.Makefile
+include Makefile.subtrees
+
 export KDEVOPS_EXTRA_VARS ?=			extra_vars.yaml
 export KDEVOPS_PLAYBOOKS_DIR :=			playbooks
 export KDEVOPS_HOSTFILE ?=			hosts
