@@ -38,7 +38,6 @@ export Q=@
 export NQ=echo
 endif
 
-include scripts/kconfig.Makefile
 INCLUDES = -I include/
 CFLAGS += $(INCLUDES)
 
