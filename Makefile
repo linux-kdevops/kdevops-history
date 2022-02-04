@@ -26,7 +26,7 @@ nconf_CFLAGS :=  $(shell test -f $(CURDIR)/.nconf-cfg && . $(CURDIR)/.nconf-cfg 
 nconf_LDFLAGS := $(shell test -f $(CURDIR)/.nconf-cfg && . $(CURDIR)/.nconf-cfg && echo $$libs)
 nconf: CFLAGS += ${nconf_CFLAGS}
 
-include $(CURDIR)/../Kbuild.include
+include $(CURDIR)/Kbuild.include
 # check if necessary packages are available, and configure build flags
 define filechk_conf_cfg
 	$(CURDIR)/$<
