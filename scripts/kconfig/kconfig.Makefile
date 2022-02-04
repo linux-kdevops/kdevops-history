@@ -32,34 +32,34 @@ include/config/project.release: $(CURDIR)/Makefile
 
 export PROJECT PROJECTVERSION PROJECTRELEASE
 
-scripts/kconfig/mconf:
-	$(MAKE) -C scripts/kconfig/ .mconf-cfg
-	$(MAKE) -C scripts/kconfig/ mconf
+$(KCONFIG_DIR)/mconf:
+	$(MAKE) -C $(KCONFIG_DIR)/ .mconf-cfg
+	$(MAKE) -C $(KCONFIG_DIR)/ mconf
 
 PHONY += menuconfig
-menuconfig: scripts/kconfig/mconf include/config/project.release
+menuconfig: $(KCONFIG_DIR)/mconf include/config/project.release
 	@$< Kconfig
 
-scripts/kconfig/nconf:
-	$(MAKE) -C scripts/kconfig/ .nconf-cfg
-	$(MAKE) -C scripts/kconfig/ nconf
+$(KCONFIG_DIR)/nconf:
+	$(MAKE) -C $(KCONFIG_DIR)/ .nconf-cfg
+	$(MAKE) -C $(KCONFIG_DIR)/ nconf
 
 PHONY += nconfig
-nconfig: scripts/kconfig/nconf include/config/project.release
+nconfig: $(KCONFIG_DIR)/nconf include/config/project.release
 	@$< Kconfig
 
-scripts/kconfig/conf:
-	$(MAKE) -C scripts/kconfig conf
+$(KCONFIG_DIR)/conf:
+	$(MAKE) -C $(KCONFIG_DIR) conf
 
 # More are supported, however we only list the ones tested on this top
 # level Makefile.
 simple-targets := allnoconfig allyesconfig alldefconfig randconfig
 PHONY += $(simple-targets)
 
-$(simple-targets): scripts/kconfig/conf
+$(simple-targets): $(KCONFIG_DIR)/conf
 	$< --$@ Kconfig
 
-defconfig-%:: scripts/kconfig/conf
+defconfig-%:: $(KCONFIG_DIR)/conf
 	@$< --defconfig=defconfigs/$(@:defconfig-%=%) Kconfig
 
 .PHONY: $(PHONY)
