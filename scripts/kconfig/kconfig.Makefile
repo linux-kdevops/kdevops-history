@@ -24,7 +24,7 @@ PROJECTVERSION = $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBLEVEL),.$(
 PROJECTRELEASE = $(shell test -f $(CURDIR)/include/config/project.release && cat $(CURDIR)/include/config/project.release 2> /dev/null)
 
 define filechk_project.release
-	echo "$(PROJECTVERSION)$$($(CURDIR)/scripts/setlocalversion $(CURDIR))"
+	echo "$(PROJECTVERSION)$$($(KCONFIG_DIR)/setlocalversion $(CURDIR))"
 endef
 
 include/config/project.release: $(CURDIR)/Makefile

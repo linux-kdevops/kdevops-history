@@ -13,4 +13,4 @@ nconf
 qconf
 gconf
 
-zconf.tab.c
+parser.tab.c
