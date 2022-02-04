@@ -58,5 +58,5 @@ help:
 
 .PHONY: clean
 clean:
-	@rm -f conf mconf conf *.o lxdialog/*.o *.o parser.tab.c .mconf-cfg
+	@rm -f conf mconf conf *.o lxdialog/*.o *.o parser.tab.c .mconf-cfg *.lex.c
 	@rm -rf *.o.d
