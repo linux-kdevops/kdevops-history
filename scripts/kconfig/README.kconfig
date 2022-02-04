@@ -1,0 +1,8 @@
+This effort allows for independent projects to use the Linux kernel's
+kconfig on external projects, and make updates of config really easy
+to do. It does this by letting you use this tree as a git subtree.
+
+For more details and to keep this small please refer to a simple demo
+project which demonstrates how to use this and uses it itself:
+
+https://github.com/mcgrof/init-kconfig
