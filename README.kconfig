@@ -9,4 +9,5 @@ https://github.com/mcgrof/init-kconfig
 
 The following projects use this git tree as a git subtree as well:
 
-https://github.com/mcgrof/kdevops
+  * https://github.com/mcgrof/kdevops
+  * https://github.com/mcgrof/fio-tests
