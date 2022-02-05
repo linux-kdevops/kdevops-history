@@ -6,6 +6,8 @@ PATCHLEVEL = 3
 SUBLEVEL = 3
 EXTRAVERSION =
 
+all: deps
+
 export KCONFIG_DIR=$(CURDIR)/scripts/kconfig
 include $(KCONFIG_DIR)/kconfig.Makefile
 include Makefile.subtrees
@@ -20,8 +22,6 @@ KDEVOPS_NODES_TEMPLATES :=			workflows/linux/kdevops_nodes_split_start.yaml.in
 export KDEVOPS_NODES_TEMPLATES
 
 KDEVOPS_INSTALL_TARGETS :=
-
-all: deps
 
 DEFAULT_DEPS :=
 MAKEFLAGS += --no-print-directory
