@@ -129,6 +129,7 @@
     - sys
     - fsgqa
     - daemon
+    - nobody
   loop_control:
     label: "Ensuring the group {{ item }} exists"
 
