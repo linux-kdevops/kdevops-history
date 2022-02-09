@@ -31,6 +31,7 @@
       - libcap2-bin
       - libtool
       - pkg-config
+      - libpopt
       - libtirpc-dev
       - libtirpc3
     state: present
