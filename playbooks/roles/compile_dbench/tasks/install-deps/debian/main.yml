@@ -1,37 +1,19 @@
 ---
-- name: Install nvme tools
-  become: yes
-  become_method: sudo
-  apt:
-    name:
-      - nvme-cli
+- name: Force dbench compilation on debian
+  set_fact:
+    compile_dbench: True
 
-- name: Install fstests build dependencies
+- name: Install dbench build dependencies
   become: yes
   become_method: sudo
   apt:
     name:
-      - bison
-      - flex
       - git
       - automake
       - gcc
       - libuuid1
       - quota
       - make
-      - xfsprogs
-      - xfsdump
-      - e2fsprogs
-      - btrfs-progs
-      - gawk
-      - uuid-runtime
-      - acl
-      - bc
-      - dump
-      - indent
-      - libtool
-      - lvm2
-      - psmisc
       - sed
       - libacl1
       - libacl1-dev
@@ -46,9 +28,11 @@
       - libgdbm-dev
       - libssl-dev
       - xfslibs-dev
-      - fio
       - libcap2-bin
       - libtool
+      - pkg-config
+      - libtirpc-dev
+      - libtirpc3
     state: present
     update_cache: yes
-  tags: [ 'fstests', 'deps' ]
+  tags: [ 'dbench', 'deps' ]

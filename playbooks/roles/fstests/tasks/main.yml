@@ -55,6 +55,18 @@
   args:
     chdir: "{{ kdevops_dir }}"
 
+# We do this *after* the /data/ partition is set up so
+# we can house the dbench source code there and so that
+# we don't have to bother with the setup of that partition
+# in the dbench role.
+- name: Compile dbench from source if needed by the distribution
+  include_role:
+    name: compile_dbench
+  vars:
+    dbench_data: "{{ data_path }}/dbench"
+    dbench_git: "https://github.com/linux-kdevops/dbench.git"
+  tags: [ 'oscheck', 'git', 'dbench']
+
 - name: Remove any old fstests as we always clone a fresh tree
   become: yes
   become_flags: 'su - -c'

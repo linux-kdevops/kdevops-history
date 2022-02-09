@@ -20,3 +20,5 @@ sparsefiles_filename_prefix: "sparse-disk"
 fstests_test_dir: "/media/test"
 
 fstests_debug: False
+
+compile_dbench: False

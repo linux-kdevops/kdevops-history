@@ -46,7 +46,6 @@
       - libssl-dev
       - xfslibs-dev
       - fio
-      - dbench
       - libcap2-bin
       - libtool
       - gcc

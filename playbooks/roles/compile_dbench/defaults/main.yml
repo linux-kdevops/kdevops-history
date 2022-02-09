@@ -1,0 +1,6 @@
+# SPDX-License-Identifier GPL-2.0+
+---
+# Our sensible defaults.
+compile_dbench: False
+dbench_data: "{{ data_path }}/dbench"
+dbench_git: "https://github.com/linux-kdevops/dbench.git"

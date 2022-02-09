@@ -1,0 +1,59 @@
+---
+- name: Import optional extra_args file
+  include_vars: "{{ item }}"
+  ignore_errors: yes
+  with_first_found:
+    - files:
+      - "../extra_vars.yml"
+      - "../extra_vars.yaml"
+      - "../extra_vars.json"
+      skip: true
+  tags: vars
+
+# Distro specific
+- include: tasks/install-deps/main.yml
+
+- name: git clone dbench
+  git:
+    repo: "{{ dbench_git }}"
+    dest: "{{ dbench_data }}"
+    update: yes
+  tags: [ 'git', 'dbench' ]
+  when:
+    - compile_dbench|bool
+
+- name: run autogen for dbench
+  command: "./autogen.sh"
+  tags: [ 'dbench' ]
+  args:
+    chdir: "{{ dbench_data }}"
+  when:
+    - compile_dbench|bool
+
+- name: run configure for dbench
+  command: "./configure"
+  tags: [ 'dbench' ]
+  args:
+    chdir: "{{ dbench_data }}"
+  when:
+    - compile_dbench|bool
+
+- name: Build dbench
+  tags: [ 'git', 'dbench' ]
+  make:
+    chdir: "{{ dbench_data }}"
+    params:
+      NUM_THREADS: "{{ make_num_jobs }}"
+  when:
+    - compile_dbench|bool
+
+- name: Install dbench
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "{{  make }} install"
+  tags: [ 'git', 'dbench' ]
+  args:
+    chdir: "{{ dbench_data }}"
+  when:
+    - compile_dbench|bool
