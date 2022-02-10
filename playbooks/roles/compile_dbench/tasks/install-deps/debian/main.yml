@@ -10,6 +10,7 @@
     name:
       - git
       - automake
+      - autoconf
       - gcc
       - libuuid1
       - quota
@@ -34,6 +35,9 @@
       - libpopt-dev
       - libtirpc-dev
       - libtirpc3
+      - xsltproc
+      - libsmbclient-dev
+      - libiscsi-dev
     state: present
     update_cache: yes
   tags: [ 'dbench', 'deps' ]
