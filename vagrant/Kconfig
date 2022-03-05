@@ -1,5 +1,19 @@
 if VAGRANT
 
+config QEMU_USE_DEVELOPMENT_VERSION
+	bool "Should we look for a development version of qemu?"
+	help
+	  You want to enable this option if for example the currently
+	  available version of qemu does not yet have support for the feature
+	  you are going to be working on.
+
+	  Say yes here if you are compiling your own version of qemu.
+
+config QEMU_BIN_PATH
+	string "Qemu binary path to use"
+	default "/usr/local/bin/qemu-system-x86_64" if QEMU_USE_DEVELOPMENT_VERSION
+	default "/usr/bin/qemu-system-x86_64" if !QEMU_USE_DEVELOPMENT_VERSION
+
 config HAVE_SUSE_VAGRANT
 	bool
 	default $(shell, scripts/check_distro_kconfig.sh suse)

@@ -10,6 +10,7 @@ source ${TOPDIR}/scripts/workflows/blktests/lib.sh
 
 VAGRANTBOX=$CONFIG_VAGRANT_BOX
 VBOXVERSION=$CONFIG_VAGRANT_BOX_VERSION
+QEMUBINPATH=$CONFIG_QEMU_BIN_PATH
 
 # These are shared when possible, otherwise override for your workflow
 GENERIC_SPLIT_START="workflows/linux/kdevops_nodes_split_start.yaml.in"

@@ -34,9 +34,7 @@ vagrant_global:
     # selinux you may run into snags, but that is out of scope of this project.
     qemu_group_auto: true
     qemu_group: 'libvirt-qemu'
-    # In case you use a development version of qemu
-    # emulator_path: '/usr/local/bin/qemu-system-x86_64'
-    emulator_path: '/usr/bin/qemu-system-x86_64'
+    emulator_path: '@QEMUBINPATH@'
   # On the current directory
   nvme_disk_path: '.vagrant/nvme_disks/'
   nvme_disk_prefix: 'nvme_disk'
