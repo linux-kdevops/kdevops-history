@@ -51,6 +51,26 @@ vagrant_global:
       size: 102400
     extra2:
       size: 102400
+    zone1:
+      size: 102400
+      zoned: true
+      zone_zasl: 0
+      zone_size: 128M
+      zone_capacity: 128M
+      zone_max_open: 0
+      zone_max_active: 0
+      logical_block_size: 4096
+      physical_block_size: 4096
+    zone2:
+      size: 102400
+      zoned: true
+      zone_zasl: 0
+      zone_size: 128M
+      zone_capacity: 128M
+      zone_max_open: 0
+      zone_max_active: 0
+      logical_block_size: 4096
+      physical_block_size: 4096
 
 # Note: vagrant is not a fan of hosts with underscores.
 #
