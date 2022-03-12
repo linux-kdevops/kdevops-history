@@ -12,15 +12,6 @@
   when:
     - devconfig_try_upgrade|bool
 
-- name: Avoid stupid grub-pc questions which prevents automation
-  become: yes
-  become_method: sudo
-  shell:
-    cmd: echo "grub-pc hold" | sudo dpkg --set-selections
-  tags: [ 'apt', 'grub-pc' ]
-  when:
-    - devconfig_try_upgrade|bool
-
 - name: Update apt cache and do dist-upgrade
   become: yes
   become_method: sudo
