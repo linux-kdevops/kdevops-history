@@ -214,12 +214,12 @@ config SETUP_POSTFIX_EMAIL_RELAY_HOST
 
 endif
 
-menu "Bring up goals"
-source "kconfigs/Kconfig.bringup.goals"
-endmenu
-
 menu "Bring up methods"
 source "kconfigs/Kconfig.bringup"
+endmenu
+
+menu "Bring up goals"
+source "kconfigs/Kconfig.bringup.goals"
 endmenu
 
 menu "Target workflows"
