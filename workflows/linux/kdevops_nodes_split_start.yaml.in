@@ -52,25 +52,25 @@ vagrant_global:
     extra2:
       size: 102400
     zone1:
-      size: 102400
+      size: @NVMEZONEDRIVESIZE@
       zoned: true
-      zone_zasl: 0
-      zone_size: 128M
-      zone_capacity: 128M
-      zone_max_open: 0
-      zone_max_active: 0
-      logical_block_size: 4096
-      physical_block_size: 4096
+      zone_zasl: @NVMEZONEZASL@
+      zone_size: @NVMEZONESIZE@
+      zone_capacity: @NVMEZONECAPACITY@
+      zone_max_active: @NVMEZONEMAXACTIVE@
+      zone_max_open: @NVMEZONEMAXOPEN@
+      physical_block_size: @NVMEZONEPHYSICALBLOCKSIZE@
+      logical_block_size: @NVMEZONELOGICALBLOCKSIZE@
     zone2:
-      size: 102400
+      size: @NVMEZONEDRIVESIZE@
       zoned: true
-      zone_zasl: 0
-      zone_size: 128M
-      zone_capacity: 128M
-      zone_max_open: 0
-      zone_max_active: 0
-      logical_block_size: 4096
-      physical_block_size: 4096
+      zone_zasl: @NVMEZONEZASL@
+      zone_size: @NVMEZONESIZE@
+      zone_capacity: @NVMEZONECAPACITY@
+      zone_max_active: @NVMEZONEMAXACTIVE@
+      zone_max_open: @NVMEZONEMAXOPEN@
+      physical_block_size: @NVMEZONEPHYSICALBLOCKSIZE@
+      logical_block_size: @NVMEZONELOGICALBLOCKSIZE@
 
 # Note: vagrant is not a fan of hosts with underscores.
 #
