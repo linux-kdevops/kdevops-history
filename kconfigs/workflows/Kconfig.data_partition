@@ -82,7 +82,7 @@ endif # WORKFLOW_INFER_USER_AND_GROUP
 
 choice
 	prompt "Filesystem for the workflow data partition"
-	default WORKFLOW_DATA_FSTYPE_XFS
+	default WORKFLOW_DATA_FSTYPE_BTRFS
 
 config WORKFLOW_DATA_FSTYPE_XFS
 	bool "xfs"

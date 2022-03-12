@@ -14,7 +14,7 @@ config HAVE_DISTRO_PREFERS_FSTESTS_WATCHDOG_RESET
 
 choice
 	prompt "Target filesystem to test"
-	default FSTESTS_XFS
+	default FSTESTS_BTRFS
 
 config FSTESTS_XFS
 	bool "xfs"
@@ -255,7 +255,7 @@ config FSTESTS_SPARSE_DEV
 
 choice
 	prompt "Filesystem to use where sparse files will live"
-	default FSTESTS_SPARSE_XFS
+	default FSTESTS_SPARSE_BTRFS
 
 config FSTESTS_SPARSE_XFS
 	bool "xfs"
