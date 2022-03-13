@@ -27,6 +27,6 @@ PHONY += linux
 linux: $(KDEVOPS_NODES)
 	$(Q)ansible-playbook -i \
 		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
-		--extra-vars="$(BOOTLINUX_ARGS)"
+		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS)
 
 HELP_TARGETS+=linux-help-menu

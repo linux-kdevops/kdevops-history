@@ -28,6 +28,7 @@ git tree, and get up and running on a freshly compiled Linux git tree in just
   * `make`
   * `make bringup`
   * `make linux`
+  * `make linux HOSTS="kdevops-xfs-crc kdevops-xfs-reflink"` for example if you wanted to restrict running the above command only to the two hosts listed
 
 ### Start running fstests in 2 commands
 

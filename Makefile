@@ -38,6 +38,14 @@ export Q=@
 export NQ=echo
 endif
 
+null :=
+space := ${null} ${null}
+${space} := ${space}
+LIMIT_HOSTS :=
+ifneq (,$(HOSTS))
+LIMIT_HOSTS := $(subst ${ }, -l , $(HOSTS))
+endif
+
 INCLUDES = -I include/
 CFLAGS += $(INCLUDES)
 
