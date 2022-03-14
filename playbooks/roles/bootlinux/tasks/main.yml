@@ -154,13 +154,6 @@
     line: GRUB_TERMINAL="serial"
   tags: [ 'linux', 'git', 'config', 'console' ]
 
-- name: Update grub to ensure console changes take effect
-  lineinfile:
-    path: /etc/default/grub
-    regexp: '^GRUB_TERMINAL='
-    line: GRUB_TERMINAL="serial"
-  tags: [ 'linux', 'git', 'config', 'console' ]
-
 - name: Update your boot grub file if necessary
   tags: [ 'linux', 'uninstall-linux', 'manual-update-grub', 'console' ]
   import_tasks: update-grub/main.yml
