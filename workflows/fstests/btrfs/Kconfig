@@ -66,4 +66,15 @@ config FSTESTS_BTRFS_SECTION_NORAID56
 	  section, however the results will just be a subset of the results
 	  from testing section btrfs_raid56.
 
+config FSTESTS_BTRFS_SECTION_SIMPLE
+	bool "Enable testing section: btrfs_simple"
+	default y
+	help
+	  This will use the following simple options to create a btrfs
+	  filesystem:
+
+	      [btrfs_simple]
+	      MKFS_OPTIONS='-f -d single -m single'
+	      FSTYP=btrfs
+
 endif # !FSTESTS_BTRFS_MANUAL_COVERAGE
