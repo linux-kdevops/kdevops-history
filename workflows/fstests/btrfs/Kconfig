@@ -41,7 +41,7 @@ config FSTESTS_BTRFS_ENABLES_RAID56
 
 	      [xfs]
 	      MKFS_OPTIONS='-f -m crc=1,reflink=0,rmapbt=0, -i sparse=0'
-	      FSTYP=xfs
+	      FSTYP=btrfs
 
 config FSTESTS_BTRFS_SECTION_RAID56
 	bool "Enable testing section: btrfs_raid56"
