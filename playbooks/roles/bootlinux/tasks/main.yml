@@ -170,8 +170,156 @@
     chdir: "{{ target_linux_dir_path }}"
   tags: [ 'linux', 'install-linux' ]
 
+# There is slightly confusing user-experience and not complete documentation
+# about the requirements for using grub-set-default in light of the fact that
+# most Linux distributions use sub-menus. You need to use GRUB_DEFAULT=saved
+# there is a few caveats with its use which are not well documented anywhere
+# and I'm pretty sure tons of people are running into these issues.
+#
+# I'll document them here for posterity and so to justify the approach used
+# in kdevops to ensure we do boot the correct kernel.
+#
+# Some users erroneously claim that you also need GRUB_SAVEDEFAULT=true when
+# using GRUB_DEFAULT=saved but this is not true. The issue with using
+# GRUB_DEFAULT=saved which causes confusion is that most distributions
+# today use submenus folks do not take these into account when using
+# grub-set-default and the documentation about grub-set-default is not
+# clear about this requirement.
+#
+# Sadly, if you use a bogus kernel grub-set-default will not complain. For
+# example since most distributions use submenus, if you install a new kernel you
+# may end up in a situation as follows:
+#
+# menuentry 'Debian GNU/Linux' ... {
+#   ...
+# }
+# submenu 'Advanced options for Debian GNU/Linux' ... {
+#   menuentry 'Debian GNU/Linux, with Linux 5.16.0-4-amd64' ... {
+#     ...
+#   }
+#   menuentry 'Debian GNU/Linux, with Linux 5.16.0-4-amd64 (recovery mode)' ... {
+#     ...
+#   }
+#   menuentry 'Debian GNU/Linux, with Linux 5.10.105' ... {
+#     ...
+#   }
+#   ... etc ...
+# }
+#
+# So under this scheme the 5.10.105 kernel is actually "1>2" and so if
+# you used:
+#
+#   grub-set-default 3
+#
+# This would not return an error and you would expect it to work. This
+# is a bug in grub-set-default, it should return an error. The correct
+# way to set this with submenus would be:
+#
+#   grub-set-default "1>2"
+#
+# However doing the reverse mapping is something which can get complicated
+# and there is no upstream grub2 support to do this for you. We can simplify
+# this problem instead by disabling the submenus, with GRUB_DISABLE_SUBMENU=y,
+# making the menu flat and then just querying for the linear mapping using
+# ansible using awk | grep and tail.
+#
+# So for instance, using GRUB_DISABLE_SUBMENU=y results in the following
+# options:
+#
+# vagrant@kdevops-xfs-nocrc ~ $ awk -F\' '/menuentry / {print $2}' /boot/grub/grub.cfg |  awk '{print NR-1" ... "$0}'
+# 0 ... Debian GNU/Linux, with Linux 5.16.0-4-amd64
+# 1 ... Debian GNU/Linux, with Linux 5.16.0-4-amd64 (recovery mode)
+# 2 ... Debian GNU/Linux, with Linux 5.10.105
+# 3 ... Debian GNU/Linux, with Linux 5.10.105 (recovery mode)
+# 4 ... Debian GNU/Linux, with Linux 5.10.0-5-amd64
+# 5 ... Debian GNU/Linux, with Linux 5.10.0-5-amd64 (recovery mode)
+#
+# We have a higher degree of confidence with this structure when looking
+# for "5.10.105" that its respective boot entry 2 is the correct one. So we'd
+# now just use:
+#
+#   grub-set-default 2
+- name: Ensure we have GRUB_DEFAULT=saved
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  register: grub_default_saved_cmd
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^GRUB_DEFAULT='
+    line: GRUB_DEFAULT=saved
+  tags: [ 'linux', 'git', 'config', 'saved' ]
+
+- name: Use GRUB_DISABLE_SUBMENU=y to enable grub-set-default use with one digit
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  register: grub_disable_submenu_cmd
+  lineinfile:
+    path: /etc/default/grub
+    regexp: '^GRUB_DISABLE_SUBMENU='
+    line: GRUB_DISABLE_SUBMENU=y
+  tags: [ 'linux', 'git', 'config', 'saved' ]
+
+- name: Update your boot grub file if necessary
+  tags: [ 'linux', 'uninstall-linux', 'manual-update-grub', 'saved' ]
+  import_tasks: update-grub/main.yml
+  when: grub_disable_submenu_cmd.changed or grub_default_saved_cmd.changed
+
+# If this fails then grub-set-default won't be run, and the assumption here
+# is either you do the work to enhance the heuristic or live happy with the
+# assumption that grub2's default of picking the latest kernel is the best
+# option.
+- name: Try to find your target kernel's grub boot entry number now that the menu is flattened
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  shell: |
+    awk -F\' '/menuentry / {print $2}' \
+      /boot/grub/grub.cfg | awk '{print NR-1" ... "$0}' | \
+      grep {{ target_kernel }} | head -1 | awk '{print $1}'
+  vars:
+    target_kernel: "{{ target_linux_tag | replace('v', '') }}"
+  register: grub_boot_number_cmd
+  tags: [ 'linux', 'git', 'config', 'saved' ]
+
+- name: Set the target kernel to be booted by default moving forward if the above command worked
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "grub-set-default {{ target_boot_entry }}"
+  vars:
+    target_boot_entry: "{{ grub_boot_number_cmd.stdout_lines.0 }}"
+  tags: [ 'linux', 'git', 'config', 'saved' ]
+  when:
+    - grub_boot_number_cmd.rc == 0
+    - grub_boot_number_cmd.stdout != ""
+
+- name: Itemize kernel and grub entry we just selected
+  debug:
+    msg: "{{ target_kernel }} determined to be {{ target_boot_entry }} on the grub2 flat menu. Ran: grub-set-default {{ target_boot_entry }}"
+  vars:
+    target_kernel: "{{ target_linux_tag | replace('v', '') }}"
+    target_boot_entry: "{{ grub_boot_number_cmd.stdout_lines.0 }}"
+  tags: [ 'linux', 'git', 'config', 'saved' ]
+  when:
+    - grub_boot_number_cmd.rc == 0
+    - grub_boot_number_cmd.stdout != ""
+
 - name: Reboot into linux {{ target_linux_tree }}
   become: yes
   become_method: sudo
   reboot:
   tags: [ 'linux', 'reboot' ]
+
+- name: Run uname
+  command: "uname -r"
+  register: uname_cmd
+  tags: [ 'linux', 'git', 'config', 'uname' ]
+
+- name: Check kernel uname
+  debug:
+    msg: "Target kernel {{ target_linux_tag }} Running kernel {{ running_kernel }}"
+  vars:
+    running_kernel: "{{ uname_cmd.stdout_lines.0 }}"
+  tags: [ 'linux', 'git', 'config', 'uname' ]
