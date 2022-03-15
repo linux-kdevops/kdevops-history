@@ -90,7 +90,7 @@ config VAGRANT_BOX
 	default "debian/testing64" if VAGRANT_DEBIAN_TESTING64 || !VAGRANT
 	default "debian/buster64" if VAGRANT_DEBIAN_BUSTER64
 	default "opensuse/Tumbleweed.x86_64" if VAGRANT_OPENSUSE_X86_64_TW
-	default "fedora/32-beta-cloud-base" if VAGRANT_FEDORA_X86_64_32_CLOUD_BASE
+	default "fedora/35-cloud-base" if VAGRANT_FEDORA_X86_64_35_CLOUD_BASE
 	default "opensuse/Leap-15.3.x86_64" if VAGRANT_OPENSUSE_X86_64_LEAP_15_3
 	default "Leap-15.4.x86_64" if VAGRANT_OPENSUSE_X86_64_LEAP_15_4
 	default VAGRANT_SUSE_BOX if VAGRANT_SUSE
