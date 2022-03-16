@@ -72,6 +72,126 @@ vagrant_global:
       zone_max_open: @NVMEZONEMAXOPEN@
       physical_block_size: @NVMEZONEPHYSICALBLOCKSIZE@
       logical_block_size: @NVMEZONELOGICALBLOCKSIZE@
+    zone3:
+      size: @NVMEZONEDRIVESIZE@
+      zoned: true
+      zone_zasl: @NVMEZONEZASL@
+      zone_size: @NVMEZONESIZE@
+      zone_capacity: @NVMEZONECAPACITY@
+      zone_max_active: @NVMEZONEMAXACTIVE@
+      zone_max_open: @NVMEZONEMAXOPEN@
+      physical_block_size: @NVMEZONEPHYSICALBLOCKSIZE@
+      logical_block_size: @NVMEZONELOGICALBLOCKSIZE@
+    zone4:
+      size: @NVMEZONEDRIVESIZE@
+      zoned: true
+      zone_zasl: @NVMEZONEZASL@
+      zone_size: @NVMEZONESIZE@
+      zone_capacity: @NVMEZONECAPACITY@
+      zone_max_active: @NVMEZONEMAXACTIVE@
+      zone_max_open: @NVMEZONEMAXOPEN@
+      physical_block_size: @NVMEZONEPHYSICALBLOCKSIZE@
+      logical_block_size: @NVMEZONELOGICALBLOCKSIZE@
+    zone5:
+      size: @NVMEZONEDRIVESIZE@
+      zoned: true
+      zone_zasl: @NVMEZONEZASL@
+      zone_size: @NVMEZONESIZE@
+      zone_capacity: @NVMEZONECAPACITY@
+      zone_max_active: @NVMEZONEMAXACTIVE@
+      zone_max_open: @NVMEZONEMAXOPEN@
+      physical_block_size: @NVMEZONEPHYSICALBLOCKSIZE@
+      logical_block_size: @NVMEZONELOGICALBLOCKSIZE@
+    zone6:
+      size: @NVMEZONEDRIVESIZE@
+      zoned: true
+      zone_zasl: @NVMEZONEZASL@
+      zone_size: @NVMEZONESIZE@
+      zone_capacity: @NVMEZONECAPACITY@
+      zone_max_active: @NVMEZONEMAXACTIVE@
+      zone_max_open: @NVMEZONEMAXOPEN@
+      physical_block_size: @NVMEZONEPHYSICALBLOCKSIZE@
+      logical_block_size: @NVMEZONELOGICALBLOCKSIZE@
+    zone7:
+      size: @NVMEZONEDRIVESIZE@
+      zoned: true
+      zone_zasl: @NVMEZONEZASL@
+      zone_size: @NVMEZONESIZE@
+      zone_capacity: @NVMEZONECAPACITY@
+      zone_max_active: @NVMEZONEMAXACTIVE@
+      zone_max_open: @NVMEZONEMAXOPEN@
+      physical_block_size: @NVMEZONEPHYSICALBLOCKSIZE@
+      logical_block_size: @NVMEZONELOGICALBLOCKSIZE@
+    zone8:
+      size: @NVMEZONEDRIVESIZE@
+      zoned: true
+      zone_zasl: @NVMEZONEZASL@
+      zone_size: @NVMEZONESIZE@
+      zone_capacity: @NVMEZONECAPACITY@
+      zone_max_active: @NVMEZONEMAXACTIVE@
+      zone_max_open: @NVMEZONEMAXOPEN@
+      physical_block_size: @NVMEZONEPHYSICALBLOCKSIZE@
+      logical_block_size: @NVMEZONELOGICALBLOCKSIZE@
+    zone9:
+      size: @NVMEZONEDRIVESIZE@
+      zoned: true
+      zone_zasl: @NVMEZONEZASL@
+      zone_size: @NVMEZONESIZE@
+      zone_capacity: @NVMEZONECAPACITY@
+      zone_max_active: @NVMEZONEMAXACTIVE@
+      zone_max_open: @NVMEZONEMAXOPEN@
+      physical_block_size: @NVMEZONEPHYSICALBLOCKSIZE@
+      logical_block_size: @NVMEZONELOGICALBLOCKSIZE@
+    zone10:
+      size: @NVMEZONEDRIVESIZE@
+      zoned: true
+      zone_zasl: @NVMEZONEZASL@
+      zone_size: @NVMEZONESIZE@
+      zone_capacity: @NVMEZONECAPACITY@
+      zone_max_active: @NVMEZONEMAXACTIVE@
+      zone_max_open: @NVMEZONEMAXOPEN@
+      physical_block_size: @NVMEZONEPHYSICALBLOCKSIZE@
+      logical_block_size: @NVMEZONELOGICALBLOCKSIZE@
+    zone11:
+      size: @NVMEZONEDRIVESIZE@
+      zoned: true
+      zone_zasl: @NVMEZONEZASL@
+      zone_size: @NVMEZONESIZE@
+      zone_capacity: @NVMEZONECAPACITY@
+      zone_max_active: @NVMEZONEMAXACTIVE@
+      zone_max_open: @NVMEZONEMAXOPEN@
+      physical_block_size: @NVMEZONEPHYSICALBLOCKSIZE@
+      logical_block_size: @NVMEZONELOGICALBLOCKSIZE@
+    zone12:
+      size: @NVMEZONEDRIVESIZE@
+      zoned: true
+      zone_zasl: @NVMEZONEZASL@
+      zone_size: @NVMEZONESIZE@
+      zone_capacity: @NVMEZONECAPACITY@
+      zone_max_active: @NVMEZONEMAXACTIVE@
+      zone_max_open: @NVMEZONEMAXOPEN@
+      physical_block_size: @NVMEZONEPHYSICALBLOCKSIZE@
+      logical_block_size: @NVMEZONELOGICALBLOCKSIZE@
+    zone13:
+      size: @NVMEZONEDRIVESIZE@
+      zoned: true
+      zone_zasl: @NVMEZONEZASL@
+      zone_size: @NVMEZONESIZE@
+      zone_capacity: @NVMEZONECAPACITY@
+      zone_max_active: @NVMEZONEMAXACTIVE@
+      zone_max_open: @NVMEZONEMAXOPEN@
+      physical_block_size: @NVMEZONEPHYSICALBLOCKSIZE@
+      logical_block_size: @NVMEZONELOGICALBLOCKSIZE@
+    zone14:
+      size: @NVMEZONEDRIVESIZE@
+      zoned: true
+      zone_zasl: @NVMEZONEZASL@
+      zone_size: @NVMEZONESIZE@
+      zone_capacity: @NVMEZONECAPACITY@
+      zone_max_active: @NVMEZONEMAXACTIVE@
+      zone_max_open: @NVMEZONEMAXOPEN@
+      physical_block_size: @NVMEZONEPHYSICALBLOCKSIZE@
+      logical_block_size: @NVMEZONELOGICALBLOCKSIZE@
 
 # Note: vagrant is not a fan of hosts with underscores.
 #
