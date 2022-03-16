@@ -1,5 +1,25 @@
 if VAGRANT
 
+choice
+	prompt "Vagrant virtualization technology to use"
+	default VAGRANT_LIBVIRT
+
+config VAGRANT_LIBVIRT
+	bool "Libvirt"
+	help
+	  Select this option if you want to use KVM / libvirt for
+	  local virtualization.
+
+config VAGRANT_VIRTUALBOX
+	bool "Virtualbox"
+	help
+	  Select this option if you want to use Virtualbox for
+	  local virtualization.
+
+endchoice
+
+if VAGRANT_LIBVIRT
+
 config QEMU_USE_DEVELOPMENT_VERSION
 	bool "Should we look for a development version of qemu?"
 	help
@@ -9,10 +29,17 @@ config QEMU_USE_DEVELOPMENT_VERSION
 
 	  Say yes here if you are compiling your own version of qemu.
 
-config QEMU_BIN_PATH
+config QEMU_BIN_PATH_LIBVIRT
 	string "Qemu binary path to use"
 	default "/usr/local/bin/qemu-system-x86_64" if QEMU_USE_DEVELOPMENT_VERSION
 	default "/usr/bin/qemu-system-x86_64" if !QEMU_USE_DEVELOPMENT_VERSION
+
+endif
+
+config QEMU_BIN_PATH
+	string
+	default QEMU_BIN_PATH_LIBVIRT if VAGRANT_LIBVIRT
+	default "/usr/bin/qemu-system-x86_64" if !VAGRANT_LIBVIRT
 
 config HAVE_SUSE_VAGRANT
 	bool
@@ -187,8 +214,17 @@ config VAGRANT_INSTALL_PRIVATE_BOXES
 	  vagrant boxes. Enabling this option is safe as well, given no
 	  private boxes would be defined, and so nothing is done.
 
+config QEMU_ENABLE_NVME_ZNS
+	bool "Enable Qemu NVMe ZNS drives"
+	depends on VAGRANT_LIBVIRT
+	default n
+	help
+	  If this option is enabled then you can enable NVMe ZNS drives on the
+	  guests.
+
 config QEMU_CUSTOM_NVME_ZNS
 	bool "Customize Qemu NVMe ZNS settings"
+	depends on QEMU_ENABLE_NVME_ZNS
 	default n
 	help
 	  If this option is enabled then you will be able to modify the defaults
@@ -280,6 +316,10 @@ config QEMU_CUSTOM_NVME_ZONE_LOGICAL_BLOCKSIZE
 	  bytes.
 
 endif # QEMU_CUSTOM_NVME_ZNS
+
+config VAGRANT_ENABLE_ZNS
+	bool
+	default y if QEMU_ENABLE_NVME_ZNS
 
 config QEMU_NVME_ZONE_DRIVE_SIZE
 	int

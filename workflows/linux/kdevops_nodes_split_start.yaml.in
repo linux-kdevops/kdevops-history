@@ -5,6 +5,7 @@ vagrant_global:
   skip_ansible: @SKIPANSIBLE@
   memory: 8192
   cpus: 8
+  enable_zns: @VAGRANTENABLEZNS@
   # Enable the below options
   #limit_boxes: "yes"
   #limit_num_boxes: 1
