@@ -65,6 +65,8 @@
 
 - name: Installs the libvirt vagrant plugin
   command: "vagrant plugin install vagrant-libvirt"
+  environment:
+    CONFIGURE_ARGS: 'with-libvirt-include=/usr/include/libvirt with-libvirt-lib=/usr/lib64'
   register: cmd_done
   changed_when: "cmd_done.rc == 0"
   when:

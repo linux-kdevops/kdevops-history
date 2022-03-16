@@ -8,7 +8,7 @@
       - libvirt-daemon
       - qemu
       - qemu-kvm
-      - qemu-x86
+      - qemu-system-x86
     state: present
 
 - name: Make sure libvirtd is running
