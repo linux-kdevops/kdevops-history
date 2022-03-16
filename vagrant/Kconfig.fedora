@@ -3,36 +3,36 @@ if VAGRANT_FEDORA
 
 choice
 	prompt "Fedora release to use"
-	default VAGRANT_FEDORA_X86_64_32_CLOUD_BASE
+	default VAGRANT_FEDORA_X86_64_35_CLOUD_BASE
 
-config VAGRANT_FEDORA_X86_64_32_CLOUD_BASE
-	bool "fedora/32-beta-cloud-base"
+config VAGRANT_FEDORA_X86_64_35_CLOUD_BASE
+	bool "fedora/35-cloud-base"
 	depends on TARGET_ARCH_X86_64
 	help
-	  This option will set the target guest to fedora/32-beta-cloud-base
-	  release 32.20200312.0
+	  This option will set the target guest to fedora/35-cloud-base
+	  release 35.20211026.0
 
 endchoice
 
-if VAGRANT_FEDORA_X86_64_32_CLOUD_BASE
+if VAGRANT_FEDORA_X86_64_35_CLOUD_BASE
 
 choice
-	prompt "fedora/32-beta-cloud-base version to use"
-	default VAGRANT_FEDORA_32_202003120
+	prompt "fedora/35-cloud-base version to use"
+	default VAGRANT_FEDORA_35_35202110260
 
-config VAGRANT_FEDORA_32_202003120
-	bool "fedora/32-beta-cloud-base 32.20200312.0"
+config VAGRANT_FEDORA_35_35202110260
+	bool "fedora/35-beta-cloud-base 35.20211026.0"
 	select HAVE_VAGRANT_BOX_VERSION
 	select HAVE_DISTRO_XFS_SUPPORTS_CRC if FSTESTS_XFS
 	select HAVE_DISTRO_XFS_SUPPORTS_EXTERNAL_LOG if FSTESTS_XFS
 	select HAVE_DISTRO_XFS_SUPPORTS_REFLINKS if FSTESTS_XFS
 	select HAVE_DISTRO_XFS_SUPPORTS_BIGBLOCKS if FSTESTS_XFS
 	help
-	  This option will set the target guest to fedora/32-beta-cloud-base
-	  release 32.20200312.0
+	  This option will set the target guest to fedora/35-beta-cloud-base
+	  release 35.20211026.0
 
 endchoice
 
-endif # VAGRANT_FEDORA_X86_64_32_CLOUD_BASE
+endif # VAGRANT_FEDORA_X86_64_35_CLOUD_BASE
 
 endif # VAGRANT_FEDORA
