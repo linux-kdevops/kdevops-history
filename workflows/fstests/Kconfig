@@ -231,12 +231,11 @@ config FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 
 	  The SCRATCH_DEV_POOL is set to these devices:
 
-	   /dev/loop5   /dev/loop6   /dev/loop6   /dev/loop7
-	   /dev/loop8   /dev/loop9   /dev/loop10  /dev/loop11
+	   /dev/loop5   /dev/loop6   /dev/loop7   /dev/loop8
+	   /dev/loop9   /dev/loop10  /dev/loop11  /dev/loop12
 
 	  With this strategy these loopback devices currently remain unused:
 
-	   /dev/loop12
 	   /dev/loop13
 
 endchoice
@@ -335,7 +334,7 @@ config FSTESTS_TEST_DIR
 	# default $(shell, for i in $(seq 5 11) echo /dev/loop$i) if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 config FSTESTS_SCRATCH_DEV_POOL
 	string "The list of devices to set in SCRATCH_DEV_POOL"
-	default "/dev/loop5 /dev/loop6 /dev/loop6 /dev/loop7 /dev/loop8 /dev/loop9 /dev/loop10 /dev/loop11" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
+	default "/dev/loop5 /dev/loop6 /dev/loop7 /dev/loop8 /dev/loop9 /dev/loop10 /dev/loop11 /dev/loop12" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 	help
 	  To set of spare devices to use for the FSTESTS SCRATCH_DEV_POOL.
 
