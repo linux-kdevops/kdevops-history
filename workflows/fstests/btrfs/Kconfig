@@ -77,4 +77,15 @@ config FSTESTS_BTRFS_SECTION_SIMPLE
 	      MKFS_OPTIONS='-f -d single -m single'
 	      FSTYP=btrfs
 
+config FSTESTS_BTRFS_SECTION_SIMPLE_ZNS
+	bool "Enable testing section: btrfs_simple_zns"
+	default y
+	help
+	  This will use the following simple options to create a btrfs
+	  filesystem for ZNS drives:
+
+	      [btrfs_simple]
+	      MKFS_OPTIONS='-f -d single -m single'
+	      FSTYP=btrfs
+
 endif # !FSTESTS_BTRFS_MANUAL_COVERAGE

@@ -6,6 +6,7 @@ source ${TOPDIR}/scripts/workflows/fstests/lib.sh
 BTRFS_SECTIONS="raid56"
 BTRFS_SECTIONS="$BTRFS_SECTIONS noraid56"
 BTRFS_SECTIONS="$BTRFS_SECTIONS simple"
+BTRFS_SECTIONS="$BTRFS_SECTIONS simple_zns"
 
 export BTRFS_SECTIONS
 

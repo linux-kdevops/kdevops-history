@@ -324,6 +324,14 @@ config FSTESTS_TEST_DEV
 	  To test with fstests one must set the TEST_DEV variable, this sets
 	  the TEST_DEV to use.
 
+config FSTESTS_TEST_DEV_ZNS
+	string "The device to use TEST_DEV on fstests for ZNS testing"
+	depends on VAGRANT_ENABLE_ZNS
+	default "/dev/nvme4n1" if QEMU_ENABLE_NVME_ZNS
+	help
+	  To test with fstests one must set the TEST_DEV variable, this sets
+	  the TEST_DEV to use when testing with ZNS drives.
+
 config FSTESTS_TEST_DIR
 	string "The path to use for the fstests TEST_DIR variable"
 	default "/media/test"
@@ -337,6 +345,14 @@ config FSTESTS_SCRATCH_DEV_POOL
 	default "/dev/loop5 /dev/loop6 /dev/loop7 /dev/loop8 /dev/loop9 /dev/loop10 /dev/loop11 /dev/loop12" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 	help
 	  To set of spare devices to use for the FSTESTS SCRATCH_DEV_POOL.
+
+config FSTESTS_SCRATCH_DEV_POOL
+	string "The list of devices to set in SCRATCH_DEV_POOL for ZNS testing"
+	depends on VAGRANT_ENABLE_ZNS
+	default "/dev/nvme4n1 /dev/nvme5n1 /dev/nvme6n1 /dev/nvme7n1 /dev/nvme8n1 /dev/nvme9n1 /dev/nvme10n1 /dev/nvme11n1" if QEMU_ENABLE_NVME_ZNS
+	help
+	  To set of spare devices to use for the FSTESTS SCRATCH_DEV_POOL for ZNS testing.
+
 
 config FSTESTS_SCRATCH_MNT
 	string "The path to use for the fstests SCRATCH_MNT variable"
