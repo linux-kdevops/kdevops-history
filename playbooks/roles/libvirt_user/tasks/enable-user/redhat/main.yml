@@ -25,6 +25,29 @@
     - 'only_verify_user|bool'
     - 'apparmor_file_stat_result.stat.exists'
 
+- name: Check if getenforce exists
+  stat:
+    path: /usr/sbin/getenforce
+  register: getenforce_file_stat_result
+  when: 'only_verify_user|bool'
+
+- name: Check if SELinux is enabled
+  command:
+    cmd: /usr/sbin/getenforce
+  register: selinux_check
+  when:
+    - 'only_verify_user|bool'
+    - 'getenforce_file_stat_result.stat.exists'
+
+- name: Inform if the user must disable SELinux
+  register: selinux_enabled
+  debug:
+    msg: "SELinux is enabled which may cause problems without the proper svirt_t context settings, disable SELinux or patch this thing to set the contexts properly"
+  failed_when: '"Enforcing" in selinux_check.stdout'
+  when:
+    - 'only_verify_user|bool'
+    - 'selinux_check is defined and "Enforcing" in selinux_check.stdout'
+
 - name: Verifies user's effective group allows to run libvirt/kvm without being root
   shell: groups | grep {{ item }}
   with_items:
