@@ -9,6 +9,11 @@ config BOOTLINUX_TREE_NEXT
 	help
 	  Use the linux-next tree.
 
+config BOOTLINUX_TREE_BTRFS_DEVEL
+	bool "btrfs-devel"
+	help
+	  Use the btrfs-devel tree.
+
 endchoice
 
 endif # BOOTLINUX_DEV

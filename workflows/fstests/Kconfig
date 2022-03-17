@@ -186,6 +186,7 @@ config FSTESTS_GIT
 	default "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git" if !GIT_ALTERNATIVES
 	default "https://github.com/linux-kdevops/fstests.git" if GIT_LINUX_KDEVOPS_GITHUB
 	default "https://gitlab.com/linux-kdevops/fstests.git" if GIT_LINUX_KDEVOPS_GITLAB
+	default "https://github.com/btrfs/fstests.git" if FSTESTS_BTRFS
 	help
 	  The fstests git tree to clone.
 
