@@ -14,4 +14,8 @@
 - import_tasks: suse/main.yml
   when: ansible_facts['os_family']|lower == 'suse'
 - import_tasks: redhat/main.yml
-  when: ansible_facts['os_family']|lower == 'redhat'
+  when:
+    - ansible_facts['os_family']|lower == 'redhat'
+    - ansible_facts['distribution']|lower != "fedora"
+- import_tasks: fedora/main.yml
+  when: ansible_facts['distribution']|lower == "fedora"

@@ -1,0 +1,9 @@
+---
+- name: Install vagrant and vagrant-plugin-libvirt
+  become: yes
+  become_method: sudo
+  dnf:
+    name:
+      - vagrant
+      - vagrant-libvirt
+    state: present
