@@ -2,7 +2,7 @@
 ---
 
 # You can override these
-vagrant_version: "2.2.6"
+vagrant_version: "2.2.19"
 
 # Ignores using distro packages and installs from zip file instead
 force_install_zip: False
