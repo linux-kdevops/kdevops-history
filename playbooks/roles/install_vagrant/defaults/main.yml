@@ -1,6 +1,20 @@
 # SPDX-License-Identifier copyleft-next-0.3.1
 ---
 
+storage_pool_user: "root"
+storage_pool_group: "root"
+
+# kdevops *owns* this so we expect to set this to something
+# sensible with kconfig.
+kdevops_storage_pool_user: "root"
+kdevops_storage_pool_group: "root"
+
+libvirt_provider: False
+virtualbox_provider: False
+
+storage_pool_path: "/dev/null"
+kdevops_storage_pool_path: "/dev/null"
+
 # You can override these
 vagrant_version: "2.2.19"
 

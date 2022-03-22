@@ -13,3 +13,27 @@
 # Distro specific
 - name: Install vagrant and other dependencies
   include_tasks: install-deps/main.yml
+
+- name: Create a base storage pool if it does not exist
+  become: yes
+  become_method: sudo
+  file:
+    path: "{{ storage_pool_path }}"
+    state: directory
+    mode: 'g+rw,o+rx'
+    owner: "{{ storage_pool_user }}"
+    group: "{{ storage_pool_group }}"
+  delegate_to: localhost
+  run_once: true
+
+- name: Create a kdevops specific storage pool for vagrant if it does not exist
+  become: yes
+  become_method: sudo
+  file:
+    path: "{{ kdevops_storage_pool_path }}"
+    state: directory
+    mode: 'o+rwxs,g+rxws'
+    owner: "{{ kdevops_storage_pool_user }}"
+    group: "{{ kdevops_storage_pool_group }}"
+  delegate_to: localhost
+  run_once: true

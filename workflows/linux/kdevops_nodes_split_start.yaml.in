@@ -6,6 +6,9 @@ vagrant_global:
   memory: 8192
   cpus: 8
   enable_zns: @VAGRANTENABLEZNS@
+  # For creating extra nvme drives and if libvirt is used it is also
+  # where we let vagrant store its images.
+  storage_pool_path: '@KDEVOPSSTORAGEPOOLPATH@'
   # Enable the below options
   #limit_boxes: "yes"
   #limit_num_boxes: 1
