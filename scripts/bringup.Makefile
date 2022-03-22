@@ -4,9 +4,9 @@ ifeq (,$(wildcard $(CURDIR)/.config))
 else
 # stage-2-y targets gets called after all local config files have been generated
 stage-2-$(CONFIG_TERRAFORM)			+= kdevops_terraform_deps
-stage-2-$(CONFIG_VAGRANT)			+= kdevops_vagrant_install_vagrant
 stage-2-$(CONFIG_VAGRANT_LIBVIRT_INSTALL)	+= kdevops_vagrant_install_libvirt
 stage-2-$(CONFIG_VAGRANT_LIBVIRT_CONFIGURE)	+= kdevops_vagrant_configure_libvirt
+stage-2-$(CONFIG_VAGRANT)			+= kdevops_vagrant_install_vagrant
 stage-2-$(CONFIG_VAGRANT_INSTALL_PRIVATE_BOXES)	+= kdevops_vagrant_boxes
 stage-2-$(CONFIG_VAGRANT_LIBVIRT_VERIFY)	+= kdevops_verify_vagrant_user
 DEFAULT_DEPS += kdevops_stage_2
