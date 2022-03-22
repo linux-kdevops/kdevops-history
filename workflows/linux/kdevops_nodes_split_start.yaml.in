@@ -39,6 +39,13 @@ vagrant_global:
     qemu_group_auto: true
     qemu_group: 'libvirt-qemu'
     emulator_path: '@QEMUBINPATH@'
+    storage_pool_path: '@LIBVIRTSTORAGEPOOLPATH@'
+    uri: '@LIBVIRTURI@'
+    system_uri: '@LIBVIRTSYSTEMURI@'
+    session: @LIBVIRTSESSION@
+    session_socket: '@LIBVIRTSESSIONSOCKET@'
+    session_management_network_device: '@LIBVIRTSESSIONMANAGEMENTNETWORKDEVICE@'
+    session_public_network_dev: '@LIBVIRTSESSIONPUBLICNETWORKDEV@'
   # On the current directory
   nvme_disk_path: '.vagrant/nvme_disks/'
   nvme_disk_prefix: 'nvme_disk'

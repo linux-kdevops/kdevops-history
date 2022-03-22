@@ -86,6 +86,120 @@ config LIBVIRT_STORAGE_POOL_PATH_CUSTOM
 	  the nvme qcow2 files created will go in by default to the directory
 	  /var/lib/libvirt/images/kdevops/.vagrant/nvme_disks/guest-hostname/.
 
+choice
+	prompt "Libvirt URI"
+	default LIBVIRT_URI_SYSTEM if !DISTRO_FEDORA
+	default LIBVIRT_URI_SESSION if DISTRO_FEDORA
+
+config LIBVIRT_URI_SYSTEM
+	bool "Use qemu:///system for the URI"
+	help
+	  The first design behind libvirt is to use the system URI, that is,
+	  qemu:///system. All 'system' URIs (be it qemu, lxc, uml, ...)
+	  connect to the libvirtd daemon running as root which is launched at
+	  system startup. Virtual machines created and run using 'system'
+	  are usually launched as root, unless configured otherwise (for
+	  example in /etc/libvirt/qemu.conf). A distribution can however still
+	  allow users to use the system URI if they are added to the respective
+	  groups to use libvirt, and this is the approach taken by kdevops when
+	  this option is enabled.
+
+	  You will definitely want to use qemu:///system if your VMs are
+	  acting as servers. VM autostart on host boot only works for 'system',
+	  and the root libvirtd instance has necessary permissions to use
+	  proper networkings via bridges or virtual networks. qemu:///system
+	  is generally what tools like virt-manager default to.
+
+	  When this option is enabled vagrant's libvirt default built-in
+	  URI is used along with the default network management interface,
+	  libvirt socket, and the network interface assumed for bridging.
+
+	  For more details on this refer to the libvirt wiki which still
+	  advises in favor of the system URI over the session URI:
+
+	  https://wiki.libvirt.org/page/FAQ#What_is_the_difference_between_qemu:.2F.2F.2Fsystem_and_qemu:.2F.2F.2Fsession.3F_Which_one_should_I_use.3F
+
+config LIBVIRT_URI_SESSION
+	bool "Use qemu:///session for the URI"
+	help
+	  A second design consideration has been implemented into libvirt to
+	  enable users to use libvirt without the libvirt daemon needing to
+	  run as root. All 'session' URIs launch a libvirtd instance as your
+	  local user, and all VMs are run with local user permissions.
+
+	  The benefit of qemu:///session is that permission issues vanish:
+	  disk images can easily be stored in $HOME, serial PTYs are owned by
+	  the user, etc.
+
+	  qemu:///session has a serious drawback: since the libvirtd instance
+	  does not have sufficient privileges, the only out of the box network
+	  option is qemu's usermode networking, which has nonobvious
+	  limitations, so its usage is discouraged. More info on qemu
+	  networking options: http://people.gnome.org/~markmc/qemu-networking.html
+	  With regards to kdevops, if you use the session URI we don't
+	  instantiate secondary interfaces with private IP addresses. This is
+	  not a requirement for the currently supported workflows but if
+	  you are doing custom networking stuff this may be more relevant for
+	  you. Fedora defaults to the session URI.
+
+	  When this option is enabled we modify vagrant's libvirt default
+	  built-in URI for the session URI, and we also modify the default
+	  network management interface to be virbr0, the default socket
+	  is assumed to be /run/libvirt/libvirt-sock-ro. New kconfig options
+	  can be added later to customize those further if we really need
+	  to.
+
+	  Please note that sensible defaults are enabled for your Linux
+	  distribution, so if your distribution does not have session URI
+	  set by default it means it doesn't support it yet and you should
+	  expect things to not work, and put the work to fix / enhance that
+	  somehow. That work likely is not on kdevops... but perhaps this
+	  could be worng. Testing has be done with session support on debian
+	  testing, Ubuntu 21.10 and they both have issues. Don't enable session
+	  support manually unless you know what you are doing.
+
+config LIBVIRT_URI_CUSTOM
+	bool "Custom qemu URI"
+	help
+	  Select this option if you want to manually specify which URI to use.
+	  In other words you know what you are doing.
+
+endchoice
+
+config LIBVIRT_URI_PATH
+	string "Libvirt qemu URI to use"
+	default "qemu:///system" if LIBVIRT_URI_SYSTEM || LIBVIRT_URI_CUSTOM
+	default "qemu:///session" if LIBVIRT_URI_SESSION
+	help
+	  By default vagrant uses a qemu:///system URI which assumes the libvirt
+	  daemon runs as a user other than the user which is running the vagrant
+	  commands. Libvirt has support for running the libvirt daemon as other
+	  users using session support. This will be modified to a session URI
+	  if you enable LIBVIRT_URI_SESSION. You can however set this to
+	  something different to suit your exact needs here. This is the value
+	  passed to the vagrant-libvirt plugin libvirt.uri. You should not have
+	  to modify this value if you selected LIBVIRT_URI_SYSTEM or
+	  LIBVIRT_URI_SESSION and are starting from a fresh 'make mrproper'
+	  setting on kdevops, the appropriate value will be set for you.
+	  You should only have to modify this manually if you set
+	  LIBVIRT_URI_CUSTOM and you know what you are doing.
+
+config LIBVIRT_SYSTEM_URI_PATH
+	string "Libvirt system qemu URI to use"
+	default "qemu:///system"
+	help
+	  This is the URI of QEMU system connection, used to obtain the IP
+	  address for management. This is used for the vagrant-libvirt plugin
+	  libvirt.system_uri setting. If for whatever reason this needs to
+	  be modified you can do so here. Even if you are using session
+	  support you should leave this with the default qemu:///system setting
+	  as this is still used to ensure your guest's IP address will be
+	  communicated back to vagrant so it determines the guest is up and
+	  you can ssh to it. Setting this to qemu:///session still gets the
+	  guest up but vagrant won't know the guest is up, even though the
+	  host can ssh to the guest. You should only modify this value if
+	  you know what you are doing.
+
 endif
 
 if VAGRANT_VIRTUALBOX
@@ -145,6 +259,37 @@ config QEMU_BIN_PATH
 	string
 	default QEMU_BIN_PATH_LIBVIRT if VAGRANT_LIBVIRT
 	default "/usr/bin/qemu-system-x86_64" if !VAGRANT_LIBVIRT
+
+config LIBVIRT_URI
+	string
+	default "qemu:///system" if !VAGRANT_LIBVIRT
+	default LIBVIRT_URI_PATH if VAGRANT_LIBVIRT
+
+config LIBVIRT_SYSTEM_URI
+	string
+	default "qemu:///system" if !VAGRANT_LIBVIRT
+	default LIBVIRT_SYSTEM_URI_PATH if VAGRANT_LIBVIRT
+
+config LIBVIRT_SESSION
+	bool
+	default LIBVIRT_URI_SESSION
+
+# These defaults are only used when LIBVIRT_SESSION is true,
+# but we need them to build our nodes file even if LIBVIRT_SESSION is
+# disabled. We can provide new kconfig entries for these should we
+# need them later. For now we default to what Fedora uses as that's
+# the only distro using the session URI by default by now.
+config LIBVIRT_SESSION_SOCKET
+	string
+	default "/run/libvirt/libvirt-sock-ro"
+
+config LIBVIRT_SESSION_MANAGEMENT_NETWORK_DEVICE
+	string
+	default "virbr0"
+
+config LIBVIRT_SESSION_PUBLIC_NETWORK_DEV
+	string
+	default "virbr0"
 
 config HAVE_SUSE_VAGRANT
 	bool
