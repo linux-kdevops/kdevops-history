@@ -1,10 +1,49 @@
 ---
+# RH doesn't have any up to date reasonable package for
+# vagrant or vagrant-libvirt
+- name: Set generic redhat/fedora specific distro facts
+  set_fact:
+    force_install_zip: true
+
+- name: Nuke vagrant binary manually
+  become: yes
+  become_method: sudo
+  file:
+    path: "/usr/local/bin/vagrant"
+    state: absent
+  when:
+    - force_install_zip|bool
+
+- name: Install requiredments to run our verifications or to download vagrant
+  become: yes
+  become_method: sudo
+  yum:
+    name:
+      - fuse
+      - unzip
+      - bsdtar
+    state: present
+  tags: install
+
 - name: Verify vagrant installation
   command: "which vagrant"
   register: vagrant_present
   changed_when: vagrant_present.rc == 1
   failed_when: vagrant_present.rc != 0 and vagrant_present.rc != 1
   tags: [ 'vagrant', 'verify' ]
+
+- name: Install vagrant and vagrant-libvirt
+  become: yes
+  become_method: sudo
+  yum:
+    name:
+      - vagrant
+      - vagrant-libvirt
+    state: present
+  when:
+    - not force_install_zip|bool
+    - force_install_if_present|bool or vagrant_present.rc != 0
+  tags: install
 
 - name: Downlaod vagrant from the latest release and install locally
   become: yes
@@ -14,6 +53,7 @@
     dest: /usr/local/bin
     remote_src: yes
   when:
+    - force_install_zip|bool
     - force_install_if_present|bool or vagrant_present.rc != 0
 
 # This is a major heck, alas, vagrant plugin subset commands do not have any
@@ -31,7 +71,8 @@
   changed_when: plugin_check.rc == 0
   failed_when: plugin_check.rc != 0 and plugin_check.rc != 1
   run_once: true
-
+  when:
+    - force_install_zip|bool
 
 # This is a major heck, alas, vagrant plugin subset commands do not have any
 # easy way to confirm if a plugin is installed in a straight forward way.
@@ -49,19 +90,42 @@
   failed_when: plugin_check.rc != 0 and plugin_check.rc != 1
   run_once: true
 
-# No package yet for this... which means we have to install
-# its build dependencies as well.
+- name: Enable libvirtd
+  become: yes
+  become_method: sudo
+  systemd:
+    name: libvirtd
+    enabled: yes
+    masked: no
+
+- name: Start libvirtd
+  become: yes
+  become_method: sudo
+  systemd:
+    name: libvirtd
+    state: restarted
+
 - name: Install vagrant-libvirt build dependencies
   become: yes
   become_method: sudo
   yum:
     name:
       - libvirt-devel
+      - openssl-devel
       - ruby-devel
       - gcc
+      - rubygem-ruby-libvirt
+      - rubygem-rake
+      - autoconf
+      - automake
+      - byacc
+      - binutils
+      - libguestfs-tools
+      - wget
+      - zlib-devel
     state: present
   when:
-    - plugin_check.rc != 0
+    - force_install_zip|bool and plugin_check.rc != 0
 
 - name: Installs the libvirt vagrant plugin
   command: "vagrant plugin install vagrant-libvirt"
@@ -70,4 +134,5 @@
   register: cmd_done
   changed_when: "cmd_done.rc == 0"
   when:
+    - force_install_zip|bool
     - plugin_check.rc != 0
