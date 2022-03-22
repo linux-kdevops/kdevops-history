@@ -20,6 +20,14 @@
     state: present
   tags: install
 
+- name: Enable libvirtd
+  become: yes
+  become_method: sudo
+  systemd:
+    name: libvirtd
+    enabled: yes
+    masked: no
+
 - name: Make sure libvirtd is running
   become: yes
   become_method: sudo

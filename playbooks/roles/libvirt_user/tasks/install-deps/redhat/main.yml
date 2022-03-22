@@ -11,6 +11,14 @@
       - qemu-system-x86
     state: present
 
+- name: Enable libvirtd
+  become: yes
+  become_method: sudo
+  systemd:
+    name: libvirtd
+    enabled: yes
+    masked: no
+
 - name: Make sure libvirtd is running
   become: yes
   become_method: sudo
