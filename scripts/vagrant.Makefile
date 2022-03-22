@@ -9,6 +9,25 @@ else
 VAGRANT_PRIVATE_BOX_DEPS :=
 endif
 
+VAGRANT_ARGS += kdevops_storage_pool_user='$(USER)'
+
+ifeq (y,$(CONFIG_VAGRANT_LIBVIRT))
+VAGRANT_ARGS += libvirt_provider=True
+
+QEMU_GROUP:=$(subst ",,$(CONFIG_LIBVIRT_QEMU_GROUP))
+VAGRANT_ARGS += kdevops_storage_pool_group='$(QEMU_GROUP)'
+VAGRANT_ARGS += storage_pool_group='$(QEMU_GROUP)'
+endif
+
+ifeq (y,$(CONFIG_VAGRANT_VIRTUALBOX))
+VAGRANT_ARGS += virtualbox_provider=True
+endif
+
+STORAGE_POOL_PATH:=$(subst ",,$(CONFIG_KDEVOPS_STORAGE_POOL_PATH))
+KDEVOPS_STORAGE_POOL_PATH:=$(STORAGE_POOL_PATH)/kdevops
+VAGRANT_ARGS += storage_pool_path=$(STORAGE_POOL_PATH)
+VAGRANT_ARGS += kdevops_storage_pool_path=$(KDEVOPS_STORAGE_POOL_PATH)
+
 EXTRA_VAR_INPUTS += extend-extra-args-vagrant
 
 extend-extra-args-vagrant:

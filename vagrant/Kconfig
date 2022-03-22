@@ -34,7 +34,112 @@ config QEMU_BIN_PATH_LIBVIRT
 	default "/usr/local/bin/qemu-system-x86_64" if QEMU_USE_DEVELOPMENT_VERSION
 	default "/usr/bin/qemu-system-x86_64" if !QEMU_USE_DEVELOPMENT_VERSION
 
+choice
+	prompt "Libvirt storage pool path"
+	default LIBVIRT_STORAGE_POOL_PATH_CUSTOM_DEFAULT_DISTRO if !DISTRO_SUSE
+	default LIBVIRT_STORAGE_POOL_PATH_CUSTOM_CWD if DISTRO_SUSE
+
+config LIBVIRT_STORAGE_POOL_PATH_CUSTOM_CWD
+	bool "Use the current vagrant working directory"
+	help
+	  Select this option if you want to use the vagrant directory inside
+	  where you git cloned kdevops as the libvirt storage pool path where
+	  we'll download images and store images for guests spawned. If users
+	  git cloned kdevops somewhere in their home directory they'll have to
+	  make sure that the group which libvirt is configured to run for their
+	  distribution can have access to that directory. As it is today it
+	  would seem only fedora restricts the $HOME to g-rwx o-rwx and so
+	  by default this option won't work on Fedora by default. This used
+	  to be the old default on kdevops but because of this it should not
+	  be used by default. Distributions still relying on this should
+	  verify they can change this default.
+
+config LIBVIRT_STORAGE_POOL_PATH_CUSTOM_DEFAULT_DISTRO
+	bool "Use the same path typically used by each distribution"
+	help
+	  Select this option if you want to use the same location as the
+	  distribution would typically use. We expect this to be
+	  /var/lib/libvirt/images/ for most distributions, however we can
+	  customize this further if this is not true by adding further checks.
+
+config LIBVIRT_STORAGE_POOL_PATH_CUSTOM_MANUAL
+	bool "Custom manual path"
+	help
+	  Select this option if you want to manually specify where to use as
+	  the qemu storage pool path. This is today's default given otherwise
+	  we may have to muck with the $HOME directory permissions.
+
+endchoice
+
+config LIBVIRT_STORAGE_POOL_PATH_CUSTOM
+	string "Libvirt storage pool path"
+	default "/var/lib/libvirt/images/" if !LIBVIRT_STORAGE_POOL_PATH_CUSTOM_CWD
+	default $(shell, scripts/cwd-append.sh vagrant) if LIBVIRT_STORAGE_POOL_PATH_CUSTOM_CWD
+	default "/opt/libvirt/images/" if LIBVIRT_STORAGE_POOL_PATH_CUSTOM_MANUAL
+	help
+	  The path to use for the libvirt storage pool path. Since kdevops uses
+	  vagrant for virtualization this is also the path used to place the
+	  additional nvme drives created. kdevops adds a postfix "kdevops" to
+	  this directory as it wants to allow vagrant full control over that
+	  directory. For instance if this is /var/lib/libvirt/images/ kdevops
+	  will let vagrant store images in /var/lib/libvirt/images/ and
+	  the nvme qcow2 files created will go in by default to the directory
+	  /var/lib/libvirt/images/kdevops/.vagrant/nvme_disks/guest-hostname/.
+
 endif
+
+if VAGRANT_VIRTUALBOX
+
+choice
+	prompt "Virtualbox storage pool path"
+	default VIRTUALBOX_STORAGE_POOL_PATH_CUSTOM_MANUAL if !DISTRO_SUSE
+	default VIRTUALBOX_STORAGE_POOL_PATH_CUSTOM_CWD if DISTRO_SUSE
+
+config VIRTUALBOX_STORAGE_POOL_PATH_CUSTOM_CWD
+	bool "Use the current vagrant working directory"
+	help
+	  Select this option if you want to use the vagrant directory inside
+	  where you git cloned kdevops as the vagrant storage pool path where
+	  additional nvme drives will be created. As it is today it
+	  would seem only fedora restricts the $HOME to g-rwx o-rwx and so
+	  by default this option won't work on Fedora by default. This used
+	  to be the old default on kdevops but because of this it should not
+	  be used by default. Distributions still relying on this should
+	  verify they can change this default.
+
+config VIRTUALBOX_STORAGE_POOL_PATH_CUSTOM_MANUAL
+	bool "Custom manual path"
+	help
+	  Select this option if you want to manually specify where to use as
+	  the directory where we'll have kdevops create additional nvme drives
+	  for virtualbox to use. This is today's default given otherwise
+	  we may have to muck with the $HOME directory permissions.
+
+endchoice
+
+config VIRTUALBOX_STORAGE_POOL_PATH_CUSTOM
+	string "Virtualbox storage pool path"
+	default $(shell, scripts/cwd-append.sh vagrant) if VIRTUALBOX_STORAGE_POOL_PATH_CUSTOM_CWD
+	default "/opt/virtualbox/storage/" if VIRTUALBOX_STORAGE_POOL_PATH_CUSTOM_MANUAL
+	help
+	  The path to use for creating additional nvme drives used by
+	  virtualbox. kdevops adds a postfix "kdevops" to this directory as it
+	  wants to allow vagrant full control over that directory. For instance
+	  if this is /opt/virtualbox/storage/ kdevops will have virtualbox
+	  create the nvme files under the directory
+	  /opt/virtualbox/storage/kdevops/.vagrant/nvme_disks/guest-hostname/.
+
+endif
+
+config LIBVIRT_QEMU_GROUP
+	string
+	default "qemu" if !DISTRO_DEBIAN && !DISTRO_UBUNTU
+	default "libvirt-qemu" if DISTRO_DEBIAN || DISTRO_UBUNTU
+
+config KDEVOPS_STORAGE_POOL_PATH
+	string
+	default LIBVIRT_STORAGE_POOL_PATH_CUSTOM if VAGRANT_LIBVIRT
+	default VIRTUALBOX_STORAGE_POOL_PATH_CUSTOM if VAGRANT_VIRTUALBOX
 
 config QEMU_BIN_PATH
 	string
