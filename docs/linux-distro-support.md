@@ -18,7 +18,9 @@ vagrant and terraform rolling Linux distributions are encouraged to be used.
 Currently supported Linux distributions:
 
   * Debian testing
+  * Fedora 35
   * OpenSUSE Tumbleweed
+  * Ubuntu 21.10
 
 If your distribution does not have vagrant and terraform packaged, support
 is provided to download the latest releases via the published zip files,
@@ -39,5 +41,5 @@ Currently supported target Linux distributions:
 
    * Debian testing
    * OpenSUSE Tumbleweed
-   * Fedora 32
+   * Fedora 35
    * SUSE Linux

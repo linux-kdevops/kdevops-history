@@ -159,6 +159,9 @@ end
 pool_path = global_data['storage_pool_path']
 kdevops_pool_path = pool_path + '/kdevops/'
 
+libvirt_session = global_data['libvirt_cfg']['session']
+libvirt_session_public_network_dev = global_data['libvirt_cfg']['session_public_network_dev']
+
 num_servers = limit_num_boxes.to_i
 playbooks_to_run = ansible_playbooks && ansible_playbooks['playbooks'] ? ansible_playbooks['playbooks'].size() : 0
 ansible_ran = false
@@ -180,7 +183,17 @@ Vagrant.configure("2") do |config|
       if server_box_version != ""
         srv.vm.box_version = server_box_version
       end
-      srv.vm.network "private_network", ip: server_data["ip"]
+      # https://wiki.libvirt.org/page/FAQ#What_is_the_difference_between_qemu:.2F.2F.2Fsystem_and_qemu:.2F.2F.2Fsession.3F_Which_one_should_I_use.3F
+      # qemu:///session has a serious drawback: since the libvirtd instance
+      # does not have sufficient privileges, the only out of the box network
+      # option is qemu's usermode networking, which has nonobvious
+      # limitations, so its usage is discouraged. More info on qemu networking
+      # options: http://people.gnome.org/~markmc/qemu-networking.html
+      if ! libvirt_session
+        srv.vm.network "private_network", ip: server_data["ip"]
+      else
+        srv.vm.network "public_network", :type => "user"
+      end
       host_name = server_data["name"]
       nvme_path = kdevops_pool_path + "/" + global_data['nvme_disk_path'] + "/#{host_name}"
       FileUtils.mkdir_p(nvme_path) unless File.exists?(nvme_path)
@@ -249,6 +262,13 @@ Vagrant.configure("2") do |config|
         override.vm.boot_timeout = global_data['boot_timeout']
         libvirt.watchdog :model => 'i6300esb', :action => 'reset'
 	libvirt.storage_pool_path = kdevops_pool_path
+	if libvirt_session
+	  libvirt.qemu_use_session = true
+	  libvirt.uri = global_data['libvirt_cfg']['uri']
+	  libvirt.system_uri = global_data['libvirt_cfg']['system_uri']
+	  libvirt.socket = global_data['libvirt_cfg']['session_socket']
+	  libvirt.management_network_device = global_data['libvirt_cfg']['session_management_network_device']
+	end
         libvirt.memory = global_data["memory"]
         libvirt.cpus = global_data["cpus"]
         libvirt.emulator_path = global_data['libvirt_cfg']['emulator_path']
