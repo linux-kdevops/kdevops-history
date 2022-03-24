@@ -1,9 +1,9 @@
 # SPDX-License-Identifier: copyleft-next-0.3.1
 
 PROJECT = kdevops
-VERSION = 4
-PATCHLEVEL = 3
-SUBLEVEL = 3
+VERSION = 5
+PATCHLEVEL = 0
+SUBLEVEL = 0
 EXTRAVERSION =
 
 all: deps
