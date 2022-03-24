@@ -40,6 +40,8 @@ for expunge in $(cat $COMMON); do
 	COMMON_EXPUNGES="$COMMON_EXPUNGES|$expunge"
 done
 
-cat $FILE | egrep -v "${COMMON_EXPUNGES[@]}" | sort | uniq
+TMP_FILE=$(mktemp)
+cat $FILE | egrep -v "${COMMON_EXPUNGES[@]}" | sort | uniq > $TMP_FILE
+mv $TMP_FILE $FILE
 
 exit 0
