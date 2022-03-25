@@ -66,28 +66,6 @@ sles_skip_groups()
 	done
 }
 
-sles_queue_sections()
-{
-	case "$VERSION_ID" in
-	15.2) # on 5.3 kernel
-		if [ "$FSTYP" = "xfs" ] ; then
-			# XXX: we need the hardware to test this.
-			# queue_tests dax
-			queue_tests xfs_reflink
-			queue_tests xfs_reflink_1024
-		fi
-		;;
-	*)
-		;;
-	esac
-
-	if [ "$FSTYP" = "xfs" ] ; then
-		queue_tests logdev
-		queue_tests xfs_nocrc
-		queue_tests xfs_nocrc_512
-	fi
-}
-
 sles_restart_ypbind()
 {
 	which ypbind 2 >/dev/null

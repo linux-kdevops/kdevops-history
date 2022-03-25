@@ -56,31 +56,6 @@ fedora_skip_groups()
 	done
 }
 
-fedora_queue_sections()
-{
-	case "$VERSION_ID" in
-	# Note: Fedora 28 does not enable CONFIG_XFS_RT as such
-	# we always skip the section xfs_realtimedev :)
-	28) # on 4.16.* kernel
-		if [ "$FSTYP" = "xfs" ] ; then
-			# XXX: we need the hardware to test this.
-			# queue_tests dax
-			queue_tests xfs_reflink
-			queue_tests xfs_reflink_1024
-		fi
-		;;
-	*)
-		;;
-	esac
-
-	if [ "$FSTYP" = "xfs" ] ; then
-		queue_tests logdev
-		queue_tests xfs_nocrc
-		queue_tests xfs_nocrc_512
-
-	fi
-}
-
 fedora_restart_ypbind()
 {
 	which ypbind 2 >/dev/null

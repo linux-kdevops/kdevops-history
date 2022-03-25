@@ -52,29 +52,6 @@ debian_skip_groups()
 	done
 }
 
-debian_queue_sections()
-{
-	case "$OSCHECK_RELEASE" in
-	"testing")
-		if [ "$FSTYP" = "xfs" ] ; then
-			queue_tests xfs_reflink
-			queue_tests xfs_reflink_1024
-		fi
-		;;
-	*)
-		;;
-	esac
-
-	if [ "$FSTYP" = "xfs" ] ; then
-		queue_tests logdev
-		queue_tests xfs_nocrc
-		queue_tests xfs_nocrc_512
-		# As of 4.16.0-2-amd64 Debian still enables CONFIG_XFS_RT
-		# this perhaps should soon be reconsidered.
-		queue_tests xfs_realtimedev
-	fi
-}
-
 debian_restart_ypbind()
 {
 	which ypbind 2 >/dev/null

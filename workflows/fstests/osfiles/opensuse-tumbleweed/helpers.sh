@@ -64,30 +64,6 @@ opensuse-tumbleweed_skip_groups()
 	done
 }
 
-opensuse-tumbleweed_queue_sections()
-{
-	case "$VERSION_ID" in
-	# Note: CONFIG_XFS_RT is not enabled as of OpenSUSE Leap 15
-	# as such we always skip the xfs_realtimedev section test :)
-	2019*) # on 4.19.* kernel
-		if [ "$FSTYP" = "xfs" ] ; then
-			# XXX: we need the hardware to test this.
-			# queue_tests dax
-			queue_tests xfs_reflink
-			queue_tests xfs_reflink_1024
-		fi
-		;;
-	*)
-		;;
-	esac
-
-	if [ "$FSTYP" = "xfs" ] ; then
-		queue_tests logdev
-		queue_tests xfs_nocrc
-		queue_tests xfs_nocrc_512
-	fi
-}
-
 opensuse-tumbleweed_restart_ypbind()
 {
 	which ypbind 2 >/dev/null

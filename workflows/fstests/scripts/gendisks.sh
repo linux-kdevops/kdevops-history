@@ -72,11 +72,13 @@ parse_args()
 			shift
 			;;
 		-m)
-			SECTION=$(echo $HOSTNAME | sed -e 's|-dev||')
+			HOST=`hostname -s`
+			SECTION=$(echo $HOST | sed -e 's|-dev||')
 			SECTION=$(echo $SECTION | sed -e 's|-|_|g')
 			SECTION=$(echo $SECTION| awk -F"_" '{for (i=2; i <= NF; i++) { printf $i; if (i!=NF) printf "_"}; print NL}')
 			unset TEST_DEV
 			unset MKFS_OPTIONS
+			parse_config_section default
 			parse_config_section $SECTION
 			echo "Section: $SECTION with TEST_DEV: $TEST_DEV and MKFS_OPTIONS: $MKFS_OPTIONS"
 			CREATE_TEST_DEV="y"

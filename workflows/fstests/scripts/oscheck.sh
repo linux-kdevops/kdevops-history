@@ -6,11 +6,19 @@ DRY_RUN="false"
 EXPUNGE_FLAGS=""
 ONLY_SHOW_CMD="false"
 VERBOSE="false"
-ONLY_TEST_SECTION=""
+TEST_ARG_SECTION=""
 ONLY_CHECK_DEPS="false"
 ONLY_QUESTION_DISTRO_KERNEL="false"
 PRINT_START="false"
 PRINT_DONE="false"
+RUN_SECTION=""
+
+TEST_DEV=""
+TEST_DIR=""
+MOUNT_OPTIONS=""
+TEST_FS_MOUNT_OPTS=""
+MKFS_OPTIONS=""
+SCRATCH_DEV_POOL=""
 
 # Used to do a sanity check that the section we are running a test
 # for has all intended files part of its expunge list. Updated per
@@ -115,7 +123,7 @@ parse_args()
 			shift
 			;;
 		--test-section)
-			ONLY_TEST_SECTION="$2"
+			TEST_ARG_SECTION="$2"
 			shift
 			shift
 			;;
@@ -160,6 +168,36 @@ parse_args()
 }
 
 parse_args $@
+
+HOST=`hostname -s`
+if [ ! -f "$HOST_OPTIONS" ]; then
+	known_hosts
+fi
+
+INFER_SECTION=$(echo $HOST | sed -e 's|-dev||')
+INFER_SECTION=$(echo $INFER_SECTION | sed -e 's|-|_|g')
+INFER_SECTION=$(echo $INFER_SECTION | awk -F"_" '{for (i=2; i <= NF; i++) { printf $i; if (i!=NF) printf "_"}; print NL}')
+
+if [[ "$TEST_ARG_SECTION" != "" ]]; then
+	RUN_SECTION=$TEST_ARG_SECTION
+else
+	RUN_SECTION=$INFER_SECTION
+fi
+
+if [ "${RUN_SECTION}" != "${FSTYP}" ]; then
+	# If you specified a section but it does not have the filesystem
+	# prefix, we add it for you. Likewise, this means that if you
+	# used oscheck.sh --test-section, we will allow you to specify
+	# either the full section name, ie, xfs_reflink, or just the
+	# short name, ie, reflink and we'll add the xfs prefix for you.
+	echo $RUN_SECTION | grep -q ^${FSTYP}
+	if [ $? -ne 0 ]; then
+		RUN_SECTION="${FSTYP}_${s}"
+	fi
+fi
+
+parse_config_section default
+parse_config_section $RUN_SECTION
 
 if [ ! -z "$OSCHECK_OS_FILE" ]; then
 	OS_FILE="$OSCHECK_OS_FILE"
@@ -447,28 +485,6 @@ oscheck_systemctl_restart_ypbind()
 	fi
 }
 
-# queue_tests - a way to group test to run with a custom section
-#
-# Often times may want to run all tests with multiple sections. This can
-# for instance happen when you using an external log. Using an external log
-# can change the way a filesystem works, as such all tests must be run without
-# the external log and then at the end with an external log.
-#
-# We implement an easy way to run test with multiple sections, if you want to
-# run all tests with extra sections at the end of the test you can use
-# queue_tests with the special section name. We use EXTRA_SECTIONS to add the
-# series of extra tests to run towards the end with their own respection
-# custom section in the configuration file used. The name of the section in
-# the configuration file would be:
-#
-# [${FSTYP}_${CUSTOM_SECTION}]
-#
-# Refer to oscheck_run_sections() on where this is done.
-queue_tests()
-{
-	EXTRA_SECTIONS="$EXTRA_SECTIONS $1"
-}
-
 oscheck_add_expunge_if_exists()
 {
 	if [ "$EXPUNGE_LIST" = "true" ]; then
@@ -698,44 +714,22 @@ oscheck_run_cmd()
 	fi
 }
 
-oscheck_run_sections()
+oscheck_run_section()
 {
 	if [[ "$PRINT_START" == "true" ]]; then
 		NOW=$(date --rfc-3339='seconds' | awk -F"+" '{print $1}')
 		echo "run fstests fstestsstart/000 at $NOW" > /dev/kmsg
 	fi
-	for s in $RUN_SECTIONS; do
-		SECTION="$s"
-		# If you specified to run only one section we run it.
-		# If you wanted to run FAST_TEST but did not specify a
-		# specific section we only run the main filesystem section
-		# test.
-		if [ "${SECTION}" != "${FSTYP}" ]; then
-			if [ ! -z "$FAST_TEST" ]; then
-				if [ "$ONLY_TEST_SECTION" != "" ]; then
-					continue
-				fi
-			fi
-			# If you specified a section but it does not have the filesystem
-			# prefix, we add it for you. Likewise, this means that if you
-			# used oscheck.sh --test-section, we will allow you to specify
-			# either the full section name, ie, xfs_reflink, or just the
-			# short name, ie, reflink and we'll add the xfs prefix for you.
-			echo $SECTION | grep -q ^${FSTYP}
-			if [ $? -ne 0 ]; then
-				SECTION="${FSTYP}_${s}"
-			fi
-		fi
-		oscheck_prefix_section $SECTION
-		oscheck_handle_section_expunges
+	SECTION=$RUN_SECTION
+	oscheck_prefix_section $SECTION
+	oscheck_handle_section_expunges
 
-		oscheck_update_expunge_files
-		oscheck_count_check
-		oscheck_verify_intented_expunges $SECTION
+	oscheck_update_expunge_files
+	oscheck_count_check
+	oscheck_verify_intented_expunges $SECTION
 
-		OSCHECK_CMD="./check -s ${SECTION} -R xunit $_SKIP_GROUPS $EXPUNGE_FLAGS $CHECK_ARGS"
-		oscheck_run_cmd
-	done
+	OSCHECK_CMD="./check -s ${SECTION} -R xunit $_SKIP_GROUPS $EXPUNGE_FLAGS $CHECK_ARGS"
+	oscheck_run_cmd
 	if [[ "$PRINT_DONE" == "true" ]]; then
 		NOW=$(date --rfc-3339='seconds' | awk -F"+" '{print $1}')
 		echo "run fstests fstestsdone/000 at $NOW" > /dev/kmsg
@@ -744,18 +738,13 @@ oscheck_run_sections()
 
 oscheck_test_dev_setup()
 {
-	SECTION=$(echo $HOSTNAME | sed -e 's|-dev||')
-	SECTION=$(echo $SECTION | sed -e 's|-|_|g')
-	SECTION=$(echo $SECTION| awk -F"_" '{for (i=2; i <= NF; i++) { printf $i; if (i!=NF) printf "_"}; print NL}')
-	parse_config_section $SECTION
-	echo "Section: $SECTION with TEST_DEV: $TEST_DEV and MKFS_OPTIONS: $MKFS_OPTIONS"
-	parse_config_section $SECTION
 	if [ "$DRY_RUN" = "true" ]; then
 		return
 	fi
 
 	blkid -t TYPE=$FSTYP $TEST_DEV /dev/null
 	if [[ $? -ne 0 ]]; then
+		echo "Section: $INFER_SECTION with TEST_DEV: $TEST_DEV and MKFS_OPTIONS: $MKFS_OPTIONS TEST_DIR: $TEST_DIR"
 		CMD="mkfs.$FSTYP $MKFS_OPTIONS $TEST_DEV"
 		echo "$CMD"
 		$CMD
@@ -840,7 +829,7 @@ check_check()
 	return 0
 }
 
-check_config()
+check_kernel_config()
 {
 	CONFIG_RET=0
 	if [ -e /proc/config.gz ]; then
@@ -857,8 +846,6 @@ check_config()
 check_test_dev_setup()
 {
 	DEV_SETUP_RET=0
-	eval $(grep '^TEST_DEV=' configs/.config)
-	eval $(grep '^TEST_DIR=' configs/.config)
 	if [ "$DRY_RUN" = "true" ]; then
 		return
 	fi
@@ -873,8 +860,7 @@ check_test_dev_setup()
 check_dev_pool()
 {
 	DEV_POOL_RET=0
-	if [ -e configs/.config ]; then
-		eval $(grep '^SCRATCH_DEV_POOL=' configs/.config)
+	if [ -e $HOST_OPTIONS ]; then
 		NDEVS=$(echo $SCRATCH_DEV_POOL|wc -w)
 		if [ "$NDEVS" -lt 5 ]; then
 			DEV_POOL_RET=1
@@ -884,40 +870,26 @@ check_dev_pool()
 	return $DEV_POOL_RET
 }
 
-check_sections()
+check_section()
 {
-	ALL_RUN_SECTIONS_FOUND=0
-	if [ ! -e configs/.config ]; then
+	if [ ! -e $HOST_OPTIONS ]; then
 		return 0;
 	fi
-	ALL_FS_SECTIONS=$(grep "^\[" configs/.config | grep -v "^\[default\]" | sed -e 's|\[||' | sed -e 's|\]||')
-	for s in $RUN_SECTIONS; do
-		SECTION="$s"
-		if [ "${SECTION}" != "${FSTYP}" ]; then
-			if [ ! -z "$FAST_TEST" ]; then
-				if [ "$ONLY_TEST_SECTION" != "" ]; then
-					continue
-				fi
-			fi
-			echo $SECTION | grep -q ^${FSTYP}
-			if [ $? -ne 0 ]; then
-				SECTION="${FSTYP}_${s}"
-			fi
-		fi
-		RUN_SECTION_FOUND=0
-		for valid_section in $ALL_FS_SECTIONS; do
-			if [[ "$SECTION" == "$valid_section" ]]; then
-				RUN_SECTION_FOUND=1
-			fi
-		done
-		if [ $RUN_SECTION_FOUND -ne 1 ]; then
-			echo "Invalid section: $SECTION"
-			echo "This section name is not present on the file configs/.config"
-			echo "Valid sections: $ALL_FS_SECTIONS"
-			ALL_RUN_SECTIONS_FOUND=1
+	ALL_FS_SECTIONS=$(grep "^\[" $HOST_OPTIONS | grep -v "^\[default\]" | sed -e 's|\[||' | sed -e 's|\]||')
+	SECTION=$RUN_SECTION
+	RUN_SECTION_FOUND=0
+	for valid_section in $ALL_FS_SECTIONS; do
+		if [[ "$SECTION" == "$valid_section" ]]; then
+			RUN_SECTION_FOUND=1
 		fi
 	done
-	return $ALL_RUN_SECTIONS_FOUND
+	if [ $RUN_SECTION_FOUND -ne 1 ]; then
+		echo "Invalid section: $SECTION"
+		echo "This section name is not present on the file $HOST_OPTIONS"
+		echo "Valid sections: $ALL_FS_SECTIONS"
+		return 1
+	fi
+	return 0
 }
 
 SKIP_GROUPS=
@@ -926,16 +898,11 @@ oscheck_read_osfile_and_includes
 oscheck_distro_kernel_check
 
 if [ -z "$FSTYP" ]; then
-	FSTYP=xfs
+	echo "FSTYP needs to be set"
+	exit
 fi
 
 oscheck_handle_skipping_group
-oscheck_queue_sections
-RUN_SECTIONS="${EXTRA_SECTIONS}"
-if [ "$ONLY_TEST_SECTION" != "" ]; then
-	RUN_SECTIONS="$ONLY_TEST_SECTION"
-	echo "Only testing section: $ONLY_TEST_SECTION"
-fi
 
 check_reqs
 DEPS_RET=$?
@@ -949,11 +916,19 @@ if [ $DEPS_RET -ne 0 ]; then
 	exit $DEPS_RET
 fi
 
-check_config
+check_kernel_config
 DEPS_RET=$?
 if [ $DEPS_RET -ne 0 ]; then
 	exit $DEPS_RET
 fi
+
+check_section
+DEPS_RET=$?
+if [ $DEPS_RET -ne 0 ]; then
+	exit $DEPS_RET
+fi
+
+echo "Testing section: $RUN_SECTION"
 
 check_test_dev_setup
 DEPS_RET=$?
@@ -962,12 +937,6 @@ if [ $DEPS_RET -ne 0 ]; then
 fi
 
 check_dev_pool
-DEPS_RET=$?
-if [ $DEPS_RET -ne 0 ]; then
-	exit $DEPS_RET
-fi
-
-check_sections
 DEPS_RET=$?
 if [ $DEPS_RET -ne 0 ]; then
 	exit $DEPS_RET
@@ -985,14 +954,10 @@ else
 	fi
 fi
 
-export HOST=`hostname -s`
-if [ ! -f "$HOST_OPTIONS" ]; then
-	known_hosts
-fi
 oscheck_get_progs_version
 oscheck_test_dev_setup
 
 tmp=/tmp/$$
 trap "_cleanup; exit \$status" 0 1 2 3 15
 
-oscheck_run_sections
+oscheck_run_section
