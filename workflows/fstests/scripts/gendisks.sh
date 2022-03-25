@@ -4,6 +4,10 @@
 # A loopback device is used for each of them. This allows us to save space
 # and deploy the test on any system.
 
+TEST_DEV=""
+FSTYP=""
+MKFS_OPTIONS=""
+
 known_hosts()
 {
 	[ "$HOST_CONFIG_DIR" ] || HOST_CONFIG_DIR=`pwd`/configs
@@ -72,12 +76,6 @@ parse_args()
 			shift
 			;;
 		-m)
-			HOST=`hostname -s`
-			SECTION=$(echo $HOST | sed -e 's|-dev||')
-			SECTION=$(echo $SECTION | sed -e 's|-|_|g')
-			SECTION=$(echo $SECTION| awk -F"_" '{for (i=2; i <= NF; i++) { printf $i; if (i!=NF) printf "_"}; print NL}')
-			parse_config_section default
-			parse_config_section $SECTION
 			echo "Section: $SECTION with TEST_DEV: $TEST_DEV and MKFS_OPTIONS: $MKFS_OPTIONS"
 			CREATE_TEST_DEV="y"
 			if [ ! -z $TEST_DEV ]; then
@@ -102,6 +100,14 @@ export HOST=`hostname -s`
 if [ ! -f "$HOST_OPTIONS" ]; then
 	known_hosts
 fi
+
+HOST=`hostname -s`
+INFER_SECTION=$(echo $HOST | sed -e 's|-dev||')
+INFER_SECTION=$(echo $INFER_SECTION | sed -e 's|-|_|g')
+INFER_SECTION=$(echo $INFER_SECTION| awk -F"_" '{for (i=2; i <= NF; i++) { printf $i; if (i!=NF) printf "_"}; print NL}')
+parse_config_section default
+parse_config_section $INFER_SECTION
+
 parse_args $@
 
 if [ ! -d $FSTESTS_SPARSE_FILE_PATH ]; then
