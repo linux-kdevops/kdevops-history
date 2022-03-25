@@ -1,8 +1,6 @@
 #!/bin/bash
 # OS wrapper for check.sh
 
-. common/config
-
 OS_FILE="/etc/os-release"
 DRY_RUN="false"
 EXPUNGE_FLAGS=""
@@ -64,6 +62,29 @@ oscheck_usage()
 	echo "Note that all parameters which we do not understand we'll just"
 	echo "pass long to check.sh so it can use them. So calling oscheck.sh -g quick"
 	echo "will call check.sh -g quick."
+}
+
+known_hosts()
+{
+	[ "$HOST_CONFIG_DIR" ] || HOST_CONFIG_DIR=`pwd`/configs
+
+	[ -f /etc/xfsqa.config ]             && export HOST_OPTIONS=/etc/xfsqa.config
+	[ -f $HOST_CONFIG_DIR/$HOST ]        && export HOST_OPTIONS=$HOST_CONFIG_DIR/$HOST
+	[ -f $HOST_CONFIG_DIR/$HOST.config ] && export HOST_OPTIONS=$HOST_CONFIG_DIR/$HOST.config
+}
+
+parse_config_section() {
+	SECTION=$1
+	if ! $OPTIONS_HAVE_SECTIONS; then
+		return 0
+	fi
+	eval `sed -e 's/[[:space:]]*\=[[:space:]]*/=/g' \
+		-e 's/#.*$//' \
+		-e 's/[[:space:]]*$//' \
+		-e 's/^[[:space:]]*//' \
+		-e "s/^\([^=]*\)=\"\?'\?\([^\"']*\)\"\?'\?$/export \1=\"\2\"/" \
+		< $HOST_OPTIONS \
+		| sed -n -e "/^\[$SECTION\]/,/^\s*\[/{/^[^#].*\=.*/p;}"`
 }
 
 copy_to_check_arg()
@@ -964,11 +985,12 @@ else
 	fi
 fi
 
-oscheck_get_progs_version
-
-if [ -e configs/.config ]; then
-	oscheck_test_dev_setup
+export HOST=`hostname -s`
+if [ ! -f "$HOST_OPTIONS" ]; then
+	known_hosts
 fi
+oscheck_get_progs_version
+oscheck_test_dev_setup
 
 tmp=/tmp/$$
 trap "_cleanup; exit \$status" 0 1 2 3 15

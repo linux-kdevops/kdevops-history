@@ -4,7 +4,28 @@
 # A loopback device is used for each of them. This allows us to save space
 # and deploy the test on any system.
 
-test -s common/config && . common/config || true
+known_hosts()
+{
+	[ "$HOST_CONFIG_DIR" ] || HOST_CONFIG_DIR=`pwd`/configs
+
+	[ -f /etc/xfsqa.config ]             && export HOST_OPTIONS=/etc/xfsqa.config
+	[ -f $HOST_CONFIG_DIR/$HOST ]        && export HOST_OPTIONS=$HOST_CONFIG_DIR/$HOST
+	[ -f $HOST_CONFIG_DIR/$HOST.config ] && export HOST_OPTIONS=$HOST_CONFIG_DIR/$HOST.config
+}
+
+parse_config_section() {
+	SECTION=$1
+	if ! $OPTIONS_HAVE_SECTIONS; then
+		return 0
+	fi
+	eval `sed -e 's/[[:space:]]*\=[[:space:]]*/=/g' \
+		-e 's/#.*$//' \
+		-e 's/[[:space:]]*$//' \
+		-e 's/^[[:space:]]*//' \
+		-e "s/^\([^=]*\)=\"\?'\?\([^\"']*\)\"\?'\?$/export \1=\"\2\"/" \
+		< $HOST_OPTIONS \
+		| sed -n -e "/^\[$SECTION\]/,/^\s*\[/{/^[^#].*\=.*/p;}"`
+}
 
 CREATE_TEST_DEV="n"
 
@@ -51,13 +72,13 @@ parse_args()
 			shift
 			;;
 		-m)
-			if [[ -f common/config ]]; then
-				SECTION=$(echo $HOSTNAME | sed -e 's|-dev||')
-				SECTION=$(echo $SECTION | sed -e 's|-|_|g')
-				SECTION=$(echo $SECTION| awk -F"_" '{for (i=2; i <= NF; i++) { printf $i; if (i!=NF) printf "_"}; print NL}')
-				parse_config_section $SECTION
-				echo "Section: $SECTION with TEST_DEV: $TEST_DEV and MKFS_OPTIONS: $MKFS_OPTIONS"
-			fi
+			SECTION=$(echo $HOSTNAME | sed -e 's|-dev||')
+			SECTION=$(echo $SECTION | sed -e 's|-|_|g')
+			SECTION=$(echo $SECTION| awk -F"_" '{for (i=2; i <= NF; i++) { printf $i; if (i!=NF) printf "_"}; print NL}')
+			unset TEST_DEV
+			unset MKFS_OPTIONS
+			parse_config_section $SECTION
+			echo "Section: $SECTION with TEST_DEV: $TEST_DEV and MKFS_OPTIONS: $MKFS_OPTIONS"
 			CREATE_TEST_DEV="y"
 			if [ ! -z $TEST_DEV ]; then
 				umount $TEST_DEV
@@ -77,6 +98,10 @@ parse_args()
 	done
 }
 
+export HOST=`hostname -s`
+if [ ! -f "$HOST_OPTIONS" ]; then
+	known_hosts
+fi
 parse_args $@
 
 if [ ! -d $FSTESTS_SPARSE_FILE_PATH ]; then
