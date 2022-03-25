@@ -349,7 +349,7 @@ config FSTESTS_SCRATCH_DEV_POOL
 config FSTESTS_SCRATCH_DEV_POOL_ZNS
 	string "The list of devices to set in SCRATCH_DEV_POOL for ZNS testing"
 	depends on VAGRANT_ENABLE_ZNS
-	default "/dev/nvme4n1 /dev/nvme5n1 /dev/nvme6n1 /dev/nvme7n1 /dev/nvme8n1 /dev/nvme9n1 /dev/nvme10n1 /dev/nvme11n1" if QEMU_ENABLE_NVME_ZNS
+	default "/dev/nvme5n1 /dev/nvme6n1 /dev/nvme7n1 /dev/nvme8n1 /dev/nvme9n1 /dev/nvme10n1 /dev/nvme11n1 /dev/nvme12n1" if QEMU_ENABLE_NVME_ZNS
 	help
 	  To set of spare devices to use for the fstests SCRATCH_DEV_POOL for ZNS testing.
 
