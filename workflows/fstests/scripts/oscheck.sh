@@ -13,6 +13,8 @@ PRINT_START="false"
 PRINT_DONE="false"
 RUN_SECTION=""
 
+# Stuff we use for mkfs. check.sh assumes a few things so we try to
+# do our best.
 TEST_DEV=""
 TEST_DIR=""
 MOUNT_OPTIONS=""
@@ -20,36 +22,73 @@ TEST_FS_MOUNT_OPTS=""
 MKFS_OPTIONS=""
 SCRATCH_DEV_POOL=""
 
+# For sanity checks before we run, we should remove this as ansible
+# should do these checks for us.
+REQS="gcc"
+REQS="$REQS git"
+REQS="$REQS make"
+REQS="$REQS automake"
+REQS="$REQS gawk"
+REQS="$REQS chattr"
+REQS="$REQS fio"
+REQS="$REQS dbench"
+REQS="$REQS setcap"
+REQS="$REQS setfattr"
+
+if [ "$FSTYP" = "xfs" ] ; then
+	REQS="$REQS xfs_info"
+fi
+
+# Ansible should check this for us too.
+USERS_NEEDED="fsgqa"
+
+GROUPS_NEEDED="fsgqa"
+GROUPS_NEEDED="$GROUPS_NEEDED sys"
+
+DIRS_NEEDED="/home/fsgqa"
+DIRS_NEEDED="$DIRS_NEEDED /media/test"
+DIRS_NEEDED="$DIRS_NEEDED /media/scratch/"
+
+# fstests check.sh uses $ID for the test number, so we need to use something
+# more unique. For example, on Debian this is "debian" for opensuse factory
+# this is "opensuse" and for OpenSUSE Leap this is "opensuse-leap".
+OSCHECK_ID=""
+# VERSION_ID is 15.0 for OpenSUSE Leap 15.0, but Debian testing lacks VERSION_ID.
+VERSION_ID=""
+
+
 # Used to do a sanity check that the section we are running a test
 # for has all intended files part of its expunge list. Updated per
 # section run.
 OSCHECK_EXCLUDE_DIR=""
 EXPUNGE_FILES=""
 
-if [ -z "$FSTESTS_SETUP_SYSTEM" ]; then
-	FSTESTS_SETUP_SYSTEM="n"
-fi
+# We keep two versions, one the actual version spit out by the program,
+# the others as interreted by linux/scripts/ld-version.sh as it is simple
+# and tested over time. It also allows easy requirements to be checked for
+# using simple math.
+#
+# For instance:
+#
+# $ echo 4.15.1 | ~/linux-next/scripts/ld-version.sh
+# 415010000
+# The VERSION would be 4.15.1 while the LD_VERSION would be 415010000
+XFSPROGS_VERSION=""
+XFSPROGS_LD_VERSION=""
+# -m option added as of xfsprogs 3.2.0 via commit f7b8029124db6
+# ("xfsprogs: introduce CRC support into mkfs.xfs")
+XFSPROGS_LD_VERSION_M="302000000"
 
-if [ -z "$OSCHECK_ONLY_RUN_DISTRO_KERNEL" ]; then
-	OSCHECK_ONLY_RUN_DISTRO_KERNEL="false"
-fi
+BTRFSPROGS_VERSION=""
+BTRFSPROGS_LD_VERSION=""
 
-if [ -z "$OSCHECK_CUSTOM_KERNEL" ]; then
-	OSCHECK_CUSTOM_KERNEL="false"
-fi
+E2FSPROGS_VERSION=""
+E2FSPROGS_LD_VERSION=""
 
-# Where we stuff the arguments we will pass to ./check
-declare -a CHECK_ARGS
+REISERFS_PROGS_VERSION=""
+REISERFS_PROGS_LD_VERSION=""
 
-if [ -z "$OSCHECK_INCLUDE_PATH" ]; then
-	OSCHECK_DIR="$(dirname $(readlink -f $0))"
-	OSCHECK_INCLUDE_PATH="${OSCHECK_DIR}/../osfiles"
-fi
-
-if [ $(id -u) != "0" ]; then
-	echo "Must run as root"
-	exit 1
-fi
+SKIP_GROUPS=
 
 oscheck_usage()
 {
@@ -166,116 +205,6 @@ parse_args()
 		esac
 	done
 }
-
-parse_args $@
-
-HOST=`hostname -s`
-if [ ! -f "$HOST_OPTIONS" ]; then
-	known_hosts
-fi
-
-INFER_SECTION=$(echo $HOST | sed -e 's|-dev||')
-INFER_SECTION=$(echo $INFER_SECTION | sed -e 's|-|_|g')
-INFER_SECTION=$(echo $INFER_SECTION | awk -F"_" '{for (i=2; i <= NF; i++) { printf $i; if (i!=NF) printf "_"}; print NL}')
-
-if [[ "$TEST_ARG_SECTION" != "" ]]; then
-	RUN_SECTION=$TEST_ARG_SECTION
-else
-	RUN_SECTION=$INFER_SECTION
-fi
-
-if [ "${RUN_SECTION}" != "${FSTYP}" ]; then
-	# If you specified a section but it does not have the filesystem
-	# prefix, we add it for you. Likewise, this means that if you
-	# used oscheck.sh --test-section, we will allow you to specify
-	# either the full section name, ie, xfs_reflink, or just the
-	# short name, ie, reflink and we'll add the xfs prefix for you.
-	echo $RUN_SECTION | grep -q ^${FSTYP}
-	if [ $? -ne 0 ]; then
-		RUN_SECTION="${FSTYP}_${s}"
-	fi
-fi
-
-parse_config_section default
-parse_config_section $RUN_SECTION
-
-if [ ! -z "$OSCHECK_OS_FILE" ]; then
-	OS_FILE="$OSCHECK_OS_FILE"
-fi
-
-OS_SECTION_PREFIX=""
-
-if [ -z "$OSCHECK_EXCLUDE_PREFIX" ]; then
-	OSCHECK_EXCLUDE_PREFIX="$(dirname $(readlink -f $0))/../expunges/"
-fi
-
-REQS="gcc"
-REQS="$REQS git"
-REQS="$REQS make"
-REQS="$REQS automake"
-REQS="$REQS gawk"
-REQS="$REQS chattr"
-REQS="$REQS fio"
-REQS="$REQS dbench"
-REQS="$REQS setcap"
-REQS="$REQS setfattr"
-
-if [ "$FSTYP" = "xfs" ] ; then
-	REQS="$REQS xfs_info"
-fi
-
-USERS_NEEDED="fsgqa"
-
-GROUPS_NEEDED="fsgqa"
-GROUPS_NEEDED="$GROUPS_NEEDED sys"
-
-DIRS_NEEDED="/home/fsgqa"
-DIRS_NEEDED="$DIRS_NEEDED /media/test"
-DIRS_NEEDED="$DIRS_NEEDED /media/scratch/"
-
-# fstests check.sh uses $ID for the test number, so we need to use something
-# more unique. For example, on Debian this is "debian" for opensuse factory
-# this is "opensuse" and for OpenSUSE Leap this is "opensuse-leap".
-OSCHECK_ID=""
-# VERSION_ID is 15.0 for OpenSUSE Leap 15.0, but Debian testing lacks VERSION_ID.
-VERSION_ID=""
-
-# Some distributions rely on things like lsb_release -r -s as the
-# /etc/os-release file may not have a VERSION_ID annotated. So for
-# instance OpenSUSE Leap uses /etc/os-release ID set to opensuse-leap
-# and VERSION_ID="15.0" but Debian lacks such annotation on Debian
-# testing. The OSCHECK_RELEASE can be used then by the osfile helpers.sh
-# for distributions which want to support these releases.
-export OSCHECK_RELEASE=""
-which lsb_release 2>/dev/null 1>/dev/null
-if [ $? -eq 0 ]; then
-	export OSCHECK_RELEASE="$(lsb_release -r -s)"
-fi
-
-# We keep two versions, one the actual version spit out by the program,
-# the others as interreted by linux/scripts/ld-version.sh as it is simple
-# and tested over time. It also allows easy requirements to be checked for
-# using simple math.
-#
-# For instance:
-#
-# $ echo 4.15.1 | ~/linux-next/scripts/ld-version.sh
-# 415010000
-# The VERSION would be 4.15.1 while the LD_VERSION would be 415010000
-XFSPROGS_VERSION=""
-XFSPROGS_LD_VERSION=""
-# -m option added as of xfsprogs 3.2.0 via commit f7b8029124db6
-# ("xfsprogs: introduce CRC support into mkfs.xfs")
-XFSPROGS_LD_VERSION_M="302000000"
-
-BTRFSPROGS_VERSION=""
-BTRFSPROGS_LD_VERSION=""
-
-E2FSPROGS_VERSION=""
-E2FSPROGS_LD_VERSION=""
-
-REISERFS_PROGS_VERSION=""
-REISERFS_PROGS_LD_VERSION=""
 
 # Gets your respective filesystem program version. Expand as more
 # filesystems are supported.
@@ -744,7 +673,7 @@ oscheck_test_dev_setup()
 
 	blkid -t TYPE=$FSTYP $TEST_DEV /dev/null
 	if [[ $? -ne 0 ]]; then
-		echo "Section: $INFER_SECTION with TEST_DEV: $TEST_DEV and MKFS_OPTIONS: $MKFS_OPTIONS TEST_DIR: $TEST_DIR"
+		echo "FSTYP: $FSTYP Section: $INFER_SECTION with TEST_DEV: $TEST_DEV and MKFS_OPTIONS: $MKFS_OPTIONS TEST_DIR: $TEST_DIR"
 		CMD="mkfs.$FSTYP $MKFS_OPTIONS $TEST_DEV"
 		echo "$CMD"
 		$CMD
@@ -892,7 +821,90 @@ check_section()
 	return 0
 }
 
-SKIP_GROUPS=
+if [ -z "$FSTESTS_SETUP_SYSTEM" ]; then
+	FSTESTS_SETUP_SYSTEM="n"
+fi
+
+if [ -z "$OSCHECK_ONLY_RUN_DISTRO_KERNEL" ]; then
+	OSCHECK_ONLY_RUN_DISTRO_KERNEL="false"
+fi
+
+if [ -z "$OSCHECK_CUSTOM_KERNEL" ]; then
+	OSCHECK_CUSTOM_KERNEL="false"
+fi
+
+# Where we stuff the arguments we will pass to ./check
+declare -a CHECK_ARGS
+
+if [ -z "$OSCHECK_INCLUDE_PATH" ]; then
+	OSCHECK_DIR="$(dirname $(readlink -f $0))"
+	OSCHECK_INCLUDE_PATH="${OSCHECK_DIR}/../osfiles"
+fi
+
+if [ $(id -u) != "0" ]; then
+	echo "Must run as root"
+	exit 1
+fi
+
+
+parse_args $@
+
+HOST=`hostname -s`
+if [ ! -f "$HOST_OPTIONS" ]; then
+	known_hosts
+fi
+
+INFER_SECTION=$(echo $HOST | sed -e 's|-dev||')
+INFER_SECTION=$(echo $INFER_SECTION | sed -e 's|-|_|g')
+INFER_SECTION=$(echo $INFER_SECTION | awk -F"_" '{for (i=2; i <= NF; i++) { printf $i; if (i!=NF) printf "_"}; print NL}')
+
+if [[ "$TEST_ARG_SECTION" != "" ]]; then
+	RUN_SECTION=$TEST_ARG_SECTION
+else
+	RUN_SECTION=$INFER_SECTION
+fi
+
+if [ "${RUN_SECTION}" != "${FSTYP}" ]; then
+	# If you specified a section but it does not have the filesystem
+	# prefix, we add it for you. Likewise, this means that if you
+	# used oscheck.sh --test-section, we will allow you to specify
+	# either the full section name, ie, xfs_reflink, or just the
+	# short name, ie, reflink and we'll add the xfs prefix for you.
+	echo $RUN_SECTION | grep -q ^${FSTYP}
+	if [ $? -ne 0 ]; then
+		RUN_SECTION="${FSTYP}_${s}"
+	fi
+fi
+
+parse_config_section default
+parse_config_section $RUN_SECTION
+check_mount $TEST_DIR
+if [ $? -eq 0 ]; then
+	umount $TEST_DEV
+fi
+
+if [ ! -z "$OSCHECK_OS_FILE" ]; then
+	OS_FILE="$OSCHECK_OS_FILE"
+fi
+
+OS_SECTION_PREFIX=""
+
+if [ -z "$OSCHECK_EXCLUDE_PREFIX" ]; then
+	OSCHECK_EXCLUDE_PREFIX="$(dirname $(readlink -f $0))/../expunges/"
+fi
+
+# Some distributions rely on things like lsb_release -r -s as the
+# /etc/os-release file may not have a VERSION_ID annotated. So for
+# instance OpenSUSE Leap uses /etc/os-release ID set to opensuse-leap
+# and VERSION_ID="15.0" but Debian lacks such annotation on Debian
+# testing. The OSCHECK_RELEASE can be used then by the osfile helpers.sh
+# for distributions which want to support these releases.
+export OSCHECK_RELEASE=""
+which lsb_release 2>/dev/null 1>/dev/null
+if [ $? -eq 0 ]; then
+	export OSCHECK_RELEASE="$(lsb_release -r -s)"
+fi
+
 
 oscheck_read_osfile_and_includes
 oscheck_distro_kernel_check
