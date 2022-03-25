@@ -1,6 +1,8 @@
 #!/bin/bash
 # OS wrapper for check.sh
 
+. common/config
+
 OS_FILE="/etc/os-release"
 DRY_RUN="false"
 EXPUNGE_FLAGS=""
@@ -721,15 +723,21 @@ oscheck_run_sections()
 
 oscheck_test_dev_setup()
 {
-	eval $(grep '^TEST_DEV=' configs/.config)
-	eval $(grep '^TEST_DIR=' configs/.config)
+	SECTION=$(echo $HOSTNAME | sed -e 's|-dev||')
+	SECTION=$(echo $SECTION | sed -e 's|-|_|g')
+	SECTION=$(echo $SECTION| awk -F"_" '{for (i=2; i <= NF; i++) { printf $i; if (i!=NF) printf "_"}; print NL}')
+	parse_config_section $SECTION
+	echo "Section: $SECTION with TEST_DEV: $TEST_DEV and MKFS_OPTIONS: $MKFS_OPTIONS"
+	parse_config_section $SECTION
 	if [ "$DRY_RUN" = "true" ]; then
 		return
 	fi
 
 	blkid -t TYPE=$FSTYP $TEST_DEV /dev/null
 	if [[ $? -ne 0 ]]; then
-		mkfs.$FSTYP -f $TEST_DEV
+		CMD="mkfs.$FSTYP $MKFS_OPTIONS $TEST_DEV"
+		echo "$CMD"
+		$CMD
 	fi
 
 	if [[ ! -d  $TEST_DIR ]]; then

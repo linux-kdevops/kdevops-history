@@ -4,6 +4,8 @@
 # A loopback device is used for each of them. This allows us to save space
 # and deploy the test on any system.
 
+test -s common/config && . common/config || true
+
 CREATE_TEST_DEV="n"
 
 setup_loop()
@@ -49,6 +51,13 @@ parse_args()
 			shift
 			;;
 		-m)
+			if [[ -f common/config ]]; then
+				SECTION=$(echo $HOSTNAME | sed -e 's|-dev||')
+				SECTION=$(echo $SECTION | sed -e 's|-|_|g')
+				SECTION=$(echo $SECTION| awk -F"_" '{for (i=2; i <= NF; i++) { printf $i; if (i!=NF) printf "_"}; print NL}')
+				parse_config_section $SECTION
+				echo "Section: $SECTION with TEST_DEV: $TEST_DEV and MKFS_OPTIONS: $MKFS_OPTIONS"
+			fi
 			CREATE_TEST_DEV="y"
 			if [ ! -z $TEST_DEV ]; then
 				umount $TEST_DEV
@@ -114,9 +123,7 @@ else
 	if [ "$error" == "yes" ]; then
 		exit 1
 	fi
-	FORCE_ARGS=""
-	if [[ "$FSTYP" != "ext4" ]]; then
-		FORCE_ARGS="-f"
-	fi
-	mkfs.$FSTYP $FORCE_ARGS $TEST_DEV
+	CMD="mkfs.$FSTYP $MKFS_OPTIONS $TEST_DEV"
+	echo "$CMD"
+	$CMD
 fi
