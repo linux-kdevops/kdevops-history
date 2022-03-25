@@ -3,7 +3,7 @@
 PROJECT = kdevops
 VERSION = 5
 PATCHLEVEL = 0
-SUBLEVEL = 1
+SUBLEVEL = 2
 EXTRAVERSION =
 
 all: deps
