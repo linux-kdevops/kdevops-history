@@ -39,3 +39,6 @@
       - portmap
       - hwinfo
       - iscsi-initiator-utils
+      - openssl
+      - dwarves
+      - zstd
