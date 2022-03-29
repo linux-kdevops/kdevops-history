@@ -1,0 +1,8 @@
+---
+- name: Install blktests base tools
+  become: yes
+  become_method: sudo
+  apt:
+    name:
+      - btrfs-progs
+    update_cache: yes
