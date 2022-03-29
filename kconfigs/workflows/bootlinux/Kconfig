@@ -27,9 +27,9 @@ config BOOTLINUX_TREE_NAME
 
 config BOOTLINUX_TREE
 	string "Linux git tree URL"
-	default "git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git" if BOOTLINUX_TREE_LINUS
-	default "git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git" if BOOTLINUX_TREE_STABLE
-	default "git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git" if BOOTLINUX_TREE_NEXT
+	default "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git" if BOOTLINUX_TREE_LINUS
+	default "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git" if BOOTLINUX_TREE_STABLE
+	default "https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git" if BOOTLINUX_TREE_NEXT
 	help
 	  The Linux git tree to use.
 
