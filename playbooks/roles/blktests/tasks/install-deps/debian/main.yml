@@ -57,6 +57,7 @@
       - g++
       - parted
       - libnl-utils
+      - zlib1g-dev
     state: present
     update_cache: yes
   tags: [ 'blktests', 'deps' ]
