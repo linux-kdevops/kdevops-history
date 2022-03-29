@@ -10,8 +10,6 @@
       skip: true
   tags: vars
 
-- include: tasks/install-base-deps/main.yml
-
 - include_role:
     name: create_data_partition
   tags: [ 'data_partition' ]

@@ -10,6 +10,9 @@
       skip: true
   tags: vars
 
+# Distro specific
+- include: tasks/install-deps/main.yml
+
 - name: Check if {{ disk_setup_path }} is mounted
   become: yes
   become_method: sudo

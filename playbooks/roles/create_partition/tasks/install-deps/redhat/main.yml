@@ -1,0 +1,12 @@
+---
+- name: Install partition creation base tools
+  become: yes
+  become_method: sudo
+  yum:
+    update_cache: yes
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - xfsprogs
+      - e2fsprogs
+      - btrfs-progs

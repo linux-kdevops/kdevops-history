@@ -1,8 +1,10 @@
 ---
-- name: Install blktests base tools
+- name: Install partition creation base tools
   become: yes
   become_method: sudo
   apt:
     name:
       - btrfs-progs
+      - e2fsprogs
+      - xfsprogs
     update_cache: yes
