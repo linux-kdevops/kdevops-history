@@ -1,4 +1,11 @@
 ---
+- name: Update apt cache
+  become: yes
+  become_method: sudo
+  apt:
+    update_cache: yes
+  tags: linux
+
 - name: Install nvme tools
   become: yes
   become_method: sudo

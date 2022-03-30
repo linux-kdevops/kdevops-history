@@ -1,4 +1,11 @@
 ---
+- name: Update apt cache
+  become: yes
+  become_method: sudo
+  apt:
+    update_cache: yes
+  tags: linux
+
 - name: Force dbench compilation on debian
   set_fact:
     compile_dbench: True
