@@ -44,4 +44,25 @@ config BOOTLINUX_TREE_TAG
 	help
 	  The git branch / tag or sha1sum to use.
 
+config BOOTLINUX_SHALLOW_CLONE
+	bool "Shallow git clone"
+	default n
+	help
+	  If enabled the git tree cloned with be cloned using a shallow tree
+	  with history truncated. You want to enable this if you really don't
+	  care about the git history on the targets which will clone Linux.
+	  You want to say no here (the default) if you are using the targets
+	  for actual kernel development. You want to enable this if you are
+	  just using the targets as dummy target runners and don't expect to
+	  be using 'git log' on the target guests.
+
+config BOOTLINUX_SHALLOW_CLONE_DEPTH
+	int "Shallow git clone depth"
+	default 1
+	depends on BOOTLINUX_SHALLOW_CLONE
+	help
+	  Create a shallow clone with a history truncated to the specified
+	  number or revisions. The minimum possible value is 1, otherwise
+	  ignored. Needs git>=1.9.1 to work correctly.
+
 endif # BOOTLINUX

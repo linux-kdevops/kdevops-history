@@ -71,6 +71,7 @@
     repo: "{{ target_linux_git }}"
     dest: "{{ target_linux_dir_path }}"
     update: yes
+    depth: "{{ target_linux_shallow_depth }}"
     version: "{{ target_linux_tag }}"
   tags: [ 'linux', 'git', 'clone']
 

@@ -16,6 +16,7 @@ data_fs_opts: "-L {{ disk_setup_label }}"
 target_linux_admin_name: "Hacker Amanda"
 target_linux_admin_email: "devnull@kernel.org"
 target_linux_git: "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git"
+target_linux_shallow_depth: 0
 target_linux_tree: "linux-stable"
 target_linux_dir_path: "{{ data_path }}/{{ target_linux_tree }}"
 
