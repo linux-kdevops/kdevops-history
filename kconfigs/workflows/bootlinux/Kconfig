@@ -51,6 +51,7 @@ config BOOTLINUX_SHALLOW_CLONE
 	  If enabled the git tree cloned with be cloned using a shallow tree
 	  with history truncated. You want to enable this if you really don't
 	  care about the git history on the targets which will clone Linux.
+	  Using a full shallow tree will save you about 5 minutes in time.
 	  You want to say no here (the default) if you are using the targets
 	  for actual kernel development. You want to enable this if you are
 	  just using the targets as dummy target runners and don't expect to
