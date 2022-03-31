@@ -47,6 +47,21 @@ terraform apply
 You should have had your `~/.ssh/config` updated automatically with the
 provisioned hosts.
 
+## Destroying nodes with terraform
+
+Just run:
+
+```bash
+make destroy
+```
+
+Or if you are doing things manually:
+
+```bash
+cd terraform/you_provider
+terraform destroy
+```
+
 ### Terraform ssh config update
 
 We provide support for updating your ssh configuration file (typically
