@@ -16,9 +16,25 @@ You configure which cloud provider you want to use, what feature from that
 cloud provider you want to use, and then you can use kdevops to select which
 workflows you want to enable on that configuration.
 
+## Configuring your cloud options
+
+To configure which cloud provider you will use you will use the same
+mechanism to configure anything in kdevops:
+
+```bash
+make menuconfig
+```
+
+Under "Bring up methods" you will see the option for
+"Node bring up method (Vagrant for local virtualization (KVM / Virtualbox))".
+Click on that and then change the option to "Terraform for cloud environments".
+That should let you start configuring your cloud provider options. You can
+use the same main menu to configure specific workflows supported by kdevops,
+by defaults no workflows are enabled, and so all you get is the bringup.
+
 ## Installing dependencies
 
-Just run:
+To instal the dependencies of everything which you just enabled just run:
 
 ```bash
 make
