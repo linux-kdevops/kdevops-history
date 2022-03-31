@@ -1,7 +1,8 @@
 # Terraform support
 
-Read the [kdevops_terraform](https://github.com/mcgrof/kdevops_terraform)
-documentation, then come here and read this.
+kdevops allows you to provide variability for terraform using kconfig,
+and uses ansible to deploy the files needed to get you going with
+a terraform plan.
 
 Terraform is used to deploy your development hosts on cloud virtual machines.
 Below are the list of clouds providers currently supported:
@@ -11,7 +12,19 @@ Below are the list of clouds providers currently supported:
   * azure - Microsoft Azure
   * openstack (special minicloud support added)
 
-## Provisioning with terraform
+You configure which cloud provider you want to use, what feature from that
+cloud provider you want to use, and then you can use kdevops to select which
+workflows you want to enable on that configuration.
+
+## Installing dependencies
+
+Just run:
+
+```bash
+make
+```
+
+## Provisioning (bringup) with terraform
 
 You can just use:
 
@@ -19,7 +32,7 @@ You can just use:
 make bringup
 ```
 
-Or to do this manually:
+Or if you want to do this manually:
 
 ```bash
 make deps
@@ -68,22 +81,8 @@ Before running ansible make sure you can ssh into the hosts listed on
 ansible/hosts.
 
 ```bash
-make ansible_deps
-ansible-playbook -i hosts -l dev playbooks/bootlinux.yml
+make uname
 ```
 
-Yes you can later add use a different tag for the kernel revision from the
-command line, and even add an extra patch to test on top a kernel:
-
-```
-ansible-playbook -i hosts -l dev --extra-vars "target_linux_tag=v4.19.21 target_linux_extra_patch=try-v4.19.20-fixes-20190716-v1.patch" bootlinux.yml
-```
-
-You would place the `pend-v4.19.58-fixes-20190716-v2.patch` file into the
-`~/.ansible/roles/mcgrof.bootlinux/templates/` directory.
-
-Say you just want to reboot the systems:
-
-```bash
-ansible-playbook -i hosts playbooks/bootlinux.yml --tags reboot
-```
+There is documentation about different workflows supported on the top level
+documentation.
