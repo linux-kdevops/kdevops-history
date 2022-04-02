@@ -1,3 +1,52 @@
+btrfs/003
+btrfs/006
 btrfs/011 # seems to crash the system even just the simple profile
+btrfs/060
+btrfs/061
+btrfs/062
+btrfs/063
+btrfs/064
+btrfs/065
+btrfs/066
+btrfs/067
+btrfs/068
+btrfs/069
+btrfs/070
+btrfs/071
+btrfs/072
+btrfs/073
+btrfs/074
+btrfs/090
+btrfs/141
+btrfs/151
+btrfs/161
+btrfs/162
+btrfs/163
+btrfs/164
+btrfs/167
+btrfs/184
+btrfs/207
+btrfs/218
+btrfs/239
+btrfs/248
+btrfs/252
+btrfs/254
+btrfs/258
+btrfs/263
+generic/015
+generic/027 # other than failing it produces a 5.7 GiB generic/027.out.bad file! WTF!!!
+generic/083
+generic/102
+generic/171
+generic/173
+generic/174
 generic/204 # takes over 24 hours to run, does't seem right 204.full just has: files 24536189, resvblks 1024
+generic/224
+generic/275
 generic/320 # hung task never ends https://gist.github.com/mcgrof/798032aa4878bc785861065cdd2c0cbd
+generic/387
+generic/427
+generic/492
+generic/520
+generic/551
+generic/673
