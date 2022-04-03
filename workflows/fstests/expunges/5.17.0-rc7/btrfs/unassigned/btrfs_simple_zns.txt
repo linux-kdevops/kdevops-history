@@ -44,6 +44,7 @@ generic/204 # takes over 24 hours to run, does't seem right 204.full just has: f
 generic/224
 generic/275
 generic/320 # hung task never ends https://gist.github.com/mcgrof/798032aa4878bc785861065cdd2c0cbd
+generic/334 # ran for 3607 seconds then hang detected, failure rate 1/2 - https://gist.github.com/mcgrof/2442b9b7fc015eb8551c018f388beb53
 generic/387
 generic/427
 generic/492
