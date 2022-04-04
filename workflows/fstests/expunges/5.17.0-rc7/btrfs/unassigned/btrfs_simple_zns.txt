@@ -30,9 +30,9 @@ btrfs/218
 btrfs/239
 btrfs/248
 btrfs/252
-btrfs/254
-btrfs/258
-btrfs/263
+btrfs/254 # also fails on btrfs_simple
+btrfs/258 # also fails on btrfs_simple
+btrfs/263 # also fails on btrfs_simple
 generic/015
 generic/027 # other than failing it produces a 5.7 GiB generic/027.out.bad file! WTF!!!
 generic/083
