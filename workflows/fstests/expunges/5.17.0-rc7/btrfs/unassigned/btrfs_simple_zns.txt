@@ -50,4 +50,5 @@ generic/427
 generic/492
 generic/520
 generic/551
+generic/626 # failure rate 1/3 hung task https://gist.github.com/mcgrof/d4b349e3298fd3b889e790b825a96c77
 generic/673
