@@ -1,5 +1,7 @@
+generic/388
 xfs/008
 xfs/154
+xfs/301
 xfs/506
 xfs/513
 xfs/539
