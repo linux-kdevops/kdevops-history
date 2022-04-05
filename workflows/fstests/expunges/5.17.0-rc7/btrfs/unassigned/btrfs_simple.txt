@@ -1,3 +1,4 @@
 btrfs/254
 btrfs/258
 btrfs/263
+generic/673 # failure rate 1/4
