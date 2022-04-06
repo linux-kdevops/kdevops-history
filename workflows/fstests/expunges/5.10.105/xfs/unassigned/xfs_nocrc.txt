@@ -1,4 +1,5 @@
 generic/482 # failure rate is 1/2
+xfs/195 # failure rate is 1/5
 xfs/273
 xfs/495
 xfs/503
