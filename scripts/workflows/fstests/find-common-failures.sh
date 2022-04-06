@@ -18,7 +18,6 @@ if [[ ! -d $DIR ]]; then
 	exit
 fi
 
-FIRST=$(find $DIR -type f | grep -v 'all.txt' | head -1)
 FILES=$(find $DIR -type f | grep -v 'all.txt')
 COUNT=$(find $DIR -type f | grep -v 'all.txt'| wc -l)
 COMMON_EXPUNGES=()

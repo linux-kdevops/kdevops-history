@@ -1,13 +1,13 @@
 #!/bin/bash
 # SPDX-License-Identifier: copyleft-next-0.3.1
 
-# Takes as input an expunge file, it will look for all.txt for
+# Takes as input a directory with expunge files, it will look for all.txt for
 # common failures, and then only output entries which are not
 # present in the commmon all.txt file.
 
 usage()
 {
-	echo "$0: <expunge-file-to-remove-common-entries-from>"
+	echo "$0: <directory-with-expunges-to-remove-common-entries-from>"
 }
 
 if [[ $# -ne 1 ]]; then
@@ -15,14 +15,14 @@ if [[ $# -ne 1 ]]; then
 	exit
 fi
 
-FILE=$1
-if [[ ! -f $FILE ]]; then
-	echo "Path supplied must be a file, but it is not: $FILE"
+DIR=$1
+if [[ ! -d $DIR ]]; then
+	echo "Path supplied must be a directory, but it is not: $DIR"
 	exit
 fi
 
-DIR=$(dirname $FILE)
 COMMON="$DIR/all.txt"
+FILES=$(find $DIR -type f | grep -v 'all.txt')
 
 if [[ ! -f $COMMON ]]; then
 	echo "Common file does not exist: $COMMON"
@@ -31,8 +31,7 @@ fi
 
 COMMON_EXPUNGES=""
 
-LAST_ENTRY="$(cat $COMMON | tail -1)"
-for expunge in $(cat $COMMON); do
+for expunge in $(cat $COMMON | awk '{print $1}'); do
 	if [[ "$COMMON_EXPUNGES" == "" ]]; then
 		COMMON_EXPUNGES="$expunge"
 		continue
@@ -41,7 +40,9 @@ for expunge in $(cat $COMMON); do
 done
 
 TMP_FILE=$(mktemp)
-cat $FILE | egrep -v "${COMMON_EXPUNGES[@]}" | sort | uniq > $TMP_FILE
-mv $TMP_FILE $FILE
+for i in $FILES; do
+	cat $i | egrep -v "${COMMON_EXPUNGES[@]}" | sort | uniq > $TMP_FILE
+	mv $TMP_FILE $i
+done
 
 exit 0
