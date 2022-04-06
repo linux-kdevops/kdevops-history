@@ -1,5 +1,3 @@
 generic/055
-generic/241
 xfs/157
 xfs/195
-xfs/506
