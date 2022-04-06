@@ -1,4 +1,5 @@
 btrfs/003
+btrfs/004 # failure rate is probably 1/10
 btrfs/006
 btrfs/011 # seems to crash the system even just the simple profile
 btrfs/060
@@ -35,6 +36,7 @@ btrfs/258 # also fails on btrfs_simple
 btrfs/263 # also fails on btrfs_simple
 generic/015
 generic/027 # other than failing it produces a 5.7 GiB generic/027.out.bad file! WTF!!!
+generic/066 # failure rate is probably 1/10
 generic/083
 generic/102
 generic/171
