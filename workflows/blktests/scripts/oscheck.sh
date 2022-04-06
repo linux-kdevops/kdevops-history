@@ -16,6 +16,17 @@ ONLY_CHECK_DEPS="false"
 ONLY_QUESTION_DISTRO_KERNEL="false"
 PRINT_START="false"
 PRINT_DONE="false"
+RUN_GROUP=""
+
+VALID_GROUPS="block"
+VALID_GROUPS="$VALID_GROUPS loop"
+VALID_GROUPS="$VALID_GROUPS meta"
+VALID_GROUPS="$VALID_GROUPS nbd"
+VALID_GROUPS="$VALID_GROUPS nvme"
+VALID_GROUPS="$VALID_GROUPS nvmeof-mp"
+VALID_GROUPS="$VALID_GROUPS scsi"
+VALID_GROUPS="$VALID_GROUPS srp"
+VALID_GROUPS="$VALID_GROUPS zbd"
 
 # Used to do a sanity check that the section we are running a test
 # for has all intended files part of its expunge list. Updated per
@@ -422,6 +433,21 @@ oscheck_distro_kernel_check()
 	fi
 }
 
+validate_run_group()
+{
+	VALID_GROUP="false"
+	for i in $VALID_GROUPS; do
+		if [[ "$RUN_GROUP" == "$i" ]]; then
+			VALID_GROUP="true"
+		fi
+	done
+	if [[ "$VALID_GROUP" != "true" ]]; then
+		echo "Invalid group: $RUN_GROUP"
+		echo "Allowed groups: $VALID_GROUPS"
+		exit 1
+	fi
+}
+
 check_check()
 {
 	if [ ! -e ./check ]; then
@@ -435,11 +461,19 @@ check_check()
 oscheck_read_osfile_and_includes
 oscheck_distro_kernel_check
 
-RUN_GROUP=""
+INFER_GROUP=$(echo $HOST | sed -e 's|-dev||')
+INFER_GROUP=$(echo $INFER_GROUP | sed -e 's|-|_|g')
+INFER_GROUP=$(echo $INFER_GROUP | awk -F"_" '{for (i=2; i <= NF; i++) { printf $i; if (i!=NF) printf "_"}; print NL}')
+
 if [ "$ONLY_TEST_GROUP" != "" ]; then
 	RUN_GROUP="$ONLY_TEST_GROUP"
 	echo "Only testing group: $ONLY_TEST_GROUP"
+else
+	RUN_GROUP="$INFER_GROUP"
+	echo "Only testing inferred group: $RUN_GROUP"
 fi
+
+validate_run_group
 
 check_check
 CHECK_RET=$?
