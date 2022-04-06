@@ -37,6 +37,7 @@ btrfs/263 # also fails on btrfs_simple
 generic/015
 generic/027 # other than failing it produces a 5.7 GiB generic/027.out.bad file! WTF!!!
 generic/066 # failure rate is probably 1/10
+generic/068 # failure rate is probably 1/12 hung task https://gist.github.com/mcgrof/1825ee538a8b912b478b5dedac38e104
 generic/083
 generic/102
 generic/171
