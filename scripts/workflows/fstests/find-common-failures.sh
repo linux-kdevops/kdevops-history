@@ -18,9 +18,11 @@ if [[ ! -d $DIR ]]; then
 	exit
 fi
 
-COUNT=$(find $DIR -type f | wc -l)
-FILES=$(find $DIR -type f)
+FIRST=$(find $DIR -type f | grep -v 'all.txt' | head -1)
+FILES=$(find $DIR -type f | grep -v 'all.txt')
+COUNT=$(find $DIR -type f | grep -v 'all.txt'| wc -l)
 COMMON_EXPUNGES=()
+TMP_FILE=$(mktemp)
 
 for f in $FILES; do
 	for expunge in $(cat $f); do
@@ -47,6 +49,8 @@ print_all_common_expunges()
 	done
 }
 
-print_all_common_expunges | sort | uniq
+print_all_common_expunges | sort | uniq > $TMP_FILE
+cat $TMP_FILE >> $DIR/all.txt
+rm -f $TMP_FILE
 
 exit 0
