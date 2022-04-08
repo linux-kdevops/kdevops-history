@@ -1,2 +1,3 @@
+generic/055 # failure rate is about 1/5 fails on xfs_nocrc_512, xfs_reflink_1024 and xfs_reflink_normapbt
 generic/241
 xfs/506
