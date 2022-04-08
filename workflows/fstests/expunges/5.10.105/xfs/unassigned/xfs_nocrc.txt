@@ -1,5 +1,4 @@
 generic/482 # failure rate is 1/2
-generic/531 # failure rate is 1/5 hung task https://gist.github.com/mcgrof/91e1e16b8fbb8e09c6f6de8e9dc1ecd9
 xfs/195 # failure rate is 1/5
 xfs/273
 xfs/495
