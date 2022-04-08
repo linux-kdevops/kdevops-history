@@ -30,6 +30,7 @@ btrfs/207
 btrfs/218
 btrfs/237 # failure rate is about 1/15
 btrfs/239
+btrfs/242 # failure rate is about 1/20
 btrfs/248
 btrfs/252
 btrfs/254 # also fails on btrfs_simple

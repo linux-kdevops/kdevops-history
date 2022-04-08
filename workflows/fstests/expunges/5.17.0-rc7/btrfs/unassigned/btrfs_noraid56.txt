@@ -1,1 +1,2 @@
 generic/118 # failure rate is about 1/15
+generic/226 # failure rate is about 1/20
