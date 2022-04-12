@@ -1,5 +1,6 @@
 generic/241
 generic/531 # failure rate is 1/5 hung task fails on xfs_nocrc and xfs_crc complex backport required https://gist.github.com/mcgrof/91e1e16b8fbb8e09c6f6de8e9dc1ecd9
+generic/320 # failure rate is about 1/30 hung task on  xfs_reflink_normapbt https://gist.github.com/mcgrof/752cff159077b2fdf722d83382b1c337
 xfs/157
 xfs/158
 xfs/177
