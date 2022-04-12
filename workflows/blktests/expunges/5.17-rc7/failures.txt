@@ -13,3 +13,4 @@ srp/008 # failure rate is 1 always fails with a diff
 srp/009 # failure rate is 1 always fails with a soft lockup  https://gist.github.com/mcgrof/d6b351b40f2345dd20a7fa8acee3f704
 srp/010 # failure rate is 1 always fails with a diff
 srp/011 # failure rate is 1 always fails with an NMI https://gist.github.com/mcgrof/8f80e72f9f3bae20dcc3d45a06f30379
+srp/012 # failure rate is 1 always fails with an NMI https://gist.github.com/mcgrof/72929570da5de920d9a37cb401225822
