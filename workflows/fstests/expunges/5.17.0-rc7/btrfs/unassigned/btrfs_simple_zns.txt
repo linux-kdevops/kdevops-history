@@ -28,6 +28,7 @@ btrfs/167
 btrfs/184
 btrfs/207
 btrfs/218
+btrfs/236 # failure rate is about 1/30
 btrfs/237 # failure rate is about 1/15
 btrfs/239
 btrfs/242 # failure rate is about 1/20
@@ -47,8 +48,8 @@ generic/173
 generic/174
 generic/204 # takes over 24 hours to run, does't seem right 204.full just has: files 24536189, resvblks 1024
 generic/224
-generic/275
 generic/269 # fails with a low failure rate of about 1/20 with a soft lockup and then OOMs https://gist.github.com/mcgrof/360b2c6bb3d0299934ea5c0f82151871
+generic/275
 generic/320 # hung task never ends https://gist.github.com/mcgrof/798032aa4878bc785861065cdd2c0cbd
 generic/334 # ran for 3607 seconds then hang detected, failure rate 1/2 - https://gist.github.com/mcgrof/2442b9b7fc015eb8551c018f388beb53
 generic/387
