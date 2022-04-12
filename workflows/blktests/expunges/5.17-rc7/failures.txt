@@ -7,3 +7,6 @@ nvme/017 # failure rate is 1 always fails https://gist.github.com/mcgrof/a956c7a
 srp/001 # failure rate is 1 always fails soft lockup https://gist.github.com/mcgrof/f94ad51123cfdbff4520a9964c292c2c
 srp/002 # failure rate is 1 always fails with an NMI https://gist.github.com/mcgrof/9f3b1b9592d2196eb79f8c22238dbfd9
 srp/005 # failure rate is 1 always fails with an NMI https://gist.github.com/mcgrof/d73bc3c0fe91fbbf6d4b9957e51b3ddb
+srp/006 # failure rate is 1 always fails with a diff
+srp/007 # failure rate is 1 always fails with a diff
+srp/008 # failure rate is 1 always fails with a diff
