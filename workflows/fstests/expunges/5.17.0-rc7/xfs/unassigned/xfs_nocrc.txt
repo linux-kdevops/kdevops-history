@@ -1,4 +1,5 @@
 generic/055
 generic/530 # failure rate is 1/5
+generic/589 # failure rate is 1/10
 xfs/157
 xfs/195
