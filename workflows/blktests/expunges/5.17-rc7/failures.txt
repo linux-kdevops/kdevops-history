@@ -15,3 +15,4 @@ srp/010 # failure rate is 1 always fails with a diff
 srp/011 # failure rate is 1 always fails with an NMI https://gist.github.com/mcgrof/8f80e72f9f3bae20dcc3d45a06f30379
 srp/012 # failure rate is 1 always fails with an NMI https://gist.github.com/mcgrof/72929570da5de920d9a37cb401225822
 srp/013 # failure rate is 1 always fails with an NMI https://gist.github.com/mcgrof/eed4d4683fa53960bffc10c3c4fe1fda
+srp/014 # failure rate is 1 always fails with a diff
