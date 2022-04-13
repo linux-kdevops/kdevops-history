@@ -209,15 +209,15 @@ config HAVE_DISTRO_BLKTESTS_TEST_LOOP
 
 config HAVE_DISTRO_BLKTESTS_TEST_META
 	bool
-	default y
+	default n
 
 config HAVE_DISTRO_BLKTESTS_TEST_NBD
 	bool
-	default n
+	default y
 
 config HAVE_DISTRO_BLKTESTS_TEST_NVME
 	bool
-	default n
+	default y
 
 config HAVE_DISTRO_BLKTESTS_TEST_NVMEMP
 	bool
@@ -225,15 +225,15 @@ config HAVE_DISTRO_BLKTESTS_TEST_NVMEMP
 
 config HAVE_DISTRO_BLKTESTS_TEST_SCSI
 	bool
-	default n
+	default y
 
 config HAVE_DISTRO_BLKTESTS_TEST_SRP
 	bool
-	default n
+	default y
 
 config HAVE_DISTRO_BLKTESTS_TEST_ZBD
 	bool
-	default n
+	default y
 
 config BLKTESTS_MANUAL_COVERAGE
 	bool "Enable manual coverage selection"
@@ -266,6 +266,9 @@ config BLKTESTS_SECTION_META
 	default n if !HAVE_DISTRO_BLKTESTS_TEST_META
 	help
 	  This will create a host to test metas stuff.
+	  These are tests which help ensure blktests itself works.
+	  You should not need to test this unless you are working on
+	  enhancing blktests itself.
 
 config BLKTESTS_SECTION_NBD
 	bool "nbd"
@@ -273,6 +276,7 @@ config BLKTESTS_SECTION_NBD
 	default n if !HAVE_DISTRO_BLKTESTS_TEST_NBD
 	help
 	  This will create a host to test the nbd block driver.
+	  These are tests which use the null_blk block driver.
 
 config BLKTESTS_SECTION_NVME
 	bool "nvme"
@@ -286,7 +290,11 @@ config BLKTESTS_SECTION_NVMEMP
 	default y if HAVE_DISTRO_BLKTESTS_TEST_NVMEMP
 	default n if !HAVE_DISTRO_BLKTESTS_TEST_NVMEMP
 	help
-	  This will create a host to test nvme.
+	  This will create a host to test nvme multipath using device mapper.
+	  These tests require you to disable set the module parameter
+	  nvme_core.multipath=N on /etc/default/grub. It is currently being
+	  evaluated whether or not the complexity to enable these test merits
+	  just removing these tests as srp tests should suffice.
 
 config BLKTESTS_SECTION_SCSI
 	bool "scsi"
@@ -300,7 +308,7 @@ config BLKTESTS_SECTION_SRP
 	default y if HAVE_DISTRO_BLKTESTS_TEST_SRP
 	default n if !HAVE_DISTRO_BLKTESTS_TEST_SRP
 	help
-	  This will create a host to test srp.
+	  This will create a host to run SCSI RDMA Protocol (SRP) tests.
 
 config BLKTESTS_SECTION_ZBD
 	bool "zone block devices"
@@ -308,6 +316,8 @@ config BLKTESTS_SECTION_ZBD
 	default n if !HAVE_DISTRO_BLKTESTS_TEST_ZBD
 	help
 	  This will create a host to test zone block devices.
+	  You can enable VAGRANT_ENABLE_ZNS to test qemu nvme
+	  drives instead of having blktests use nbd.
 
 endif # BLKTESTS_MANUAL_COVERAGE
 
