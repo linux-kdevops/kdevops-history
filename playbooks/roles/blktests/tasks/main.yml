@@ -134,6 +134,15 @@
     label: "{{ item }}"
   tags: [ 'blktests', 'install' ]
 
+- name: Disable multipathd service for srp blktests tests
+  become: yes
+  become_method: sudo
+  systemd:
+    name: snmpd
+    enabled: no
+    state: stopped
+  tags: multipathd
+
 - name: Reboot system before our test so we know everything is sane
   tags: [ 'blktests', 'run_tests', 'reboot' ]
   become: yes
