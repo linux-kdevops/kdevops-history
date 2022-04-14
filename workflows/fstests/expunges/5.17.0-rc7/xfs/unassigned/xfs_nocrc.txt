@@ -1,4 +1,5 @@
 generic/055
+generic/482 # failure rate is about 1/15 https://gist.github.com/mcgrof/048243ac4435ee055d7a0e38a2c082da
 generic/530 # failure rate is 1/5
 generic/589 # failure rate is 1/10
 xfs/157
