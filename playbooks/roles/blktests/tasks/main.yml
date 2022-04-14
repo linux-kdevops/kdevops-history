@@ -138,7 +138,7 @@
   become: yes
   become_method: sudo
   systemd:
-    name: snmpd
+    name: multipathd
     enabled: no
     state: stopped
   tags: multipathd
