@@ -18,3 +18,4 @@ srp/011 # failure rate is 1 always fails with an NMI https://gist.github.com/mcg
 srp/012 # failure rate is 1 always fails with an NMI https://gist.github.com/mcgrof/72929570da5de920d9a37cb401225822
 srp/013 # failure rate is 1 always fails with an NMI https://gist.github.com/mcgrof/eed4d4683fa53960bffc10c3c4fe1fda
 srp/014 # failure rate is 1 always fails with a diff
+# zbd/006 # failure rate is about 1/80 non-fatal RCU stall https://gist.github.com/mcgrof/5647efdc01bdb4715cfd9b2852fb13ce
