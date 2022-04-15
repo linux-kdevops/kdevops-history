@@ -9,6 +9,7 @@ xfs/154 # buggy test check for missing 'needsrepair' feature in 5.10
 xfs/157
 xfs/158
 xfs/177
+xfs/301 # fails in two sections already https://gist.github.com/mcgrof/3567f39ea06ba785b3d66351cdcb22cf
 xfs/506
 xfs/513 # fixed by "xfs: show the proper user quota options" in xfs-5.10.y-1
 xfs/539 # fixed by "xfs: Skip repetitive warnings about mount options" in xfs-5.10.y-4
