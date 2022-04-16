@@ -1,7 +1,7 @@
 block/011 # failure rate is 1 always fails https://gist.github.com/mcgrof/e691dbfd5e1bd595a0442700b51fc22e
 block/012 # failure rate is 1 always fails https://gist.github.com/mcgrof/1e34a8cf6d6c829d370fbfdbedfbf862
-nvme/011 # failure rate is 1 always fails with nvme_trtype=rdma kernel warning https://gist.github.com/mcgrof/21f6adf2fd26db6e3ca7d1768d50a0c3
 nvme/002 # failure rate is 1 always fails https://gist.github.com/mcgrof/cb208120664771a81a5a30ae650f7eaa
+nvme/011 # failure rate is 1 always fails with nvme_trtype=rdma kernel warning https://gist.github.com/mcgrof/21f6adf2fd26db6e3ca7d1768d50a0c3
 nvme/016 # failure rate is 1 always fails https://gist.github.com/mcgrof/d4b3e8fb0419b27ca8209799d3f532de
 nvme/017 # failure rate is 1 always fails https://gist.github.com/mcgrof/a956c7ad68a2ca703c766790be5b38bc
 nvmeof-mp/001 # failure rate is always 1 fails with a diff
