@@ -36,6 +36,7 @@ btrfs/242 # failure rate is about 1/20
 btrfs/248
 btrfs/252
 btrfs/254 # also fails on btrfs_simple
+btrfs/255 # failure rate is about 1/20 linked list btrfs corruption BUG_ON https://gist.github.com/mcgrof/87523138ec4495eda5372e8b7a2174bb
 btrfs/258 # also fails on btrfs_simple
 btrfs/263 # also fails on btrfs_simple
 generic/015
