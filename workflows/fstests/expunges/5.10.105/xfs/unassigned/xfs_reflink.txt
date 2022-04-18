@@ -1,6 +1,8 @@
 generic/475 # failure rate is about 1/50 crash https://gist.github.com/mcgrof/c54d31596ca14dde3b9a120871462348 https://gist.github.com/mcgrof/0495085f562470e6a8c8ead275c19796
 xfs/008 # failure rate is about 1/40
 xfs/154
+xfs/216
+xfs/449
 xfs/506
 xfs/513
 xfs/539
