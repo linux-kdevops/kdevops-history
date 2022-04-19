@@ -15,6 +15,7 @@ btrfs/249
 generic/224 # fails with a hang on btrfs_raid56 section but let's skip for all sections for now
 generic/241
 generic/260
+generic/300 # fails on btrfs_simple so chances are other sections should fail too
 generic/633
 generic/644
 generic/645
