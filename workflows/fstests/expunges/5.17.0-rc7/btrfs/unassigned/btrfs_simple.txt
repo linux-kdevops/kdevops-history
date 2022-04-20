@@ -2,5 +2,5 @@ btrfs/080 # fails with a low failure rate of about 1/60 https://gist.github.com/
 btrfs/254
 btrfs/258
 btrfs/263
-generic/673 # failure rate 1/4
 generic/300 # failure rate is about 1/10 hung task on btrfs_wait_ordered_extents() https://gist.github.com/mcgrof/2696e71d3322becfe3811260fbe1ec3a
+generic/673 # failure rate 1/4
