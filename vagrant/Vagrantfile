@@ -86,8 +86,8 @@ pn_u = project_namespace.upcase
 pn_u = pn_u.tr("-", "_")
 pn_l = pn_l.tr("-", "_")
 
-node_config          = ENV[pn_u + '_VAGRANT_NODE_CONFIG'] ? ENV[pn_u + '_VAGRANT_NODE_CONFIG'] : pn_l + "_nodes.yaml"
-node_config_override = ENV[pn_u + '_VAGRANT_NODE_CONFIG'] ? ENV[pn_u + '_VAGRANT_NODE_CONFIG'] : pn_l + "_nodes_override.yaml"
+node_config          = ENV[pn_u + '_VAGRANT_NODE_CONFIG'] ? ENV[pn_u + '_VAGRANT_NODE_CONFIG'] : "kdevops_nodes.yaml"
+node_config_override = ENV[pn_u + '_VAGRANT_NODE_CONFIG'] ? ENV[pn_u + '_VAGRANT_NODE_CONFIG'] : "kdevops_nodes_override.yaml"
 
 config_data = YAML.load_file(node_config)
 
