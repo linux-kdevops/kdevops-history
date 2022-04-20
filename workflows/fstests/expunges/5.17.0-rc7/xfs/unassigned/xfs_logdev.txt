@@ -11,6 +11,7 @@ generic/482
 shared/298
 xfs/017
 xfs/045
+xfs/060
 xfs/158
 xfs/160
 xfs/161
