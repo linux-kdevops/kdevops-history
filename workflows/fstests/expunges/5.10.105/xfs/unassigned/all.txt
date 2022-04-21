@@ -1,3 +1,4 @@
+generic/050 # fails on multiple sections
 generic/241
 generic/273 # fails on xfs_reflink_1024 but chances are it will fail in others too https://gist.github.com/mcgrof/89d8349f899ff07ba4dda19264034db2
 generic/320 # failure rate is about 1/30 hung task on  xfs_reflink_normapbt https://gist.github.com/mcgrof/752cff159077b2fdf722d83382b1c337
@@ -6,6 +7,7 @@ generic/459 # fails on multiple sections
 generic/475 # failure rate is about 1/50 fails on xfs_reflink but failure seems generic see section failure for details https://gist.github.com/mcgrof/0495085f562470e6a8c8ead275c19796
 generic/482 # different failure rate depending on section
 generic/531 # failure rate is 1/5 hung task [1] complex backport required [2] [1] https://gist.github.com/mcgrof/91e1e16b8fbb8e09c6f6de8e9dc1ecd9 [2] deferred inode inactivation: https://lore.kernel.org/r/162812918259.2589546.16599271324044986858.stgit@magnolia
+generic/601 # fails on xfs_reflink_1024
 xfs/005 # fails on many sections failure rate about 1/5
 xfs/008 # fails on two sections so stop testing this for now
 xfs/014 # fails on section xfs_reflink_1024 but seems generic skip it for now
