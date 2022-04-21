@@ -61,6 +61,7 @@ generic/334 # ran for 3607 seconds then hang detected, failure rate 1/2 - https:
 generic/387
 generic/416 # requires a fix in btrfs-progs I have queued https://gist.github.com/mcgrof/81771a86ef0b90152e142e597d5f4147
 generic/427
+generic/479 # failed to create flakey device - failure rate 1/20
 generic/492
 generic/520
 generic/551
