@@ -18,6 +18,7 @@ btrfs/072
 btrfs/073
 btrfs/074
 btrfs/090
+btrfs/132 # requires a fix in btrfs-progs I have queued https://gist.github.com/mcgrof/81771a86ef0b90152e142e597d5f4147
 btrfs/141
 btrfs/151
 btrfs/161
@@ -51,12 +52,14 @@ generic/173
 generic/174
 generic/204 # takes over 24 hours to run, does't seem right 204.full just has: files 24536189, resvblks 1024
 generic/224
+generic/226 # requires a fix in btrfs-progs I have queued https://gist.github.com/mcgrof/81771a86ef0b90152e142e597d5f4147
 generic/269 # fails with a low failure rate of about 1/20 with a soft lockup and then OOMs https://gist.github.com/mcgrof/360b2c6bb3d0299934ea5c0f82151871
 generic/273 # failure rate is about 1/40 https://gist.github.com/mcgrof/a84c91371a39d72a4b915e8333bd461e
 generic/275
 generic/320 # hung task never ends https://gist.github.com/mcgrof/798032aa4878bc785861065cdd2c0cbd
 generic/334 # ran for 3607 seconds then hang detected, failure rate 1/2 - https://gist.github.com/mcgrof/2442b9b7fc015eb8551c018f388beb53
 generic/387
+generic/416 # requires a fix in btrfs-progs I have queued https://gist.github.com/mcgrof/81771a86ef0b90152e142e597d5f4147
 generic/427
 generic/492
 generic/520
