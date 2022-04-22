@@ -40,5 +40,6 @@
       - hwinfo
       - iscsi-initiator-utils
       - openssl
+      - openssl-devel
       - dwarves
       - zstd
