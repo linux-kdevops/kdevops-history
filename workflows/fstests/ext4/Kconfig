@@ -33,4 +33,15 @@ config FSTESTS_EXT4_SECTION_DEFAULTS
 	  Enabling this will test ext4 with the default options for the mkfs.ext4
 	  to create the filesystem.
 
+config FSTESTS_EXT4_SECTION_ADVANCED_FEATURES
+	bool "Enable testing section: ext4_advanced_features"
+	default y
+	help
+	  Enabling this will test ext4 with the advanced features enabled.
+	  This enables a host which will use the following configuration:
+
+	      [ext4_advanced_features]
+	      MKFS_OPTIONS="-I 256 -O inline_data,metadata_csum,64bit"
+	      FSTYP=ext4
+
 endif # !FSTESTS_EXT4_MANUAL_COVERAGE
