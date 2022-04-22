@@ -43,3 +43,10 @@
       - openssl-devel
       - dwarves
       - zstd
+
+- name: Remove packages that mess with initramfs
+  become: yes
+  become_method: sudo
+  yum:
+    state: absent
+    name: dracut-config-generic
