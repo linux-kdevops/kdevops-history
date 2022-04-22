@@ -58,6 +58,7 @@ generic/273 # failure rate is about 1/40 https://gist.github.com/mcgrof/a84c9137
 generic/275
 generic/320 # hung task never ends https://gist.github.com/mcgrof/798032aa4878bc785861065cdd2c0cbd
 generic/334 # ran for 3607 seconds then hang detected, failure rate 1/2 - https://gist.github.com/mcgrof/2442b9b7fc015eb8551c018f388beb53
+generic/335 # failure rate is about 1/10 - failed to create flakey device
 generic/387
 generic/416 # requires a fix in btrfs-progs I have queued https://gist.github.com/mcgrof/81771a86ef0b90152e142e597d5f4147
 generic/427
