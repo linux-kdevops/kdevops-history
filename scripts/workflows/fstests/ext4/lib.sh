@@ -3,9 +3,7 @@
 
 source ${TOPDIR}/scripts/workflows/fstests/lib.sh
 
-EXT4_SECTIONS="defaults"
-
-export EXT4_SECTIONS
+export EXT4_SECTIONS=$(get_fs_sections ext4)
 
 ext4_generate_nodes_file()
 {

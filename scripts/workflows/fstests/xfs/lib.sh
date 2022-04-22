@@ -3,20 +3,11 @@
 
 source ${TOPDIR}/scripts/workflows/fstests/lib.sh
 
-XFS_SECTIONS="crc"
-XFS_SECTIONS="$XFS_SECTIONS nocrc"
-XFS_SECTIONS="$XFS_SECTIONS nocrc_512"
-XFS_SECTIONS="$XFS_SECTIONS reflink"
-XFS_SECTIONS="$XFS_SECTIONS reflink_1024"
-XFS_SECTIONS="$XFS_SECTIONS reflink_normapbt"
-XFS_SECTIONS="$XFS_SECTIONS logdev"
-XFS_SECTIONS="$XFS_SECTIONS rtdev"
+export XFS_SECTIONS=$(get_fs_sections xfs)
 
-if [[ "$CONFIG_FSTESTS_XFS_SECTION_BIGBLOCK" == "y" ]]; then
-	XFS_SECTIONS="$XFS_SECTIONS bigblock"
+if [[ "$CONFIG_FSTESTS_XFS_SECTION_BIGBLOCK" != "y" ]]; then
+	XFS_SECTIONS=$(echo $XFS_SECTIONS | sed -e 's| bigblock ||g')
 fi
-
-export XFS_SECTIONS
 
 xfs_generate_nodes_file()
 {
