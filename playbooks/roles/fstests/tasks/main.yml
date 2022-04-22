@@ -117,6 +117,14 @@
   reboot:
     post_reboot_delay: 10
 
+- name: Make sure loop device support is loaded
+  tags: [ 'oscheck', 'fstests', 'run_tests' ]
+  become: yes
+  become_method: sudo
+  command: "modprobe loop"
+  when:
+    - kdevops_run_fstests|bool
+
 - name: Add missing groups for fstests
   tags: [ 'oscheck', 'fstests', 'install', 'root']
   become: yes

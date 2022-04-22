@@ -24,12 +24,14 @@ config BOOTLINUX_TREE_NAME
 	default "linux" if BOOTLINUX_TREE_LINUS
 	default "linux-stable" if BOOTLINUX_TREE_STABLE
 	default "linux-next" if BOOTLINUX_TREE_NEXT
+	default "btrfs-devel" if BOOTLINUX_TREE_BTRFS_DEVEL
 
 config BOOTLINUX_TREE
 	string "Linux git tree URL"
 	default "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git" if BOOTLINUX_TREE_LINUS
 	default "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git" if BOOTLINUX_TREE_STABLE
 	default "https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git" if BOOTLINUX_TREE_NEXT
+	default "https://github.com/kdave/btrfs-devel.git" if BOOTLINUX_TREE_BTRFS_DEVEL
 	help
 	  The Linux git tree to use.
 
@@ -41,6 +43,7 @@ config BOOTLINUX_TREE_TAG
 	default "v5.14.4" if BOOTLINUX_STABLE_V514
 	default "v5.17-rc7" if BOOTLINUX_STABLE_V517
 	default "next-20220408" if BOOTLINUX_TREE_NEXT
+	default "for-next" if BOOTLINUX_TREE_BTRFS_DEVEL
 	help
 	  The git branch / tag or sha1sum to use.
 
