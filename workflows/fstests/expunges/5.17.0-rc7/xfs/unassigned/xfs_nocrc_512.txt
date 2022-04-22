@@ -7,3 +7,4 @@ xfs/157
 xfs/158
 xfs/168 # failure rate is about 1/20
 xfs/220
+xfs/295 # failure rate is about 1/30 xfs_logprint: unknown log operation type (0) Bad data in log
