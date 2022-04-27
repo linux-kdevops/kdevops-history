@@ -10,8 +10,8 @@
       skip: true
   tags: vars
 
-- name: Install distro specific dependencies
-  include_tasks: install-deps/main.yml
+# Distro specific
+- include: tasks/install-deps/main.yml
 
 - name: git clone dbench
   git:
