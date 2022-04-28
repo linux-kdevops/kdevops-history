@@ -27,6 +27,7 @@ WORKFLOW_ARGS += $(BOOTLINUX_ARGS)
 linux-help-menu:
 	@echo "Linux git kernel development options"
 	@echo "linux              - Git clones a linux git tree, build linux and reboots into it"
+	@echo "uname              - Prints current running kernel"
 	@echo ""
 
 PHONY += linux
