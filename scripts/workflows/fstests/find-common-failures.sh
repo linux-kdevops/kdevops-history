@@ -2,17 +2,48 @@
 # SPDX-License-Identifier: copyleft-next-0.3.1
 # Takes an expunge directory as input and outputs all
 # common expunges between them.
+
+LAZY_BASELINE="n"
+DIR=""
+
 usage()
 {
-	echo "$0: <directory-with-expunges>"
+	echo "Usage: $0 [-l | --lazy-baseline ] <directory-with-expunges>"
+	echo ""
+	echo "-l | --lazy-baseline  If an expunge is found present in at least two sections expunge it from all sections"
+	echo ""
 }
 
-if [[ $# -ne 1 ]]; then
+if [[ $# -le 1 ]]; then
 	usage
 	exit
 fi
 
-DIR=$1
+parse_args()
+{
+	while [[ $# -gt 0 ]]; do
+	key="$1"
+
+	case $key in
+		-l|--lazy-baseline)
+		LAZY_BASELINE="y"
+		shift
+		;;
+	*)
+		DIR=$1
+		shift
+		;;
+	esac
+	done
+}
+
+parse_args $@
+
+if [[ $DIR == "" ]]; then
+	usage
+	exit
+fi
+
 if [[ ! -d $DIR ]]; then
 	echo "Path supplied must be a directory, but it is not: $DIR"
 	exit
@@ -35,7 +66,11 @@ for f in $FILES; do
 				let EXPUNGE_COUNT=$EXPUNGE_COUNT+1
 			fi
 		done
-		if [[ $EXPUNGE_COUNT -eq $COUNT ]]; then
+		if [[ "$LAZY_BASELINE" == "y" ]]; then
+			if [[ $EXPUNGE_COUNT -ge 2 ]]; then
+				COMMON_EXPUNGES+=( $expunge )
+			fi
+		elif [[ $EXPUNGE_COUNT -eq $COUNT ]]; then
 			COMMON_EXPUNGES+=( $expunge )
 		fi
 	done
@@ -44,7 +79,11 @@ done
 print_all_common_expunges()
 {
 	for i in ${COMMON_EXPUNGES[@]}; do
-		echo $i
+		if [[ "$LAZY_BASELINE" == "y" ]]; then
+			echo "$i # lazy baseline - failure found in at least two sections"
+		else
+			echo $i
+		fi
 	done
 }
 
