@@ -55,7 +55,7 @@ COMMON_EXPUNGES=()
 TMP_FILE=$(mktemp)
 
 for f in $FILES; do
-	for expunge in $(cat $f); do
+	for expunge in $(cat $f | awk '{print $1}'); do
 		EXPUNGE_COUNT=1
 		for f2 in $FILES; do
 			if [[ "$f2" == "$f" ]]; then
