@@ -1,56 +1,44 @@
-generic/050 # fails on multiple sections
 generic/050 # lazy baseline - failure found in at least two sections
 generic/241
-generic/273 # fails on xfs_reflink_1024 but chances are it will fail in others too https://gist.github.com/mcgrof/89d8349f899ff07ba4dda19264034db2
+generic/273 # fails on xfs_reflink_1024 with a failure rate is 1/10 but chances are it will fail in others too https://gist.github.com/mcgrof/89d8349f899ff07ba4dda19264034db2
 generic/320 # failure rate is about 1/30 hung task on  xfs_reflink_normapbt https://gist.github.com/mcgrof/752cff159077b2fdf722d83382b1c337
-generic/388 # fails on xfs_reflink and xfs_reflink_1024 failure rate 1/20
+eeneric/388 # fails on xfs_reflink with a failure rate of 1/20 and xfs_reflink_1024 with a failure rate of 1/5
 generic/418 # can sometimes take over 10 times the amount of time, no obvious failure yet requires manual introspection, failure rate is about 1/10
-generic/459 # fails on multiple sections
 generic/459 # lazy baseline - failure found in at least two sections
 generic/475 # failure rate is about 1/50 fails on xfs_reflink but failure seems generic see section failure for details https://gist.github.com/mcgrof/0495085f562470e6a8c8ead275c19796
 generic/482 # different failure rate depending on section
-generic/482 # lazy baseline - failure found in at least two sections
+generic/482 # lazy baseline - failure found in at least two sections - fails on xfs_nocrc with a failure rate of 1/2 and on xfs_nocrc_512 with a failure rate is about 1/35
 generic/531 # failure rate is 1/5 hung task [1] complex backport required [2] [1] https://gist.github.com/mcgrof/91e1e16b8fbb8e09c6f6de8e9dc1ecd9 [2] deferred inode inactivation: https://lore.kernel.org/r/162812918259.2589546.16599271324044986858.stgit@magnolia
 generic/590 # lazy baseline - failure found in at least two sections - can be xfsprogs regression
 generic/601 # fails on xfs_reflink_1024
-xfs/005 # fails on many sections failure rate about 1/5
-xfs/005 # lazy baseline - failure found in at least two sections
-xfs/008 # fails on two sections so stop testing this for now
+xfs/005 # fails on many sections failure rate about 1/5, lazy baseline - failure found in at least two sections
 xfs/008 # lazy baseline - failure found in at least two sections
-xfs/014 # fails on section xfs_reflink_1024 but seems generic skip it for now
-xfs/014 # lazy baseline - failure found in at least two sections
+xfs/014 # fails on section xfs_reflink_1024  failure rate is about 1/50 https://gist.github.com/mcgrof/822b449725fd069d1a13013e91929f70 and on xfs_logdev with a failure rate of failure rate 1/40
 xfs/045 # lazy baseline - failure found in at least two sections - can be xfsprogs regression
 xfs/075 # lazy baseline - failure found in at least two sections - can be xfsprogs regression
 xfs/095 # lazy baseline - failure found in at least two sections - can be xfsprogs regression
 xfs/137 # lazy baseline - failure found in at least two sections - can be xfsprogs regression
-xfs/154 # buggy test check for missing 'needsrepair' feature in 5.10
-xfs/154 # lazy baseline - failure found in at least two sections
+xfs/154 # buggy test check for missing 'needsrepair' feature in 5.10, lazy baseline - failure found in at least two sections
 xfs/157
 xfs/158
 xfs/177
 xfs/185 # lazy baseline - failure found in at least two sections
 xfs/189 # lazy baseline - failure found in at least two sections - can be xfsprogs regression
-xfs/216 # fails on multiple sections
 xfs/216 # lazy baseline - failure found in at least two sections
 xfs/263 # lazy baseline - failure found in at least two sections - can be xfsprogs regression
 xfs/270 # lazy baseline - failure found in at least two sections - can be xfsprogs regression
 xfs/273 # lazy baseline - failure found in at least two sections
-xfs/301 # fails in two sections already https://gist.github.com/mcgrof/3567f39ea06ba785b3d66351cdcb22cf
-xfs/301 # lazy baseline - failure found in at least two sections
+xfs/301 # fails in two sections xfs_reflink_1024 with a failure rate of 1/5 and xfs_nocrc for always https://gist.github.com/mcgrof/3567f39ea06ba785b3d66351cdcb22cf
 xfs/439 # lazy baseline - failure found in at least two sections - can be xfsprogs regression
 xfs/444 # lazy baseline - failure found in at least two sections - can be xfsprogs regression
-xfs/449 # fails on multiple sections
 xfs/449 # lazy baseline - failure found in at least two sections
 xfs/493 # lazy baseline - failure found in at least two sections - can be xfsprogs regression
 xfs/495 # lazy baseline - failure found in at least two sections
 xfs/503 # lazy baseline - failure found in at least two sections
-xfs/506
 xfs/506 # lazy baseline - failure found in at least two sections
-xfs/513 # fixed by "xfs: show the proper user quota options" in xfs-5.10.y-1
-xfs/513 # lazy baseline - failure found in at least two sections
+xfs/513 # fixed by "xfs: show the proper user quota options" in xfs-5.10.y-1, lazy baseline - failure found in at least two sections
 xfs/516 # lazy baseline - failure found in at least two sections - can be xfsprogs regression
 xfs/521 # lazy baseline - failure found in at least two sections - can be xfsprogs regression
 xfs/528 # lazy baseline - failure found in at least two sections - can be xfsprogs regression
-xfs/539 # fixed by "xfs: Skip repetitive warnings about mount options" in xfs-5.10.y-4
-xfs/539 # lazy baseline - failure found in at least two sections
+xfs/539 # fixed by "xfs: Skip repetitive warnings about mount options" in xfs-5.10.y-4, lazy baseline - failure found in at least two sections
 xfs/544 # lazy baseline - failure found in at least two sections - can be xfsprogs regression

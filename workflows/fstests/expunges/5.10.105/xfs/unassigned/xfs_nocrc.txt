@@ -1,18 +1,1 @@
-generic/482 # failure rate is 1/2
-generic/590
-xfs/045
-xfs/075
-xfs/095
 xfs/195 # failure rate is 1/5
-xfs/216
-xfs/263
-xfs/273
-xfs/301 # failure rate 1/50 https://gist.github.com/mcgrof/3567f39ea06ba785b3d66351cdcb22cf
-xfs/439
-xfs/493
-xfs/495
-xfs/503
-xfs/516
-xfs/521
-xfs/528
-xfs/544
