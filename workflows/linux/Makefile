@@ -28,6 +28,7 @@ linux-help-menu:
 	@echo "Linux git kernel development options"
 	@echo "linux              - Git clones a linux git tree, build linux and reboots into it"
 	@echo "linux-grub-setup   - Ensures the appropriate target kernel is set to boot"
+	@echo "linux-reboot       - Reboot guests"
 	@echo "uname              - Prints current running kernel"
 	@echo ""
 
@@ -42,6 +43,12 @@ linux-grub-setup: $(KDEVOPS_NODES)
 	$(Q)ansible-playbook -i \
 		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
 		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS) --tags saved,vars
+
+PHONY += linux-reboot
+linux-reboot: $(KDEVOPS_NODES)
+	$(Q)ansible-playbook -i \
+		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
+		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS) --tags vars,reboot
 
 PHONY += uname
 uname: $(KDEVOPS_NODES)
