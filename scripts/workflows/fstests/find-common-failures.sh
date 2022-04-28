@@ -89,6 +89,7 @@ print_all_common_expunges()
 
 print_all_common_expunges | sort | uniq > $TMP_FILE
 cat $TMP_FILE >> $DIR/all.txt
-rm -f $TMP_FILE
+sort $DIR/all.txt | uniq > $TMP_FILE
+mv $TMP_FILE $DIR/all.txt
 
 exit 0
