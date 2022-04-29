@@ -15,6 +15,16 @@ config VAGRANT_DEBIAN_BUSTER64
 	help
 	  This option will set the target guest to debian/buster64.
 
+config VAGRANT_DEBIAN_BULLSEYE64
+	bool "debian/bullseye64"
+	select HAVE_DISTRO_XFS_SUPPORTS_CRC if FSTESTS_XFS
+	select HAVE_DISTRO_XFS_SUPPORTS_EXTERNAL_LOG if FSTESTS_XFS
+	select HAVE_DISTRO_XFS_SUPPORTS_REFLINKS if FSTESTS_XFS
+	select HAVE_DISTRO_XFS_SUPPORTS_BIGBLOCKS if FSTESTS_XFS
+	depends on TARGET_ARCH_X86_64
+	help
+	  This option will set the target guest to debian/bullseye64.
+
 config VAGRANT_DEBIAN_TESTING64
 	bool "debian/testing64"
 	select HAVE_DISTRO_XFS_SUPPORTS_CRC if FSTESTS_XFS
@@ -30,6 +40,7 @@ endchoice
 config VAGRANT_DEBIAN_BOX_SHORT
 	string
 	default "buster64" if VAGRANT_DEBIAN_BUSTER64
+	default "bullseye64" if VAGRANT_DEBIAN_BULLSEYE64
 	default "testing64" if VAGRANT_DEBIAN_TESTING64
 
 endif # VAGRANT_DEBIAN
