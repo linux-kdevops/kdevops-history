@@ -31,7 +31,6 @@ REQS="$REQS automake"
 REQS="$REQS gawk"
 REQS="$REQS chattr"
 REQS="$REQS fio"
-REQS="$REQS dbench"
 REQS="$REQS setcap"
 REQS="$REQS setfattr"
 

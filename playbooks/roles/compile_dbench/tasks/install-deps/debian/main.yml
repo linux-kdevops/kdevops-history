@@ -8,7 +8,7 @@
 
 - name: Force dbench compilation on debian
   set_fact:
-    compile_dbench: True
+    compile_dbench: False
 
 - name: Install dbench build dependencies
   become: yes
