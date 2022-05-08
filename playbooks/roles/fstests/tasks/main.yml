@@ -91,6 +91,16 @@
     params:
       NUM_THREADS: "{{ make_num_jobs }}"
 
+- name: git pull latest kdevops to ensure expunge lists and scripts are up to date
+  environment:
+    GIT_SSL_NO_VERIFY:  true
+  git:
+    repo: "{{ kdevops_git }}"
+    dest: "{{ kdevops_data }}"
+    update: yes
+    version: master
+  tags: [ 'oscheck', 'install', 'git', 'git_update', 'fstests', 'run_tests' ]
+
 - name: Install fstests
   become: yes
   become_flags: 'su - -c'
@@ -99,16 +109,6 @@
   tags: [ 'oscheck', 'fstests', 'install', 'root']
   args:
     chdir: "{{ fstests_data }}"
-
-- name: git pull latest kdevops to ensure expunge list is up to date
-  environment:
-    GIT_SSL_NO_VERIFY:  true
-  git:
-    repo: "{{ kdevops_git }}"
-    dest: "{{ kdevops_data }}"
-    update: yes
-    version: master
-  tags: [ 'oscheck', 'install', 'git', 'git_update', 'run_tests' ]
 
 - name: Reboot system before our test so we know everything is sane
   tags: [ 'oscheck', 'fstests', 'run_tests', 'reboot' ]
