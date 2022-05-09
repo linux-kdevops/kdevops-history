@@ -47,7 +47,9 @@ endif
 
 config WORKFLOW_KDEVOPS_GIT
 	string "Git tree of kdevops to clone on targets"
-	default "https://github.com/mcgrof/kdevops.git" if !HAVE_CUSTOM_KDEVOPS_GIT
+	default "https://github.com/mcgrof/kdevops.git" if !GIT_ALTERNATIVES && !HAVE_CUSTOM_KDEVOPS_GIT
+	default "https://github.com/linux-kdevops/kdevops.git" if GIT_LINUX_KDEVOPS_GITHUB
+	default "https://gitlab.com/linux-kdevops/kdevops.git" if GIT_LINUX_KDEVOPS_GITLAB
 	default CUSTOM_KDEVOPS_GIT if HAVE_CUSTOM_KDEVOPS_GIT
 	help
 	  Some workflows want to also clone a version of kdevops on each target.
