@@ -1,0 +1,18 @@
+# failure from running with xfsprogs 4.20 on buster
+generic/095
+generic/300
+generic/373
+generic/374
+generic/594
+generic/600
+generic/607
+generic/673
+xfs/030
+xfs/122
+xfs/149
+xfs/175
+xfs/310
+xfs/500
+xfs/514
+xfs/515
+xfs/542

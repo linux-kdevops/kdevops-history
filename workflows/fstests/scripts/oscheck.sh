@@ -551,7 +551,9 @@ oscheck_handle_section_expunges()
 	# These are files which always should be used for all sections
 	# We allow future expansion on this to enable grouping failures
 	# into groups.
-	ALWAYS_USE="all"
+	# 'progs' is a group for failures in userspace tools (e.g. xfsprogs)
+	# those should also be split by specific tools and versions
+	ALWAYS_USE="all progs"
 
 	EXPUNGE_FLAGS=""
 
