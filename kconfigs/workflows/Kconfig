@@ -133,6 +133,7 @@ if !WORKFLOWS_DEDICATED_WORKFLOW
 
 config KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_FSTESTS
 	bool "fstests"
+	select KDEVOPS_WORKFLOW_ENABLE_FSTESTS
 	help
 	  Select this option if you are doing filesystem development and want
 	  to target development for a filesystem and enable fstests so that
@@ -146,6 +147,7 @@ config KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_FSTESTS
 
 config KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_BLKTESTS
 	bool "blktests"
+	select KDEVOPS_WORKFLOW_ENABLE_BLKTESTS
 	help
 	  Select this option if you are doing block layer development and want
 	  to run blktests. The git tree for blktests will be git clone and
