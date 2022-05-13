@@ -8,6 +8,8 @@ generic/600
 generic/607
 generic/673
 xfs/030
+xfs/059 # xfsdump multi stream bug
+xfs/060 # xfsdump multi stream bug
 xfs/122
 xfs/149
 xfs/175
