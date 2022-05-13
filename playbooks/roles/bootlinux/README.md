@@ -99,7 +99,7 @@ ansible-playbook -i hosts -l dev --tags uninstall-linux --extra-vars "uninstall_
 To ensure you can get the grub prompt:
 
 ```bash
-ansible-playbook -i hosts --tags console,vars --extra-vars "manual_update_grub=y" playbooks/bootlinux.yml
+ansible-playbook -i hosts --tags console,vars,manual-update-grub playbooks/bootlinux.yml
 ```
 
 The ansible bootlinux role relies on the create_partition role to create a data

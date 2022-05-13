@@ -158,7 +158,6 @@
 - name: Update your boot grub file if necessary
   tags: [ 'linux', 'uninstall-linux', 'manual-update-grub', 'console' ]
   import_tasks: update-grub/main.yml
-  when: (manual_update_grub is defined) or (uninstall_kernel_ver is defined)
 
 - name: Ensure we have DEFAULTDEBUG set
   become: yes

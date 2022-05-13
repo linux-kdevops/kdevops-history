@@ -42,7 +42,7 @@ PHONY += linux-grub-setup
 linux-grub-setup: $(KDEVOPS_NODES)
 	$(Q)ansible-playbook -i \
 		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
-		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS) --tags saved,vars
+		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS) --tags manual-update-grub,saved,vars
 
 PHONY += linux-reboot
 linux-reboot: $(KDEVOPS_NODES)
