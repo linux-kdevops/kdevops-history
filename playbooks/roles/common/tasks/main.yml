@@ -1,0 +1,23 @@
+---
+- name: Import optional extra_args file
+  include_vars: "{{ item }}"
+  ignore_errors: yes
+  with_first_found:
+    - files:
+      - "../extra_vars.yml"
+      - "../extra_vars.yaml"
+      - "../extra_vars.json"
+      skip: true
+  tags: vars
+
+# Distro agnostic stuff goes below
+
+- name: git reset kdevops
+  environment:
+    GIT_SSL_NO_VERIFY:  true
+  git:
+    repo: "{{ kdevops_git }}"
+    dest: "{{ kdevops_data }}"
+  tags: [ 'kdevops_reset']
+  when:
+    - kdevops_git_reset|bool

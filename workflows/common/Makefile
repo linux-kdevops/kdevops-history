@@ -32,3 +32,15 @@ WORKFLOW_ARGS	+= data_user=$(WORKFLOW_DATA_USER)
 WORKFLOW_ARGS	+= data_group=$(WORKFLOW_DATA_GROUP)
 
 endif # CONFIG_WORKFLOW_INFER_USER_AND_GROUP == y
+
+ifeq (y,$(CONFIG_KDEVOPS_WORKFLOW_GIT_CLONES_KDEVOPS_GIT))
+kdevops-git-reset:
+	$(Q)ansible-playbook -f 30 -i hosts playbooks/common.yml --tags vars,kdevops_reset --extra-vars '{ kdevops_git_reset: True }' $(LIMIT_HOSTS)
+
+kdevops-help-menu:
+	@echo "Common workflow options:"
+	@echo "kdevops-git-reset:                      - Resets your kdevops git tree URL and contents on guests"
+	@echo
+
+HELP_TARGETS += kdevops-help-menu
+endif # CONFIG_KDEVOPS_WORKFLOW_GIT_CLONES_KDEVOPS_GIT
