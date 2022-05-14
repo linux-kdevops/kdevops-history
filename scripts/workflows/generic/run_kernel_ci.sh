@@ -252,8 +252,17 @@ kernel_ci_watchdog_loop()
 	done
 }
 
+if [[ "$CONFIG_KERNEL_CI_STEADY_STATE_INCREMENTAL" == "y" && -f $KERNEL_CI_OK_FILE ]]; then
+	LOOP_COUNT=$(cat $KERNEL_CI_OK_FILE)
+fi
+
 rm -f ${TOPDIR}/.kernel-ci.*
 rm -f $STARTED_FILE
+
+if [[ "$CONFIG_KERNEL_CI_STEADY_STATE_INCREMENTAL" == "y" && ! -z "$LOOP_COUNT" ]]; then
+	# Resume the loop from last success counter
+	echo $LOOP_COUNT > $KERNEL_CI_OK_FILE
+fi
 
 if [[ "$CONFIG_KERNEL_CI_EMAIL_REPORT" == "y" ]]; then
 	RCPT="$CONFIG_KERNEL_CI_EMAIL_RCPT"

@@ -58,6 +58,18 @@ config KERNEL_CI_STEADY_STATE_GOAL
 	  bail out and report we have achieved steady state for the workflow
 	  being tested.
 
+config KERNEL_CI_STEADY_STATE_INCREMENTAL
+	bool "Bound kernel-ci tests with an incremental steady-state goal"
+	default n
+	help
+	  Enable this so that kernel-ci loop will bail once a certain number
+	  of full loops have passed without resetting the counter on failures.
+	  In this mode, when a test run has failures, the failed tests will be
+	  added to the local expunge lists and success counter will not be
+	  incremented, but the next time that loop will be run it will resume
+	  from the last success counter and stop when it reaches the kernel-ci
+	  steady-state test goal.
+
 endif # KERNEL_CI_ENABLE_STEADY_STATE
 
 config KERNEL_CI_EMAIL_REPORT

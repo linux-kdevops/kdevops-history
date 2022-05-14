@@ -5,7 +5,6 @@ source ${TOPDIR}/.config
 source ${TOPDIR}/scripts/lib.sh
 
 FSTYPE="$CONFIG_FSTESTS_FSTYP"
-COUNT=1
 
 run_loop()
 {
@@ -84,6 +83,16 @@ run_loop()
 	done
 }
 
-rm -f $KERNEL_CI_FAIL_FILE $KERNEL_CI_OK_FILE
+if [[ "$CONFIG_KERNEL_CI_STEADY_STATE_INCREMENTAL" == "y" && -f $KERNEL_CI_OK_FILE ]]; then
+	# Resume the loop from last success counter
+	COUNT=$(cat $KERNEL_CI_OK_FILE)
+else
+	# Reset the loop success counter
+	rm -f $KERNEL_CI_OK_FILE
+	COUNT=0
+fi
+let COUNT=$COUNT+1
+
+rm -f $KERNEL_CI_FAIL_FILE
 echo "= kernel-ci full log" > $KERNEL_CI_FULL_LOG
 run_loop
