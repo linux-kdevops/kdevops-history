@@ -101,6 +101,7 @@ oscheck_usage()
 	echo "--is-distro     - Only checks if the kernel detected is a distro kernel or not, does not run any tests"
 	echo "--custom-kernel - Only checks if the kernel detected is a distro kernel or not, does not run any tests"
 	echo "--fast-tests    - Run oscheck's interpretation of what fast test are"
+	echo "--large-disk    - Include tests that require a large disk"
 	echo "--print-start   - Echo into /dev/kmsg when we've started with run fstests fstestsstart/000 at time'"
 	echo "--print-done    - Echo into /dev/kmsg when we're done with run fstests fstestsdone/000 at time'"
 	echo "--verbose       - Be verbose when debugging"
@@ -183,6 +184,10 @@ parse_args()
 			;;
 		--fast-tests)
 			FAST_TEST="y"
+			shift
+			;;
+		--large-disk)
+			LARGE_DISK="true"
 			shift
 			;;
 		--help)
@@ -564,6 +569,11 @@ oscheck_handle_section_expunges()
 	if [ ! -z "$FAST_TEST" ]; then
 		oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/over-10s.txt"
 		oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/$FSTYP/over-10s.txt"
+	fi
+
+	if [ "$LARGE_DISK" != "true" ]; then
+		oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/large-disk.txt"
+		oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/$FSTYP/large-disk.txt"
 	fi
 
 	oscheck_handle_special_expunges
