@@ -6,7 +6,7 @@ generic/388 # fails on xfs_reflink with a failure rate of 1/20 and xfs_reflink_1
 generic/418 # can sometimes take over 10 times the amount of time, no obvious failure yet requires manual introspection, failure rate is about 1/10
 generic/459 # lazy baseline - failure found in at least two sections
 generic/475 # failure rate is about 1/50 fails on xfs_reflink but failure seems generic see section failure for details https://gist.github.com/mcgrof/0495085f562470e6a8c8ead275c19796
-generic/482 # different failure rate depending on section
+generic/476 # can sometimes take over 10 times the amount of time, no obvious failure, happened on xfs_nocrc_512 but also on ext4_defaults
 generic/482 # lazy baseline - failure found in at least two sections - fails on xfs_nocrc with a failure rate of 1/2 and on xfs_nocrc_512 with a failure rate is about 1/35
 generic/531 # failure rate is 1/5 hung task [1] complex backport required [2] [1] https://gist.github.com/mcgrof/91e1e16b8fbb8e09c6f6de8e9dc1ecd9 [2] deferred inode inactivation: https://lore.kernel.org/r/162812918259.2589546.16599271324044986858.stgit@magnolia
 generic/590 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
