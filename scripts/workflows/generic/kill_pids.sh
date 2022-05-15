@@ -99,8 +99,11 @@ for i in $PID_LIST; do
 	if [[ ! -d /proc/$i ]]; then
 		continue
 	fi
+	CWD_TARGET=$(readlink /proc/$i/cwd)
 	CONFIG_TARGET="/proc/$i/cwd/.config"
 	if [[ ! -f  $CONFIG_TARGET ]]; then
+		continue
+	elif [[ "$CWD_TARGET" != "${TOPDIR}" ]]; then
 		continue
 	fi
 	if [[ "$TARGET_WORFKLOW" == "fstests" ]]; then
