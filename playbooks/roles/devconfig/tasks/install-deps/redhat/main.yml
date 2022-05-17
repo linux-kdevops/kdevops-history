@@ -6,6 +6,7 @@
   yum:
     update_cache: yes
     name: '*'
+    state: latest
   when:
     - devconfig_try_upgrade|bool
 
