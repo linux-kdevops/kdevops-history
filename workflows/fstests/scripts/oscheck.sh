@@ -187,7 +187,7 @@ parse_args()
 			shift
 			;;
 		--large-disk)
-			LARGE_DISK="true"
+			FSTESTS_RUN_LARGE_DISK_TESTS="y"
 			shift
 			;;
 		--help)
@@ -571,7 +571,7 @@ oscheck_handle_section_expunges()
 		oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/$FSTYP/over-10s.txt"
 	fi
 
-	if [ "$LARGE_DISK" != "true" ]; then
+	if [ "$FSTESTS_RUN_LARGE_DISK_TESTS" != "y" ]; then
 		oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/large-disk.txt"
 		oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/$FSTYP/large-disk.txt"
 	fi
@@ -842,6 +842,10 @@ fi
 
 if [ -z "$OSCHECK_CUSTOM_KERNEL" ]; then
 	OSCHECK_CUSTOM_KERNEL="false"
+fi
+
+if [ -z "$FSTESTS_RUN_LARGE_DISK_TESTS" ]; then
+	FSTESTS_RUN_LARGE_DISK_TESTS="n"
 fi
 
 # Where we stuff the arguments we will pass to ./check
