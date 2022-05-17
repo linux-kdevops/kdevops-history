@@ -18,6 +18,7 @@ shared/032 # hangs due to nvme I/O timeout - found in at least two sections
 xfs/005 # fails on many sections failure rate about 1/5, lazy baseline - failure found in at least two sections
 xfs/008 # lazy baseline - failure found in at least two sections
 xfs/014 # fails on section xfs_reflink_1024  failure rate is about 1/50 https://gist.github.com/mcgrof/822b449725fd069d1a13013e91929f70 and on xfs_logdev with a failure rate of failure rate 1/40
+xfs/033 # rare test bug - extra newline in golden output of xfs_repair - failed after more than 80 runs
 xfs/045 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/075 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/095 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
