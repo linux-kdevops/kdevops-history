@@ -70,8 +70,6 @@
     src: snmpd.conf
     dest: /etc/snmp/snmpd.conf
   when:
-    - is_sle15sp2|bool
-    - repos_will_be_added|bool
     - devconfig_try_install_kdevtools|bool
   tags: snmpd
 
