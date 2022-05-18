@@ -17,6 +17,7 @@ sudo chmod 220 /sys/bus/pci/drivers_probe
 # cd to our current directory so we can copy the udev rule into place
 cd $(dirname $0)
 sudo cp 10-qemu-hw-users.rules /etc/udev/rules.d/
+sudo cp 10-qemu-limits.conf /etc/security/limits.d
 
 for DEV in $@; do
 	sudo chgrp libvirt /sys/bus/pci/devices/$DEV/driver_override
