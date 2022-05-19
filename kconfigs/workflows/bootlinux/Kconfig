@@ -47,6 +47,12 @@ config BOOTLINUX_TREE_TAG
 	help
 	  The git branch / tag or sha1sum to use.
 
+config BOOTLINUX_TREE_LOCALVERSION
+	string "Linux local version to use"
+	help
+	  The Linux local version to use (for uname).
+
+
 config BOOTLINUX_SHALLOW_CLONE
 	bool "Shallow git clone"
 	default n
