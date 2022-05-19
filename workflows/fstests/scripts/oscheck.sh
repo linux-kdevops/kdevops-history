@@ -584,7 +584,7 @@ oscheck_handle_section_expunges()
 		if [ "$OSCHECK_CUSTOM_KERNEL" == "true" ]; then
 			if [ "$OSCHECK_ONLY_RUN_DISTRO_KERNEL" != "true" ]; then
 				# XXX: make this userspace progs specific as well?
-				FS_EXCLUDE_DIR="${OSCHECK_EXCLUDE_PREFIX}/$(uname -r)/${FSTYP}/"
+				FS_EXCLUDE_DIR="${OSCHECK_EXCLUDE_PREFIX}/${KERNEL_VERSION}/${FSTYP}/"
 				OSCHECK_EXCLUDE_DIR="$FS_EXCLUDE_DIR"
 			fi
 		fi
@@ -749,6 +749,11 @@ oscheck_distro_kernel_check()
 				exit 1
 			fi
 			echo "Running custom kernel: $(uname -a)"
+			KERNEL_VERSION=$(uname -r)
+			if [ ! -z "$CONFIG_BOOTLINUX_TREE_LOCALVERSION" ]; then
+				# Strip localversion to use the expunge lists of baseline version
+				KERNEL_VERSION=${KERNEL_VERSION%$CONFIG_BOOTLINUX_TREE_LOCALVERSION}
+			fi
 		else
 			if [ "$ONLY_QUESTION_DISTRO_KERNEL" = "true" ]; then
 				echo "Running distro kernel"
