@@ -297,6 +297,7 @@
     FSTYP: "{{ fstests_fstyp }}"
     FSTESTS_SPARSE_FILE_PATH: "{{ sparsefiles_path }}"
     FSTESTS_SETUP_SYSTEM: "{{ fstests_setup_system }}"
+    FSTESTS_LINUX_LOCALVERSION: "{{ target_linux_localversion }}"
     FSTESTS_TESTDEV_SPARSEFILE_GENERATION: "{{ sparsefiles_generation }}"
     FSTESTS_SPARSE_FILE_SIZE: "{{ sparsefiles_size }}"
     FSTESTS_SPARSE_FILENAME_PREFIX: "{{ sparsefiles_filename_prefix }}"
