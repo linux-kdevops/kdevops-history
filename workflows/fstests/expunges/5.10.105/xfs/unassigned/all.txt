@@ -31,6 +31,7 @@ xfs/158
 xfs/177
 xfs/185 # lazy baseline - failure found in at least two sections
 xfs/189 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
+xfs/195 # lazy baseline - failure found in at least two sections - xfs_nocrc after 5 runs, xfs_reflink after 70 runs
 xfs/216 # lazy baseline - failure found in at least two sections
 xfs/263 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/270 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files

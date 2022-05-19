@@ -1,2 +1,1 @@
 generic/270
-xfs/195 # failure rate is 1/5
