@@ -101,6 +101,17 @@
     version: master
   tags: [ 'oscheck', 'install', 'git', 'git_update', 'fstests', 'run_tests' ]
 
+- name: Install the kdevops fstests configs in case they changed
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  environment:
+    FSTYP: "{{ fstests_fstyp }}"
+  command: "{{ make }} kdevops_fstests_install"
+  tags: [ 'fstests', 'run_tests' ]
+  args:
+    chdir: "{{ kdevops_dir }}"
+
 - name: Install fstests
   become: yes
   become_flags: 'su - -c'
