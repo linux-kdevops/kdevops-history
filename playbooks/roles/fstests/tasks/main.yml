@@ -297,11 +297,11 @@
     FSTYP: "{{ fstests_fstyp }}"
     FSTESTS_SPARSE_FILE_PATH: "{{ sparsefiles_path }}"
     FSTESTS_SETUP_SYSTEM: "{{ fstests_setup_system }}"
-    FSTESTS_LINUX_LOCALVERSION: "{{ target_linux_localversion }}"
+    FSTESTS_LINUX_LOCALVERSION: "{{ target_linux_localversion  | default ('') }}"
     FSTESTS_TESTDEV_SPARSEFILE_GENERATION: "{{ sparsefiles_generation }}"
     FSTESTS_SPARSE_FILE_SIZE: "{{ sparsefiles_size }}"
     FSTESTS_SPARSE_FILENAME_PREFIX: "{{ sparsefiles_filename_prefix }}"
-    FSTESTS_RUN_LARGE_DISK_TESTS: "{{ run_large_disk_tests }}"
+    FSTESTS_RUN_LARGE_DISK_TESTS: "{{ run_large_disk_tests | default ('') }}"
     TEST_DEV: "{{ fstests_test_dev }}"
     TEST_DIR: "{{ fstests_test_dir }}"
   when:
