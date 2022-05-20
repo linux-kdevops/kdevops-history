@@ -169,9 +169,9 @@
   loop_control:
     label: "Ensuring the user {{ item }} exists"
 
-- name: Verify section name {{ section }} exists on fstests config file /var/lib/xfstests/configs/.config
+- name: Verify section name {{ fstests_section }} exists on fstests config file /var/lib/xfstests/configs/.config
   vars:
-    section: "{{ ansible_ssh_host | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
+    fstests_section: "{{ ansible_ssh_host | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
   tags: [ 'oscheck', 'fstests', 'run_tests', 'section' ]
   become: yes
   become_flags: 'su - -c'
@@ -180,7 +180,7 @@
   failed_when: not section_grep.changed
   lineinfile:
     path: /var/lib/xfstests/configs/.config
-    regexp: "\\[{{ section }}\\]$"
+    regexp: "\\[{{ fstests_section }}\\]$"
     line: ''
   check_mode: yes
   when:
@@ -221,12 +221,12 @@
 
 - name: Check and verify fstests dependencies are met prior to running fstests
   vars:
-    section: "{{ ansible_ssh_host | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
+    fstests_section: "{{ ansible_ssh_host | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
   tags: [ 'oscheck', 'fstests', 'run_tests' ]
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
-  command: "./oscheck.sh --check-deps --test-section {{ section }}"
+  command: "./oscheck.sh --check-deps --test-section {{ fstests_section }}"
   args:
     chdir: "{{ fstests_data_target }}"
   environment:
@@ -292,14 +292,14 @@
     - kdevops_run_fstests|bool
   run_once: true
 
-- name: Run fstests using ./oscheck.sh --print-done --test-section {{ section }} {{ oscheck_extra_args }}
+- name: Run fstests using ./oscheck.sh --print-done --test-section {{ fstests_section }} {{ oscheck_extra_args }}
   vars:
-    section: "{{ ansible_ssh_host | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
+    fstests_section: "{{ ansible_ssh_host | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
   tags: [ 'oscheck', 'fstests', 'run_tests' ]
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
-  command: "./oscheck.sh --print-start --print-done --test-section {{ section }} {{ oscheck_extra_args }}"
+  command: "./oscheck.sh --print-start --print-done --test-section {{ fstests_section }} {{ oscheck_extra_args }}"
   ignore_errors: yes
   no_log: True
   args:
