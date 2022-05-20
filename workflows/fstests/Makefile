@@ -88,6 +88,7 @@ FSTESTS_ARGS += sparsefiles_label='$(SPARSE_LABEL)'
 FSTESTS_ARGS += sparsefiles_fs_opts='-L$(SPARSE_LABEL)'
 FSTESTS_ARGS += sparsefiles_size='$(FSTESTS_SPARSE_FILE_SIZE)'
 FSTESTS_ARGS += sparsefiles_filename_prefix='$(FSTESTS_SPARSE_FILENAME_PREFIX)'
+FSTESTS_ARGS += run_large_disk_tests='$(FSTESTS_RUN_LARGE_DISK_TESTS)'
 
 endif # CONFIG_FSTESTS_TESTDEV_SPARSEFILE_GENERATION == y
 WORKFLOW_ARGS += $(FSTESTS_ARGS)

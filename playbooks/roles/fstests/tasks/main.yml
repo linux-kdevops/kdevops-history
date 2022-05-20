@@ -301,6 +301,7 @@
     FSTESTS_TESTDEV_SPARSEFILE_GENERATION: "{{ sparsefiles_generation }}"
     FSTESTS_SPARSE_FILE_SIZE: "{{ sparsefiles_size }}"
     FSTESTS_SPARSE_FILENAME_PREFIX: "{{ sparsefiles_filename_prefix }}"
+    FSTESTS_RUN_LARGE_DISK_TESTS: "{{ run_large_disk_tests }}"
     TEST_DEV: "{{ fstests_test_dev }}"
     TEST_DIR: "{{ fstests_test_dir }}"
   when:
