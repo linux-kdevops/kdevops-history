@@ -111,6 +111,14 @@
     - not reboot_limit_reg_count_file.stat.exists
   tags: [ 'run_tests' , 'read_count' ]
 
+- name: Wait for boot up to complete before running systemd-analyze
+  become: yes
+  become_method: sudo
+  command: "systemctl is-system-running --wait"
+  when:
+    - reboot_limit_enable_systemd_analyze|bool
+  tags: [ 'run_tests' ]
+
 - name: Collect systemctl-analyze results
   become: yes
   become_method: sudo
