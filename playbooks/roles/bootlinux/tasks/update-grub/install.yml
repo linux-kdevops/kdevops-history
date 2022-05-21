@@ -89,6 +89,10 @@
     line: GRUB_DISABLE_SUBMENU=y
   tags: [ 'linux', 'git', 'config', 'saved' ]
 
+- name: Update your boot grub file if necessary to ensure grub flat earth
+  tags: [ 'linux', 'uninstall-linux', 'manual-update-grub', 'console' ]
+  import_tasks: update-grub/main.yml
+
 - name: Set file used to extract KERNELRELEASE variable
   set_fact:
     kernelrelease_file: "{{ target_linux_dir_path }}/include/config/kernel.release"
