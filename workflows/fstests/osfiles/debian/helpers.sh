@@ -17,31 +17,20 @@ debian_read_osfile()
 debian_special_expunges()
 {
 	case "$OSCHECK_RELEASE" in
-	"testing")
+	"10")
 		if [ "$FSTYP" = "xfs" ] ; then
-			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/xfs/reqs-y2038.txt"
-			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/xfs/reqs-xfsprogs-4.5.txt"
-			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/xfs/maybe-broken.txt"
-		fi
-		if [ "$FSTYP" = "ext4" ] ; then
-			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/ext4/xfstests-bld-expunges.txt"
+			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/xfs/reqs-xfsprogs-4.20.txt"
 		fi
 		;;
 	esac
+
+	if [ "$FSTYP" = "ext4" ] ; then
+		oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/ext4/xfstests-bld-expunges.txt"
+	fi
 }
 
 debian_skip_groups()
 {
-	case "$OSCHECK_RELEASE" in
-	"testing")
-		if [ "$FSTYP" = "xfs" ] ; then
-			SKIP_GROUPS="tape clone dedupe dax dangerous_repair dangerous_online_repair broken"
-		fi
-		;;
-	*)
-		;;
-	esac
-
 	if [ "$FSTYP" = "xfs" ] ; then
 		SKIP_GROUPS="$SKIP_GROUPS encrypt"
 	fi
