@@ -16,6 +16,7 @@ generic/590 # lazy baseline - failure found in at least two sections - when host
 generic/601 # fails on xfs_reflink_1024
 generic/607
 generic/623 # fixed by e4826691cc7e ("xfs: restore shutdown check in mapped write fault path") (v5.12)
+generic/631 # test hangs with overlayfs enabled - fixed by 6da1b4b1ab36 ("xfs: fix an ABBA deadlock in xfs_rename") in xfs-5.10.y-1
 generic/642 # failure found in at least two sections. failure rate is about 1/40
 generic/646 # fixed by 50d25484bebe ("xfs: sync lazy sb accounting on quiesce of read-only mounts") (v5.12)
 generic/648 # fails on xfs_reflink and xfs_reflink_normapbt
