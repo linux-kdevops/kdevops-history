@@ -668,7 +668,7 @@ oscheck_run_section()
 	oscheck_count_check
 	oscheck_verify_intented_expunges $SECTION
 
-	OSCHECK_CMD="./check -s ${SECTION} -R xunit $_SKIP_GROUPS $EXPUNGE_FLAGS $CHECK_ARGS"
+	OSCHECK_CMD="./check -s ${SECTION} -R xunit $_RUN_GROUPS $_SKIP_GROUPS $EXPUNGE_FLAGS $CHECK_ARGS"
 	oscheck_run_cmd
 	if [[ "$PRINT_DONE" == "true" ]]; then
 		NOW=$(date --rfc-3339='seconds' | awk -F"+" '{print $1}')
@@ -851,6 +851,10 @@ fi
 
 if [ -z "$FSTESTS_RUN_LARGE_DISK_TESTS" ]; then
 	FSTESTS_RUN_LARGE_DISK_TESTS="n"
+fi
+
+if [ "$FSTESTS_RUN_AUTO_GROUP_TESTS" = y ]; then
+	_RUN_GROUPS="-g auto"
 fi
 
 # Where we stuff the arguments we will pass to ./check

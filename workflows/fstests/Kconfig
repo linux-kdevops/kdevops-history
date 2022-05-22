@@ -403,6 +403,14 @@ config FSTESTS_RUN_TESTS
 	  Disable this to only install dependencies for fstests, and so the
 	  full set of fstests won't be run.
 
+config FSTESTS_RUN_AUTO_GROUP_TESTS
+	bool "Run fstests of group 'auto'"
+	depends on FSTESTS_RUN_TESTS
+	default y
+	help
+	  The 'auto' test group is a good choice for running regression tests.
+	  Disable this to run also the tests that are not in the 'auto' group.
+
 config FSTESTS_RUN_LARGE_DISK_TESTS
 	bool "Run fstests that require large disk"
 	depends on FSTESTS_RUN_TESTS

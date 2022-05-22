@@ -313,6 +313,7 @@
     FSTESTS_SPARSE_FILE_SIZE: "{{ sparsefiles_size }}"
     FSTESTS_SPARSE_FILENAME_PREFIX: "{{ sparsefiles_filename_prefix }}"
     FSTESTS_RUN_LARGE_DISK_TESTS: "{{ run_large_disk_tests | default ('') }}"
+    FSTESTS_RUN_AUTO_GROUP_TESTS: "{{ run_auto_group_tests | default ('y') }}"
     TEST_DEV: "{{ fstests_test_dev }}"
     TEST_DIR: "{{ fstests_test_dir }}"
   when:
