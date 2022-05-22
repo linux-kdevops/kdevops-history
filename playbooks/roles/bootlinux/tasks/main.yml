@@ -102,9 +102,7 @@
   tags: [ 'linux', 'git', 'config' ]
 
 - name: Set kernel localversion if requested
-  command: "echo {{ target_linux_localversion }} > {{ target_linux_dir_path }}/localversion"
-  args:
-    chdir: "{{ target_linux_dir_path }}"
+  shell: "echo {{ target_linux_localversion }} > {{ target_linux_dir_path }}/localversion"
   tags: [ 'linux', 'git', 'config' ]
   when: target_linux_localversion is defined
 
