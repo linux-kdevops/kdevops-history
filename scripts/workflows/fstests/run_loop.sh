@@ -22,7 +22,7 @@ run_loop()
 
 		XUNIT_FAIL="no"
 		if [ -f workflows/fstests/results/xunit_results.txt ]; then
-			grep -q Failures workflows/fstests/results/xunit_results.txt
+			grep -qi "[^0].failures" workflows/fstests/results/xunit_results.txt
 			if [[ $? -eq 0 ]]; then
 				echo "Detected a failure as reported by xunit:" >> $KERNEL_CI_DIFF_LOG
 				cat workflows/fstests/results/xunit_results.txt >> $KERNEL_CI_DIFF_LOG
