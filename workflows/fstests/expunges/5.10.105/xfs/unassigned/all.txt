@@ -31,6 +31,7 @@ xfs/057 # hangs after enabling CONFIG_XFS_DEBUG
 xfs/075 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/095 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/137 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
+xfs/145 # fixed by "xfs: fix chown leaking delalloc quota blocks when fssetxattr fails" in xfs-5.10.y-3
 xfs/154 # buggy test check for missing 'needsrepair' feature in 5.10, lazy baseline - failure found in at least two sections
 xfs/157
 xfs/158
