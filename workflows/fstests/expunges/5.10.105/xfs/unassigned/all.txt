@@ -54,6 +54,7 @@ xfs/506 # lazy baseline - failure found in at least two sections
 xfs/513 # fixed by "xfs: show the proper user quota options" in xfs-5.10.y-1, lazy baseline - failure found in at least two sections
 xfs/516 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/521 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
+xfs/527 # fixed by "xfs: fix incorrect root dquot corruption error when switching group/project quota types" in xfs-5.10.y-3 (requires CONFIG_XFS_DEBUG)
 xfs/528 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/539 # fixed by "xfs: Skip repetitive warnings about mount options" in xfs-5.10.y-4, lazy baseline - failure found in at least two sections
 xfs/542 # fixed by "xfs: punch out data fork delalloc blocks on COW writeback failure" in xfs-5.10.y-6
