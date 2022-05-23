@@ -39,7 +39,6 @@ vagrant_global:
     qemu_group_auto: true
     qemu_group: 'libvirt-qemu'
     emulator_path: '@QEMUBINPATH@'
-    storage_pool_path: '@LIBVIRTSTORAGEPOOLPATH@'
     uri: '@LIBVIRTURI@'
     system_uri: '@LIBVIRTSYSTEMURI@'
     session: @LIBVIRTSESSION@
