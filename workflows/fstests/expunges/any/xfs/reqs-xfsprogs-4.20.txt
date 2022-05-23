@@ -17,4 +17,5 @@ xfs/310
 xfs/500
 xfs/514
 xfs/515
+xfs/530 # log size 5242880 blocks too large, maximum size is 1048576 blocks
 xfs/542
