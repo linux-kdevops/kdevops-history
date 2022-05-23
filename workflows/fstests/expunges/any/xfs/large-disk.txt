@@ -4,3 +4,5 @@ xfs/104 # takes 35s
 
 # Requires 10 GiB scratch area
 xfs/167
+
+xfs/538 # failed with many "fallocate: No space left on device" on xfs_nocrc_512 and xfs_reflink_1024 (requires CONFIG_XFS_DEBUG)
