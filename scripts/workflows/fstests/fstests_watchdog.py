@@ -27,7 +27,7 @@ def print_fstest_host_status(host, verbose, basedir, config):
 
     stall_str = "OK"
     if stall_suspect:
-        if kernel == "Timeout":
+        if kernel == "Timeout" or last_test is None:
             stall_str = "Timeout"
         else:
             stall_str = "Hung-Stalled"
