@@ -2,4 +2,3 @@ generic/618
 xfs/060 # failure rate about 1/35
 xfs/071
 xfs/220 # failure rate is 1/2
-xfs/259
