@@ -30,6 +30,7 @@ xfs/033 # rare test bug - extra newline in golden output of xfs_repair - failed 
 xfs/045 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/057 # hangs after enabling CONFIG_XFS_DEBUG
 xfs/059
+xfs/060 # lazy baseline - failure found in at least two sections - failure rate about 1/35
 xfs/075 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/095 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/137 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
