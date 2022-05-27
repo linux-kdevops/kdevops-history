@@ -1,6 +1,8 @@
 btrfs/011 # crash on raid6_avx5121_gen_syndrome https://gist.github.com/mcgrof/4f4d59a6d6057d2147949cbc49a41b13
+btrfs/029 # lazy baseline - failure found in at least two sections
 btrfs/080 # fails on section btrfs_simple but we expect this to fail for others https://gist.github.com/mcgrof/7ae85812aeacd62ab221eda2fab4552e
 btrfs/099
+btrfs/131 # lazy baseline - failure found in at least two sections
 btrfs/175
 btrfs/176
 btrfs/194
@@ -12,12 +14,20 @@ btrfs/223
 btrfs/225
 btrfs/238
 btrfs/249
+btrfs/254 # lazy baseline - failure found in at least two sections
+btrfs/258 # lazy baseline - failure found in at least two sections
+btrfs/263 # lazy baseline - failure found in at least two sections
 generic/224 # fails with a hang on btrfs_raid56 section but let's skip for all sections for now
+generic/226 # lazy baseline - failure found in at least two sections - failure rate 1/20 requires a fix in btrfs-progs I have queued https://gist.github.com/mcgrof/81771a86ef0b90152e142e597d5f4147
 generic/241
 generic/260
-generic/300 # fails on btrfs_simple so chances are other sections should fail too
+generic/300 # fails on btrfs_simple so chances are other sections should fail too - failure rate is about 1/10 hung task on btrfs_wait_ordered_extents() https://gist.github.com/mcgrof/2696e71d3322becfe3811260fbe1ec3a
+generic/373 # lazy baseline - failure found in at least two sections
+generic/374 # lazy baseline - failure found in at least two sections
 generic/633
 generic/644
 generic/645
-generic/648 # fails on btrfs_noraid56 section but the error seems generic so skip for now see that section for details
+generic/648 # fails on btrfs_noraid56 section but the error seems generic so skip for now see that section for details - failure rate is about 1/50 https://gist.github.com/mcgrof/c3f6dae20800da6f1bda607d0c0275b3
+generic/673 # lazy baseline - failure found in at least two sections - failure rate 1/4
+generic/679 # lazy baseline - failure found in at least two sections
 shared/298
