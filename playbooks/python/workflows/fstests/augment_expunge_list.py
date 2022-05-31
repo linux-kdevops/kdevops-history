@@ -67,15 +67,14 @@ def main():
                 continue
             if not os.path.isfile(f):
                 continue
-            if not f.endswith('.bad'):
-                continue
-
-            bad_files.append(f)
+            if f.endswith('.bad') or f.endswith('.dmesg'):
+                bad_files.append(f)
     for f in bad_files:
         if args.verbose:
             sys.stdout.write("Processing %s\n" % f)
 
         # f may be results/oscheck-xfs/4.19.0-4-amd64/xfs/generic/xxx.out.bad
+        # f may be results/oscheck-xfs/4.19.0-4-amd64/xfs/generic/xxx.dmesg
         # where xxx are digits
         bad_file_list = f.split("/")
         bad_file_list_len = len(bad_file_list) - 1
@@ -93,8 +92,7 @@ def main():
             sys.stdout.write("\thostname: %s\n" % hostname)
 
         bad_file_parts = bad_file.split(".")
-        bad_file_part_len = len(bad_file_parts) - 1
-        bad_file_test_number = bad_file_parts[bad_file_part_len - 2]
+        bad_file_test_number = bad_file_parts[0]
         # This is like for example generic/xxx where xxx are digits
         test_failure_line = test_group + '/' + bad_file_test_number
 
