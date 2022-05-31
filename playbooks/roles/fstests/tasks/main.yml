@@ -420,6 +420,33 @@
   when:
     - failed_tests.matched > 0
 
+- name: Check if respective bad full file exists exists
+  tags: [ 'oscheck', 'fstests', 'copy_results', 'failed_tests' ]
+  stat:
+    path: "{{ item.path | splitext | first }}.full"
+  with_items: "{{ failed_tests.files }}"
+  loop_control:
+    label: "Looking for {{ item.path | splitext | first }}.full"
+  register: bad_full_file_stats
+  when:
+    - failed_tests.matched > 0
+
+- name: Copy test full bad result file over
+  tags: [ 'oscheck', 'fstests', 'copy_results', 'failed_tests' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  fetch:
+    src: "{{ item.stat.path }}"
+    dest: "{{ fstests_results_target }}/{{ item.stat.path | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
+    flat: yes
+  with_items: "{{ bad_full_file_stats.results }}"
+  loop_control:
+    label: "Copying over {{ item.stat.path }}"
+  when:
+    - failed_tests.matched > 0
+    - item.stat.exists
+
 - name: Print fstests results to xunit_results.txt on localhost if xunit xml file was found
   local_action: "shell ./python/workflows/fstests/gen_results_summary --results_file result.xml  --print_section --output_file {{ fstests_results_target }}/results/xunit_results.txt {{ fstests_results_target }}/results"
   tags: [ 'oscheck', 'fstests', 'copy_results', 'print_results', 'augment_expunge_list' ]
