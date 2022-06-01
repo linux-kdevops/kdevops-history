@@ -1,0 +1,28 @@
+# SPDX-License-Identifier: copyleft-next-0.3.1
+
+QEMU_BUILD_SETUP_ARGS += qemu_build=True
+
+QEMU_GIT:=$(subst ",,$(CONFIG_QEMU_BUILD_GIT))
+QEMU_DATA:=$(subst ",,$(CONFIG_QEMU_BUILD_GIT_DATA_PATH))
+QEMU_BIN_PATH:=$(subst ",,$(CONFIG_QEMU_BIN_PATH))
+
+QEMU_BUILD_SETUP_ARGS += qemu_git=$(QEMU_GIT)
+QEMU_BUILD_SETUP_ARGS += qemu_data=\"$(QEMU_DATA)\"
+QEMU_BUILD_SETUP_ARGS += qemu_bin_path=\"$(QEMU_BIN_PATH)\"
+
+qemu: $(KDEVOPS_EXTRA_VARS)
+	@$(Q)ansible-playbook --connection=local \
+		--inventory localhost, \
+		$(KDEVOPS_PLAYBOOKS_DIR)/build_qemu.yml \
+		-e 'ansible_python_interpreter=/usr/bin/python3' \
+		--extra-vars=@./extra_vars.yaml
+PHONY += qemu
+
+qemu-help-menu:
+	@echo "qemu options:"
+	@echo "qemu                                 - Git clones qemu, builds and install it on localhost"
+	@echo ""
+
+HELP_TARGETS += qemu-help-menu
+
+LOCALHOST_SETUP_WORK += qemu

@@ -20,6 +20,17 @@ endchoice
 
 if VAGRANT_LIBVIRT
 
+config QEMU_BUILD
+	bool "Should we build qemu for you?"
+	help
+	  You only want to enable this option if your distribution package
+	  of qemu does not have support for the features you need. For
+	  example this may be useful if you are a qemu developer or are
+	  relying on technology is still under development or if you have
+	  a custom qemu git URL.
+
+if !QEMU_BUILD
+
 config QEMU_USE_DEVELOPMENT_VERSION
 	bool "Should we look for a development version of qemu?"
 	help
@@ -28,6 +39,54 @@ config QEMU_USE_DEVELOPMENT_VERSION
 	  you are going to be working on.
 
 	  Say yes here if you are compiling your own version of qemu.
+
+endif # !QEMU_BUILD
+
+if QEMU_BUILD
+
+choice
+	prompt "Qemu git URL to use"
+	default QEMU_BUILD_UPSTREAM
+
+config QEMU_BUILD_UPSTREAM
+	bool "https://github.com/qemu/qemu.git"
+	help
+	  Select this option if you want to use the upstream qemu git repo.
+
+config QEMU_BUILD_JIC23
+	bool "https://gitlab.com/jic23/qemu.git"
+	help
+	  Select this option if you want to use Cameron's qemu git repo.
+	  This has a few CXL bells and whistles which are not yet upstream.
+
+config QEMU_BUILD_MANUAL
+	bool "Custom qemu git URL"
+	help
+	  Select this option if you want to specify your own git URL.
+
+endchoice
+
+config QEMU_BUILD_GIT
+	string "Git tree for qemu to clone on localhost"
+	default "https://github.com/qemu/qemu.git" if QEMU_BUILD_UPSTREAM || QEMU_BUILD_MANUAL
+	default "https://gitlab.com/jic23/qemu.git" if QEMU_BUILD_JIC23
+	help
+	  This is the git URL to use to clone and then build qemu for you on
+	  your localhost.
+
+config QEMU_BUILD_GIT_DATA_PATH
+	string "The destination directory where to clone the qemu git tree"
+	default "{{data_path}}/qemu"
+	help
+	  This is the target location of where to clone the above git tree.
+	  Note that {{data_path}} corresponds to the location set by the
+	  configuration option CONFIG_WORKFLOW_DATA_PATH.
+
+config QEMU_USE_DEVELOPMENT_VERSION
+	bool
+	default y
+
+endif # QEMU_BUILD
 
 config QEMU_BIN_PATH_LIBVIRT
 	string "Qemu binary path to use"
