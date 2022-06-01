@@ -23,6 +23,7 @@ generic/226 # lazy baseline - failure found in at least two sections - failure r
 generic/241
 generic/260
 generic/300 # fails on btrfs_simple so chances are other sections should fail too - failure rate is about 1/10 hung task on btrfs_wait_ordered_extents() https://gist.github.com/mcgrof/2696e71d3322becfe3811260fbe1ec3a
+generic/371 # found to have taken once 10 times the amount it took to run the first run so 305s vs 26s for 1173% difference on btrfs_simple, this variablity should be looked into
 generic/373 # lazy baseline - failure found in at least two sections
 generic/374 # lazy baseline - failure found in at least two sections
 generic/633
