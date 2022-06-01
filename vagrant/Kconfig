@@ -22,6 +22,7 @@ if VAGRANT_LIBVIRT
 
 config QEMU_BUILD
 	bool "Should we build qemu for you?"
+	select NEEDS_LOCAL_DEVELOPMENT_PATH
 	help
 	  You only want to enable this option if your distribution package
 	  of qemu does not have support for the features you need. For
@@ -76,11 +77,11 @@ config QEMU_BUILD_GIT
 
 config QEMU_BUILD_GIT_DATA_PATH
 	string "The destination directory where to clone the qemu git tree"
-	default "{{data_path}}/qemu"
+	default "{{local_dev_path}}/qemu"
 	help
 	  This is the target location of where to clone the above git tree.
-	  Note that {{data_path}} corresponds to the location set by the
-	  configuration option CONFIG_WORKFLOW_DATA_PATH.
+	  Note that {{local_dev_path}} corresponds to the location set by the
+	  configuration option CONFIG_NEEDS_LOCAL_DEVELOPMENT_PATH.
 
 config QEMU_USE_DEVELOPMENT_VERSION
 	bool

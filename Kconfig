@@ -9,6 +9,10 @@ config HAVE_KDEVOPS_CUSTOM_DEFAULTS
 	bool
 	default n
 
+config NEEDS_LOCAL_DEVELOPMENT_PATH
+	bool
+	default n
+
 config KDEVOPS_FIRST_RUN
 	bool "Is this your first time running kdevops on this system?"
 	default n
@@ -215,6 +219,13 @@ config SETUP_POSTFIX_EMAIL_RELAY_HOST
 	  created.
 
 endif
+
+config LOCAL_DEVELOPMENT_PATH
+	string "The path to place source code on localhost if we building things"
+	default $(shell, echo $HOME/devel/)
+	depends on NEEDS_LOCAL_DEVELOPMENT_PATH
+	help
+	  The path where kdevops should put code we need to compile.
 
 menu "Bring up methods"
 source "kconfigs/Kconfig.bringup"

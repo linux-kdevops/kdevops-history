@@ -56,6 +56,13 @@ export KDEVOPS_HOSTS := $(KDEVOPS_HOSTFILE)
 # configuration data for ansible roles through kconfig.
 ANSIBLE_EXTRA_ARGS :=
 
+LOCAL_DEVELOPMENT_ARGS	:=
+ifeq (y,$(CONFIG_NEEDS_LOCAL_DEVELOPMENT_PATH))
+include local.Makefile
+endif # CONFIG_NEEDS_LOCAL_DEVELOPMENT_PATH
+
+ANSIBLE_EXTRA_ARGS += $(LOCAL_DEVELOPMENT_ARGS)
+
 # These should be set as non-empty if you want any generic bring up
 # targets to come up. We support 2 bring up methods:
 #
