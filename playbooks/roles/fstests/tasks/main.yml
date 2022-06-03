@@ -121,6 +121,20 @@
   args:
     chdir: "{{ fstests_data }}"
 
+- name: Install root generated .kdevops_fstests_setup
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' ]
+  vars:
+    kdevops_fstests_setup: ".kdevops_fstests_setup"
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  template:
+    src: "{{ kdevops_fstests_setup }}"
+    dest: "/root/{{ kdevops_fstests_setup }}"
+    owner: "root"
+    group: "root"
+    mode: 0644
+
 - name: Reboot system before our test so we know everything is sane
   tags: [ 'oscheck', 'fstests', 'run_tests', 'reboot' ]
   become: yes

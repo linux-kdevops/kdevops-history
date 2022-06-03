@@ -13,7 +13,6 @@ KDEVOPS_FSTESTS_PROGS += $(KDEVOPS_FSTESTS_SCRIPTS_PATH)/naggy-check.sh
 
 KDEVOPS_FSTESTS_BASHRC :=  workflows/fstests/.bashrc
 KDEVOPS_FSTESTS_SETUP_FILE := .kdevops_fstests_setup
-KDEVOPS_FSTESTS_SETUP_FILE_DEST := $(HOME)/$(KDEVOPS_FSTESTS_SETUP_FILE)
 
 FSTESTS=$(subst ",,$(CONFIG_FSTESTS_DATA_TARGET))
 FSTESTS_CONFIGS?= $(FSTESTS)/configs
@@ -115,6 +114,9 @@ $(KDEVOPS_FSTESTS_CONFIG): $(KDEVOPS_FSTESTS_CONFIG_TEMPLATE) .config
 fstests:
 	$(Q)ansible-playbook -f 30 -i hosts playbooks/fstests.yml --skip-tags run_tests,copy_results $(LIMIT_HOSTS)
 
+fstests-kdevops-setup:
+	$(Q)ansible-playbook -f 30 -i hosts playbooks/fstests.yml --tags vars,kdevops_fstests_setup $(LIMIT_HOSTS)
+
 fstests-baseline:
 	$(Q)PYTHONUNBUFFERED=1 ansible-playbook -f 30 -i hosts -l baseline playbooks/fstests.yml --tags run_tests,copy_results --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
@@ -162,17 +164,6 @@ kdevops_fstests_install: $(KDEVOPS_FSTESTS_PROGS) $(KDEVOPS_FSTESTS_CONFIG)
 		cat .bashrc >> $(BASHRC) ;\
 		chmod 755 $(BASHRC) ;\
 	fi
-	@echo INSTALL $(KDEVOPS_FSTESTS_SETUP_FILE) $(HOME)
-	@echo "#!/bin/bash" > $(KDEVOPS_FSTESTS_SETUP_FILE_DEST)
-	@echo "export FSTYP='$(FSTYP)'" >> $(KDEVOPS_FSTESTS_SETUP_FILE_DEST)
-	@echo "export FSTESTS_SPARSE_FILE_PATH='$(FSTESTS_SPARSE_FILE_PATH)'" >> $(KDEVOPS_FSTESTS_SETUP_FILE_DEST)
-	@echo "export FSTESTS_SETUP_SYSTEM='$(FSTESTS_SETUP_SYSTEM)'" >> $(KDEVOPS_FSTESTS_SETUP_FILE_DEST)
-	@echo "export FSTESTS_TESTDEV_SPARSEFILE_GENERATION='$(FSTESTS_TESTDEV_SPARSEFILE_GENERATION)'" >> $(KDEVOPS_FSTESTS_SETUP_FILE_DEST)
-	@echo "export FSTESTS_SPARSE_FILE_SIZE='$(FSTESTS_SPARSE_FILE_SIZE)'" >> $(KDEVOPS_FSTESTS_SETUP_FILE_DEST)
-	@echo "export FSTESTS_SPARSE_FILENAME_PREFIX='$(FSTESTS_SPARSE_FILENAME_PREFIX)'" >> $(KDEVOPS_FSTESTS_SETUP_FILE_DEST)
-	@echo "export FSTESTS_RUN_LARGE_DISK_TESTS='$(FSTESTS_RUN_LARGE_DISK_TESTS)'" >> $(KDEVOPS_FSTESTS_SETUP_FILE_DEST)
-	@echo "export FSTESTS_RUN_AUTO_GROUP_TESTS='$(FSTESTS_RUN_AUTO_GROUP_TESTS)'" >> $(KDEVOPS_FSTESTS_SETUP_FILE_DEST)
-	@echo "export FSTESTS_RUN_CUSTOM_TESTS='$(FSTESTS_RUN_CUSTOM_TESTS)'" >> $(KDEVOPS_FSTESTS_SETUP_FILE_DEST)
 	@mkdir -p $(FSTESTS_CONFIGS)
 	@echo INSTALL $(HOSTNAME_CONFIG)  $(FSTESTS_CONFIGS)
 	@if [ ! -f $(KDEVOPS_FSTESTS_CONFIG) ]; then \
@@ -187,6 +178,7 @@ kdevops_fstests_install: $(KDEVOPS_FSTESTS_PROGS) $(KDEVOPS_FSTESTS_CONFIG)
 fstests-help-menu:
 	@echo "fstests options:"
 	@echo "fstests                                 - Git clones fstests, builds and install it"
+	@echo "fstests-kdevops-setup                   - Install kdevops specific files, the fstests and running test targets also runs this"
 	@echo "fstests-baseline                        - Run fstests on baseline hosts and collect results"
 	@echo "fstests-dev                             - Run fstests on dev hosts and collect results"
 	@echo "fstests-baseline-results                - Only collect results for baseline hosts"
