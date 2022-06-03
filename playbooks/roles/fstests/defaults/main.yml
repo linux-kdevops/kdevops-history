@@ -22,3 +22,7 @@ fstests_test_dir: "/media/test"
 fstests_debug: False
 
 compile_dbench: False
+run_large_disk_tests:
+
+kdevops_fstests_setup_name: "kdevops_fstests_setup"
+kdevops_fstests_setup: ".{{ kdevops_fstests_setup_name }}"

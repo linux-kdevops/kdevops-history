@@ -11,9 +11,6 @@ KDEVOPS_FSTESTS_PROGS += $(KDEVOPS_FSTESTS_SCRIPTS_PATH)/gendisks.sh
 KDEVOPS_FSTESTS_PROGS += $(KDEVOPS_FSTESTS_SCRIPTS_PATH)/oscheck.sh
 KDEVOPS_FSTESTS_PROGS += $(KDEVOPS_FSTESTS_SCRIPTS_PATH)/naggy-check.sh
 
-KDEVOPS_FSTESTS_BASHRC :=  workflows/fstests/.bashrc
-KDEVOPS_FSTESTS_SETUP_FILE := .kdevops_fstests_setup
-
 FSTESTS=$(subst ",,$(CONFIG_FSTESTS_DATA_TARGET))
 FSTESTS_CONFIGS?= $(FSTESTS)/configs
 FSTESTS_SETUP_SYSTEM=$(subst ",,$(CONFIG_FSTESTS_SETUP_SYSTEM))
@@ -22,7 +19,6 @@ FSTESTS_TEST_DEV=$(subst ",,$(CONFIG_FSTESTS_TEST_DEV))
 HOSTNAME := $(shell hostname)
 HOSTNAME_CONFIG := $(HOSTNAME).config
 ID=$(shell id -u)
-BASHRC?= $(HOME)/.bashrc
 
 FSTESTS_ARGS	:=
 
@@ -153,17 +149,6 @@ kdevops_fstests_install: $(KDEVOPS_FSTESTS_PROGS) $(KDEVOPS_FSTESTS_CONFIG)
 			ln -sf $(shell readlink -f $(var)) $(FSTESTS); \
 		fi; \
 		)
-	@if [ -f $(BASHRC) ]; then \
-		if ! grep $(KDEVOPS_FSTESTS_SETUP_FILE) $(BASHRC) 2>&1 > /dev/null ; then \
-			echo "REFER $(KDEVOPS_FSTESTS_SETUP_FILE) on $(BASHRC)" ;\
-			cat $(KDEVOPS_FSTESTS_BASHRC) >> $(BASHRC) ;\
-		fi \
-	else \
-		echo "INSTALL $(BASHRC)" ;\
-		echo "#!/bin/bash" >> $(BASHRC) ;\
-		cat .bashrc >> $(BASHRC) ;\
-		chmod 755 $(BASHRC) ;\
-	fi
 	@mkdir -p $(FSTESTS_CONFIGS)
 	@echo INSTALL $(HOSTNAME_CONFIG)  $(FSTESTS_CONFIGS)
 	@if [ ! -f $(KDEVOPS_FSTESTS_CONFIG) ]; then \

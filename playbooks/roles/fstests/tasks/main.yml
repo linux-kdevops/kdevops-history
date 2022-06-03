@@ -123,8 +123,6 @@
 
 - name: Install root generated .kdevops_fstests_setup
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' ]
-  vars:
-    kdevops_fstests_setup: ".kdevops_fstests_setup"
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -134,6 +132,27 @@
     owner: "root"
     group: "root"
     mode: 0644
+
+- name: source .kdevops_fstests_setup for root if it is not already done
+  vars:
+    dev_bash_config: ".bashrc"
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' ]
+  shell: |
+    SOURCE_KDEVOPS_FSTESTS_SETUP="test -s ~/{{ kdevops_fstests_setup }} && . ~/{{ kdevops_fstests_setup }} || true"
+    if [ -f {{ dev_bash_config }} ]; then
+      if ! grep "{{ kdevops_fstests_setup_name }}" {{ dev_bash_config }}  2>&1 > /dev/null ; then
+        echo "$SOURCE_KDEVOPS_FSTESTS_SETUP" >> {{ dev_bash_config }}
+      fi
+    else
+      echo "#!/bin/bash" >> {{ dev_bash_config }}
+      echo "$SOURCE_KDEVOPS_FSTESTS_SETUP" >> {{ dev_bash_config }}
+      chmod 755 {{ dev_bash_config }}
+    fi
+  args:
+    executable: /bin/bash
 
 - name: Reboot system before our test so we know everything is sane
   tags: [ 'oscheck', 'fstests', 'run_tests', 'reboot' ]
