@@ -1,28 +1,13 @@
 # SPDX-License-Identifier: copyleft-next-0.3.1
 
-export KDEVOPS_FSTESTS_CONFIG :=
-export KDEVOPS_FSTESTS_CONFIG_TEMPLATE :=
-
-KDEVOPS_INSTALL_TARGETS += kdevops_fstests_install
-KDEVOPS_FSTESTS_SCRIPTS_PATH=workflows/fstests/scripts
-
 FSTESTS=$(subst ",,$(CONFIG_FSTESTS_DATA_TARGET))
-FSTESTS_CONFIGS?= $(FSTESTS)/configs
 FSTESTS_SETUP_SYSTEM=$(subst ",,$(CONFIG_FSTESTS_SETUP_SYSTEM))
 FSTESTS_TEST_DEV=$(subst ",,$(CONFIG_FSTESTS_TEST_DEV))
 
-HOSTNAME := $(shell hostname)
-HOSTNAME_CONFIG := $(HOSTNAME).config
-ID=$(shell id -u)
-
-FSTESTS_ARGS	:=
+FSTESTS_ARGS	        :=
+FSTESTS_ARGS_SEPARATED	:=
 
 export FSTYP:=$(subst ",,$(CONFIG_FSTESTS_FSTYP))
-KDEVOPS_FSTESTS_CONFIG := workflows/fstests/$(FSTYP)/$(FSTYP).config
-DEFAULT_DEPS += $(KDEVOPS_FSTESTS_CONFIG)
-KDEVOPS_FSTESTS_CONFIG_TEMPLATE := $(KDEVOPS_FSTESTS_CONFIG).in
-
-KDEVOPS_WORKFLOW_FSTESTS_CLEAN += $(KDEVOPS_FSTESTS_CONFIG)
 
 ifeq (y,$(CONFIG_WORKFLOWS_DEDICATED_WORKFLOW))
 # We don't use a nodes template for fstests, the file is generated from
@@ -40,8 +25,6 @@ FSTESTS_GIT:=$(subst ",,$(CONFIG_FSTESTS_GIT))
 FSTESTS_DATA:=$(subst ",,$(CONFIG_FSTESTS_DATA))
 FSTESTS_DATA_TARGET:=$(subst ",,$(CONFIG_FSTESTS_DATA_TARGET))
 
-TARGET_CONFIG := $(FSTESTS_CONFIGS)/$(HOSTNAME_CONFIG)
-
 FSTESTS_ARGS += fstests_git=$(FSTESTS_GIT)
 FSTESTS_ARGS += fstests_fstyp='$(FSTYP)'
 FSTESTS_ARGS += fstests_data=\"$(FSTESTS_DATA)\"
@@ -53,9 +36,23 @@ export FSTESTS_SPARSE_FILE_SIZE:=
 export FSTESTS_TESTDEV_SPARSEFILE_GENERATION:=
 export FSTESTS_SPARSE_FILE_PATH:=
 export FSTESTS_SPARSE_FILENAME_PREFIX:=
+export FSTESTS_SCRATCH_MNT:=
+export FSTESTS_LOGWRITES_DEV:=
 
 FSTESTS_TEST_DIR:=$(subst ",,$(CONFIG_FSTESTS_TEST_DIR))
 FSTESTS_ARGS += fstests_test_dir='$(FSTESTS_TEST_DIR)'
+
+FSTESTS_SCRATCH_MNT:=$(subst ",,$(CONFIG_FSTESTS_SCRATCH_MNT))
+FSTESTS_ARGS += fstests_scratch_mnt='$(FSTESTS_SCRATCH_MNT)'
+
+FSTESTS_LOGWRITES_DEV:=$(subst ",,$(CONFIG_FSTESTS_LOGWRITES_DEV))
+FSTESTS_ARGS += fstests_logwrites_dev='$(FSTESTS_LOGWRITES_DEV)'
+
+FSTESTS_SCRATCH_LOGDEV:=$(subst ",,$(CONFIG_FSTESTS_SCRATCH_LOGDEV))
+FSTESTS_ARGS += fstests_scratch_logdev='$(FSTESTS_SCRATCH_LOGDEV)'
+
+FSTESTS_SCRATCH_RTDEV:=$(subst ",,$(CONFIG_FSTESTS_SCRATCH_RTDEV))
+FSTESTS_ARGS += fstests_scratch_rtdev='$(FSTESTS_SCRATCH_RTDEV)'
 
 SPARSE_GEN:=$(subst ",,$(CONFIG_FSTESTS_TESTDEV_SPARSEFILE_GENERATION))
 FSTESTS_ARGS += sparsefiles_generation='$(SPARSE_GEN)'
@@ -84,8 +81,18 @@ FSTESTS_ARGS += run_large_disk_tests='$(FSTESTS_RUN_LARGE_DISK_TESTS)'
 FSTESTS_ARGS += run_auto_group_tests='$(FSTESTS_RUN_AUTO_GROUP_TESTS)'
 FSTESTS_ARGS += oscheck_extra_args='$(FSTESTS_RUN_CUSTOM_TESTS)'
 
+FSTESTS_SCRATCH_DEVPOOL=$(subst ",,$(CONFIG_FSTESTS_SCRATCH_DEV_POOL))
+FSTESTS_ARGS_SEPARATED += fstests_scratch_devpool='$(subst $(space),+,$(FSTESTS_SCRATCH_DEVPOOL))'
+
 endif # CONFIG_FSTESTS_TESTDEV_SPARSEFILE_GENERATION == y
+
+ifeq (y,$(CONFIG_QEMU_ENABLE_NVME_ZNS))
+FSTESTS_SCRATCH_DEVPOOL_ZNS=$(subst ",,$(CONFIG_FSTESTS_SCRATCH_DEV_POOL_ZNS))
+FSTESTS_ARGS_SEPARATED += fstests_scratch_devpool_zns='$(subst $(space),+,$(FSTESTS_SCRATCH_DEVPOOL_ZNS))'
+endif # CONFIG_QEMU_ENABLE_NVME_ZNS
+
 WORKFLOW_ARGS += $(FSTESTS_ARGS)
+WORKFLOW_ARGS_SEPARATED += $(FSTESTS_ARGS_SEPARATED)
 
 FSTEST_KERNEL_CI_LOOP := false
 FSTEST_KERNEL_CI_LOOP_KOTD := false
@@ -98,9 +105,6 @@ ifeq (y,$(CONFIG_WORKFLOWS_DEDICATED_WORKFLOW))
 $(KDEVOPS_HOSTS_TEMPLATE): .config
 	$(Q)$(TOPDIR)/scripts/workflows/fstests/$(FSTYP)/gen_manual_hosts.sh
 endif
-
-$(KDEVOPS_FSTESTS_CONFIG): $(KDEVOPS_FSTESTS_CONFIG_TEMPLATE) .config
-	$(Q)$(TOPDIR)/scripts/workflows/fstests/gen_fstests_config.sh $(KDEVOPS_FSTESTS_CONFIG)
 
 fstests: $(KDEVOPS_EXTRA_VARS)
 	$(Q)ansible-playbook -f 30 -i hosts playbooks/fstests.yml --skip-tags run_tests,copy_results $(LIMIT_HOSTS)
@@ -131,22 +135,6 @@ fstests-baseline-results: $(KDEVOPS_EXTRA_VARS)
 
 fstests-dev-results: $(KDEVOPS_EXTRA_VARS)
 	$(Q)ansible-playbook -f 30 -i hosts -l dev playbooks/fstests.yml --tags copy_results,print_results --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
-
-kdevops_fstests_install: $(KDEVOPS_FSTESTS_CONFIG)
-	@if [ $(ID) != "0" ]; then \
-		echo "Must run as root" ;\
-		exit 1 ;\
-	fi
-	@mkdir -p $(FSTESTS_CONFIGS)
-	@echo INSTALL $(HOSTNAME_CONFIG)  $(FSTESTS_CONFIGS)
-	@if [ ! -f $(KDEVOPS_FSTESTS_CONFIG) ]; then \
-		echo "Unsupported filesystem: $(FSTYP)" ;\
-		echo "Consider adding an example fstests config in $(KDEVOPS_FSTESTS_CONFIG) and submit to kdevops upstream" ;\
-		exit 1 ;\
-	fi
-	@install $(KDEVOPS_FSTESTS_CONFIG) $(TARGET_CONFIG)
-	@echo INSTALL $(HOSTNAME_CONFIG)  $(FSTESTS_CONFIGS)/.config
-	@install $(KDEVOPS_FSTESTS_CONFIG) $(FSTESTS_CONFIGS)/.config
 
 fstests-help-menu:
 	@echo "fstests options:"

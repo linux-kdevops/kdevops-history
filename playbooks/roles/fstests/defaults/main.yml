@@ -26,3 +26,10 @@ run_large_disk_tests:
 
 kdevops_fstests_setup_name: "kdevops_fstests_setup"
 kdevops_fstests_setup: ".{{ kdevops_fstests_setup_name }}"
+
+fstests_scratch_mnt: "/media/scratch"
+fstests_logwrites_dev: "/dev/loop15"
+fstests_scratch_logdev: "/dev/loop15"
+fstests_scratch_rtdev: "/dev/loop14"
+fstests_scratch_devpool: "/dev/loop5 /dev/loop6 /dev/loop7 /dev/loop8 /dev/loop9 /dev/loop10 /dev/loop11 /dev/loop12"
+fstests_scratch_devpool_zns: "/dev/nvme5n1 /dev/nvme6n1 /dev/nvme7n1 /dev/nvme8n1 /dev/nvme9n1 /dev/nvme10n1 /dev/nvme11n1 /dev/nvme12n1"
