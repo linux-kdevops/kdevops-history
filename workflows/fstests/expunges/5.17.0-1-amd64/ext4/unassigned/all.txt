@@ -1,0 +1,6 @@
+ext4/025 # lazy baseline - failure found in at least two sections
+generic/050 # lazy baseline - failure found in at least two sections
+generic/223 # lazy baseline - failure found in at least two sections
+generic/241 # lazy baseline - failure found in at least two sections
+generic/398 # lazy baseline - failure found in at least two sections
+generic/607 # lazy baseline - failure found in at least two sections
