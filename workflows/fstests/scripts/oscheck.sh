@@ -873,6 +873,7 @@ fi
 
 parse_args $@
 
+HOST_OPTIONS=${HOST_OPTIONS:=local.config}
 HOST=`hostname -s`
 if [ ! -f "$HOST_OPTIONS" ]; then
 	known_hosts
