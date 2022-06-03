@@ -154,6 +154,20 @@
   args:
     executable: /bin/bash
 
+- name: Add symlinks for kdevops scripts for fstests
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.file:
+    src: "{{ kdevops_data }}/workflows/fstests/scripts/{{ item }}"
+    dest: "{{ fstests_data_target }}/{{ item }}"
+    state: link
+  with_items:
+    - gendisks.sh
+    - oscheck.sh
+    - naggy-check.sh
+
 - name: Reboot system before our test so we know everything is sane
   tags: [ 'oscheck', 'fstests', 'run_tests', 'reboot' ]
   become: yes

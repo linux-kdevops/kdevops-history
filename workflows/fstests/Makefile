@@ -6,11 +6,6 @@ export KDEVOPS_FSTESTS_CONFIG_TEMPLATE :=
 KDEVOPS_INSTALL_TARGETS += kdevops_fstests_install
 KDEVOPS_FSTESTS_SCRIPTS_PATH=workflows/fstests/scripts
 
-KDEVOPS_FSTESTS_PROGS :=
-KDEVOPS_FSTESTS_PROGS += $(KDEVOPS_FSTESTS_SCRIPTS_PATH)/gendisks.sh
-KDEVOPS_FSTESTS_PROGS += $(KDEVOPS_FSTESTS_SCRIPTS_PATH)/oscheck.sh
-KDEVOPS_FSTESTS_PROGS += $(KDEVOPS_FSTESTS_SCRIPTS_PATH)/naggy-check.sh
-
 FSTESTS=$(subst ",,$(CONFIG_FSTESTS_DATA_TARGET))
 FSTESTS_CONFIGS?= $(FSTESTS)/configs
 FSTESTS_SETUP_SYSTEM=$(subst ",,$(CONFIG_FSTESTS_SETUP_SYSTEM))
@@ -137,18 +132,11 @@ fstests-baseline-results:
 fstests-dev-results:
 	$(Q)ansible-playbook -f 30 -i hosts -l dev playbooks/fstests.yml --tags copy_results,print_results --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
-kdevops_fstests_install: $(KDEVOPS_FSTESTS_PROGS) $(KDEVOPS_FSTESTS_CONFIG)
+kdevops_fstests_install: $(KDEVOPS_FSTESTS_CONFIG)
 	@if [ $(ID) != "0" ]; then \
 		echo "Must run as root" ;\
 		exit 1 ;\
 	fi
-	@mkdir -p $(FSTESTS) $(FSTESTS_SPARSE_FILE_PATH)
-	@$(foreach var,$(KDEVOPS_FSTESTS_PROGS), \
-		if [ ! -f $(FSTESTS)/$(var) ]; then \
-			echo SYMLINK $(var) on $(FSTESTS); \
-			ln -sf $(shell readlink -f $(var)) $(FSTESTS); \
-		fi; \
-		)
 	@mkdir -p $(FSTESTS_CONFIGS)
 	@echo INSTALL $(HOSTNAME_CONFIG)  $(FSTESTS_CONFIGS)
 	@if [ ! -f $(KDEVOPS_FSTESTS_CONFIG) ]; then \
