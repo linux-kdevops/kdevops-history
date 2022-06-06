@@ -28,6 +28,16 @@ MAKEFLAGS += --no-print-directory
 SHELL := /bin/bash
 HELP_TARGETS := kconfig-help-menu
 EXTRA_VAR_INPUTS := most_extra_vars
+
+# This ensures that for instance running 'make fstests-baseline-loop' will
+# have the respective filesystem configuration file
+# /var/lib/xfstests/configs/${HOST}.config get updated *with* a respective
+# correct value in case you do dynamic updates to the .config.
+# The extra_vars.yaml file will get the correct updated values, not the
+# defaults from fstests/defaults/main.yml so long as the file
+# workflows/fstests/Makefile also updates
+EXTRA_VAR_INPUTS += $(KDEVOPS_PLAYBOOKS_DIR)/roles/*/defaults/main.yml
+
 PHONY += kconfig-help-menu
 
 ifeq ($(V),1)

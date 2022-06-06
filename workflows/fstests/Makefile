@@ -102,34 +102,34 @@ endif
 $(KDEVOPS_FSTESTS_CONFIG): $(KDEVOPS_FSTESTS_CONFIG_TEMPLATE) .config
 	$(Q)$(TOPDIR)/scripts/workflows/fstests/gen_fstests_config.sh $(KDEVOPS_FSTESTS_CONFIG)
 
-fstests:
+fstests: $(KDEVOPS_EXTRA_VARS)
 	$(Q)ansible-playbook -f 30 -i hosts playbooks/fstests.yml --skip-tags run_tests,copy_results $(LIMIT_HOSTS)
 
-fstests-kdevops-setup:
+fstests-kdevops-setup: $(KDEVOPS_EXTRA_VARS)
 	$(Q)ansible-playbook -f 30 -i hosts playbooks/fstests.yml --tags vars,kdevops_fstests_setup $(LIMIT_HOSTS)
 
-fstests-baseline:
+fstests-baseline: $(KDEVOPS_EXTRA_VARS)
 	$(Q)PYTHONUNBUFFERED=1 ansible-playbook -f 30 -i hosts -l baseline playbooks/fstests.yml --tags run_tests,copy_results --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
-fstests-baseline-loop:
+fstests-baseline-loop: $(KDEVOPS_EXTRA_VARS)
 	$(Q)$(FSTEST_KERNEL_CI_LOOP) baseline $(LIMIT_HOSTS)
 
-fstests-baseline-kernelci:
+fstests-baseline-kernelci: $(KDEVOPS_EXTRA_VARS)
 	$(Q)$(FSTEST_KERNEL_CI_LOOP_KOTD) baseline $(LIMIT_HOSTS)
 
-fstests-baseline-skip-kdevops-update:
+fstests-baseline-skip-kdevops-update: $(KDEVOPS_EXTRA_VARS)
 	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/fstests.yml --tags run_tests,copy_results --skip-tags git_update --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
-fstests-baseline-run-oscheck-only:
+fstests-baseline-run-oscheck-only: $(KDEVOPS_EXTRA_VARS)
 	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/fstests.yml --tags run_tests,copy_results --skip-tags git_update,reboot,clean_results --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
-fstests-dev:
+fstests-dev: $(KDEVOPS_EXTRA_VARS)
 	$(Q)ansible-playbook -f 30 -i hosts -l dev playbooks/fstests.yml --tags run_tests,copy_results --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
-fstests-baseline-results:
+fstests-baseline-results: $(KDEVOPS_EXTRA_VARS)
 	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/fstests.yml --tags copy_results,print_results --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
-fstests-dev-results:
+fstests-dev-results: $(KDEVOPS_EXTRA_VARS)
 	$(Q)ansible-playbook -f 30 -i hosts -l dev playbooks/fstests.yml --tags copy_results,print_results --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
 kdevops_fstests_install: $(KDEVOPS_FSTESTS_CONFIG)
