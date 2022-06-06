@@ -12,7 +12,7 @@ generic/241
 generic/270
 generic/382
 generic/398
-generic/477
+generic/477 # always fails and never fails with the defaults section after 300 runs https://gist.github.com/mcgrof/8ca888e9f41553573c22ea61b36aa165
 generic/566
 generic/587
 generic/600
