@@ -1,5 +1,8 @@
 # SPDX-License-Identifier: copyleft-next-0.3.1
 
+WORKFLOW_ARGS           :=
+WORKFLOW_ARGS_SEPARATED	:=
+
 include workflows/common/Makefile
 
 BOOTLINUX_ARGS	:=
@@ -20,3 +23,6 @@ endif # CONFIG_KDEVOPS_WORKFLOW_ENABLE_BLKTESTS == y
 ifeq (y,$(CONFIG_WORKFLOWS_REBOOT_LIMIT))
 include workflows/demos/reboot-limit/Makefile
 endif # CONFIG_WORKFLOWS_REBOOT_LIMIT == y
+
+ANSIBLE_EXTRA_ARGS += $(WORKFLOW_ARGS)
+ANSIBLE_EXTRA_ARGS_SEPARATED += $(WORKFLOW_ARGS_SEPARATED)

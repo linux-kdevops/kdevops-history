@@ -86,14 +86,9 @@ ifeq (y,$(CONFIG_VAGRANT))
 include scripts/vagrant.Makefile
 endif
 
-WORKFLOW_ARGS           :=
-WORKFLOW_ARGS_SEPARATED	:=
 ifeq (y,$(CONFIG_WORKFLOWS))
 include workflows/Makefile
 endif # CONFIG_WORKFLOWS
-
-ANSIBLE_EXTRA_ARGS += $(WORKFLOW_ARGS)
-ANSIBLE_EXTRA_ARGS_SEPARATED += $(WORKFLOW_ARGS_SEPARATED)
 
 include scripts/devconfig.Makefile
 include scripts/ssh.Makefile
