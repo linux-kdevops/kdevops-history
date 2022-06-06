@@ -1,5 +1,7 @@
 # SPDX-License-Identifier: copyleft-next-0.3.1
 
+VAGRANT_ARGS :=
+
 KDEVOPS_BRING_UP_DEPS := bringup_vagrant
 KDEVOPS_DESTROY_DEPS := destroy_vagrant
 
@@ -29,6 +31,7 @@ VAGRANT_ARGS += storage_pool_path=$(STORAGE_POOL_PATH)
 VAGRANT_ARGS += kdevops_storage_pool_path=$(KDEVOPS_STORAGE_POOL_PATH)
 
 EXTRA_VAR_INPUTS += extend-extra-args-vagrant
+ANSIBLE_EXTRA_ARGS += $(VAGRANT_ARGS)
 
 extend-extra-args-vagrant:
 	@if [[ "$(CONFIG_HAVE_VAGRANT_BOX_URL)" == "y" ]]; then \

@@ -82,11 +82,9 @@ ifeq (y,$(CONFIG_TERRAFORM))
 include scripts/terraform.Makefile
 endif # CONFIG_TERRAFORM
 
-VAGRANT_ARGS :=
 ifeq (y,$(CONFIG_VAGRANT))
 include scripts/vagrant.Makefile
 endif
-ANSIBLE_EXTRA_ARGS += $(VAGRANT_ARGS)
 
 WORKFLOW_ARGS           :=
 WORKFLOW_ARGS_SEPARATED	:=
