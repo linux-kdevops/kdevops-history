@@ -131,8 +131,8 @@ while true; do
 		# Only if there was a failure itemize which tests passed, and which ones failed,
 		# otherwise as reflected above we print that all tests passed.
 		for TEST in $TESTS; do
-			if [ ! -f xfstests-dev/results/$(hostname)/$(uname -r)/${SECTION}/${TEST}.out.bad -a \
-			     ! -f xfstests-dev/results/$(hostname)/$(uname -r)/${SECTION}/${TEST}.dmesg ]; then
+			if [ ! -f results/$(hostname)/$(uname -r)/${SECTION}/${TEST}.out.bad -a \
+			     ! -f results/$(hostname)/$(uname -r)/${SECTION}/${TEST}.dmesg ]; then
 				echo "PASS $i ... $TEST"
 			else
 				echo "FAIL $i ... $TEST"
