@@ -3,9 +3,12 @@
 
 source ${TOPDIR}/.config
 source ${TOPDIR}/scripts/lib.sh
-source ${TOPDIR}/scripts/workflows/fstests/xfs/lib.sh
-source ${TOPDIR}/scripts/workflows/fstests/btrfs/lib.sh
-source ${TOPDIR}/scripts/workflows/fstests/ext4/lib.sh
+
+if [[ "$CONFIG_KDEVOPS_WORKFLOW_ENABLE_FSTESTS" == "y" ]]; then
+	source ${TOPDIR}/scripts/workflows/fstests/xfs/lib.sh
+	source ${TOPDIR}/scripts/workflows/fstests/btrfs/lib.sh
+	source ${TOPDIR}/scripts/workflows/fstests/ext4/lib.sh
+fi
 source ${TOPDIR}/scripts/workflows/blktests/lib.sh
 
 VAGRANTBOX=$CONFIG_VAGRANT_BOX
