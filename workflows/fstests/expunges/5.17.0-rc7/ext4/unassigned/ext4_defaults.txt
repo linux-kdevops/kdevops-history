@@ -1,25 +1,6 @@
-ext4/025
-ext4/034
-generic/050 # https://gist.github.com/mcgrof/e598053099af6b5eb83c3f318d38bab5
-generic/082
 generic/127 # sometimes may take about 10 times more than it typically takes (336 seconds)
-generic/219
-generic/230
-generic/231
-generic/232
-generic/233
-generic/235
-generic/241
-generic/270
-generic/382
-generic/398
 generic/418 # can sometimes take more than 10 times its original time failure rate 1/30 seems to be due to nvme controller QID timeout issue
 generic/459 # failure rate 1/20 https://gist.github.com/mcgrof/58818ec26ca195b22a3cfe8da5e40a7a
 generic/476 # seems to run for over 3603 seconds..
-generic/566
 generic/581 # failure rate is 1/20
-generic/587
-generic/600
-generic/601
-generic/607
 generic/622 # failure rate 1/10
