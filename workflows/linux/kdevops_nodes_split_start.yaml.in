@@ -3,8 +3,8 @@ vagrant_global:
   box: "@VAGRANTBOX@"
   box_version: "@VBOXVERSION@"
   skip_ansible: @SKIPANSIBLE@
-  memory: 8192
-  cpus: 8
+  memory: @VAGRANTMEMMB@
+  cpus: @VAGRANTVCPUSCOUNT@
   enable_zns: @VAGRANTENABLEZNS@
   # For creating extra nvme drives and if libvirt is used it is also
   # where we let vagrant store its images.

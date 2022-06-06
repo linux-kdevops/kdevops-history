@@ -18,6 +18,88 @@ config VAGRANT_VIRTUALBOX
 
 endchoice
 
+choice
+	prompt "Guest vCPUs"
+	default VAGRANT_VCPUS_8
+
+config VAGRANT_VCPUS_2
+	bool "2"
+	help
+	  Use 2 vCPUs on guests.
+
+config VAGRANT_VCPUS_4
+	bool "4"
+	help
+	  Use 4 vCPUs on guests.
+
+config VAGRANT_VCPUS_8
+	bool "8"
+	help
+	  Use 8 vCPUs on guests.
+
+config VAGRANT_VCPUS_16
+	bool "16"
+	help
+	  Use 16 vCPUs on guests.
+
+config VAGRANT_VCPUS_32
+	bool "32"
+	help
+	  Use 32 vCPUs on guests.
+
+endchoice
+
+config VAGRANT_VCPUS_COUNT
+	int "Number of guest vCPUs"
+	default 2 if VAGRANT_VCPUS_2
+	default 4 if VAGRANT_VCPUS_4
+	default 8 if VAGRANT_VCPUS_8
+	default 16 if VAGRANT_VCPUS_16
+	default 32 if VAGRANT_VCPUS_32
+	help
+	  The number of virtual CPUs to use per guest.
+
+choice
+	prompt "How much GiB memory to use per guest"
+	default VAGRANT_MEM_2G
+
+config VAGRANT_MEM_2G
+	bool "2"
+	help
+	  Use 2 GiB of RAM on guests.
+
+config VAGRANT_MEM_4G
+	bool "4"
+	help
+	  Use 4 GiB of RAM on guests.
+
+config VAGRANT_MEM_8G
+	bool "8"
+	help
+	  Use 8 GiB of RAM on guests.
+
+config VAGRANT_MEM_16G
+	bool "16"
+	help
+	  Use 16 GiB of RAM on guests.
+
+config VAGRANT_MEM_32G
+	bool "32"
+	help
+	  Use 32 GiB of RAM on guests.
+
+endchoice
+
+config VAGRANT_MEM_MB
+	int "How much RAM to use per guest in MB"
+	default 2048 if VAGRANT_MEM_2G
+	default 4096 if VAGRANT_MEM_4G
+	default 8192 if VAGRANT_MEM_8G
+	default 16384 if VAGRANT_MEM_16G
+	default 32768 if VAGRANT_MEM_32G
+	help
+	  How much MiB of RAM to use per guest.
+
 if VAGRANT_LIBVIRT
 
 config QEMU_BUILD
