@@ -50,6 +50,10 @@ gen_nodes_dedicated()
 		exit
 	fi
 
+	if [[ "$CONFIG_KDEVOPS_WORKFLOW_ENABLE_FSTESTS" == "y" ]]; then
+		check_fs_config
+	fi
+
 	if [[ "$CONFIG_FSTESTS_XFS" == "y" ]]; then
 		xfs_generate_nodes_file
 	elif [[ "$CONFIG_FSTESTS_BTRFS" == "y" ]]; then

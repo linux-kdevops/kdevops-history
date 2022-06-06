@@ -4,6 +4,16 @@
 source ${TOPDIR}/.config
 source ${TOPDIR}/scripts/lib.sh
 
+FS_CONFIG_FILE=${TOPDIR}/playbooks/roles/fstests/templates/${FSTYP}/${FSTYP}.config
+
+check_fs_config()
+{
+	if [[ ! -f $FS_CONFIG_FILE ]]; then
+		echo "Filesystem configuration $FS_CONFIG_FILE does not exist"
+		exit 1
+	fi
+}
+
 get_fs_sections()
 {
 	local FS=$1
@@ -14,7 +24,7 @@ get_fs_sections()
 		exit 1
 	fi
 
-	FS_SECTIONS=$(grep "^\[" ${TOPDIR}/workflows/fstests/${FS}/${FS}.config.in)
+	FS_SECTIONS=$(grep "^\[" ${FS_CONFIG_FILE})
 	FS_SECTIONS=$(echo "$FS_SECTIONS" | grep -v "^\[default")
 	FS_SECTIONS=$(echo "$FS_SECTIONS" | sed -e 's|\[||g' | sed -e 's|\]||g')
 	FS_SECTIONS=$(echo "$FS_SECTIONS" | awk -F"${FS}_" '{print $2}')
