@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: copyleft-next-0.3.1
 
+HYPERVISOR_TUNING_ARGS :=
 HYPERVISOR_TUNING_ARGS += hypervisor_tunning_enabled=True
 
 ifeq (y,$(CONFIG_HYPERVISOR_TUNING_KSM))
@@ -20,4 +21,5 @@ kdevops_hypervisor_tunning: $(KDEVOPS_EXTRA_VARS)
 		--extra-vars=@./extra_vars.yaml
 PHONY += kdevops_hypervisor_tunning
 
+ANSIBLE_EXTRA_ARGS += $(HYPERVISOR_TUNING_ARGS)
 LOCALHOST_SETUP_WORK += kdevops_hypervisor_tunning
