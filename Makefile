@@ -114,11 +114,9 @@ endif
 # make with no arguments.
 LOCALHOST_SETUP_WORK :=
 
-QEMU_BUILD_SETUP_ARGS :=
 ifeq (y,$(CONFIG_QEMU_BUILD))
 include Makefile.build_qemu
 endif # CONFIG_QEMU_BUILD
-ANSIBLE_EXTRA_ARGS += $(QEMU_BUILD_SETUP_ARGS)
 
 POSTFIX_SETUP_ARGS :=
 ifeq (y,$(CONFIG_SETUP_POSTFIX_EMAIL_RELAY))

@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: copyleft-next-0.3.1
 
+QEMU_BUILD_SETUP_ARGS :=
 QEMU_BUILD_SETUP_ARGS += qemu_build=True
 
 QEMU_GIT:=$(subst ",,$(CONFIG_QEMU_BUILD_GIT))
@@ -53,4 +54,5 @@ qemu-help-menu:
 
 HELP_TARGETS += qemu-help-menu
 
+ANSIBLE_EXTRA_ARGS += $(QEMU_BUILD_SETUP_ARGS)
 LOCALHOST_SETUP_WORK += qemu
