@@ -20,6 +20,7 @@ btrfs/258 # lazy baseline - failure found in at least two sections
 btrfs/263 # lazy baseline - failure found in at least two sections
 generic/224 # fails with a hang on btrfs_raid56 section but let's skip for all sections for now
 generic/226 # lazy baseline - failure found in at least two sections - failure rate 1/20 requires a fix in btrfs-progs I have queued https://gist.github.com/mcgrof/81771a86ef0b90152e142e597d5f4147
+generic/208 # lazy baseline - dmesg failure rate is about 1/60 try with zswap pressure on the host https://gist.github.com/mcgrof/8296499615800048d658abbadb7ebe22
 generic/241
 generic/260
 generic/300 # fails on btrfs_simple so chances are other sections should fail too - failure rate is about 1/10 hung task on btrfs_wait_ordered_extents() https://gist.github.com/mcgrof/2696e71d3322becfe3811260fbe1ec3a
