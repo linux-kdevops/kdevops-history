@@ -27,17 +27,6 @@ DEFAULT_DEPS :=
 MAKEFLAGS += --no-print-directory
 SHELL := /bin/bash
 HELP_TARGETS := kconfig-help-menu
-EXTRA_VAR_INPUTS := most_extra_vars
-EXTRA_VAR_INPUTS += most_extra_vars_separated
-
-# This ensures that for instance running 'make fstests-baseline-loop' will
-# have the respective filesystem configuration file
-# /var/lib/xfstests/configs/${HOST}.config get updated *with* a respective
-# correct value in case you do dynamic updates to the .config.
-# The extra_vars.yaml file will get the correct updated values, not the
-# defaults from fstests/defaults/main.yml so long as the file
-# workflows/fstests/Makefile also updates
-EXTRA_VAR_INPUTS += $(KDEVOPS_PLAYBOOKS_DIR)/roles/*/defaults/main.yml
 
 PHONY += kconfig-help-menu
 
@@ -49,9 +38,13 @@ export Q=@
 export NQ=echo
 endif
 
-null :=
-space := ${null} ${null}
-${space} := ${space}
+# This will be used to generate our extra_args.yml file used to pass on
+# configuration data for ansible roles through kconfig.
+EXTRA_VAR_INPUTS :=
+ANSIBLE_EXTRA_ARGS :=
+ANSIBLE_EXTRA_ARGS_SEPARATED :=
+include Makefile.extra_vars
+
 LIMIT_HOSTS :=
 ifneq (,$(HOSTS))
 LIMIT_HOSTS := $(subst ${ }, -l , $(HOSTS))
@@ -62,11 +55,6 @@ CFLAGS += $(INCLUDES)
 
 export KDEVOPS_HOSTS_TEMPLATE := $(KDEVOPS_HOSTFILE).in
 export KDEVOPS_HOSTS := $(KDEVOPS_HOSTFILE)
-
-# This will be used to generate our extra_args.yml file used to pass on
-# configuration data for ansible roles through kconfig.
-ANSIBLE_EXTRA_ARGS :=
-ANSIBLE_EXTRA_ARGS_SEPARATED :=
 
 LOCAL_DEVELOPMENT_ARGS	:=
 ifeq (y,$(CONFIG_NEEDS_LOCAL_DEVELOPMENT_PATH))
@@ -177,32 +165,6 @@ export TOPDIR=./
 	echo "|"							;\
 	make -f scripts/build.Makefile help                             ;\
 	false)
-
-define YAML_ENTRY
-$(1)
-
-endef
-
-define YAML_ENTRY_SEP
-$(subst +, ,$(1))
-
-endef
-
-# We can transform most of .config things we need to using
-# looping on ANSIBLE_EXTRA_ARGS and converting those with
-# this target. If you need to do more complex fancy stuff
-# extend the EXTRA_VAR_INPUTS variable in your workflow with
-# your custom stuff.
-most_extra_vars:
-	@echo --- > $(KDEVOPS_EXTRA_VARS)
-	@$(foreach exp,$(ANSIBLE_EXTRA_ARGS),echo $(call YAML_ENTRY,$(subst =,: ,$(exp)) >> $(KDEVOPS_EXTRA_VARS)))
-
-# ANSIBLE_EXTRA_ARGS_SEPARATED is to be used for variables in .config
-# which are separted by spaces. We use a trick and assume .config variables
-# won't have the sign "+" so substitute spaces for "+" for looping over them and
-# then substitute the "+" for the space when echoing the variable again.
-most_extra_vars_separated:
-	@$(foreach exp,$(ANSIBLE_EXTRA_ARGS_SEPARATED),echo $(call YAML_ENTRY_SEP,$(subst =,: ,"$(exp)") >> $(KDEVOPS_EXTRA_VARS)))
 
 PHONY += $(EXTRA_VAR_INPUTS)
 
