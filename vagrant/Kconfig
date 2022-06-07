@@ -61,17 +61,25 @@ config VAGRANT_VCPUS_COUNT
 
 choice
 	prompt "How much GiB memory to use per guest"
-	default VAGRANT_MEM_2G
+	default VAGRANT_MEM_2G if !BOOTLINUX_TREE_NEXT
+	default VAGRANT_MEM_4G if BOOTLINUX_TREE_NEXT
 
 config VAGRANT_MEM_2G
 	bool "2"
 	help
-	  Use 2 GiB of RAM on guests.
+	  Use 2 GiB of RAM on guests. Most workflows should work well
+	  except for:
+	  - xfs/074 is known to fail on some old kernels due to the
+	    amount of RAM used by xfs_scratch, this issue should however
+	    be fixed upstream in xfsprogs.
+	  - git cloning linux-next requires > 2 GiB RAM if your clone is not
+	    shallow (BOOTLINUX_SHALLOW_CLONE)
 
 config VAGRANT_MEM_4G
 	bool "4"
 	help
-	  Use 4 GiB of RAM on guests.
+	  Use 4 GiB of RAM on guests. No known issues are known when using
+	  4 GiB of RAM on most workflows.
 
 config VAGRANT_MEM_8G
 	bool "8"
