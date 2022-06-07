@@ -35,3 +35,8 @@ devconfig_has_kotd_repo: False
 devconfig_kotd_repo: "http://ignore.com"
 devconfig_kotd_repo_name: "ignore"
 devconfig_enable_systemd_watchdog: False
+
+devconfig_enable_sysctl_tuning: False
+devconfig_enable_sysctl_mm_overcommit_memory: False
+devconfig_sysctl_conf: "/etc/sysctl.conf"
+devconfig_sysctl_mm_overcommit_memory: 0

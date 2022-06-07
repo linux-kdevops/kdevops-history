@@ -1,0 +1,83 @@
+config SYSCTL_TUNING
+	bool "Enable sysctl knob tuning"
+	default n
+	help
+	  Enable this to let you set specific sysctls on the target nodes
+	  after bootup. This step is done during bring up once. The sysctls
+	  are written to so they are persistent.
+
+if SYSCTL_TUNING
+
+config SYSCTL_TUNING_CONF
+	string "The syctl file to use"
+	default "/etc/sysctl.conf"
+	help
+	  Specifies the absolute path to sysctl.conf to use to write syctl
+	  values.
+
+config SYSCTL_TUNING_MM_OVERCOMMIT_MEMORY_ENABLE
+	bool "Enable overwriting vm.overcommit_memory"
+	default n
+	help
+	  Enable this to let you override the default sysctl setting for
+	  vm.overcommit_memory. This can be used to customize the method
+	  for kernel memory overcommitment.
+
+if SYSCTL_TUNING_MM_OVERCOMMIT_MEMORY_ENABLE
+
+choice
+	prompt "How to tune vm.overcommit_memory"
+	default SYSCTL_TUNING_MM_OVERCOMMIT_MEMORY_0
+
+config SYSCTL_TUNING_MM_OVERCOMMIT_MEMORY_0
+	bool "Set vm.overcommit_memory=0"
+	help
+	  This is the default, when vm.overcommit_memory=0 the kernel attempts
+	  to estimate the amount free memory left when userspace requests more
+	  memory. This is what userspace typically expects.
+
+config SYSCTL_TUNING_MM_OVERCOMMIT_MEMORY_1
+	bool "Set vm.overcommit_memory=1"
+	help
+	  This sets vm.overcommit_memory=1, and with this kernel pretends that
+	  there is always enough memory until it actually runs out. This is
+	  very useful to proove odd kernel failures with tests which have a low
+	  failure rate where you suspect the issue can be triggered due to OOM
+	  situations. Enabling this will surely trigger the OOM killer but
+	  will also force the kernel to OOM faster in areas where otherwise
+	  it would not have triggered faster. It also useful to proove or
+	  not faster when userspace triggers the OOM.
+
+	  It helps to provide an example where this can be useful. The fstests
+	  test xfs/074 is known to require a lot of memory due to its use of
+	  xfs_scratch. xfs_scratch has also long been obsolete and so it is
+	  disabled by default via fstests commit 591c8fb57d07 ("common/xfs:
+	  skip xfs_check unless the test runner forces us to"). The OOMs
+	  with xfs/074 can more easily be triggered by enabling
+	  vm.overcommit_memory=1.
+
+config SYSCTL_TUNING_MM_OVERCOMMIT_MEMORY_2
+	bool "Set vm.overcommit_memory=2"
+	help
+	  This will set vm.overcommit_memory=2. When this is set the kernel
+	  uses a "never overcommit" policy which attempts to prevent any
+	  overcommit of memory. Note that user_reserve_kbytes affects this
+	  policy.
+
+endchoice
+
+config SYSCTL_TUNING_MM_OVERCOMMIT_MEMORY
+	int "The value to set for vm.overcommit_memory"
+	default 0 if SYSCTL_TUNING_MM_OVERCOMMIT_MEMORY_0
+	default 1 if SYSCTL_TUNING_MM_OVERCOMMIT_MEMORY_1
+	default 2 if SYSCTL_TUNING_MM_OVERCOMMIT_MEMORY_2
+	help
+	  The value to use for vm.overcommit_memory. Setting this value to
+	  something other than vm.overcommit_memory=0 is very useful because
+	  there are a lot of programs that malloc() huge amounts of memory
+	  "just-in-case" but don't use much of it. It is also useful to
+	  trigger OOMs in the kernel faster.
+
+endif # SYSCTL_TUNING_MM_OVERCOMMIT_MEMORY_ENABLE
+
+endif # SYSCTL_TUNING

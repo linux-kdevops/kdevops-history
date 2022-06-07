@@ -482,6 +482,22 @@
     - devconfig_enable_systemd_watchdog|bool
   tags: [ 'systemd_watchdog' ]
 
+- name: Set sysctl vm.overcommit_memory={{ devconfig_sysctl_mm_overcommit_memory }}
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.posix.sysctl:
+    name: vm.overcommit_memory
+    sysctl_file: "{{ devconfig_sysctl_conf }}"
+    value: "{{ devconfig_sysctl_mm_overcommit_memory }}"
+    state: present
+    sysctl_set: yes
+    reload: yes
+  when:
+    - devconfig_enable_sysctl_tuning
+    - devconfig_enable_sysctl_mm_overcommit_memory
+  tags: [ 'sysctl' ]
+
 - name: Rev the kernel to the latest distribution kotd
   import_tasks: kotd-rev-kernel/main.yml
   when:

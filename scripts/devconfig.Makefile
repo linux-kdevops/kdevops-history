@@ -12,6 +12,20 @@ ifeq (y,$(CONFIG_KDEVOPS_TRY_INSTALL_KDEV_TOOLS))
 ANSIBLE_EXTRA_ARGS += devconfig_try_install_kdevtools=True
 endif
 
+ifeq (y,$(CONFIG_SYSCTL_TUNING))
+SYSCTL_EXTRA_ARGS :=
+SYSCTL_EXTRA_ARGS += devconfig_enable_sysctl_tuning=True
+SYSCTL_CONF:=$(subst ",,$(CONFIG_SYSCTL_TUNING_CONF))
+SYSCTL_EXTRA_ARGS += devconfig_sysctl_conf="$(SYSCTL_CONF)"
+
+ifeq (y,$(CONFIG_SYSCTL_TUNING_MM_OVERCOMMIT_MEMORY_ENABLE))
+SYSCTL_EXTRA_ARGS += devconfig_enable_sysctl_mm_overcommit_memory=True
+SYSCTL_MM_OVERCOMMIT_MEMORY:=$(subst ",,$(CONFIG_SYSCTL_TUNING_MM_OVERCOMMIT_MEMORY))
+SYSCTL_EXTRA_ARGS += devconfig_sysctl_mm_overcommit_memory=$(SYSCTL_MM_OVERCOMMIT_MEMORY)
+endif
+
+endif # CONFIG_SYSCTL_TUNING
+
 ifeq (y,$(CONFIG_KDEVOPS_DEVCONFIG_ENABLE_CONSOLE))
 ANSIBLE_EXTRA_ARGS += devconfig_enable_console=True
 GRUB_TIMEOUT:=$(subst ",,$(CONFIG_KDEVOPS_GRUB_TIMEOUT))
@@ -34,3 +48,19 @@ extend-extra-args-devconfig:
 		echo "devconfig_systemd_watchdog_reboot_timeout: '$(CONFIG_KDEVOPS_DEVCONFIG_SYSTEMD_WATCHDOG_TIMEOUT_REBOOT)'" >> $(KDEVOPS_EXTRA_VARS) ;\
 		echo "devconfig_systemd_watchdog_kexec_timeout: '$(CONFIG_KDEVOPS_DEVCONFIG_SYSTEMD_WATCHDOG_TIMEOUT_KEXEC)'" >> $(KDEVOPS_EXTRA_VARS) ;\
 	fi
+
+ifeq (y,$(CONFIG_SYSCTL_TUNING))
+PHONY += sysctl-tunings
+sysctl-tunings: $(KDEVOPS_NODES)
+	$(Q)ansible-playbook -i \
+		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/devconfig.yml \
+		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS) --tags vars,sysctl
+
+devconfig-help-menu:
+	@echo "Target node configuration options"
+	@echo "sysctl-tunings     - Sets the configured sysctl tunnings"
+	@echo ""
+
+HELP_TARGETS+=devconfig-help-menu
+ANSIBLE_EXTRA_ARGS += $(SYSCTL_EXTRA_ARGS)
+endif

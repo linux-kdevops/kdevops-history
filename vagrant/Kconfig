@@ -69,9 +69,10 @@ config VAGRANT_MEM_2G
 	help
 	  Use 2 GiB of RAM on guests. Most workflows should work well
 	  except for:
-	  - xfs/074 is known to fail on some old kernels due to the
-	    amount of RAM used by xfs_scratch, this issue should however
-	    be fixed upstream in xfsprogs.
+	  - xfs/074 is known to fail due to the amount of RAM used by the
+	    obsolete xfs_scratch. Since xfs_scratch is obsolete this test
+	    will not run by default unless the test runner uses
+	    FORCE_XFS_CHECK_PROG=yes
 	  - git cloning linux-next requires > 2 GiB RAM if your clone is not
 	    shallow (BOOTLINUX_SHALLOW_CLONE)
 

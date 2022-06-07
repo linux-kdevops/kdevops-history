@@ -235,6 +235,10 @@ menu "Bring up goals"
 source "kconfigs/Kconfig.bringup.goals"
 endmenu
 
+menu "Node sysctl configuration"
+source "kconfigs/Kconfig.sysctl"
+endmenu
+
 menu "Target workflows"
 source "kconfigs/workflows/Kconfig"
 endmenu
