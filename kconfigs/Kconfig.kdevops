@@ -68,17 +68,29 @@ config KDEVOPS_CUSTOM_SSH_KEXALGORITHMS
 
 config KDEVOPS_BASELINE_AND_DEV
 	bool "Enable both a baseline and development system per target test"
-	default y
+	default n
 	help
-	  By default two hosts are created, one to track a baseline, and another
-	  to do development on. If you want to reduce the amount of target hosts
-	  to only one disable this option, this would just means you have
-	  reboot to a different kernel if you want to switch between a baseline
-	  and a development kernel to test.
+	  By default kdevops will only spawn a baseline target node (local
+	  virtualization or cloud node) for your Linux kernel testing and
+	  development. If you have spare resources though it is useful to
+	  spawn two nodes per target test though, one to track the basline
+	  and another for development purposes or to help you reproduce issues
+	  should an issue be found on the baseline. You can enable the spare
+	  node by enabling this option. This allows you to for example
+	  to keep baseline testing moving forward as soon as an issue is found,
+	  so you can use the spare dev node to try to reproduce the issue.
+
+	  The spare dev nodes can also be useful to for example to enable
+	  developers in an ecosystem to login to instances with the target
+	  distribution / kernel release as well.
 
 	  If enabled, the host baseline will be created as well as the
 	  development host, the development hostname is the same as the baseline
 	  host but with an added "-dev" postfix.
+
+	  You are encouraged to leave this option disabled unles you really
+	  know you have spare resources for the additional dev nodes and know
+	  they are immediatey useful to you.
 
 config HAVE_DISTRO_SUPPORTS_EXTRA_ADDON
 	bool
