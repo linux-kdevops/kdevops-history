@@ -49,6 +49,7 @@ xfs/259 # lazy baseline - failure found in at least two sections - xfs_nocrc and
 xfs/263 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/270 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/273 # lazy baseline - failure found in at least two sections
+xfs/297 # started hanging after reducing RAM size to 2GB (no OOM killer) rate 1/20 - 1/100
 xfs/301 # fails in two sections xfs_reflink_1024 with a failure rate of 1/5 and xfs_nocrc for always https://gist.github.com/mcgrof/3567f39ea06ba785b3d66351cdcb22cf
 xfs/310
 xfs/439 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
