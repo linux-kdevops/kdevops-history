@@ -33,11 +33,9 @@ _vagrant_lacks_parallel()
 	return 0
 }
 
-echo 1
 # This is just a workaround for fedora since we have an old vagrant-libvirt
 # plugin that doesn't work with parallel
 ARG=
-echo 2
 if ! _vagrant_lacks_parallel; then
 	ARG='--no-parallel'
 fi
