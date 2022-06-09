@@ -56,33 +56,25 @@
   when:
     - build_qemu_now|bool
 
-- name: Create a qemu build directory
+- name: Nuke old build directory
   file:
     path: "{{ qemu_build_dir }}"
-    state: directory
+    state: absent
   tags: [ 'qemu', 'build-deps' ]
   when:
     - build_qemu_now|bool
 
 - name: run configure for qemu
-  command: "../configure --with-git-submodules=validate"
+  command: "./configure"
   tags: [ 'qemu', 'configure' ]
   args:
-    chdir: "{{ qemu_build_dir }}"
-  when:
-    - build_qemu_now|bool
-
-- name: manually update git submodules prior to running make
-  command: "./scripts/git-submodule.sh update"
-  tags: [ 'qemu', 'configure' ]
-  args:
-    chdir: "{{ qemu_build_dir }}"
+    chdir: "{{ qemu_data }}"
   when:
     - build_qemu_now|bool
 
 - name: Build qemu
   make:
-    chdir: "{{ qemu_build_dir }}"
+    chdir: "{{ qemu_data }}"
     params:
       NUM_THREADS: "{{ make_num_jobs }}"
   tags: [ 'qemu', 'build' ]
@@ -95,7 +87,7 @@
   become_method: sudo
   command: "{{ make }} install"
   args:
-    chdir: "{{ qemu_build_dir }}"
+    chdir: "{{ qemu_data }}"
   tags: [ 'qemu', 'install' ]
   when:
     - build_qemu_now|bool
