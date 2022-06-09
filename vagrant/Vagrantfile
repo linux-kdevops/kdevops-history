@@ -61,6 +61,12 @@ require 'rbconfig'
 # Mac OS X           virtualbox
 provider = "libvirt"
 
+# Are we in a nested virtualized environment? For now we just
+# do something different if we're not on bare metal. We may want
+# to do something different later to optimize this further but
+# we have to draw the line somewhere.
+nested = %x(which systemd-detect-virtd > /dev/null || systemd-detect-virt) != "none"
+
 case
 when @os.downcase.include?('linux')
   provider = "libvirt"
@@ -190,7 +196,9 @@ Vagrant.configure("2") do |config|
       # limitations, so its usage is discouraged. More info on qemu networking
       # options: http://people.gnome.org/~markmc/qemu-networking.html
       if ! libvirt_session
-        srv.vm.network "private_network", ip: server_data["ip"]
+        if ! nested
+          srv.vm.network "private_network", ip: server_data["ip"]
+        end
       else
         srv.vm.network "public_network", :type => "user"
       end
@@ -268,6 +276,12 @@ Vagrant.configure("2") do |config|
 	  libvirt.system_uri = global_data['libvirt_cfg']['system_uri']
 	  libvirt.socket = global_data['libvirt_cfg']['session_socket']
 	  libvirt.management_network_device = global_data['libvirt_cfg']['session_management_network_device']
+        else
+          if nested
+            libvirt.management_network_name = 'vagrant-libvirt-private'
+            libvirt.management_network_address = '192.168.124.0/24'
+	    libvirt.management_network_device = global_data['libvirt_cfg']['session_management_network_device']
+          end
 	end
         libvirt.memory = global_data["memory"]
         libvirt.cpus = global_data["cpus"]
