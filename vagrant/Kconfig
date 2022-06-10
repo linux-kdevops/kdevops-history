@@ -61,7 +61,7 @@ config VAGRANT_VCPUS_COUNT
 
 choice
 	prompt "How much GiB memory to use per guest"
-	default VAGRANT_MEM_2G if !BOOTLINUX_TREE_NEXT
+	default VAGRANT_MEM_3G if !BOOTLINUX_TREE_NEXT
 	default VAGRANT_MEM_4G if BOOTLINUX_TREE_NEXT
 
 config VAGRANT_MEM_2G
@@ -75,6 +75,13 @@ config VAGRANT_MEM_2G
 	    FORCE_XFS_CHECK_PROG=yes
 	  - git cloning linux-next requires > 2 GiB RAM if your clone is not
 	    shallow (BOOTLINUX_SHALLOW_CLONE)
+	  - xfs/084 and generic/627 often get killed by OOM killer and skipped
+
+config VAGRANT_MEM_3G
+	bool "3"
+	help
+	  Use 3 GiB of RAM on guests. No OOM killed tests observed when using
+	  3 GiB of RAM on most workflows.
 
 config VAGRANT_MEM_4G
 	bool "4"
@@ -102,6 +109,7 @@ endchoice
 config VAGRANT_MEM_MB
 	int "How much RAM to use per guest in MB"
 	default 2048 if VAGRANT_MEM_2G
+	default 3072 if VAGRANT_MEM_3G
 	default 4096 if VAGRANT_MEM_4G
 	default 8192 if VAGRANT_MEM_8G
 	default 16384 if VAGRANT_MEM_16G
