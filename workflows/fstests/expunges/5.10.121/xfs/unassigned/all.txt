@@ -1,0 +1,71 @@
+generic/050 # lazy baseline - failure found in at least two sections
+generic/074 # hung after 50 runs on xfs_nocrc due to nvme I/O timeout (may not be test related)
+generic/241
+generic/270 # lazy baseline - failure found in at least two sections (maybe related to)
+generic/273 # fails on xfs_reflink_1024 with a failure rate is 1/10 but chances are it will fail in others too https://gist.github.com/mcgrof/89d8349f899ff07ba4dda19264034db2
+generic/320 # failure rate is about 1/30 hung task on  xfs_reflink_normapbt https://gist.github.com/mcgrof/752cff159077b2fdf722d83382b1c337
+generic/373 # cross-fs reflink
+generic/374 # cross-fs dedupe
+generic/388 # fails on xfs_reflink with a failure rate of 1/20 and xfs_reflink_1024 with a failure rate of 1/5
+generic/418 # can sometimes take over 10 times the amount of time, no obvious failure yet requires manual introspection, failure rate is about 1/10
+generic/459 # lazy baseline - failure found in at least two sections
+generic/475 # failure rate is about 1/50 fails on xfs_reflink but failure seems generic see section failure for details https://gist.github.com/mcgrof/0495085f562470e6a8c8ead275c19796
+generic/476 # can sometimes take over 10 times the amount of time, no obvious failure, happened on xfs_nocrc_512 but also on ext4_defaults
+generic/482 # lazy baseline - failure found in at least two sections - fails on xfs_nocrc with a failure rate of 1/2 and on xfs_nocrc_512 with a failure rate is about 1/35
+generic/531 # failure rate is 1/5 hung task [1] complex backport required [2] [1] https://gist.github.com/mcgrof/91e1e16b8fbb8e09c6f6de8e9dc1ecd9 [2] deferred inode inactivation: https://lore.kernel.org/r/162812918259.2589546.16599271324044986858.stgit@magnolia
+generic/590 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
+generic/600 # failed after mote than 100 runs - looks like a test bug related to 1 second drift on clock change (set grace to 1653569363 but got grace 1653569362)
+generic/601 # fails on xfs_reflink_1024
+generic/607
+generic/623 # fixed by e4826691cc7e ("xfs: restore shutdown check in mapped write fault path") (v5.12)
+generic/631 # test hangs with overlayfs enabled - fixed by 6da1b4b1ab36 ("xfs: fix an ABBA deadlock in xfs_rename") in xfs-5.10.y-1
+generic/642 # failure found in at least two sections. failure rate is about 1/40
+generic/646 # fixed by 50d25484bebe ("xfs: sync lazy sb accounting on quiesce of read-only mounts") (v5.12)
+generic/648 # fails on xfs_reflink and xfs_reflink_normapbt
+generic/673
+shared/032 # hung due to nvme I/O timeout (may not be test related)
+xfs/005 # fails on many sections failure rate about 1/5, lazy baseline - failure found in at least two sections
+xfs/008 # lazy baseline - failure found in at least two sections
+xfs/014 # fails on section xfs_reflink_1024  failure rate is about 1/50 https://gist.github.com/mcgrof/822b449725fd069d1a13013e91929f70 and on xfs_logdev with a failure rate of failure rate 1/40
+xfs/033 # rare test bug - extra newline in golden output of xfs_repair - failed after more than 80 runs
+xfs/045 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
+xfs/057 # hangs after enabling CONFIG_XFS_DEBUG
+xfs/059
+xfs/060 # lazy baseline - failure found in at least two sections - failure rate about 1/35
+xfs/075 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
+xfs/095 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
+xfs/144 # test is obsolete and removed in upstream fstests
+xfs/116 # failed on xfs_nocrc_512 and on xfs_reflink_1024 several times. failure rate about 1/50.
+xfs/137 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
+xfs/145 # fixed by "xfs: fix chown leaking delalloc quota blocks when fssetxattr fails" in xfs-5.10.y-3
+xfs/154 # buggy test check for missing 'needsrepair' feature in 5.10, lazy baseline - failure found in at least two sections
+xfs/155 # xfs_repair hangs (possibly after reducing RAM size to 3GB)
+xfs/157
+xfs/158
+xfs/177
+xfs/185 # lazy baseline - failure found in at least two sections
+xfs/189 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
+xfs/195 # lazy baseline - failure found in at least two sections - xfs_nocrc after 5 runs, xfs_reflink after 70 runs
+xfs/216 # lazy baseline - failure found in at least two sections
+xfs/259 # lazy baseline - failure found in at least two sections - xfs_nocrc and xfs_reflink_1024 after more than 100 runs
+xfs/263 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
+xfs/270 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
+xfs/273 # lazy baseline - failure found in at least two sections
+xfs/297 # started hanging after reducing RAM size to 2GB (no OOM killer) rate 1/20 - 1/100
+xfs/301 # fails in two sections xfs_reflink_1024 with a failure rate of 1/5 and xfs_nocrc for always https://gist.github.com/mcgrof/3567f39ea06ba785b3d66351cdcb22cf
+xfs/310
+xfs/439 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
+xfs/444 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
+xfs/449 # lazy baseline - failure found in at least two sections
+xfs/493 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
+xfs/495 # lazy baseline - failure found in at least two sections
+xfs/503 # lazy baseline - failure found in at least two sections
+xfs/506 # lazy baseline - failure found in at least two sections
+xfs/513 # fixed by "xfs: show the proper user quota options" in xfs-5.10.y-1, lazy baseline - failure found in at least two sections
+xfs/516 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
+xfs/521 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
+xfs/527 # fixed by "xfs: fix incorrect root dquot corruption error when switching group/project quota types" in xfs-5.10.y-3 (requires CONFIG_XFS_DEBUG)
+xfs/528 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
+xfs/539 # fixed by "xfs: Skip repetitive warnings about mount options" in xfs-5.10.y-4, lazy baseline - failure found in at least two sections
+xfs/542 # fixed by "xfs: punch out data fork delalloc blocks on COW writeback failure" in xfs-5.10.y-6
+xfs/544 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files

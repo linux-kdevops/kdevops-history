@@ -1,0 +1,2 @@
+xfs/167
+xfs/291 # failure rate is ~1/20 on debian/buster. xfs_repair (v4.20) fatal error -- unable to add AG 2 reverse-mapping data to btree. This test may need fixes similar to generic/204 to deal with reflink disk space calculation (see commits 1e24e517,a8f5f152e)
