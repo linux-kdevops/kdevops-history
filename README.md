@@ -1,26 +1,22 @@
 # kdevops
 
-kdevops provides a devops environment for Linux kernel development and testing.
-It makes heavy use of local ansible roles and optionally lets you use
-vagrant or terraform. kdevops is Linux distribution agnostic, and also supports
-OS X. It aims at letting you configure these tools and bring up a set
-of nodes for Linux kernel development as fast as possible.
-
-You can use this project as a template, or you can fork it for your own needs.
-Better yet, if you really have custom changes and you want to keep them
-private, this use is encouraged and supported, the best to do this however
-is for you to consider using kdevops as a git subtree.
+kdevops provides a framework for Linux kernel development and testing.
+It makes use of local ansible roles and optionally lets you use
+vagrant or terraform. kdevops is compatible with Linux in a distribution
+agnostic manner and has support for OS X as well. It aims to provision nodes and
+tooling for kernel development in a flexible, configurable and speedy manner.
 
 ## Quick kdevops demos
 
-To give you the idea of the power and goals behind kdevops we provide a few
+To give you an idea of the power and goals behind kdevops we provide a few
 quick demos of what you can do below. More workflows will be added with time.
-There is documentation below on how to get started to add new workflows.
+Additional documentation detailing how to get started as well as how to add new
+workflows follows the quick demos.
 
 ### Start kernel hacking in just 4 commands
 
-Configure kdevops to use bare metal, cloud or virtualization solution, pick
-your distribution of choise, enable the Linux kernel workflow, select target
+Configure kdevops to use bare metal, cloud or a local vm based solution, pick
+your distribution of choice, enable the Linux kernel workflow, select target
 git tree, and get up and running on a freshly compiled Linux git tree in just
 4 commands:
 
@@ -50,7 +46,7 @@ workflow you can just run:
 
 It is best to think about kdevops in phases of your desired target workflow.
 The first thing you need to do is get systems up. You either are going to
-use baremetal guests, use a cloud solution, or spawn virtualized guests.
+use baremetal hosts, use a cloud solution, or spawn local virtualized guests.
 
 The phases of use of kdevops can be split into:
 
