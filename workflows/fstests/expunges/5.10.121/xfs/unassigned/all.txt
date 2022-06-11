@@ -17,10 +17,7 @@ generic/590 # lazy baseline - failure found in at least two sections - when host
 generic/600 # failed after mote than 100 runs - looks like a test bug related to 1 second drift on clock change (set grace to 1653569363 but got grace 1653569362)
 generic/601 # fails on xfs_reflink_1024
 generic/607
-generic/623 # fixed by e4826691cc7e ("xfs: restore shutdown check in mapped write fault path") (v5.12)
-generic/631 # test hangs with overlayfs enabled - fixed by 6da1b4b1ab36 ("xfs: fix an ABBA deadlock in xfs_rename") in xfs-5.10.y-1
 generic/642 # failure found in at least two sections. failure rate is about 1/40
-generic/646 # fixed by 50d25484bebe ("xfs: sync lazy sb accounting on quiesce of read-only mounts") (v5.12)
 generic/648 # fails on xfs_reflink and xfs_reflink_normapbt
 generic/673
 shared/032 # hung due to nvme I/O timeout (may not be test related)
@@ -37,7 +34,6 @@ xfs/095 # lazy baseline - failure found in at least two sections - when host use
 xfs/144 # test is obsolete and removed in upstream fstests
 xfs/116 # failed on xfs_nocrc_512 and on xfs_reflink_1024 several times. failure rate about 1/50.
 xfs/137 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
-xfs/145 # fixed by "xfs: fix chown leaking delalloc quota blocks when fssetxattr fails" in xfs-5.10.y-3
 xfs/154 # buggy test check for missing 'needsrepair' feature in 5.10, lazy baseline - failure found in at least two sections
 xfs/155 # xfs_repair hangs (possibly after reducing RAM size to 3GB)
 xfs/157
@@ -61,10 +57,8 @@ xfs/493 # lazy baseline - failure found in at least two sections - when host use
 xfs/495 # lazy baseline - failure found in at least two sections
 xfs/503 # lazy baseline - failure found in at least two sections
 xfs/506 # lazy baseline - failure found in at least two sections
-xfs/513 # fixed by "xfs: show the proper user quota options" in xfs-5.10.y-1, lazy baseline - failure found in at least two sections
 xfs/516 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/521 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
-xfs/527 # fixed by "xfs: fix incorrect root dquot corruption error when switching group/project quota types" in xfs-5.10.y-3 (requires CONFIG_XFS_DEBUG)
 xfs/528 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/539 # fixed by "xfs: Skip repetitive warnings about mount options" in xfs-5.10.y-4, lazy baseline - failure found in at least two sections
 xfs/542 # fixed by "xfs: punch out data fork delalloc blocks on COW writeback failure" in xfs-5.10.y-6
