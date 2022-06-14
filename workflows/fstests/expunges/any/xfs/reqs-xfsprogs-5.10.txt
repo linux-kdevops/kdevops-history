@@ -1,0 +1,2 @@
+# failure from running with xfsprogs 5.10 on debian/bullseye
+xfs/540 # fixed in xfsprogs 5.13
