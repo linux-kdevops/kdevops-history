@@ -460,7 +460,7 @@
   find:
     paths: "{{ fstests_data_target }}"
     recurse: yes
-    patterns: "*.bad,*.dmesg"
+    patterns: "*.out.bad,*.dmesg"
   register: failed_tests
 
 - name: Copy data for tests that failed
