@@ -227,7 +227,7 @@
   loop_control:
     label: "Ensuring the user {{ item }} exists"
 
-- name: Verify section name {{ fstests_section }} exists on fstests config file /var/lib/xfstests/configs/.config
+- name: Verify section name {{ fstests_section }} exists on fstests config file
   vars:
     fstests_section: "{{ ansible_ssh_host | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
   tags: [ 'oscheck', 'fstests', 'run_tests', 'section' ]
@@ -237,7 +237,7 @@
   register: section_grep
   failed_when: not section_grep.changed
   lineinfile:
-    path: /var/lib/xfstests/configs/.config
+    path: "{{ fstests_data_target }}/configs/{{ ansible_ssh_host }}.config"
     regexp: "\\[{{ fstests_section }}\\]$"
     line: ''
   check_mode: yes
