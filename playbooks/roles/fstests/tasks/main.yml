@@ -480,11 +480,19 @@
 
 - name: Check if respective bad full file exists exists
   tags: [ 'oscheck', 'fstests', 'copy_results', 'failed_tests' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  vars:
+    tests_full_group_dir: "{{ item.path | dirname }}"
+    tests_group_dir: "{{ tests_full_group_dir | split('/') | last }}"
+    tests_full_name: "{{ item.path | basename | split('.') | first }}.full"
+    tests_name: "{{ tests_group_dir }}/{{ tests_full_name }}"
   stat:
-    path: "{{ item.path | splitext | first }}.full"
+    path: "{{ tests_full_group_dir }}/{{ tests_full_name }}"
   with_items: "{{ failed_tests.files }}"
   loop_control:
-    label: "Looking for {{ item.path | splitext | first }}.full"
+    label: "Looking for {{ tests_name }}"
   register: bad_full_file_stats
   when:
     - failed_tests.matched > 0
@@ -494,13 +502,18 @@
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
+  vars:
+    tests_full_group_dir: "{{ item.item.path | dirname }}"
+    tests_group_dir: "{{ tests_full_group_dir | split('/') | last }}"
+    tests_full_name: "{{ item.item.path | basename | split('.') | first }}.full"
+    tests_name: "{{ tests_group_dir }}/{{ tests_full_name }}"
   fetch:
     src: "{{ item.stat.path }}"
     dest: "{{ fstests_results_target }}/{{ item.stat.path | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
     flat: yes
   with_items: "{{ bad_full_file_stats.results }}"
   loop_control:
-    label: "Copying over {{ item.stat.path }}"
+    label: "Copying over {{ tests_name }}"
   when:
     - failed_tests.matched > 0
     - item.stat.exists
