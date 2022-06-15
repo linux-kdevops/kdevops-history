@@ -42,6 +42,12 @@ workflow you can just run:
   * `make blktests`
   * `make blktests-baseline`
 
+## kdevops chat server
+
+We have a public chat server up, for now we use discord:
+
+  * https://bit.ly/linux-kdevops-chat
+
 ## Parts to kdevops 
 
 It is best to think about kdevops in phases of your desired target workflow.
