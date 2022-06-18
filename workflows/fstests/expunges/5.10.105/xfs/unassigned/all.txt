@@ -1,5 +1,6 @@
 generic/050 # lazy baseline - failure found in at least two sections
 generic/074 # hung after 50 runs on xfs_nocrc due to nvme I/O timeout (may not be test related)
+generic/176 # hung after 5 runs
 generic/241
 generic/270 # lazy baseline - failure found in at least two sections (maybe related to)
 generic/273 # fails on xfs_reflink_1024 with a failure rate is 1/10 but chances are it will fail in others too https://gist.github.com/mcgrof/89d8349f899ff07ba4dda19264034db2
