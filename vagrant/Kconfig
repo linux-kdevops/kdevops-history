@@ -61,8 +61,7 @@ config VAGRANT_VCPUS_COUNT
 
 choice
 	prompt "How much GiB memory to use per guest"
-	default VAGRANT_MEM_3G if !BOOTLINUX_TREE_NEXT
-	default VAGRANT_MEM_4G if BOOTLINUX_TREE_NEXT
+	default VAGRANT_MEM_4G
 
 config VAGRANT_MEM_2G
 	bool "2"
