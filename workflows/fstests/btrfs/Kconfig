@@ -88,4 +88,20 @@ config FSTESTS_BTRFS_SECTION_SIMPLE_ZNS
 	      MKFS_OPTIONS='-f -d single -m single'
 	      FSTYP=btrfs
 
+endif # FSTESTS_BTRFS_MANUAL_COVERAGE
+
+if !FSTESTS_BTRFS_MANUAL_COVERAGE
+
+config FSTESTS_BTRFS_SECTION_RAID56
+	bool
+	default y
+
+config FSTESTS_BTRFS_SECTION_NORAID56
+	bool
+	default n
+
+config FSTESTS_BTRFS_SECTION_SIMPLE_ZNS
+	bool
+	default y
+
 endif # !FSTESTS_BTRFS_MANUAL_COVERAGE

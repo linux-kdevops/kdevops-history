@@ -272,6 +272,38 @@ endif # FSTESTS_XFS_MANUAL_COVERAGE
 
 if !FSTESTS_XFS_MANUAL_COVERAGE
 
+config FSTESTS_XFS_SECTION_CRC
+	bool
+	default y
+
+config FSTESTS_XFS_SECTION_NOCRC
+	bool
+	default y
+
+config FSTESTS_XFS_SECTION_NOCRC_512
+	bool
+	default y
+
+config FSTESTS_XFS_SECTION_REFLINK
+	bool
+	default y
+
+config FSTESTS_XFS_SECTION_REFLINK_1024
+	bool
+	default y
+
+config FSTESTS_XFS_SECTION_REFLINK_NORMAPBT
+	bool
+	default y
+
+config FSTESTS_XFS_SECTION_LOGDEV
+	bool
+	default y
+
+config FSTESTS_XFS_SECTION_RTDEV
+	bool
+	default n
+
 config FSTESTS_XFS_SECTION_BIGBLOCK
 	bool
 	default y if HAVE_DISTRO_XFS_SUPPORTS_BIGBLOCKS
