@@ -321,6 +321,46 @@ config BLKTESTS_SECTION_ZBD
 
 endif # BLKTESTS_MANUAL_COVERAGE
 
+if !BLKTESTS_MANUAL_COVERAGE
+
+config BLKTESTS_SECTION_BLOCK
+	bool
+	default y
+
+config BLKTESTS_SECTION_LOOP
+	bool
+	default y
+
+config BLKTESTS_SECTION_META
+	bool
+	default n
+
+config BLKTESTS_SECTION_NBD
+	bool
+	default y
+
+config BLKTESTS_SECTION_NVME
+	bool
+	default y
+
+config BLKTESTS_SECTION_NVMEMP
+	bool
+	default n
+
+config BLKTESTS_SECTION_SCSI
+	bool
+	default y
+
+config BLKTESTS_SECTION_SRP
+	bool
+	default y
+
+config BLKTESTS_SECTION_ZBD
+	bool
+	default y
+
+endif # !BLKTESTS_MANUAL_COVERAGE
+
 endmenu
 
 endif # KDEVOPS_WORKFLOW_ENABLE_BLKTESTS
