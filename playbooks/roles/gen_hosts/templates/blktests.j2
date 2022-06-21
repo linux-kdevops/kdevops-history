@@ -1,0 +1,23 @@
+[all]
+{% for test_type in blktests_enabled_test_types %}
+{{ kdevops_host_prefix }}-{{ test_type }}
+{% if kdevops_baseline_and_dev %}
+{{ kdevops_host_prefix }}-{{ test_type }}-dev
+{% endif %}
+{% endfor %}
+[all:vars]
+ansible_python_interpreter =  "{{ kdevops_python_interpreter }}"
+[baseline]
+{% for test_type in blktests_enabled_test_types %}
+{{ kdevops_host_prefix }}-{{ test_type }}
+{% endfor %}
+[baseline:vars]
+ansible_python_interpreter =  "{{ kdevops_python_interpreter }}"
+[dev]
+{% if kdevops_baseline_and_dev %}
+  {% for test_type in blktests_enabled_test_types %}
+{{ kdevops_host_prefix }}-{{ test_type }}-dev
+  {% endfor %}
+{% endif %}
+[dev:vars]
+ansible_python_interpreter =  "{{ kdevops_python_interpreter }}"

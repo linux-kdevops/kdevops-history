@@ -52,16 +52,6 @@ if [[ "$ANSIBLE_ENABLE" != "y" ]]; then
 	ENABLEANSIBLE="false"
 fi
 
-cat_template_hosts_sed()
-{
-	cat $1 | sed -e \
-		'
-		s|@KDEVOPSPYTHONINTERPRETER@|'"$KDEVOPSPYTHONINTERPRETER"'|g;
-		s|@KDEVOPSPYTHONOLDINTERPRETER@|'"$KDEVOPSPYTHONOLDINTERPRETER"'|g;
-		s|@KDEVOPSHOSTSPREFIX@|'"$KDEVOPSHOSTSPREFIX"'|g;
-		' | cat -s
-}
-
 cat_template_nodes_sed()
 {
 	cat $1 | sed -e \

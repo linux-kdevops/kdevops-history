@@ -53,7 +53,7 @@ endif
 INCLUDES = -I include/
 CFLAGS += $(INCLUDES)
 
-export KDEVOPS_HOSTS_TEMPLATE := $(KDEVOPS_HOSTFILE).in
+export KDEVOPS_HOSTS_TEMPLATE := $(KDEVOPS_HOSTFILE).j2
 export KDEVOPS_HOSTS := $(KDEVOPS_HOSTFILE)
 
 LOCAL_DEVELOPMENT_ARGS	:=
@@ -140,7 +140,9 @@ KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK:=$(subst ",,$(CONFIG_KDEVOPS_ANSIBLE_PROVISIO
 
 export TOPDIR=./
 
-# disable built-in rules for this file
+include scripts/gen-hosts.Makefile
+
+# disable built-in rules for this
 .SUFFIXES:
 
 .config:
@@ -179,7 +181,11 @@ endif
 
 DEFAULT_DEPS += $(KDEVOPS_HOSTS)
 $(KDEVOPS_HOSTS): .config $(KDEVOPS_HOSTS_TEMPLATE)
-	$(Q)$(TOPDIR)/scripts/gen_hosts.sh
+	$(Q)ansible-playbook --connection=local \
+		--inventory localhost, \
+		$(KDEVOPS_PLAYBOOKS_DIR)/gen_hosts.yml \
+		-e 'ansible_python_interpreter=/usr/bin/python3' \
+		--extra-vars=@./extra_vars.yaml
 
 DEFAULT_DEPS += $(KDEVOPS_NODES)
 $(KDEVOPS_NODES): $(KDEVOPS_NODES_TEMPLATES) .config

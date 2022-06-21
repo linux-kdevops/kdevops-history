@@ -1,0 +1,151 @@
+---
+- name: Import optional extra_args file
+  include_vars: "{{ item }}"
+  ignore_errors: yes
+  with_first_found:
+    - files:
+      - "../extra_vars.yml"
+      - "../extra_vars.yaml"
+      - "../extra_vars.json"
+      skip: true
+  tags: vars
+
+- name: verify ansible host template file exists {{ kdevops_hosts_template_full_path }}
+  stat:
+    path: "{{ kdevops_hosts_template_full_path }}"
+  register: ansible_hosts_template
+
+- name: Set fstests config file variable for {{ fstests_fstyp }}
+  set_fact:
+    is_fstests: True
+    fs_config_path: "{{ kdevops_playbooks_dir_full_path }}/{{ fs_config_role_path }}"
+  when:
+    - kdevops_workflows_dedicated_workflow
+    - kdevops_workflow_enable_fstests
+    - ansible_hosts_template.stat.exists
+  tags: vars
+
+- name: verify fstest config file file exists {{ fs_config_path }}
+  stat:
+    path: "{{ fs_config_path }}"
+  register: fstests_config_file_reg
+  when:
+    - is_fstests
+
+- name: Generate the ansible hosts file
+  tags: [ 'hosts' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  template:
+    src: "{{ kdevops_hosts_template }}"
+    dest: "{{ topdir_path }}/{{ kdevops_hosts }}"
+    force: yes
+    trim_blocks: True
+    lstrip_blocks: True
+  when:
+    - not kdevops_workflows_dedicated_workflow
+    - ansible_hosts_template.stat.exists
+
+- name: Set empty enabled test types list for fstests
+  tags: [ 'hosts' ]
+  set_fact:
+    fstests_enabled_test_types: []
+  when:
+    - is_fstests
+    - ansible_hosts_template.stat.exists
+
+- name: Check which fstests test types are enabled
+  register: fstests_enabled_test_types_reg
+  vars:
+    fs: "{{ fstests_fstyp | upper }}"
+    config_val: "{{ 'CONFIG_FSTESTS_' + fs + '_SECTION_' }}"
+    fs_config_data: "{{ lookup('file', fs_config_path) }}"
+    sections_without_default: "{{ fs_config_data | regex_replace('\\[default\\]', multiline=True) }}"
+    sections_lines: "{{ sections_without_default | regex_findall('^\\[(.*)', multiline=True) }}"
+    clean_section_lines: "{{ sections_lines | regex_replace('\\[') | regex_replace('\\]') }}"
+    clean_section_lines_without_fsname: "{{ clean_section_lines | regex_replace(fstests_fstyp + '_') }}"
+    config_sections_targets: "{{ clean_section_lines_without_fsname |  replace(\"'\", '') | split(', ') }}"
+  lineinfile:
+    path: "{{ topdir_path }}/.config"
+    regexp: '^({{ config_val + item.upper() }})=y'
+    line: ''
+  check_mode: yes
+  with_items: "{{ config_sections_targets }}"
+  loop_control:
+    label: "Checking for {{ config_val + item.upper() }}"
+  when:
+    - is_fstests
+    - ansible_hosts_template.stat.exists
+
+- name: Now expand the list of enabled fstests for valid configuration sections
+  tags: [ 'hosts' ]
+  set_fact:
+    fstests_enabled_test_types: "{{ fstests_enabled_test_types  + [ fstests_fstyp + '-' + item.item | regex_replace('_', '-') ] }}"
+  with_items: "{{ fstests_enabled_test_types_reg.results }}"
+  loop_control:
+    label: "Checking for {{ item.item }} "
+  when:
+    - is_fstests
+    - ansible_hosts_template.stat.exists
+    - item.changed
+
+- name: Generate the ansible hosts file for a dedicated fstests setup
+  tags: [ 'hosts' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  vars:
+    fs_config_data: "{{ lookup('file', fs_config_path) }}"
+    sections_without_default: "{{ fs_config_data | regex_replace('\\[default\\]', multiline=True) }}"
+    sections_lines: "{{ sections_without_default | regex_findall('^\\[(.*)', multiline=True) }}"
+    clean_section_lines: "{{ sections_lines | regex_replace('\\[') | regex_replace('\\]') }}"
+    sections_replace_underscore: "{{ clean_section_lines |  replace('_', '-') }}"
+    sections: "{{ sections_replace_underscore |  replace(\"'\", '') | split(', ') }}"
+  template:
+    src: "{{ kdevops_hosts_template }}"
+    dest: "{{ topdir_path }}/{{ kdevops_hosts }}"
+    force: yes
+    trim_blocks: True
+    lstrip_blocks: True
+  when:
+    - is_fstests
+    - ansible_hosts_template.stat.exists
+
+- name: Infer enabled blktests test section types
+  vars:
+    kdevops_config_data: "{{ lookup('file', topdir_path + '/.config') }}"
+    config_val: "CONFIG_BLKTESTS_SECTION_"
+    config_block_test_types: "{{ kdevops_config_data | regex_findall('^' + config_val + '(.*)=y$', multiline=True) }}"
+    config_block_test_type_names: "{{ config_block_test_types | lower }}"
+  set_fact:
+    blktests_enabled_test_types: "{{ config_block_test_type_names }}"
+  when:
+    - kdevops_workflows_dedicated_workflow
+    - kdevops_workflow_enable_blktests
+    - ansible_hosts_template.stat.exists
+
+- name: debug inferring block test types
+  debug:
+    var: blktests_enabled_test_types
+  when:
+    - False
+    - kdevops_workflows_dedicated_workflow
+    - kdevops_workflow_enable_blktests
+    - ansible_hosts_template.stat.exists
+
+- name: Generate the ansible hosts file for a dedicated blktests setup
+  tags: [ 'hosts' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  template:
+    src: "{{ kdevops_hosts_template }}"
+    dest: "{{ topdir_path }}/{{ kdevops_hosts }}"
+    force: yes
+    trim_blocks: True
+    lstrip_blocks: True
+  when:
+    - kdevops_workflows_dedicated_workflow
+    - kdevops_workflow_enable_blktests
+    - ansible_hosts_template.stat.exists

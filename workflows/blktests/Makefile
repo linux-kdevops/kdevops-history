@@ -19,8 +19,7 @@ ifeq (y,$(CONFIG_WORKFLOWS_DEDICATED_WORKFLOW))
 # If you disable WORKFLOWS_DEDICATED_WORKFLOW you are on your own!
 export KDEVOPS_NODES_TEMPLATE :=
 
-export KDEVOPS_HOSTS_TEMPLATE := workflows/blktests/hosts_generated.in
-KDEVOPS_WORKFLOW_BLKTESTS_CLEAN += $(KDEVOPS_HOSTS_TEMPLATE)
+export KDEVOPS_HOSTS_TEMPLATE := blktests.j2
 endif
 
 BLKTESTS_GIT:=$(subst ",,$(CONFIG_BLKTESTS_GIT))
@@ -62,11 +61,6 @@ extend-extra-args-blktests:
 	@if [[ "$(CONFIG_KDEVOPS_WORKFLOW_ENABLE_BLKTESTS)" == "y" ]]; then \
 		echo "blktests_test_devs: '$(CONFIG_BLKTESTS_TEST_DEVS)'" >> $(KDEVOPS_EXTRA_VARS) ;\
 	fi
-
-ifeq (y,$(CONFIG_WORKFLOWS_DEDICATED_WORKFLOW))
-$(KDEVOPS_HOSTS_TEMPLATE): .config
-	$(Q)$(TOPDIR)/scripts/workflows/blktests/gen_manual_hosts.sh
-endif
 
 blktests:
 	$(Q)ansible-playbook -f 30 -i hosts playbooks/blktests.yml --skip-tags run_tests,copy_results $(LIMIT_HOSTS)

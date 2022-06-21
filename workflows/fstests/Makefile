@@ -17,8 +17,7 @@ ifeq (y,$(CONFIG_WORKFLOWS_DEDICATED_WORKFLOW))
 # If you disable WORKFLOWS_DEDICATED_WORKFLOW you are on your own!
 export KDEVOPS_NODES_TEMPLATE :=
 
-export KDEVOPS_HOSTS_TEMPLATE := workflows/fstests/$(FSTYP)/hosts_generated.in
-KDEVOPS_WORKFLOW_FSTESTS_CLEAN += $(KDEVOPS_HOSTS_TEMPLATE)
+export KDEVOPS_HOSTS_TEMPLATE := fstests.j2
 endif
 
 FSTESTS_GIT:=$(subst ",,$(CONFIG_FSTESTS_GIT))
@@ -27,6 +26,8 @@ FSTESTS_DATA_TARGET:=$(subst ",,$(CONFIG_FSTESTS_DATA_TARGET))
 
 FSTESTS_ARGS += fstests_git=$(FSTESTS_GIT)
 FSTESTS_ARGS += fstests_fstyp='$(FSTYP)'
+FS_CONFIG='$(FSTYP)/$(FSTYP).config'
+FSTESTS_ARGS += fs_config_role_path='roles/fstests/templates/$(FS_CONFIG)'
 FSTESTS_ARGS += fstests_data=\"$(FSTESTS_DATA)\"
 FSTESTS_ARGS += fstests_setup_system='$(FSTESTS_SETUP_SYSTEM)'
 FSTESTS_ARGS += fstests_data_target='$(FSTESTS_DATA_TARGET)'
@@ -100,11 +101,6 @@ ifeq (y,$(CONFIG_KERNEL_CI))
 FSTEST_KERNEL_CI_LOOP := scripts/workflows/fstests/run_kernel_ci.sh
 FSTEST_KERNEL_CI_LOOP_KOTD := scripts/workflows/fstests/run_kernel_ci_kotd.sh
 endif # CONFIG_KERNEL_CI
-
-ifeq (y,$(CONFIG_WORKFLOWS_DEDICATED_WORKFLOW))
-$(KDEVOPS_HOSTS_TEMPLATE): .config
-	$(Q)$(TOPDIR)/scripts/workflows/fstests/$(FSTYP)/gen_manual_hosts.sh
-endif
 
 fstests: $(KDEVOPS_EXTRA_VARS)
 	$(Q)ansible-playbook -f 30 -i hosts playbooks/fstests.yml --skip-tags run_tests,copy_results $(LIMIT_HOSTS)

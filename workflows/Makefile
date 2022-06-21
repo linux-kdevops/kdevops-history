@@ -13,10 +13,12 @@ endif # CONFIG_BOOTLINUX == y
 KDEVOPS_WORKFLOW_FSTESTS_CLEAN :=
 
 ifeq (y,$(CONFIG_KDEVOPS_WORKFLOW_ENABLE_FSTESTS))
+WORKFLOW_ARGS += kdevops_workflow_enable_fstests='True'
 include workflows/fstests/Makefile
 endif # CONFIG_KDEVOPS_WORKFLOW_ENABLE_FSTESTS == y
 
 ifeq (y,$(CONFIG_KDEVOPS_WORKFLOW_ENABLE_BLKTESTS))
+WORKFLOW_ARGS += kdevops_workflow_enable_blktests='True'
 include workflows/blktests/Makefile
 endif # CONFIG_KDEVOPS_WORKFLOW_ENABLE_BLKTESTS == y
 
