@@ -1,0 +1,38 @@
+--- playbooks/roles/build_qemu/tasks/install-deps/fedora/main.yml
++++ playbooks/roles/build_qemu/tasks/install-deps/fedora/main.yml
+@@ -14,7 +14,7 @@
+       - ImageMagick
+       - ImageMagick-libs
+       - LibRaw
+-      - SDL2-2
++      - SDL2
+       - SDL2-devel
+       - SDL2_image
+       - SDL2_image-devel
+@@ -141,7 +141,7 @@
+       - libiscsi
+       - libiscsi-devel
+       - libjpeg-turbo-devel
+-      - liblqr
++      - liblqr-1
+       - libmount-devel
+       - libmpc
+       - libnfs
+@@ -151,7 +151,7 @@
+       - libpng-devel
+       - libraqm
+       - libraw1394
+-      - librdmacm-39
++      - librdmacm
+       - libsamplerate
+       - libseccomp-devel
+       - libselinux-devel
+@@ -261,7 +261,7 @@
+       - vte-profile
+       - vte291
+       - vte291
+-      - wayland
++      - wayland-devel
+       - xen-devel
+       - xen-libs
+       - xen-licenses

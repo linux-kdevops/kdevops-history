@@ -3,12 +3,15 @@
 You must be on a recent Linux distribution or OS X. You must have installed:
 
   * ansible
-  * python
-  * ncurses-devel
   * make
-  * gcc
-  * bison
-  * flex
+
+Then just run:
+
+  * `make menuconfig-deps`
+
+Then you can now run:
+
+  * `make menuconfig`
 
 If you enable vagrant or terraform *we* try to install it for you along with
 their dependencies, including the vagrant-libvirt plugin. The dependency chain
@@ -29,6 +32,8 @@ Examples of well tested rolling distributions recommended if using vagrant:
 
   * Debian testing
   * OpenSUSE Tumbleweed
+  * Fedora
+  * Latest Ubuntu
 
 If using terraform just ensure you can upgrade terraform to the latest release
 regularly.

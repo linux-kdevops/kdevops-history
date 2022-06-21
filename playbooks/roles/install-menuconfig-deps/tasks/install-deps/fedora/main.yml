@@ -1,0 +1,15 @@
+---
+- name: Install kdevops generic dependencies
+  become: yes
+  become_method: sudo
+  dnf:
+    name:
+      - gcc
+      - make
+      - bison
+      - flex
+      - m4
+      - bc
+      - sed
+      - ncurses-devel
+    state: present

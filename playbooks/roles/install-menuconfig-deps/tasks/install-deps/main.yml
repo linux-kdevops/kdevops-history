@@ -1,0 +1,21 @@
+---
+- name: Import optional distribution specific variables
+  include_vars: "{{ item }}"
+  ignore_errors: yes
+  with_first_found:
+    - files:
+      - "{{ ansible_facts['os_family']|lower }}.yml"
+      skip: true
+  tags: vars
+
+- name: distribution specific setup
+  import_tasks: debian/main.yml
+  when: ansible_facts['os_family']|lower == 'debian'
+- import_tasks: suse/main.yml
+  when: ansible_facts['os_family']|lower == 'suse'
+- import_tasks: redhat/main.yml
+  when:
+    - ansible_facts['os_family']|lower == 'redhat'
+    - ansible_facts['distribution']|lower != "fedora"
+- import_tasks: fedora/main.yml
+  when: ansible_facts['distribution']|lower == "fedora"
