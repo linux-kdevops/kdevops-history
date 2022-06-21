@@ -96,12 +96,7 @@ if WORKFLOWS_DEDICATED_WORKFLOW
 
 choice
 	prompt "Dedicated target Linux test workflow"
-	default KDEVOPS_WORKFLOW_ENABLE_NONE
-
-config KDEVOPS_WORKFLOW_ENABLE_NONE
-	bool "None"
-	help
-	 This essentially disables all workflow tests.
+	default KDEVOPS_WORKFLOW_ENABLE_FSTESTS
 
 config KDEVOPS_WORKFLOW_DEDICATE_FSTESTS
 	bool "fstests"
