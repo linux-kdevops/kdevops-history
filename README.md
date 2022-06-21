@@ -1,5 +1,9 @@
 # kdevops
 
+The master git repo for kdevops is:
+
+  * https://github.com/linux-kdevops/kdevops
+
 kdevops provides a framework for Linux kernel development and testing.
 It makes use of local ansible roles and optionally lets you use
 vagrant or terraform. kdevops is compatible with Linux in a distribution
