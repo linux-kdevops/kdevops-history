@@ -16,10 +16,13 @@ export KDEVOPS_EXTRA_VARS ?=			extra_vars.yaml
 export KDEVOPS_PLAYBOOKS_DIR :=			playbooks
 export KDEVOPS_HOSTFILE ?=			hosts
 export KDEVOPS_NODES :=				vagrant/kdevops_nodes.yaml
+export KDEVOPS_VAGRANT :=
 export PYTHONUNBUFFERED=1
 
-KDEVOPS_NODES_TEMPLATES :=			workflows/linux/kdevops_nodes_split_start.yaml.in
-export KDEVOPS_NODES_TEMPLATES
+KDEVOPS_NODES_ROLE_TEMPLATE_DIR :=		$(KDEVOPS_PLAYBOOKS_DIR)/roles/gen_nodes/templates
+export KDEVOPS_NODES_TEMPLATE :=		$(KDEVOPS_NODES_ROLE_TEMPLATE_DIR)/kdevops_nodes_split_start.j2.yaml
+export KDEVOPS_VAGRANT_TEMPLATE :=		$(KDEVOPS_NODES_ROLE_TEMPLATE_DIR)/Vagrantfile.j2
+export KDEVOPS_MRPROPER :=
 
 KDEVOPS_INSTALL_TARGETS :=
 
@@ -141,6 +144,7 @@ KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK:=$(subst ",,$(CONFIG_KDEVOPS_ANSIBLE_PROVISIO
 export TOPDIR=./
 
 include scripts/gen-hosts.Makefile
+include scripts/gen-nodes.Makefile
 
 # disable built-in rules for this
 .SUFFIXES:
@@ -188,8 +192,12 @@ $(KDEVOPS_HOSTS): .config $(KDEVOPS_HOSTS_TEMPLATE)
 		--extra-vars=@./extra_vars.yaml
 
 DEFAULT_DEPS += $(KDEVOPS_NODES)
-$(KDEVOPS_NODES): $(KDEVOPS_NODES_TEMPLATES) .config
-	$(Q)$(TOPDIR)/scripts/gen_nodes_file.sh
+$(KDEVOPS_NODES) $(KDEVOPS_VAGRANT): .config $(KDEVOPS_NODES_TEMPLATE)
+	$(Q)ansible-playbook --connection=local \
+		--inventory localhost, \
+		$(KDEVOPS_PLAYBOOKS_DIR)/gen_nodes.yml \
+		-e 'ansible_python_interpreter=/usr/bin/python3' \
+		--extra-vars=@./extra_vars.yaml
 
 DEFAULT_DEPS += $(LOCALHOST_SETUP_WORK)
 
@@ -211,7 +219,7 @@ mrproper:
 	fi
 	$(Q)rm -f terraform/*/terraform.tfvars
 	$(Q)rm -f $(KDEVOPS_NODES)
-	$(Q)rm -f $(KDEVOPS_HOSTFILE) $(KDEVOPS_WORKFLOW_FSTESTS_CLEAN)
+	$(Q)rm -f $(KDEVOPS_HOSTFILE) $(KDEVOPS_MRPROPER)
 	$(Q)rm -f .config .config.old extra_vars.yaml
 	$(Q)rm -f playbooks/secret.yml $(KDEVOPS_EXTRA_ADDON_DEST)
 	$(Q)rm -rf include

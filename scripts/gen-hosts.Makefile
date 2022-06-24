@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: copyleft-next-0.3.1
 
-TOPDIR_PATH += $(shell readlink -f $(TOPDIR))
+TOPDIR_PATH = $(shell readlink -f $(TOPDIR))
 KDEVOPS_PLAYBOOKS_DIR_FULL_PATH=$(TOPDIR_PATH)/$(KDEVOPS_PLAYBOOKS_DIR)/
 KDEVOPS_HOSTS_TEMPLATE_DIR=$(KDEVOPS_PLAYBOOKS_DIR_FULL_PATH)/roles/gen_hosts/templates/
 

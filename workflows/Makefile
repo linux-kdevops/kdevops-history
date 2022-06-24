@@ -10,8 +10,6 @@ ifeq (y,$(CONFIG_BOOTLINUX))
 include workflows/linux/Makefile
 endif # CONFIG_BOOTLINUX == y
 
-KDEVOPS_WORKFLOW_FSTESTS_CLEAN :=
-
 ifeq (y,$(CONFIG_KDEVOPS_WORKFLOW_ENABLE_FSTESTS))
 WORKFLOW_ARGS += kdevops_workflow_enable_fstests='True'
 include workflows/fstests/Makefile

@@ -15,21 +15,6 @@
 # configuration through the node overridef file:
 #
 # 	kdevops_vagrant_nodes_override.yaml
-#
-# You can use environemnt variables as well to override configuration, but this
-# doesn't scale well as it means we have to add a support into this file for
-# each new feature.
-#
-# Environment you can use are expected to be prefixed in upper case by your
-# project namespace. We support the following environment variables, assume
-# ${PN_U} below is your upper case of your project namespace, so for kdevops
-# this would be KDEVOPS:
-#
-# ${PN_U}_VAGRANT_NODE_CONFIG - lets you override default configuration
-#   file used
-# ${PN_U}_VAGRANT_PROVIDER - lets you override provider
-# ${PN_U}_VAGRANT_LIMIT_BOXES - lets you enable box limiting
-# ${PN_U}_VAGRANT_LIMIT_NUM_BOXES - number of boxes to limit
 
 Vagrant.require_version ">= 1.6.0"
 
@@ -77,23 +62,11 @@ else
   exit
 end
 
-# Default ansible inventory file
-inventory_default = File.dirname(__FILE__) + "/../hosts"
-
 # We assume if you are in kdevops/vagrant/ your project namespace is kdevops
-#                         oscheck/vagrant/ your project namespace is oscheck
 project_namespace = File.basename(File.dirname(Dir.getwd))
 
-# shorthand accessors
-pn_l = project_namespace.downcase
-pn_u = project_namespace.upcase
-
-# Bash variables cannot use "-", they must use _
-pn_u = pn_u.tr("-", "_")
-pn_l = pn_l.tr("-", "_")
-
-node_config          = ENV[pn_u + '_VAGRANT_NODE_CONFIG'] ? ENV[pn_u + '_VAGRANT_NODE_CONFIG'] : "kdevops_nodes.yaml"
-node_config_override = ENV[pn_u + '_VAGRANT_NODE_CONFIG'] ? ENV[pn_u + '_VAGRANT_NODE_CONFIG'] : "kdevops_nodes_override.yaml"
+node_config          =  "kdevops_nodes.yaml"
+node_config_override =  "kdevops_nodes_override.yaml"
 
 config_data = YAML.load_file(node_config)
 
@@ -105,7 +78,6 @@ end
 
 global_data = config_data['vagrant_global']
 vagrant_boxes = config_data['vagrant_boxes']
-ansible_playbooks = config_data['ansible_playbooks'] ? config_data['ansible_playbooks'] : false
 
 if override_data
   if config_data_override['vagrant_global']
@@ -114,17 +86,6 @@ if override_data
   if config_data_override['vagrant_boxes']
     vagrant_boxes = config_data_override['vagrant_boxes']
   end
-  if config_data_override['ansible_playbooks']
-    ansible_playbooks = config_data_override['ansible_playbooks'] ? config_data_override['ansible_playbooks'] : false
-  end
-end
-
-if global_data['force_provider']
-  provider = global_data['force_provider']
-end
-
-if ENV[pn_u + '_VAGRANT_PROVIDER']
-  provider = ENV[pn_u + '_VAGRANT_PROVIDER']
 end
 
 supported_provider = case provider
@@ -139,14 +100,6 @@ if ! supported_provider
   exit
 end
 
-limit_boxes = global_data['limit_boxes'] == "yes" ? "yes" : "no"
-limit_boxes = ENV[pn_u + '_VAGRANT_LIMIT_BOXES'] == "yes" ? "yes" : limit_boxes
-
-limit_num_boxes = vagrant_boxes.count
-limit_max_num_boxes = limit_num_boxes
-limit_num_boxes = limit_boxes == "yes" && global_data['limit_num_boxes']  ? [limit_max_num_boxes, global_data['limit_num_boxes']].min : limit_num_boxes
-limit_num_boxes = limit_boxes == "yes" && ENV[pn_u + '_VAGRANT_LIMIT_NUM_BOXES'] ? [limit_max_num_boxes, ENV[pn_u + '_VAGRANT_LIMIT_NUM_BOXES'].to_i].min : limit_num_boxes
-
 qemu_group = global_data['libvirt_cfg']['qemu_group']
 qemu_group_auto = global_data['libvirt_cfg']['qemu_group_auto']
 
@@ -158,27 +111,13 @@ if qemu_group_auto
   end
 end
 
-if ENV[pn_u + '_VAGRANT_QEMU_GROUP']
-  qemu_group = ENV[pn_u + '_VAGRANT_QEMU_GROUP']
-end
-
 pool_path = global_data['storage_pool_path']
 kdevops_pool_path = pool_path + '/kdevops/'
 
-libvirt_session = global_data['libvirt_cfg']['session']
 libvirt_session_public_network_dev = global_data['libvirt_cfg']['session_public_network_dev']
 
-num_servers = limit_num_boxes.to_i
-playbooks_to_run = ansible_playbooks && ansible_playbooks['playbooks'] ? ansible_playbooks['playbooks'].size() : 0
-ansible_ran = false
-
 Vagrant.configure("2") do |config|
-  box_count = 0
   vagrant_boxes.each do |server_data|
-    if limit_boxes == "yes" && box_count >= num_servers
-      box_count+=1
-      next
-    end
     # Using sync folders won't work for say openstack / aws / azure / gce, and
     # for that we'll use terraform, so best to allow whatever data we want to
     # sync be provisioned with ansible.
@@ -189,22 +128,23 @@ Vagrant.configure("2") do |config|
       if server_box_version != ""
         srv.vm.box_version = server_box_version
       end
+{% if libvirt_session %}
       # https://wiki.libvirt.org/page/FAQ#What_is_the_difference_between_qemu:.2F.2F.2Fsystem_and_qemu:.2F.2F.2Fsession.3F_Which_one_should_I_use.3F
       # qemu:///session has a serious drawback: since the libvirtd instance
       # does not have sufficient privileges, the only out of the box network
       # option is qemu's usermode networking, which has nonobvious
       # limitations, so its usage is discouraged. More info on qemu networking
       # options: http://people.gnome.org/~markmc/qemu-networking.html
-      if ! libvirt_session
-        if ! nested
-          srv.vm.network "private_network", ip: server_data["ip"]
-        end
-      else
-        srv.vm.network "public_network", :type => "user"
+      srv.vm.network "public_network", :type => "user"
+{% else %}
+      if ! nested
+        srv.vm.network "private_network", ip: server_data["ip"]
       end
+{% endif %}
       host_name = server_data["name"]
       nvme_path = kdevops_pool_path + "/" + global_data['nvme_disk_path'] + "/#{host_name}"
       FileUtils.mkdir_p(nvme_path) unless File.exists?(nvme_path)
+{% if virtualbox_provider %}
       srv.vm.provider "virtualbox" do |vb, override|
 	if provider == "virtualbox" && ! global_data['virtualbox_cfg']['auto_update']
           # we'll need to run later: vagrant vbguest install
@@ -263,6 +203,8 @@ Vagrant.configure("2") do |config|
           end # end of looping all nvme disks
         end # end of checking for nvme disks
       end # end of virtualbox provider section
+{% endif %}
+{% if libvirt_provider %}
       # For details see: https://github.com/vagrant-libvirt/vagrant-libvirt
       srv.vm.provider "libvirt" do |libvirt, override|
         #libvirt.host = "localhost"
@@ -270,19 +212,19 @@ Vagrant.configure("2") do |config|
         override.vm.boot_timeout = global_data['boot_timeout']
         libvirt.watchdog :model => 'i6300esb', :action => 'reset'
 	libvirt.storage_pool_path = kdevops_pool_path
-	if libvirt_session
-	  libvirt.qemu_use_session = true
-	  libvirt.uri = global_data['libvirt_cfg']['uri']
-	  libvirt.system_uri = global_data['libvirt_cfg']['system_uri']
-	  libvirt.socket = global_data['libvirt_cfg']['session_socket']
+{% if libvirt_session %}
+	libvirt.qemu_use_session = true
+	libvirt.uri = global_data['libvirt_cfg']['uri']
+	libvirt.system_uri = global_data['libvirt_cfg']['system_uri']
+	libvirt.socket = global_data['libvirt_cfg']['session_socket']
+	libvirt.management_network_device = global_data['libvirt_cfg']['session_management_network_device']
+{% else %}
+	if nested
+	  libvirt.management_network_name = 'vagrant-libvirt-private'
+	  libvirt.management_network_address = '192.168.124.0/24'
 	  libvirt.management_network_device = global_data['libvirt_cfg']['session_management_network_device']
-        else
-          if nested
-            libvirt.management_network_name = 'vagrant-libvirt-private'
-            libvirt.management_network_address = '192.168.124.0/24'
-	    libvirt.management_network_device = global_data['libvirt_cfg']['session_management_network_device']
-          end
 	end
+{% endif %}
         libvirt.memory = global_data["memory"]
         libvirt.cpus = global_data["cpus"]
         libvirt.emulator_path = global_data['libvirt_cfg']['emulator_path']
@@ -357,31 +299,32 @@ Vagrant.configure("2") do |config|
                 end
               end
             end
+{% if lacks_drive_virtio %}
+            non_nvme_drive_interface = "ide"
+{% else %}
             non_nvme_drive_interface = "virtio"
-            if server_data['lacks_drive_virtio']
-              non_nvme_drive_interface = "ide"
-            end
-            if server_data['lacks_nvme_support']
+{% endif %}
+{% if lacks_nvme_support %}
+            libvirt.qemuargs :value => "-drive"
+            libvirt.qemuargs :value => "file=#{nvme_disk},if=#{non_nvme_drive_interface}"
+{% else %}
+            # We're limited to 19 by default
+            pci_function = 0 + port
+            if zoned
               libvirt.qemuargs :value => "-drive"
-              libvirt.qemuargs :value => "file=#{nvme_disk},if=#{non_nvme_drive_interface}"
+              libvirt.qemuargs :value => "file=#{nvme_disk},if=none,id=#{disk_id}"
+              libvirt.qemuargs :value => "-device"
+              libvirt.qemuargs :value => "nvme,id=nvme#{port},serial=#{serial_id},bus=custom-pci-for-nvme,addr=#{pci_function},zoned.zasl=#{zone_zasl}"
+              libvirt.qemuargs :value => "-device"
+              libvirt.qemuargs :value => "nvme-ns,drive=#{disk_id},bus=nvme#{port},nsid=1,logical_block_size=#{logical_block_size},physical_block_size=#{physical_block_size},zoned=true,zoned.zone_size=#{zone_size},zoned.zone_capacity=#{zone_capacity},zoned.max_open=#{zone_max_open},zoned.max_active=#{zone_max_active}"
             else
-              # We're limited to 19 by default
-              pci_function = 0 + port
-              if zoned
-                libvirt.qemuargs :value => "-drive"
-                libvirt.qemuargs :value => "file=#{nvme_disk},if=none,id=#{disk_id}"
-                libvirt.qemuargs :value => "-device"
-                libvirt.qemuargs :value => "nvme,id=nvme#{port},serial=#{serial_id},bus=custom-pci-for-nvme,addr=#{pci_function},zoned.zasl=#{zone_zasl}"
-                libvirt.qemuargs :value => "-device"
-                libvirt.qemuargs :value => "nvme-ns,drive=#{disk_id},bus=nvme#{port},nsid=1,logical_block_size=#{logical_block_size},physical_block_size=#{physical_block_size},zoned=true,zoned.zone_size=#{zone_size},zoned.zone_capacity=#{zone_capacity},zoned.max_open=#{zone_max_open},zoned.max_active=#{zone_max_active}"
-              else
-                libvirt.qemuargs :value => "-drive"
-                libvirt.qemuargs :value => "file=#{nvme_disk},if=none,id=#{disk_id}"
-                libvirt.qemuargs :value => "-device"
-                libvirt.qemuargs :value => "nvme,drive=#{disk_id},serial=#{serial_id},bus=custom-pci-for-nvme,addr=#{pci_function}"
-              end
+              libvirt.qemuargs :value => "-drive"
+              libvirt.qemuargs :value => "file=#{nvme_disk},if=none,id=#{disk_id}"
+              libvirt.qemuargs :value => "-device"
+              libvirt.qemuargs :value => "nvme,drive=#{disk_id},serial=#{serial_id},bus=custom-pci-for-nvme,addr=#{pci_function}"
             end
             port += 1
+{% endif %}
 	  end
 	  if provider == "libvirt"
 	    cmd = "chgrp -R #{qemu_group} #{nvme_path}"
@@ -399,7 +342,7 @@ Vagrant.configure("2") do |config|
 	  end # end of provider check for libvirt
 	end # end of check for nvme disks for libvirt
       end # end of libvirt provider code
+{% endif %}
     end # end of srv defined loop
-    box_count+=1
   end # end of vagrant_boxes loop
 end

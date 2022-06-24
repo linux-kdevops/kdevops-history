@@ -12,13 +12,6 @@ ID=$(shell id -u)
 BLKTESTS_ARGS	:=
 
 ifeq (y,$(CONFIG_WORKFLOWS_DEDICATED_WORKFLOW))
-# We don't use a nodes template for blktests, the file is generated from
-# a start file and post file. We set this to empty to ensure it doesn't
-# fall as a dependency.
-#
-# If you disable WORKFLOWS_DEDICATED_WORKFLOW you are on your own!
-export KDEVOPS_NODES_TEMPLATE :=
-
 export KDEVOPS_HOSTS_TEMPLATE := blktests.j2
 endif
 

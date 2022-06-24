@@ -432,11 +432,10 @@ config LIBVIRT_SESSION
 	bool
 	default LIBVIRT_URI_SESSION
 
-# These defaults are only used when LIBVIRT_SESSION is true,
-# but we need them to build our nodes file even if LIBVIRT_SESSION is
-# disabled. We can provide new kconfig entries for these should we
-# need them later. For now we default to what Fedora uses as that's
-# the only distro using the session URI by default by now.
+# Only fedora is using this for now. We can add options to modify
+# this once this changes or if someone wants to really modify these.
+if LIBVIRT_SESSION
+
 config LIBVIRT_SESSION_SOCKET
 	string
 	default "/run/libvirt/libvirt-sock-ro"
@@ -448,6 +447,8 @@ config LIBVIRT_SESSION_MANAGEMENT_NETWORK_DEVICE
 config LIBVIRT_SESSION_PUBLIC_NETWORK_DEV
 	string
 	default "virbr0"
+
+endif # LIBVIRT_SESSION
 
 config HAVE_SUSE_VAGRANT
 	bool

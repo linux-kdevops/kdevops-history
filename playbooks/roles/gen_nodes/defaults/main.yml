@@ -1,0 +1,43 @@
+# SPDX-License-Identifier GPL-2.0+
+---
+kdevops_enable_vagrant: False
+kdevops_vagrant: '/dev/null'
+kdevops_vagrant_template: '/dev/null'
+kdevops_nodes: "vagrant/kdevops_nodes.yaml"
+kdevops_baseline_and_dev: False
+
+virtualbox_provider: False
+libvirt_provider: False
+
+vagrant_box: "debian/testing64"
+vagrant_box_version: ""
+vagrant_vcpus_count: 8
+vagrant_mem_mb: 4096
+qemu_bin_path: "/usr/bin/qemu-system-x86_64"
+lacks_nvme_support: False
+lacks_drive_virtio: False
+nvme_zone_enable: False
+nvme_zone_drive_size: 102400
+nvme_zone_zasl: 0
+nvme_zone_size: '128M'
+nvme_zone_capacity: 0
+nvme_zone_max_active: 0
+nvme_zone_max_open: 0
+nvme_zone_physical_blocksize: 4096
+nvme_zone_logical_blocksize: 4096
+kdevops_storage_pool_path: "/var/lib/libvirt/images/"
+libvirt_uri: 'qemu:///system'
+libvirt_system_uri: 'qemu:///system'
+libvirt_session: False
+libvirt_session_socket: '/run/libvirt/libvirt-sock-ro'
+libvirt_session_management_network_device: 'virbr0'
+libvirt_session_public_network_dev: 'virbr0'
+
+kdevops_workflows_dedicated_workflow: False
+kdevops_workflow_enable_fstests: False
+kdevops_workflow_enable_blktests: False
+
+is_fstests: False
+fstests_fstyp: "bogus"
+fs_config_role_path: "/dev/null"
+fs_config_data: "[section_1]"

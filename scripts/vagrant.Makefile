@@ -2,8 +2,15 @@
 
 VAGRANT_ARGS :=
 
+KDEVOPS_VAGRANT := vagrant/Vagrantfile
+KDEVOPS_MRPROPER += $(KDEVOPS_VAGRANT)
+
 KDEVOPS_BRING_UP_DEPS := bringup_vagrant
 KDEVOPS_DESTROY_DEPS := destroy_vagrant
+
+VAGRANT_ARGS += kdevops_enable_vagrant=True
+VAGRANT_ARGS += kdevops_vagrant='$(KDEVOPS_VAGRANT)'
+VAGRANT_ARGS += kdevops_vagrant_template='$(KDEVOPS_VAGRANT_TEMPLATE)'
 
 ifeq (y,$(CONFIG_HAVE_VAGRANT_BOX_URL))
 VAGRANT_PRIVATE_BOX_DEPS := vagrant_private_box_install

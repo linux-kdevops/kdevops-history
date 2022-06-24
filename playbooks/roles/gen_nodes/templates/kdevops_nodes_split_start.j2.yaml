@@ -1,0 +1,100 @@
+---
+vagrant_global:
+  box: "{{ vagrant_box }}"
+  box_version: "{{ vagrant_box_version }}"
+  memory: {{ vagrant_mem_mb }}
+  cpus: {{ vagrant_vcpus_count }}
+{% if nvme_zone_enable %}
+  enable_zns: True
+{% endif %}
+  storage_pool_path: "{{ kdevops_storage_pool_path }}"
+{% if virtualbox_provider %}
+  virtualbox_cfg:
+    auto_update: false
+    enabled: "true"
+    enable_sse4: "true"
+    # can be vdi, vmdk, vhd
+    nvme_disk_postfix: 'vdi'
+    # To stress test a virtual nvme controller you could peg all disks onto
+    # one controller. We want to avoid this as our focus is testing filesystems
+    # and not storage controllers however Virtualbox currently only supports
+    # one nvme storage controller. Set this to true only if you are adding
+    # support for this upstream to Virtualbox.
+    nvme_controller_per_disk: false
+{% endif %}
+{% if libvirt_provider %}
+  libvirt_cfg:
+    nvme_disk_postfix: 'qcow2'
+    nvme_disk_id_prefix: 'drv'
+    # This lets the ansible role kdevops_vagrant try to infer your default
+    # distro group to use for qemu. OpenSUSE and Fedora uses qemu here by
+    # default, debian uses libvirt-qemu. You can always override with the
+    # environment variable KDEVOPS_VAGRANT_QEMU_GROUP. If not sure edit
+    # /etc/libvirt/qemu.conf user and group settings. If using apparmor /
+    # selinux you may run into snags, but that is out of scope of this project.
+    qemu_group_auto: true
+    qemu_group: 'libvirt-qemu'
+    emulator_path: '{{ qemu_bin_path }}'
+    uri: '{{ libvirt_uri }}'
+    system_uri: '{{ libvirt_system_uri }}'
+{% if libvirt_session %}
+    session_socket: '{{ libvirt_session_socket }}'
+    session_management_network_device: '{{ libvirt_session_management_network_device }}'
+    session_public_network_dev: '{{ libvirt_session_public_network_dev }}'
+{% endif %}
+{% endif %}
+  # On the current directory
+  nvme_disk_path: '.vagrant/nvme_disks/'
+  nvme_disk_prefix: 'nvme_disk'
+  # This ends up slightly different depending on the vagrant provider right now.
+  # For Virtualbox: /dev/nvme0n1, /dev/nvme0n2, etc.
+  # For libvirt:    /dev/nvme0n1, /dev/nvme1n1, etc.
+  # This is due to how Virtualbox only supports one nvme storage controller
+  nvme_disks:
+    data:
+      size: 102400
+    scratch:
+      size: 102400
+    extra1:
+      size: 102400
+    extra2:
+      size: 102400
+{% if nvme_zone_enable %}
+{% for n in range(1,14) %}
+    zone{{ n }}:
+      size: {{ nvme_zone_drive_size }}
+      zoned: true
+      zone_zasl: {{ nvme_zone_zasl }}
+      zone_size: '{{ nvme_zone_size }}'
+      zone_capacity: {{ nvme_zone_capacity }}
+      zone_max_active: {{ nvme_zone_max_active }}
+      zone_max_open: {{ nvme_zone_max_open }}
+      physical_block_size: {{ nvme_zone_physical_blocksize }}
+      logical_block_size: {{ nvme_zone_logical_blocksize }}
+{% endfor %}
+{% for n in range(1,2) %}
+    zonenptwo{{ n }}:
+      size: 98304
+      zoned: true
+      zone_zasl: 0
+      zone_size: 96M
+      zone_capacity: 0
+      zone_max_active: 0
+      zone_max_open: 0
+      physical_block_size: 4096
+      logical_block_size: 4096
+{% endfor %}
+{% endif %}
+
+# Note: vagrant is not a fan of hosts with underscores.
+#
+# Modify the hostname to include a purpose, and then extract it later with
+# ansible, for instance with:
+#
+# section: "{{ ansible_hostname | regex_replace('kdevops-') | regex_replace('-dev') | regex_replace('-', '_') }}"
+#
+# So if you say embraced kdevops-pokeyman and kdevops-pokeyman-dev you'd end up
+# getting in the section always as pokeyman. As is below, with the above
+# ansible regex you'd get the digits.
+vagrant_boxes:
+{% include './templates/hosts.j2' %}

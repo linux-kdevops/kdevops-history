@@ -6,17 +6,15 @@
 # documentation so that it is easier for folks to add more workflows.
 
 # This simple workflow relies on the default setting of the variable
-# KDEVOPS_NODES_TEMPLATES which is a preamble file used by the script
-# scripts/gen_nodes_file.sh to generate your Vagrant nodes file. Vagrant
-# is only used if you are using virtualization for bringup to describe the
-# target nodes which are to be created during bringup. scripts/gen_nodes_file.sh
-# would use this file and then append nodes after. This is useful if you have
-# a workflow where you want to enable different set of nodes on the workflow
-# and let the user configure which nodes they want enabled.
+# KDEVOPS_NODES_TEMPLATE which to generate your target nodes. This can
+# either be used by vagrant or terraform when building the nodes it will
+# create for bringup. The template file relies on jinja2 templating for
+# its parsing and generation and we rely on the ansible template module
+# to process this template file.
 #
-# The default KDEVOPS_NODES_TEMPLATES file is designed to be generic enough
+# The default KDEVOPS_NODES_TEMPLATE file is designed to be generic enough
 # for most Linux kernel development and test workflows, you can however
-# override it by simply setting the variable KDEVOPS_NODES_TEMPLATES to an
+# override it by simply setting the variable KDEVOPS_NODES_TEMPLATE to an
 # empty string as is done with fstests. Look at the fstests workflow for a
 # more complex example.
 
