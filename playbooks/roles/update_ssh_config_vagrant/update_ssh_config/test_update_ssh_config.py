@@ -397,10 +397,14 @@ class TestUpdateSshConfig(unittest.TestCase):
                            '~alpha/.ssh/go',
                            '--addstrict',
                            target_sshconfig_copy])
+        self.assertTrue(not path.exists(target_sshconfig_orig))
+        self.assertTrue(not path.exists(target_sshconfig_copy))
         run_args(args)
+        self.assertTrue(not path.exists(target_sshconfig_orig))
+        self.assertTrue(not path.exists(target_sshconfig_bk))
+        self.assertTrue(path.exists(target_sshconfig_copy))
         self.assertTrue(cmp(target_sshconfig_copy,
                             target_sshconfig_res, shallow=False))
-        self.assertTrue(not path.exists(target_sshconfig_bk))
 
     def tearDown(self):
         files = listdir("tests")
