@@ -1,10 +1,10 @@
 # If you need to use a git subtree, please add it here.
 
-KCONFIG_GIT_URL_READ :=  https://github.com/mcgrof/kconfig.git
-KCONFIG_GIT_URL_RW   :=  git@github.com:mcgrof/kconfig.git
+KCONFIG_GIT_URL_READ :=  https://github.com/linux-kdevops/kconfig.git
+KCONFIG_GIT_URL_RW   :=  git@github.com:linux-kdevops/kconfig.git
 
-UPDATE_SSHCONFIG_READ :=  https://github.com/mcgrof/update_ssh_config.git
-UPDATE_SSHCONFIG_RW   :=  git@github.com:mcgrof/update_ssh_config.git
+UPDATE_SSHCONFIG_READ :=  https://github.com/linux-kdevops/update_ssh_config.git
+UPDATE_SSHCONFIG_RW   :=  git@github.com:linux-kdevops/update_ssh_config.git
 
 KCONFIG_DIR :=          scripts/kconfig/
 UPDATE_SSHCONFIG_DIR := roles/update_ssh_config_vagrant/update_ssh_config/
