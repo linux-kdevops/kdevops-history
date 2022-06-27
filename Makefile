@@ -193,6 +193,8 @@ $(KDEVOPS_NODES): $(KDEVOPS_NODES_TEMPLATES) .config
 
 DEFAULT_DEPS += $(LOCALHOST_SETUP_WORK)
 
+include scripts/tests.Makefile
+
 PHONY += clean
 clean:
 	$(Q)$(MAKE) -f scripts/build.Makefile $@
