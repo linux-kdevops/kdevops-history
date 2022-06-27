@@ -1,6 +1,6 @@
 module "ssh_config_update_host_entries" {
-  source  = "mcgrof/add-host-ssh-config/kdevops"
-  version = "2.3.2"
+  source  = "linux-kdevops/add-host-ssh-config/kdevops"
+  version = "3.0.0"
 
   ssh_config = var.ssh_config
   update_ssh_config_enable = local.limit_count > 0 ? "true" : ""
