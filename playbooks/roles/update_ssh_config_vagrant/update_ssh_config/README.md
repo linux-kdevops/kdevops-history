@@ -1,3 +1,40 @@
+# Project home
+
+This project's home page is:
+
+ * https://github.com/linux-kdevops/update_ssh_config/
+
+This code lives under the linux-kdevops organization as code changes
+can be made to it there by any member of the linux-kdevops organization.
+
+# Sharing this code between vagrant and terraform
+
+The main user of this project is [kdevops](https://github.com/linux-kdevops/kdevops)
+and it uses this code today for vagranta nd terraform bringup methods. When
+using terraform, as part of the last part of bring up it calls ansible
+against the localhost with an ansible role [update_ssh_config_vagrant](https://github.com/linux-kdevops/kdevops/tree/master/playbooks/roles/update_ssh_config_vagrant).
+
+Kdevop's terraform provisioning uses this code by publishing an terraform
+module and referring to it on each cloud specific provider:
+
+ * https://registry.terraform.io/modules/linux-kdevops/add-host-ssh-config/kdevops/latest
+
+kdevops uses the code in this tree as a git subtree. Delta for the code
+in this directory can be queued up in kdevops, but a developer should at some
+point in time push the code also back up to the master tree. This can be done
+with something like this:
+
+```bash
+git subtree push --prefix=playbooks/roles/update_ssh_config_vagrant/update_ssh_config update_ssh_config master
+```
+
+This will only push the code changes under the directory `playbooks/roles/update_ssh_config_vagrant/update_ssh_config`
+back to the update_ssh_config repository. In order for a new terraform
+module to be published a git tag is required to be tagged on the
+`update_ssh_config` git tree. Terraform will do sanity checks and publish
+a new module once that is available. Then each terraform provider file
+must be updated to ensure they use the latest avilable version of the module.
+
 # update_ssh_config
 
 This Python script you update your ssh configuration file, typically
@@ -6,8 +43,8 @@ vagrant so that it would update your user's ssh configuration, and later
 terraform support was added. The same python script however is shared
 between both projects:
 
-  * [update_ssh_config_vagrant](https://github.com/mcgrof/update_ssh_config_vagrant) - ansible role for vagrant to update your ssh configuration
-  * [terraform-kdevops-add-host-ssh-config](https://github.com/mcgrof/terraform-kdevops-add-host-ssh-config) - terraform module to update you ssh configuration
+  * [update_ssh_config_vagrant](https://github.com/linux-kdevops/update_ssh_config_vagrant) - ansible role for vagrant to update your ssh configuration
+  * [terraform-kdevops-add-host-ssh-config](https://github.com/linux-kdevops/terraform-kdevops-add-host-ssh-config) - terraform module to update you ssh configuration
 
 This git tree aims at providing a mechanism to allow both projects to share
 the same python script. They bring in this code using a git subtree.
@@ -36,6 +73,7 @@ To run tests:
 
 ```bash
 make test
+make flake8
 ```
 
 ### The vagrant use case
