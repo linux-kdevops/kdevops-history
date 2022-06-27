@@ -59,9 +59,42 @@ terraform init
 terraform plan
 terraform apply
 ```
+### Terraform ssh config update - The add-host-ssh-config terraform module
 
-You should have had your `~/.ssh/config` updated automatically with the
-provisioned hosts.
+We provide support for updating your configured ssh configuration file
+(typically `~/.ssh/config`) automatically for you, however each cloud provider
+requires support to be added in order for this to work. At the time of this
+writing we support this for all cloud providers we support.
+
+After `make bringup` you should have had your ssh configuration file updated
+automatically with the provisioned hosts. The terraform module
+`add-host-ssh-config` is used to do the work of updating your ssh configuration,
+a module is used to share the code with provioning with vagrant.
+
+The terraform module on the registry:
+
+  * https://registry.terraform.io/modules/mcgrof/add-host-ssh-config/kdevops/latest
+
+The terraform source code:
+
+  * https://github.com/mcgrof/terraform-kdevops-add-host-ssh-config
+
+Because the same code is shared between the vagrant ansible role and the
+terraform module, a git subtree is used to maintain the shared code. The
+terraform code downloads the module on its own, while the code for
+the vagrant ansible role has the code present on the kdevops tree as
+part of its local directories in under:
+
+  * `playbooks/roles/update_ssh_config_vagrant/update_ssh_config/`
+
+Patches for code for in `update_ssh_config` can go against
+the `playbooks/roles/update_ssh_config_vagrant/update_ssh_config/`
+directory, but should be made atomic so that these changes can
+be pushed onto the standalone git tree for update_ssh_config on
+a regular basis. For details on the development workflow for it,
+read the documentation on:
+
+ * [update_ssh_config documentation](playbooks/roles/update_ssh_config_vagrant/update_ssh_config/README.md)
 
 ## Destroying nodes with terraform
 
@@ -77,13 +110,6 @@ Or if you are doing things manually:
 cd terraform/you_provider
 terraform destroy
 ```
-
-### Terraform ssh config update
-
-We provide support for updating your ssh configuration file (typically
-`~/.ssh/config`) automatically for you, however each cloud provider requires
-support to be added in order for this to work. At the time of this writing
-we support this for all cloud providers we support.
 
 # If provisioning failed
 

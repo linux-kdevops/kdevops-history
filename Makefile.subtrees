@@ -1,10 +1,36 @@
 # If you need to use a git subtree, please add it here.
-add-kconfig-remote:
-	git remote add kconfig https://github.com/mcgrof/kconfig.git
 
-add-kconfig:
-	git subtree add --prefix=scripts/kconfig/ kconfig master
+KCONFIG_GIT_URL_READ :=  https://github.com/mcgrof/kconfig.git
+KCONFIG_GIT_URL_RW   :=  git@github.com:mcgrof/kconfig.git
 
-refresh-kconfig:
+UPDATE_SSHCONFIG_READ :=  https://github.com/mcgrof/update_ssh_config.git
+UPDATE_SSHCONFIG_RW   :=  git@github.com:mcgrof/update_ssh_config.git
+
+KCONFIG_DIR :=          scripts/kconfig/
+UPDATE_SSHCONFIG_DIR := roles/update_ssh_config_vagrant/update_ssh_config/
+
+# If you only have read access to these trees use this target
+add-subtree-remotes:
+	git remote add kconfig             $(KCONFIG_GIT_URL_READ)
+	git remote add update_ssh_config   $(UPDATE_SSHCONFIG_READ)
+
+# If you have write access to these trees use this
+add-subtree-remotes-dev:
+	git remote add kconfig             $(KCONFIG_GIT_URL_RW)
+	git remote add update_ssh_config   $(UPDATE_SSHCONFIG_RW)
+
+add-subtrees:
+	git subtree add --prefix=$(KCONFIG_DIR)            kconfig           master
+	git subtree add --prefix=$(UPDATE_SSHCONFIG_DIR)   update_ssh_config master
+
+refresh-subtrees:
 	git fetch kconfig
-	git subtree pull --prefix=scripts/kconfig/ kconfig master
+	git fetch update_ssh_config
+	git subtree pull --prefix=$(KCONFIG_DIR)          kconfig           master
+	git fetch update_ssh_config
+	git subtree pull --prefix=$(UPDATE_SSHCONFIG_DIR) update_ssh_config master
+
+# If you are a developer with write commit access you can push changes queued
+# up here onto kdevops to their respective upstream as follows:
+# git subtree push --prefix=scripts/kconfig/                                            kconfig           master
+# git subtree push --prefix=playbooks/roles/update_ssh_config_vagrant/update_ssh_config update_ssh_config master

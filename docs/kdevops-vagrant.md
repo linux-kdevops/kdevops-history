@@ -63,17 +63,35 @@ make
 make bringup
 ```
 
-The last step in the above `make bringup will also run the ansible roles
-configured to at least get ansible working afterwards, this is known as
-`vagrant provisioning`.  The playbooks which will run during `vagrant
-provisioning` are
+The last step in the above `make bringup` is to run optional ansible roles
+which can enable direct ssh access to nodes and also run a bit of basic
+provisioning. Although vagrant has direct support for running ansible we do
+not make use of this mechanism as it has proven to be fragile before. If
+`CONFIG_KDEVOPS_SSH_CONFIG_UPDATE` is enabled your ssh configuration
+is updated to enable ansible to connect to the nodes which have come up. If
+`CONFIG_KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK` is enabled then the ansible
+role configured in `CONFIG_KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK` is the first
+ansible to run against nodes to do initial provisioning which by default is the
+`devconfig` ansible role. This is all done as part of the `bringup_vagrant`
+target on the file `scripts/vagrant.Makefile`. The roles used are:
 
   * [update_ssh_config_vagrant](playbooks/roles/update_ssh_config_vagrant/README.md)
   * [devconfig](playbooks/roles/devconfig/README.md)
 
-We purposely don't run any more ansible roles because we want to encourage
-ansible to be used manually as a next step. This would allow the next step
-to be independent of vagrant or terraform.
+At this point basic initial provisioning is complete.
+
+### Code changes for update_ssh_config_vagrant
+
+The ansible role `update_ssh_config_vagrant` is used to help update your
+ssh configuration when using vagrant. The actual code used is a python
+script which is also shared for kdevop's support of terrform for cloud
+provisioning support. The `update_ssh_config_vagrant` ansible role in
+kdevops has the for for the python script locally by using a git subtree.
+Updates to actual python code used should be made atomically so that these
+changes get pushed back upstream. For more details refer to the follwing
+documentation:
+
+  * [update_ssh_config shared code documentation](playbooks/roles/update_ssh_config_vagrant/update_ssh_config/README.md)
 
 ## Destroying provisioned nodes with vagrant
 

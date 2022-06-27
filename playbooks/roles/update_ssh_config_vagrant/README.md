@@ -10,8 +10,21 @@ Care must be taken as this *does* update your local user's ~/.ssh/config by
 default. That is, this role is intended to be run locally, never on virtual
 host, unless of course you are doing nested virtualization.
 
+Development notes
+-----------------
+The code for updating your ssh configuration is shared with terraform.
+We do this by having the code for this ansible role effectively
+present on this ansible role through a git subtree within kdevops.
+The code upstream on that tree is used to publish a terraform module:
+
+  * https://registry.terraform.io/modules/mcgrof/add-host-ssh-config
+
+To learn how to make changes to the shared code read:
+
+  * [update_ssh_config documentation](playbooks/roles/update_ssh_config_vagrant/update_ssh_config/README.md)
+
 Requirements
---------k----
+------------
 
 You can use this if you are using vagrant to deploy guests.
 
