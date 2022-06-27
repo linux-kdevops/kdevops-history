@@ -1,3 +1,10 @@
+Project home page:
+
+https://github.com/linux-kdevops/kconfig
+
+This project lives under the linux-kdevops organization to let anyone
+with write access modify that code.
+
 This effort allows for independent projects to use the Linux kernel's
 kconfig on external projects, and make updates of config really easy
 to do. It does this by letting you use this tree as a git subtree.
@@ -9,5 +16,5 @@ https://github.com/mcgrof/init-kconfig
 
 The following projects use this git tree as a git subtree as well:
 
-  * https://github.com/mcgrof/kdevops
+  * https://github.com/linux-kdevops/kdevops
   * https://github.com/mcgrof/fio-tests
