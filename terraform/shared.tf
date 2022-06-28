@@ -60,11 +60,6 @@ variable "ansible_provision_playbook" {
     default = "devconfig.yml"
 }
 
-provider "null" {
-  # any non-beta version >= 2.0.0 and < 2.1.0, e.g. 2.0.1
-  version = "~> 2.1"
-}
-
 locals {
   kdevops_num_boxes = "${length(var.kdevops_nodes)}"
 }
