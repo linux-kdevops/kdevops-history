@@ -47,6 +47,7 @@ xfs/259 # lazy baseline - failure found in at least two sections - xfs_nocrc and
 xfs/263 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/270 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/273 # lazy baseline - failure found in at least two sections
+xfs/291 # failure on debian/buster in both xfs_reflink and xfs_reflink_1024 configs. xfs_repair (v4.20) fatal error -- unable to add AG 2 reverse-mapping data to btree. This test may need fixes similar to generic/204 to deal with reflink disk space calculation (see commits 1e24e517,a8f5f152e). It is one of the few tests that still runs xfs_check and it failed with "xfs_check failed" error. xfs_check is not considered reliable and xfs maintainer does not run it.
 xfs/297 # started hanging after reducing RAM size to 2GB (no OOM killer) rate 1/20 - 1/100
 xfs/301 # fails in two sections xfs_reflink_1024 with a failure rate of 1/5 and xfs_nocrc for always https://gist.github.com/mcgrof/3567f39ea06ba785b3d66351cdcb22cf
 xfs/310
