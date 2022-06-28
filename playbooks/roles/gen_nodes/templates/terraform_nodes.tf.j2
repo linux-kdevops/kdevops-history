@@ -1,0 +1,6 @@
+variable "kdevops_nodes" {
+  type = list
+  default = [
+	{{ all_generic_nodes | map('to_json') | join(', ') }}
+	]
+}

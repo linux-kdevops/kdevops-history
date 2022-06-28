@@ -44,19 +44,7 @@ resource "openstack_compute_keypair_v2" "kdevops_keypair" {
 
 resource "openstack_compute_instance_v2" "kdevops_instances" {
   count = local.num_boxes
-  name = replace(
-    urlencode(
-      element(
-        split(
-          "name: ",
-          element(data.yaml_list_of_strings.list.output, count.index),
-        ),
-        1,
-      ),
-    ),
-    "%7D",
-    "",
-  )
+  name = element(var.kdevops_nodes, count.index)
   image_name      = var.image_name
   flavor_name     = var.flavor_name
   key_pair        = var.ssh_pubkey_name

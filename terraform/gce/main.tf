@@ -1,18 +1,6 @@
 resource "google_compute_instance" "kdevops_instances" {
   count        = local.num_boxes
-  name = replace(
-    urlencode(
-      element(
-        split(
-          "name: ",
-          element(data.yaml_list_of_strings.list.output, count.index),
-        ),
-        1,
-      ),
-    ),
-    "%7D",
-    "",
-  )
+  name = element(var.kdevops_nodes, count.index)
   machine_type = var.machine_type
   zone         = var.region
 

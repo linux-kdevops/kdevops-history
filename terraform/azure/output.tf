@@ -1,19 +1,7 @@
 data "null_data_source" "host_names" {
   count = local.num_boxes
   inputs = {
-    value = replace(
-      urlencode(
-        element(
-          split(
-            "name: ",
-            element(data.yaml_list_of_strings.list.output, count.index),
-          ),
-          1,
-        ),
-      ),
-      "%7D",
-      "",
-    )
+    value = element(var.kdevops_nodes, count.index),
   }
 }
 

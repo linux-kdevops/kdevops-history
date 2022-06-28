@@ -64,19 +64,7 @@ data "template_file" "script_user_data" {
     user_data_log_dir = var.user_data_log_dir
     user_data_enabled = var.user_data_enabled
     ssh_config_user = var.ssh_config_user
-    new_hostname = replace(
-      urlencode(
-        element(
-          split(
-            "name: ",
-            element(data.yaml_list_of_strings.list.output, count.index),
-          ),
-          1,
-        ),
-      ),
-      "%7D",
-      "",
-    )
+    new_hostname = element(var.kdevops_nodes, count.index),
   }
 }
 
@@ -85,19 +73,7 @@ data "template_file" "cloud_init_user_data" {
   template = file("templates/config.yaml")
 
   vars = {
-    new_hostname = replace(
-      urlencode(
-        element(
-          split(
-            "name: ",
-            element(data.yaml_list_of_strings.list.output, count.index),
-          ),
-          1,
-        ),
-      ),
-      "%7D",
-      "",
-    )
+    new_hostname = element(var.kdevops_nodes, count.index),
     ssh_config_user = var.ssh_config_user
   }
 }
@@ -143,19 +119,7 @@ resource "aws_instance" "kdevops_instance" {
   )
 
   tags = {
-    Name = replace(
-      urlencode(
-        element(
-          split(
-            "name: ",
-            element(data.yaml_list_of_strings.list.output, count.index),
-          ),
-          1,
-        ),
-      ),
-      "%7D",
-      "",
-    )
+    Name = element(var.kdevops_nodes, count.index),
   }
 }
 

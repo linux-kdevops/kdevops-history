@@ -15,6 +15,20 @@
     path: "{{ kdevops_nodes_template_full_path }}"
   register: ansible_nodes_template
 
+- name: Set generic nodes array
+  tags: vars
+  set_fact:
+    generic_nodes: "{{ [ kdevops_host_prefix ] }}"
+  when:
+    - not kdevops_baseline_and_dev
+
+- name: Set generic nodes array on dual baseline and dev systems
+  tags: vars
+  set_fact:
+    generic_nodes: "{{ [ kdevops_host_prefix ] + [ kdevops_host_prefix + '-dev' ] }}"
+  when:
+    - kdevops_baseline_and_dev
+
 - name: Set fstests config file variable for {{ fstests_fstyp }}
   set_fact:
     is_fstests: True
@@ -40,6 +54,7 @@
   vars:
     node_template: "{{ kdevops_nodes_template | basename }}"
     nodes: "{{ kdevops_host_prefix  | replace(\"'\", '') | split(', ') }}"
+    all_generic_nodes: "{{ generic_nodes }}"
   template:
     src: "{{ node_template }}"
     dest: "{{ topdir_path }}/{{ kdevops_nodes }}"
@@ -119,6 +134,7 @@
   vars:
     node_template: "{{ kdevops_nodes_template | basename }}"
     nodes: "{{ fstests_enabled_nodes |  regex_replace('\\[') | regex_replace('\\]') | replace(\"'\", '') | split(', ') }}"
+    all_generic_nodes: "{{ fstests_enabled_nodes }}"
   template:
     src: "{{ node_template }}"
     dest: "{{ topdir_path }}/{{ kdevops_nodes }}"
@@ -173,6 +189,7 @@
   vars:
     node_template: "{{ kdevops_nodes_template | basename }}"
     nodes: "{{ blktests_enabled_test_types }}"
+    all_generic_nodes: "{{ blktests_enabled_test_types }}"
   template:
     src: "{{ node_template }}"
     dest: "{{ topdir_path }}/{{ kdevops_nodes }}"
@@ -186,6 +203,8 @@
   stat:
     path: "{{ kdevops_vagrant_template_full_path }}"
   register: vagrant_template
+  when:
+    - kdevops_enable_vagrant
 
 - name: Generate the {{ kdevops_vagrant }} file using {{ kdevops_vagrant_template }} as jinja2 source template
   tags: [ 'vagrant' ]

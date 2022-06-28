@@ -120,19 +120,7 @@ resource "azurerm_linux_virtual_machine" "kdevops_vm" {
   #
   # The "%7D" is the lingering nagging trailing "}" at the end of the string,
   # we just remove it.
-  name = replace(
-    urlencode(
-      element(
-        split(
-          "name: ",
-          element(data.yaml_list_of_strings.list.output, count.index),
-        ),
-        1,
-      ),
-    ),
-    "%7D",
-    "",
-  )
+  name = element(var.kdevops_nodes, count.index)
   location              = var.resource_location
   resource_group_name   = azurerm_resource_group.kdevops_group.name
   network_interface_ids = [element(azurerm_network_interface.kdevops_nic.*.id, count.index)]

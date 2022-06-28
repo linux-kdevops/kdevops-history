@@ -15,13 +15,12 @@ include Makefile.subtrees
 export KDEVOPS_EXTRA_VARS ?=			extra_vars.yaml
 export KDEVOPS_PLAYBOOKS_DIR :=			playbooks
 export KDEVOPS_HOSTFILE ?=			hosts
-export KDEVOPS_NODES :=				vagrant/kdevops_nodes.yaml
+export KDEVOPS_NODES :=
 export KDEVOPS_VAGRANT :=
 export PYTHONUNBUFFERED=1
 
 KDEVOPS_NODES_ROLE_TEMPLATE_DIR :=		$(KDEVOPS_PLAYBOOKS_DIR)/roles/gen_nodes/templates
-export KDEVOPS_NODES_TEMPLATE :=		$(KDEVOPS_NODES_ROLE_TEMPLATE_DIR)/kdevops_nodes_split_start.j2.yaml
-export KDEVOPS_VAGRANT_TEMPLATE :=		$(KDEVOPS_NODES_ROLE_TEMPLATE_DIR)/Vagrantfile.j2
+export KDEVOPS_NODES_TEMPLATE :=
 export KDEVOPS_MRPROPER :=
 
 KDEVOPS_INSTALL_TARGETS :=
@@ -142,6 +141,7 @@ endif
 KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK:=$(subst ",,$(CONFIG_KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK))
 
 export TOPDIR=./
+TOPDIR_PATH = $(shell readlink -f $(TOPDIR))
 
 include scripts/gen-hosts.Makefile
 include scripts/gen-nodes.Makefile
@@ -206,9 +206,6 @@ include scripts/tests.Makefile
 PHONY += clean
 clean:
 	$(Q)$(MAKE) -f scripts/build.Makefile $@
-	@$(Q)if [ -f terraform/Makefile ]; then \
-		$(MAKE) -C terraform/ $@ ;\
-	fi
 
 PHONY += mrproper
 mrproper:

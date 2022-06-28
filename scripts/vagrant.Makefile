@@ -2,8 +2,15 @@
 
 VAGRANT_ARGS :=
 
-KDEVOPS_VAGRANT := vagrant/Vagrantfile
-KDEVOPS_MRPROPER += $(KDEVOPS_VAGRANT)
+KDEVOPS_NODES_TEMPLATE :=	$(KDEVOPS_NODES_ROLE_TEMPLATE_DIR)/kdevops_nodes_split_start.j2.yaml
+KDEVOPS_NODES :=		vagrant/kdevops_nodes.yaml
+
+KDEVOPS_VAGRANT_TEMPLATE :=	$(KDEVOPS_NODES_ROLE_TEMPLATE_DIR)/Vagrantfile.j2
+KDEVOPS_VAGRANT :=		vagrant/Vagrantfile
+
+KDEVOPS_MRPROPER +=		$(KDEVOPS_VAGRANT)
+
+VAGRANT_ARGS += kdevops_vagrant_template_full_path='$(TOPDIR_PATH)/$(KDEVOPS_VAGRANT_TEMPLATE)'
 
 KDEVOPS_BRING_UP_DEPS := bringup_vagrant
 KDEVOPS_DESTROY_DEPS := destroy_vagrant

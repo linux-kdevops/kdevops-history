@@ -1,8 +1,5 @@
 # SPDX-License-Identifier: copyleft-next-0.3.1
-#
-TOPDIR_PATH = $(shell readlink -f $(TOPDIR))
 
-GEN_NODES_EXTRA_ARGS += kdevops_vagrant_template_full_path='$(TOPDIR_PATH)/$(KDEVOPS_VAGRANT_TEMPLATE)'
 GEN_NODES_EXTRA_ARGS += kdevops_nodes='$(KDEVOPS_NODES)'
 GEN_NODES_EXTRA_ARGS += kdevops_nodes_template='$(KDEVOPS_NODES_TEMPLATE)'
 GEN_NODES_EXTRA_ARGS += kdevops_nodes_template_full_path='$(TOPDIR_PATH)/$(KDEVOPS_NODES_TEMPLATE)'

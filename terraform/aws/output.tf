@@ -13,19 +13,7 @@ data "null_data_source" "group_hostnames_and_ips" {
   inputs = {
     value = format(
       "%30s  :  ssh %s@%s %s ",
-      replace(
-        urlencode(
-          element(
-            split(
-              "name: ",
-              element(data.yaml_list_of_strings.list.output, count.index),
-            ),
-            1,
-          ),
-        ),
-        "%7D",
-        "",
-      ),
+      element(var.kdevops_nodes, count.index),
       var.ssh_config_user,
       element(aws_eip.kdevops_eip.*.public_ip, count.index),
       local.ssh_key_i,

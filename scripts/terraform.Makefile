@@ -1,7 +1,14 @@
 # SPDX-License-Identifier: copyleft-next-0.3.1
-#
+
+TERRAFORM_EXTRA_VARS :=
+
 KDEVOPS_BRING_UP_DEPS := bringup_terraform
 KDEVOPS_DESTROY_DEPS := destroy_terraform
+
+KDEVOPS_NODES_TEMPLATE :=	$(KDEVOPS_NODES_ROLE_TEMPLATE_DIR)/terraform_nodes.tf.j2
+KDEVOPS_NODES :=		terraform/nodes.tf
+
+TERRAFORM_EXTRA_VARS += kdevops_enable_terraform='True'
 
 export KDEVOPS_CLOUD_PROVIDER=aws
 ifeq (y,$(CONFIG_TERRAFORM_AWS))
@@ -56,6 +63,8 @@ endif
 
 DEFAULT_DEPS += $(KDEVOPS_SSH_PRIVKEY)
 endif # CONFIG_TERRAFORM_SSH_CONFIG_GENKEY
+
+ANSIBLE_EXTRA_ARGS += $(TERRAFORM_EXTRA_VARS)
 
 bringup_terraform:
 	$(Q)$(TOPDIR)/scripts/bringup_terraform.sh

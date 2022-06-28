@@ -13,9 +13,6 @@ kdevops_terraform_deps:
 		--inventory localhost, \
 		$(KDEVOPS_PLAYBOOKS_DIR)/install_terraform.yml \
 		-e 'ansible_python_interpreter=/usr/bin/python3'
-	@$(Q)if [ -d $(KDEVOPS_TERRAFORM_DIR) ]; then \
-		make -C $(KDEVOPS_TERRAFORM_DIR) deps; \
-	fi
 PHONY += kdevops_terraform_deps
 
 kdevops_vagrant_install_vagrant:
