@@ -20,7 +20,7 @@ if BOOTLINUX_TREE_STABLE
 
 choice
 	prompt "Stable branch to use"
-	default BOOTLINUX_STABLE_V517
+	default BOOTLINUX_STABLE_V519
 
 config BOOTLINUX_STABLE_V419
 	bool "linux-4.19.y"
@@ -41,6 +41,11 @@ config BOOTLINUX_STABLE_V517
 	bool "linux-5.17.y"
 	help
 	  Automatically enable the latest supported linux-5.17.y kernel.
+
+config BOOTLINUX_STABLE_V517
+	bool "linux-5.19.y"
+	help
+	  Automatically enable the latest supported linux-5.19.y kernel.
 
 endchoice
 
