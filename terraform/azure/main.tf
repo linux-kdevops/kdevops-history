@@ -24,7 +24,7 @@ resource "azurerm_subnet" "kdevops_subnet" {
   name                 = "kdevops_subnet"
   resource_group_name  = azurerm_resource_group.kdevops_group.name
   virtual_network_name = azurerm_virtual_network.kdevops_network.name
-  address_prefixes       = ["10.0.2.0/24"]
+  address_prefixes     = ["10.0.2.0/24"]
 }
 
 resource "azurerm_public_ip" "kdevops_publicip" {
@@ -64,14 +64,14 @@ resource "azurerm_network_security_group" "kdevops_sg" {
 resource "azurerm_network_interface_security_group_association" "kdevops_sg_assoc" {
   count                     = local.num_boxes
   network_security_group_id = azurerm_network_security_group.kdevops_sg.id
-  network_interface_id = element(azurerm_network_interface.kdevops_nic.*.id, count.index)
+  network_interface_id      = element(azurerm_network_interface.kdevops_nic.*.id, count.index)
 }
 
 resource "azurerm_network_interface" "kdevops_nic" {
-  count                     = local.num_boxes
-  name                      = format("kdevops_nic_%02d", count.index + 1)
-  location                  = var.resource_location
-  resource_group_name       = azurerm_resource_group.kdevops_group.name
+  count               = local.num_boxes
+  name                = format("kdevops_nic_%02d", count.index + 1)
+  location            = var.resource_location
+  resource_group_name = azurerm_resource_group.kdevops_group.name
 
   ip_configuration {
     name                          = "kdevops_nic_configuration"
@@ -120,12 +120,12 @@ resource "azurerm_linux_virtual_machine" "kdevops_vm" {
   #
   # The "%7D" is the lingering nagging trailing "}" at the end of the string,
   # we just remove it.
-  name = element(var.kdevops_nodes, count.index)
-  location              = var.resource_location
-  resource_group_name   = azurerm_resource_group.kdevops_group.name
-  network_interface_ids = [element(azurerm_network_interface.kdevops_nic.*.id, count.index)]
-  size                  = var.vmsize
-  admin_username        = var.ssh_config_user
+  name                            = element(var.kdevops_nodes, count.index)
+  location                        = var.resource_location
+  resource_group_name             = azurerm_resource_group.kdevops_group.name
+  network_interface_ids           = [element(azurerm_network_interface.kdevops_nic.*.id, count.index)]
+  size                            = var.vmsize
+  admin_username                  = var.ssh_config_user
   disable_password_authentication = true
 
   os_disk {
@@ -134,9 +134,9 @@ resource "azurerm_linux_virtual_machine" "kdevops_vm" {
     # move this hack to a single place using local variables somehow so that
     # we can later adjust the hack *once* instead of many times.
     #name                 = "${format("kdevops-main-disk-%s", element(azurerm_virtual_machine.kdevops_vm.*.name, count.index))}"
-    name                  = format("kdevops-main-disk-%02d", count.index + 1)
-    caching               = "ReadWrite"
-    storage_account_type  = var.managed_disk_type
+    name                 = format("kdevops-main-disk-%02d", count.index + 1)
+    caching              = "ReadWrite"
+    storage_account_type = var.managed_disk_type
     #disk_size_gb         = 64
   }
 
@@ -148,8 +148,8 @@ resource "azurerm_linux_virtual_machine" "kdevops_vm" {
   }
 
   admin_ssh_key {
-    username      = var.ssh_config_user
-    public_key    = var.ssh_config_pubkey_file != "" ? file(var.ssh_config_pubkey_file) : ""
+    username   = var.ssh_config_user
+    public_key = var.ssh_config_pubkey_file != "" ? file(var.ssh_config_pubkey_file) : ""
   }
 
   boot_diagnostics {

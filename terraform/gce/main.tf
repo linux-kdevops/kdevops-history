@@ -1,10 +1,10 @@
 resource "google_compute_instance" "kdevops_instances" {
   count        = local.num_boxes
-  name = element(var.kdevops_nodes, count.index)
+  name         = element(var.kdevops_nodes, count.index)
   machine_type = var.machine_type
   zone         = var.region
 
-  tags = ["kdevops" ]
+  tags = ["kdevops"]
 
   boot_disk {
     initialize_params {

@@ -1,14 +1,14 @@
 terraform {
-	required_providers {
-		azurerm= {
-			source = "hashicorp/azurerm"
-			version = "~>3.11.0"
-		}
-		null = {
-			source = "hashicorp/null"
-			version = "~>2.1"
-		}
-	}
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~>3.11.0"
+    }
+    null = {
+      source  = "hashicorp/null"
+      version = "~>2.1"
+    }
+  }
 }
 
 provider "azurerm" {

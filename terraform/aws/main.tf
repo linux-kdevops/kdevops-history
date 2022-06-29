@@ -63,8 +63,8 @@ data "template_file" "script_user_data" {
   vars = {
     user_data_log_dir = var.user_data_log_dir
     user_data_enabled = var.user_data_enabled
-    ssh_config_user = var.ssh_config_user
-    new_hostname = element(var.kdevops_nodes, count.index),
+    ssh_config_user   = var.ssh_config_user
+    new_hostname      = element(var.kdevops_nodes, count.index),
   }
 }
 
@@ -73,7 +73,7 @@ data "template_file" "cloud_init_user_data" {
   template = file("templates/config.yaml")
 
   vars = {
-    new_hostname = element(var.kdevops_nodes, count.index),
+    new_hostname    = element(var.kdevops_nodes, count.index),
     ssh_config_user = var.ssh_config_user
   }
 }

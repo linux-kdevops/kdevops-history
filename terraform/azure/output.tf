@@ -13,7 +13,7 @@ data "azurerm_public_ip" "public_ips" {
   count               = local.num_boxes
   name                = element(azurerm_public_ip.kdevops_publicip.*.name, count.index)
   resource_group_name = azurerm_resource_group.kdevops_group.name
-  depends_on          = [ azurerm_linux_virtual_machine.kdevops_vm ]
+  depends_on          = [azurerm_linux_virtual_machine.kdevops_vm]
 }
 
 output "kdevops_public_ip_addresses" {
@@ -21,11 +21,11 @@ output "kdevops_public_ip_addresses" {
 }
 
 locals {
-  ssh_key_i = "${format(" %s%s ", var.ssh_config_pubkey_file != "" ? "-i " : "", var.ssh_config_pubkey_file != "" ? replace(var.ssh_config_pubkey_file, ".pub", "") : "")}"
+  ssh_key_i = format(" %s%s ", var.ssh_config_pubkey_file != "" ? "-i " : "", var.ssh_config_pubkey_file != "" ? replace(var.ssh_config_pubkey_file, ".pub", "") : "")
 }
 
 data "null_data_source" "group_hostnames_and_ips" {
-  count  = "${local.num_boxes}"
+  count = local.num_boxes
   inputs = {
     # In theory using "${self.triggers["name"]}" and "${self.triggersp["ip"]}"
     # would be nice but it is not supported in this context, only in the
@@ -35,5 +35,5 @@ data "null_data_source" "group_hostnames_and_ips" {
 }
 
 output "login_using" {
-  value = "${data.null_data_source.group_hostnames_and_ips.*.outputs}"
+  value = data.null_data_source.group_hostnames_and_ips.*.outputs
 }
