@@ -6,7 +6,164 @@ One reason might be you are an Enterprise Linux distribution and don't
 have public vagrant boxes for older releases you might still support
 but want the benefit of having vagrant boxes to work with kdevops
 kernel-ci. Another reason might be you just cannot legally share you
-images, for one reason or another.
+images, for one reason or another. Another reason is you may have some
+new technology which is not yet easily available on distribution kernels
+and want to enable folks to test technology on some development subsystem
+or linux-nxt.
+
+## Re-using an existing box for development
+
+If you are doing Linux kernel development you may want to just enable
+a QA or other developers to quickly test a built kernel for you.
+If you don't want to do a full fresh install of a distribution you can
+opt to re-use a distribution vagrant box and just augment it with a
+custom kernel build. This section documents how to do that with a demo
+of a successful box built using this technique.
+
+This is the lazy developer approach to customizing a Vagrant box for Linux
+kernel development. This involves four steps:
+
+  * 1) one is getting your kernel binary and modules
+  * 2) The grub configuration stuff right.
+  * 3) Edit the Vagrantfile to remove stupid stuff
+  * 4) Building the tarball
+
+We break this down below.
+
+### Getting your kernel over
+
+From a libvirt perspective Vagrant boxes are just compressed tarballs
+with a qcow2 file. So to hack on one first download the box. So for
+example if we visit the [debian/testing64](https://app.vagrantup.com/debian/boxes/testing64)
+page there you will see a [libvirt download URL](https://app.vagrantup.com/debian/boxes/testing64/versions/20220626.1/providers/libvirt.box)
+with the box file.
+
+So we do:
+
+```bash
+wget https://app.vagrantup.com/debian/boxes/testing64/versions/20220626.1/providers/libvirt.box
+
+sha1sum libvirt.box
+06b07c0d0b78df5369d9ed35eaf39098c1ec7846  libvirt.box
+
+file libvirt.box
+libvirt.box: gzip compressed data, from Unix, original size modulo 2^32 1197363200
+```
+
+And so to hack on it we just use nbd:
+
+```bash
+sudo qemu-nbd --connect=/dev/nbd0 box.img
+mkdir debian-testing-root-vagrant
+sudo mount /dev/nbd0p1 ./vanilla-debian-zns/debian-testing-root-vagrant
+```
+
+When you finish just do:
+
+```bash
+sudo modprobe nbd max_part=8
+sudo umount debian-testing-root-vagrant
+sudo qemu-nbd --disconnect /dev/nbd0
+```
+
+It is important to run the disconnect command before copying the box file as
+backups or using it for anything.
+
+What I do then is use a kdevops linux-next guest to compile linux-next or
+whatever I want, and then I use a two step process. One to scp the modules
+directory locally, and the respective `/boot/*$(uname -r)*` files over to
+a new directoy and then install these on the target. Then you need to configure
+the grub console so `sudo virsh console <domain>` works and you also want to
+update the grub menu. That is covered in the next subsection.
+
+### Getting your kernel over
+
+OK now you just need to update the `/etc/default/grub` file and also the
+`/boot/grub/grub.cfg` file. Editing `/etc/default/grub` is easy you can
+just run your editor on the mounted partition for the file and ensure
+you have these entries:
+
+```
+GRUB_DEFAULT=0
+GRUB_TIMEOUT=5
+GRUB_DISTRIBUTOR=`lsb_release -i -s 2> /dev/null || echo Debian`
+GRUB_CMDLINE_LINUX_DEFAULT="net.ifnames=0 biosdevname=0"
+GRUB_CMDLINE_LINUX="console=tty0 console=tty1 console=ttyS0,38400n8"
+
+GRUB_SERIAL_COMMAND="serial --speed=38400 --unit=0 --parity=no --stop=1"
+GRUB_TERMINAL="serial"
+GRUB_DISABLE_SUBMENU=y
+```
+
+The last part of this file helps ensure you can get to pick a different
+kernel at boot through the grub prompt using the serial console (`virsh console),
+however sadly it seems the grub version on the debian-testing as of today
+doesn't work with this yet, so this step could be enhanced to enable more
+flexibility to the user from the start. Until this is fixed then developers
+have to do the work manually to perhaps update grub to get this fixed.
+
+The last step is then to update the `/boot/grub/grub.cfg` file.
+To do this, I just have two guests running:
+
+ * dev: some development system where I compile and install some kernel
+ * baseline: a fresh debian-testing guest just brought up with vagrant
+
+And then I scp to it the kernel / modules from dev over, run update-grub
+and copy its grub file over. Something like the following:
+
+```bash
+mkdir -p tmp/boot
+scp -r dev:/lib/modules/5.19.0-rc4-next-20220629/ tmp/
+scp -r dev:/boot/*5.19.0-rc4-next-20220629* tmp/
+
+scp -r tmp/boot/* baseline:/boot/
+scp -r tmp-provision-dir/5.19.0-rc4-next-20220629 baseline:/lib/modules/
+ssh baseline sudo update-grub
+scp baseline:/boot/grub/grub.cfg tmp
+```
+
+OK so finally we can copy that grub.cfg to the mounted nbd partition and
+hope that works.
+
+### Editing your Vagrantfile to remove stupid stuff
+
+By default vagrant boxes enavble sharing your directory to the guest
+through NFS. From a Linux kernel development perspective this is just
+lunacy. And so I like to disable it. By default then debian uses this
+for its sync thing
+
+```
+  config.vm.synced_folder ".", "/vagrant", type: "nfs", nfs_version: "4", nfs_udp: false
+```
+
+Replace this with the more sane which disables this:
+
+```
+  config.vm.synced_folder './', '/vagrant', type: '9p', disabled: true, accessmode: "mapped", mount: false
+```
+
+You may also want to edit the `config.vm.post_up_message` with whatever.
+
+```
+  config.vm.post_up_message = "this is kernel build for send bug reports to ignore@ignore.org"
+```
+
+### Creating the vagrant new box file tarball
+
+To create the box file you just tar it up. Assuming you want maximum
+compression:
+
+```bash
+tar -cvf ../mcgrof-20220629.box box.img metadata.json Vagrantfile -I "gzip --best"
+```
+
+You can now upload this box on the vagrant cloud and use it with the
+nice shorthands provided.
+
+## A fresh install
+
+To try to save the most amount of space you want to do a fresh install.
+This section documents how to do that.
 
 First you'd install a guest using virt-install, an example script which
 you can extend to your own needs is the
