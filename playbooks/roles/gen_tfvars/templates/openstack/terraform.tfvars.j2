@@ -1,0 +1,15 @@
+openstack_cloud = "{{ terraform_openstack_cloud_name }}"
+instance_prefix = "{{ terraform_openstack_instance_prefix }}"
+flavor_name = "{{ terraform_openstack_flavor }}"
+image_name = "{{ terraform_openstack_image_name }}"
+ssh_pubkey_name = "{{ terraform_openstack_ssh_pubkey_name }}"
+
+limit_boxes = "{{ terraform_limit_boxes }}"
+limit_num_boxes = "{{ terraform_limit_num_boxes }}"
+
+ssh_config_pubkey_file = "{{ kdevops_terraform_ssh_config_pubkey_file }}"
+ssh_config_user = "{{ kdevops_terraform_ssh_config_user }}"
+ssh_config = "{{ sshconfig }}"
+ssh_config_update = "{{ kdevops_terraform_ssh_config_update }}"
+ssh_config_use_strict_settings = "{{ kdevops_terraform_ssh_config_update_strict }}"
+ssh_config_backup = "{{ kdevops_terraform_ssh_config_update_backup }}"

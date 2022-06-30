@@ -1,0 +1,31 @@
+---
+- name: Import optional extra_args file
+  include_vars: "{{ item }}"
+  ignore_errors: yes
+  with_first_found:
+    - files:
+      - "../extra_vars.yml"
+      - "../extra_vars.yaml"
+      - "../extra_vars.json"
+      skip: true
+  tags: vars
+
+- name: verify terraform variable template file exists {{ kdevops_terraform_tfvars_template_full_path }}
+  stat:
+    path: "{{ kdevops_nodes_template_full_path }}"
+  register: terraform_tfvars_template
+
+- name: Generate the terraform variables file file using {{ kdevops_terraform_tfvars }} as jinja2 source template
+  tags: [ 'nodes' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  vars:
+    tfvars_template: "{{ kdevops_terraform_tfvars_template }}"
+  template:
+    src: "{{ tfvars_template }}"
+    dest: "{{ topdir_path }}/{{ kdevops_terraform_tfvars }}"
+    force: yes
+  when:
+    - kdevops_enable_terraform
+    - terraform_tfvars_template.stat.exists

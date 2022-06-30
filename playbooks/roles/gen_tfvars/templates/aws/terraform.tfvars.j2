@@ -1,0 +1,20 @@
+aws_region = "{{ terraform_aws_region }}"
+aws_availability_region = "{{ terraform_aws_av_region }}"
+aws_name_search = "{{ terraform_aws_ns }}"
+aws_virt_type = "{{ terraform_aws_virt_type }}"
+aws_ami_owner = "{{ terraform_aws_ami_owner }}"
+aws_instance_type = "{{ terraform_aws_instance_type }}"
+
+limit_boxes = "{{ terraform_limit_boxes }}"
+limit_num_boxes = "{{ terraform_limit_num_boxes }}"
+
+ssh_config_pubkey_file = "{{ kdevops_terraform_ssh_config_pubkey_file }}"
+ssh_config_user = "{{ kdevops_terraform_ssh_config_user }}"
+ssh_config = "{{ sshconfig }}"
+ssh_config_update = "{{ kdevops_terraform_ssh_config_update }}"
+ssh_config_use_strict_settings = "{{ kdevops_terraform_ssh_config_update_strict }}"
+ssh_config_backup = "{{ kdevops_terraform_ssh_config_update_backup }}"
+
+ansible_provision = "{{ kdevops_terraform_ansible_provision }}"
+ansible_inventory = "{{ kdevops_terraform_ansible_inventory }}"
+ansible_provision_playbook = "{{ kdevops_ansible_provision_playbook }}"

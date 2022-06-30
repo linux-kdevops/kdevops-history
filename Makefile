@@ -28,6 +28,7 @@ export KDEVOPS_MRPROPER :=
 KDEVOPS_INSTALL_TARGETS :=
 
 DEFAULT_DEPS :=
+DEFAULT_DEPS_REQS_EXTRA_VARS :=
 MAKEFLAGS += --no-print-directory
 SHELL := /bin/bash
 HELP_TARGETS := kconfig-help-menu
@@ -111,6 +112,8 @@ ifneq (,$(ANSIBLE_EXTRA_ARGS))
 DEFAULT_DEPS += $(KDEVOPS_EXTRA_VARS)
 endif
 
+DEFAULT_DEPS += $(DEFAULT_DEPS_REQS_EXTRA_VARS)
+
 # To not clutter the top level Makefile, work which requires to be made
 # on the localhost can be augmented on the LOCALHOST_SETUP_WORK variable.
 # This will run after the extra_vars.yaml file is created and so you can
@@ -141,6 +144,9 @@ KDEVOPS_EXTRA_ADDON_SOURCE:=$(subst ",,$(CONFIG_KDEVOPS_EXTRA_ADDON_SOURCE))
 endif
 
 KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK:=$(subst ",,$(CONFIG_KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK))
+ifeq (y,$(CONFIG_KDEVOPS_ANSIBLE_PROVISION_ENABLE))
+ANSIBLE_EXTRA_ARGS += kdevops_ansible_provision_playbook='$(KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK)'
+endif
 
 include scripts/gen-hosts.Makefile
 include scripts/gen-nodes.Makefile
@@ -210,9 +216,6 @@ PHONY += mrproper
 mrproper:
 	$(Q)$(MAKE) -f scripts/build.Makefile clean
 	$(Q)$(MAKE) -f scripts/build.Makefile $@
-	@$(Q)if [ -f terraform/Makefile ]; then \
-		$(MAKE) -C terraform clean ;\
-	fi
 	$(Q)rm -f terraform/*/terraform.tfvars
 	$(Q)rm -f $(KDEVOPS_NODES)
 	$(Q)rm -f $(KDEVOPS_HOSTFILE) $(KDEVOPS_MRPROPER)
