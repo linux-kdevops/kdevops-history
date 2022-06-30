@@ -50,7 +50,85 @@ file libvirt.box
 libvirt.box: gzip compressed data, from Unix, original size modulo 2^32 1197363200
 ```
 
-And so to hack on it we just use nbd:
+The file can be decompressed as a regular tarball. Since it has no
+directory in it you want to copy the file to another directory and uncompress
+there, otherwise it will clutter your current directory:
+
+```bash
+mkdir box-dev
+cp libvirt.box box-dev
+cd box-dev
+tar zxvf libvirt.box
+```
+
+So you will see 3 files, one just a qcow2 file the other expresses
+how big of a drive was used to create this qcow2 file along with a
+provider, and the Vagrantfile defines how to inialize this qcow2 file
+with libvirt:
+
+```bash
+ls -1
+
+box.img
+metadata.json
+Vagrantfile
+
+file box.img
+box.img: QEMU QCOW2 Image (v3), 21474836480 bytes
+
+cat metadata.json
+{
+  "provider"     : "libvirt",
+  "format"       : "qcow2",
+  "virtual_size" : 20
+}
+
+cat Vagrantfile
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  config.vm.post_up_message = "Vanilla Debian box. See https://app.vagrantup.com/debian for help and bug reports"
+
+  # workaround for #837992
+  # use nfsv4 mode by default since rpcbind is not available on startup
+  # we need to force tcp because udp is not availaible for nfsv4
+  config.vm.synced_folder ".", "/vagrant", type: "nfs", nfs_version: "4", nfs_udp: false
+
+  # Options for libvirt vagrant provider.
+  config.vm.provider :libvirt do |libvirt|
+
+    # A hypervisor name to access. Different drivers can be specified, but
+    # this version of provider creates KVM machines only. Some examples of
+    # drivers are kvm (qemu hardware accelerated), qemu (qemu emulated),
+    # xen (Xen hypervisor), lxc (Linux Containers),
+    # esx (VMware ESX), vmwarews (VMware Workstation) and more. Refer to
+    # documentation for available drivers (http://libvirt.org/drivers.html).
+    libvirt.driver = "kvm"
+
+    # The name of the server, where libvirtd is running.
+    # libvirt.host = "localhost"
+
+    # If use ssh tunnel to connect to Libvirt.
+    libvirt.connect_via_ssh = false
+
+    # The username and password to access Libvirt. Password is not used when
+    # connecting via ssh.
+    libvirt.username = "root"
+    #libvirt.password = "secret"
+
+    # Libvirt storage pool name, where box image and instance snapshots will
+    # be stored.
+    libvirt.storage_pool_name = "default"
+
+    # Set a prefix for the machines that's different than the project dir name.
+    #libvirt.default_prefix = ''
+  end
+end
+```
+
+And so to hack on the qcow file we just use nbd:
 
 ```bash
 sudo qemu-nbd --connect=/dev/nbd0 box.img
