@@ -344,7 +344,7 @@
   register: serial_command_grep
   lineinfile:
     path: /etc/default/grub
-    regexp: '^(GRUB_SERIAL_COMMAND=\")(.*)'
+    regexp: '^(GRUB_SERIAL_COMMAND=\")(.*)\"\s*"'
     line: ''
   check_mode: yes
   when:
