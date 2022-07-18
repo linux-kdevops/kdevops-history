@@ -4,7 +4,7 @@ The master git repo for kdevops is:
 
   * https://github.com/linux-kdevops/kdevops
 
-![kdevops-logo](images/kdevops-trans-bg-edited-individual-with-logo-gausian-blur-1600x1600.png = 250x)
+<img src="images/kdevops-trans-bg-edited-individual-with-logo-gausian-blur-1600x1600.png" width=250 align=center alt="kdevops logo">
 
 kdevops provides a framework for Linux kernel development and testing.
 It makes use of local ansible roles and optionally lets you use
