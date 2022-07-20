@@ -18,7 +18,7 @@ data_fs_opts: "-L {{ data_label }}"
 
 # Full path to make command if you want to override
 make: "make"
-make_num_jobs: "$(nproc --all)"
+num_jobs: "nproc --all"
 
 sparsefiles_device: "/dev/nvme2n1"
 sparsefiles_path: "/media/sparse"

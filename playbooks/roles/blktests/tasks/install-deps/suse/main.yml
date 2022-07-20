@@ -283,12 +283,16 @@
   args:
     chdir: "{{ nbd_data }}"
 
+- name: Get nproc
+  command: "{{ num_jobs }}"
+  tags: [ 'git', 'blktests', 'nbd' ]
+  register: nproc
+
 - name: Build nbd
   tags: [ 'git', 'blktests', 'nbd' ]
   make:
     chdir: "{{ nbd_data }}"
-    params:
-      NUM_THREADS: "{{ make_num_jobs }}"
+    jobs: "{{ nproc.stdout }}"
 
 - name: Install nbd
   become: yes

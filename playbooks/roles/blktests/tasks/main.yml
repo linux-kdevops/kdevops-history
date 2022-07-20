@@ -62,12 +62,16 @@
     version: master
   tags: [ 'git', 'blktests', 'blktrace' ]
 
+- name: Get nproc
+  command: "{{ num_jobs }}"
+  tags: [ 'blktests', 'build', 'bltkrace' ]
+  register: nproc
+
 - name: Build blktrace
   tags: [ 'blktests', 'build', 'bltkrace' ]
   make:
     chdir: "{{ blktrace_data }}"
-    params:
-      NUM_THREADS: "{{ make_num_jobs }}"
+    jobs: "{{ nproc.stdout }}"
 
 - name: Install blktrace
   become: yes
@@ -99,8 +103,7 @@
   tags: [ 'blktests', 'build']
   make:
     chdir: "{{ blktests_data }}"
-    params:
-      NUM_THREADS: "{{ make_num_jobs }}"
+    jobs: "{{ nproc.stdout }}"
 
 - name: Install blktests
   become: yes

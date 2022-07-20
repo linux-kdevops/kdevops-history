@@ -84,12 +84,15 @@
     version: master
   tags: [ 'oscheck', 'git', 'fstests']
 
+- name: Get nproc
+  tags: [ 'oscheck', 'fstests', 'build']
+  register: nproc
+
 - name: Build fstests
   tags: [ 'oscheck', 'fstests', 'build']
   make:
     chdir: "{{ fstests_data }}"
-    params:
-      NUM_THREADS: "{{ make_num_jobs }}"
+    jobs: "{{ nproc.stdout }}"
 
 - name: git pull latest kdevops to ensure expunge lists and scripts are up to date
   environment:

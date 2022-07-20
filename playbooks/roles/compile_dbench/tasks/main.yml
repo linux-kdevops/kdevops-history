@@ -38,12 +38,18 @@
   when:
     - compile_dbench|bool
 
+- name: Get nproc
+  command: "{{ num_jobs }}"
+  tags: [ 'git', 'dbench' ]
+  register: nproc
+  when:
+    - compile_dbench|bool
+
 - name: Build dbench
   tags: [ 'git', 'dbench' ]
   make:
     chdir: "{{ dbench_data }}"
-    params:
-      NUM_THREADS: "{{ make_num_jobs }}"
+    jobs: "{{ nproc.stdout }}"
   when:
     - compile_dbench|bool
 

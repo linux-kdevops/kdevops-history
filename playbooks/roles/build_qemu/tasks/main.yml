@@ -72,11 +72,17 @@
   when:
     - build_qemu_now|bool
 
+- name: Get nproc
+  command: "{{ num_jobs }}"
+  tags: [ 'qemu', 'configure' ]
+  register: nproc
+  when:
+    - build_qemu_now|bool
+
 - name: Build qemu
   make:
     chdir: "{{ qemu_data }}"
-    params:
-      NUM_THREADS: "{{ make_num_jobs }}"
+    jobs: "{{ nproc.stdout }}"
   tags: [ 'qemu', 'build' ]
   when:
     - build_qemu_now|bool
