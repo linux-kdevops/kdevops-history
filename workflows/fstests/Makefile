@@ -26,6 +26,10 @@ FSTESTS_ARGS += fstests_setup_system='$(FSTESTS_SETUP_SYSTEM)'
 FSTESTS_ARGS += fstests_data_target='$(FSTESTS_DATA_TARGET)'
 FSTESTS_ARGS += fstests_test_dev='$(FSTESTS_TEST_DEV)'
 
+ifeq (y,$(CONFIG_QEMU_ENABLE_NVME_ZNS))
+FSTESTS_ARGS += fstests_test_dev_zns='$(subst ",,$(CONFIG_FSTESTS_TEST_DEV_ZNS))'
+endif
+
 export FSTESTS_SPARSE_FILE_SIZE:=
 export FSTESTS_TESTDEV_SPARSEFILE_GENERATION:=
 export FSTESTS_SPARSE_FILE_PATH:=
