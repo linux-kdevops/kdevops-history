@@ -6,15 +6,9 @@
 # all you'd have to do is edit your respective project name space
 # yaml file to set the hosts / playbooks you need to run.
 #
-# We infer your project namespace from the parent directory where this
-# vagrant directory sits in. Suppose this file is in your project under
-# kdevops/vagrant/Vagrantfile then your namespace is inferred to be kdevops.
-#
-# The file which describes nodes for this project is expected to then be
-# kdevops_nodes.yml. In this project example's case you can override node
-# configuration through the node overridef file:
-#
-# 	kdevops_vagrant_nodes_override.yaml
+# This file is automatically created for you from a jinja2 template file
+# and parsed with ansible after extra_vars.yaml file is created. The source is
+# playbooks/roles/gen_nodes/templates/Vagrantfile.j2
 
 Vagrant.require_version ">= 1.6.0"
 
