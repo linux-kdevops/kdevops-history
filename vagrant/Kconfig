@@ -539,7 +539,7 @@ source "vagrant/Kconfig.debian"
 source "vagrant/Kconfig.opensuse"
 source "vagrant/Kconfig.fedora"
 source "vagrant/Kconfig.redhat.generic"
-source "vagrant/Kconfig.kdevops
+source "vagrant/Kconfig.kdevops"
 
 if HAVE_SUSE_VAGRANT
 source "vagrant/Kconfig.suse"
