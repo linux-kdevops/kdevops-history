@@ -96,7 +96,7 @@ if WORKFLOWS_DEDICATED_WORKFLOW
 
 choice
 	prompt "Dedicated target Linux test workflow"
-	default KDEVOPS_WORKFLOW_ENABLE_FSTESTS
+	default KDEVOPS_WORKFLOW_DEDICATE_FSTESTS
 
 config KDEVOPS_WORKFLOW_DEDICATE_FSTESTS
 	bool "fstests"
