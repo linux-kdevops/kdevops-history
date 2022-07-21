@@ -42,7 +42,7 @@ config BOOTLINUX_STABLE_V517
 	help
 	  Automatically enable the latest supported linux-5.17.y kernel.
 
-config BOOTLINUX_STABLE_V517
+config BOOTLINUX_STABLE_V519
 	bool "linux-5.19.y"
 	help
 	  Automatically enable the latest supported linux-5.19.y kernel.
