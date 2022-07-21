@@ -86,6 +86,7 @@
 
 - name: Get nproc
   tags: [ 'oscheck', 'fstests', 'build']
+  command: "nproc"
   register: nproc
 
 - name: Build fstests
