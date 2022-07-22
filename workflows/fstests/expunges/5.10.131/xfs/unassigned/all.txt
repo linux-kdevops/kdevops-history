@@ -8,12 +8,14 @@ generic/373 # cross-fs reflink
 generic/374 # cross-fs dedupe
 generic/418 # can sometimes take over 10 times the amount of time, no obvious failure yet requires manual introspection, failure rate is about 1/10
 generic/459 # lazy baseline - failure found in at least two sections
+generic/475 # lazy baseline - failure found in at least two sections
 generic/476 # can sometimes take over 10 times the amount of time, no obvious failure, happened on xfs_nocrc_512 but also on ext4_defaults
 generic/531 # failure rate is 1/5 hung task [1] complex backport required [2] [1] https://gist.github.com/mcgrof/91e1e16b8fbb8e09c6f6de8e9dc1ecd9 [2] deferred inode inactivation: https://lore.kernel.org/r/162812918259.2589546.16599271324044986858.stgit@magnolia
 generic/590 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 generic/600 # failed after mote than 100 runs - looks like a test bug related to 1 second drift on clock change (set grace to 1653569363 but got grace 1653569362)
 generic/601 # fails on xfs_reflink_1024
 generic/607
+generic/648 # lazy baseline - failure found in at least two sections
 generic/673
 shared/032 # hung due to nvme I/O timeout (may not be test related)
 xfs/005 # fails on many sections failure rate about 1/5, lazy baseline - failure found in at least two sections

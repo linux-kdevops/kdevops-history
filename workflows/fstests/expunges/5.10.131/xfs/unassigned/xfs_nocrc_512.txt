@@ -1,3 +1,4 @@
+generic/482
 generic/618
 xfs/071
 xfs/141 # fails after enabling CONFIG_XFS_DEBUG

@@ -1,1 +1,2 @@
+generic/482
 xfs/141 # fails after enabling CONFIG_XFS_DEBUG
