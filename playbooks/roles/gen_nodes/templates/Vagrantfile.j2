@@ -255,6 +255,28 @@ Vagrant.configure("2") do |config|
 {% else %}
         libvirt.qemuargs :value => "-device"
         libvirt.qemuargs :value => "ioh3420,id=custom-pci-for-nvme,bus=pcie.0,addr=0x8,chassis=8"
+{% if libvirt_enable_cxl %}
+{% if libvirt_enable_cxl_demo_topo1 %}
+        libvirt.qemuargs :value => "-machine"
+        libvirt.qemuargs :value => "cxl=on"
+
+        libvirt.qemuargs :value => "-device"
+        libvirt.qemuargs :value => "pxb-cxl,bus=pcie.0,id=cxl.0,bus_nr=52,addr=0x9"
+
+
+        libvirt.qemuargs :value => "-object"
+        libvirt.qemuargs :value => "memory-backend-file,id=kdevops-cxl-mem1,share=on,mem-path=/tmp/cxltest.raw,size=256M"
+
+        libvirt.qemuargs :value => "-object"
+        libvirt.qemuargs :value => "memory-backend-file,id=kdevops-cxl-lsa1,share=on,mem-path=/tmp/lsa.raw,size=256M"
+
+        libvirt.qemuargs :value => "-device"
+        libvirt.qemuargs :value => "cxl-rp,port=0,bus=cxl.0,id=kdevops_cxl_root_port1,chassis=0,slot=2"
+
+        libvirt.qemuargs :value => "-device"
+        libvirt.qemuargs :value => "cxl-type3,bus=kdevops_cxl_root_port1,memdev=kdevops-cxl-mem1,lsa=kdevops-cxl-lsa1,id=kdevops-cxl-pmem0"
+{% endif %}
+{% endif %}
 {% endif %}
 
         if server_data['pcipassthrough']

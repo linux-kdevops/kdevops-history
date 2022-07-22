@@ -826,4 +826,28 @@ config QEMU_NVME_ZONE_LOGICAL_BLOCKSIZE
 	default 4096 if !QEMU_CUSTOM_NVME_ZNS
 	default QEMU_CUSTOM_NVME_ZONE_LOGICAL_BLOCKSIZE if QEMU_CUSTOM_NVME_ZNS
 
+config QEMU_ENABLE_CXL
+	bool "Enable Qemu CXL devices"
+	depends on VAGRANT_LIBVIRT
+	depends on LIBVIRT_MACHINE_TYPE_Q35
+	depends on QEMU_BUILD
+	default n
+	help
+	  If this option is enabled then you can enable different types of
+	  CXL devices which we will emulate for you.
+
+if QEMU_ENABLE_CXL
+
+choice
+	prompt "CXL topology to enable"
+	default QEMU_ENABLE_CXL_DEMO_TOPOLOGY_1
+
+config QEMU_ENABLE_CXL_DEMO_TOPOLOGY_1
+	bool "First CXL demo topology"
+	help
+	  Basic CXL demo topology.
+endchoice
+
+endif # QEMU_ENABLE_CXL
+
 endif # VAGRANT
