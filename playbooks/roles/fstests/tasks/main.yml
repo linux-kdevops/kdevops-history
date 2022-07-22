@@ -430,6 +430,32 @@
   when:
     - checktime_files.matched > 0
 
+- name: Look for the check.log files on {{ fstests_data_target }}
+  tags: [ 'oscheck', 'fstests', 'copy_results', 'checklog' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  find:
+    paths: "{{ fstests_data_target }}"
+    recurse: yes
+    patterns: "check.log"
+  register: checklog_files
+
+- name: Copy the latest run check.log files from {{ fstests_data_target }}
+  tags: [ 'oscheck', 'fstests', 'copy_results', 'checklog' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  fetch:
+    src: "{{ item.path }}"
+    dest: "{{ fstests_results_target }}/{{ item.path | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
+    flat: yes
+  with_items: "{{ checklog_files.files }}"
+  loop_control:
+    label: "{{ item.path | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
+  when:
+    - checklog_files.matched > 0
+
 - name: Look for xunit results files on {{ fstests_data_target }}
   tags: [ 'oscheck', 'fstests', 'copy_results', 'xunit' ]
   become: yes
