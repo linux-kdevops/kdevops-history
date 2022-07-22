@@ -1,0 +1,26 @@
+if KDEVOPS_WORKFLOW_ENABLE_CXL
+
+config NDCTL_GIT
+	string "The ndctl git tree to clone"
+	default "https://github.com/pmem/ndctl.git" if !GIT_ALTERNATIVES
+	default "https://github.com/linux-kdevops/ndctl.git" if GIT_LINUX_KDEVOPS_GITHUB
+	default "https://gitlab.com/linux-kdevops/ndctl.git" if GIT_LINUX_KDEVOPS_GITLAB
+	help
+	  The ndctl git tree to clone.
+
+config NDCTL_DATA
+	string "Where to clone the blktests git tree to"
+	default "{{data_path}}/ndctl"
+	help
+	  This is the target location of where to clone the blktests git tree.
+	  Note that {{data_path}} corresponds to the location set by the
+	  configuration option CONFIG_WORKFLOW_DATA_PATH.
+
+config NDCTL_VERSION
+	string "ndctl version tag or branch to use to compile"
+	default "pending"
+	help
+	  This specifies the git tag or branch to use for ndctl.
+	  At this point in time only the pending branch builds correctly.
+
+endif # KDEVOPS_WORKFLOW_ENABLE_CXL

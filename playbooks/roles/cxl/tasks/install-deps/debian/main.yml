@@ -1,0 +1,28 @@
+---
+- name: Update apt cache
+  become: yes
+  become_method: sudo
+  apt:
+    update_cache: yes
+  tags: linux
+
+- name: Install ndctl build deps
+  become: yes
+  become_method: sudo
+  apt:
+    name:
+      - meson
+      - gcc
+      - pkg-config
+      - cmake
+      - libkmod-dev
+      - libudev-dev
+      - uuid-dev
+      - libjson-c-dev
+      - asciidoctor
+      - libkeyutils-dev
+      - libiniparser-dev
+      - bash-completion
+    state: present
+    update_cache: yes
+  tags: [ 'cxl', 'deps' ]

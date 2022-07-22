@@ -1,0 +1,47 @@
+---
+- name: Import optional extra_args file
+  include_vars: "{{ item }}"
+  ignore_errors: yes
+  with_first_found:
+    - files:
+      - "../extra_vars.yml"
+      - "../extra_vars.yaml"
+      - "../extra_vars.json"
+      skip: true
+  tags: vars
+
+# Distro specific
+- include: tasks/install-deps/main.yml
+
+- include_role:
+    name: create_data_partition
+  tags: [ 'ndctl', 'data_partition' ]
+
+- name: git clone ndctl
+  git:
+    repo: "{{ ndctl_git }}"
+    dest: "{{ ndctl_data }}"
+    version: "{{ ndctl_version }}"
+    update: yes
+  tags: [ 'git', 'ndctl' ]
+
+- name: run meson setup build for ndctl
+  command: "meson setup build"
+  tags: [ 'ndctl' ]
+  args:
+    chdir: "{{ ndctl_data }}"
+
+- name: run meson compile -C build for ndctl
+  command: "meson compile -C build"
+  tags: [ 'ndctl' ]
+  args:
+    chdir: "{{ ndctl_data }}"
+
+- name: run meson install -C build
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "meson install -C build"
+  tags: [ 'ndctl' ]
+  args:
+    chdir: "{{ ndctl_data }}"

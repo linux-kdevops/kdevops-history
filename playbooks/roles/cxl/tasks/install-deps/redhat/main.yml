@@ -1,0 +1,22 @@
+---
+- name: Install build dependencies for ndctl
+  become: yes
+  become_method: sudo
+  yum:
+    update_cache: yes
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - meson
+      - cmake
+      - gcc
+      - pkgconf-pkg-config
+      - kmod-devel
+      - systemd-devel
+      - uuid-devel
+      - libuuid-devel
+      - json-c-devel
+      - rubygem-asciidoctor
+      - keyutils-libs-devel
+      - iniparser-devel
+      - bash-completion

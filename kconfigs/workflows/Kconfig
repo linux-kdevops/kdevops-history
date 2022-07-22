@@ -120,6 +120,20 @@ config KDEVOPS_WORKFLOW_DEDICATE_BLKTESTS
 	help
 	  This will dedicate your configuration only to blktests.
 
+config KDEVOPS_WORKFLOW_DEDICATE_CXL
+	bool "cxl"
+	select KDEVOPS_WORKFLOW_ENABLE_CXL
+	help
+	  This will dedicate your configuration only to cxl work.
+
+	  This will expose certain make targets which you can use to get
+	  ramped up with all CXL development tools and testing.
+
+	  Note that this does not ensure you have CXL hardware enabled or
+	  emulated, that will depend on the type of node you are using.
+	  If you are using libvirt you will want to enable in kdevops
+	  the symbol CONFIG_QEMU_ENABLE_CXL.
+
 endchoice
 
 endif
@@ -148,6 +162,19 @@ config KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_BLKTESTS
 	  to run blktests. The git tree for blktests will be git clone and
 	  setup for you.
 
+config KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_CXL
+	bool "cxl"
+	select KDEVOPS_WORKFLOW_ENABLE_CXL
+	help
+	  Select this option if you are doing cxl development and testing.
+	  This will expose certain make targets which you can use to get
+	  ramped up with all CXL development tools and testing.
+
+	  Note that this does not ensure you have CXL hardware enabled or
+	  emulated, that will depend on the type of node you are using.
+	  If you are using libvirt you will want to enable in kdevops
+	  the symbol CONFIG_QEMU_ENABLE_CXL.
+
 endif # !WORKFLOWS_DEDICATED_WORKFLOW
 
 config KDEVOPS_WORKFLOW_ENABLE_FSTESTS
@@ -169,6 +196,16 @@ menu "Configure and run blktests"
 source "workflows/blktests/Kconfig"
 endmenu
 endif # KDEVOPS_WORKFLOW_ENABLE_BLKTESTS
+
+config KDEVOPS_WORKFLOW_ENABLE_CXL
+	bool
+	default y if KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_CXL || KDEVOPS_WORKFLOW_DEDICATE_CXL
+
+if KDEVOPS_WORKFLOW_ENABLE_CXL
+menu "Enable cxl development"
+source "workflows/cxl/Kconfig"
+endmenu
+endif # KDEVOPS_WORKFLOW_ENABLE_CXL
 
 config KDEVOPS_WORKFLOW_GIT_CLONES_KDEVOPS_GIT
 	bool
