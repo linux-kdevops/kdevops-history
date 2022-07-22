@@ -230,6 +230,7 @@ Vagrant.configure("2") do |config|
           end
         end
 
+{% if not libvirt_override_machine_type %}
         # Add an extra spare PCI-E root bus to be used for our NVME drives.
         #
         # Note that that up to at least recently we were not clashing with
@@ -251,6 +252,10 @@ Vagrant.configure("2") do |config|
         # and "add nvme drives".
         libvirt.qemuargs :value => "-device"
         libvirt.qemuargs :value => "pci-bridge,id=custom-pci-for-nvme,chassis_nr=1,bus=pci.0,addr=0x8"
+{% else %}
+        libvirt.qemuargs :value => "-device"
+        libvirt.qemuargs :value => "ioh3420,id=custom-pci-for-nvme,bus=pcie.0,addr=0x8,chassis=8"
+{% endif %}
 
         if server_data['pcipassthrough']
           server_data['pcipassthrough'].each do |key, value|

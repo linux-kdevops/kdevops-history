@@ -32,4 +32,9 @@ GEN_NODES_EXTRA_ARGS += nvme_zone_physical_blocksize='$(subst ",,$(CONFIG_QEMU_N
 GEN_NODES_EXTRA_ARGS += nvme_zone_logical_blocksize='$(subst ",,$(CONFIG_QEMU_NVME_ZONE_LOGICAL_BLOCKSIZE))'
 endif
 
+ifeq (y,$(CONFIG_LIBVIRT_MACHINE_TYPE_Q35))
+GEN_NODES_EXTRA_ARGS += libvirt_override_machine_type='True'
+GEN_NODES_EXTRA_ARGS += libvirt_machine_type='q35'
+endif # CONFIG_LIBVIRT_MACHINE_TYPE_Q35
+
 ANSIBLE_EXTRA_ARGS += $(GEN_NODES_EXTRA_ARGS)

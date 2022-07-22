@@ -33,6 +33,11 @@ libvirt_session: False
 libvirt_session_socket: '/run/libvirt/libvirt-sock-ro'
 libvirt_session_management_network_device: 'virbr0'
 libvirt_session_public_network_dev: 'virbr0'
+libvirt_override_machine_type: False
+# we imply this is this the default for libvirt, we however
+# don't actually use this variable unless libvirt_override_machine_type is
+# True. So by default we use whatever libvirt uses by default.
+libvirt_machine_type: 'pc'
 
 kdevops_workflows_dedicated_workflow: False
 kdevops_workflow_enable_fstests: False

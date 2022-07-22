@@ -193,6 +193,31 @@ config QEMU_BIN_PATH_LIBVIRT
 	default "/usr/bin/qemu-system-x86_64" if !QEMU_USE_DEVELOPMENT_VERSION
 
 choice
+	prompt "Machine type to use"
+	default LIBVIRT_MACHINE_TYPE_DEFAULT
+
+config LIBVIRT_MACHINE_TYPE_DEFAULT
+	bool "Use the default machine type"
+	help
+	  Use whatever default the guest was intended to use. This will either
+	  be the machine type used at virt-install time or some other default
+	  by qemu / libvirt. This is important for backward compatibility with
+	  older kernels. For example if you enable q35 on an old kernel the old
+	  kernel may not boot. For details refer to kdevops commit 83952e2e532e
+	  ("vagrant/kdevops_nodes.yaml.in: remove machine_type)".
+
+	  It would seem today's default for libvirt is to still use "pc" which
+	  is the old i440x, so you will not get PCIe support.
+
+config LIBVIRT_MACHINE_TYPE_Q35
+	bool "q35"
+	help
+	  Use q35 for the machine type. This will be required for things like
+	  CXL or PCIe passthrough.
+
+endchoice
+
+choice
 	prompt "Libvirt storage pool path"
 	default LIBVIRT_STORAGE_POOL_PATH_CUSTOM_DEFAULT_DISTRO if !DISTRO_SUSE
 	default LIBVIRT_STORAGE_POOL_PATH_CUSTOM_CWD if DISTRO_SUSE
