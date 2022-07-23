@@ -16,14 +16,14 @@ generic/600 # failed after mote than 100 runs - looks like a test bug related to
 generic/601 # fails on xfs_reflink_1024
 generic/607
 generic/648 # lazy baseline - failure found in at least two sections
-generic/673
+generic/673 # fixed by vfs SGID stripping
 generic/681
 generic/682
-generic/683
-generic/684
-generic/685
-generic/686
-generic/687
+generic/683 # fixed by vfs SGID stripping
+generic/684 # fixed by vfs SGID stripping
+generic/685 # fixed by vfs SGID stripping
+generic/686 # fixed by vfs SGID stripping
+generic/687 # fixed by vfs SGID stripping
 generic/688
 generic/691
 shared/032 # hung due to nvme I/O timeout (may not be test related)
