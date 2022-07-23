@@ -7,8 +7,6 @@ CXL_ARGS += ndctl_version='$(subst ",,$(CONFIG_NDCTL_VERSION))'
 
 WORKFLOW_ARGS += $(CXL_ARGS)
 
-EXTRA_VAR_INPUTS += extend-extra-args-blktests
-
 cxl:
 	$(Q)ansible-playbook -f 30 -i hosts playbooks/cxl.yml $(LIMIT_HOSTS)
 
