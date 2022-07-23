@@ -33,6 +33,7 @@ xfs/014 # fails on section xfs_reflink_1024  failure rate is about 1/50 https://
 xfs/019 # fails after 7834a740 ("xfs/019: extend protofile test")
 xfs/033 # rare test bug - extra newline in golden output of xfs_repair - failed after more than 80 runs
 xfs/045 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
+xfs/050 # fixed by "xfs: revert "xfs: actually bump warning counts when we send warnings" in v5.19
 xfs/057 # hangs after enabling CONFIG_XFS_DEBUG
 xfs/059
 xfs/060 # lazy baseline - failure found in at least two sections - failure rate about 1/35
@@ -56,8 +57,10 @@ xfs/270 # lazy baseline - failure found in at least two sections - when host use
 xfs/273 # lazy baseline - failure found in at least two sections
 xfs/291 # failure on debian/buster in both xfs_reflink and xfs_reflink_1024 configs. xfs_repair (v4.20) fatal error -- unable to add AG 2 reverse-mapping data to btree. This test may need fixes similar to generic/204 to deal with reflink disk space calculation (see commits 1e24e517,a8f5f152e). It is one of the few tests that still runs xfs_check and it failed with "xfs_check failed" error. xfs_check is not considered reliable and xfs maintainer does not run it.
 xfs/297 # started hanging after reducing RAM size to 2GB (no OOM killer) rate 1/20 - 1/100
+xfs/299 # fixed by "xfs: revert "xfs: actually bump warning counts when we send warnings" in v5.19
 xfs/301 # fails in two sections xfs_reflink_1024 with a failure rate of 1/5 and xfs_nocrc for always https://gist.github.com/mcgrof/3567f39ea06ba785b3d66351cdcb22cf
 xfs/310
+xfs/348 # fixed by "xfs: validate inode fork size against fork format" in v5.19
 xfs/439 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/444 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/449 # lazy baseline - failure found in at least two sections
@@ -68,3 +71,4 @@ xfs/506 # lazy baseline - failure found in at least two sections
 xfs/516 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/521 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/528 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
+xfs/546 # fixed by "xfs: return errors in xfs_fs_sync_fs" in v5.17
