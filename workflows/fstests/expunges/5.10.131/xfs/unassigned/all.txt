@@ -6,6 +6,7 @@ generic/273 # fails on xfs_reflink_1024 with a failure rate is 1/10 but chances 
 generic/320 # failure rate is about 1/30 hung task on  xfs_reflink_normapbt https://gist.github.com/mcgrof/752cff159077b2fdf722d83382b1c337
 generic/373 # cross-fs reflink
 generic/374 # cross-fs dedupe
+generic/388 # fails on xfs_reflink_1024 very frequently. fails on other configs about 1/10.
 generic/418 # can sometimes take over 10 times the amount of time, no obvious failure yet requires manual introspection, failure rate is about 1/10
 generic/459 # lazy baseline - failure found in at least two sections
 generic/475 # lazy baseline - failure found in at least two sections
