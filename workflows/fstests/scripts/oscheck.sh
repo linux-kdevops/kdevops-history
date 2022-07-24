@@ -855,6 +855,8 @@ fi
 
 if [ "$FSTESTS_RUN_AUTO_GROUP_TESTS" = y ]; then
 	_RUN_GROUPS="-g auto"
+elif [ -n "$FSTESTS_RUN_CUSTOM_GROUP_TESTS" ]; then
+	_RUN_GROUPS="-g $FSTESTS_RUN_CUSTOM_GROUP_TESTS"
 fi
 
 # Where we stuff the arguments we will pass to ./check

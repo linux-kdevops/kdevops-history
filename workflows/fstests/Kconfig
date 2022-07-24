@@ -411,6 +411,14 @@ config FSTESTS_RUN_AUTO_GROUP_TESTS
 	  The 'auto' test group is a good choice for running regression tests.
 	  Disable this to run also the tests that are not in the 'auto' group.
 
+config FSTESTS_RUN_CUSTOM_GROUP_TESTS
+	string "Run a custom group of fstests"
+	default "auto" if FSTESTS_RUN_AUTO_GROUP_TESTS
+	depends on FSTESTS_RUN_TESTS
+	help
+	  To configure fstests to run specific group of tests instead of the
+	  'auto' group.
+
 config FSTESTS_RUN_CUSTOM_TESTS
 	string "Run a custom set of fstests"
 	depends on FSTESTS_RUN_TESTS
