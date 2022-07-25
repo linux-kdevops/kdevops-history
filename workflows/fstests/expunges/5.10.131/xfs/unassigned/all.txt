@@ -1,3 +1,4 @@
+generic/019 # fails for at least one config every run (after enabling CONFIG_FAIL_MAKE_REQUEST)
 generic/050 # lazy baseline - failure found in at least two sections
 generic/074 # hung after 50 runs on xfs_nocrc due to nvme I/O timeout (may not be test related)
 generic/241
