@@ -65,7 +65,7 @@ locals {
 }
 
 locals {
-  num_boxes = var.limit_boxes == "yes" ? min(local.kdevops_num_boxes, var.limit_num_boxes) : local.kdevops_num_boxes
+  num_boxes = var.limit_boxes == "True" ? min(local.kdevops_num_boxes, var.limit_num_boxes) : local.kdevops_num_boxes
 }
 
 data "template_file" "ansible_cmd" {
