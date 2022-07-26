@@ -736,8 +736,8 @@ config QEMU_CUSTOM_NVME_ZONE_SIZE
 	  capacity.
 
 config QEMU_CUSTOM_NVME_ZONE_CAPACITY
-	int "Qemu ZNS storage nvme zone capacity"
-	default 0
+	string "Qemu ZNS storage nvme zone capacity"
+	default "0M"
 	help
 	  The size to use for the zone capacity. This may be smaller or equal
 	  to the zone size. If set to 0 then this will ensure the zone
@@ -802,8 +802,8 @@ config QEMU_NVME_ZONE_SIZE
 	default QEMU_CUSTOM_NVME_ZONE_SIZE if QEMU_CUSTOM_NVME_ZNS
 
 config QEMU_NVME_ZONE_CAPACITY
-	int
-	default 0 if !QEMU_CUSTOM_NVME_ZNS
+	string
+	default "0M" if !QEMU_CUSTOM_NVME_ZNS
 	default QEMU_CUSTOM_NVME_ZONE_CAPACITY if QEMU_CUSTOM_NVME_ZNS
 
 config QEMU_NVME_ZONE_MAX_ACTIVE
