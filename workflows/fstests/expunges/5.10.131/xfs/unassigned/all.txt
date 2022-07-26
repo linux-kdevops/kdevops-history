@@ -12,6 +12,7 @@ generic/418 # can sometimes take over 10 times the amount of time, no obvious fa
 generic/459 # lazy baseline - failure found in at least two sections
 generic/475 # lazy baseline - failure found in at least two sections
 generic/476 # can sometimes take over 10 times the amount of time, no obvious failure, happened on xfs_nocrc_512 but also on ext4_defaults
+generic/482 # fails on nocrc configs very frequently. fails on other configs about 1/100.
 generic/531 # failure rate is 1/5 hung task [1] complex backport required [2] [1] https://gist.github.com/mcgrof/91e1e16b8fbb8e09c6f6de8e9dc1ecd9 [2] deferred inode inactivation: https://lore.kernel.org/r/162812918259.2589546.16599271324044986858.stgit@magnolia
 generic/590 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 generic/600 # failed after mote than 100 runs - looks like a test bug related to 1 second drift on clock change (set grace to 1653569363 but got grace 1653569362)
@@ -37,6 +38,7 @@ xfs/033 # rare test bug - extra newline in golden output of xfs_repair - failed 
 xfs/045 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/050 # fixed by "xfs: revert "xfs: actually bump warning counts when we send warnings" in v5.19
 xfs/059
+xfs/057 # fails or hangs after enabling CONFIG_XFS_DEBUG - failure rate about 1/200
 xfs/060 # lazy baseline - failure found in at least two sections - failure rate about 1/35
 xfs/075 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/095 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
