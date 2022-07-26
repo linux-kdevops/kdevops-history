@@ -80,5 +80,5 @@ data "template_file" "ansible_cmd" {
 
 locals {
   skip_ansible_cmd = "echo Skipping ansible provisioning"
-  ansible_cmd      = var.ansible_provision == "true" ? "${data.template_file.ansible_cmd.rendered}" : "${local.skip_ansible_cmd}"
+  ansible_cmd      = var.ansible_provision == "True" ? "${data.template_file.ansible_cmd.rendered}" : "${local.skip_ansible_cmd}"
 }
