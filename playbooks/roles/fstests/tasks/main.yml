@@ -176,7 +176,7 @@
   become_method: sudo
   template:
     src: "{{ fstests_fstyp }}/{{ fstests_fstyp }}.config"
-    dest: "{{ fstests_data_target }}/configs/{{ ansible_ssh_host }}.config"
+    dest: "{{ fstests_data_target }}/configs/{{ ansible_host }}.config"
     force: yes
 
 - name: Reboot system before our test so we know everything is sane
@@ -229,7 +229,7 @@
 
 - name: Verify section name {{ fstests_section }} exists on fstests config file
   vars:
-    fstests_section: "{{ ansible_ssh_host | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
+    fstests_section: "{{ ansible_host | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
   tags: [ 'oscheck', 'fstests', 'run_tests', 'section' ]
   become: yes
   become_flags: 'su - -c'
@@ -237,7 +237,7 @@
   register: section_grep
   failed_when: not section_grep.changed
   lineinfile:
-    path: "{{ fstests_data_target }}/configs/{{ ansible_ssh_host }}.config"
+    path: "{{ fstests_data_target }}/configs/{{ ansible_host }}.config"
     regexp: "\\[{{ fstests_section }}\\]$"
     line: ''
   check_mode: yes
@@ -279,7 +279,7 @@
 
 - name: Check and verify fstests dependencies are met prior to running fstests
   vars:
-    fstests_section: "{{ ansible_ssh_host | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
+    fstests_section: "{{ ansible_host | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
   tags: [ 'oscheck', 'fstests', 'run_tests' ]
   become: yes
   become_flags: 'su - -c'
@@ -352,7 +352,7 @@
 
 - name: Run fstests using ./oscheck.sh --print-done --test-section {{ fstests_section }} {{ oscheck_extra_args }}
   vars:
-    fstests_section: "{{ ansible_ssh_host | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
+    fstests_section: "{{ ansible_host | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
   tags: [ 'oscheck', 'fstests', 'run_tests' ]
   become: yes
   become_flags: 'su - -c'
