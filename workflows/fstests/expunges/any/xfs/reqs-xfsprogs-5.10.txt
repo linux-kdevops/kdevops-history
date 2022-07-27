@@ -1,6 +1,4 @@
 # failure from running with xfsprogs 5.10 on debian/bullseye
-generic/388 # fails on any configs about 1/10.
-generic/482 # fails on any configs about 1/30.
 xfs/082 # xfs_copy bug fixed in xfsprogs 5.19-rc1
 xfs/540 # xfs_db issue fixed in xfsprogs 5.13
 xfs/543 # mkfs.xfs bug fixed in xfsprogs 5.19-rc1
