@@ -230,29 +230,45 @@ Vagrant.configure("2") do |config|
           end
         end
 
-{% if not libvirt_override_machine_type %}
-        # Add an extra spare PCI-E root bus to be used for our NVME drives.
+        # Add an extra spare PCI or PCI-E root bus to be used for NVME drives.
+        # For i440x on x86_64 (default on libvirt as of today) we use PCI, not
+        # PCI-E. For 'q35' on x86_64 and virt for 'virt' for AArch64 we use can
+        # use PCI-E.
         #
-        # Note that that up to at least recently we were not clashing with
-        # the defaults brought up by libvirt-qemu, however recent versions
-        # seem to start clashing up to pci.0,addr=0x3 so we'd see something
-        # like:
+        # We use a dedicated PCI or PCI-E root bus to not clash with defaults
+        # which libvirt may use on PCI root bus (pci.0 if PCI, pcie.0 if PCI-E).
+        #
+        # For a while in kdevops we were not clashing with the defaults brought
+        # up by libvirt-qemu, however recent versions seem to start clashing up
+        # to pci.0,addr=0x3 so we'd see an error like:
         #
         # PCI: slot 3 function 0 not available for virtio-blk-pci, in use by nvme,id=(null) (Libvirt::Error)
         #
-        # In fact, if you bumped the nvme drives to start at a custom
-        # bus and addr say, pci.0,addr=0x8 you'd finally not run into clashes
-        # up to  pci.0,addr=0x8. But we'd only be limited to 20 devices so
-        # ZNS drives won't fit.
-        #
-        # So just create a PCI bridge dedicated for nvme drives. We use
-        # 0x08 as we know this is avilable on modern x86-64 systems.
-        # Eventually we may need to bump this to 0x9, but it would be better
-        # instead to have vagant-libvit speak "add a new PCI express bridge"
-        # and "add nvme drives".
+        # Just create a PCI or PCI-E root bus dedicated for nvme drives. We
+        # use 0x08 to place this PCI / PCI-E root bus as we know this is
+        # avilable on modern x86-64 systems. Eventually we may need to bump
+        # this to 0x9, but it would be better instead to have vagant-libvirt
+        # speak "add a new PCI or PCI-E root bus" and "add nvme drives".
+{% if not libvirt_override_machine_type %}
+        # Below assumes i440x, so add an extra spare PCI root bus to be used
+        # for our NVME drives.
         libvirt.qemuargs :value => "-device"
         libvirt.qemuargs :value => "pci-bridge,id=custom-pci-for-nvme,chassis_nr=1,bus=pci.0,addr=0x8"
 {% else %}
+	# Below works for q35 for x86_64 and 'virt' for a AArch64. Rigt now
+	# kdevops only supports q35, adding 'virt' for AArch64 should hopefully
+	# be relatively easy after this.
+	#
+	# The ioh3420 PCIe root port can be used for both 'q35' and 'virt'. This
+	# root port lets us start exclusive PCIe hierarchies. A PCIe root bus
+	# supports up to 32 devices and since each can be up to 8 multifunctions
+	# we're limited to 256 PCIe root ports.
+	#
+	# We may consider in the future an extra PCIe root complex (pxb-pcie)
+	# added to the pcie root bus (pcie.0) if we wanted to dedicate a PCIe
+	# root port per new technology. For example one root port for nvme and
+	# one for CXL, however CXL uses its own host bridge so device
+	# enumeration is pretty well isolated already.
         libvirt.qemuargs :value => "-device"
         libvirt.qemuargs :value => "ioh3420,id=custom-pci-for-nvme,bus=pcie.0,addr=0x8,chassis=8"
 {% if libvirt_enable_cxl %}
@@ -260,6 +276,7 @@ Vagrant.configure("2") do |config|
         libvirt.qemuargs :value => "-machine"
         libvirt.qemuargs :value => "cxl=on"
 
+	# CXL host bus
         libvirt.qemuargs :value => "-device"
         libvirt.qemuargs :value => "pxb-cxl,bus=pcie.0,id=cxl.0,bus_nr=52,addr=0x9"
 
