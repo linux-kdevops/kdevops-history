@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: copyleft-next-0.3.1
 
 CXL_ARGS :=
-CXL_ARGS += ndctl_git='$(subst ",,$(CONFIG_NDCTL_GIT))
+CXL_ARGS += ndctl_git='$(subst ",,$(CONFIG_NDCTL_GIT))'
 CXL_ARGS += ndctl_data=\"$(subst ",,$(CONFIG_NDCTL_DATA))\"
 CXL_ARGS += ndctl_version='$(subst ",,$(CONFIG_NDCTL_VERSION))'
 
