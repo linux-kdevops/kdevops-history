@@ -15,11 +15,32 @@
     path: "{{ kdevops_nodes_template_full_path }}"
   register: terraform_tfvars_template
 
-- name: Generate the terraform variables file file using {{ kdevops_terraform_tfvars }} as jinja2 source template
-  tags: [ 'nodes' ]
+- name: get our user
+  command: "whoami"
+  register: my_user
+
+- name: get our primary group
+  command: "id -g -n"
+  register: my_group
+
+- name: Check if {{ kdevops_terraform_tfvars }} exists already
+  stat:
+    path: "{{ topdir_path }}/{{ kdevops_terraform_tfvars }}"
+  register: kdevops_tfvars_dest
+
+- name: Ensure proper permission on {{ kdevops_terraform_tfvars }}
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
+  file:
+    path: "{{ topdir_path }}/{{ kdevops_terraform_tfvars }}"
+    owner: "{{ my_user.stdout }}"
+    group: "{{ my_group.stdout }}"
+  when:
+    - kdevops_tfvars_dest.stat.exists
+
+- name: Generate the terraform variables file file using {{ kdevops_terraform_tfvars }} as jinja2 source template
+  tags: [ 'nodes' ]
   vars:
     tfvars_template: "{{ kdevops_terraform_tfvars_template }}"
   template:
