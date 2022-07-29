@@ -10,6 +10,14 @@
       skip: true
   tags: vars
 
+- name: get our user
+  command: "whoami"
+  register: my_user
+
+- name: get our primary group
+  command: "id -g -n"
+  register: my_group
+
 - name: verify ansible nodes template file exists {{ kdevops_nodes_template_full_path }}
   stat:
     path: "{{ kdevops_nodes_template_full_path }}"
@@ -46,11 +54,24 @@
   when:
     - is_fstests
 
-- name: Generate the generic kdevops nodes file using {{ kdevops_nodes_template }} as jinja2 source template
-  tags: [ 'nodes' ]
+- name: Check if {{ kdevops_nodes }} exists already
+  stat:
+    path: "{{ topdir_path }}/{{ kdevops_nodes }}"
+  register: kdevops_nodes_dest
+
+- name: Ensure proper permission on {{ kdevops_nodes }}
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
+  file:
+    path: "{{ topdir_path }}/{{ kdevops_nodes }}"
+    owner: "{{ my_user.stdout }}"
+    group: "{{ my_group.stdout }}"
+  when:
+    - kdevops_nodes_dest.stat.exists
+
+- name: Generate the generic kdevops nodes file using {{ kdevops_nodes_template }} as jinja2 source template
+  tags: [ 'nodes' ]
   vars:
     node_template: "{{ kdevops_nodes_template | basename }}"
     nodes: "{{ kdevops_host_prefix  | replace(\"'\", '') | split(', ') }}"
@@ -128,9 +149,6 @@
 
 - name: Generate the fstests kdevops nodes file using {{ kdevops_nodes_template }} as jinja2 source template
   tags: [ 'hosts' ]
-  become: yes
-  become_flags: 'su - -c'
-  become_method: sudo
   vars:
     node_template: "{{ kdevops_nodes_template | basename }}"
     nodes: "{{ fstests_enabled_nodes |  regex_replace('\\[') | regex_replace('\\]') | replace(\"'\", '') | split(', ') }}"
@@ -183,9 +201,6 @@
 
 - name: Generate the blktests kdevops nodes file using {{ kdevops_nodes_template }} as jinja2 source template
   tags: [ 'hosts' ]
-  become: yes
-  become_flags: 'su - -c'
-  become_method: sudo
   vars:
     node_template: "{{ kdevops_nodes_template | basename }}"
     nodes: "{{ blktests_enabled_test_types }}"
@@ -206,11 +221,26 @@
   when:
     - kdevops_enable_vagrant
 
-- name: Generate the {{ kdevops_vagrant }} file using {{ kdevops_vagrant_template }} as jinja2 source template
-  tags: [ 'vagrant' ]
+- name: Check if {{ kdevops_vagrant }} exists already
+  stat:
+    path: "{{ topdir_path }}/{{ kdevops_vagrant }}"
+  register: vagrant_dest
+  when:
+    - kdevops_enable_vagrant
+
+- name: Ensure proper permission on {{ kdevops_vagrant }}
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
+  file:
+    path: "{{ topdir_path }}/{{ kdevops_vagrant }}"
+    owner: "{{ my_user.stdout }}"
+    group: "{{ my_group.stdout }}"
+  when:
+    - vagrant_dest.stat.exists
+
+- name: Generate the {{ kdevops_vagrant }} file using {{ kdevops_vagrant_template }} as jinja2 source template
+  tags: [ 'vagrant' ]
   template:
     src: "{{ kdevops_vagrant_template | basename }}"
     dest: "{{ topdir_path }}/{{ kdevops_vagrant }}"
