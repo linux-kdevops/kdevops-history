@@ -89,6 +89,7 @@ endif # CONFIG_TERRAFORM
 
 ifeq (y,$(CONFIG_VAGRANT))
 include scripts/vagrant.Makefile
+DEFAULT_DEPS += $(KDEVOPS_VAGRANT)
 endif
 
 ifeq (y,$(CONFIG_WORKFLOWS))
