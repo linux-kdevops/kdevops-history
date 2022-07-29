@@ -10,6 +10,30 @@
       skip: true
   tags: vars
 
+- name: get our user
+  command: "whoami"
+  register: my_user
+
+- name: get our primary group
+  command: "id -g -n"
+  register: my_group
+
+- name: Check if the file {{ kdevops_hosts }} exists already
+  stat:
+    path: "{{ topdir_path }}/{{ kdevops_hosts }}"
+  register: kdevops_hosts_dest
+
+- name: Ensure proper permission on the file {{ kdevops_hosts }}
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  file:
+    path: "{{ topdir_path }}/{{ kdevops_hosts }}"
+    owner: "{{ my_user.stdout }}"
+    group: "{{ my_group.stdout }}"
+  when:
+    - kdevops_hosts_dest.stat.exists
+
 - name: verify ansible host template file exists {{ kdevops_hosts_template_full_path }}
   stat:
     path: "{{ kdevops_hosts_template_full_path }}"
@@ -34,9 +58,6 @@
 
 - name: Generate the ansible hosts file
   tags: [ 'hosts' ]
-  become: yes
-  become_flags: 'su - -c'
-  become_method: sudo
   template:
     src: "{{ kdevops_hosts_template }}"
     dest: "{{ topdir_path }}/{{ kdevops_hosts }}"
@@ -92,9 +113,6 @@
 
 - name: Generate the ansible hosts file for a dedicated fstests setup
   tags: [ 'hosts' ]
-  become: yes
-  become_flags: 'su - -c'
-  become_method: sudo
   vars:
     fs_config_data: "{{ lookup('file', fs_config_path) }}"
     sections_without_default: "{{ fs_config_data | regex_replace('\\[default\\]', multiline=True) }}"
@@ -136,9 +154,6 @@
 
 - name: Generate the ansible hosts file for a dedicated blktests setup
   tags: [ 'hosts' ]
-  become: yes
-  become_flags: 'su - -c'
-  become_method: sudo
   template:
     src: "{{ kdevops_hosts_template }}"
     dest: "{{ topdir_path }}/{{ kdevops_hosts }}"
