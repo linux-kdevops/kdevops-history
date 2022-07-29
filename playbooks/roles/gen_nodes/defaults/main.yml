@@ -3,6 +3,7 @@
 kdevops_enable_terraform: False
 kdevops_enable_vagrant: False
 kdevops_vagrant: '/dev/null'
+kdevops_vagrant_generated: '/dev/null'
 kdevops_vagrant_template: '/dev/null'
 kdevops_nodes: "vagrant/kdevops_nodes.yaml"
 kdevops_baseline_and_dev: False

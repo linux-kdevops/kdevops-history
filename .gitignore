@@ -20,6 +20,7 @@ scripts/workflows/blktests/lib/__pycache__/
 scripts/workflows/lib/__pycache__/
 
 vagrant/kdevops_nodes.yaml
+vagrant/.Vagrantfile.generated
 vagrant/Vagrantfile
 
 include/

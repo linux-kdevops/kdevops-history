@@ -6,8 +6,10 @@ KDEVOPS_NODES_TEMPLATE :=	$(KDEVOPS_NODES_ROLE_TEMPLATE_DIR)/kdevops_nodes_split
 KDEVOPS_NODES :=		vagrant/kdevops_nodes.yaml
 
 KDEVOPS_VAGRANT_TEMPLATE :=	$(KDEVOPS_NODES_ROLE_TEMPLATE_DIR)/Vagrantfile.j2
+KDEVOPS_VAGRANT_GENERATED:=	vagrant/.Vagrantfile.generated
 KDEVOPS_VAGRANT :=		vagrant/Vagrantfile
 
+KDEVOPS_MRPROPER +=		$(KDEVOPS_VAGRANT_GENERATED)
 KDEVOPS_MRPROPER +=		$(KDEVOPS_VAGRANT)
 
 VAGRANT_ARGS += kdevops_vagrant_template_full_path='$(TOPDIR_PATH)/$(KDEVOPS_VAGRANT_TEMPLATE)'
@@ -17,6 +19,7 @@ KDEVOPS_DESTROY_DEPS := destroy_vagrant
 
 VAGRANT_ARGS += kdevops_enable_vagrant=True
 VAGRANT_ARGS += kdevops_vagrant='$(KDEVOPS_VAGRANT)'
+VAGRANT_ARGS += kdevops_vagrant_generated='$(KDEVOPS_VAGRANT_GENERATED)'
 VAGRANT_ARGS += kdevops_vagrant_template='$(KDEVOPS_VAGRANT_TEMPLATE)'
 
 ifeq (y,$(CONFIG_HAVE_VAGRANT_BOX_URL))

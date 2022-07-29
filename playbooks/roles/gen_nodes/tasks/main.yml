@@ -239,12 +239,20 @@
   when:
     - vagrant_dest.stat.exists
 
-- name: Generate the {{ kdevops_vagrant }} file using {{ kdevops_vagrant_template }} as jinja2 source template
+- name: Generate the {{ kdevops_vagrant_generated }} file using {{ kdevops_vagrant_template }} as jinja2 source template
   tags: [ 'vagrant' ]
   template:
     src: "{{ kdevops_vagrant_template | basename }}"
-    dest: "{{ topdir_path }}/{{ kdevops_vagrant }}"
+    dest: "{{ topdir_path }}/{{ kdevops_vagrant_generated }}"
     force: yes
   when:
     - kdevops_enable_vagrant
     - vagrant_template.stat.exists
+
+- name: Copy the generated {{ kdevops_vagrant_generated }} to {{ kdevops_vagrant }} if it does not exist already
+  tags: [ 'vagrant' ]
+  command: "cp {{ topdir_path }}/{{ kdevops_vagrant_generated }} {{ topdir_path }}/{{ kdevops_vagrant }}"
+  when:
+    - kdevops_enable_vagrant
+    - vagrant_template.stat.exists
+    - not vagrant_dest.stat.exists
