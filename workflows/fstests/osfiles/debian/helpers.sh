@@ -27,6 +27,11 @@ debian_special_expunges()
 			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/xfs/reqs-xfsprogs-5.10.txt"
 		fi
 		;;
+	"testing")
+		if [ "$FSTYP" = "xfs" ] ; then
+			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/xfs/reqs-xfsprogs-5.18.txt"
+		fi
+		;;
 	esac
 
 	if [ "$FSTYP" = "ext4" ] ; then
