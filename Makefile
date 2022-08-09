@@ -68,6 +68,17 @@ endif # CONFIG_NEEDS_LOCAL_DEVELOPMENT_PATH
 
 ANSIBLE_EXTRA_ARGS += $(LOCAL_DEVELOPMENT_ARGS)
 
+# We may not need the extra_args.yaml file all the time.  If this file is empty
+# you don't need it. All of our ansible kdevops roles check for this file
+# without you having to specify it as an extra_args=@extra_args.yaml file. This
+# helps us with allowing users call ansible on the command line themselves,
+# instead of using the make constructs we have built here.
+# Most of the ansible roles have extra_vars.yml as a dependency. Make sure this
+# is generated first by putting it first in DEFAULT_DEPS.
+ifneq (,$(ANSIBLE_EXTRA_ARGS))
+DEFAULT_DEPS += $(KDEVOPS_EXTRA_VARS)
+endif
+
 # These should be set as non-empty if you want any generic bring up
 # targets to come up. We support 2 bring up methods:
 #
@@ -104,14 +115,6 @@ ifeq (y,$(CONFIG_WORKFLOW_KOTD_ENABLE))
 include scripts/kotd.Makefile
 endif # WORKFLOW_KOTD_ENABLE
 
-# We may not need the extra_args.yaml file all the time.  If this file is empty
-# you don't need it. All of our ansible kdevops roles check for this file
-# without you having to specify it as an extra_args=@extra_args.yaml file. This
-# helps us with allowing users call ansible on the command line themselves,
-# instead of using the make constructs we have built here.
-ifneq (,$(ANSIBLE_EXTRA_ARGS))
-DEFAULT_DEPS += $(KDEVOPS_EXTRA_VARS)
-endif
 
 DEFAULT_DEPS += $(DEFAULT_DEPS_REQS_EXTRA_VARS)
 
