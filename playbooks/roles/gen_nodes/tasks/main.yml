@@ -74,8 +74,8 @@
   tags: [ 'nodes' ]
   vars:
     node_template: "{{ kdevops_nodes_template | basename }}"
-    nodes: "{{ kdevops_host_prefix  | replace(\"'\", '') | split(', ') }}"
     all_generic_nodes: "{{ generic_nodes }}"
+    nodes: "{{ all_generic_nodes }}"
   template:
     src: "{{ node_template }}"
     dest: "{{ topdir_path }}/{{ kdevops_nodes }}"
