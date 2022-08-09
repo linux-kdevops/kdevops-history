@@ -11,6 +11,7 @@
   become_method: sudo
   apt:
     name:
+      - git
       - meson
       - gcc
       - pkg-config
