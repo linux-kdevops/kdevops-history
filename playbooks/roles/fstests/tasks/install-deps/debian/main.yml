@@ -13,6 +13,14 @@
     name:
       - nvme-cli
 
+# Remove this step when xfsdump is available again in testing repo
+- name: Add debian stable repository into sources list for xfsdump
+  become: yes
+  become_method: sudo
+  apt_repository:
+    repo: deb http://deb.debian.org/debian stable main
+    state: present
+
 - name: Install fstests build dependencies
   become: yes
   become_method: sudo
