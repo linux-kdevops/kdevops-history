@@ -41,6 +41,7 @@ xfs/059
 xfs/057 # fails or hangs after enabling CONFIG_XFS_DEBUG - failure rate about 1/200
 xfs/060 # lazy baseline - failure found in at least two sections - failure rate about 1/35
 xfs/075 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
+xfs/083 # dangerous_fuzzers test (not in auto group) failing with error "Failed to create fino of sufficient height!" on xfs_reflink_1024 and sometimes on other configs
 xfs/095 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/144 # test is obsolete and removed in upstream fstests
 xfs/116 # failed on xfs_nocrc_512 and on xfs_reflink_1024 several times. failure rate about 1/50.
