@@ -27,7 +27,6 @@
       - quota
       - make
       - xfsprogs
-      - xfsdump
       - e2fsprogs
       - btrfs-progs
       - gawk
