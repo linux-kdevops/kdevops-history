@@ -18,7 +18,6 @@
       - make
       - xfsprogs
       - xfsprogs-devel
-      - xfsdump
       - xfsprogs-xfs_scrub
       - e2fsprogs
       - btrfs-progs

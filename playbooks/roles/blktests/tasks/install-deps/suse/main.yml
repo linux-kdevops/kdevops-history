@@ -101,7 +101,6 @@
       - make
       - xfsprogs
       - xfsprogs-devel
-      - xfsdump
       - e2fsprogs
       - btrfsprogs
       - gawk
