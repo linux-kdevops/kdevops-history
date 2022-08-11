@@ -10,12 +10,12 @@
       skip: true
   tags: vars
 
-# Distro specific
-- include: tasks/install-deps/main.yml
-
 - include_role:
     name: create_data_partition
   tags: [ 'oscheck', 'data_partition' ]
+
+# Distro specific
+- include: tasks/install-deps/main.yml
 
 - name: Create {{ truncated_path }} if needed
   include_role:

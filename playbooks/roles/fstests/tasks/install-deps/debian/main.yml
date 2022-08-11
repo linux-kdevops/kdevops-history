@@ -1,4 +1,15 @@
 ---
+- name: Import optional extra_args file
+  include_vars: "{{ item }}"
+  ignore_errors: yes
+  with_first_found:
+    - files:
+      - "../extra_vars.yml"
+      - "../extra_vars.yaml"
+      - "../extra_vars.json"
+      skip: true
+  tags: vars
+
 - name: Update apt cache
   become: yes
   become_method: sudo
@@ -27,7 +38,6 @@
       - quota
       - make
       - xfsprogs
-      - xfsdump
       - e2fsprogs
       - btrfs-progs
       - gawk
@@ -56,6 +66,37 @@
       - fio
       - libcap2-bin
       - libtool
+      - gettext
+      - ncurses-dev
     state: present
     update_cache: yes
   tags: [ 'fstests', 'deps' ]
+
+# Debian testing has removed xfsdump. Build from sources until it is available
+# in Debian Testing repository
+- name: git clone xfsdump
+  git:
+    repo: "https://github.com/linux-kdevops/xfsdump-dev.git"
+    dest: "{{ data_path }}/xfsdump"
+    update: yes
+    version: v3.1.10-fixed
+  tags: [ 'fstests', 'deps' ]
+
+- name: Get nproc
+  tags: [ 'oscheck', 'fstests', 'build']
+  command: "nproc"
+  register: nproc
+
+- name: Build xfsdump
+  tags: [ 'fstests', 'deps' ]
+  make:
+    chdir: "{{ data_path }}/xfsdump"
+    jobs: "{{ nproc.stdout }}"
+
+- name: Install xfsdump
+  become: yes
+  become_method: sudo
+  tags: [ 'fstests', 'deps' ]
+  make:
+    chdir: "{{ data_path }}/xfsdump"
+    target: install
