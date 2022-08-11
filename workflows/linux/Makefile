@@ -25,6 +25,12 @@ ifeq (y,$(CONFIG_WORKFLOW_MAKE_CMD_OVERRIDE))
 BOOTLINUX_ARGS	+= target_linux_make_cmd='$(WORKFLOW_MAKE_CMD)'
 endif
 
+ifeq (y,$(CONFIG_BOOTLINUX_TEST_MESSAGE_ID))
+BOOTLINUX_ARGS	+= target_linux_apply_patch_message_id='$(CONFIG_BOOTLINUX_TEST_MESSAGE_ID_THREAD_ID)'
+BOOTLINUX_ARGS	+= target_linux_install_b4='$(CONFIG_BOOTLINUX_TEST_MESSAGE_ID_INSTALL_B4)'
+endif
+
+
 WORKFLOW_ARGS += $(BOOTLINUX_ARGS)
 linux-help-menu:
 	@echo "Linux git kernel development options"

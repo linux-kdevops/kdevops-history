@@ -35,6 +35,35 @@ config BOOTLINUX_TREE
 	help
 	  The Linux git tree to use.
 
+config BOOTLINUX_TEST_MESSAGE_ID
+	bool "Test mailing list message ID"
+	default n
+	depends on KDEVOPS_BASELINE_AND_DEV
+	select BOOTLINUX_TEST_MESSAGE_INSTALL_B4 if BOOTLINUX_TEST_MESSAGE_ID
+	help
+	  When enabled, the b4 command from public-inbox will rebase the patches
+	  contained in the message-id on top of a baseline kernel and install it
+	  in the development box. A baseline kernel without the patches will be
+	  installed in the baseline box. The effects of the patch on the tests
+	  can then be seen as the difference between the baseline and development
+	  test runs.
+
+config BOOTLINUX_TEST_MESSAGE_ID_THREAD_ID
+	string "The message ID"
+	default ""
+	depends on BOOTLINUX_TEST_MESSAGE_ID
+	help
+	  The message id that will be rebased on top of the baseline kernel in
+	  the development box.
+
+config BOOTLINUX_TEST_MESSAGE_ID_INSTALL_B4
+	bool
+	default n
+	depends on BOOTLINUX_TEST_MESSAGE_ID
+	prompt "Install b4 on development system" if BOOTLINUX_TEST_MESSAGE_ID
+	help
+	  When enabled, b4 will be installed using pip
+
 config BOOTLINUX_TREE_TAG
 	string "Git tree branch / tag / sha1sum to use"
 	default "v4.19" if BOOTLINUX_TREE_LINUS

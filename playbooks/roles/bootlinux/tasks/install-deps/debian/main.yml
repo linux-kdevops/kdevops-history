@@ -37,3 +37,14 @@
       - open-iscsi
     state: present
   tags: linux
+
+- name: Install b4
+  become: yes
+  become_method: sudo
+  pip:
+    name:
+      - b4
+  when:
+    - target_linux_install_b4 is defined
+    - target_linux_install_b4
+  tags: linux

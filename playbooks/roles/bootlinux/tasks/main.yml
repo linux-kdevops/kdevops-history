@@ -27,6 +27,10 @@
   when:
     - infer_uid_and_group|bool
 
+- name: set hostname_ends_in_dev as a fact
+  set_fact:
+    hostname_ends_in_dev: "{{ ansible_hostname | regex_search('^.*-dev$') is none }}"
+
 - name: Run getent againt that the inferred target user
   getent:
     database: passwd
@@ -89,8 +93,36 @@
   command: "git am {{ target_linux_extra_patch }}"
   args:
     chdir: "{{ target_linux_dir_path }}"
-  tags: [ 'linux', 'extra-patch', 'skip_ansible_lint' ]
+  tags: [ 'linux', 'git', 'extra-patch', 'skip_ansible_lint' ]
   when: target_linux_extra_patch is defined
+
+- name: Set git user name and email if needed
+  shell: |
+    if ! $(git config --get user.email) ; then
+      git config --global user.email user@example.com
+    fi
+    if ! $(git config --get user.name) ; then
+      git config --global user.name user
+    fi
+  tags: [ 'linux', 'git', 'extra-patch', 'skip_ansible_lint' ]
+  when:
+    - target_linux_apply_patch_message_id is defined
+    - target_linux_apply_patch_message_id | length > 0
+    - hostname_ends_in_dev
+
+- name: Variable values
+  debug:
+    msg: "{{ target_linux_apply_patch_message_id }}"
+
+- name: Apply message patch set if requested
+  shell: b4 am -o - {{target_linux_apply_patch_message_id}} | git am
+  args:
+    chdir: "{{ target_linux_dir_path }}"
+  tags: [ 'linux', 'extra-patch', 'skip_ansible_lint' ]
+  when:
+    - target_linux_apply_patch_message_id is defined
+    - target_linux_apply_patch_message_id | length > 0
+    - hostname_ends_in_dev
 
 - name: Copy configuration for linux {{ target_linux_tree }}
   template:
