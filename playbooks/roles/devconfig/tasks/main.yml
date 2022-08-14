@@ -10,6 +10,12 @@
       skip: true
   tags: vars
 
+- name: Wait for {{ ansible_host }} to be available
+  wait_for_connection:
+
+- name: Gathering facts
+  setup:
+
 # Distro specific
 - name: Install dependencies
   import_tasks: install-deps/main.yml
