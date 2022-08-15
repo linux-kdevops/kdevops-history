@@ -9,6 +9,7 @@ stage-2-$(CONFIG_VAGRANT_LIBVIRT_CONFIGURE)	+= kdevops_vagrant_configure_libvirt
 stage-2-$(CONFIG_VAGRANT)			+= kdevops_vagrant_install_vagrant
 stage-2-$(CONFIG_VAGRANT_INSTALL_PRIVATE_BOXES)	+= kdevops_vagrant_boxes
 stage-2-$(CONFIG_VAGRANT_LIBVIRT_VERIFY)	+= kdevops_verify_vagrant_user
+stage-2-$(CONFIG_LIBVIRT_STORAGE_POOL_CREATE)	+= kdevops_libvirt_storage_pool_create
 DEFAULT_DEPS += kdevops_stage_2
 
 kdevops_stage_2: .config

@@ -21,6 +21,12 @@ GEN_NODES_EXTRA_ARGS += libvirt_session_management_network_device='$(subst ",,$(
 GEN_NODES_EXTRA_ARGS += libvirt_session_public_network_dev='$(subst ",,$(CONFIG_LIBVIRT_SESSION_PUBLIC_NETWORK_DEV))'
 endif
 
+ifeq (y,$(CONFIG_LIBVIRT_STORAGE_POOL_CREATE))
+GEN_NODES_EXTRA_ARGS += libvirt_storage_pool_create='True'
+GEN_NODES_EXTRA_ARGS += libvirt_storage_pool_name='$(subst ",,$(CONFIG_LIBVIRT_STORAGE_POOL_NAME))'
+GEN_NODES_EXTRA_ARGS += libvirt_storage_pool_path='$(subst ",,$(CONFIG_LIBVIRT_STORAGE_POOL_PATH_CUSTOM))'
+endif
+
 ifeq (y,$(CONFIG_VAGRANT_ENABLE_ZNS))
 GEN_NODES_EXTRA_ARGS += nvme_zone_enable='True'
 GEN_NODES_EXTRA_ARGS += nvme_zone_drive_size='$(subst ",,$(CONFIG_QEMU_NVME_ZONE_DRIVE_SIZE))'

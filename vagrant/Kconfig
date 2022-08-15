@@ -254,6 +254,49 @@ config LIBVIRT_STORAGE_POOL_PATH_CUSTOM_MANUAL
 
 endchoice
 
+config LIBVIRT_STORAGE_POOL_CREATE
+	bool "Should we build a custom storage pool for you?"
+	default n
+	help
+	  By default vagrant assumes your storage pool name is "default" and
+	  it expects libvirt to have created this for you. If you want to
+	  use a custom pool name and path enable this. This is useful if
+	  you want to place guest images on another path other than the
+	  default libvirt has setup for you on the "default" pool name.
+
+config LIBVIRT_STORAGE_POOL_NAME
+	string "Libvirt storage pool name"
+	depends on LIBVIRT_STORAGE_POOL_CREATE
+	default "default"
+	help
+	  The libvirt storage pool name to use. By default this is "default",
+	  and this is typically defined by libvirt. Even if you create guests
+	  on a separate directory unless you use a custom storage pool name
+	  here the default path used where libvirt created the default
+	  storage pool path will be used for data. You should modify the
+	  storage pool name to something other than "default" here if you
+	  are using a custom storage pool path and are doing so to ensure
+	  you don't waste space in whatever path libvirt's default storage
+	  pool path is set to. To check your libvirt's default storage pool
+	  path you can run this and look for the path:
+
+	    virsh pool-dumpxml default
+
+	  You will need to use sudo on all distros which do not use
+	  LIBVIRT_URI_SESSION (so all distros other than Fedora).
+	  If you set here something other than 'default' kdevops will create
+	  this pool upon 'make bringup' if the pool is not yet available. It
+	  will do this with:
+
+	    virsh pool-define-as NAME PATH
+	    virsh pool-start NAME
+	    virsh pool-autostart NAME
+
+	  That name you use here is up to you but you should use something
+	  which would make it obvious what it is for other users on the system.
+	  For instance you may want to use a volume name of "data2" for a path
+	  on a partition on /data2/ or something like that.
+
 config LIBVIRT_STORAGE_POOL_PATH_CUSTOM
 	string "Libvirt storage pool path"
 	default "/var/lib/libvirt/images/" if !LIBVIRT_STORAGE_POOL_PATH_CUSTOM_CWD

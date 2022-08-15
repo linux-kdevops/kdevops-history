@@ -59,6 +59,15 @@ kdevops_verify_vagrant_user:
 PHONY += kdevops_verify_vagrant_user
 KDEVOPS_VAGRANT_WORK += kdevops_verify_vagrant_user
 
+kdevops_libvirt_storage_pool_create:
+	@$(Q)ansible-playbook --connection=local \
+		--inventory localhost, \
+		$(KDEVOPS_PLAYBOOKS_DIR)/libvirt_storage_pool_create.yml \
+		-e 'ansible_python_interpreter=/usr/bin/python3'
+
+PHONY += kdevops_libvirt_storage_pool_create
+KDEVOPS_VAGRANT_WORK += kdevops_libvirt_storage_pool_create
+
 kdevops_deps: kdevops_terraform_deps $(KDEVOPS_VAGRANT_WORK)
 	@echo Installed dependencies
 PHONY += kdevops_deps
