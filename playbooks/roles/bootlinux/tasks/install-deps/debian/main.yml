@@ -35,6 +35,7 @@
       - portmap
       - hwinfo
       - open-iscsi
+      - python3-pip
     state: present
   tags: linux
 
