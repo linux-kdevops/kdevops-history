@@ -39,7 +39,7 @@ config BOOTLINUX_TEST_MESSAGE_ID
 	bool "Test mailing list message ID"
 	default n
 	depends on KDEVOPS_BASELINE_AND_DEV
-	select BOOTLINUX_TEST_MESSAGE_INSTALL_B4 if BOOTLINUX_TEST_MESSAGE_ID
+	select BOOTLINUX_TEST_MESSAGE_ID_INSTALL_B4 if BOOTLINUX_TEST_MESSAGE_ID
 	help
 	  When enabled, the b4 command from public-inbox will rebase the patches
 	  contained in the message-id on top of a baseline kernel and install it
