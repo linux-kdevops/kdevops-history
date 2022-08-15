@@ -1,5 +1,7 @@
 # SPDX-License-Identifier: copyleft-next-0.3.1
 
+export KDEVOPS_HOSTS_TEMPLATE := cxl.j2
+
 CXL_ARGS :=
 CXL_ARGS += ndctl_git='$(subst ",,$(CONFIG_NDCTL_GIT))'
 CXL_ARGS += ndctl_data=\"$(subst ",,$(CONFIG_NDCTL_DATA))\"

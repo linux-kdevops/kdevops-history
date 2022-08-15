@@ -84,6 +84,21 @@
     - not kdevops_workflows_dedicated_workflow
     - ansible_nodes_template.stat.exists
 
+- name: Generate the cxl kdevops nodes file using {{ kdevops_nodes_template }} as jinja2 source template
+  tags: [ 'nodes' ]
+  vars:
+    node_template: "{{ kdevops_nodes_template | basename }}"
+    all_generic_nodes: "{{ generic_nodes }}"
+    nodes: "{{ all_generic_nodes }}"
+  template:
+    src: "{{ node_template }}"
+    dest: "{{ topdir_path }}/{{ kdevops_nodes }}"
+    force: yes
+  when:
+    - kdevops_workflows_dedicated_workflow
+    - kdevops_workflow_enable_cxl
+    - ansible_nodes_template.stat.exists
+
 - name: Set empty enabled test types list for fstests
   tags: [ 'hosts' ]
   set_fact:

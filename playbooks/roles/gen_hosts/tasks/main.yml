@@ -68,6 +68,19 @@
     - not kdevops_workflows_dedicated_workflow
     - ansible_hosts_template.stat.exists
 
+- name: Generate the ansible hosts file for dedicated cxl work
+  tags: [ 'hosts' ]
+  template:
+    src: "{{ kdevops_hosts_template }}"
+    dest: "{{ topdir_path }}/{{ kdevops_hosts }}"
+    force: yes
+    trim_blocks: True
+    lstrip_blocks: True
+  when:
+    - kdevops_workflows_dedicated_workflow
+    - kdevops_workflow_enable_cxl
+    - ansible_hosts_template.stat.exists
+
 - name: Set empty enabled test types list for fstests
   tags: [ 'hosts' ]
   set_fact:
