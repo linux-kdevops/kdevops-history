@@ -29,7 +29,7 @@
 
 - name: set hostname_ends_in_dev as a fact
   set_fact:
-    hostname_ends_in_dev: "{{ ansible_hostname | regex_search('^.*-dev$') is none }}"
+    hostname_ends_in_dev: "{{ ansible_hostname | regex_search('^.*-dev$') is not none }}"
 
 - name: Run getent againt that the inferred target user
   getent:
