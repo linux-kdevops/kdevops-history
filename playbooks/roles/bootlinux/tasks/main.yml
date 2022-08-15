@@ -14,6 +14,18 @@
 - name: Install dependencies
   include_tasks: install-deps/main.yml
 
+# We do this regardless of what distro you use
+- name: Install b4
+  become: yes
+  become_method: sudo
+  pip:
+    name:
+      - b4
+  when:
+    - target_linux_install_b4 is defined
+    - target_linux_install_b4
+  tags: linux
+
 - name: Get username we are using
   command:
     cmd: whoami
