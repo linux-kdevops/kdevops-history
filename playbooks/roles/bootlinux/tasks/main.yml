@@ -125,6 +125,8 @@
 - name: Variable values
   debug:
     msg: "{{ target_linux_apply_patch_message_id }}"
+  when:
+    - target_linux_apply_patch_message_id is defined
 
 - name: Apply message patch set if requested
   shell: b4 am -o - {{target_linux_apply_patch_message_id}} | git am
