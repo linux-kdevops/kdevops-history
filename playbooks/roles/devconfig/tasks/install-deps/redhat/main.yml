@@ -17,13 +17,8 @@
   when:
     - devconfig_try_upgrade|bool
 
-- name: Install packages we typically care about
-  become: yes
-  become_method: sudo
-  yum:
-    update_cache: yes
-    name: "{{ packages }}"
-  vars:
+- name: Build install package list
+  set_fact:
     packages:
       - bison
       - flex
@@ -42,7 +37,6 @@
       - psmisc
       - sed
       - vim
-      - screen
       - fio
       - libaio-devel
       - diffutils
@@ -50,6 +44,25 @@
       - ncurses-devel
       - openssh-server
       - net-snmp
+
+- name: Add GNU screen to install package list
+  set_fact:
+    packages: "{{ packages + [ 'screen' ] }}"
+  when:
+    ansible_facts['os_family']|lower != 'redhat' or ansible_facts['distribution_major_version'] | int < 8
+
+- name: Add Tmux to install package list
+  set_fact:
+    packages: "{{ packages + [ 'tmux' ] }}"
+  when:
+    ansible_facts['os_family']|lower == 'redhat' or ansible_facts['distribution_major_version'] | int >= 8
+
+- name: Install packages we typically care about
+  become: yes
+  become_method: sudo
+  yum:
+    update_cache: yes
+    name: "{{ packages }}"
   when:
     - devconfig_try_install_kdevtools|bool
 
