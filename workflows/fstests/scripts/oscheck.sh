@@ -660,9 +660,9 @@ oscheck_prefix_section()
 oscheck_run_cmd()
 {
 	if [ "$ONLY_SHOW_CMD" = "false" ]; then
-		LC_ALL=C bash --posix $OSCHECK_CMD
+		LC_ALL=C bash $OSCHECK_CMD
 	else
-		echo "LC_ALL=C bash --posix $OSCHECK_CMD"
+		echo "LC_ALL=C bash $OSCHECK_CMD"
 	fi
 }
 
