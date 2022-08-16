@@ -21,6 +21,8 @@ kdevops_workflows_dedicated_workflow: False
 kdevops_workflow_enable_fstests: False
 kdevops_workflow_enable_blktests: False
 
+kdevops_workflow_enable_cxl: False
+
 is_fstests: False
 fstests_fstyp: "bogus"
 fs_config_role_path: "/dev/null"
