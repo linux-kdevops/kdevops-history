@@ -722,6 +722,43 @@ config VAGRANT_INSTALL_PRIVATE_BOXES
 	  vagrant boxes. Enabling this option is safe as well, given no
 	  private boxes would be defined, and so nothing is done.
 
+choice
+	prompt "Libvirt nvme drive file format"
+	depends on VAGRANT_LIBVIRT
+	default LIBVIRT_NVME_DRIVE_FORMAT_QCOW2
+
+config LIBVIRT_NVME_DRIVE_FORMAT_QCOW2
+	bool "Use qcow2 format"
+	help
+	  Select this option if you want to use the qcow2 file format for the
+	  nvme drives created for you. This is useful if you want to use
+	  advanced features on the files such as growing them or freezing
+	  them. There may be some odd issues however with very sub-optimal
+	  features such as with discard, however these issues are still being
+	  investingated.
+
+config LIBVIRT_NVME_DRIVE_FORMAT_RAW
+	bool "Use raw format"
+	help
+	  Select this option if you want to use the raw file format for the nvme
+	  drives created for you. One of the sweet spots for using raw and 4KiB
+	  block sizes is the advantages of ensuring that when a filesystem
+	  issues a punch hole through fallocate (FALLOC_FL_PUNCH_HOLE) write
+	  zeroes (REQ_OP_WRITE_ZEROES) results in an actual deallocation of
+	  blocks faster. When using qcow2 the default is to use a cluster of
+	  64 KiB for blocks and by default blocks will only be marked
+	  deallocated if a full cluster is zeroed or discarded. You can
+	  fallocate (punch) holes on a filesystem with a smaller block
+	  size than the default qcow2 cluster size (say 4 KiB), and so in
+	  theory, this may cause undeterministic delays. In practice this may
+	  end up in nvme timeouts, but these issues are currently being
+	  investigated, and if using the raw format proves to not cause nvme
+	  timeouts as observed with fstests punch tests while the backend
+	  drive has low space (below 80%) this may become the default for
+	  kdevops as it reflects a possible bug in qemu.
+
+endchoice
+
 config QEMU_ENABLE_NVME_ZNS
 	bool "Enable Qemu NVMe ZNS drives"
 	depends on VAGRANT_LIBVIRT

@@ -27,6 +27,10 @@ GEN_NODES_EXTRA_ARGS += libvirt_storage_pool_name='$(subst ",,$(CONFIG_LIBVIRT_S
 GEN_NODES_EXTRA_ARGS += libvirt_storage_pool_path='$(subst ",,$(CONFIG_LIBVIRT_STORAGE_POOL_PATH_CUSTOM))'
 endif
 
+ifeq (y,$(CONFIG_LIBVIRT_NVME_DRIVE_FORMAT_RAW))
+GEN_NODES_EXTRA_ARGS += libvirt_nvme_drive_format='raw'
+endif
+
 ifeq (y,$(CONFIG_VAGRANT_ENABLE_ZNS))
 GEN_NODES_EXTRA_ARGS += nvme_zone_enable='True'
 GEN_NODES_EXTRA_ARGS += nvme_zone_drive_size='$(subst ",,$(CONFIG_QEMU_NVME_ZONE_DRIVE_SIZE))'
