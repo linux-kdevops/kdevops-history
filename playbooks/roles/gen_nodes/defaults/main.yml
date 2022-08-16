@@ -28,6 +28,7 @@ nvme_zone_max_open: 0
 nvme_zone_physical_blocksize: 4096
 nvme_zone_logical_blocksize: 4096
 kdevops_storage_pool_path: "/var/lib/libvirt/images/"
+libvirt_storage_pool_create: False
 libvirt_uri: 'qemu:///system'
 libvirt_system_uri: 'qemu:///system'
 libvirt_session: False
