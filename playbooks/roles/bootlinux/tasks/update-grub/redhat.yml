@@ -1,8 +1,25 @@
+- name: Determine if system was booted using UEFI
+  stat:
+    path: /sys/firmware/efi
+  register: efi_boot
+
+- name: Use /boot/grub2.cfg as the grub configuration file
+  set_fact:
+    grub_config_file: '/boot/grub2.cfg'
+  when:
+    not efi_boot.stat.exists
+
+- name: Use /boot/efi/EFI/redhat/grub.cfg as the configuration file
+  set_fact:
+    grub_config_file: '/boot/efi/EFI/redhat/grub.cfg'
+  when:
+    efi_boot.stat.exists
+
 - name: Run update-grub
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
-  command: 'grub2-mkconfig -o /etc/grub2.cfg'
+  command: "grub2-mkconfig -o {{ grub_config_file }}"
   register: grub_update
   changed_when: "grub_update.rc == 0"
   tags: [ 'linux', 'manual-update-grub', 'console' ]
