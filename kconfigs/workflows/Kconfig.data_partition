@@ -4,6 +4,7 @@ config WORKFLOW_DATA_DEVICE
 	default "/dev/nvme1n1" if TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE
 	default "/dev/nvme0n1" if TERRAFORM_GCE
 	default "/dev/sdc" if TERRAFORM_AZURE
+	default TERRAFORM_OCI_DATA_VOLUME_DEVICE_FILE_NAME if TERRAFORM_OCI
 	help
 	  Workflows require data to be passed onto each target host. When doing
 	  development or testing on target workflows you often want to keep

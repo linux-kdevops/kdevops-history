@@ -249,6 +249,7 @@ config FSTESTS_SPARSE_DEV
 	default "/dev/nvme2n1" if TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE
 	default "/dev/nvme1n1" if TERRAFORM_GCE
 	default "/dev/sde" if TERRAFORM_AZURE
+	default TERRAFORM_OCI_SPARSE_VOLUME_DEVICE_FILE_NAME if TERRAFORM_OCI
 	help
 	  The device to use to create a filesystem on where we will place
 	  sparse files.
