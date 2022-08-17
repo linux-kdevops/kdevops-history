@@ -109,6 +109,24 @@
   register: kernelrelease
   when: kernel_release_file.stat.exists
 
+- name: Construct command line to determine default kernel ID
+  set_fact:
+    determine_default_kernel_id: >-
+      awk -F\' '/menuentry / {print $2}'
+      /boot/grub/grub.cfg | awk '{print NR-1" ... "$0}' |
+      grep {{ kernelrelease.stdout }} | head -1 | awk '{print $1}'
+  when:
+    ansible_facts['os_family']|lower != 'redhat' or ansible_facts['distribution_major_version'] | int < 8
+
+- name: Construct command line to determine default kernel ID for RHEL >= 8
+  set_fact:
+    determine_default_kernel_id: >-
+      for f in $(ls -1 /boot/loader/entries/*.conf); do
+      cat $f | grep id | grep {{ kernelrelease.stdout }};
+      done | awk '{print $2}'
+  when:
+    ansible_facts['os_family']|lower == 'redhat' and ansible_facts['distribution_major_version'] | int >= 8
+
 # If this fails then grub-set-default won't be run, and the assumption here
 # is either you do the work to enhance the heuristic or live happy with the
 # assumption that grub2's default of picking the latest kernel is the best
@@ -117,21 +135,30 @@
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
-  shell: |
-    awk -F\' '/menuentry / {print $2}' \
-      /boot/grub/grub.cfg | awk '{print NR-1" ... "$0}' | \
-      grep {{ kernelrelease.stdout }} | head -1 | awk '{print $1}'
+  shell: " {{ determine_default_kernel_id }} "
   vars:
     target_kernel: "{{ target_linux_tag | replace('v', '') }}"
   register: grub_boot_number_cmd
   tags: [ 'linux', 'git', 'config', 'saved' ]
   when: kernel_release_file.stat.exists
 
+- name: Obtain command to set default kernel to boot
+  set_fact:
+    grub_set_default_boot_kernel: grub-set-default
+  when:
+    ansible_facts['os_family']|lower != 'redhat' or ansible_facts['distribution_major_version'] | int < 8
+
+- name: Obtain command to set default kernel to boot for RHEL >= 8
+  set_fact:
+    grub_set_default_boot_kernel: grub2-set-default
+  when:
+    ansible_facts['os_family']|lower == 'redhat' and ansible_facts['distribution_major_version'] | int >= 8
+
 - name: Set the target kernel to be booted by default moving forward if the above command worked
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
-  command: "grub-set-default {{ target_boot_entry }}"
+  command: "{{ grub_set_default_boot_kernel }} {{ target_boot_entry }}"
   vars:
     target_boot_entry: "{{ grub_boot_number_cmd.stdout_lines.0 }}"
   tags: [ 'linux', 'git', 'config', 'saved' ]
