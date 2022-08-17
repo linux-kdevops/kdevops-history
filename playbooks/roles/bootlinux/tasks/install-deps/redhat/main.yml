@@ -23,7 +23,6 @@
       - psmisc
       - sed
       - vim
-      - screen
       - fio
       - libaio-devel
       - diffutils
