@@ -236,8 +236,8 @@
 - name: Set the default kernel if necessary
   tags: [ 'linux', 'git', 'config', 'saved' ]
   import_tasks: update-grub/install.yml
-  when:
-    - ansible_facts['os_family']|lower != 'redhat'
+  # when:
+  #   - ansible_facts['os_family']|lower != 'redhat'
 
 - name: Reboot into linux {{ target_linux_tree }}
   become: yes
