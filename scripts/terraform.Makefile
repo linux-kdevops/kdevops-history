@@ -24,6 +24,9 @@ endif
 ifeq (y,$(CONFIG_TERRAFORM_AZURE))
 export KDEVOPS_CLOUD_PROVIDER=azure
 endif
+ifeq (y,$(CONFIG_TERRAFORM_OCI))
+export KDEVOPS_CLOUD_PROVIDER=oci
+endif
 ifeq (y,$(CONFIG_TERRAFORM_OPENSTACK))
 export KDEVOPS_CLOUD_PROVIDER=openstack
 endif
@@ -82,6 +85,23 @@ TERRAFORM_EXTRA_VARS += terraform_gce_machine_type=$(subst ",,$(CONFIG_TERRAFORM
 TERRAFORM_EXTRA_VARS += terraform_gce_scatch_disk_type=$(subst ",,$(CONFIG_TERRAFORM_GCE_SCRATCH_DISK_INTERFACE))
 TERRAFORM_EXTRA_VARS += terraform_gce_image_name=$(subst ",,$(CONFIG_TERRAFORM_GCE_IMAGE))
 TERRAFORM_EXTRA_VARS += terraform_gce_credentials=$(subst ",,$(CONFIG_TERRAFORM_GCE_JSON_CREDENTIALS_PATH))
+endif
+
+ifeq (y,$(CONFIG_TERRAFORM_OCI))
+TERRAFORM_EXTRA_VARS += terraform_oci_region=$(subst ",,$(CONFIG_TERRAFORM_OCI_REGION))
+TERRAFORM_EXTRA_VARS += terraform_oci_tenancy_ocid=$(subst ",,$(CONFIG_TERRAFORM_OCI_TENANCY_OCID))
+TERRAFORM_EXTRA_VARS += terraform_oci_user_ocid=$(subst ",,$(CONFIG_TERRAFORM_OCI_USER_OCID))
+TERRAFORM_EXTRA_VARS += terraform_oci_user_private_key_path=$(subst ",,$(CONFIG_TERRAFORM_OCI_USER_PRIVATE_KEY_PATH))
+TERRAFORM_EXTRA_VARS += terraform_oci_user_fingerprint=$(subst ",,$(CONFIG_TERRAFORM_OCI_USER_FINGERPRINT))
+TERRAFORM_EXTRA_VARS += terraform_oci_availablity_domain=$(subst ",,$(CONFIG_TERRAFORM_OCI_AVAILABLITY_DOMAIN))
+TERRAFORM_EXTRA_VARS += terraform_oci_compartment_ocid=$(subst ",,$(CONFIG_TERRAFORM_OCI_COMPARTMENT_OCID))
+TERRAFORM_EXTRA_VARS += terraform_oci_shape=$(subst ",,$(CONFIG_TERRAFORM_OCI_SHAPE))
+TERRAFORM_EXTRA_VARS += terraform_oci_os_image_ocid=$(subst ",,$(CONFIG_TERRAFORM_OCI_OS_IMAGE_OCID))
+TERRAFORM_EXTRA_VARS += terraform_oci_subnet_ocid=$(subst ",,$(CONFIG_TERRAFORM_OCI_SUBNET_OCID))
+TERRAFORM_EXTRA_VARS += terraform_oci_data_volume_display_name=$(subst ",,$(CONFIG_TERRAFORM_OCI_DATA_VOLUME_DISPLAY_NAME))
+TERRAFORM_EXTRA_VARS += terraform_oci_data_volume_device_file_name=$(subst ",,$(CONFIG_TERRAFORM_OCI_DATA_VOLUME_DEVICE_FILE_NAME))
+TERRAFORM_EXTRA_VARS += terraform_oci_sparse_volume_display_name=$(subst ",,$(CONFIG_TERRAFORM_OCI_SPARSE_VOLUME_DISPLAY_NAME))
+TERRAFORM_EXTRA_VARS += terraform_oci_sparse_volume_device_file_name=$(subst ",,$(CONFIG_TERRAFORM_OCI_SPARSE_VOLUME_DEVICE_FILE_NAME))
 endif
 
 ifeq (y,$(CONFIG_TERRAFORM_OPENSTACK))

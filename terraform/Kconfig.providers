@@ -21,6 +21,13 @@ config TERRAFORM_AZURE
 	  Enabling this means you are going to use Azure for your cloud
 	  solution.
 
+config TERRAFORM_OCI
+	bool "OCI - Oracle Cloud Infrastructure"
+	depends on TARGET_ARCH_X86_64
+	help
+	  Enabling this means you are going to use OCI for your cloud
+	  solution.
+
 config TERRAFORM_OPENSTACK
 	bool "OpenStack"
 	help
@@ -32,4 +39,5 @@ endchoice
 source "terraform/gce/Kconfig"
 source "terraform/aws/Kconfig"
 source "terraform/azure/Kconfig"
+source "terraform/oci/Kconfig"
 source "terraform/openstack/Kconfig"

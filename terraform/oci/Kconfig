@@ -1,0 +1,101 @@
+if TERRAFORM_OCI
+
+config TERRAFORM_OCI_REGION
+	string "OCI Region"
+	help
+	  This option will set the OCI resource location.
+	  Read this:
+	  https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformproviderconfiguration.htm
+
+config TERRAFORM_OCI_TENANCY_OCID
+	string "OCI tenant OCID"
+	help
+	  The OCI ID of the tenancy to use.
+	  Read this:
+	  https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformproviderconfiguration.htm
+
+config TERRAFORM_OCI_USER_OCID
+	string "OCI user OCID"
+	help
+	  The OCI ID of the user to use.
+	  Read this:
+	  https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformproviderconfiguration.htm
+
+config TERRAFORM_OCI_USER_PRIVATE_KEY_PATH
+	string "OCI user private key path"
+	help
+	  Path to the file containing the private key of the user.
+	  Read this:
+	  https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformproviderconfiguration.htm
+
+config TERRAFORM_OCI_USER_FINGERPRINT
+	string "OCI user fingerprint"
+	help
+	  Fingerprint for the key pair being used.
+	  Read this:
+	  https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformproviderconfiguration.htm
+
+config TERRAFORM_OCI_AVAILABLITY_DOMAIN
+	string "OCI availablity domain"
+	help
+	  The name of the availability domain.
+	  Read this:
+	  https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformproviderconfiguration.htm
+
+config TERRAFORM_OCI_COMPARTMENT_OCID
+	string "OCI compartment OCID"
+	help
+	  The OCI ID of user's compartment.
+	  Read this:
+	  https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformproviderconfiguration.htm
+
+config TERRAFORM_OCI_SHAPE
+	string "OCI shape name"
+	help
+	  The name of the shape
+	  Read this:
+	  https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformproviderconfiguration.htm
+
+config TERRAFORM_OCI_OS_IMAGE_OCID
+	string "OCI OS image OCID"
+	help
+	  The OCI ID of the OS image to use.
+	  Read this:
+	  https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformproviderconfiguration.htm
+
+config TERRAFORM_OCI_SUBNET_OCID
+	string "OCI Subnet OCID"
+	help
+	  The OCI ID of the subnet.
+	  Read this:
+	  https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformproviderconfiguration.htm
+
+config TERRAFORM_OCI_DATA_VOLUME_DISPLAY_NAME
+	string "Display name to use for the data volume"
+	help
+	  Human readable data volume instance name
+	  Read this:
+	  https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformproviderconfiguration.htm
+
+config TERRAFORM_OCI_DATA_VOLUME_DEVICE_FILE_NAME
+	string "Data volume's device file name"
+	help
+	  Data volume's device file name
+	  Read this:
+	  https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformproviderconfiguration.htm
+
+config TERRAFORM_OCI_SPARSE_VOLUME_DISPLAY_NAME
+	string "Display name to use for the sparse volume"
+	help
+	  Human readable sparse volume instance name
+	  Read this:
+	  https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformproviderconfiguration.htm
+
+config TERRAFORM_OCI_SPARSE_VOLUME_DEVICE_FILE_NAME
+	string "Sparse volume's device file name"
+	help
+	  Sparse volume's device file name
+	  Read this:
+	  https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformproviderconfiguration.htm
+
+endif # TERRAFORM_OCI
