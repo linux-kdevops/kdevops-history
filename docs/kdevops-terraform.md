@@ -7,9 +7,10 @@ a terraform plan.
 Terraform is used to deploy your development hosts on cloud virtual machines.
 Below are the list of clouds providers currently supported:
 
-  * gce - Google Cloud Compute
-  * aws - Amazon Web Service
   * azure - Microsoft Azure
+  * aws - Amazon Web Service
+  * gce - Google Cloud Compute
+  * oci - Oracle Cloud Infrastructure
   * openstack (special minicloud support added)
 
 You configure which cloud provider you want to use, what feature from that
@@ -314,3 +315,7 @@ credentials = /home/foo/path/to/some.json
 https://www.terraform.io/docs/providers/google/getting_started.html
 https://www.terraform.io/docs/providers/google/index.html
 https://cloud.google.com/iam/docs/granting-roles-to-service-accounts#granting_access_to_a_service_account_for_a_resource
+
+### OCI - Oracle Cloud Infrastrucure
+
+Someone give me some love.
