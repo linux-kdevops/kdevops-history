@@ -1,6 +1,5 @@
 generic/019 # fails for at least one config every run (after enabling CONFIG_FAIL_MAKE_REQUEST)
 generic/050 # lazy baseline - failure found in at least two sections
-generic/074 # hung after 50 runs on xfs_nocrc due to nvme I/O timeout (may not be test related)
 generic/241
 generic/270 # lazy baseline - failure found in at least two sections (maybe related to)
 generic/273 # fails on xfs_reflink_1024 with a failure rate is 1/10 but chances are it will fail in others too https://gist.github.com/mcgrof/89d8349f899ff07ba4dda19264034db2
@@ -29,7 +28,6 @@ generic/686 # fixed by vfs SGID stripping
 generic/687 # fixed by vfs SGID stripping
 generic/688
 generic/691
-shared/032 # hung due to nvme I/O timeout (may not be test related)
 xfs/005 # fails on many sections failure rate about 1/5, lazy baseline - failure found in at least two sections
 xfs/008 # lazy baseline - failure found in at least two sections
 xfs/014 # fails on section xfs_reflink_1024  failure rate is about 1/50 https://gist.github.com/mcgrof/822b449725fd069d1a13013e91929f70 and on xfs_logdev with a failure rate of failure rate 1/40
