@@ -50,6 +50,7 @@ xfs/157
 xfs/158
 xfs/177 # fixed by "xfs: fix I_DONTCACHE" in v5.15
 xfs/185 # lazy baseline - failure found in at least two sections
+xfs/191 # fixed by 7be3bd8856fb ("xfs: empty xattr leaf header blocks are not corruption") in v5.19
 xfs/189 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/195 # lazy baseline - failure found in at least two sections - xfs_nocrc after 5 runs, xfs_reflink after 70 runs
 xfs/216 # lazy baseline - failure found in at least two sections
