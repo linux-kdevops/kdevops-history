@@ -354,6 +354,12 @@
     - kdevops_run_fstests|bool
   run_once: true
 
+- name: Enable low-level messages on console
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: sysctl kernel.printk="8 8 1 7"
+
 - name: Run fstests using ./oscheck.sh --print-done --test-section {{ fstests_section }} {{ oscheck_extra_args }}
   vars:
     fstests_section: "{{ ansible_host | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
