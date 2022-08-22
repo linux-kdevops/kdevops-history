@@ -27,6 +27,11 @@ config BOOTLINUX_STABLE_V419
 	help
 	  Automatically enable the latest supported linux-4.19.y kernel.
 
+config BOOTLINUX_STABLE_V54
+	bool "linux-5.4.y"
+	help
+	  Automatically enable the latest supported linux-5.4.y kernel.
+
 config BOOTLINUX_STABLE_V510
 	bool "linux-5.10.y"
 	help
