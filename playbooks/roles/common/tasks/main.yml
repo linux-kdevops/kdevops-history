@@ -18,6 +18,10 @@
   git:
     repo: "{{ kdevops_git }}"
     dest: "{{ kdevops_data }}"
+  retries: 3
+  delay: 5
+  register: result
+  until: not result.failed
   tags: [ 'kdevops_reset']
   when:
     - kdevops_git_reset|bool

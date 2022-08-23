@@ -36,6 +36,10 @@
   git:
     repo: "{{ kdevops_git }}"
     dest: "{{ kdevops_data }}"
+  retries: 3
+  delay: 5
+  register: result
+  until: not result.failed
   tags: [ 'oscheck', 'install', 'git']
 
 - name: Copy over our .config
@@ -82,6 +86,10 @@
     dest: "{{ fstests_data }}"
     update: yes
     version: master
+  retries: 3
+  delay: 5
+  register: result
+  until: not result.failed
   tags: [ 'oscheck', 'git', 'fstests']
 
 - name: Get nproc
@@ -103,6 +111,10 @@
     dest: "{{ kdevops_data }}"
     update: yes
     version: master
+  retries: 3
+  delay: 5
+  register: result
+  until: not result.failed
   tags: [ 'oscheck', 'install', 'git', 'git_update', 'fstests', 'run_tests' ]
 
 - name: Install fstests

@@ -89,6 +89,10 @@
     update: yes
     depth: "{{ target_linux_shallow_depth }}"
     version: "{{ target_linux_tag }}"
+  retries: 3
+  delay: 5
+  register: result
+  until: not result.failed
   tags: [ 'linux', 'git', 'clone']
 
 - name: Copy kernel delta if requested
