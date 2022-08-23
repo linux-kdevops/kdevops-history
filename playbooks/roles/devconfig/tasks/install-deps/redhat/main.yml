@@ -7,6 +7,10 @@
     update_cache: yes
     name: '*'
     state: latest
+  retries: 3
+  delay: 5
+  register: result
+  until: result.rc == 0
   when:
     - devconfig_try_upgrade|bool
 
@@ -63,6 +67,10 @@
   yum:
     update_cache: yes
     name: "{{ packages }}"
+  retries: 3
+  delay: 5
+  register: result
+  until: result.rc == 0
   when:
     - devconfig_try_install_kdevtools|bool
 
