@@ -34,6 +34,7 @@ endif
 ifeq (y,$(CONFIG_VAGRANT_ENABLE_ZNS))
 GEN_NODES_EXTRA_ARGS += nvme_zone_enable='True'
 GEN_NODES_EXTRA_ARGS += nvme_zone_drive_size='$(subst ",,$(CONFIG_QEMU_NVME_ZONE_DRIVE_SIZE))'
+GEN_NODES_EXTRA_ARGS += nvme_zone_size='$(subst ",,$(CONFIG_QEMU_NVME_ZONE_SIZE))'
 GEN_NODES_EXTRA_ARGS += nvme_zone_zasl='$(subst ",,$(CONFIG_QEMU_NVME_ZONE_ZASL))'
 GEN_NODES_EXTRA_ARGS += nvme_zone_capacity='$(subst ",,$(CONFIG_QEMU_NVME_ZONE_CAPACITY))'
 GEN_NODES_EXTRA_ARGS += nvme_zone_max_active='$(subst ",,$(CONFIG_QEMU_NVME_ZONE_MAX_ACTIVE))'
