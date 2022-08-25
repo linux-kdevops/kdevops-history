@@ -95,13 +95,14 @@
     dev: "{{ disk_setup_device }}"
     opts: "{{ disk_setup_fs_opts }}"
   when: >
-    (result is success and
-    part_mounts_item is not defined) or
-    (result is success and
-    part_mounts_item is defined and
-    (part_mounts_item | length == 0) or
-    (part_mounts_item[0] is not defined and
-    part_mounts_item[1] is not defined))
+    mountpoint_stat != 0 and
+    ((result is success and
+     part_mounts_item is not defined) or
+     (result is success and
+     part_mounts_item is defined and
+     (part_mounts_item | length == 0) or
+     (part_mounts_item[0] is not defined and
+     part_mounts_item[1] is not defined)))
   register: create_data_fs
   tags: [ 'partition' ]
 
@@ -116,19 +117,20 @@
     opts: "{{ disk_setup_mount_opts }}"
     state: mounted
   when: >
-    label_grep.rc == 0 or
-    (create_data_fs is success and
-     part_mounts_item is not defined) or
-    (create_data_fs is success and
-    part_mounts_item is defined and
-    part_mounts_item | length <= 1 or
-    part_mounts_item[1] is not defined) or
-    (part_mounts_item is not defined) or
-    (part_mounts_item is defined and
-    part_mounts_item | length <= 0) or
-    (part_mounts_item is defined and
-    part_mounts_item | length <= 1 or
-    part_mounts_item[1] is not defined)
+    mountpoint_stat != 0 and
+    (label_grep.rc == 0 or
+     (create_data_fs is success and
+      part_mounts_item is not defined) or
+     (create_data_fs is success and
+     part_mounts_item is defined and
+     part_mounts_item | length <= 1 or
+     part_mounts_item[1] is not defined) or
+     (part_mounts_item is not defined) or
+     (part_mounts_item is defined and
+     part_mounts_item | length <= 0) or
+     (part_mounts_item is defined and
+     part_mounts_item | length <= 1 or
+     part_mounts_item[1] is not defined))
   tags: [ 'partition' ]
 
 - name: Ensure directory {{ disk_setup_path }} is created and with correct permissions
