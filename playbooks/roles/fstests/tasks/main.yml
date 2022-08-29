@@ -185,6 +185,24 @@
     - "{{ fstests_data_target }}/configs"
     - "{{ sparsefiles_path }}"
 
+- name: Check if there's a host specific fstests at {{ fstests_fstyp }}/{{ inventory_hostname }}.config configuration
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' ]
+  delegate_to: localhost
+  stat:
+    path: "{{ topdir_path }}/workflows/fstests/{{ fstests_fstyp }}/{{ inventory_hostname }}.config"
+  register: host_specific_fstests_config
+
+- name: Copy and force overwrite of the host specific fstests configuration
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  template:
+    src: "{{ topdir_path }}/workflows/fstests/{{ fstests_fstyp }}//{{ ansible_host }}.config"
+    dest: "{{ fstests_data_target }}/configs/{{ ansible_host }}.config"
+    force: yes
+  when: host_specific_fstests_config.stat.exists
+
 - name: Copy and force overwrite of the target filesystem fstests configuration
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' ]
   become: yes
@@ -194,6 +212,7 @@
     src: "{{ fstests_fstyp }}/{{ fstests_fstyp }}.config"
     dest: "{{ fstests_data_target }}/configs/{{ ansible_host }}.config"
     force: yes
+  when: not host_specific_fstests_config.stat.exists
 
 - name: Reboot system before our test so we know everything is sane
   tags: [ 'oscheck', 'fstests', 'run_tests', 'reboot' ]
