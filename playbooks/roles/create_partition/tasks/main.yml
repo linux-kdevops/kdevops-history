@@ -95,7 +95,8 @@
     dev: "{{ disk_setup_device }}"
     opts: "{{ disk_setup_fs_opts }}"
   when: >
-    mountpoint_stat != 0 and
+    (mountpoint_stat != 0 and
+     label_grep.rc != 0) and
     ((result is success and
      part_mounts_item is not defined) or
      (result is success and
