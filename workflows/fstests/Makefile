@@ -107,7 +107,7 @@ fstests: $(KDEVOPS_EXTRA_VARS)
 fstests-kdevops-setup: $(KDEVOPS_EXTRA_VARS)
 	$(Q)ansible-playbook -f 30 -i hosts playbooks/fstests.yml --tags vars,kdevops_fstests_setup $(LIMIT_HOSTS)
 
-fstests-baseline: $(KDEVOPS_EXTRA_VARS)
+fstests-baseline:
 	$(Q)PYTHONUNBUFFERED=1 ansible-playbook -f 30 -i hosts -l baseline playbooks/fstests.yml --tags run_tests,copy_results --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
 fstests-baseline-loop: $(KDEVOPS_EXTRA_VARS)
