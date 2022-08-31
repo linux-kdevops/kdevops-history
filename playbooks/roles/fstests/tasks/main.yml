@@ -278,6 +278,7 @@
   check_mode: yes
   when:
     - kdevops_run_fstests|bool
+    - fstests_section != "all"
 
 # We have to set the environment variables explicitly because some distros
 # or systems might have on /etc/sudeors env_reset enabled, which gives us

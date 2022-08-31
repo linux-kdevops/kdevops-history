@@ -125,6 +125,11 @@ parse_config_section() {
 	if ! $OPTIONS_HAVE_SECTIONS; then
 		return 0
 	fi
+
+	if [ "${SECTION}" == "all" ]; then
+		return 0
+	fi
+
 	eval `sed -e 's/[[:space:]]*\=[[:space:]]*/=/g' \
 		-e 's/#.*$//' \
 		-e 's/[[:space:]]*$//' \
@@ -520,6 +525,10 @@ oscheck_verify_intented_expunges()
 		return 0
 	fi
 
+	if [ "$TARGET_SECTION" == "all"]; then
+		return 0
+	fi
+
 	INTENDED_SECTION_EXPUNGES="$(find $OSCHECK_EXCLUDE_DIR -type f)"
 	for i in $INTENDED_SECTION_EXPUNGES; do
 		# Is this a section specific file? If so then only test
@@ -636,6 +645,9 @@ oscheck_queue_sections()
 oscheck_prefix_section()
 {
 	ADD_SECTION="$1"
+	if [ "$ADD_SECTION" == "all" ]; then
+		return 0;
+	fi
 	if [ "$OS_SECTION_PREFIX" != "" ]; then
 		if [ "${ADD_SECTION}" != "${FSTYP}" ]; then
 			SECTION="${OS_SECTION_PREFIX}_${ADD_SECTION}"
@@ -667,8 +679,13 @@ oscheck_run_section()
 	oscheck_update_expunge_files
 	oscheck_count_check
 	oscheck_verify_intented_expunges $SECTION
+	SECTION_ARGS=
 
-	OSCHECK_CMD="./check -s ${SECTION} -R xunit $_RUN_GROUPS $_SKIP_GROUPS $EXPUNGE_FLAGS $CHECK_ARGS"
+	if [ "$SECTION" != "all" ]; then
+		SECTION_ARGS="-s $SECTION"
+	fi
+
+	OSCHECK_CMD="./check $SECTION_ARGS -R xunit $_RUN_GROUPS $_SKIP_GROUPS $EXPUNGE_FLAGS $CHECK_ARGS"
 	oscheck_run_cmd
 	if [[ "$PRINT_DONE" == "true" ]]; then
 		NOW=$(date --rfc-3339='seconds' | awk -F"+" '{print $1}')
@@ -805,6 +822,12 @@ check_test_dev_setup()
 check_dev_pool()
 {
 	DEV_POOL_RET=0
+
+	# If we have a specific setup and don't specify SCRATCH_DEV_POOL just
+	# ignore this particular check.
+	if [ "$SCRATCH_DEV_POOL" == "" ]; then
+		return 0;
+	fi
 	if [ -e $HOST_OPTIONS ]; then
 		NDEVS=$(echo $SCRATCH_DEV_POOL|wc -w)
 		if [ "$NDEVS" -lt 5 ]; then
@@ -818,6 +841,9 @@ check_dev_pool()
 check_section()
 {
 	if [ ! -e $HOST_OPTIONS ]; then
+		return 0;
+	fi
+	if [ "${RUN_SECTION}" == "all" ]; then
 		return 0;
 	fi
 	ALL_FS_SECTIONS=$(grep "^\[" $HOST_OPTIONS | grep -v "^\[default\]" | sed -e 's|\[||' | sed -e 's|\]||')
@@ -891,7 +917,7 @@ else
 	RUN_SECTION=$INFER_SECTION
 fi
 
-if [ "${RUN_SECTION}" != "${FSTYP}" ]; then
+if [ "${RUN_SECTION}" != "${FSTYP}" ] && [ "${RUN_SECTION}" != "all" ]; then
 	# If you specified a section but it does not have the filesystem
 	# prefix, we add it for you. Likewise, this means that if you
 	# used oscheck.sh --test-section, we will allow you to specify
