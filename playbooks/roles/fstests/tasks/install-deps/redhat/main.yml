@@ -50,3 +50,9 @@
       - gdbm-libs
       - fio
       - dbench
+      - e2fsprogs-devel
+      - libblkid-devel
+      - libzstd-devel
+      - libudev-devel
+      - python3-devel
+      - lzo-devel
