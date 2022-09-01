@@ -101,7 +101,7 @@ FSTEST_KERNEL_CI_LOOP := scripts/workflows/fstests/run_kernel_ci.sh
 FSTEST_KERNEL_CI_LOOP_KOTD := scripts/workflows/fstests/run_kernel_ci_kotd.sh
 endif # CONFIG_KERNEL_CI
 
-fstests: $(KDEVOPS_EXTRA_VARS)
+fstests:
 	$(Q)ansible-playbook -f 30 -i hosts playbooks/fstests.yml --skip-tags run_tests,copy_results $(LIMIT_HOSTS)
 
 fstests-kdevops-setup: $(KDEVOPS_EXTRA_VARS)
