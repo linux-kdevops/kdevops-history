@@ -1,5 +1,6 @@
 # failure from running with xfsprogs 5.18 on debian/testing
 xfs/082 # xfs_copy bug fixed in xfsprogs 5.19-rc1
+xfs/191 # fixed by "f50d3462c654 xfs_repair: ignore empty xattr leaf blocks" in xfsprogs v5.19
 xfs/543 # mkfs.xfs bug fixed in xfsprogs 5.19-rc1
 xfs/544 # xfsdump bug
 xfs/545 # xfsdump bug
