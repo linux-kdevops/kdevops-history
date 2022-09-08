@@ -28,6 +28,7 @@ FSTESTS_ARGS += fstests_test_dev='$(FSTESTS_TEST_DEV)'
 
 ifeq (y,$(CONFIG_QEMU_ENABLE_NVME_ZNS))
 FSTESTS_ARGS += fstests_test_dev_zns='$(subst ",,$(CONFIG_FSTESTS_TEST_DEV_ZNS))'
+FSTESTS_ARGS += fstests_zns_enabled='$(subst ",,$(CONFIG_QEMU_ENABLE_NVME_ZNS))'
 endif
 
 export FSTESTS_SPARSE_FILE_SIZE:=

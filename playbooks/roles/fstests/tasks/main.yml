@@ -103,6 +103,19 @@
     chdir: "{{ fstests_data }}"
     jobs: "{{ nproc.stdout }}"
 
+- name: Copy udev rules for zoned
+  become: yes
+  become_method: sudo
+  template:
+    src: "64-btrfs-zoned.rules"
+    dest: "/usr/lib/udev/rules.d/"
+    owner: "{{ data_user }}"
+    group: "{{ data_group }}"
+  tags: [ 'oscheck', 'fstests']
+  when:
+    - fstests_zns_enabled == "y"
+    - fstests_fstyp == "btrfs"
+
 - name: git pull latest kdevops to ensure expunge lists and scripts are up to date
   environment:
     GIT_SSL_NO_VERIFY:  true
