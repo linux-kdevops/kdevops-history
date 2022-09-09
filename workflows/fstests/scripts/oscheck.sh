@@ -525,7 +525,7 @@ oscheck_verify_intented_expunges()
 		return 0
 	fi
 
-	if [ "$TARGET_SECTION" == "all"]; then
+	if [ "$TARGET_SECTION" == "all" ]; then
 		return 0
 	fi
 
