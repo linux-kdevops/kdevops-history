@@ -1,7 +1,7 @@
 btrfs/003
-btrfs/004 # failure rate is probably 1/10
 btrfs/006
-btrfs/056 # failure rate is about 1/40 https://gist.github.com/mcgrof/c4efeb015baf37bfd33b3da7b6c1a900
+btrfs/011
+btrfs/038
 btrfs/060
 btrfs/061
 btrfs/062
@@ -19,7 +19,7 @@ btrfs/073
 btrfs/074
 btrfs/076
 btrfs/090
-btrfs/132 # requires a fix in btrfs-progs I have queued https://gist.github.com/mcgrof/81771a86ef0b90152e142e597d5f4147
+btrfs/132
 btrfs/141
 btrfs/150
 btrfs/151
@@ -29,41 +29,37 @@ btrfs/163
 btrfs/164
 btrfs/167
 btrfs/184
-btrfs/187
 btrfs/207
 btrfs/218
-btrfs/233 # failure rate is about 1/35 https://gist.github.com/mcgrof/47190a5b004e8302efbfa92cabbf3bfb
-btrfs/236 # failure rate is about 1/30
-btrfs/237 # failure rate is about 1/15
+btrfs/233
+btrfs/236
+btrfs/237
 btrfs/239
-btrfs/242 # failure rate is about 1/20
+btrfs/242
 btrfs/248
-btrfs/252
-btrfs/255 # failure rate is about 1/20 linked list btrfs corruption BUG_ON https://gist.github.com/mcgrof/87523138ec4495eda5372e8b7a2174bb
+btrfs/271
 generic/015
-generic/027 # other than failing it produces a 5.7 GiB generic/027.out.bad file! WTF!!!
-generic/066 # failure rate is probably 1/10
-generic/068 # failure rate is probably 1/12 hung task https://gist.github.com/mcgrof/1825ee538a8b912b478b5dedac38e104
+generic/027 # hangs forever
+generic/066 # Fails in loop 14
 generic/083
 generic/102
+generic/113
 generic/171
 generic/173
 generic/174
-generic/204 # takes over 24 hours to run, does't seem right 204.full just has: files 24536189, resvblks 1024
-generic/269 # fails with a low failure rate of about 1/20 with a soft lockup and then OOMs https://gist.github.com/mcgrof/360b2c6bb3d0299934ea5c0f82151871
-generic/273 # failure rate is about 1/40 https://gist.github.com/mcgrof/a84c91371a39d72a4b915e8333bd461e
+generic/204 # hangs forever
+generic/269
+generic/273
 generic/275
+generic/297
 generic/298
-generic/320 # hung task never ends https://gist.github.com/mcgrof/798032aa4878bc785861065cdd2c0cbd
-generic/333
+generic/301
+generic/320
+generic/333 # stuff just hangs in this
 generic/334 # ran for 3607 seconds then hang detected, failure rate 1/2 - https://gist.github.com/mcgrof/2442b9b7fc015eb8551c018f388beb53
-generic/335 # failure rate is about 1/10 - failed to create flakey device
 generic/387
-generic/416 # requires a fix in btrfs-progs I have queued https://gist.github.com/mcgrof/81771a86ef0b90152e142e597d5f4147
+generic/416
 generic/427
-generic/479 # failed to create flakey device - failure rate 1/20
 generic/492
 generic/520
-generic/551
 generic/626 # failure rate 1/3 hung task https://gist.github.com/mcgrof/d4b349e3298fd3b889e790b825a96c77
-generic/650 # btrfs BUG_ON() while CPU hot unplug! fs/btrfs/extent_io.c:5797! https://gist.github.com/mcgrof/364baf930373984c052be60fd6dcfe5c
