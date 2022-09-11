@@ -1,5 +1,6 @@
 generic/373 # lazy baseline - failure found in at least two sections
 generic/374 # lazy baseline - failure found in at least two sections
+generic/388 # lazy baseline - failure found in at least two sections
 generic/484 # lazy baseline - failure found in at least two sections
 generic/536 # lazy baseline - failure found in at least two sections
 generic/587 # lazy baseline - failure found in at least two sections
@@ -22,6 +23,7 @@ xfs/030 # lazy baseline - failure found in at least two sections
 xfs/082 # lazy baseline - failure found in at least two sections
 xfs/122 # lazy baseline - failure found in at least two sections
 xfs/144 # lazy baseline - failure found in at least two sections
+xfs/145 # lazy baseline - failure found in at least two sections
 xfs/148 # lazy baseline - failure found in at least two sections
 xfs/175 # lazy baseline - failure found in at least two sections
 xfs/191 # lazy baseline - failure found in at least two sections
@@ -29,6 +31,7 @@ xfs/216 # lazy baseline - failure found in at least two sections
 xfs/270 # lazy baseline - failure found in at least two sections
 xfs/294 # lazy baseline - failure found in at least two sections
 xfs/310 # lazy baseline - failure found in at least two sections
+xfs/320 # lazy baseline - failure found in at least two sections
 xfs/348 # lazy baseline - failure found in at least two sections
 xfs/512 # lazy baseline - failure found in at least two sections
 xfs/513 # lazy baseline - failure found in at least two sections
