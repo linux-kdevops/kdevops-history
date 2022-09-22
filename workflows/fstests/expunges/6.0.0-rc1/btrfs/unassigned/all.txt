@@ -27,6 +27,7 @@ generic/300 # fails on btrfs_simple so chances are other sections should fail to
 generic/371 # found to have taken once 10 times the amount it took to run the first run so 305s vs 26s for 1173% difference on btrfs_simple, this variablity should be looked into
 generic/373 # lazy baseline - failure found in at least two sections
 generic/374 # lazy baseline - failure found in at least two sections
+generic/471 # broken test
 generic/509 # low-hanging-fruit: device-mapper reload ioctl on flakey-test device or resource busy #  https://gist.github.com/mcgrof/05be5f0b6b9c669bef9481ace6299529
 generic/633
 generic/644

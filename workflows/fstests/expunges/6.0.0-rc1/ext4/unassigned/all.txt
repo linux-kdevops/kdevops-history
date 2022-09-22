@@ -13,6 +13,7 @@ generic/270 # lazy baseline - failure found in at least two sections
 generic/382 # lazy baseline - failure found in at least two sections
 generic/388 # lazy baseline - failure rate 1/30 failure only appears on xunit file no *.bad file https://gist.github.com/mcgrof/3ec6a4603548d240e5d33a2831a55683
 generic/398 # lazy baseline - failure found in at least two sections
+generic/471 # broken test
 generic/566 # lazy baseline - failure found in at least two sections
 generic/587 # lazy baseline - failure found in at least two sections
 generic/600 # lazy baseline - failure found in at least two sections
