@@ -7,7 +7,6 @@ generic/223
 generic/361
 generic/455
 generic/459
-generic/482
 shared/298
 xfs/017
 xfs/045

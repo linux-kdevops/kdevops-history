@@ -5,6 +5,7 @@ generic/273 # fails on two sections already
 generic/459 # fails on multiple sections maybe xfsprogs version?
 generic/471 # broken test
 generic/475 # flaky test
+generic/482 # flaky test - failure rate is about 1/15 https://gist.github.com/mcgrof/048243ac4435ee055d7a0e38a2c082da
 xfs/005 # fails on multiple sections already
 xfs/154 # fails on multiple sections already
 xfs/155 # xfs_repair fails (possibly after reducing RAM size to 3GB)
