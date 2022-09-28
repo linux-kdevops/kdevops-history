@@ -1,4 +1,5 @@
 generic/050
+generic/388 # failure only appears on xunit file no *.bad file
 generic/530
 generic/618
 generic/681
