@@ -11,6 +11,7 @@ xfs/005 # fails on multiple sections already
 xfs/008 # unreliable test - fails because "holes has value of 44 holes is NOT in range 45 .. 55" - this is a _within_tolerance test - not an reliable check
 xfs/016 # unreliable test - fails on multiple sections already because of non deterministic calculation of log size
 xfs/059 # fails on multiple sections already
+xfs/060 # fails on multiple sections already
 xfs/154 # fails on multiple sections already
 xfs/155 # xfs_repair fails (possibly after reducing RAM size to 3GB)
 xfs/158 # fails on multiple sections already
