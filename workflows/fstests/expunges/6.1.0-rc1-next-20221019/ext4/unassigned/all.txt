@@ -1,0 +1,21 @@
+ext4/025 # lazy baseline - failure found in at least two sections
+ext4/034 # lazy baseline - failure found in at least two sections
+generic/050 # lazy baseline - failure found in at least two sections https://gist.github.com/mcgrof/e598053099af6b5eb83c3f318d38bab5
+generic/082 # lazy baseline - failure found in at least two sections
+generic/219 # lazy baseline - failure found in at least two sections
+generic/230 # lazy baseline - failure found in at least two sections
+generic/231 # lazy baseline - failure found in at least two sections
+generic/232 # lazy baseline - failure found in at least two sections
+generic/233 # lazy baseline - failure found in at least two sections
+generic/235 # lazy baseline - failure found in at least two sections
+generic/241 # lazy baseline - failure found in at least two sections
+generic/270 # lazy baseline - failure found in at least two sections
+generic/382 # lazy baseline - failure found in at least two sections
+generic/388 # lazy baseline - failure rate 1/30 failure only appears on xunit file no *.bad file https://gist.github.com/mcgrof/3ec6a4603548d240e5d33a2831a55683
+generic/398 # lazy baseline - failure found in at least two sections
+generic/471 # broken test
+generic/566 # lazy baseline - failure found in at least two sections
+generic/587 # lazy baseline - failure found in at least two sections
+generic/600 # lazy baseline - failure found in at least two sections
+generic/601 # lazy baseline - failure found in at least two sections
+generic/607 # lazy baseline - failure found in at least two sections
