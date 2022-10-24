@@ -26,7 +26,12 @@
   shell: |
     set -o pipefail
     if [ -d .vagrant ]; then
-        vagrant ssh-config | sed '/^[[:space:]]*$/d' | grep ^Host | awk '{print $2}' | sed  ':a;N;$!ba;s/\n/,/g'
+        if uname | grep Darwin >/dev/null; then
+            SED='gsed'
+        else
+            SED='sed'
+        fi
+        vagrant ssh-config | $SED '/^[[:space:]]*$/d' | grep ^Host | awk '{print $2}' | $SED  ':a;N;$!ba;s/\n/,/g'
     else
         echo You are not in a directory with a .vagrant directory
         exit 1
