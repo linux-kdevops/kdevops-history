@@ -9,6 +9,10 @@ LINUX_TIMERS := linux-mirror.timer
 LINUX_TIMERS += linux-stable-mirror.timer
 LINUX_TIMERS += linux-next-mirror.timer
 
+GIT_DAEMON_FILES := git-daemon@.service
+GIT_DAEMON_FILES += git-daemon.socket
+LOCAL_SYSTEMD    := /usr/local/lib/systemd/system/
+
 TORVALDS := git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
 STABLE   := git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
 NEXT     := git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
@@ -47,3 +51,8 @@ install:
 		systemctl --user enable $$i ;         \
 		systemctl --user start $$i ;          \
 	done
+	$(NQ) "          ENABLE git-daemon"
+	$(Q)sudo mkdir -p $(LOCAL_SYSTEMD)
+	$(Q)sudo cp $(GIT_DAEMON_FILES) $(LOCAL_SYSTEMD)
+	$(Q)sudo systemctl enable git-daemon.socket
+	$(Q)sudo systemctl start git-daemon.socket

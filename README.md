@@ -10,9 +10,3 @@ based on Torvald's tree.
   * It will update linux.git every 10 minutes after it last ran
   * It will update linux-stable.git every 2 hours after it last ran
   * It will update linux-next.git every 6 hours after it last ran
-
-To run a daemon just run something like this in a screen session:
-
-```bash
-git daemon --verbose --export-all /mirror
-```
