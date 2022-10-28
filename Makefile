@@ -39,9 +39,11 @@ install:
 	$(Q)cp $(LINUX_SERVICES) $(USER_SYSTEM)
 	$(Q)cp $(LINUX_TIMERS) $(USER_SYSTEM)
 	$(Q)for i in $(LINUX_SERVICES); do            \
-		systemctl --user enable  $$i ;     \
+		echo  "Enabling $$i" ;                \
+		systemctl --user enable  $$i ;        \
 	done
 	$(Q)for i in $(LINUX_TIMERS); do              \
-		systemctl --user enable $$i ;      \
-		systemctl --user start $$i ;       \
+		echo  "Enabling $$i" ;                \
+		systemctl --user enable $$i ;         \
+		systemctl --user start $$i ;          \
 	done
