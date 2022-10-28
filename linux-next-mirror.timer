@@ -1,0 +1,11 @@
+[Unit]
+Description=linux mirror query timer [linux-next.git]
+ConditionPathExists=/mirror/linux-next.git
+
+[Timer]
+OnBootSec=10m
+# Every 6 hours
+OnUnitInactiveSec=360m
+
+[Install]
+WantedBy=default.target
