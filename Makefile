@@ -16,7 +16,6 @@ all:
 
 mirror:
 	mkdir -p /mirror/
-	mkdir git clone 
 	cd /mirror
 	git clone --bare $(TORVALDS)
 	git clone --bare $(STABLE) --reference /mirror/linux.git linux-stable.git
