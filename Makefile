@@ -1,4 +1,4 @@
-USER_SYSTEM := .  config/systemd/user/
+USER_SYSTEM := ~/.config/systemd/user/
 MIRROR_PATH := /mirror/
 
 LINUX_SERVICES := linux-mirror.service
