@@ -10,3 +10,10 @@ based on Torvald's tree.
   * It will update linux.git every 10 minutes after it last ran
   * It will update linux-stable.git every 2 hours after it last ran
   * It will update linux-next.git every 6 hours after it last ran
+
+How to use this thing, as a regular user just run:
+
+```bash
+make mirror
+make install
+```

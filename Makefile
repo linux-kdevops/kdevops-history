@@ -25,7 +25,11 @@ export Q=@
 export NQ=@echo
 endif
 
-all:
+all: help
+
+help:
+	$(NQ) "mirror:     git clone all mirrors about linux"
+	$(NQ) "install:    install system timers and git-daemon socket activation"
 
 mirror:
 	$(Q)if [ ! -d $(MIRROR_PATH) ]; then \
