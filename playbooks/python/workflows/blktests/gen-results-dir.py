@@ -10,8 +10,8 @@ import os
 import sys
 import subprocess
 import glob
-from distutils.dir_util import copy_tree
 from lib import git
+from shutil import copytree
 from shutil import rmtree
 
 oscheck_ansible_python_dir = os.path.dirname(os.path.abspath(__file__))
@@ -55,8 +55,11 @@ def main():
         sys.exit(0)
 
     target_results = results_dir + kernel + '/'
+    if not os.path.isdir(last_run_dir):
+        sys.stdout.write("Ignoring last-run directory %s as it is empty ...\n" % (last_run_dir))
+        sys.exit(0)
     sys.stdout.write("Copying %s to %s ...\n" % (last_run_dir, target_results))
-    copy_tree(last_run_dir, target_results)
+    copytree(last_run_dir, target_results, dirs_exist_ok=True)
 
     for root, dirs, all_files in os.walk(target_results):
         for fname in all_files:
