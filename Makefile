@@ -13,9 +13,14 @@ GIT_DAEMON_FILES := git-daemon@.service
 GIT_DAEMON_FILES += git-daemon.socket
 LOCAL_SYSTEMD    := /usr/local/lib/systemd/system/
 
-TORVALDS := git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-STABLE   := git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-NEXT     := git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+TORVALDS        := git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+TORVALDS_TARGET := $(MIRROR_PATH)/linux.git
+
+STABLE          := git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+STABLE_TARGET   := $(MIRROR_PATH)/linux-stable.git
+
+NEXT            := git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+NEXT_TARGET     := $(MIRROR_PATH)/linux-next.git
 
 ifeq ($(V),1)
 export Q=
@@ -35,12 +40,18 @@ mirror:
 	$(Q)if [ ! -d $(MIRROR_PATH) ]; then \
 		mkdir -p $(MIRROR_PATH)     ;\
 	fi
-	$(NQ) "          CLONE Torvald's tree"
-	$(Q)git -C $(MIRROR_PATH) clone --bare $(TORVALDS)
-	$(NQ) "          CLONE linux-stable"
-	$(Q)git -C $(MIRROR_PATH) clone --bare $(STABLE) --reference /mirror/linux.git linux-stable.git
-	$(NQ) "          CLONE linux-next"
-	$(Q)git -C $(MIRROR_PATH) clone --bare $(NEXT) --reference /mirror/linux.git linux-next.git
+	$(Q)if [ ! -d $(TORVLADS_TARGET) ]; then                            \
+	 echo "          CLONE Torvald's tree"                             ;\
+	 git -C $(MIRROR_PATH) clone --bare $(TORVALDS) $(TORVALDS_TARGET) ;\
+	fi
+	$(Q)if [ ! -d $(STABLE_TARGET) ]; then                                                        \
+	 echo "          CLONE linux-stable"                                                         ;\
+	 git -C $(MIRROR_PATH) clone --bare $(STABLE) --reference /mirror/linux.git $(STABLE_TARGET) ;\
+	fi
+	$(Q)if [ ! -d $(NEXT_TARGET) ]; then                                                      \
+	  echo "          CLONE linux-next"                                                       ;\
+	  git -C $(MIRROR_PATH) clone --bare $(NEXT) --reference /mirror/linux.git $(NEXT_TARGET) ;\
+	fi
 
 install:
 	$(Q)mkdir -p $(USER_SYSTEM)
