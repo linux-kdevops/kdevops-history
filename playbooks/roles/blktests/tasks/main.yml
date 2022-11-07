@@ -200,6 +200,46 @@
     path: "{{ blktests_data_target }}/results/"
   tags: [ 'blktests', 'run_tests', 'clean_results' ]
 
+- name: Verify target test devices are defined
+  fail:
+    msg: "The variable blktests_test_devs must be defined to run"
+  when:
+    - kdevops_run_blktests|bool
+    - blktests_test_devs is not defined
+  tags: [ 'blktests', 'run_tests' ]
+
+- name: Verify target test device is not /dev/null
+  fail:
+    msg: "The variable blktests_test_devs must not be /dev/null"
+  when:
+    - blktests_test_devs == "/dev/null"
+  tags: [ 'blktests', 'run_tests' ]
+
+- name: Verify target test devices exist {{ blktests_test_devs }}
+  vars:
+    verify_dev_list: "{{ blktests_test_devs | regex_replace(' ', ' -a -e ') }}"
+  tags: [ 'blktests', 'run_tests' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "test -e {{ verify_dev_list }}"
+  when:
+    - kdevops_run_blktests|bool
+    - blktests_test_devs|length != 0
+
+- name: Verify target test devices are block devices {{ blktests_test_devs }}
+  vars:
+    verify_dev_list: "{{ blktests_test_devs | regex_replace(' ', ' -a -b ') }}"
+  tags: [ 'blktests', 'run_tests' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "test -b {{ verify_dev_list }}"
+  when:
+    - kdevops_run_blktests|bool
+    - blktests_test_devs is defined
+    - blktests_test_devs|length != 0
+
 - name: Hint to watchdog tests are about to kick off
   local_action: file path="{{ blktests_workflow_target }}/.begin" state=touch
   tags: [ 'blktests', 'run_tests' ]
