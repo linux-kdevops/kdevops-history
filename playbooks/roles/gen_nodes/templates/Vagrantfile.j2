@@ -237,15 +237,10 @@ Vagrant.configure("2") do |config|
             libvirt.machine_type = global_data['libvirt_cfg']['machine_type']
           end
         end
-
         # Add an extra spare PCI or PCI-E root bus to be used for NVME drives.
-        # For i440x on x86_64 (default on libvirt as of today) we use PCI, not
-        # PCI-E. For 'q35' on x86_64 and virt for 'virt' for AArch64 we use can
-        # use PCI-E.
         #
         # We use a dedicated PCI or PCI-E root bus to not clash with defaults
         # which libvirt may use on PCI root bus (pci.0 if PCI, pcie.0 if PCI-E).
-        #
         # For a while in kdevops we were not clashing with the defaults brought
         # up by libvirt-qemu, however recent versions seem to start clashing up
         # to pci.0,addr=0x3 so we'd see an error like:
@@ -257,28 +252,30 @@ Vagrant.configure("2") do |config|
         # avilable on modern x86-64 systems. Eventually we may need to bump
         # this to 0x9, but it would be better instead to have vagant-libvirt
         # speak "add a new PCI or PCI-E root bus" and "add nvme drives".
+        #
 {% if not libvirt_override_machine_type %}
-        # Below assumes i440x, so add an extra spare PCI root bus to be used
-        # for our NVME drives.
+        # For i440x on x86_64 (default on libvirt as of today) we use PCI, not
+        # PCI-E. Below assumes i440x. i440x cannot support CXL as it does not
+        # suport PCI-E.
         libvirt.qemuargs :value => "-device"
         libvirt.qemuargs :value => "pci-bridge,id=custom-pci-for-nvme,chassis_nr=1,bus=pci.0,addr=0x8"
 {% else %}
-	# Below works for q35 for x86_64 and 'virt' for a AArch64. Rigt now
-	# kdevops only supports q35, adding 'virt' for AArch64 should hopefully
-	# be relatively easy after this.
+	# This is for exclusive PCIe hierarchies.
 	#
-	# The ioh3420 PCIe root port can be used for both 'q35' and 'virt'. This
-	# root port lets us start exclusive PCIe hierarchies. A PCIe root bus
-	# supports up to 32 devices and since each can be up to 8 multifunctions
-	# we're limited to 256 PCIe root ports.
+        # For 'q35' on x86_64 and 'virt' for AArch64 we use can use PCI-E
+        # only hierarchies.
+        #
+	# We add a dedicated PCI root bus (pxb-pcie) just for dedicated PCI
+	# root ports for NVMe, this will be pcie.1.
 	#
-	# We may consider in the future an extra PCIe root complex (pxb-pcie)
-	# added to the pcie root bus (pcie.0) if we wanted to dedicate a PCIe
-	# root port per new technology. For example one root port for nvme and
-	# one for CXL, however CXL uses its own host bridge so device
-	# enumeration is pretty well isolated already.
+        # We can keep doing this to support new technologies. For instance,
+        # it may be reasoanble to add a PCI-E root bus also to support PCI-E
+        # hotplug on PCI-E capable systems and avoid clashes with libvirt
+	# defaults on pcie.0. CXL uses its own host bridge so device
+	# enumeration is pretty well isolated already so no need to do anything
+	# extra there.
         libvirt.qemuargs :value => "-device"
-        libvirt.qemuargs :value => "ioh3420,id=custom-pci-for-nvme,bus=pcie.0,addr=0x8,chassis=8"
+        libvirt.qemuargs :value => "pxb-pcie,id=pcie.1,bus_nr=32,bus=pcie.0,addr=0x8"
 {% if libvirt_enable_cxl %}
 {% if libvirt_enable_cxl_demo_topo1 %}
         libvirt.qemuargs :value => "-machine"
@@ -360,20 +357,31 @@ Vagrant.configure("2") do |config|
             libvirt.qemuargs :value => "-drive"
             libvirt.qemuargs :value => "file=#{nvme_disk},if=#{non_nvme_drive_interface}"
 {% else %}
-            # We're limited to 19 by default
+{% if not libvirt_override_machine_type %}
+            bus_for_nvme = "custom-pci-for-nvme"
             pci_function = 0 + port
+{% else %}
+	    # A PCI-E root port must be added per NVMe device.
+            # Chassis must be something unique for the entire topology it seems (?)
+            chassis = 50 + port
+            bus_for_nvme = "pcie-port-for-nvme-#{port}"
+            libvirt.qemuargs :value => "-device"
+            libvirt.qemuargs :value => "pcie-root-port,id=#{bus_for_nvme},multifunction=on,bus=pcie.1,addr=0x#{port},chassis=#{chassis}"
+            pci_function = "0x0"
+{% endif %}
+
             if zoned
               libvirt.qemuargs :value => "-drive"
               libvirt.qemuargs :value => "file=#{nvme_disk},if=none,id=#{disk_id}"
               libvirt.qemuargs :value => "-device"
-              libvirt.qemuargs :value => "nvme,id=nvme#{port},serial=#{serial_id},bus=custom-pci-for-nvme,addr=#{pci_function},zoned.zasl=#{zone_zasl}"
+              libvirt.qemuargs :value => "nvme,id=nvme#{port},serial=#{serial_id},bus=#{bus_for_nvme},addr=#{pci_function},zoned.zasl=#{zone_zasl}"
               libvirt.qemuargs :value => "-device"
               libvirt.qemuargs :value => "nvme-ns,drive=#{disk_id},bus=nvme#{port},nsid=1,logical_block_size=#{logical_block_size},physical_block_size=#{physical_block_size},zoned=true,zoned.zone_size=#{zone_size},zoned.zone_capacity=#{zone_capacity},zoned.max_open=#{zone_max_open},zoned.max_active=#{zone_max_active}"
             else
               libvirt.qemuargs :value => "-drive"
               libvirt.qemuargs :value => "file=#{nvme_disk},if=none,id=#{disk_id}"
               libvirt.qemuargs :value => "-device"
-              libvirt.qemuargs :value => "nvme,id=nvme#{port},serial=#{serial_id},bus=custom-pci-for-nvme,addr=#{pci_function}"
+              libvirt.qemuargs :value => "nvme,id=nvme#{port},serial=#{serial_id},bus=#{bus_for_nvme},addr=#{pci_function}"
               libvirt.qemuargs :value => "-device"
               libvirt.qemuargs :value => "nvme-ns,drive=#{disk_id},bus=nvme#{port},nsid=1"
             end
