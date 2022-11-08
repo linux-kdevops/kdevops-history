@@ -169,7 +169,7 @@ GRUB_CMDLINE_LINUX_DEFAULT="net.ifnames=0 biosdevname=0"
 GRUB_CMDLINE_LINUX="console=tty0 console=tty1 console=ttyS0,38400n8"
 
 GRUB_SERIAL_COMMAND="serial --speed=38400 --unit=0 --parity=no --stop=1"
-GRUB_TERMINAL="serial"
+GRUB_TERMINAL="console serial"
 GRUB_DISABLE_SUBMENU=y
 ```
 
@@ -448,7 +448,7 @@ make the following change on /etc/default/grub:
 
 ```
 -GRUB_TERMINAL=console
-+GRUB_TERMINAL=serial
++GRUB_TERMINAL="console serial"
 ```
 
 Also ensure GRUB_CMDLINE_LINUX_DEFAULT has the entry `quiet` removed.

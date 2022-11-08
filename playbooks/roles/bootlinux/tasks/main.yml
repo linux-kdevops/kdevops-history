@@ -200,6 +200,10 @@
     label: "{{ item }}"
   when: uninstall_kernel_ver is defined
 
+# We use "console serial" so to enable real consoles to be
+# preferred first, and fallback to the serial as secondary
+# option. This let's us work with hardware serial consoles
+# say on IPMIs and virtual guests ('virsh console').
 - name: Ensure we can get the grub prompt on reboot
   become: yes
   become_flags: 'su - -c'
@@ -207,7 +211,7 @@
   lineinfile:
     path: /etc/default/grub
     regexp: '^GRUB_TERMINAL='
-    line: GRUB_TERMINAL="serial"
+    line: GRUB_TERMINAL="console serial"
   tags: [ 'linux', 'git', 'config', 'console' ]
 
 - name: Update your boot grub file if necessary

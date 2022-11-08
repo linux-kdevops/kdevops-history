@@ -403,6 +403,10 @@
     - devconfig_enable_console|bool
   tags: [ 'console' ]
 
+# We use "console serial" so to enable real consoles to be
+# preferred first, and fallback to the serial as secondary
+# option. This let's us work with hardware serial consoles
+# say on IPMIs and virtual guests ('virsh console').
 - name: Update grub terminal to be serial
   become: yes
   become_flags: 'su - -c'
@@ -411,7 +415,7 @@
     path: /etc/default/grub
     regexp: '^(GRUB_TERMINAL=)(.*)$'
     backrefs: yes
-    line: '\1serial'
+    line: '\1"console serial"'
   when:
     - grub2_config_file.stat.exists
     - devconfig_enable_console|bool
@@ -426,7 +430,7 @@
     path: /etc/default/grub
     insertafter: EOF
     regexp: '^(GRUB_TERMINAL=)(.*)$'
-    line: 'GRUB_TERMINAL=serial'
+    line: 'GRUB_TERMINAL="console serial"'
   when:
     - grub2_config_file.stat.exists
     - devconfig_enable_console|bool
