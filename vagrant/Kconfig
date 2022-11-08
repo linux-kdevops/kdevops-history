@@ -910,7 +910,7 @@ config QEMU_ENABLE_CXL
 	bool "Enable Qemu CXL devices"
 	depends on VAGRANT_LIBVIRT
 	depends on LIBVIRT_MACHINE_TYPE_Q35
-	depends on QEMU_BUILD
+	depends on QEMU_USE_DEVELOPMENT_VERSION
 	default n
 	help
 	  If this option is enabled then you can enable different types of
