@@ -117,6 +117,7 @@ config KDEVOPS_WORKFLOW_DEDICATE_FSTESTS
 config KDEVOPS_WORKFLOW_DEDICATE_BLKTESTS
 	bool "blktests"
 	select KDEVOPS_WORKFLOW_ENABLE_BLKTESTS
+	depends on !LIBVIRT_MACHINE_TYPE_Q35
 	help
 	  This will dedicate your configuration only to blktests.
 
