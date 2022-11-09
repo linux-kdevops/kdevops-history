@@ -1,0 +1,29 @@
+# SPDX-License-Identifier: copyleft-next-0.3.1
+
+LINUX_MIRROR_ARGS :=
+LINUX_MIRROR_ARGS += install_linux_mirror=True
+
+MIRROR_CODE      := $(TOPDIR)/playbooks/roles/linux-mirror/linux-mirror-systemd/
+
+# We don't use jinja2 yet to parse this extra_vars stuff to allow
+# customizations as the defaults seem sensible. However once and if
+# folks want to start adding variability to the how we deploy the
+# linux-mirror ansible can be used:
+#kdevops_linux_mirror: $(KDEVOPS_EXTRA_VARS)
+#	$(Q)ansible-playbook --connection=local \
+#		--inventory localhost, \
+#		$(KDEVOPS_PLAYBOOKS_DIR)/linux-mirror.yml \
+#		-e 'ansible_python_interpreter=/usr/bin/python3' \
+#		--extra-vars=@./extra_vars.yaml
+#
+
+# Since we don't support varabiliity yet, for now we keep it very simple:
+kdevops_linux_mirror: $(KDEVOPS_EXTRA_VARS)
+	$(NQ) Setting up Linux mirror on localhost
+	$(Q)make -C $(MIRROR_CODE) mirror
+	$(Q)make -C $(MIRROR_CODE) install
+
+PHONY += kdevops_linux_mirror
+
+ANSIBLE_EXTRA_ARGS += $(LINUX_MIRROR_ARGS)
+LOCALHOST_SETUP_WORK += kdevops_linux_mirror

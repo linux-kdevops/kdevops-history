@@ -18,6 +18,11 @@ config VAGRANT_VIRTUALBOX
 
 endchoice
 
+config USE_VAGRANT_LIBVIRT_MIRROR
+	bool
+	default y if USE_LOCAL_LINUX_MIRROR
+	default n if !USE_LOCAL_LINUX_MIRROR
+
 choice
 	prompt "Guest vCPUs"
 	default VAGRANT_VCPUS_8

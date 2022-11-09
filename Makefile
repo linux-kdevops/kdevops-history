@@ -139,6 +139,10 @@ ifeq (y,$(CONFIG_HYPERVISOR_TUNING))
 include Makefile.hypervisor-tunings
 endif # CONFIG_HYPERVISOR_TUNING
 
+ifeq (y,$(CONFIG_INSTALL_LOCAL_LINUX_MIRROR))
+include Makefile.linux-mirror
+endif
+
 ifeq (y,$(CONFIG_KDEVOPS_DISTRO_REG_METHOD_TWOLINE))
 DEFAULT_DEPS += playbooks/secret.yml
 endif

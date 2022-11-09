@@ -220,6 +220,53 @@ config SETUP_POSTFIX_EMAIL_RELAY_HOST
 
 endif
 
+config ENABLE_LOCAL_LINUX_MIRROR
+	bool "Enable kdevops to use your localhost as a git mirror for Linux"
+	default n
+	help
+	  When doing build on Linux one of the most timely consuming operations
+	  is doing a git clone on Linux. This is whether you are doing a local
+	  build on your system or on the guest, either way, a git clone
+	  operation on a Linux tree takes forever. You can optimize the build
+	  process by using a local mirror.
+
+	  Enabling this option let's you either just pick a locally setup up
+	  mirror or let's kdevops go ahead and set up the new mirror for you.
+
+	  Enable this option if if you want to save time with building Linux.
+
+if ENABLE_LOCAL_LINUX_MIRROR
+
+config USE_LOCAL_LINUX_MIRROR
+	bool "Use local linux mirror"
+	default n
+	help
+	  If you have a local Linux mirror already set up, or want to use
+	  the one which kdevops lets you set up, enable this option so that
+	  build targets can use it.
+
+config INSTALL_LOCAL_LINUX_MIRROR
+	bool "Install local mirror setup"
+	default n
+	select USE_LOCAL_LINUX_MIRROR
+	help
+	  If you enable this kdevops will git clone the main Linux repos needed
+	  for Linux as bare git repositories and then install systemd units
+	  to keep these properly updated. The repositories will be placed
+	  into /mirrror/ directory:
+
+	    /mirror/linux.git
+	    /mirror/linux-stable.git
+	    /mirror/linux-next.git
+
+	  Enabling this even if you already have the repositories does nothing
+	  so it is safe to keep this enabled even after your first linux-mirror
+	  setup. You can however safely also disable this option after your
+	  first linux-mirror setup and just use USE_LOCAL_LINUX_MIRROR so to
+	  make use of the mirror.
+
+endif
+
 config LOCAL_DEVELOPMENT_PATH
 	string "The path to place source code on localhost if we building things"
 	default $(shell, echo $HOME/devel/)
