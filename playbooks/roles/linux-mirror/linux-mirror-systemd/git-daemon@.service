@@ -1,0 +1,10 @@
+[Unit]
+Description=Git Repositories Server Daemon
+Documentation=man:git-daemon(1)
+
+[Service]
+DynamicUser=yes
+ExecStart=-/usr/bin/git daemon --verbose --init-timeout=10 --timeout=5 --inetd --export-all /mirror
+StandardInput=socket
+StandardOutput=inherit
+StandardError=journal
