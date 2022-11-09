@@ -1,7 +1,7 @@
 {% macro gen_node(n, enable_second_interface, last_octet) %}
   - name: {{ n }}
 {% if enable_second_interface %}
-    ip: 172.17.8.{{ last_octet}}
+    ip: 172.17.8.{{ last_octet | string }}
 {% endif %}
 {% endmacro %}
 {% macro gen_nodes_list(nodes_list, dev, enable_second_interface, octet) %}
