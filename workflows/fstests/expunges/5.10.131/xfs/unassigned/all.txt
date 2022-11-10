@@ -36,8 +36,8 @@ xfs/019 # fails after 7834a740 ("xfs/019: extend protofile test")
 xfs/033 # rare test bug - extra newline in golden output of xfs_repair - failed after more than 80 runs
 xfs/045 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/050 # fixed by "xfs: revert "xfs: actually bump warning counts when we send warnings" in v5.19
-xfs/059
 xfs/057 # fails or hangs after enabling CONFIG_XFS_DEBUG - failure rate about 1/200
+xfs/059
 xfs/060 # lazy baseline - failure found in at least two sections - failure rate about 1/35
 xfs/075 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/083 # dangerous_fuzzers test (not in auto group) failing with error "Failed to create fino of sufficient height!" on xfs_reflink_1024 and sometimes on other configs
