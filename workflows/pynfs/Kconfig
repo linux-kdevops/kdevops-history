@@ -1,0 +1,9 @@
+if KDEVOPS_WORKFLOW_ENABLE_PYNFS
+
+config PYNFS_GIT
+	string "The pynfs git tree to clone"
+	default "git://git.linux-nfs.org/projects/bfields/pynfs.git"
+	help
+	  The pynfs git tree to clone.
+
+endif # KDEVOPS_WORKFLOW_ENABLE_PYNFS

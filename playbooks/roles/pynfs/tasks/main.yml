@@ -1,0 +1,137 @@
+- name: Import optional extra_args file
+  include_vars: "{{ item }}"
+  ignore_errors: yes
+  with_first_found:
+    - files:
+      - "../extra_vars.yml"
+      - "../extra_vars.yaml"
+      - "../extra_vars.json"
+      skip: true
+  tags: vars
+
+- name: Set the path where we collect our local pynfs results
+  set_fact:
+    pynfs_local_results_dir: "../workflows/pynfs/results"
+  tags: [ 'vars' ]
+
+- name: Clean up our localhost results directory and files
+  local_action: file path="{{ pynfs_local_results_dir }}/" state=absent
+  run_once: true
+  tags: [ 'clean_local_results', 'first_run' ]
+
+- name: Create the local results directory
+  local_action: file path="{{ pynfs_local_results_dir }}/" state=directory
+  run_once: true
+  tags: [ 'first_run' ]
+
+- include_role:
+    name: create_data_partition
+  tags: [ 'data_partition' ]
+
+# Distro specific
+- include: tasks/install-deps/main.yml
+
+- name: Create export_path if needed
+  tags: [ 'nfsd' ]
+  include_role:
+    name: create_partition
+  vars:
+    disk_setup_device: "{{ sparsefiles_device }}"
+    disk_setup_fstype: "{{ sparsefiles_fstype }}"
+    disk_setup_label : "{{ sparsefiles_label }}"
+    disk_setup_fs_opts: "{{ sparsefiles_fs_opts }}"
+    disk_setup_path: "{{ export_path }}"
+    disk_setup_user: "{{ data_user }}"
+    disk_setup_group: "{{ data_group }}"
+
+- name: Make the exported filesystem a world-writeable sticky dir
+  tags: [ 'nfsd' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.file:
+    path: "{{ export_path }}"
+    owner: root
+    group: root
+    mode: 01777
+
+# FIXME: make a template that uses {{ export_path }}
+- name: Create /etc/exports with an export for /exports
+  tags: [ 'nfsd' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  copy:
+    dest: "/etc/exports"
+    mode: 0644
+    content: |
+      /export	*(rw,insecure,no_root_squash)
+
+- name: Start up nfsd
+  tags: [ 'nfsd' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.systemd:
+    name: nfs-server.service
+    state: reloaded
+
+- name: Remove old pynfs dir as we always clone a fresh tree
+  tags: [ 'git', 'pynfs' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  file:
+    path: "{{ pynfs_data }}"
+    state: absent
+
+- name: git clone pynfs
+  tags: [ 'git', 'pynfs' ]
+  git:
+    repo: "{{ pynfs_git }}"
+    dest: "{{ pynfs_data }}"
+    update: yes
+    version: fixes
+  retries: 3
+  delay: 5
+  register: result
+  until: not result.failed
+
+- name: Build pynfs
+  tags: [ 'pynfs' ]
+  command: ./setup.py build
+  args:
+    chdir: "{{ pynfs_data }}"
+
+- name: Run pynfs
+  tags: [ 'run_tests' ]
+  command: "./testserver.py --json={{ pynfs_data }}/pynfs-{{ item }}-results.json --maketree localhost:{{ export_path }} all"
+  args:
+    chdir: "{{ pynfs_data }}/nfs{{ item }}"
+  with_items:
+    - 4.0
+    - 4.1
+
+- name: Get used target kernel version
+  tags: [ 'copy_results' ]
+  command: "uname -r"
+  register: uname_cmd
+
+- name: Store kernel_rev variable
+  tags: [ 'copy_results' ]
+  set_fact:
+    kernel_rev: "{{ uname_cmd.stdout_lines | regex_replace('\\]') | regex_replace('\\[') | replace(\"'\",'') }}"
+  run_once: true
+
+- name: Copy the latest results over when we're done
+  tags: [ 'copy_results' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  fetch:
+    src: "{{ pynfs_data }}/pynfs-{{ item }}-results.json"
+    dest: "{{ pynfs_local_results_dir }}/{{ kernel_rev }}-v{{ item }}.json"
+    flat: yes
+  with_items:
+    - 4.0
+    - 4.1
