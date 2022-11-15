@@ -430,6 +430,7 @@
     FSTESTS_RUN_CUSTOM_GROUP_TESTS: "{{ run_custom_group_tests | default ('') }}"
     TEST_DEV: "{{ fstests_test_dev }}"
     TEST_DIR: "{{ fstests_test_dir }}"
+    KEEP_DMESG: "yes"
   when:
     - kdevops_run_fstests|bool
 
