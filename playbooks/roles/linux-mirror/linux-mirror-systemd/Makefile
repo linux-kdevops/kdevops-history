@@ -40,7 +40,7 @@ mirror:
 	$(Q)if [ ! -d $(MIRROR_PATH) ]; then \
 		mkdir -p $(MIRROR_PATH)     ;\
 	fi
-	$(Q)if [ ! -d $(TORVLADS_TARGET) ]; then                            \
+	$(Q)if [ ! -d $(TORVALDS_TARGET) ]; then                            \
 	 echo "          CLONE Torvald's tree"                             ;\
 	 git -C $(MIRROR_PATH) clone --bare $(TORVALDS) $(TORVALDS_TARGET) ;\
 	fi
