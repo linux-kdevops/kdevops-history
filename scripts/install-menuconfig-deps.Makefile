@@ -15,5 +15,5 @@ menuconfig-deps-help-menu:
 HELP_TARGETS += menuconfig-deps-help-menu
 
 ifeq (y,$(CONFIG_KDEVOPS_FIRST_RUN))
-LOCALHOST_SETUP_WORK += kdevops-deps
+LOCALHOST_SETUP_WORK += menuconfig-deps
 endif # CONFIG_KDEVOPS_FIRST_RUN
