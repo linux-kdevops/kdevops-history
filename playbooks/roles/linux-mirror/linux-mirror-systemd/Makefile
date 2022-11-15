@@ -40,6 +40,9 @@ mirror:
 	$(Q)if [ ! -d $(MIRROR_PATH) ]; then \
 		mkdir -p $(MIRROR_PATH)     ;\
 	fi
+	$(NQ) "          Verify $(USER) can write onto $(MIRROR_PATH)"
+	$(Q)touch $(MIRROR_PATH)/ignore_kdevops
+	$(Q)rm -f $(MIRROR_PATH)/ignore_kdevops
 	$(Q)if [ ! -d $(TORVALDS_TARGET) ]; then                            \
 	 echo "          CLONE Torvald's tree"                             ;\
 	 git -C $(MIRROR_PATH) clone --bare $(TORVALDS) $(TORVALDS_TARGET) ;\
