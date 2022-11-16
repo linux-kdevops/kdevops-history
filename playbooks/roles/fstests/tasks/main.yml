@@ -405,6 +405,13 @@
   become_method: sudo
   command: sysctl kernel.printk="8 8 1 7"
 
+- name: Read dynamically set test limit scope, if that was set
+  set_fact:
+    limit_tests: "{{ lookup('ansible.builtin.env', 'LIMIT_TESTS') }}"
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'vars', 'limit-tests' ]
+  when:
+    - kdevops_run_fstests|bool
+
 - name: Print list of test limits for this run
   debug:
     msg: "limit_tests: {{ limit_tests }}"

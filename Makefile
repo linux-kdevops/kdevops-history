@@ -55,6 +55,11 @@ ifneq (,$(HOSTS))
 LIMIT_HOSTS := $(subst ${ }, -l , $(HOSTS))
 endif
 
+export LIMIT_TESTS :=
+ifneq (,$(TESTS))
+LIMIT_TESTS := $(TESTS)
+endif
+
 INCLUDES = -I include/
 CFLAGS += $(INCLUDES)
 
