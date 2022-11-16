@@ -8,6 +8,7 @@ kdevops_run_fstests: False
 # Ror instance you can use "-g quick" but note that this may produce
 # not results as all quick tests may be expunded.
 oscheck_extra_args: ""
+limit_tests: ""
 
 fstests_git: "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git"
 fstests_data: "{{ data_path }}/fstests"
@@ -35,3 +36,6 @@ fstests_scratch_logdev: "/dev/loop15"
 fstests_scratch_rtdev: "/dev/loop14"
 fstests_scratch_devpool: "/dev/loop5 /dev/loop6 /dev/loop7 /dev/loop8 /dev/loop9 /dev/loop10 /dev/loop11 /dev/loop12"
 fstests_scratch_devpool_zns: "/dev/nvme5n1 /dev/nvme6n1 /dev/nvme7n1 /dev/nvme8n1 /dev/nvme9n1 /dev/nvme10n1 /dev/nvme11n1 /dev/nvme12n1"
+
+run_auto_group_tests: 'n'
+run_custom_group_tests: ''

@@ -407,6 +407,7 @@ config FSTESTS_RUN_TESTS
 config FSTESTS_RUN_AUTO_GROUP_TESTS
 	bool "Run fstests of group 'auto'"
 	depends on FSTESTS_RUN_TESTS
+	depends on !FSTESTS_ENABLE_RUN_CUSTOM_TESTS
 	default y
 	help
 	  The 'auto' test group is a good choice for running regression tests.
@@ -416,9 +417,25 @@ config FSTESTS_RUN_CUSTOM_GROUP_TESTS
 	string "Run a custom group of fstests"
 	default "auto" if FSTESTS_RUN_AUTO_GROUP_TESTS
 	depends on FSTESTS_RUN_TESTS
+	depends on !FSTESTS_ENABLE_RUN_CUSTOM_TESTS
 	help
 	  To configure fstests to run specific group of tests instead of the
 	  'auto' group.
+
+config FSTESTS_ENABLE_RUN_CUSTOM_TESTS
+	bool "Enable running custom tests"
+	depends on FSTESTS_RUN_TESTS
+	default n
+	help
+	  Enable this only if you want to always run custom tests.
+	  In the future we will support the ability to dynamically run
+	  custom tests at runtime, and so this option could eventually
+	  become deprecated because we typically don't want to run custom
+	  tests for a setup every time, only sporadically. This option
+	  exists to ensure that if you enable custom tests for the setup
+	  you cannot enable FSTESTS_RUN_AUTO_GROUP_TESTS.
+
+if FSTESTS_ENABLE_RUN_CUSTOM_TESTS
 
 config FSTESTS_RUN_CUSTOM_TESTS
 	string "Run a custom set of fstests"
@@ -431,6 +448,8 @@ config FSTESTS_RUN_CUSTOM_TESTS
 	  expunge lists. If a custom test is listed in expunge list, it will not
 	  run. Similarly, if a custom test is listed as a large disk test, it
 	  will not run if FSTESTS_RUN_LARGE_DISK_TESTS is disabled.
+
+endif
 
 config FSTESTS_RUN_LARGE_DISK_TESTS
 	bool "Run fstests that require large disk"

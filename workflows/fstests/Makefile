@@ -80,7 +80,7 @@ FSTESTS_ARGS += sparsefiles_filename_prefix='$(FSTESTS_SPARSE_FILENAME_PREFIX)'
 FSTESTS_ARGS += run_large_disk_tests='$(FSTESTS_RUN_LARGE_DISK_TESTS)'
 FSTESTS_ARGS += run_auto_group_tests='$(FSTESTS_RUN_AUTO_GROUP_TESTS)'
 FSTESTS_ARGS += run_custom_group_tests='$(FSTESTS_RUN_CUSTOM_GROUP_TESTS)'
-FSTESTS_ARGS += oscheck_extra_args='$(FSTESTS_RUN_CUSTOM_TESTS)'
+FSTESTS_ARGS += limit_tests='$(FSTESTS_RUN_CUSTOM_TESTS)'
 
 FSTESTS_SCRATCH_DEVPOOL=$(subst ",,$(CONFIG_FSTESTS_SCRATCH_DEV_POOL))
 FSTESTS_ARGS_SEPARATED += fstests_scratch_devpool='$(subst $(space),+,$(FSTESTS_SCRATCH_DEVPOOL))'
