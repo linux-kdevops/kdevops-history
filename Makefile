@@ -52,7 +52,7 @@ include Makefile.extra_vars
 
 LIMIT_HOSTS :=
 ifneq (,$(HOSTS))
-LIMIT_HOSTS := $(subst ${ }, -l , $(HOSTS))
+LIMIT_HOSTS := '-l $(subst ${space},$(comma),$(HOSTS))'
 endif
 
 export LIMIT_TESTS :=

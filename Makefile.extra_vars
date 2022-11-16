@@ -17,6 +17,7 @@ EXTRA_VAR_INPUTS += $(KDEVOPS_PLAYBOOKS_DIR)/roles/*/defaults/main.yml
 null :=
 space := ${null} ${null}
 ${space} := ${space}
+comma:= ,
 
 define YAML_ENTRY
 $(1)
