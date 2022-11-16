@@ -559,7 +559,7 @@
   find:
     paths: "{{ fstests_data_target }}"
     recurse: yes
-    patterns: "*.out.bad,*.dmesg"
+    patterns: "*.out.bad"
   register: failed_tests
 
 - name: Copy data for tests that failed
@@ -613,6 +613,46 @@
   with_items: "{{ bad_full_file_stats.results }}"
   loop_control:
     label: "Copying over {{ tests_name }}"
+  when:
+    - failed_tests.matched > 0
+    - item.stat.exists
+
+- name: Check if respective dmesg file exists exists for failed tests
+  tags: [ 'oscheck', 'fstests', 'copy_results', 'failed_tests' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  vars:
+    tests_full_group_dir: "{{ item.path | dirname }}"
+    tests_group_dir: "{{ tests_full_group_dir | split('/') | last }}"
+    tests_dmesg_name: "{{ item.path | basename | split('.') | first }}.dmesg"
+    tests_name: "{{ tests_group_dir }}/{{ tests_full_name }}"
+  stat:
+    path: "{{ tests_full_group_dir }}/{{ tests_dmesg_name }}"
+  with_items: "{{ failed_tests.files }}"
+  loop_control:
+    label: "Looking for {{ tests_name }} dmesg"
+  register: bad_dmesg_file_stats
+  when:
+    - failed_tests.matched > 0
+
+- name: Copy test dmesg results file over
+  tags: [ 'oscheck', 'fstests', 'copy_results', 'failed_tests' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  vars:
+    tests_full_group_dir: "{{ item.item.path | dirname }}"
+    tests_group_dir: "{{ tests_full_group_dir | split('/') | last }}"
+    tests_dmesg_name: "{{ item.item.path | basename | split('.') | first }}.dmesg"
+    tests_name: "{{ tests_group_dir }}/{{ tests_full_name }}"
+  fetch:
+    src: "{{ item.stat.path }}"
+    dest: "{{ fstests_results_target }}/{{ item.stat.path | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
+    flat: yes
+  with_items: "{{ bad_dmesg_file_stats.results }}"
+  loop_control:
+    label: "Copying over dmesg {{ tests_name }}"
   when:
     - failed_tests.matched > 0
     - item.stat.exists
