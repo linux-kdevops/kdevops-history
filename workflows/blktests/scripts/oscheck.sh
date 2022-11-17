@@ -476,9 +476,8 @@ if [[ "$LIMIT_TESTS" == "" ]]; then
 		RUN_GROUP="$INFER_GROUP"
 		echo "Only testing inferred group: $RUN_GROUP"
 	fi
+	validate_run_group
 fi
-
-validate_run_group
 
 check_check
 CHECK_RET=$?
