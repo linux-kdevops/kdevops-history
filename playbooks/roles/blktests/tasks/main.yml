@@ -247,7 +247,22 @@
     - kdevops_run_blktests|bool
   run_once: true
 
-- name: Run blktests using ./oscheck.sh --print-done --test-group {{ group }} {{ oscheck_extra_args }}
+- name: Read dynamically set test limit scope, if that was set
+  set_fact:
+    limit_tests: "{{ lookup('ansible.builtin.env', 'LIMIT_TESTS') }}"
+  tags: [ 'blktests', 'run_tests', 'limit-tests' ]
+  when:
+    - kdevops_run_blktests|bool
+
+- name: Print list of test limits for this run
+  debug:
+    msg: "limit_tests: {{ limit_tests }}"
+  tags: [ 'blktests', 'run_tests', 'limit-tests' ]
+  when:
+    - kdevops_run_blktests|bool
+    - limit_tests != ""
+
+- name: Run blktests using oscheck.sh
   vars:
     group: "{{ ansible_host | regex_replace('blktests-') | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
   tags: [ 'blktests', 'run_tests' ]
@@ -261,6 +276,7 @@
     chdir: "{{ blktests_data_target }}"
   environment:
     TEST_DEVS: "{{ blktests_test_devs }}"
+    LIMIT_TESTS: "{{ limit_tests }}"
   when:
     - kdevops_run_blktests|bool
 

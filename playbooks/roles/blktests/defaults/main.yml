@@ -8,6 +8,7 @@ kdevops_run_blktests: False
 # Ror instance you can use "-g quick" but note that this may produce
 # not results as all quick tests may be expunded.
 oscheck_extra_args: ""
+limit_tests: ""
 
 blktests_git: "https://github.com/osandov/blktests.git"
 blktets_data: "{{ data_path }}/blktests"

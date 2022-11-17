@@ -362,7 +362,9 @@ oscheck_run_groups()
 		echo "run blktests blktestsstart/000 at $NOW" > /dev/kmsg
 	fi
 
-	oscheck_handle_group_expunges
+	if [[ "$LIMIT_TESTS" == "" ]]; then
+		oscheck_handle_group_expunges
+	fi
 	oscheck_count_check
 	OSCHECK_CMD="./check ${RUN_GROUP} $EXPUNGE_FLAGS ${CHECK_ARGS[@]}"
 	oscheck_run_cmd
@@ -465,12 +467,15 @@ INFER_GROUP=$(echo $HOST | sed -e 's|-dev||')
 INFER_GROUP=$(echo $INFER_GROUP | sed -e 's|-|_|g')
 INFER_GROUP=$(echo $INFER_GROUP | awk -F"_" '{for (i=2; i <= NF; i++) { printf $i; if (i!=NF) printf "_"}; print NL}')
 
-if [ "$ONLY_TEST_GROUP" != "" ]; then
-	RUN_GROUP="$ONLY_TEST_GROUP"
-	echo "Only testing group: $ONLY_TEST_GROUP"
-else
-	RUN_GROUP="$INFER_GROUP"
-	echo "Only testing inferred group: $RUN_GROUP"
+
+if [[ "$LIMIT_TESTS" == "" ]]; then
+	if [ "$ONLY_TEST_GROUP" != "" ]; then
+		RUN_GROUP="$ONLY_TEST_GROUP"
+		echo "Only testing group: $ONLY_TEST_GROUP"
+	else
+		RUN_GROUP="$INFER_GROUP"
+		echo "Only testing inferred group: $RUN_GROUP"
+	fi
 fi
 
 validate_run_group
