@@ -125,6 +125,12 @@ parse_config_section() {
 		| sed -n -e "/^\[$SECTION\]/,/^\s*\[/{/^[^#].*\=.*/p;}"`
 }
 
+oscheck_lib_get_host_options_vars()
+{
+	parse_config_section default
+	parse_config_section $RUN_SECTION
+}
+
 oscheck_include_os_files()
 {
 	if [ ! -e $OS_FILE ]; then

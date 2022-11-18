@@ -538,9 +538,8 @@ fi
 parse_args $@
 
 oscheck_lib_set_run_section $TEST_ARG_SECTION
+oscheck_lib_get_host_options_vars
 
-parse_config_section default
-parse_config_section $RUN_SECTION
 check_mount $TEST_DIR
 if [ $? -eq 0 ]; then
 	umount $TEST_DEV
