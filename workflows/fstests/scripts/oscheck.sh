@@ -401,9 +401,6 @@ oscheck_run_section()
 {
 	SECTION=$RUN_SECTION
 	if [[ "$LIMIT_TESTS" == "" ]]; then
-		oscheck_handle_section_expunges
-		oscheck_update_expunge_files
-		oscheck_verify_intented_expunges $SECTION
 		oscheck_count_check
 	fi
 	SECTION_ARGS=
@@ -605,4 +602,5 @@ oscheck_test_dev_setup
 tmp=/tmp/$$
 trap "_cleanup; exit \$status" 0 1 2 3 15
 
+oscheck_lib_set_expunges
 oscheck_run_section

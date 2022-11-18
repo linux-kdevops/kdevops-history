@@ -463,3 +463,12 @@ check_section()
 	fi
 	return 0
 }
+
+oscheck_lib_set_expunges()
+{
+	if [[ "$LIMIT_TESTS" == "" ]]; then
+		oscheck_handle_section_expunges
+		oscheck_update_expunge_files
+		oscheck_verify_intented_expunges $RUN_SECTION
+	fi
+}
