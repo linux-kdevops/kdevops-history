@@ -122,12 +122,12 @@ oscheck_set_host_config_vars()
 }
 
 parse_config_section() {
-	SECTION=$1
+	LOCAL_SECTION=$1
 	if ! $OPTIONS_HAVE_SECTIONS; then
 		return 0
 	fi
 
-	if [ "${SECTION}" == "all" ]; then
+	if [ "${LOCAL_SECTION}" == "all" ]; then
 		return 0
 	fi
 
@@ -137,7 +137,7 @@ parse_config_section() {
 		-e 's/^[[:space:]]*//' \
 		-e "s/^\([^=]*\)=\"\?'\?\([^\"']*\)\"\?'\?$/export \1=\"\2\"/" \
 		< $HOST_OPTIONS \
-		| sed -n -e "/^\[$SECTION\]/,/^\s*\[/{/^[^#].*\=.*/p;}"`
+		| sed -n -e "/^\[$LOCAL_SECTION\]/,/^\s*\[/{/^[^#].*\=.*/p;}"`
 }
 
 oscheck_lib_get_host_options_vars()
