@@ -247,20 +247,47 @@
     - kdevops_run_blktests|bool
   run_once: true
 
-- name: Read dynamically set test limit scope, if that was set
+- name: Enable low-level messages on console
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: sysctl kernel.printk="8 8 1 7"
+
+- name: Check to see if dynamic test limit scope was set
   set_fact:
-    limit_tests: "{{ lookup('ansible.builtin.env', 'LIMIT_TESTS') }}"
+    dynamic_limit_tests: "{{ lookup('ansible.builtin.env', 'LIMIT_TESTS') }}"
   tags: [ 'blktests', 'run_tests', 'limit-tests' ]
   when:
     - kdevops_run_blktests|bool
 
-- name: Print list of test limits for this run
-  debug:
-    msg: "limit_tests: {{ limit_tests }}"
+- name: Allow dynamic test override
+  set_fact:
+    all_limit_tests: "{{ dynamic_limit_tests }}"
   tags: [ 'blktests', 'run_tests', 'limit-tests' ]
   when:
     - kdevops_run_blktests|bool
-    - limit_tests != ""
+    - dynamic_limit_tests is defined
+    - dynamic_limit_tests != None
+    - dynamic_limit_tests | length > 0
+
+- name: Empty out test limit if None is set
+  set_fact:
+    all_limit_tests: ""
+  tags: [ 'blktests', 'run_tests', 'limit-tests' ]
+  when:
+    - kdevops_run_blktests|bool
+    - all_limit_tests is defined
+    - all_limit_tests == None
+
+- name: Print list of test limits for this run
+  debug:
+    msg: "all_limit_tests: {{ all_limit_tests }}"
+  tags: [ 'blktests', 'run_tests', 'limit-tests' ]
+  when:
+    - kdevops_run_blktests|bool
+    - all_limit_tests is defined
+    - all_limit_tests != None
+    - all_limit_tests | length > 0
 
 - name: Run blktests using oscheck.sh
   vars:
@@ -269,14 +296,14 @@
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
-  command: "./oscheck.sh --print-start --print-done --test-group {{ group }} {{ oscheck_extra_args }} {{ limit_tests }}"
+  command: "./oscheck.sh --print-start --print-done --test-group {{ group }} {{ oscheck_extra_args }} {{ all_limit_tests }}"
   ignore_errors: yes
   no_log: True
   args:
     chdir: "{{ blktests_data_target }}"
   environment:
     TEST_DEVS: "{{ blktests_test_devs }}"
-    LIMIT_TESTS: "{{ limit_tests }}"
+    LIMIT_TESTS: "{{ all_limit_tests }}"
   when:
     - kdevops_run_blktests|bool
 
