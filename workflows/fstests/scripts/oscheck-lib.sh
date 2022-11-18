@@ -75,7 +75,9 @@ oscheck_lib_init_vars()
 	export EXPUNGE_FLAGS=""
 	oscheck_set_host_config_vars
 
-	export OSCHECK_LIB_SKIP_NON_FAILURE_EXPUNGES="n"
+	if [ -z "$OSCHECK_LIB_SKIP_NON_FAILURE_EXPUNGES" ]; then
+		export OSCHECK_LIB_SKIP_NON_FAILURE_EXPUNGES="n"
+	fi
 }
 
 known_hosts()
