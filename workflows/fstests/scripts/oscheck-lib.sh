@@ -70,6 +70,9 @@ oscheck_lib_init_vars()
 	# Once oscheck_distro_kernel_check is run.
 	export ONLY_QUESTION_DISTRO_KERNEL="false"
 
+	# Used to set the set of list of expunges files to pass to check.sh
+	# For example this may be, -E foo/file.txt -E bar/another.txt
+	export EXPUNGE_FLAGS=""
 	oscheck_set_host_config_vars
 }
 

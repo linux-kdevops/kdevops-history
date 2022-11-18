@@ -2,7 +2,6 @@
 # OS wrapper for check.sh
 
 DRY_RUN="false"
-EXPUNGE_FLAGS=""
 ONLY_SHOW_CMD="false"
 VERBOSE="false"
 TEST_ARG_SECTION=""
