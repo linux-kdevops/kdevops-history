@@ -57,6 +57,12 @@ oscheck_lib_init_vars()
 		export OSCHECK_CUSTOM_KERNEL="false"
 	fi
 
+	export KERNEL_VERSION=$(uname -r)
+	if [ ! -z "$FSTESTS_LINUX_LOCALVERSION" ]; then
+		# Strip localversion to use the expunge lists of baseline version
+		export KERNEL_VERSION=${KERNEL_VERSION%$FSTESTS_LINUX_LOCALVERSION}
+	fi
+
 	oscheck_set_host_config_vars
 }
 
@@ -409,11 +415,6 @@ oscheck_distro_kernel_check()
 				exit 1
 			fi
 			echo "Running custom kernel: $(uname -a)"
-			KERNEL_VERSION=$(uname -r)
-			if [ ! -z "$FSTESTS_LINUX_LOCALVERSION" ]; then
-				# Strip localversion to use the expunge lists of baseline version
-				KERNEL_VERSION=${KERNEL_VERSION%$FSTESTS_LINUX_LOCALVERSION}
-			fi
 		else
 			if [ "$ONLY_QUESTION_DISTRO_KERNEL" = "true" ]; then
 				echo "Running distro kernel"
