@@ -141,8 +141,7 @@ parse_config_section() {
 
 copy_to_check_arg()
 {
-	IDX=${#CHECK_ARGS[@]}
-	CHECK_ARGS[$IDX]="$1"
+	CHECK_ARGS+=" $1"
 }
 
 parse_args()
@@ -660,6 +659,7 @@ oscheck_prefix_section()
 oscheck_run_cmd()
 {
 	if [ "$ONLY_SHOW_CMD" = "false" ]; then
+		echo "LC_ALL=C bash $OSCHECK_CMD" > /tmp/run-cmd.txt
 		LC_ALL=C bash $OSCHECK_CMD
 	else
 		echo "LC_ALL=C bash $OSCHECK_CMD"
@@ -677,9 +677,9 @@ oscheck_run_section()
 	if [[ "$LIMIT_TESTS" == "" ]]; then
 		oscheck_handle_section_expunges
 		oscheck_update_expunge_files
+		oscheck_count_check
+		oscheck_verify_intented_expunges $SECTION
 	fi
-	oscheck_count_check
-	oscheck_verify_intented_expunges $SECTION
 	SECTION_ARGS=
 
 	if [ "$SECTION" != "all" ]; then
