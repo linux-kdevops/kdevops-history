@@ -63,6 +63,15 @@ oscheck_lib_init_vars()
 		export KERNEL_VERSION=${KERNEL_VERSION%$FSTESTS_LINUX_LOCALVERSION}
 	fi
 
+	# Set this to true to only output if we're on a custom kernel or not.
+	# This is useful for enterprise distributions which want to take
+	# care to only run tests on their distro kernels. So an "os" check
+	# exists for them to query this. This is distro specific.
+	#
+	# Setting this to true will *only* do that check and bail out.
+	# Once oscheck_distro_kernel_check is run.
+	export ONLY_QUESTION_DISTRO_KERNEL="false"
+
 	oscheck_set_host_config_vars
 }
 
