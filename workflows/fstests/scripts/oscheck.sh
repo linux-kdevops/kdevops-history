@@ -544,8 +544,7 @@ if [ $? -eq 0 ]; then
 	umount $TEST_DEV
 fi
 
-oscheck_read_osfile_and_includes
-oscheck_distro_kernel_check
+oscheck_lib_read_osfiles_verify_kernel
 
 if [[ "$LIMIT_TESTS" == "" ]]; then
 	oscheck_handle_skipping_group

@@ -434,6 +434,12 @@ oscheck_distro_kernel_check()
 	fi
 }
 
+oscheck_lib_read_osfiles_verify_kernel()
+{
+	oscheck_read_osfile_and_includes
+	oscheck_distro_kernel_check
+}
+
 check_section()
 {
 	if [ ! -e $HOST_OPTIONS ]; then
