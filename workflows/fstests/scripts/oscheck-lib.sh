@@ -464,6 +464,15 @@ oscheck_lib_check_section()
 	return 0
 }
 
+oscheck_lib_validate_section()
+{
+	oscheck_lib_check_section
+	DEPS_RET=$?
+	if [ $DEPS_RET -ne 0 ]; then
+		exit $DEPS_RET
+	fi
+}
+
 oscheck_lib_set_expunges()
 {
 	if [[ "$LIMIT_TESTS" == "" ]]; then

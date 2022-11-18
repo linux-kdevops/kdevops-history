@@ -564,11 +564,7 @@ if [ $DEPS_RET -ne 0 ]; then
 	exit $DEPS_RET
 fi
 
-oscheck_lib_check_section
-DEPS_RET=$?
-if [ $DEPS_RET -ne 0 ]; then
-	exit $DEPS_RET
-fi
+oscheck_lib_validate_section
 
 echo "Testing section: $RUN_SECTION"
 
