@@ -74,6 +74,8 @@ oscheck_lib_init_vars()
 	# For example this may be, -E foo/file.txt -E bar/another.txt
 	export EXPUNGE_FLAGS=""
 	oscheck_set_host_config_vars
+
+	export OSCHECK_LIB_SKIP_NON_FAILURE_EXPUNGES="n"
 }
 
 known_hosts()
@@ -326,6 +328,12 @@ oscheck_add_expunges_for_quick_tests()
 	fi
 }
 
+oscheck_process_non_failure_expunges()
+{
+	oscheck_add_expunges_for_quick_tests
+	oscheck_handle_special_expunges
+}
+
 oscheck_handle_section_expunges()
 {
 	CATEGORIES="diff unassigned assigned"
@@ -344,8 +352,9 @@ oscheck_handle_section_expunges()
 		echo "List of possible expunge files for section $SECTION :"
 	fi
 
-	oscheck_add_expunges_for_quick_tests
-	oscheck_handle_special_expunges
+	if [[ "$OSCHECK_LIB_SKIP_NON_FAILURE_EXPUNGES" != "y" ]]; then
+		oscheck_process_non_failure_expunges
+	fi
 
 	if [ -e $OS_FILE ]; then
 		FS_EXCLUDE_DIR="${OSCHECK_EXCLUDE_PREFIX}/${OSCHECK_ID}/${VERSION_ID}/${FSTYP}/"
