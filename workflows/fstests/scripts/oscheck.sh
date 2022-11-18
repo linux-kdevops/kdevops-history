@@ -405,7 +405,6 @@ oscheck_run_section()
 		echo "run fstests fstestsstart/000 at $NOW" > /dev/kmsg
 	fi
 	SECTION=$RUN_SECTION
-	oscheck_prefix_section $SECTION
 	if [[ "$LIMIT_TESTS" == "" ]]; then
 		oscheck_handle_section_expunges
 		oscheck_update_expunge_files

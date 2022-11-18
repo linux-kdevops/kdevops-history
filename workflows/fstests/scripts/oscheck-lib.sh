@@ -18,8 +18,6 @@ oscheck_lib_init_vars()
 		OS_FILE="$OSCHECK_OS_FILE"
 	fi
 
-	export OS_SECTION_PREFIX=""
-
 	if [ -z "$OSCHECK_EXCLUDE_PREFIX" ]; then
 		export OSCHECK_EXCLUDE_PREFIX="$(dirname $(readlink -f $0))/../expunges/"
 	fi
@@ -361,21 +359,6 @@ oscheck_handle_section_expunges()
 	FS_EXCLUDE_DIR="${OSCHECK_EXCLUDE_PREFIX}/any/${FSTYP}/"
 	# Don't update OSCHECK_EXCLUDE_DIR as these are extra files only.
 	oscheck_get_section_files
-}
-
-oscheck_prefix_section()
-{
-	ADD_SECTION="$1"
-	if [ "$ADD_SECTION" == "all" ]; then
-		return 0;
-	fi
-	if [ "$OS_SECTION_PREFIX" != "" ]; then
-		if [ "${ADD_SECTION}" != "${FSTYP}" ]; then
-			SECTION="${OS_SECTION_PREFIX}_${ADD_SECTION}"
-		else
-			SECTION="${OS_SECTION_PREFIX}_${FSTYP}"
-		fi
-	fi
 }
 
 # If you don't have the /etc/os-release we try to use lsb_release
