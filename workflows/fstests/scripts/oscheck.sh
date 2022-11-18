@@ -399,10 +399,6 @@ oscheck_run_cmd()
 
 oscheck_run_section()
 {
-	if [[ "$PRINT_START" == "true" ]]; then
-		NOW=$(date --rfc-3339='seconds' | awk -F"+" '{print $1}')
-		echo "run fstests fstestsstart/000 at $NOW" > /dev/kmsg
-	fi
 	SECTION=$RUN_SECTION
 	if [[ "$LIMIT_TESTS" == "" ]]; then
 		oscheck_handle_section_expunges
@@ -414,6 +410,11 @@ oscheck_run_section()
 
 	if [ "$SECTION" != "all" ]; then
 		SECTION_ARGS="-s $SECTION"
+	fi
+
+	if [[ "$PRINT_START" == "true" ]]; then
+		NOW=$(date --rfc-3339='seconds' | awk -F"+" '{print $1}')
+		echo "run fstests fstestsstart/000 at $NOW" > /dev/kmsg
 	fi
 
 	OSCHECK_CMD="./check $SECTION_ARGS -R xunit $_RUN_GROUPS $_SKIP_GROUPS $EXPUNGE_FLAGS $CHECK_ARGS"
