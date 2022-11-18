@@ -313,6 +313,19 @@ oscheck_verify_intented_expunges()
 	fi
 }
 
+oscheck_add_expunges_for_quick_tests()
+{
+	if [ ! -z "$FAST_TEST" ]; then
+		oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/over-10s.txt"
+		oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/$FSTYP/over-10s.txt"
+	fi
+
+	if [ "$FSTESTS_RUN_LARGE_DISK_TESTS" != "y" ]; then
+		oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/large-disk.txt"
+		oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/$FSTYP/large-disk.txt"
+	fi
+}
+
 oscheck_handle_section_expunges()
 {
 	CATEGORIES="diff unassigned assigned"
@@ -331,16 +344,7 @@ oscheck_handle_section_expunges()
 		echo "List of possible expunge files for section $SECTION :"
 	fi
 
-	if [ ! -z "$FAST_TEST" ]; then
-		oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/over-10s.txt"
-		oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/$FSTYP/over-10s.txt"
-	fi
-
-	if [ "$FSTESTS_RUN_LARGE_DISK_TESTS" != "y" ]; then
-		oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/large-disk.txt"
-		oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/$FSTYP/large-disk.txt"
-	fi
-
+	oscheck_add_expunges_for_quick_tests
 	oscheck_handle_special_expunges
 
 	if [ -e $OS_FILE ]; then
