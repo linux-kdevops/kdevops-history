@@ -69,6 +69,33 @@ known_hosts()
 	[ -f $HOST_CONFIG_DIR/$HOST.config ] && export HOST_OPTIONS=$HOST_CONFIG_DIR/$HOST.config
 }
 
+oscheck_lib_set_run_section()
+{
+	LOCAL_TEST_ARG_SECTION="$1"
+
+	INFER_SECTION=$(echo $HOST | sed -e 's|-dev||')
+	INFER_SECTION=$(echo $INFER_SECTION | sed -e 's|-|_|g')
+	INFER_SECTION=$(echo $INFER_SECTION | awk -F"_" '{for (i=2; i <= NF; i++) { printf $i; if (i!=NF) printf "_"}; print NL}')
+
+	if [[ "$LOCAL_TEST_ARG_SECTION" != "" ]]; then
+		RUN_SECTION=$LOCAL_TEST_ARG_SECTION
+	else
+		RUN_SECTION=$INFER_SECTION
+	fi
+
+	if [ "${RUN_SECTION}" != "${FSTYP}" ] && [ "${RUN_SECTION}" != "all" ]; then
+		# If you specified a section but it does not have the filesystem
+		# prefix, we add it for you. Likewise, this means that if you
+		# used oscheck.sh --test-section, we will allow you to specify
+		# either the full section name, ie, xfs_reflink, or just the
+		# short name, ie, reflink and we'll add the xfs prefix for you.
+		echo $RUN_SECTION | grep -q ^${FSTYP}
+		if [ $? -ne 0 ]; then
+			RUN_SECTION="${FSTYP}_${s}"
+		fi
+	fi
+}
+
 # Set's the HOST and HOST_OPTIONS variables
 oscheck_set_host_config_vars()
 {
