@@ -537,12 +537,6 @@ fi
 
 parse_args $@
 
-HOST_OPTIONS=${HOST_OPTIONS:=local.config}
-HOST=`hostname -s`
-if [ ! -f "$HOST_OPTIONS" ]; then
-	known_hosts
-fi
-
 INFER_SECTION=$(echo $HOST | sed -e 's|-dev||')
 INFER_SECTION=$(echo $INFER_SECTION | sed -e 's|-|_|g')
 INFER_SECTION=$(echo $INFER_SECTION | awk -F"_" '{for (i=2; i <= NF; i++) { printf $i; if (i!=NF) printf "_"}; print NL}')

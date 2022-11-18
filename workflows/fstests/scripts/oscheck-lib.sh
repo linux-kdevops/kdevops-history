@@ -56,6 +56,8 @@ oscheck_lib_init_vars()
 	if [ -z "$OSCHECK_CUSTOM_KERNEL" ]; then
 		export OSCHECK_CUSTOM_KERNEL="false"
 	fi
+
+	oscheck_set_host_config_vars
 }
 
 known_hosts()
@@ -65,6 +67,16 @@ known_hosts()
 	[ -f /etc/xfsqa.config ]             && export HOST_OPTIONS=/etc/xfsqa.config
 	[ -f $HOST_CONFIG_DIR/$HOST ]        && export HOST_OPTIONS=$HOST_CONFIG_DIR/$HOST
 	[ -f $HOST_CONFIG_DIR/$HOST.config ] && export HOST_OPTIONS=$HOST_CONFIG_DIR/$HOST.config
+}
+
+# Set's the HOST and HOST_OPTIONS variables
+oscheck_set_host_config_vars()
+{
+	export HOST_OPTIONS=${HOST_OPTIONS:=local.config}
+	export HOST=`hostname -s`
+	if [ ! -f "$HOST_OPTIONS" ]; then
+		known_hosts
+	fi
 }
 
 parse_config_section() {
