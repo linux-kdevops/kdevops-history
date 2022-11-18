@@ -407,8 +407,8 @@ oscheck_run_section()
 	if [[ "$LIMIT_TESTS" == "" ]]; then
 		oscheck_handle_section_expunges
 		oscheck_update_expunge_files
-		oscheck_count_check
 		oscheck_verify_intented_expunges $SECTION
+		oscheck_count_check
 	fi
 	SECTION_ARGS=
 
