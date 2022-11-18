@@ -6,7 +6,6 @@
 OSCHECK_OSFILE_PREFIX=""
 OSCHECK_SUBSYSTEM="blktests"
 
-OS_FILE="/etc/os-release"
 DRY_RUN="false"
 EXPUNGE_FLAGS=""
 ONLY_SHOW_CMD="false"
@@ -28,13 +27,6 @@ VALID_GROUPS="$VALID_GROUPS scsi"
 VALID_GROUPS="$VALID_GROUPS srp"
 VALID_GROUPS="$VALID_GROUPS zbd"
 
-# Used to do a sanity check that the section we are running a test
-# for has all intended files part of its expunge list. Updated per
-# section run.
-OSCHECK_EXCLUDE_DIR=""
-EXPUNGE_TESTS=""
-EXPUNGE_TESTS_COUNT=0
-
 if [ ! -z "$OSCHECK_SUBSYSTEM" ]; then
 	OSCHECK_OSFILE_PREFIX="_blktests"
 fi
@@ -50,15 +42,19 @@ fi
 # Where we stuff the arguments we will pass to ./check
 declare -a CHECK_ARGS
 
-if [ -z "$OSCHECK_INCLUDE_PATH" ]; then
-	OSCHECK_DIR="$(dirname $(readlink -f $0))"
-	OSCHECK_INCLUDE_PATH="${OSCHECK_DIR}/../osfiles"
-fi
-
 if [ $(id -u) != "0" ]; then
 	echo "Must run as root"
 	exit 1
 fi
+
+OSCHECK_DIR="$(dirname $(readlink -f $0))"
+OSCHECK_LIB="$OSCHECK_DIR/oscheck-lib.sh"
+if [ ! -f $OSCHECK_LIB ]; then
+	echo "Missing oscheck library: $OSCHECK_LIB"
+	exit 1
+fi
+source $OSCHECK_LIB
+oscheck_lib_init_vars
 
 oscheck_usage()
 {
@@ -136,33 +132,6 @@ parse_args()
 }
 
 parse_args $@
-
-if [ ! -z "$OSCHECK_OS_FILE" ]; then
-	OS_FILE="$OSCHECK_OS_FILE"
-fi
-
-if [ -z "$OSCHECK_EXCLUDE_PREFIX" ]; then
-	OSCHECK_EXCLUDE_PREFIX="$(dirname $(readlink -f $0))/../results/"
-fi
-
-# blktests check uses $ID for the test number, so we need to use something
-# more unique. For example, on Debian this is "debian" for opensuse factory
-# this is "opensuse" and for OpenSUSE Leap this is "opensuse-leap".
-OSCHECK_ID=""
-# VERSION_ID is 15.0 for OpenSUSE Leap 15.0, but Debian testing lacks VERSION_ID.
-VERSION_ID=""
-
-# Some distributions rely on things like lsb_release -r -s as the
-# /etc/os-release file may not have a VERSION_ID annotated. So for
-# instance OpenSUSE Leap uses /etc/os-release ID set to opensuse-leap
-# and VERSION_ID="15.0" but Debian lacks such annotation on Debian
-# testing. The OSCHECK_RELEASE can be used then by the osfile helpers.sh
-# for distributions which want to support these releases.
-export OSCHECK_RELEASE=""
-which lsb_release 2>/dev/null 1>/dev/null
-if [ $? -eq 0 ]; then
-	export OSCHECK_RELEASE="$(lsb_release -r -s)"
-fi
 
 oscheck_include_os_files()
 {
