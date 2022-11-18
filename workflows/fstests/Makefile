@@ -106,6 +106,11 @@ FSTEST_KERNEL_CI_LOOP := scripts/workflows/fstests/run_kernel_ci.sh
 FSTEST_KERNEL_CI_LOOP_KOTD := scripts/workflows/fstests/run_kernel_ci_kotd.sh
 endif # CONFIG_KERNEL_CI
 
+DYNAMIC_RUNTIME_VARS :=
+ifneq (,$(RUN_FAILURES))
+DYNAMIC_RUNTIME_VARS := "run_tests_on_failures": True
+endif
+
 fstests:
 	$(Q)ansible-playbook -f 30 -i hosts playbooks/fstests.yml --skip-tags run_tests,copy_results $(LIMIT_HOSTS)
 
@@ -113,7 +118,7 @@ fstests-kdevops-setup: $(KDEVOPS_EXTRA_VARS)
 	$(Q)ansible-playbook -f 30 -i hosts playbooks/fstests.yml --tags vars,kdevops_fstests_setup $(LIMIT_HOSTS)
 
 fstests-baseline:
-	$(Q)PYTHONUNBUFFERED=1 ansible-playbook -f 30 -i hosts -l baseline playbooks/fstests.yml --tags run_tests,copy_results --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
+	$(Q)PYTHONUNBUFFERED=1 ansible-playbook -f 30 -i hosts -l baseline playbooks/fstests.yml --tags run_tests,copy_results --extra-vars '{ kdevops_run_fstests: True $(DYNAMIC_RUNTIME_VARS) }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
 fstests-baseline-loop: $(KDEVOPS_EXTRA_VARS)
 	$(Q)$(FSTEST_KERNEL_CI_LOOP) baseline $(LIMIT_HOSTS)
@@ -122,13 +127,13 @@ fstests-baseline-kernelci: $(KDEVOPS_EXTRA_VARS)
 	$(Q)$(FSTEST_KERNEL_CI_LOOP_KOTD) baseline $(LIMIT_HOSTS)
 
 fstests-baseline-skip-kdevops-update: $(KDEVOPS_EXTRA_VARS)
-	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/fstests.yml --tags run_tests,copy_results --skip-tags git_update --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
+	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/fstests.yml --tags run_tests,copy_results --skip-tags git_update --extra-vars '{ kdevops_run_fstests: True $(DYNAMIC_RUNTIME_VARS) }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
 fstests-baseline-run-oscheck-only: $(KDEVOPS_EXTRA_VARS)
-	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/fstests.yml --tags run_tests,copy_results --skip-tags git_update,reboot,clean_results --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
+	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/fstests.yml --tags run_tests,copy_results --skip-tags git_update,reboot,clean_results --extra-vars '{ "kdevops_run_fstests": True, $(DYNAMIC_RUNTIME_VARS) }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
 fstests-dev: $(KDEVOPS_EXTRA_VARS)
-	$(Q)ansible-playbook -f 30 -i hosts -l dev playbooks/fstests.yml --tags run_tests,copy_results --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
+	$(Q)ansible-playbook -f 30 -i hosts -l dev playbooks/fstests.yml --tags run_tests,copy_results --extra-vars '{ kdevops_run_fstests: True $(DYNAMIC_RUNTIME_VARS) }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
 fstests-baseline-results: $(KDEVOPS_EXTRA_VARS)
 	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/fstests.yml --tags copy_results,print_results --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)

@@ -410,6 +410,7 @@
     dynamic_limit_tests: "{{ lookup('ansible.builtin.env', 'LIMIT_TESTS') }}"
   tags: [ 'oscheck', 'fstests', 'run_tests', 'vars', 'limit-tests' ]
   when:
+    - not run_tests_on_failures
     - kdevops_run_fstests|bool
 
 - name: Set test limit scope from build time settings, this may be empty
@@ -417,6 +418,7 @@
     all_limit_tests: "{{ limit_tests }}"
   tags: [ 'oscheck', 'fstests', 'run_tests', 'vars', 'limit-tests' ]
   when:
+    - not run_tests_on_failures
     - kdevops_run_fstests|bool
     - limit_tests is defined
     - limit_tests != None
@@ -426,6 +428,7 @@
     all_limit_tests: "{{ dynamic_limit_tests }}"
   tags: [ 'oscheck', 'fstests', 'run_tests', 'vars', 'limit-tests' ]
   when:
+    - not run_tests_on_failures
     - kdevops_run_fstests|bool
     - dynamic_limit_tests is defined
     - dynamic_limit_tests != None
@@ -436,9 +439,43 @@
     all_limit_tests: ""
   tags: [ 'oscheck', 'fstests', 'run_tests', 'vars', 'limit-tests' ]
   when:
+    - not run_tests_on_failures
     - kdevops_run_fstests|bool
     - all_limit_tests is defined
     - all_limit_tests == None
+
+- name: Run oscheck-get-failures.sh to get list of known failed tests
+  vars:
+    fstests_section: "{{ ansible_host | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
+  tags: [ 'oscheck', 'fstests', 'run_tests' ]
+  command: "{{ kdevops_data }}/workflows/fstests/scripts/oscheck-get-failures.sh --test-section {{ fstests_section }}"
+  args:
+    chdir: "{{ fstests_data_target }}"
+  environment:
+    FSTYP: "{{ fstests_fstyp }}"
+    FSTESTS_LINUX_LOCALVERSION: "{{ target_linux_localversion  | default ('') }}"
+    KEEP_DMESG: "yes"
+  register: failed_tests_limit
+  when:
+    - run_tests_on_failures
+    - kdevops_run_fstests|bool
+
+- name: Inform user no failures are known
+  fail:
+    msg: "No known failures for this run! Go find bugs!"
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'vars', 'limit-tests' ]
+  when:
+    - run_tests_on_failures
+    - kdevops_run_fstests|bool
+    - failed_tests_limit.stdout | replace('\n', ' ') | length == 0
+
+- name: Set test limit to known failed tests
+  set_fact:
+    all_limit_tests: "{{ failed_tests_limit.stdout | replace('\n', ' ') }}"
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'vars', 'limit-tests' ]
+  when:
+    - run_tests_on_failures
+    - kdevops_run_fstests|bool
 
 - name: Print test list limits for this run
   debug:
