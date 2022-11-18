@@ -674,9 +674,10 @@ oscheck_run_section()
 	fi
 	SECTION=$RUN_SECTION
 	oscheck_prefix_section $SECTION
-	oscheck_handle_section_expunges
-
-	oscheck_update_expunge_files
+	if [[ "$LIMIT_TESTS" == "" ]]; then
+		oscheck_handle_section_expunges
+		oscheck_update_expunge_files
+	fi
 	oscheck_count_check
 	oscheck_verify_intented_expunges $SECTION
 	SECTION_ARGS=
@@ -969,7 +970,9 @@ if [ -z "$FSTYP" ]; then
 	exit
 fi
 
-oscheck_handle_skipping_group
+if [[ "$LIMIT_TESTS" == "" ]]; then
+	oscheck_handle_skipping_group
+fi
 
 check_reqs
 DEPS_RET=$?
