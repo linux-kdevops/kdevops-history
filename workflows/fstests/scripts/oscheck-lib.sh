@@ -78,6 +78,10 @@ oscheck_lib_init_vars()
 	if [ -z "$OSCHECK_LIB_SKIP_NON_FAILURE_EXPUNGES" ]; then
 		export OSCHECK_LIB_SKIP_NON_FAILURE_EXPUNGES="n"
 	fi
+
+	if [ -z "$OSCHECK_LIB_CHATTY_DISTRO_CHECK" ]; then
+		export OSCHECK_LIB_CHATTY_DISTRO_CHECK="y"
+	fi
 }
 
 known_hosts()
@@ -179,7 +183,11 @@ oscheck_run_osfile_read()
 {
 	os_has_osfile_read $OSCHECK_ID
 	if [ $? -eq 0 ] ; then
-		${OSCHECK_ID}_read_osfile
+		if [[ "$OSCHECK_LIB_CHATTY_DISTRO_CHECK" == "n" ]]; then
+			${OSCHECK_ID}_read_osfile > /dev/null
+		else
+			${OSCHECK_ID}_read_osfile
+		fi
 	fi
 }
 
@@ -424,11 +432,15 @@ oscheck_distro_kernel_check()
 				echo "OSCHECK_ONLY_RUN_DISTRO_KERNEL"
 				exit 1
 			fi
-			echo "Running custom kernel: $(uname -a)"
+			if [[ "$OSCHECK_LIB_CHATTY_DISTRO_CHECK" == "y" ]]; then
+				echo "Running custom kernel: $(uname -a)"
+			fi
 		else
 			if [ "$ONLY_QUESTION_DISTRO_KERNEL" = "true" ]; then
-				echo "Running distro kernel"
-				uname -a
+				if [[ "$OSCHECK_LIB_CHATTY_DISTRO_CHECK" == "y" ]]; then
+					echo "Running distro kernel"
+					uname -a
+				fi
 				exit 0
 			fi
 		fi
