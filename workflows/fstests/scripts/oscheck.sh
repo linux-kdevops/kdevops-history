@@ -564,7 +564,7 @@ if [ $DEPS_RET -ne 0 ]; then
 	exit $DEPS_RET
 fi
 
-check_section
+oscheck_lib_check_section
 DEPS_RET=$?
 if [ $DEPS_RET -ne 0 ]; then
 	exit $DEPS_RET

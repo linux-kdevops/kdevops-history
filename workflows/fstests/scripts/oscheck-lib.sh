@@ -439,7 +439,7 @@ oscheck_lib_read_osfiles_verify_kernel()
 	oscheck_distro_kernel_check
 }
 
-check_section()
+oscheck_lib_check_section()
 {
 	if [ ! -e $HOST_OPTIONS ]; then
 		return 0;
