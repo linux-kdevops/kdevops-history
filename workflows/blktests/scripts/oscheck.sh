@@ -80,8 +80,7 @@ oscheck_usage()
 
 copy_to_check_arg()
 {
-	IDX=${#CHECK_ARGS[@]}
-	CHECK_ARGS[$IDX]="$1"
+	CHECK_ARGS+=" $1"
 }
 
 parse_args()
@@ -349,6 +348,7 @@ oscheck_handle_group_expunges()
 oscheck_run_cmd()
 {
 	if [ "$ONLY_SHOW_CMD" = "false" ]; then
+		echo "LC_ALL=C $OSCHECK_CMD" /tmp/run-cmd.txt
 		LC_ALL=C $OSCHECK_CMD
 	else
 		echo "LC_ALL=C $OSCHECK_CMD"
@@ -364,8 +364,8 @@ oscheck_run_groups()
 
 	if [[ "$LIMIT_TESTS" == "" ]]; then
 		oscheck_handle_group_expunges
+		oscheck_count_check
 	fi
-	oscheck_count_check
 	OSCHECK_CMD="./check ${RUN_GROUP} $EXPUNGE_FLAGS ${CHECK_ARGS[@]}"
 	oscheck_run_cmd
 
