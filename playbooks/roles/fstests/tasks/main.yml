@@ -487,6 +487,12 @@
     - all_limit_tests != None
     - all_limit_tests | length > 0
 
+- name: Stop fstests if we're debbugging limit_tests
+  ansible.builtin.meta: end_play
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'vars', 'limit-tests' ]
+  when:
+    - fstests_skip_run|bool
+
 - name: Run fstests using ./oscheck.sh --print-start --print-done --test-section {{ fstests_section }} {{ oscheck_extra_args }} {{ all_limit_tests }}
   vars:
     fstests_section: "{{ ansible_host | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"

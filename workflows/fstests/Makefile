@@ -111,6 +111,10 @@ ifneq (,$(RUN_FAILURES))
 DYNAMIC_RUNTIME_VARS += , "run_tests_on_failures": True
 endif
 
+ifneq (,$(SKIP_RUN))
+DYNAMIC_RUNTIME_VARS += , "fstests_skip_run": True
+endif
+
 fstests:
 	$(Q)ansible-playbook -f 30 -i hosts playbooks/fstests.yml --skip-tags run_tests,copy_results $(LIMIT_HOSTS)
 
