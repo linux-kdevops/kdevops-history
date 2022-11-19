@@ -58,7 +58,7 @@ TMP=$(oscheck_lib_mktemp)
 echo > $TMP
 
 for i in $EXPUNGE_TESTS; do
-	cat $echo | awk '{print $1}' | sed -e '/^$/d' >> $TMP
+	echo $i | awk '{print $1}' | sed -e '/^$/d' >> $TMP
 done
 
 cat $TMP | sort | uniq | sed -e '/^$/d'
