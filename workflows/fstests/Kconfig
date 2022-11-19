@@ -381,9 +381,17 @@ config FSTESTS_LOGWRITES_DEV
 
 if FSTESTS_XFS
 
+config FSTESTS_TEST_RTDEV
+	string "The fstests TEST_RTDEV to use"
+	default "/dev/loop13" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
+	depends on FSTESTS_XFS_SECTION_RTDEV
+	help
+	  To set devices to use for the TEST_RTDEV.
+
 config FSTESTS_SCRATCH_RTDEV
 	string "The fstests SCRATCH_RTDEV to use"
 	default "/dev/loop14" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
+	depends on FSTESTS_XFS_SECTION_RTDEV
 	help
 	  To set devices to use for the SCRATCH_RTDEV.
 

@@ -229,7 +229,7 @@ config FSTESTS_XFS_SECTION_LOGDEV
 	      FSTYP=xfs
 
 config FSTESTS_XFS_SECTION_RTDEV
-	bool "Enable testing section: xfs_realtimedev"
+	bool "Enable testing section: xfs_rtdev"
 	default y if HAVE_DISTRO_XFS_SUPPORTS_RT
 	default n if !HAVE_DISTRO_XFS_SUPPORTS_RT
 	help
@@ -239,12 +239,12 @@ config FSTESTS_XFS_SECTION_RTDEV
 	  disable these days. This enables a host which will use the following
 	  configuration:
 
-	      [xfs_realtimedev]
-	      MKFS_OPTIONS="-f -lsize=1g"
-	      SCRATCH_LOGDEV=@FSTESTSSCRATCHLOGDEV@
-	      SCRATCH_RTDEV=@FSTESTSSCRATCHRTDEV@
-	      USE_EXTERNAL=yes
+	      [xfs_rtdev]
 	      FSTYP=xfs
+	      TEST_DEV="/dev/some-dev"
+	      TEST_RTDEV="/dev/some-rt-dev"
+	      MKFS_OPTIONS="-f -lsize=1g -d rtinherit=1"
+	      SCRATCH_RTDEV=@FSTESTSSCRATCHRTDEV@
 
 endif # FSTESTS_XFS_SECTION_EXTERNAL_LOGS
 
