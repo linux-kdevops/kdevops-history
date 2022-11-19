@@ -258,7 +258,7 @@
     dynamic_limit_tests: "{{ lookup('ansible.builtin.env', 'LIMIT_TESTS') }}"
   tags: [ 'blktests', 'run_tests', 'limit-tests' ]
   when:
-    - not run_tests_on_failures
+    - not run_tests_on_failures|bool
     - kdevops_run_blktests|bool
 
 - name: Allow dynamic test override
@@ -266,7 +266,7 @@
     all_limit_tests: "{{ dynamic_limit_tests }}"
   tags: [ 'blktests', 'run_tests', 'limit-tests' ]
   when:
-    - not run_tests_on_failures
+    - not run_tests_on_failures|bool
     - kdevops_run_blktests|bool
     - dynamic_limit_tests is defined
     - dynamic_limit_tests != None
@@ -277,7 +277,7 @@
     all_limit_tests: ""
   tags: [ 'blktests', 'run_tests', 'limit-tests' ]
   when:
-    - not run_tests_on_failures
+    - not run_tests_on_failures|bool
     - kdevops_run_blktests|bool
     - all_limit_tests is defined
     - all_limit_tests == None
@@ -286,14 +286,12 @@
   vars:
     group: "{{ ansible_host | regex_replace('blktests-') | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
   tags: [ 'blktests', 'run_tests' ]
-  command: "{{ kdevops_data }}/workflows/fstests/scripts/oscheck-get-failures.sh --test-section {{ group }}"
+  command: "{{ kdevops_data }}/workflows/blktests/scripts/oscheck-get-failures.sh --test-group {{ group }}"
   args:
     chdir: "{{ blktests_data_target }}"
-  environment:
-    KEEP_DMESG: "yes"
   register: failed_tests_limit
   when:
-    - run_tests_on_failures
+    - run_tests_on_failures|bool
     - kdevops_run_blktests|bool
 
 - name: Inform user no failures are known
@@ -301,7 +299,7 @@
     msg: "No known failures for this run! Go find bugs!"
   tags: [ 'blktests', 'run_tests' ]
   when:
-    - run_tests_on_failures
+    - run_tests_on_failures|bool
     - kdevops_run_blktests|bool
     - failed_tests_limit.stdout | replace('\n', ' ') | length == 0
 
@@ -310,7 +308,7 @@
     all_limit_tests: "{{ failed_tests_limit.stdout | replace('\n', ' ') }}"
   tags: [ 'blktests', 'run_tests' ]
   when:
-    - run_tests_on_failures
+    - run_tests_on_failures|bool
     - kdevops_run_blktests|bool
 
 - name: Print list of test limits for this run

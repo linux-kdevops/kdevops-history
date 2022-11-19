@@ -4,6 +4,7 @@
 #
 # We default to not run tests.
 kdevops_run_blktests: False
+run_tests_on_failures: False
 
 # Ror instance you can use "-g quick" but note that this may produce
 # not results as all quick tests may be expunded.
