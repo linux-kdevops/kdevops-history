@@ -55,6 +55,10 @@ ifneq (,$(RUN_FAILURES))
 DYNAMIC_RUNTIME_VARS += , "run_tests_on_failures": True
 endif
 
+ifneq (,$(SKIP_RUN))
+DYNAMIC_RUNTIME_VARS += , "blktests_skip_run": True
+endif
+
 extend-extra-args-blktests:
 	@if [[ "$(CONFIG_KDEVOPS_WORKFLOW_ENABLE_BLKTESTS)" == "y" ]]; then \
 		echo "blktests_test_devs: '$(CONFIG_BLKTESTS_TEST_DEVS)'" >> $(KDEVOPS_EXTRA_VARS) ;\

@@ -321,6 +321,12 @@
     - all_limit_tests != None
     - all_limit_tests | length > 0
 
+- name: Stop blktests if we're debbugging limit_tests
+  ansible.builtin.meta: end_play
+  tags: [ 'blktests', 'run_tests' ]
+  when:
+    - blktests_skip_run|bool
+
 - name: Run blktests using oscheck.sh
   vars:
     group: "{{ ansible_host | regex_replace('blktests-') | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
