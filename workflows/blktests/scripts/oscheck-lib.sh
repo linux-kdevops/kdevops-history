@@ -55,6 +55,10 @@ oscheck_lib_init_vars()
 	VALID_GROUPS="$VALID_GROUPS scsi"
 	VALID_GROUPS="$VALID_GROUPS srp"
 	VALID_GROUPS="$VALID_GROUPS zbd"
+
+	if [ -z "$OSCHECK_LIB_CHATTY_DISTRO_CHECK" ]; then
+		export OSCHECK_LIB_CHATTY_DISTRO_CHECK="y"
+	fi
 }
 
 validate_run_group()
@@ -90,4 +94,64 @@ oscheck_lib_set_run_group()
 		fi
 		validate_run_group
 	fi
+}
+
+oscheck_include_os_files()
+{
+	if [ ! -e $OS_FILE ]; then
+		return
+	fi
+	if [ -z $OSCHECK_ID ]; then
+		return
+	fi
+	OSCHECK_INCLUDE_FILE="$OSCHECK_INCLUDE_PATH/$OSCHECK_ID/helpers.sh"
+	test -s $OSCHECK_INCLUDE_FILE && . $OSCHECK_INCLUDE_FILE || true
+	if [ ! -f $OSCHECK_INCLUDE_FILE ]; then
+		echo "Your distribution lacks $OSCHECK_INCLUDE_FILE file ..."
+	fi
+}
+
+os_has_osfile_read()
+{
+	if [ ! -e $OS_FILE ]; then
+		return 1
+	fi
+	declare -f ${OSCHECK_ID}_read_osfile > /dev/null;
+	return $?
+}
+
+oscheck_run_osfile_read()
+{
+	os_has_osfile_read $OSCHECK_ID
+	if [ $? -eq 0 ] ; then
+		if [[ "$OSCHECK_LIB_CHATTY_DISTRO_CHECK" == "n" ]]; then
+			${OSCHECK_ID}_read_osfile > /dev/null
+		else
+			${OSCHECK_ID}_read_osfile > /dev/null
+		fi
+	fi
+}
+
+# If you don't have the /etc/os-release we try to use lsb_release
+oscheck_read_osfile_and_includes()
+{
+	if [ -e $OS_FILE ]; then
+		eval $(grep '^ID=' $OS_FILE)
+		export OSCHECK_ID="$ID"
+		oscheck_include_os_files
+		oscheck_run_osfile_read
+	else
+		which lsb_release 2>/dev/null
+		if [ $? -eq 0 ]; then
+			export OSCHECK_ID="$(lsb_release -i -s | tr '[A-Z]' '[a-z]')"
+			oscheck_include_os_files
+			oscheck_run_osfile_read
+		fi
+	fi
+}
+
+oscheck_lib_read_osfiles_verify_kernel()
+{
+	oscheck_read_osfile_and_includes
+	oscheck_distro_kernel_check
 }
