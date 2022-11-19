@@ -410,7 +410,7 @@
     dynamic_limit_tests: "{{ lookup('ansible.builtin.env', 'LIMIT_TESTS') }}"
   tags: [ 'oscheck', 'fstests', 'run_tests', 'vars', 'limit-tests' ]
   when:
-    - not run_tests_on_failures
+    - not run_tests_on_failures|bool
     - kdevops_run_fstests|bool
 
 - name: Set test limit scope from build time settings, this may be empty
@@ -418,7 +418,7 @@
     all_limit_tests: "{{ limit_tests }}"
   tags: [ 'oscheck', 'fstests', 'run_tests', 'vars', 'limit-tests' ]
   when:
-    - not run_tests_on_failures
+    - not run_tests_on_failures|bool
     - kdevops_run_fstests|bool
     - limit_tests is defined
     - limit_tests != None
@@ -428,7 +428,7 @@
     all_limit_tests: "{{ dynamic_limit_tests }}"
   tags: [ 'oscheck', 'fstests', 'run_tests', 'vars', 'limit-tests' ]
   when:
-    - not run_tests_on_failures
+    - not run_tests_on_failures|bool
     - kdevops_run_fstests|bool
     - dynamic_limit_tests is defined
     - dynamic_limit_tests != None
@@ -439,7 +439,7 @@
     all_limit_tests: ""
   tags: [ 'oscheck', 'fstests', 'run_tests', 'vars', 'limit-tests' ]
   when:
-    - not run_tests_on_failures
+    - not run_tests_on_failures|bool
     - kdevops_run_fstests|bool
     - all_limit_tests is defined
     - all_limit_tests == None
@@ -457,7 +457,7 @@
     KEEP_DMESG: "yes"
   register: failed_tests_limit
   when:
-    - run_tests_on_failures
+    - run_tests_on_failures|bool
     - kdevops_run_fstests|bool
 
 - name: Inform user no failures are known
@@ -465,7 +465,7 @@
     msg: "No known failures for this run! Go find bugs!"
   tags: [ 'oscheck', 'fstests', 'run_tests', 'vars', 'limit-tests' ]
   when:
-    - run_tests_on_failures
+    - run_tests_on_failures|bool
     - kdevops_run_fstests|bool
     - failed_tests_limit.stdout | replace('\n', ' ') | length == 0
 
@@ -474,7 +474,7 @@
     all_limit_tests: "{{ failed_tests_limit.stdout | replace('\n', ' ') }}"
   tags: [ 'oscheck', 'fstests', 'run_tests', 'vars', 'limit-tests' ]
   when:
-    - run_tests_on_failures
+    - run_tests_on_failures|bool
     - kdevops_run_fstests|bool
 
 - name: Print test list limits for this run
