@@ -362,22 +362,23 @@ config FSTESTS_SCRATCH_MNT
 	  This sets the SCRATCH_MNT variable.
 
 config FSTESTS_LOGWRITES_DEV
-	string "The fstests LOGWRITES_DEV to use"
+	string "The fstests LOGWRITES_DEV to use for powerfailing tests"
 	default "/dev/loop15" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 	help
-	  To set of spare devices to use for the fstests SCRATCH_DEV_POOL.
+	  To set devices to use for the LOGWRITES_DEV, this is used for
+	  power failing tests. This requires and uses the device mapper
+	  target log-writes (Linux CONFIG_DM_LOG_WRITES, the target is
+	  dm-log-writes). This target is used to write log all write
+	  operations done to the real device. This is for use by file
+	  system developers wishing to verify that their fs is writing a
+	  consistent file system at all times by allowing them to replay the
+	  log in a variety of ways and to check the contents.
 
 config FSTESTS_SCRATCH_LOGDEV
 	string "The fstests SCRATCH_LOGDEV to use"
 	default "/dev/loop15" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 	help
 	  To set devices to use for the SCRATCH_LOGDEV.
-
-config FSTESTS_LOGWRITES_DEV
-	string "The fstests LOGWRITES_DEV to use"
-	default "/dev/loop15" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
-	help
-	  To set devices to use for the LOGWRITES_DEV.
 
 if FSTESTS_XFS
 
