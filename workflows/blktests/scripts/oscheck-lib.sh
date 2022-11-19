@@ -43,4 +43,51 @@ oscheck_lib_init_vars()
 
 	export EXPUNGE_TESTS=""
 	export EXPUNGE_TESTS_COUNT=0
+
+	export RUN_GROUP=""
+
+	export VALID_GROUPS="block"
+	VALID_GROUPS="$VALID_GROUPS loop"
+	VALID_GROUPS="$VALID_GROUPS meta"
+	VALID_GROUPS="$VALID_GROUPS nbd"
+	VALID_GROUPS="$VALID_GROUPS nvme"
+	VALID_GROUPS="$VALID_GROUPS nvmeof-mp"
+	VALID_GROUPS="$VALID_GROUPS scsi"
+	VALID_GROUPS="$VALID_GROUPS srp"
+	VALID_GROUPS="$VALID_GROUPS zbd"
+}
+
+validate_run_group()
+{
+	VALID_GROUP="false"
+	for i in $VALID_GROUPS; do
+		if [[ "$RUN_GROUP" == "$i" ]]; then
+			VALID_GROUP="true"
+		fi
+	done
+	if [[ "$VALID_GROUP" != "true" ]]; then
+		echo "Invalid group: $RUN_GROUP"
+		echo "Allowed groups: $VALID_GROUPS"
+		exit 1
+	fi
+}
+
+oscheck_lib_set_run_group()
+{
+	LOCAL_TEST_GROUP=$1
+
+	INFER_GROUP=$(echo $HOST | sed -e 's|-dev||')
+	INFER_GROUP=$(echo $INFER_GROUP | sed -e 's|-|_|g')
+	INFER_GROUP=$(echo $INFER_GROUP | awk -F"_" '{for (i=2; i <= NF; i++) { printf $i; if (i!=NF) printf "_"}; print NL}')
+
+	if [[ "$LIMIT_TESTS" == "" ]]; then
+		if [ "$LOCAL_TEST_GROUP" != "" ]; then
+			RUN_GROUP="$LOCAL_TEST_GROUP"
+			echo "Only testing group: $LOCAL_TEST_GROUP"
+		else
+			RUN_GROUP="$INFER_GROUP"
+			echo "Only testing inferred group: $RUN_GROUP"
+		fi
+		validate_run_group
+	fi
 }
