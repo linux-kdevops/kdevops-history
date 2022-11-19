@@ -386,3 +386,16 @@ oscheck_lib_set_expunges()
 		oscheck_count_check
 	fi
 }
+
+oscheck_lib_mktemp()
+{
+	which mktemp > /dev/null
+	if [[ $? -eq 0 ]]; then
+		mktemp
+	else
+		LOCAL_MKTEMP_TMP="/tmp/$$.oscheck_expunges_all.txt"
+		touch $LOCAL_MKTEMP_TMP
+		echo $LOCAL_MKTEMP_TMP
+
+	fi
+}
