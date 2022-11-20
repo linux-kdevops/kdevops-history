@@ -699,12 +699,12 @@
     tests_full_group_dir: "{{ item.path | dirname }}"
     tests_group_dir: "{{ tests_full_group_dir | split('/') | last }}"
     tests_dmesg_name: "{{ item.path | basename | split('.') | first }}.dmesg"
-    tests_name: "{{ tests_group_dir }}/{{ tests_full_name }}"
+    tests_name: "{{ tests_group_dir }}/{{ tests_dmesg_name }}"
   stat:
     path: "{{ tests_full_group_dir }}/{{ tests_dmesg_name }}"
   with_items: "{{ failed_tests.files }}"
   loop_control:
-    label: "Looking for {{ tests_name }} dmesg"
+    label: "Looking for {{ tests_name }}"
   register: bad_dmesg_file_stats
   when:
     - failed_tests.matched > 0
@@ -718,7 +718,7 @@
     tests_full_group_dir: "{{ item.item.path | dirname }}"
     tests_group_dir: "{{ tests_full_group_dir | split('/') | last }}"
     tests_dmesg_name: "{{ item.item.path | basename | split('.') | first }}.dmesg"
-    tests_name: "{{ tests_group_dir }}/{{ tests_full_name }}"
+    tests_name: "{{ tests_group_dir }}/{{ tests_dmesg_name }}"
   fetch:
     src: "{{ item.stat.path }}"
     dest: "{{ fstests_results_target }}/{{ item.stat.path | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
