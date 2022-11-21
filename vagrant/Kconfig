@@ -125,7 +125,7 @@ if VAGRANT_LIBVIRT
 
 choice
 	prompt "Machine type to use"
-	default LIBVIRT_MACHINE_TYPE_DEFAULT
+	default LIBVIRT_MACHINE_TYPE_Q35
 
 config LIBVIRT_MACHINE_TYPE_DEFAULT
 	bool "Use the default machine type"
