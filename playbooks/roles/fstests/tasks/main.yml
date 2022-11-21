@@ -234,7 +234,9 @@
     src: "{{ topdir_path }}/workflows/fstests/{{ fstests_fstyp }}//{{ ansible_host }}.config"
     dest: "{{ fstests_data_target }}/configs/{{ ansible_host }}.config"
     force: yes
-  when: host_specific_fstests_config.stat.exists
+  when:
+    - not fstests_debug_localhost|bool
+    - host_specific_fstests_config.stat.exists
 
 - name: Copy and force overwrite of the target filesystem fstests configuration
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
@@ -245,7 +247,9 @@
     src: "{{ fstests_fstyp }}/{{ fstests_fstyp }}.config"
     dest: "{{ fstests_data_target }}/configs/{{ ansible_host }}.config"
     force: yes
-  when: not host_specific_fstests_config.stat.exists
+  when:
+    - not fstests_debug_localhost|bool
+    - not host_specific_fstests_config.stat.exists
 
 - name: Reboot system before our test so we know everything is sane
   tags: [ 'oscheck', 'fstests', 'run_tests', 'reboot' ]
