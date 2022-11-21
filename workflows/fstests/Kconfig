@@ -326,6 +326,23 @@ config FSTESTS_TEST_DEV
 	  To test with fstests one must set the TEST_DEV variable, this sets
 	  the TEST_DEV to use.
 
+if FSTESTS_XFS_SECTION_LOGDEV
+
+config FSTESTS_TEST_LOGDEV
+	string "The device to use TEST_LOGDEV on fstests"
+	default "/dev/loop13" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
+	help
+	  To test with fstests with an external journal you can set this to
+	  device which will be used for the journal.
+
+config FSTESTS_TEST_LOGDEV_MKFS_OPTS
+	string "The extra mkfs options to use for the external journal"
+	default "-lsize=1g"
+	help
+	  This sets the mkfs options to configure the external journal.
+
+endif
+
 config FSTESTS_TEST_DEV_ZNS
 	string "The device to use TEST_DEV on fstests for ZNS testing"
 	depends on VAGRANT_ENABLE_ZNS

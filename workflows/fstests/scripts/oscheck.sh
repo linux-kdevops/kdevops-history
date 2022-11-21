@@ -441,7 +441,10 @@ oscheck_test_dev_setup()
 	fi
 	check_mount $TEST_DIR
 	if [ $? -ne 0 ]; then
-		mount $TEST_DEV $TEST_DIR
+		OSCHECK_MOUNT_CMD="mount $TEST_OPTIONS $TEST_FS_MOUNT_OPTS $SELINUX_MOUNT_OPTIONS  $TEST_DEV $TEST_DIR"
+		echo "$(basename $0) initial mount for $TEST_DIR using:"
+		echo $OSCHECK_MOUNT_CMD
+		$OSCHECK_MOUNT_CMD
 	fi
 }
 

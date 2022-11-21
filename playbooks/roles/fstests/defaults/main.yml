@@ -17,6 +17,8 @@ fstests_data: "{{ data_path }}/fstests"
 fstests_data_target: "/var/lib/xfstests/"
 fstests_setup_system: "n"
 fstests_test_dev: "/dev/null"
+fstests_test_logdev: "/dev/null"
+fstests_test_logdev_mkfs_opts: "/dev/null"
 fstests_test_dev_zns: "/dev/null"
 fstests_zns_enabled: False
 sparsefiles_generation: False

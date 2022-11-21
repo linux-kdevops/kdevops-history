@@ -154,7 +154,11 @@ else
 	if [ "$error" == "yes" ]; then
 		exit 1
 	fi
-	CMD="mkfs.$FSTYP $MKFS_OPTIONS $TEST_DEV"
+	LOG_MKFS_OPTS=""
+	if [[ "$TEST_LOGDEV" != "" ]]; then
+		LOG_MKFS_OPTS="-llogdev=$TEST_LOGDEV"
+	fi
+	CMD="mkfs.$FSTYP $MKFS_OPTIONS $LOG_MKFS_OPTS $TEST_DEV"
 	echo "$CMD"
 	$CMD
 fi

@@ -26,6 +26,10 @@ FSTESTS_ARGS += fstests_setup_system='$(FSTESTS_SETUP_SYSTEM)'
 FSTESTS_ARGS += fstests_data_target='$(FSTESTS_DATA_TARGET)'
 FSTESTS_ARGS += fstests_test_dev='$(FSTESTS_TEST_DEV)'
 
+ifeq (y,$(CONFIG_FSTESTS_XFS))
+include $(TOPDIR)/workflows/fstests/Makefile.xfs
+endif
+
 ifeq (y,$(CONFIG_QEMU_ENABLE_NVME_ZNS))
 FSTESTS_ARGS += fstests_test_dev_zns='$(subst ",,$(CONFIG_FSTESTS_TEST_DEV_ZNS))'
 FSTESTS_ARGS += fstests_zns_enabled='$(subst ",,$(CONFIG_QEMU_ENABLE_NVME_ZNS))'
