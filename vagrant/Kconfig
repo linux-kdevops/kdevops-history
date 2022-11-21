@@ -730,7 +730,7 @@ config VAGRANT_INSTALL_PRIVATE_BOXES
 choice
 	prompt "Libvirt nvme drive file format"
 	depends on VAGRANT_LIBVIRT
-	default LIBVIRT_NVME_DRIVE_FORMAT_QCOW2
+	default LIBVIRT_NVME_DRIVE_FORMAT_RAW
 
 config LIBVIRT_NVME_DRIVE_FORMAT_QCOW2
 	bool "Use qcow2 format"
