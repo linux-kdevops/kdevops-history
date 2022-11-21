@@ -36,5 +36,7 @@
       - hwinfo
       - open-iscsi
       - python3-pip
+      - zstd
+      - libncurses-dev
     state: present
   tags: linux
