@@ -25,6 +25,8 @@
     group: "{{ storage_pool_group }}"
   delegate_to: localhost
   run_once: true
+  when:
+    - libvirt_storage_pool_create|bool
 
 - name: Create a kdevops specific storage pool for vagrant if it does not exist
   become: yes
@@ -37,3 +39,5 @@
     group: "{{ kdevops_storage_pool_group }}"
   delegate_to: localhost
   run_once: true
+  when:
+    - libvirt_storage_pool_create|bool

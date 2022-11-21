@@ -11,6 +11,7 @@ kdevops_storage_pool_group: "root"
 
 libvirt_provider: False
 virtualbox_provider: False
+libvirt_storage_pool_create: False
 
 storage_pool_path: "/dev/null"
 kdevops_storage_pool_path: "/dev/null"
