@@ -140,6 +140,11 @@ fstests-baseline-skip-kdevops-update: $(KDEVOPS_EXTRA_VARS)
 fstests-baseline-run-oscheck-only: $(KDEVOPS_EXTRA_VARS)
 	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/fstests.yml --tags run_tests,copy_results --skip-tags git_update,reboot,clean_results --extra-vars '{ $(DYNAMIC_RUNTIME_VARS) }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
+fstests-config: $(KDEVOPS_EXTRA_VARS)
+	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/fstests.yml \
+		--tags vars,generate-fstests-config \
+		--extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
+
 fstests-config-debug: $(KDEVOPS_EXTRA_VARS)
 	$(Q)ansible-playbook --connection=local \
 		--inventory localhost, \
@@ -165,6 +170,7 @@ fstests-help-menu:
 	@echo "fstests-baseline                        - Run fstests on baseline hosts and collect results"
 	@echo "fstests-dev                             - Run fstests on dev hosts and collect results"
 	@echo ""
+	@echo "fstests-config                          - Generates the filesystem configuration file only onto target systems"
 	@echo "fstests-config-debug                    - Generates the filesystem configuration file locally, useful for debugging"
 	@echo ""
 	@echo "fstests-baseline-results                - Only collect results for baseline hosts"
