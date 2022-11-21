@@ -134,7 +134,7 @@ config SETUP_POSTFIX_EMAIL_RELAY
 
 config HYPERVISOR_TUNING
 	bool "Enable kernel hypervisor tunings"
-	default y if VAGRANT
+	default y if KDEVOPS_FIRST_RUN
 	help
 	  If you are going to be using a kernel-ci setup with virtualization
 	  it means you will end up with many guests using the same software
