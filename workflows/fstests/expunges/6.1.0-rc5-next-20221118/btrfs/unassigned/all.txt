@@ -1,0 +1,38 @@
+btrfs/011 # crash on raid6_avx5121_gen_syndrome https://gist.github.com/mcgrof/4f4d59a6d6057d2147949cbc49a41b13
+btrfs/029 # lazy baseline - failure found in at least two sections
+btrfs/080 # fails on section btrfs_simple but we expect this to fail for others https://gist.github.com/mcgrof/7ae85812aeacd62ab221eda2fab4552e
+btrfs/099
+btrfs/131 # lazy baseline - failure found in at least two sections
+btrfs/175
+btrfs/176
+btrfs/194
+btrfs/197
+btrfs/216
+btrfs/219
+btrfs/220
+btrfs/223
+btrfs/225
+btrfs/232 # kernel warning btrfs_noraid56 WARNING: CPU: 5 PID: 823784 at fs/btrfs/space-info.h:110 btrfs_free_reserved_data_space+0x179/0x190 https://gist.github.com/mcgrof/041f78010f8094a75cfa9a3a7bcb7d02
+btrfs/238
+btrfs/249
+btrfs/254 # lazy baseline - failure found in at least two sections
+btrfs/258 # lazy baseline - failure found in at least two sections
+btrfs/263 # lazy baseline - failure found in at least two sections
+generic/208 # lazy baseline - dmesg failure rate is about 1/60 try with zswap pressure on the host https://gist.github.com/mcgrof/8296499615800048d658abbadb7ebe22
+generic/224 # fails with a hang on btrfs_raid56 section but let's skip for all sections for now
+generic/226 # lazy baseline - failure found in at least two sections - failure rate 1/20 requires a fix in btrfs-progs I have queued https://gist.github.com/mcgrof/81771a86ef0b90152e142e597d5f4147
+generic/241
+generic/260
+generic/300 # fails on btrfs_simple so chances are other sections should fail too - failure rate is about 1/10 hung task on btrfs_wait_ordered_extents() https://gist.github.com/mcgrof/2696e71d3322becfe3811260fbe1ec3a
+generic/371 # found to have taken once 10 times the amount it took to run the first run so 305s vs 26s for 1173% difference on btrfs_simple, this variablity should be looked into
+generic/373 # lazy baseline - failure found in at least two sections
+generic/374 # lazy baseline - failure found in at least two sections
+generic/471 # broken test
+generic/509 # low-hanging-fruit: device-mapper reload ioctl on flakey-test device or resource busy #  https://gist.github.com/mcgrof/05be5f0b6b9c669bef9481ace6299529
+generic/633
+generic/644
+generic/645
+generic/648 # fails on btrfs_noraid56 section but the error seems generic so skip for now see that section for details - failure rate is about 1/50 https://gist.github.com/mcgrof/c3f6dae20800da6f1bda607d0c0275b3
+generic/673 # lazy baseline - failure found in at least two sections - failure rate 1/4
+generic/679 # lazy baseline - failure found in at least two sections
+shared/298
