@@ -82,7 +82,42 @@
 
 # Distro agnostic stuff to build and boot Linux goes below
 
-- name: git clone {{ target_linux_tree }}
+- name: mount bootlinux 9p and add to fstab if it does not exist
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  mount:
+    name: "{{ target_linux_dir_path }}"
+    src: "{{ bootlinux_9p_mount_tag }}"
+    fstype: "9p"
+    opts: "ro,trans=virtio,version=9p2000.L,posixacl,cache=loose"
+    state: "mounted"
+  tags: [ 'data_partition' ]
+  when:
+    - bootlinux_9p|bool
+
+- name: Copy kernel delta if requested on the client side
+  template:
+    src: "{{ target_linux_extra_patch }}"
+    dest: "{{ target_linux_dir_path }}/{{ target_linux_extra_patch }}"
+    owner: "{{ data_user }}"
+    group: "{{ data_group }}"
+    mode: 0644
+  tags: [ 'linux', 'git', 'config' ]
+  when:
+    - not bootlinux_9p|bool
+    - target_linux_extra_patch is defined
+
+- name: Copy kernel delta if requested on the host side
+  template:
+    src: "{{ target_linux_extra_patch }}"
+    dest: "{{ bootlinux_9p_host_path }}/{{ target_linux_extra_patch }}"
+    owner: "{{ data_user }}"
+  when:
+    - bootlinux_9p|bool
+    - target_linux_extra_patch is defined
+
+- name: git clone {{ target_linux_tree }} on the client side
   git:
     repo: "{{ target_linux_git }}"
     dest: "{{ target_linux_dir_path }}"
@@ -94,8 +129,27 @@
   register: result
   until: not result.failed
   tags: [ 'linux', 'git', 'clone']
+  when:
+    - not bootlinux_9p|bool
 
-- name: Copy kernel delta if requested
+- name: git clone {{ target_linux_tree }} on the host side
+  git:
+    repo: "{{ target_linux_git }}"
+    dest: "{{ bootlinux_9p_host_path }}"
+    update: yes
+    depth: "{{ target_linux_shallow_depth }}"
+    version: "{{ target_linux_tag }}"
+  retries: 3
+  delay: 5
+  register: result
+  until: not result.failed
+  tags: [ 'linux', 'git', 'clone']
+  when:
+    - bootlinux_9p|bool
+  run_once: true
+  delegate_to: localhost
+
+- name: Copy kernel delta if requested on the client side
   template:
     src: "{{ target_linux_extra_patch }}"
     dest: "{{ target_linux_dir_path }}/{{ target_linux_extra_patch }}"
@@ -103,14 +157,43 @@
     group: "{{ data_group }}"
     mode: 0644
   tags: [ 'linux', 'git', 'config' ]
-  when: target_linux_extra_patch is defined
+  when:
+    - not bootlinux_9p|bool
+    - target_linux_extra_patch is defined
 
-- name: Apply kernel delta if requested
+- name: Copy kernel delta if requested on the host side
+  template:
+    src: "{{ target_linux_extra_patch }}"
+    dest: "{{ bootlinux_9p_host_path }}/{{ target_linux_extra_patch }}"
+    owner: "{{ data_user }}"
+    group: "{{ data_group }}"
+    mode: 0644
+  tags: [ 'linux', 'git', 'config' ]
+  when:
+    - bootlinux_9p|bool
+    - target_linux_extra_patch is defined
+  run_once: true
+  delegate_to: localhost
+
+- name: Apply kernel delta if requested on the client side
   command: "git am {{ target_linux_extra_patch }}"
   args:
     chdir: "{{ target_linux_dir_path }}"
   tags: [ 'linux', 'git', 'extra-patch', 'skip_ansible_lint' ]
-  when: target_linux_extra_patch is defined
+  when:
+    - not bootlinux_9p|bool
+    - target_linux_extra_patch is defined
+
+- name: Apply kernel delta if requested on the host side
+  command: "git am {{ target_linux_extra_patch }}"
+  args:
+    chdir: "{{ bootlinux_9p_host_path }}"
+  tags: [ 'linux', 'git', 'extra-patch', 'skip_ansible_lint' ]
+  when:
+    - bootlinux_9p|bool
+    - target_linux_extra_patch is defined
+  run_once: true
+  delegate_to: localhost
 
 - name: Set git user name and email if needed
   shell: |
@@ -132,17 +215,31 @@
   when:
     - target_linux_apply_patch_message_id is defined
 
-- name: Apply message patch set if requested
+- name: Apply message patch set if requested on the client side
   shell: b4 am -o - {{target_linux_apply_patch_message_id}} | git am
   args:
     chdir: "{{ target_linux_dir_path }}"
   tags: [ 'linux', 'extra-patch', 'skip_ansible_lint' ]
   when:
+    - not bootlinux_9p|bool
     - target_linux_apply_patch_message_id is defined
     - target_linux_apply_patch_message_id | length > 0
     - hostname_ends_in_dev
 
-- name: Copy configuration for linux {{ target_linux_tree }}
+- name: Apply message patch set if requested on the host side
+  shell: b4 am -o - {{target_linux_apply_patch_message_id}} | git am
+  args:
+    chdir: "{{ bootlinux_9p_host_path }}"
+  tags: [ 'linux', 'extra-patch', 'skip_ansible_lint' ]
+  when:
+    - bootlinux_9p|bool
+    - target_linux_apply_patch_message_id is defined
+    - target_linux_apply_patch_message_id | length > 0
+    - hostname_ends_in_dev
+  run_once: true
+  delegate_to: localhost
+
+- name: Copy configuration for linux {{ target_linux_tree }} on the client side
   template:
     src: "{{ target_linux_config }}"
     dest: "{{ target_linux_dir_path }}/.config"
@@ -150,13 +247,37 @@
     group: "{{ data_group }}"
     mode: 0644
   tags: [ 'linux', 'git', 'config' ]
+  when:
+    - not bootlinux_9p|bool
 
-- name: Set kernel localversion if requested
+- name: Copy configuration for linux {{ target_linux_tree }} on the host side
+  template:
+    src: "{{ target_linux_config }}"
+    dest: "{{ bootlinux_9p_host_path }}/.config"
+    mode: 0644
+  tags: [ 'linux', 'git', 'config' ]
+  when:
+    - bootlinux_9p|bool
+  run_once: true
+  delegate_to: localhost
+
+- name: Set kernel localversion if requested on the client side
   shell: "echo {{ target_linux_localversion }} > {{ target_linux_dir_path }}/localversion"
   tags: [ 'linux', 'git', 'config' ]
-  when: target_linux_localversion is defined
+  when:
+    - not bootlinux_9p|bool
+    - target_linux_localversion is defined
 
-- name: Configure linux {{ target_linux_tree }}
+- name: Set kernel localversion if requested on the host side
+  shell: "echo {{ target_linux_localversion }} > {{ bootlinux_9p_host_path }}/localversion"
+  tags: [ 'linux', 'git', 'config' ]
+  when:
+    - bootlinux_9p|bool
+    - target_linux_localversion is defined
+  run_once: true
+  delegate_to: localhost
+
+- name: Configure linux {{ target_linux_tree }} on the client side
   shell: |
     set -o pipefail
     yes "" | make oldconfig
@@ -167,14 +288,53 @@
     chdir: "{{ target_linux_dir_path }}"
     executable: /bin/bash
   tags: [ 'linux', 'oldconfig' ]
+  when:
+    - not bootlinux_9p|bool
 
-- name: Build linux {{ target_linux_tree }}
+- name: Configure linux {{ target_linux_tree }} on the host side
+  shell: |
+    set -o pipefail
+    yes "" | make oldconfig
+  register: configure_done
+  changed_when: configure_done.rc == 0 or configure_done.rc == 141
+  failed_when: configure_done.rc != 0 and configure_done.rc != 141
+  args:
+    chdir: "{{ bootlinux_9p_host_path }}"
+    executable: /bin/bash
+  tags: [ 'linux', 'oldconfig' ]
+  when:
+    - bootlinux_9p|bool
+  run_once: true
+  delegate_to: localhost
+
+- name: Build linux {{ target_linux_tree }} on the client side
   command: "{{ target_linux_make_cmd }}"
   register: build
   changed_when: "build.rc == 0"
   args:
     chdir: "{{ target_linux_dir_path }}"
   tags: [ 'linux', 'build-linux' ]
+  when:
+    - not bootlinux_9p|bool
+
+- name: Get nproc on the host side
+  command: "{{ num_jobs }}"
+  tags: [ 'qemu', 'configure' ]
+  register: nproc
+  when:
+    - bootlinux_9p|bool
+  run_once: true
+  delegate_to: localhost
+
+- name: Build linux {{ target_linux_tree }} on the host side using {{ nproc.stdout }} threads
+  make:
+    jobs: "{{ nproc.stdout }}"
+    chdir: "{{ bootlinux_9p_host_path }}"
+  tags: [ 'linux', 'build-linux' ]
+  when:
+    - bootlinux_9p|bool
+  run_once: true
+  delegate_to: localhost
 
 # Say you want to remove a kernel you no longer care for:
 # ansible-playbook -i hosts --tags uninstall-linux --extra-vars "uninstall_kernel_ver=4.19.58" bootlinux.yml
@@ -230,7 +390,7 @@
   tags: [ 'linux', 'git', 'config', 'saved' ]
   when: ansible_facts['os_family']|lower == 'redhat'
 
-- name: Install linux {{ target_linux_tree }}
+- name: Install linux {{ target_linux_tree }} on the client side
   become: yes
   become_flags: 'su - -c'
   become_method: sudo

@@ -34,3 +34,11 @@ target_linux_make_install_cmd: "{{ make }} modules_install install"
 
 # If defined we'll apply this delta for you.
 # target_linux_extra_patch: foo.patch
+
+bootlinux_9p: False
+bootlinux_9p_host_path: "/dev/null"
+bootlinux_9p_msize: 0
+bootlinux_9p_fsdev: "ignore"
+bootlinux_9p_mount_tag: "ignore"
+bootlinux_9p_security_model: "none"
+bootlinux_9p_driver: "virtio-9p-pci"
