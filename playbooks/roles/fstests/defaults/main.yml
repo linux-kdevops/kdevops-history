@@ -43,3 +43,4 @@ fstests_scratch_devpool_zns: "/dev/nvme5n1 /dev/nvme6n1 /dev/nvme7n1 /dev/nvme8n
 run_auto_group_tests: 'n'
 run_custom_group_tests: ''
 run_tests_on_failures: False
+fstests_debug_localhost: False

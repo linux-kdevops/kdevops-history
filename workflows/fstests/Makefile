@@ -136,6 +136,15 @@ fstests-baseline-skip-kdevops-update: $(KDEVOPS_EXTRA_VARS)
 fstests-baseline-run-oscheck-only: $(KDEVOPS_EXTRA_VARS)
 	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/fstests.yml --tags run_tests,copy_results --skip-tags git_update,reboot,clean_results --extra-vars '{ $(DYNAMIC_RUNTIME_VARS) }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
+fstests-config-debug: $(KDEVOPS_EXTRA_VARS)
+	$(Q)ansible-playbook --connection=local \
+		--inventory localhost, \
+		playbooks/fstests.yml \
+		-e 'ansible_python_interpreter=/usr/bin/python3' \
+		-e 'fstests_debug_localhost=True' \
+		--tags vars,generate-fstests-config \
+		--extra-vars=@./extra_vars.yaml
+
 fstests-dev: $(KDEVOPS_EXTRA_VARS)
 	$(Q)ansible-playbook -f 30 -i hosts -l dev playbooks/fstests.yml --tags run_tests,copy_results --extra-vars '{ $(DYNAMIC_RUNTIME_VARS) }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
@@ -151,6 +160,9 @@ fstests-help-menu:
 	@echo "fstests-kdevops-setup                   - Install kdevops specific files, the fstests and running test targets also runs this"
 	@echo "fstests-baseline                        - Run fstests on baseline hosts and collect results"
 	@echo "fstests-dev                             - Run fstests on dev hosts and collect results"
+	@echo ""
+	@echo "fstests-config-debug                    - Generates the filesystem configuration file locally, useful for debugging"
+	@echo ""
 	@echo "fstests-baseline-results                - Only collect results for baseline hosts"
 	@echo "fstests-dev-results                     - Only collect results for dev hosts"
 	@echo "fstests-baseline-skip-kdevops-update    - Run fstests but skip updating kdevops"

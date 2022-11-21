@@ -42,6 +42,7 @@ workflows/fstests/bad_results.txt
 workflows/fstests/results/
 workflows/fstests/*/hosts_generated.in
 workflows/fstests/.begin
+workflows/fstests/*/*.config.generated
 
 workflows/blktests/hosts_generated.in
 workflows/blktests/.begin
