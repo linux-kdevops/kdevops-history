@@ -205,18 +205,22 @@
     path: "{{ topdir_path }}/workflows/fstests/{{ fstests_fstyp }}/{{ inventory_hostname }}.config"
   register: host_specific_fstests_config
 
-- name: Generate filesystem configuration file for debugging purposes using host specific config
+- name: Generate filesystem configuration file for debugging purposes using host specific config {{ target_config }}
   tags: [ 'generate-fstests-config' ]
+  vars:
+    target_config: "{{ topdir_path }}/workflows/fstests/{{ fstests_fstyp }}/{{ fstests_fstyp }}.config.generated"
   template:
     src: "{{ topdir_path }}/workflows/fstests/{{ fstests_fstyp }}/{{ ansible_host }}.config"
-    dest: "{{ topdir_path }}/workflows/fstests/{{ fstests_fstyp }}/{{ fstests_fstyp }}.config.generated"
+    dest: "{{ target_config }}"
     force: yes
   when:
     - fstests_debug_localhost|bool
     - host_specific_fstests_config.stat.exists
 
-- name: Generate filesystem configuration file for debugging purposes using generic config
+- name: Generate filesystem configuration file for debugging purposes using generic config {{ target_config }}
   tags: [ 'generate-fstests-config' ]
+  vars:
+    target_config: "{{ topdir_path }}/workflows/fstests/{{ fstests_fstyp }}/{{ fstests_fstyp }}.config.generated"
   template:
     src: "{{ fstests_fstyp }}/{{ fstests_fstyp }}.config"
     dest: "{{ topdir_path }}/workflows/fstests/{{ fstests_fstyp }}/{{ fstests_fstyp }}.config.generated"
