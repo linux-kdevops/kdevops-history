@@ -225,6 +225,9 @@ PHONY += clean
 clean:
 	$(Q)$(MAKE) -f scripts/build.Makefile $@
 
+version-check:
+	$(Q)$(MAKE) -f scripts/build.Makefile $@
+
 PHONY += mrproper
 mrproper:
 	$(Q)$(MAKE) -f scripts/build.Makefile clean

@@ -15,6 +15,7 @@ mrproper:
 version-check: include/config/project.release
 	@$(Q)echo Version: $(PROJECTVERSION)
 	@$(Q)echo Release: $(PROJECTRELEASE)
+PHONY += version-check
 
 PHONY += help
 help:
