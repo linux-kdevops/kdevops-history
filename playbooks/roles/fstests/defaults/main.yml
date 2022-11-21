@@ -48,3 +48,14 @@ run_auto_group_tests: 'n'
 run_custom_group_tests: ''
 run_tests_on_failures: False
 fstests_debug_localhost: False
+
+fstests_xfs_section_crc: False
+fstests_xfs_section_nocrc: False
+fstests_xfs_section_nocrc_512: False
+fstests_xfs_section_reflink: False
+fstests_xfs_section_reflink_1024: False
+fstests_xfs_section_reflink_normapbt: False
+fstests_xfs_section_logdev: False
+fstests_xfs_section_rtdev: False
+fstests_xfs_section_rtlogdev: False
+fstests_xfs_section_bigblock: False

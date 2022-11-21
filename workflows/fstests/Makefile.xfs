@@ -4,3 +4,43 @@ FSTESTS_ARGS += fstests_test_logdev='$(subst ",,$(CONFIG_FSTESTS_TEST_LOGDEV))'
 export FSTESTS_TEST_LOGDEV_MKFS_OPTS:=$(subst ",,$(CONFIG_FSTESTS_TEST_LOGDEV_MKFS_OPTS))
 FSTESTS_ARGS_SEPARATED += fstests_test_logdev_mkfs_opts='$(subst $(space),+,$(FSTESTS_TEST_LOGDEV_MKFS_OPTS))'
 endif
+
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_CRC))
+FSTESTS_ARGS += fstests_xfs_section_crc=True
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_NOCRC))
+FSTESTS_ARGS += fstests_xfs_section_nocrc=True
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_NOCRC_512))
+FSTESTS_ARGS += fstests_xfs_section_nocrc_512=True
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK))
+FSTESTS_ARGS += fstests_xfs_section_reflink=True
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_1024))
+FSTESTS_ARGS += fstests_xfs_section_reflink_1024=True
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_NORMAPBT))
+FSTESTS_ARGS += fstests_xfs_section_reflink_normapbt=True
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_LOGDEV))
+FSTESTS_ARGS += fstests_xfs_section_logdev=True
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_RTDEV))
+FSTESTS_ARGS += fstests_xfs_section_rtdev=True
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_RTLOGDEV))
+FSTESTS_ARGS += fstests_xfs_section_rtlogdev=True
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_BIGBLOCK))
+FSTESTS_ARGS += fstests_xfs_section_bigblock=True
+endif
