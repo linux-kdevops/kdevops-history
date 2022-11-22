@@ -148,6 +148,26 @@ config LIBVIRT_MACHINE_TYPE_Q35
 
 endchoice
 
+config LIBVIRT_HOST_PASSTHROUGH
+	bool "Use CPU host-passthrough"
+	default y
+	help
+	  Enable this to be able to also carry the same CPU your host has to
+	  the guest. As per qemu documentation this is the recommended CPU
+	  type to use, provided live migration is not required. And we're
+	  not supporting live-migration on kdevops so this our default too.
+	  This will also enable you to use things like perf stat and
+	  get access to some PMUs:
+
+	  perf stat --repeat 2 -e \
+	    dTLB-loads,dTLB-load-misses,dTLB-stores,dTLB-stores-misses,\
+	    iTLB-loads,iTLB-load-misses,\
+	    itlb_misses.walk_completed_4k\
+	    itlb_misses.walk_completed_2m_4m\
+	    page-faults,tlb:tlb_flush  \
+	      --pre 'make -s mrproper defconfig' \
+	    \-- make -s -j$(nproc) bzImage
+
 config QEMU_BUILD
 	bool "Should we build qemu for you?"
 	select NEEDS_LOCAL_DEVELOPMENT_PATH

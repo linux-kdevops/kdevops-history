@@ -14,6 +14,10 @@ GEN_NODES_EXTRA_ARGS += qemu_bin_path='$(subst ",,$(CONFIG_QEMU_BIN_PATH))'
 GEN_NODES_EXTRA_ARGS += libvirt_uri='$(subst ",,$(CONFIG_LIBVIRT_URI))'
 GEN_NODES_EXTRA_ARGS += libvirt_system_uri='$(subst ",,$(CONFIG_LIBVIRT_SYSTEM_URI))'
 
+ifeq (y,$(CONFIG_LIBVIRT_HOST_PASSTHROUGH))
+GEN_NODES_EXTRA_ARGS += libvirt_host_passthrough='True'
+endif
+
 ifeq (y,$(CONFIG_LIBVIRT_SESSION))
 GEN_NODES_EXTRA_ARGS += libvirt_session='True'
 GEN_NODES_EXTRA_ARGS += libvirt_session_socket='$(subst ",,$(CONFIG_LIBVIRT_SESSION_SOCKET))'
