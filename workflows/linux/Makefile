@@ -30,6 +30,7 @@ BOOTLINUX_ARGS	+= target_linux_apply_patch_message_id='$(CONFIG_BOOTLINUX_TEST_M
 BOOTLINUX_ARGS	+= target_linux_install_b4='$(CONFIG_BOOTLINUX_TEST_MESSAGE_ID_INSTALL_B4)'
 endif
 
+LINUX_CLONE_DEFAULT_TYPE := linux-clone-clients
 ifeq (y,$(CONFIG_BOOTLINUX_9P))
 BOOTLINUX_ARGS	+= bootlinux_9p=True
 BOOTLINUX_ARGS	+= bootlinux_9p_host_path='$(subst ",,$(CONFIG_BOOTLINUX_9P_HOST_PATH))'
@@ -38,12 +39,14 @@ BOOTLINUX_ARGS	+= bootlinux_9p_fsdev='$(subst ",,$(CONFIG_BOOTLINUX_9P_FSDEV))'
 BOOTLINUX_ARGS	+= bootlinux_9p_security_model='$(subst ",,$(CONFIG_BOOTLINUX_9P_SECURITY_MODEL))'
 BOOTLINUX_ARGS	+= bootlinux_9p_driver='$(subst ",,$(CONFIG_BOOTLINUX_9P_DRIVER))'
 BOOTLINUX_ARGS	+= bootlinux_9p_mount_tag='$(subst ",,$(CONFIG_BOOTLINUX_9P_MOUNT_TAG))'
+LINUX_CLONE_DEFAULT_TYPE := linux-clone-9p
 endif
 
 WORKFLOW_ARGS += $(BOOTLINUX_ARGS)
 linux-help-menu:
 	@echo "Linux git kernel development options"
 	@echo "linux              - Git clones a linux git tree, build linux and reboots into it"
+	@echo "linux-clone        - Only clones Linux"
 	@echo "linux-grub-setup   - Ensures the appropriate target kernel is set to boot"
 	@echo "linux-reboot       - Reboot guests"
 	@echo "uname              - Prints current running kernel"
@@ -54,6 +57,24 @@ linux: $(KDEVOPS_NODES)
 	$(Q)ansible-playbook -i \
 		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
 		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS)
+
+linux-clone-clients: $(KDEVOPS_NODES)
+	$(Q)ansible-playbook -i \
+		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
+		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS) \
+		--tags vars,deps,clone
+
+PHONY += linux-clone-9p
+linux-clone-9p: $(KDEVOPS_NODES)
+	$(Q)ansible-playbook --connection=local \
+		--inventory localhost, \
+		$(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
+		-e 'ansible_python_interpreter=/usr/bin/python3' \
+		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS) \
+		--tags vars,deps,clone
+
+PHONY += linux-clone
+linux-clone: $(KDEVOPS_NODES) $(LINUX_CLONE_DEFAULT_TYPE)
 
 PHONY += linux-grub-setup
 linux-grub-setup: $(KDEVOPS_NODES)

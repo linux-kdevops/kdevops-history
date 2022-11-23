@@ -47,6 +47,11 @@ KDEVOPS_STORAGE_POOL_PATH:=$(STORAGE_POOL_PATH)/kdevops
 VAGRANT_ARGS += storage_pool_path=$(STORAGE_POOL_PATH)
 VAGRANT_ARGS += kdevops_storage_pool_path=$(KDEVOPS_STORAGE_POOL_PATH)
 
+VAGRANT_9P_HOST_CLONE :=
+ifeq (y,$(CONFIG_BOOTLINUX_9P))
+VAGRANT_9P_HOST_CLONE := vagrant_9p_linux_clone
+endif
+
 EXTRA_VAR_INPUTS += extend-extra-args-vagrant
 ANSIBLE_EXTRA_ARGS += $(VAGRANT_ARGS)
 
@@ -61,7 +66,10 @@ vagrant_private_box_install:
 	$(Q)ansible-playbook -i \
 		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/install_vagrant_boxes.yml
 
-bringup_vagrant: $(VAGRANT_PRIVATE_BOX_DEPS)
+vagrant_9p_linux_clone:
+	$(Q)make linux-clone
+
+bringup_vagrant: $(VAGRANT_PRIVATE_BOX_DEPS) $(VAGRANT_9P_HOST_CLONE)
 	$(Q)$(TOPDIR)/scripts/bringup_vagrant.sh
 	$(Q)if [[ "$(CONFIG_KDEVOPS_SSH_CONFIG_UPDATE)" == "y" ]]; then \
 		ansible-playbook --connection=local \
