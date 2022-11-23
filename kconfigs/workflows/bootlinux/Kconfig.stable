@@ -57,6 +57,11 @@ config BOOTLINUX_STABLE_V60
 	help
 	  Automatically enable the latest supported linux-6.0.y kernel.
 
+config BOOTLINUX_STABLE_V61
+	bool "linux-6.1.y"
+	help
+	  Automatically enable the latest supported linux-6.0.y kernel.
+
 endchoice
 
 endif # BOOTLINUX_TREE_STABLE
