@@ -692,7 +692,7 @@
     path: "{{ tests_full_group_dir }}/{{ tests_full_name }}"
   with_items: "{{ failed_tests.files }}"
   loop_control:
-    label: "Looking for {{ tests_name }}"
+    label: "Looking for {{ tests_full_group_dir }}/{{ tests_full_name }}"
   register: bad_full_file_stats
   when:
     - failed_tests.matched > 0
@@ -718,7 +718,7 @@
     - failed_tests.matched > 0
     - item.stat.exists
 
-- name: Check if respective dmesg file exists exists for failed tests
+- name: Check if respective dmesg file exists for failed tests
   tags: [ 'oscheck', 'fstests', 'copy_results', 'failed_tests' ]
   become: yes
   become_flags: 'su - -c'
@@ -732,7 +732,7 @@
     path: "{{ tests_full_group_dir }}/{{ tests_dmesg_name }}"
   with_items: "{{ failed_tests.files }}"
   loop_control:
-    label: "Looking for {{ tests_name }}"
+    label: "Looking for {{ tests_full_group_dir }}/{{ tests_dmesg_name }}"
   register: bad_dmesg_file_stats
   when:
     - failed_tests.matched > 0
