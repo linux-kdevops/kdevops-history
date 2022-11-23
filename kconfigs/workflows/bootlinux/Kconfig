@@ -121,7 +121,7 @@ if BOOTLINUX_9P
 
 config BOOTLINUX_9P_HOST_PATH
 	string "9p host path"
-	default $(shell, echo $HOME/linux-next)
+	default $(shell, echo $PWD/linux)
 	help
 	  This sets the 9p host path that will be used. This is the path
 	  that has your or we'll clone the respective linux git tree.
