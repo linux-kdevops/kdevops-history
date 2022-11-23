@@ -70,7 +70,7 @@ linux-clone-9p: $(KDEVOPS_NODES)
 		--inventory localhost, \
 		$(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
 		-e 'ansible_python_interpreter=/usr/bin/python3' \
-		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS) \
+		--extra-vars="$(BOOTLINUX_ARGS)" \
 		--tags vars,deps,clone
 
 PHONY += linux-clone
