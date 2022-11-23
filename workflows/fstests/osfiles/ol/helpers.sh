@@ -70,7 +70,7 @@ ol_restart_ypbind()
 	esac
 }
 
-ol_kernel_check()
+ol_distro_kernel_check()
 {
         KERNEL_BOOT_CONFIG="/boot/config-$(uname -r)"
         if [ ! -e $KERNEL_BOOT_CONFIG ]; then
