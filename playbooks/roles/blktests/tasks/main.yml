@@ -161,6 +161,7 @@
 - name: Set the path where we collect our blktests results
   set_fact:
     blktests_results_target: "../workflows/blktests/results/"
+    blktests_results_full_path: "{{ topdir_path }}/workflows/blktests/results/"
   tags: [ 'blktests', 'run_tests', 'copy_results', 'prior_run', 'print_results' , 'augment_expunge_list' ]
 
 - name: Set the path where we collect blktests expunges
@@ -177,8 +178,14 @@
   command: "uname -r"
   register: uname_cmd
 
+- name: Store last kernel variable
+  set_fact:
+    last_kernel: "{{ uname_cmd.stdout_lines | regex_replace('\\]') | regex_replace('\\[') | replace(\"'\",'') }}"
+  tags: [ 'blktests', 'copy_results', 'augment_expunge_list' ]
+  run_once: true
+
 - name: Document used target kernel version
-  local_action: "shell echo {{ uname_cmd.stdout_lines | regex_replace('\\]') | regex_replace('\\[') }} > {{ blktests_results_target }}/last-kernel.txt"
+  local_action: "shell echo {{ last_kernel }} > {{ blktests_results_target }}/last-kernel.txt"
   tags: [ 'blktests', 'copy_results', 'augment_expunge_list' ]
   run_once: true
 
@@ -410,3 +417,14 @@
     msg: "New expunge files found: {{ new_expunges.stdout_lines }}"
   when:
     - new_expunges.stdout != 0
+
+# You are encouraged to commit the compressed results of failed tests
+# so we keep an archive
+- name: Compress results {{ blktests_results_full_path }}.xz
+  community.general.archive:
+    path: "{{ blktests_results_full_path }}/{{ last_kernel }}"
+    dest: "{{ blktests_results_full_path }}/{{ last_kernel }}.xz"
+    format: xz
+  run_once: true
+  tags: [ 'blktests', 'copy_results', 'augment_expunge_list' ]
+  delegate_to: localhost
