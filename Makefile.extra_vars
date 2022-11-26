@@ -4,6 +4,7 @@
 
 EXTRA_VAR_INPUTS += most_extra_vars
 EXTRA_VAR_INPUTS += most_extra_vars_separated
+EXTRA_VAR_INPUTS += most_extra_vars_direct
 
 # This ensures that for instance running 'make fstests-baseline-loop' will
 # have the respective filesystem configuration file
@@ -29,6 +30,21 @@ $(subst +, ,$(1))
 
 endef
 
+# firstword only works with spaces, so we must introduce artificial spaces
+# so we capture the first entry, we peg the '=' at the end after that and
+# use that to substitute $first=% / $first:%
+#
+# We may be able to use YAML_ENTRY_DIRECT for all variables and then we
+# phase out the others. This requires more inspection. But best would be
+# for us to just add yaml output support directly upstream to kconfig.
+define YAML_ENTRY_DIRECT
+$(patsubst $(firstword $(subst =, ,$(1)))=%,$(firstword $(subst =, ,$(1))): "%",$(1))
+
+endef
+
+#$(patsubst $(firstword $(subst =, ,$(1)))=%,$(firstword $(subst =, ,$(1))):%,$(1))
+#$(patsubst $(firstword $(subst =, ,$(1))=)%,$(firstword $(subst =, , $(1):)%,$(1)),$(1))
+
 # We can transform most of .config things we need to using
 # looping on ANSIBLE_EXTRA_ARGS and converting those with
 # this target. If you need to do more complex fancy stuff
@@ -44,3 +60,8 @@ most_extra_vars:
 # then substitute the "+" for the space when echoing the variable again.
 most_extra_vars_separated:
 	@$(foreach exp,$(ANSIBLE_EXTRA_ARGS_SEPARATED),echo $(call YAML_ENTRY_SEP,$(subst =,: ,"$(exp)") >> $(KDEVOPS_EXTRA_VARS)))
+
+# These are variable we want to express as-is, and which may also contain
+# a '=' inside of it.
+most_extra_vars_direct:
+	@$(foreach exp,$(ANSIBLE_EXTRA_ARGS_DIRECT),echo $(call YAML_ENTRY_DIRECT,$(exp) >> $(KDEVOPS_EXTRA_VARS)))
