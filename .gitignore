@@ -2,6 +2,8 @@
 *.o
 *.retry
 
+linux
+
 log.txt
 logtime.txt
 run.sh
