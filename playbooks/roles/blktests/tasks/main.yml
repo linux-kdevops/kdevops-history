@@ -15,7 +15,7 @@
   tags: [ 'data_partition' ]
 
 # Distro specific
-- include: tasks/install-deps/main.yml
+- include_tasks: tasks/install-deps/main.yml
 
 - name: git clone kdevops
   environment:
