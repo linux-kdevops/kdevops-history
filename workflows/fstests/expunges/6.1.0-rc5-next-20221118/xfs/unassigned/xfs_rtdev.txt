@@ -1,8 +1,39 @@
+generic/012
+generic/013
+generic/015 # mkfs failed with extra mkfs options added to "-f -d rtinherit=1"
+generic/016
+generic/021
+generic/022
+generic/027 # mkfs failed with extra mkfs options added to "-f -d rtinherit=1"
 generic/054
+generic/058
+generic/060
+generic/061
+generic/063
+generic/074
+generic/075
+generic/077 # mkfs failed with extra mkfs options added to "-f -d rtinherit=1"
 generic/081
+generic/096 # mkfs failed with extra mkfs options added to "-f -d rtinherit=1"
+generic/102 # mkfs failed with extra mkfs options added to "-f -d rtinherit=1"
 generic/108
+generic/112
+generic/113
+generic/171 # mkfs failed with extra mkfs options added to "-f -d rtinherit=1"
+generic/172
+generic/173 # mkfs failed with extra mkfs options added to "-f -d rtinherit=1"
+generic/174 # mkfs failed with extra mkfs options added to "-f -d rtinherit=1"
 generic/204
 generic/223
+generic/224
+generic/226 # mkfs failed with extra mkfs options added to "-f -d rtinherit=1"
+generic/256 # mkfs failed with extra mkfs options added to "-f -d rtinherit=1"
+generic/269 # mkfs failed with extra mkfs options added to "-f -d rtinherit=1"
+generic/270 # mkfs failed with extra mkfs options added to "-f -d rtinherit=1"
+generic/274 # mkfs failed with extra mkfs options added to "-f -d rtinherit=1"
+generic/275 # mkfs failed with extra mkfs options added to "-f -d rtinherit=1"
+generic/300 # mkfs failed with extra mkfs options added to "-f -d rtinherit=1"
+generic/312 # mkfs failed with extra mkfs options added to "-f -d rtinherit=1"
 generic/361
 shared/298
 xfs/002 # xfs_growfs: log growth not supported yet
