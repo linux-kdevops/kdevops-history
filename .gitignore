@@ -41,7 +41,7 @@ playbooks/python/workflows/fstests/gen_results_summary.pyc
 
 workflows/fstests/new_expunge_files.txt
 workflows/fstests/bad_results.txt
-workflows/fstests/results/last-run/
+workflows/fstests/results/*/
 workflows/fstests/results/last-kernel.txt
 workflows/fstests/*/hosts_generated.in
 workflows/fstests/.begin
