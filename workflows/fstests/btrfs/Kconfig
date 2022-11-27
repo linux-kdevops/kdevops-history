@@ -35,70 +35,381 @@ config FSTESTS_BTRFS_ENABLES_RAID56
 	default y if !HAVE_DISTRO_BTRFS_DISABLES_RAID56
 	default n if HAVE_DISTRO_BTRFS_DISABLES_RAID56
 	help
-	  This will create a host to test the baseline of fstests using the
-	  following configuration, which enables CRC, which was enabled by
-	  default as of the v3.2.3 xfsprogs release:
+	  This allow you to proceed to test raid5 or 6 tests. Disabling
+	  this will simply try to skip all raid5 or raid6 tests for all
+	  profiles.
 
-	      [xfs]
-	      MKFS_OPTIONS='-f -m crc=1,reflink=0,rmapbt=0, -i sparse=0'
-	      FSTYP=btrfs
+	  Raid 5 and 6 have known issues on btrfs, and so somoe distributions
+	  opt out of supporting it.
 
-config FSTESTS_BTRFS_SECTION_RAID56
-	bool "Enable testing section: btrfs_raid56"
-	default y if FSTESTS_BTRFS_ENABLES_RAID56
-	default n if !FSTESTS_BTRFS_ENABLES_RAID56
-	help
-	  Enabling this will test btrfs assuming raid 5 and raid 6 are
-	  enabled and supported on your kernel.
-
-config FSTESTS_BTRFS_SECTION_NORAID56
-	bool "Enable testing section: btrfs_noraid56"
+config FSTESTS_BTRFS_ENABLES_COMPRESSION
+	bool "Enable testing compression profiles"
 	default y
 	help
-	  Raid 5 and 6 have known issues on btrfs, and so somoe distributions
-	  opt out of supporting it. If you disable raid 5 and 6 support you
-	  want to enable testing this section as it will ensure you skip out
-	  on tests which are related to only raid 5 or 6. We currently have an
-	  expunge list which we use to ensure you don't run tests related to
-	  raid 5 or 6.
+	  Enable this to allow you to test btrfs test profiles which enable
+	  compression.
 
-	  If you enable raid 5 and 6 support, you can enable testing this
-	  section, however the results will just be a subset of the results
-	  from testing section btrfs_raid56.
+if FSTESTS_BTRFS_ENABLES_COMPRESSION
+
+config FSTESTS_BTRFS_ENABLES_COMPRESSION_ZLIB
+	bool "Enable testing zlib compression profiles"
+	default y
+	help
+	  Enable this to allow you to test zlib compression profiles.
+
+config FSTESTS_BTRFS_ENABLES_COMPRESSION_LZO
+	bool "Enable testing lzo compression profiles"
+	default y
+	help
+	  Enable this to allow you to test lzo compression profiles.
+
+config FSTESTS_BTRFS_ENABLES_COMPRESSION_ZSTD
+	bool "Enable testing zstd compression profiles"
+	default y
+	help
+	  Enable this to allow you to test zstd compression profiles. The
+	  zstandard (zstd) is a real-time compression algorithm, providing
+	  high compression ratios. It offers a very wide range of compression
+	  / speed trade-off, while being backed by a very fast decoder. It
+	  also offers a special mode for small data, called dictionary
+	  compression, and can create dictionaries from any sample set. btrfs
+	  got zstd as of v4.14. zstd should outperform lzo in terms of
+	  compression ratio.
+
+endif # FSTESTS_BTRFS_ENABLES_COMPRESSION
+
+config FSTESTS_BTRFS_ENABLES_HOLES
+	bool "Enable testing holes profiles"
+	default y
+	help
+	  Enable this to allow you to test btrfs test profiles which don't
+	  enable the no-holes, nor the free space feature. Since the no-holes
+	  feature was added as of v3.14, enablint this will let you test
+	  btrfs for older kernels.
+
+config FSTESTS_BTRFS_ENABLES_NOHOLES
+	bool "Enable testing no-holes profiles"
+	default y
+	help
+	  Enable this to allow you to test btrfs test profiles which enable
+	  the no-holes feature. The no-holes feature saves a few percent of
+	  metadata when sparse files are used. btrfs-progs enables it as
+	  default as of 5.15, and kernel support was added since v3.14.
+
+config FSTESTS_BTRFS_ENABLES_FSPACE
+	bool "Enable testing free-space-tree profiles"
+	default y
+	help
+	  Enable this to allow you to test btrfs test profiles which enable
+	  free-space-tree feature. The free-space-tree feature persists the
+	  free space cache. btrfs-progs enables it as default as of 5.15, and
+	  kernel support was added since v4.5. This can either be enabled
+	  at mkfs time or at mount at runtime via the mount option
+	  space_cache=v2.
+
+config FSTESTS_BTRFS_ENABLES_NOHOFSPACE
+	bool "Enable testing no-holes + free-space-tree profiles"
+	default y
+	help
+	  Enable this to allow you to test btrfs test profiles which enable
+	  both the no-holes and free-space-tree feature.
+
+if FSTESTS_BTRFS_ENABLES_HOLES
+
+config FSTESTS_BTRFS_SECTION_HOLES
+	bool "Enable testing section: btrfs_holes"
+	default y
+	help
+	  This disables the free space tree and also the the no-holes feature.
+	  The "hole" part of the name is used as a prefix to reflect this setup
+	  likely reflects systems which didn't yet have support for the no-hole
+	  feature. This is useful for testing kernels older than v3.14 or when
+	  using btrfs-progs older than 5.15. Note that the discard=async
+	  was made default as of v5.20 and so for modern kernels this not needed
+	  explicitly.
+
+config FSTESTS_BTRFS_SECTION_HOLES_ZLIB
+	bool "Enable testing section: btrfs_holes_zlib"
+	default y
+	depends on FSTESTS_BTRFS_ENABLES_COMPRESSION_ZLIB
+	help
+	  This will disable the free space tree and the no-holes feature
+	  and zlib compression.
+
+config FSTESTS_BTRFS_SECTION_HOLES_LZO
+	bool "Enable testing section: btrfs_holes_lzo"
+	default y
+	depends on FSTESTS_BTRFS_ENABLES_COMPRESSION_LZO
+	help
+	  This will disable the free space tree and the no-holes feature
+	  and lzo compression.
+
+config FSTESTS_BTRFS_SECTION_HOLES_ZSTD
+	bool "Enable testing section: btrfs_holes_zstd"
+	default y
+	depends on FSTESTS_BTRFS_ENABLES_COMPRESSION_ZSTD
+	help
+	  This will disable the free space tree and the no-holes feature
+	  but enable zstd compression and async discard.
+
+endif # FSTESTS_BTRFS_ENABLES_HOLES
+
+if FSTESTS_BTRFS_ENABLES_NOHOLES
+
+config FSTESTS_BTRFS_SECTION_NOHOLES
+	bool "Enable testing section: btrfs_noholes"
+	default y
+	help
+	  This enables the no-holes feature but disable the free space tree.
+
+config FSTESTS_BTRFS_SECTION_NOHOLES_ZLIB
+	bool "Enable testing section: btrfs_noholes_zlib"
+	default y
+	depends on FSTESTS_BTRFS_ENABLES_COMPRESSION_ZLIB
+	help
+	  This enables the no-holes feature, disables the free space tree
+	  and enables zlib compression.
+
+config FSTESTS_BTRFS_SECTION_NOHOLES_LZO
+	bool "Enable testing section: btrfs_noholes_lzo"
+	default y
+	depends on FSTESTS_BTRFS_ENABLES_COMPRESSION_LZO
+	help
+	  This enables the no-holes feature, disables the free space tree
+	  and enables zlib compression.
+
+config FSTESTS_BTRFS_SECTION_NOHOLES_ZSTD
+	bool "Enable testing section: btrfs_noholes_zstd"
+	default y
+	depends on FSTESTS_BTRFS_ENABLES_COMPRESSION_ZSTD
+	help
+	  This enables the no-holes feature, disables the free space tree
+	  and enables zlib compression.
+
+endif # FSTESTS_BTRFS_ENABLES_NOHOLES
+
+if FSTESTS_BTRFS_ENABLES_FSPACE
+
+config FSTESTS_BTRFS_SECTION_FSPACE
+	bool "Enable testing section: btrfs_fspace"
+	default y
+	help
+	  This will enable free space tree but disable the no-holes feature.
+
+config FSTESTS_BTRFS_SECTION_FSPACE_DSYNC
+	bool "Enable testing section: btrfs_fspace_dsync"
+	default n
+	help
+	  This will enable free space tree but disable the no-holes feature
+	  but uses synchronous discard instead of the default async discard.
+	  This is disabled by default as this tries to address testing a
+	  corner case.
+
+
+config FSTESTS_BTRFS_SECTION_FSPACE_ZLIB
+	bool "Enable testing section: btrfs_fspace_zlib"
+	default y
+	depends on FSTESTS_BTRFS_ENABLES_COMPRESSION_ZLIB
+	help
+	  This will enable free space tree but disable the no-holes feature
+	  and uses zlib compression.
+
+config FSTESTS_BTRFS_SECTION_FSPACE_LZO
+	bool "Enable testing section: btrfs_fspace_lzo"
+	default y
+	depends on FSTESTS_BTRFS_ENABLES_COMPRESSION_LZO
+	help
+	  This will enable free space tree but disable the no-holes feature
+	  and uses lzo compression.
+
+config FSTESTS_BTRFS_SECTION_FSPACE_ZSTD
+	bool "Enable testing section: btrfs_fspace_zstd"
+	default y
+	depends on FSTESTS_BTRFS_ENABLES_COMPRESSION_ZSTD
+	help
+	  This will enable free space tree but disable the no-holes feature
+	  and uses zstd compression.
+
+endif # FSTESTS_BTRFS_ENABLES_FSPACE
+
+if FSTESTS_BTRFS_ENABLES_NOHOFSPACE
+
+config FSTESTS_BTRFS_SECTION_NOHOFSPACE
+	bool "Enable testing section: btrfs_nohofspace"
+	default y
+	help
+	  This will enable both the no-holes and free space tree features.
+
+config FSTESTS_BTRFS_SECTION_NOHOFSPACE_ZLIB
+	bool "Enable testing section: btrfs_nohofspace_zlib"
+	default y
+	depends on FSTESTS_BTRFS_ENABLES_COMPRESSION_ZLIB
+	help
+	  This will enable both the no-holes and free space tree features
+	  and uses zlib compression.
+
+config FSTESTS_BTRFS_SECTION_NOHOFSPACE_LZO
+	bool "Enable testing section: btrfs_nohofspace_lzo"
+	default y
+	depends on FSTESTS_BTRFS_ENABLES_COMPRESSION_LZO
+	help
+	  This will enable both the no-holes and free space tree features
+	  and uses lzo compression.
+
+config FSTESTS_BTRFS_SECTION_NOHOFSPACE_ZSTD
+	bool "Enable testing section: btrfs_nohofspace_zstd"
+	default y
+	depends on FSTESTS_BTRFS_ENABLES_COMPRESSION_ZSTD
+	help
+	  This will enable both the no-holes and free space tree features
+	  and uses zstd compression.
+
+endif # FSTESTS_BTRFS_ENABLES_NOHOFSPACE
 
 config FSTESTS_BTRFS_SECTION_SIMPLE
 	bool "Enable testing section: btrfs_simple"
 	default y
 	help
-	  This will use the following simple options to create a btrfs
-	  filesystem:
-
-	      [btrfs_simple]
-	      MKFS_OPTIONS='-f -d single -m single'
-	      FSTYP=btrfs
+	  This will use the following simple profile for data and metadata.
+	  This profile is used to help ensure that issues found when testing
+	  with ZNS are not present with the respective simple profile without
+	  ZNS. We don't expect many folks using btrfs to use the simple profile
+	  but it is supported, so we might as well test it.
 
 config FSTESTS_BTRFS_SECTION_SIMPLE_ZNS
 	bool "Enable testing section: btrfs_simple_zns"
 	default y
 	help
-	  This will use the following simple options to create a btrfs
-	  filesystem for ZNS drives:
-
-	      [btrfs_simple]
-	      MKFS_OPTIONS='-f -d single -m single'
-	      FSTYP=btrfs
+	  This will uses ZNS support and so uses the currently required simple
+	  data and metdata profiles.
 
 endif # FSTESTS_BTRFS_MANUAL_COVERAGE
 
 if !FSTESTS_BTRFS_MANUAL_COVERAGE
 
-config FSTESTS_BTRFS_SECTION_RAID56
+config FSTESTS_BTRFS_ENABLES_RAID56
+	bool
+	default n
+
+config FSTESTS_BTRFS_ENABLES_COMPRESSION
 	bool
 	default y
 
-config FSTESTS_BTRFS_SECTION_NORAID56
+config FSTESTS_BTRFS_ENABLES_COMPRESSION_ZLIB
 	bool
 	default n
+
+config FSTESTS_BTRFS_ENABLES_COMPRESSION_LZO
+	bool
+	default n
+
+config FSTESTS_BTRFS_ENABLES_COMPRESSION_ZSTD
+	bool
+	default y
+
+config FSTESTS_BTRFS_ENABLES_HOLES
+	bool
+	default n
+
+config FSTESTS_BTRFS_ENABLES_NOHOLES
+	bool
+	default n
+
+config FSTESTS_BTRFS_ENABLES_FSPACE
+	bool
+	default y
+
+config FSTESTS_BTRFS_ENABLES_NOHOFSPACE
+	bool
+	default y
+
+if FSTESTS_BTRFS_ENABLES_HOLES
+
+config FSTESTS_BTRFS_SECTION_HOLES
+	bool
+	default y
+
+config FSTESTS_BTRFS_SECTION_HOLES_ZLIB
+	bool
+	default n
+
+config FSTESTS_BTRFS_SECTION_HOLES_LZO
+	bool
+	default n
+
+config FSTESTS_BTRFS_SECTION_HOLES_ZSTD
+	bool
+	default n
+
+endif # FSTESTS_BTRFS_ENABLES_HOLES
+
+if FSTESTS_BTRFS_ENABLES_NOHOLES
+
+config FSTESTS_BTRFS_SECTION_NOHOLES
+	bool
+	default y
+
+config FSTESTS_BTRFS_SECTION_NOHOLES_ZLIB
+	bool
+	default n
+
+config FSTESTS_BTRFS_SECTION_NOHOLES_LZO
+	bool
+	default n
+
+config FSTESTS_BTRFS_SECTION_NOHOLES_ZSTD
+	bool
+	default n
+
+endif # FSTESTS_BTRFS_ENABLES_NOHOLES
+
+if FSTESTS_BTRFS_ENABLES_FSPACE
+
+config FSTESTS_BTRFS_SECTION_FSPACE
+	bool
+	default y
+
+config FSTESTS_BTRFS_SECTION_FSPACE_DSYNC
+	bool
+	default n
+
+config FSTESTS_BTRFS_SECTION_FSPACE_ZLIB
+	bool
+	default n
+
+config FSTESTS_BTRFS_SECTION_FSPACE_LZO
+	bool
+	default n
+
+config FSTESTS_BTRFS_SECTION_FSPACE_ZSTD
+	bool
+	default y
+
+endif # FSTESTS_BTRFS_ENABLES_FSPACE
+
+if FSTESTS_BTRFS_ENABLES_NOHOFSPACE
+
+config FSTESTS_BTRFS_SECTION_NOHOFSPACE
+	bool
+	default y
+
+config FSTESTS_BTRFS_SECTION_NOHOFSPACE_ZLIB
+	bool
+	default n
+
+config FSTESTS_BTRFS_SECTION_NOHOFSPACE_LZO
+	bool
+	default n
+
+config FSTESTS_BTRFS_SECTION_NOHOFSPACE_ZSTD
+	bool
+	default y
+
+endif # FSTESTS_BTRFS_ENABLES_NOHOFSPACE
+
+config FSTESTS_BTRFS_SECTION_SIMPLE
+	bool
+	default y
 
 config FSTESTS_BTRFS_SECTION_SIMPLE_ZNS
 	bool

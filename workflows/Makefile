@@ -7,8 +7,12 @@ include workflows/common/Makefile
 
 BOOTLINUX_ARGS	:=
 ifeq (y,$(CONFIG_BOOTLINUX))
+WORKFLOW_ARGS += kdevops_bootlinux='True'
 include workflows/linux/Makefile
 endif # CONFIG_BOOTLINUX == y
+ifeq (,$(CONFIG_BOOTLINUX))
+WORKFLOW_ARGS += kdevops_bootlinux='False'
+endif
 
 ifeq (y,$(CONFIG_KDEVOPS_WORKFLOW_ENABLE_FSTESTS))
 WORKFLOW_ARGS += kdevops_workflow_enable_fstests='True'

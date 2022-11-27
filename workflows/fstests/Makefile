@@ -31,6 +31,10 @@ ifeq (y,$(CONFIG_FSTESTS_XFS))
 include $(TOPDIR)/workflows/fstests/Makefile.xfs
 endif
 
+ifeq (y,$(CONFIG_FSTESTS_BTRFS))
+include $(TOPDIR)/workflows/fstests/btrfs/Makefile
+endif
+
 ifeq (y,$(CONFIG_QEMU_ENABLE_NVME_ZNS))
 FSTESTS_ARGS += fstests_test_dev_zns='$(subst ",,$(CONFIG_FSTESTS_TEST_DEV_ZNS))'
 FSTESTS_ARGS += fstests_zns_enabled='$(subst ",,$(CONFIG_QEMU_ENABLE_NVME_ZNS))'
@@ -60,6 +64,14 @@ FSTESTS_ARGS += fstests_scratch_rtdev='$(FSTESTS_SCRATCH_RTDEV)'
 
 SPARSE_GEN:=$(subst ",,$(CONFIG_FSTESTS_TESTDEV_SPARSEFILE_GENERATION))
 FSTESTS_ARGS += sparsefiles_generation='$(SPARSE_GEN)'
+
+ifeq (y,$(CONFIG_CONFIG_BOOTLINUX))
+TREE_TAG:=$(subst ",,$(CONFIG_BOOTLINUX_TREE_TAG))
+FSTESTS_ARGS += fstests_perf_config='$(PROJECTRELEASE)-kernel-$(TREE_TAG)'
+endif
+ifeq (,$(CONFIG_CONFIG_BOOTLINUX))
+FSTESTS_ARGS += fstests_perf_config='$(PROJECTRELEASE)-kernel-distro'
+endif
 
 ifeq (y,$(CONFIG_FSTESTS_TESTDEV_SPARSEFILE_GENERATION))
 
