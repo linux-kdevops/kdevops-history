@@ -1,0 +1,3 @@
+# SPDX-License-Identifier GPL-2.0+
+---
+kdevops_pcie_dynamic_kconfig: False

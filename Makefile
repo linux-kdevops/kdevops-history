@@ -46,6 +46,7 @@ endif
 # This will be used to generate our extra_args.yml file used to pass on
 # configuration data for ansible roles through kconfig.
 EXTRA_VAR_INPUTS :=
+EXTRA_VAR_INPUTS_LAST :=
 ANSIBLE_EXTRA_ARGS :=
 ANSIBLE_EXTRA_ARGS_SEPARATED :=
 ANSIBLE_EXTRA_ARGS_DIRECT :=
@@ -90,6 +91,8 @@ ANSIBLE_EXTRA_ARGS += $(LOCAL_DEVELOPMENT_ARGS)
 # of the scope of workflows. With things like kdump, etc.
 KDEVOPS_BRING_UP_DEPS :=
 KDEVOPS_DESTROY_DEPS :=
+
+include scripts/dynamic-kconfig.Makefile
 
 ifeq (y,$(CONFIG_TERRAFORM))
 include scripts/terraform.Makefile
@@ -182,9 +185,9 @@ include scripts/gen-nodes.Makefile
 	make -f scripts/build.Makefile help                             ;\
 	false)
 
-PHONY += $(EXTRA_VAR_INPUTS)
+PHONY += $(EXTRA_VAR_INPUTS) $(EXTRA_VAR_INPUTS_LAST)
 
-$(KDEVOPS_EXTRA_VARS): .config $(EXTRA_VAR_INPUTS)
+$(KDEVOPS_EXTRA_VARS): .config $(EXTRA_VAR_INPUTS) $(EXTRA_VAR_INPUTS_LAST)
 
 playbooks/secret.yml:
 	@if [[ "$(CONFIG_KDEVOPS_REG_TWOLINE_REGCODE)" == "" ]]; then \

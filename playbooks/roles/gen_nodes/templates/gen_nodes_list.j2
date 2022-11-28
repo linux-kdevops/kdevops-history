@@ -1,11 +1,30 @@
-{% macro gen_node(n, enable_second_interface, last_octet) %}
+{%- macro gen_pci_passthrough( device_list ) -%}
+{%- for d in device_list %}
+      passthrough{{ loop.index }}:
+        domain: {{ d.domain }}
+        bus: {{ d.bus }}
+        slot: {{ d.slot }}
+        function: {{ d.function }}
+{% endfor -%}
+{%- endmacro -%}
+{% macro gen_node(n, enable_second_interface, last_octet, passthrough_enable, passthrough_first_guest, passthrough_guest_name, passthrough_target, passthrough_devices ) %}
   - name: {{ n }}
 {% if enable_second_interface %}
     ip: 172.17.8.{{ last_octet | string }}
 {% endif %}
+{% if passthrough_enable %}
+    pcipassthrough:
+{% if passthrough_first_guest %}
+{{- gen_pci_passthrough(passthrough_devices) -}}
+{% elif passthrough_guest_name %}
+{% if n == passthrough_target %}
+{{- gen_pci_passthrough(passthrough_devices) -}}
+{% endif %}
+{% endif %}
+{% endif %}
 {% endmacro %}
-{% macro gen_nodes_list(nodes_list, dev, enable_second_interface, octet) %}
+{% macro gen_nodes_list(nodes_list, dev, enable_second_interface, octet, passthrough_enable, passthrough_first_guest, passthrough_guest_name, passthrough_target, passthrough_devices) %}
 {%- for node in nodes_list -%}
-{{ gen_node(node, enable_second_interface, octet + loop.index) }}
+{{ gen_node(node, enable_second_interface, octet + loop.index, passthrough_enable, passthrough_first_guest, passthrough_guest_name, passthrough_target, passthrough_devices) }}
 {%- endfor -%}
 {% endmacro %}

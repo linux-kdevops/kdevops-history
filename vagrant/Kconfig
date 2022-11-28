@@ -123,6 +123,14 @@ config VAGRANT_MEM_MB
 
 if VAGRANT_LIBVIRT
 
+config HAVE_LIBVIRT_PCIE_PASSTHROUGH
+	bool
+	default $(shell, scripts/check_pciepassthrough_kconfig.sh passthrough_libvirt.generated)
+
+if HAVE_LIBVIRT_PCIE_PASSTHROUGH
+source "vagrant/Kconfig.pcie_passthrough_libvirt"
+endif # HAVE_LIBVIRT_PCIE_PASSTHROUGH
+
 choice
 	prompt "Machine type to use"
 	default LIBVIRT_MACHINE_TYPE_Q35

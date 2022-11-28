@@ -58,3 +58,7 @@ workflows/demos/reboot-limit/results/
 
 .kernel-ci.*
 .kotd.*
+
+scripts/kconfig/.nconf-cfg
+.dynamic-kconfig.*
+vagrant/Kconfig.passthrough_libvirt.generated

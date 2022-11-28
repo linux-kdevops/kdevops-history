@@ -1,5 +1,7 @@
 # PCI passthrough configuration
 
+Commit 929b494887049b8a45b1b9cf40aa8136803b75e5
+
 Currently this is a bit of a manual process to set up.  To get this to work
 unprivileged you must modify permissions of some sysfs files so that
 vagrant/libvirt will work properly.  You also must make sure the vfio devices
