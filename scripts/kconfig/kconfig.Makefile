@@ -37,7 +37,7 @@ $(KCONFIG_DIR)/mconf:
 	$(MAKE) -C $(KCONFIG_DIR)/ mconf
 
 PHONY += menuconfig
-menuconfig: $(KCONFIG_DIR)/mconf include/config/project.release
+menuconfig: $(KCONFIG_DIR)/mconf include/config/project.release Kconfig
 	@$< Kconfig
 
 $(KCONFIG_DIR)/nconf:
@@ -45,7 +45,7 @@ $(KCONFIG_DIR)/nconf:
 	$(MAKE) -C $(KCONFIG_DIR)/ nconf
 
 PHONY += nconfig
-nconfig: $(KCONFIG_DIR)/nconf include/config/project.release
+nconfig: $(KCONFIG_DIR)/nconf include/config/project.release Kconfig
 	@$< Kconfig
 
 $(KCONFIG_DIR)/conf:
@@ -56,10 +56,10 @@ $(KCONFIG_DIR)/conf:
 simple-targets := allnoconfig allyesconfig alldefconfig randconfig
 PHONY += $(simple-targets)
 
-$(simple-targets): $(KCONFIG_DIR)/conf
+$(simple-targets): $(KCONFIG_DIR)/conf Kconfig
 	$< --$@ Kconfig
 
-defconfig-%:: $(KCONFIG_DIR)/conf
+defconfig-%:: $(KCONFIG_DIR)/conf Kconfig
 	@$< --defconfig=defconfigs/$(@:defconfig-%=%) Kconfig
 
 .PHONY: $(PHONY)
