@@ -49,7 +49,7 @@ if KDEVOPS_DEVCONFIG_ENABLE_CONSOLE
 
 config KDEVOPS_DEVCONFIG_KERNEL_CONSOLE_SETTINGS
 	string "Kernel command line console kernel parameters to use"
-	default "console=tty0 console=tty1 console=ttyS0,38400n8"
+	default "console=tty0 console=tty1 console=ttyS0,115200n8"
 	  help
           Linux kernel console kernel parameters to use. This will be appended
 	  to the grub configuration file /etc/default/grub on the variable
@@ -58,7 +58,7 @@ config KDEVOPS_DEVCONFIG_KERNEL_CONSOLE_SETTINGS
 
 config KDEVOPS_DEVCONFIG_GRUB_SERIAL_COMMAND
 	string "Grub specific serial settings"
-	default "serial --speed=38400 --unit=0 --parity=no --stop=1"
+	default "serial --speed=115200 --unit=0 --parity=no --stop=1"
 	  help
           Grub console settings to use. This will be appended to the grub
           configuration file /etc/default/grub on the variable

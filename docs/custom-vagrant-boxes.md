@@ -166,9 +166,9 @@ GRUB_DEFAULT=0
 GRUB_TIMEOUT=5
 GRUB_DISTRIBUTOR=`lsb_release -i -s 2> /dev/null || echo Debian`
 GRUB_CMDLINE_LINUX_DEFAULT="net.ifnames=0 biosdevname=0"
-GRUB_CMDLINE_LINUX="console=tty0 console=tty1 console=ttyS0,38400n8"
+GRUB_CMDLINE_LINUX="console=tty0 console=tty1 console=ttyS0,115200n8"
 
-GRUB_SERIAL_COMMAND="serial --speed=38400 --unit=0 --parity=no --stop=1"
+GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=0 --parity=no --stop=1"
 GRUB_TERMINAL="console serial"
 GRUB_DISABLE_SUBMENU=y
 ```
