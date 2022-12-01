@@ -47,3 +47,17 @@ config KDEVOPS_TRY_INSTALL_KDEV_TOOLS
 	  Enabling this will try to install a slew of known packages which
 	  most kernel developers might prefer to have installed on target
 	  systems.
+
+config KDEVOPS_SETUP_NFSD
+	bool "Set up the kernel nfs server"
+	default n
+	help
+	  Configure and bring up the kernel NFS server. This will provision
+	  a filesystem on a block device, mount it, export it and start up the
+	  nfs server and associated daemons.
+
+if KDEVOPS_SETUP_NFSD
+menu "Configure the kernel NFS server"
+source "kconfigs/Kconfig.nfsd"
+endmenu
+endif

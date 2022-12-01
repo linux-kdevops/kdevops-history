@@ -1,0 +1,47 @@
+# FIXME: need defaults for terraform hosts
+config NFSD_EXPORT_DEVICE
+	string "Device to be exported"
+        default "/dev/nvme3n1"
+	help
+	  To set up nfsd for testing, we give it a filesystem to export. This
+	  block device houses that filesystem.
+
+choice
+	prompt "Type of filesystem to export"
+	default NFSD_EXPORT_FSTYPE_BTRFS
+
+config NFSD_EXPORT_FSTYPE_BTRFS
+	bool "btrfs"
+
+config NFSD_EXPORT_FSTYPE_XFS
+	bool "xfs"
+
+config NFSD_EXPORT_FSTYPE_EXT4
+	bool "ext4"
+
+endchoice
+
+config NFSD_EXPORT_FSTYPE
+	string
+	default "btrfs" if NFSD_EXPORT_FSTYPE_BTRFS
+	default "xfs" if NFSD_EXPORT_FSTYPE_XFS
+	default "ext4" if NFSD_EXPORT_FSTYPE_EXT4
+
+config NFSD_EXPORT_PATH
+	string "The path to mount the device to be exported"
+	default "/export"
+	help
+	  This is the path that will be exported from the nfsd server. The
+	  export_device gets mounted here.
+
+config NFSD_EXPORT_OPTIONS
+	string "The export options to use for the exported fs"
+	default "rw,insecure"
+	help
+	  The export options that the export should have
+
+config NFSD_THREADS
+	int "Number of nfsd threads to spawn"
+	default 8
+	help
+	  Number of nfsd threads to start up for testing.
