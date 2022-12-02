@@ -1,0 +1,20 @@
+---
+- name: Update apt cache
+  become: yes
+  become_method: sudo
+  apt:
+    update_cache: yes
+  tags: deps
+
+- name: Install every single selftest build dependencies
+  become: yes
+  become_method: sudo
+  apt:
+    name:
+      - gcc
+      - bc
+      - sed
+      - git
+    state: present
+    update_cache: yes
+  tags: [ 'selftests', 'deps' ]

@@ -1,0 +1,144 @@
+if KDEVOPS_WORKFLOW_ENABLE_SELFTESTS
+
+config SELFTESTS_WATCHDOG
+	bool "Enable kdevops selftests watchdog"
+	default y
+	help
+	  Enable the selftests watchdog which lets you keep tabs on progress
+	  of selftests on different spawned systems.
+
+	  Enabling this option will allow the kdevops selftests_watchdog.py to
+	  run and log into the workflows/selftests/watchdog/all.txt the status
+	  of all known tests.
+
+	  It is safe to enable as no action is taken by default, it is just
+	  informational. If you however don't even want this information logged
+	  you can disable this.
+
+if SELFTESTS_WATCHDOG
+
+config SELFTESTS_WATCHDOG_CHECK_TIME
+	int "How often to run the selftests in seconds"
+	default 5
+	help
+	  How often to trigger running the selftests watchdog, in seconds.
+
+config SELFTESTS_WATCHDOG_MAX_NEW_TEST_TIME
+	int "Max minutes to wait for a new test before assuming a hang"
+	default 600
+	help
+	  Max value of time in minutes a new test should take before assuming
+	  the test is hung.
+
+	  Once a test has completed or failed we capture the amount of
+	  seconds it took to run that test on a file called check.time. This
+	  file consists of two columns, the first with the test name and the
+	  second column with the amount of time in seconds it took to run a
+	  target selftest. When we run a test for the first time there is no
+	  known prior last test time, as there would be no check.time files
+	  present from a prior run.
+
+	  The amount of time it takes to run a test will also depend highly on
+	  the system, drive and filesystem you are running the test on and so
+	  check.time values are completely system specific. However, we can
+	  often run into a test which is hung but selftests seems to keep
+	  running, without providing feedback about a possibly hung test. In
+	  order to tell if a test is hung we must define a value for max time
+	  any new test can take. This value is system specific and so must be
+	  defined by the person configuring the test, however sensible default
+	  values are defined.
+
+	  The kdevops selftests_watchdog.py uses this max value to know when a
+	  test is on a system is hung for a test's first run. If a test had
+	  already completed before, and so had an entry for the test on the
+	  last test's check.time file for the target system, other heuristics
+	  are used.
+
+	  Setting this value is only informational, so that selftests_watchdog.py
+	  can print a status of "hung" suspect when it finds a test goes over
+	  this value on a first run.
+
+config SELFTESTS_WATCHDOG_HUNG_MULTIPLIER_LONG_TESTS
+	int "Multiplier for amount of time before assuming a test is hung"
+	default 10
+	help
+	  If we know a full selftest took 1 minute the last time we ran it,
+	  setting the multiplier to 10 will let the watchdog decide a test is
+	  hung if 10 minutes have passed and the test has not completed yet.
+
+	  This multiplier is only used for tests for which we have a prior
+	  last run time and that run time is greater than 30 seconds.
+
+config SELFTESTS_WATCHDOG_HUNG_FAST_TEST_MAX_TIME
+	int "Max time in minutes to wait before declaring quick tests as hung"
+	default 15
+	help
+	  If we know a selftest took between 1 second and 30 seconds to run in a
+	  prior test we can safely assign a timeout value in minutes for these
+	  quick tests for which we will let run before allowing the selftests
+	  watchdog to assume the test is hung.
+
+config SELFTESTS_WATCHDOG_KILL_TASKS_ON_HANG
+	bool "Enable killing local tasks on hang detection"
+	default y
+	help
+	  Enable the selftest watchdog to kill local controller tasks and if
+	  enabled send a report if a hang / timeout occurs but leave the
+	  systems which are hung / timed out alive for further inspection.
+
+endif # SELFTESTS_WATCHDOG
+
+menu "Configure what to test in selftests"
+
+config SELFTESTS_MANUAL_COVERAGE
+	bool "Enable manual coverage selection"
+	default y
+	help
+	  By default we aim to spawn enough hosts to cover testing the full
+	  set of supported tests. If you are sure you don't need to test
+	  certain things, enabling this option lets you disable them here.
+
+	  We only enable selftests for a subsystem by default after vetting by
+	  respective subsystem maintainers.
+
+if SELFTESTS_MANUAL_COVERAGE
+
+config SELFTESTS_SECTION_FIRMWARE
+	bool "Firmware loader"
+	default y
+	help
+	  This will create a host to test the firmware loader.
+
+config SELFTESTS_SECTION_KMOD
+	bool "kmod - Kernel module loader usermode helper"
+	default y
+	help
+	  This will create a host to test the kmod selftest.
+
+config SELFTESTS_SECTION_SYSCTL
+	bool "sysctls"
+	default y
+	help
+	  This will create a host to test proc sysctls.
+
+endif # SELFTESTS_MANUAL_COVERAGE
+
+if !SELFTESTS_MANUAL_COVERAGE
+
+config SELFTESTS_SECTION_FIRMWARE
+	bool
+	default y
+
+config SELFTESTS_SECTION_KMOD
+	bool
+	default y
+
+config SELFTESTS_SECTION_SYSCTL
+	bool
+	default y
+
+endif # !SELFTESTS_MANUAL_COVERAGE
+
+endmenu
+
+endif # KDEVOPS_WORKFLOW_ENABLE_SELFTESTS

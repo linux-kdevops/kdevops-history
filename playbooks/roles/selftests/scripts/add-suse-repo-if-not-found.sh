@@ -1,0 +1,1 @@
+../../devconfig/scripts/add-suse-repo-if-not-found.sh

@@ -1,0 +1,11 @@
+# SPDX-License-Identifier copyleft-next-0.3.1
+---
+kdevops_workflow_enable_selftests: False
+kdevops_run_selftests: False
+run_tests_on_failures: False
+selftests_skip_run: False
+
+selftests_section_cxl: False
+selftests_section_firmware_loader: False
+selftests_section_kmod: False
+selftests_section_sysctl: False

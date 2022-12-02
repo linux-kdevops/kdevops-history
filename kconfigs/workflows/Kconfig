@@ -140,6 +140,13 @@ config KDEVOPS_WORKFLOW_DEDICATE_PYNFS
 	help
 	  This will dedicate your configuration only to running pynfs.
 
+config KDEVOPS_WORKFLOW_DEDICATE_SELFTESTS
+	bool "Linux kernel selftests"
+	select KDEVOPS_WORKFLOW_ENABLE_SELFTESTS
+	help
+	  This will dedicate your configuration only to Linux kernel
+	  selftests work.
+
 endchoice
 
 endif
@@ -189,6 +196,13 @@ config KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_PYNFS
 	  and want to configure the deployment for testing nfsd via pynfs
 	  over the loopback interface.
 
+config KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_SELFTESTS
+	bool "Linux kernel selftest"
+	select KDEVOPS_WORKFLOW_ENABLE_SELFTESTS
+	help
+	  Select this option if you are doing Linux kernel developent and
+	  testing with sefltests.
+
 endif # !WORKFLOWS_DEDICATED_WORKFLOW
 
 config KDEVOPS_WORKFLOW_ENABLE_FSTESTS
@@ -231,6 +245,16 @@ menu "Configure and run pynfs"
 source "workflows/pynfs/Kconfig"
 endmenu
 endif # KDEVOPS_WORKFLOW_ENABLE_PYNFS
+
+config KDEVOPS_WORKFLOW_ENABLE_SELFTESTS
+	bool
+	default y if KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_SELFTESTS || KDEVOPS_WORKFLOW_DEDICATE_SELFTESTS
+
+if KDEVOPS_WORKFLOW_ENABLE_SELFTESTS
+menu "Enable Linux kernel selftests"
+source "workflows/selftests/Kconfig"
+endmenu
+endif # KDEVOPS_WORKFLOW_ENABLE_SELFTESTS
 
 config KDEVOPS_WORKFLOW_GIT_CLONES_KDEVOPS_GIT
 	bool
