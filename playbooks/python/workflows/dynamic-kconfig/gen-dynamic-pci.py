@@ -81,7 +81,7 @@ def add_pcie_kconfig_name(config_name, sdevice):
 
 def add_pcie_kconfig_entry(pci_id, sdevice, domain, bus, slot, function, IOMMUGroup, config_id):
     prefix = passthrough_prefix + "_%04d" % config_id
-    name = get_kconfig_device_name(pci_id, sdevice.strip(), IOMMUGroup)
+    name = get_kconfig_device_name(pci_id, sdevice, IOMMUGroup)
     add_pcie_kconfig_name(prefix, name)
     add_pcie_kconfig_string(prefix, IOMMUGroup, "IOMMUGroup")
     add_pcie_kconfig_string(prefix, domain, "domain")
@@ -90,7 +90,6 @@ def add_pcie_kconfig_entry(pci_id, sdevice, domain, bus, slot, function, IOMMUGr
     add_pcie_kconfig_string(prefix, function, "function")
 
 def add_new_device(slot, sdevice, IOMMUGroup, possible_id):
-    slot = slot.strip()
     # Example expeced format 0000:2d:00.0
     m = re.match(r"^(?P<DOMAIN>\w+):"
                   "(?P<BUS>\w+):"
@@ -106,8 +105,6 @@ def add_new_device(slot, sdevice, IOMMUGroup, possible_id):
     bus = "0x" + slot_dict['BUS']
     mslot = "0x" + slot_dict['MSLOT']
     function = "0x" + slot_dict['FUNCTION']
-
-    sdevice = sdevice.strip()
 
     if debug:
         sys.stdout.write("\tslot: %s\n" % (slot))
@@ -154,6 +151,7 @@ def main():
         eval_line = m.groupdict()
         tag = eval_line['TAG']
         data = eval_line['STRING']
+        data = data.strip()
         if tag == "Slot":
             if sdevice:
                 num_candidate_devices = add_new_device(slot, sdevice, IOMMUGroup, num_candidate_devices)
@@ -163,7 +161,7 @@ def main():
         elif tag == "SDevice":
             sdevice = data
         elif tag == "IOMMUGroup":
-            IOMMUGroup = data.strip()
+            IOMMUGroup = data
 
     add_pcie_kconfig_string(passthrough_prefix, num_candidate_devices, "NUM_DEVICES")
     os.unlink(lspci_output)
