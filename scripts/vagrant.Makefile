@@ -52,6 +52,11 @@ ifeq (y,$(CONFIG_BOOTLINUX_9P))
 VAGRANT_9P_HOST_CLONE := vagrant_9p_linux_clone
 endif
 
+VAGRANT_LIBVIRT_PCIE_PASSTHROUGH :=
+ifeq (y,$(CONFIG_KDEVOPS_LIBVIRT_PCIE_PASSTHROUGH))
+VAGRANT_LIBVIRT_PCIE_PASSTHROUGH := vagrant_libvirt_pcie_passthrough_permissions
+endif
+
 EXTRA_VAR_INPUTS += extend-extra-args-vagrant
 ANSIBLE_EXTRA_ARGS += $(VAGRANT_ARGS)
 
@@ -69,7 +74,13 @@ vagrant_private_box_install:
 vagrant_9p_linux_clone:
 	$(Q)make linux-clone
 
-bringup_vagrant: $(VAGRANT_PRIVATE_BOX_DEPS) $(VAGRANT_9P_HOST_CLONE)
+vagrant_libvirt_pcie_passthrough_permissions:
+	$(Q)ansible-playbook --connection=local \
+		--inventory localhost, \
+		playbooks/libvirt_pcie_passthrough.yml \
+		-e 'ansible_python_interpreter=/usr/bin/python3'
+
+bringup_vagrant: $(VAGRANT_PRIVATE_BOX_DEPS) $(VAGRANT_9P_HOST_CLONE) $(VAGRANT_LIBVIRT_PCIE_PASSTHROUGH)
 	$(Q)$(TOPDIR)/scripts/bringup_vagrant.sh
 	$(Q)if [[ "$(CONFIG_KDEVOPS_SSH_CONFIG_UPDATE)" == "y" ]]; then \
 		ansible-playbook --connection=local \

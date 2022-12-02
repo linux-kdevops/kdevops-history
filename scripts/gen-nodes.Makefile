@@ -18,6 +18,10 @@ ifeq (y,$(CONFIG_LIBVIRT_HOST_PASSTHROUGH))
 GEN_NODES_EXTRA_ARGS += libvirt_host_passthrough='True'
 endif
 
+ifeq (y,$(CONFIG_VAGRANT_LIBVIRT))
+GEN_NODES_EXTRA_ARGS += libvirt_qemu_group='$(subst ",,$(CONFIG_LIBVIRT_QEMU_GROUP))'
+endif
+
 ifeq (y,$(CONFIG_LIBVIRT_SESSION))
 GEN_NODES_EXTRA_ARGS += libvirt_session='True'
 GEN_NODES_EXTRA_ARGS += libvirt_session_socket='$(subst ",,$(CONFIG_LIBVIRT_SESSION_SOCKET))'
