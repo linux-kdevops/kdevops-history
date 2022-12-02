@@ -29,7 +29,14 @@ for i in $(seq 1 $NUM_DEVICES); do
 		eval PCIE_BUS='$'"${PCIE_CONFIG_NAME}_BUS"
 		eval PCIE_SLOT='$'"${PCIE_CONFIG_NAME}_SLOT"
 		eval PCIE_FUNCTION='$'"${PCIE_CONFIG_NAME}_FUNCTION"
-		echo "  - { domain: \"$PCIE_DOMAIN\", bus: \"$PCIE_BUS\", slot: \"$PCIE_SLOT\", function: \"$PCIE_FUNCTION\" }"
+		eval PCIE_IOMMU_GROUP='$'"${PCIE_CONFIG_NAME}_IOMMUGROUP"
+		eval PCIE_ID='$'"${PCIE_CONFIG_NAME}_PCI_ID"
+		eval PCIE_SDEVICE='$'"${PCIE_CONFIG_NAME}_SDEVICE"
+		eval PCIE_NAME='$'"${PCIE_CONFIG_NAME}_SDEVICE"
+		echo "  - { domain: \"$PCIE_DOMAIN\", bus: \"$PCIE_BUS\", slot: \"$PCIE_SLOT\", function: \"$PCIE_FUNCTION\","
+		echo "      pcie_id: \"$PCIE_ID\",  iommu_group: \"$PCIE_IOMMU_GROUP\","
+		echo "      sdevice: \"$PCIE_SDEVICE\","
+		echo "      pcie_human_name: \"$PCIE_NAME\" }"
 		PCIE_DOMAIN=$(echo $PCIE_DOMAIN | sed -e 's|0x||')
 		PCIE_BUS=$(echo $PCIE_BUS | sed -e 's|0x||')
 		PCIE_SLOT=$(echo $PCIE_SLOT | sed -e 's|0x||')

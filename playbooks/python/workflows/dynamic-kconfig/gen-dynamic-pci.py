@@ -67,7 +67,7 @@ def add_pcie_kconfig_string(prefix, val, name):
     config_name = prefix + "_" + name.upper()
     sys.stdout.write("config %s\n" % (config_name))
     sys.stdout.write("\tstring\n")
-    sys.stdout.write("\tdefault \"%s\"\n" % (val))
+    sys.stdout.write("\tdefault \"%s\"\n" % (strip_kconfig_name(str(val))))
     sys.stdout.write("\n")
 
 def add_pcie_kconfig_name(config_name, sdevice):
@@ -83,6 +83,9 @@ def add_pcie_kconfig_entry(pci_id, sdevice, domain, bus, slot, function, IOMMUGr
     prefix = passthrough_prefix + "_%04d" % config_id
     name = get_kconfig_device_name(pci_id, sdevice, IOMMUGroup)
     add_pcie_kconfig_name(prefix, name)
+    add_pcie_kconfig_string(prefix, pci_id, "pci_id")
+    add_pcie_kconfig_string(prefix, sdevice, "sdevice")
+    add_pcie_kconfig_string(prefix, name, "name")
     add_pcie_kconfig_string(prefix, IOMMUGroup, "IOMMUGroup")
     add_pcie_kconfig_string(prefix, domain, "domain")
     add_pcie_kconfig_string(prefix, bus, "bus")
