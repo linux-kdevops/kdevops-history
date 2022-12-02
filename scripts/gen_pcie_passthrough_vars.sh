@@ -36,10 +36,17 @@ for i in $(seq 1 $NUM_DEVICES); do
 		PCIE_FUNCTION=$(echo $PCIE_FUNCTION | sed -e 's|0x||')
 		DEV="${PCIE_DOMAIN}:${PCIE_BUS}:${PCIE_SLOT}.${PCIE_FUNCTION}"
 		# 0000:2d:00.0
-		sudo chgrp $QEMU_GROUP /sys/bus/pci/devices/$DEV/driver_override
-		sudo chmod 664 /sys/bus/pci/devices/$DEV/driver_override
-		sudo chgrp $QEMU_GROUP /sys/bus/pci/devices/$DEV/driver/unbind
-		sudo chmod 220 /sys/bus/pci/devices/$DEV/driver/unbind
+		DRIVER="/sys/bus/pci/devices/$DEV"
+		DRIVER_OVERRIDE="${DRIVER}/driver_override"
+		DRIVER_UNBIND="${DRIVER}/unbind"
+		if [[ -f $DRIVER_OVERRIDE ]]; then
+			sudo chgrp $QEMU_GROUP $DRIVER_OVERRIDE
+			sudo chmod 664 $DRIVER_OVERRIDE
+		fi
+		if [[ -f $DRIVER_UNBIND ]]; then
+			sudo chgrp $QEMU_GROUP $DRIVER_UNBIND
+			sudo chmod 220 $DRIVER_UNBIND
+		fi
 	fi
 done
 
