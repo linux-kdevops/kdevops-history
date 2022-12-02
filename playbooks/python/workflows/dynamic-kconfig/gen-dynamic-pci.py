@@ -36,7 +36,7 @@ def strip_kconfig_name(name):
     fixed_name = fixed_name.replace("'", "")
     return fixed_name
 
-def get_special_device_nvme(pci_id):
+def get_special_device_nvme(pci_id, IOMMUGroup):
     pci_id_name = strip_kconfig_name(pci_id)
     sys_path = sys_bus_prefix + pci_id + "/nvme/"
     if not os.path.isdir(sys_path):
@@ -51,14 +51,14 @@ def get_special_device_nvme(pci_id):
     fw = get_sysname(block_sys_path, "firmware_rev")
     if not fw:
         return None
-    return pci_id_name + " - /dev/" + block_device_name + " - " + model + " with FW %s" % fw
+    return "%s IOMMU group %s - /dev/%s - %s with FW %s" % (pci_id_name, IOMMUGroup, block_device_name, model, fw)
 
 
-def get_kconfig_device_name(pci_id, sdevice):
-    default_name = pci_id + " - " + sdevice
+def get_kconfig_device_name(pci_id, sdevice, IOMMUGroup):
+    default_name = "%s IOMMU group %s - %s" % (pci_id, IOMMUGroup, sdevice)
     special_name = None
     if os.path.isdir(sys_bus_prefix + pci_id + "/nvme"):
-        special_name = get_special_device_nvme(pci_id)
+        special_name = get_special_device_nvme(pci_id, IOMMUGroup)
     if not special_name:
         return strip_kconfig_name(default_name)
     return strip_kconfig_name(special_name)
@@ -79,16 +79,17 @@ def add_pcie_kconfig_name(config_name, sdevice):
     sys.stdout.write("\t  target guest.\n")
     sys.stdout.write("\n")
 
-def add_pcie_kconfig_entry(pci_id, sdevice, domain, bus, slot, function, config_id):
+def add_pcie_kconfig_entry(pci_id, sdevice, domain, bus, slot, function, IOMMUGroup, config_id):
     prefix = passthrough_prefix + "_%04d" % config_id
-    name = get_kconfig_device_name(pci_id, sdevice.strip())
+    name = get_kconfig_device_name(pci_id, sdevice.strip(), IOMMUGroup)
     add_pcie_kconfig_name(prefix, name)
+    add_pcie_kconfig_string(prefix, IOMMUGroup, "IOMMUGroup")
     add_pcie_kconfig_string(prefix, domain, "domain")
     add_pcie_kconfig_string(prefix, bus, "bus")
     add_pcie_kconfig_string(prefix, slot, "slot")
     add_pcie_kconfig_string(prefix, function, "function")
 
-def add_new_device(slot, sdevice, possible_id):
+def add_new_device(slot, sdevice, IOMMUGroup, possible_id):
     slot = slot.strip()
     # Example expeced format 0000:2d:00.0
     m = re.match(r"^(?P<DOMAIN>\w+):"
@@ -114,11 +115,12 @@ def add_new_device(slot, sdevice, possible_id):
         sys.stdout.write("\tbus: %s\n" % (bus))
         sys.stdout.write("\tslot: %s\n" % (mslot))
         sys.stdout.write("\tfunction: %s\n" % (function))
+        sys.stdout.write("\tIOMMUGroup: %s\n" % (IOMMUGroup))
 
     if possible_id == 1:
         sys.stdout.write("# Automatically generated PCI-E passthrough Kconfig by kdevops\n\n")
 
-    add_pcie_kconfig_entry(slot, sdevice, domain, bus, mslot, function, possible_id)
+    add_pcie_kconfig_entry(slot, sdevice, domain, bus, mslot, function, IOMMUGroup, possible_id)
 
     return possible_id
 
@@ -141,6 +143,7 @@ def main():
 
     slot = -1
     sdevice = None
+    IOMMUGroup = None
 
     for line in all_lines:
         line = line.strip()
@@ -153,11 +156,14 @@ def main():
         data = eval_line['STRING']
         if tag == "Slot":
             if sdevice:
-                num_candidate_devices = add_new_device(slot, sdevice, num_candidate_devices)
+                num_candidate_devices = add_new_device(slot, sdevice, IOMMUGroup, num_candidate_devices)
             slot = data
             sdevice = None
+            IOMMUGroup = None
         elif tag == "SDevice":
             sdevice = data
+        elif tag == "IOMMUGroup":
+            IOMMUGroup = data.strip()
 
     add_pcie_kconfig_string(passthrough_prefix, num_candidate_devices, "NUM_DEVICES")
     os.unlink(lspci_output)
