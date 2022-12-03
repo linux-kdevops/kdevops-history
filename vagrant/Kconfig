@@ -652,7 +652,7 @@ config VAGRANT_BOX
 	default "debian/bullseye64" if VAGRANT_DEBIAN_BULLSEYE64
 	default "debian/buster64" if VAGRANT_DEBIAN_BUSTER64
 	default "opensuse/Tumbleweed.x86_64" if VAGRANT_OPENSUSE_X86_64_TW
-	default "fedora/35-cloud-base" if VAGRANT_FEDORA_X86_64_35_CLOUD_BASE
+	default "fedora/37-cloud-base" if VAGRANT_FEDORA_X86_64_37_CLOUD_BASE
 	default "generic/rhel8" if VAGRANT_REDHAT_GENERIC_RHEL8_X86_64
 	default "generic/rhel9" if VAGRANT_REDHAT_GENERIC_RHEL9_X86_64
 	default "opensuse/Leap-15.3.x86_64" if VAGRANT_OPENSUSE_X86_64_LEAP_15_3
@@ -690,7 +690,6 @@ config VAGRANT_BOX_VERSION
 	default "1.0.20210203" if VAGRANT_OPENSUSE_X86_64_TW_1020210203
 	default "1.0.20200714" if VAGRANT_OPENSUSE_X86_64_TW_1020200714
 	default "1.0.20210203" if VAGRANT_OPENSUSE_X86_64_TW_1020210203
-	default "32.20200312.0" if VAGRANT_FEDORA_32_202003120
 	default "0.1.0" if VAGRANT_KDEVOPS_DEBIAN_TESTING64_NEXT_20220629
 	help
 	  The vagrant box version to use. This is set for you depending on the

@@ -45,7 +45,7 @@ provider = "libvirt"
 # do something different if we're not on bare metal. We may want
 # to do something different later to optimize this further but
 # we have to draw the line somewhere.
-nested = %x(which systemd-detect-virtd > /dev/null || systemd-detect-virt) != "none"
+nested = %x(which systemd-detect-virtd 1>/dev/null 2>&1 || systemd-detect-virt) != "none"
 
 case
 when @os.downcase.include?('linux')
