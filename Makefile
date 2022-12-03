@@ -106,6 +106,10 @@ ifeq (y,$(CONFIG_WORKFLOWS))
 include workflows/Makefile
 endif # CONFIG_WORKFLOWS
 
+ifeq (y,$(CONFIG_KDEVOPS_SETUP_NFSD))
+include scripts/nfsd.Makefile
+endif # CONFIG_KDEVOPS_SETUP_NFSD
+
 include scripts/devconfig.Makefile
 include scripts/ssh.Makefile
 

@@ -29,6 +29,10 @@ WORKFLOW_ARGS += kdevops_workflow_enable_cxl='True'
 include workflows/cxl/Makefile
 endif # CONFIG_KDEVOPS_WORKFLOW_ENABLE_CXL == y
 
+ifeq (y,$(CONFIG_KDEVOPS_WORKFLOW_ENABLE_PYNFS))
+include workflows/pynfs/Makefile
+endif # CONFIG_KDEVOPS_WORKFLOW_ENABLE_PYNFS == y
+
 ifeq (y,$(CONFIG_WORKFLOWS_REBOOT_LIMIT))
 include workflows/demos/reboot-limit/Makefile
 endif # CONFIG_WORKFLOWS_REBOOT_LIMIT == y

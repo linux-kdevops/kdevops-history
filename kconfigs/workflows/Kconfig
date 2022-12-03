@@ -134,6 +134,12 @@ config KDEVOPS_WORKFLOW_DEDICATE_CXL
 	  If you are using libvirt you will want to enable in kdevops
 	  the symbol CONFIG_QEMU_ENABLE_CXL.
 
+config KDEVOPS_WORKFLOW_DEDICATE_PYNFS
+	bool "pynfs"
+	select KDEVOPS_WORKFLOW_ENABLE_PYNFS
+	help
+	  This will dedicate your configuration only to running pynfs.
+
 endchoice
 
 endif
@@ -175,6 +181,14 @@ config KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_CXL
 	  If you are using libvirt you will want to enable in kdevops
 	  the symbol CONFIG_QEMU_ENABLE_CXL.
 
+config KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_PYNFS
+	bool "pynfs"
+	select KDEVOPS_WORKFLOW_ENABLE_PYNFS
+	help
+	  Select this option if you are doing nfsd development and testing,
+	  and want to configure the deployment for testing nfsd via pynfs
+	  over the loopback interface.
+
 endif # !WORKFLOWS_DEDICATED_WORKFLOW
 
 config KDEVOPS_WORKFLOW_ENABLE_FSTESTS
@@ -206,6 +220,17 @@ menu "Enable cxl development"
 source "workflows/cxl/Kconfig"
 endmenu
 endif # KDEVOPS_WORKFLOW_ENABLE_CXL
+
+config KDEVOPS_WORKFLOW_ENABLE_PYNFS
+	bool
+	default y if KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_PYNFS || KDEVOPS_WORKFLOW_DEDICATE_PYNFS
+	select KDEVOPS_SETUP_NFSD
+
+if KDEVOPS_WORKFLOW_ENABLE_PYNFS
+menu "Configure and run pynfs"
+source "workflows/pynfs/Kconfig"
+endmenu
+endif # KDEVOPS_WORKFLOW_ENABLE_PYNFS
 
 config KDEVOPS_WORKFLOW_GIT_CLONES_KDEVOPS_GIT
 	bool

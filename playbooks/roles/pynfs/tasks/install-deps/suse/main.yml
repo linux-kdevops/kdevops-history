@@ -1,0 +1,16 @@
+---
+- name: Install build dependencies for pynfs
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - gcc
+      - git-core
+      - make
+      - krb5-devel
+      - python3-devel
+      - swig
+      - python3-gssapi
+      - python3-ply
+      - nfs-utils
+    state: present
