@@ -28,6 +28,14 @@ config KDEVOPS_LIBVIRT_PCIE_PASSTHROUGH_TYPE_SPECIFIC
 	  specify a target hostname you want to use to pass on the selected
 	  PCI-E devices to.
 
+config KDEVOPS_LIBVIRT_PCIE_PASSTHROUGH_TYPE_EACH
+	bool "Per device specific host"
+	help
+	  Select this option if you want to have the option passthrough PCI-E
+	  devices to different target guests. This will allow you to have the
+	  ability to specify for each found PCI-E device which, to which target
+	  guest you want to enable the device to passthrough onto.
+
 endchoice
 
 config KDEVOPS_LIBVIRT_PCIE_PASSTHROUGH_TARGET_HOSTNAME

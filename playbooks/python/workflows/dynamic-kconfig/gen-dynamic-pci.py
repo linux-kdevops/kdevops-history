@@ -79,10 +79,22 @@ def add_pcie_kconfig_name(config_name, sdevice):
     sys.stdout.write("\t  target guest.\n")
     sys.stdout.write("\n")
 
+def add_pcie_kconfig_target(config_name, sdevice):
+    sys.stdout.write("config %s_TARGET_GUEST\n" % (config_name))
+    sys.stdout.write("\tstring  \"Taret guest to offload %s\"\n" % (strip_kconfig_name(sdevice)))
+    sys.stdout.write("\tdefault \"\"\n")
+    sys.stdout.write("\tdepends on %s\n" % config_name)
+    sys.stdout.write("\tdepends on KDEVOPS_LIBVIRT_PCIE_PASSTHROUGH_TYPE_EACH\n")
+    sys.stdout.write("\thelp\n")
+    sys.stdout.write("\t  Enabling this will PCI-E passthrough this device onto the\n")
+    sys.stdout.write("\t  target guest.\n")
+    sys.stdout.write("\n")
+
 def add_pcie_kconfig_entry(pci_id, sdevice, domain, bus, slot, function, IOMMUGroup, config_id):
     prefix = passthrough_prefix + "_%04d" % config_id
     name = get_kconfig_device_name(pci_id, sdevice, IOMMUGroup)
     add_pcie_kconfig_name(prefix, name)
+    add_pcie_kconfig_target(prefix, sdevice)
     add_pcie_kconfig_string(prefix, pci_id, "pci_id")
     add_pcie_kconfig_string(prefix, sdevice, "sdevice")
     add_pcie_kconfig_string(prefix, name, "name")

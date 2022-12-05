@@ -22,12 +22,19 @@ EXTRA_VAR_INPUTS_LAST += extend-extra-args-pcie-passthrough
 DYNAMIC_KCONFIG_PCIE_ARGS += pcie_passthrough_enable=True
 
 ifeq (y,$(CONFIG_KDEVOPS_LIBVIRT_PCIE_PASSTHROUGH_TYPE_FIRST))
-DYNAMIC_KCONFIG_PCIE_ARGS += pcie_passthrough_first_guest=True
+DYNAMIC_KCONFIG_PCIE_ARGS += pcie_passthrough_target_type_first_guest=True
+DYNAMIC_KCONFIG_PCIE_ARGS += pcie_passthrough_target_type='first_guest'
 endif
 
 ifeq (y,$(CONFIG_KDEVOPS_LIBVIRT_PCIE_PASSTHROUGH_TYPE_SPECIFIC))
-DYNAMIC_KCONFIG_PCIE_ARGS += pcie_passthrough_guest_name=True
+DYNAMIC_KCONFIG_PCIE_ARGS += pcie_passthrough_target_type_all_one_guest_name=True
 DYNAMIC_KCONFIG_PCIE_ARGS += pcie_passthrough_target='$(subst ",,$(CONFIG_KDEVOPS_LIBVIRT_PCIE_PASSTHROUGH_TARGET_HOSTNAME))'
+DYNAMIC_KCONFIG_PCIE_ARGS += pcie_passthrough_target_type='all_one_guest_name'
+endif
+
+ifeq (y,$(CONFIG_KDEVOPS_LIBVIRT_PCIE_PASSTHROUGH_TYPE_EACH))
+DYNAMIC_KCONFIG_PCIE_ARGS += pcie_passthrough_target_type_each_per_device=True
+DYNAMIC_KCONFIG_PCIE_ARGS += pcie_passthrough_target_type='each_per_device'
 endif
 
 endif # CONFIG_KDEVOPS_LIBVIRT_PCIE_PASSTHROUGH

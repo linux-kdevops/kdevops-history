@@ -65,8 +65,10 @@ bootlinux_9p_security_model: "none"
 bootlinux_9p_driver: "virtio-9p-pci"
 
 pcie_passthrough_enable: False
-pcie_passthrough_first_guest: False
-pcie_passthrough_guest_name: False
+pcie_passthrough_target_type_first_guest: False
+pcie_passthrough_target_type_all_one_guest_name: False
+pcie_passthrough_target_type_each_per_device: False
+pcie_passthrough_target_type: "first_guest"
 pcie_passthrough_target: "ignore"
 pcie_passthrough_devices:
   - { domain: "0x0000", bus: "0x2d", slot: "0x00", function: "0x0" }

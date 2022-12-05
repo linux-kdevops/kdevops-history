@@ -32,14 +32,17 @@ for i in $(seq 1 $NUM_DEVICES); do
 		eval PCIE_IOMMU_GROUP='$'"${PCIE_CONFIG_NAME}_IOMMUGROUP"
 		eval PCIE_ID='$'"${PCIE_CONFIG_NAME}_PCI_ID"
 		eval PCIE_SDEVICE='$'"${PCIE_CONFIG_NAME}_SDEVICE"
-		eval PCIE_NAME='$'"${PCIE_CONFIG_NAME}_SDEVICE"
+		eval PCIE_NAME='$'"${PCIE_CONFIG_NAME}_NAME"
+		PCIE_TARGET=""
+		if [[ "$CONFIG_KDEVOPS_LIBVIRT_PCIE_PASSTHROUGH_TYPE_SPECIFIC" == "y" ]]; then
+			eval PCIE_TARGET='$CONFIG_KDEVOPS_LIBVIRT_PCIE_PASSTHROUGH_TARGET_HOSTNAME'
+		elif [[ "$CONFIG_KDEVOPS_LIBVIRT_PCIE_PASSTHROUGH_TYPE_EACH" == "y" ]]; then
+			eval PCIE_TARGET='$'"${PCIE_CONFIG_NAME}_TARGET_GUEST"
+		fi
 		echo "  - { domain: \"$PCIE_DOMAIN\", bus: \"$PCIE_BUS\", slot: \"$PCIE_SLOT\", function: \"$PCIE_FUNCTION\","
 		echo "      pcie_id: \"$PCIE_ID\",  iommu_group: \"$PCIE_IOMMU_GROUP\","
 		echo "      sdevice: \"$PCIE_SDEVICE\","
-		echo "      pcie_human_name: \"$PCIE_NAME\" }"
-		PCIE_DOMAIN=$(echo $PCIE_DOMAIN | sed -e 's|0x||')
-		PCIE_BUS=$(echo $PCIE_BUS | sed -e 's|0x||')
-		PCIE_SLOT=$(echo $PCIE_SLOT | sed -e 's|0x||')
-		PCIE_FUNCTION=$(echo $PCIE_FUNCTION | sed -e 's|0x||')
+		echo "      pcie_human_name: \"$PCIE_NAME\","
+		echo "      target_guest: \"$PCIE_TARGET\" }"
 	fi
 done
