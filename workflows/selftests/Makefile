@@ -1,7 +1,6 @@
 # SPDX-License-Identifier: copyleft-next-0.3.1
 
 SELFTESTS_ARGS :=
-SELFTESTS_ARGS += selftests_git='$(subst ",,$(CONFIG_SELFTESTS_PATH))
 WORKFLOW_ARGS += $(SELFTESTS_ARGS)
 
 DYNAMIC_RUNTIME_VARS := "kdevops_run_selftests": True
