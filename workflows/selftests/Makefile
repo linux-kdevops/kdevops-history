@@ -1,6 +1,11 @@
 # SPDX-License-Identifier: copyleft-next-0.3.1
 
 SELFTESTS_ARGS :=
+
+ifeq (y,$(CONFIG_WORKFLOWS_DEDICATED_WORKFLOW))
+export KDEVOPS_HOSTS_TEMPLATE := selftests.j2
+endif
+
 WORKFLOW_ARGS += $(SELFTESTS_ARGS)
 
 DYNAMIC_RUNTIME_VARS := "kdevops_run_selftests": True

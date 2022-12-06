@@ -20,6 +20,7 @@ kdevops_hosts_template_full_path: "/dev/null"
 kdevops_workflows_dedicated_workflow: False
 kdevops_workflow_enable_fstests: False
 kdevops_workflow_enable_blktests: False
+kdevops_workflow_enable_selftests: False
 
 kdevops_workflow_enable_cxl: False
 

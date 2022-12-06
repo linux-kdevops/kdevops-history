@@ -177,3 +177,29 @@
     - kdevops_workflows_dedicated_workflow
     - kdevops_workflow_enable_blktests
     - ansible_hosts_template.stat.exists
+
+- name: Infer enabled selftests test section types
+  vars:
+    kdevops_config_data: "{{ lookup('file', topdir_path + '/.config') }}"
+    config_val: "CONFIG_SELFTESTS_SECTION_"
+    config_selftests_test_types: "{{ kdevops_config_data | regex_findall('^' + config_val + '(.*)=y$', multiline=True) }}"
+    config_selftests_test_type_names: "{{ config_selftests_test_types | lower }}"
+  set_fact:
+    selftests_enabled_test_types: "{{ config_selftests_test_type_names }}"
+  when:
+    - kdevops_workflows_dedicated_workflow
+    - kdevops_workflow_enable_selftests
+    - ansible_hosts_template.stat.exists
+
+- name: Generate the ansible hosts file for a dedicated selftests setup
+  tags: [ 'hosts' ]
+  template:
+    src: "{{ kdevops_hosts_template }}"
+    dest: "{{ topdir_path }}/{{ kdevops_hosts }}"
+    force: yes
+    trim_blocks: True
+    lstrip_blocks: True
+  when:
+    - kdevops_workflows_dedicated_workflow
+    - kdevops_workflow_enable_selftests
+    - ansible_hosts_template.stat.exists
