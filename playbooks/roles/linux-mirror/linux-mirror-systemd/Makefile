@@ -9,6 +9,9 @@ LINUX_TIMERS := linux-mirror.timer
 LINUX_TIMERS += linux-stable-mirror.timer
 LINUX_TIMERS += linux-next-mirror.timer
 
+QEMU_SERVICES  := qemu-mirror.service
+QEMU_TIMERS    := qemu-mirror.timer
+
 GIT_DAEMON_FILES := git-daemon@.service
 GIT_DAEMON_FILES += git-daemon.socket
 LOCAL_SYSTEMD    := /usr/local/lib/systemd/system/
@@ -21,6 +24,15 @@ STABLE_TARGET   := $(MIRROR_PATH)/linux-stable.git
 
 NEXT            := git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 NEXT_TARGET     := $(MIRROR_PATH)/linux-next.git
+
+QEMU            := https://github.com/qemu/qemu.git
+QEMU_TARGET     := $(MIRROR_PATH)/qemu.git
+
+MIRROR_SERVICES := $(LINUX_SERVICES)
+MIRROR_SERVICES += $(QEMU_SERVICES)
+
+MIRROR_TIMERS   := $(LINUX_TIMERS)
+MIRROR_TIMERS   += $(QEMU_TIMERS)
 
 ifeq ($(V),1)
 export Q=
@@ -55,16 +67,20 @@ mirror:
 	  echo "          CLONE linux-next"                                                       ;\
 	  git -C $(MIRROR_PATH) clone --bare $(NEXT) --reference /mirror/linux.git $(NEXT_TARGET) ;\
 	fi
+	$(Q)if [ ! -d $(QEMU_TARGET) ]; then                        \
+	  echo "          CLONE qemu"                               ;\
+	  git -C $(MIRROR_PATH) clone --bare $(QEMU) $(QEMU_TARGET) ;\
+	fi
 
 install:
 	$(Q)mkdir -p $(USER_SYSTEM)
-	$(Q)cp $(LINUX_SERVICES) $(USER_SYSTEM)
-	$(Q)cp $(LINUX_TIMERS) $(USER_SYSTEM)
-	$(Q)for i in $(LINUX_SERVICES); do            \
+	$(Q)cp $(MIRROR_SERVICES)   $(USER_SYSTEM)
+	$(Q)cp $(MIRROR_TIMERS)     $(USER_SYSTEM)
+	$(Q)for i in $(MIRROR_SERVICES); do           \
 		echo  "Enabling $$i" ;                \
 		systemctl --user enable  $$i ;        \
 	done
-	$(Q)for i in $(LINUX_TIMERS); do              \
+	$(Q)for i in $(MIRROR_TIMERS); do             \
 		echo  "Enabling $$i" ;                \
 		systemctl --user enable $$i ;         \
 		systemctl --user start $$i ;          \
