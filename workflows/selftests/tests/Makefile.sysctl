@@ -1,0 +1,8 @@
+ifeq (y,$(CONFIG_SELFTESTS_SECTION_SYSCTL))
+SELFTESTS_HELP_TARGETS += selftests-help-menu-target-sysctl
+selftests-sysctl:
+	$(Q)$(MAKE) selftests-baseline HOSTS=$(KDEVOPS_HOSTS_PREFIX)-sysctl
+endif
+
+selftests-help-menu-target-sysctl:
+	@echo "selftests-sysctl                  - Runs selftests for proc sysctl"

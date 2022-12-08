@@ -56,6 +56,17 @@ workflows/blktests/results/last-kernel.txt
 
 workflows/demos/reboot-limit/results/
 
+# For now we ignore all results as we have work to do:
+# - copy only data for failed tests
+# - envision a way so that regressions are clearly visible with a git diff
+#   against this tree
+# - we have failures upstream for the current tests, these are not bugs
+#   upstream but instead bugs in the tests which we need to fix.
+# - we have to be happy with a format of known failures we are happy with
+#   carrying in this repo just as we have with fstests. We are not there
+#   yet.
+workflows/selftests/results/
+
 .kernel-ci.*
 .kotd.*
 

@@ -10,23 +10,93 @@
       skip: true
   tags: vars
 
+# Distro specific
+# Note: if using 9p we'll install the selftests dependencies on both
+# the target node and the localhost because we first need to build
+# the target selftests for the nodes and then actually use them.
+- name: Install dependencies
+  include_tasks: tasks/install-deps/main.yml
+
+- name: Install dependencies to build Linux selftests on host
+  tags: [ 'deps' ]
+  run_once: true
+  local_action: import_tasks install-deps/main.yml
+  when:
+    - bootlinux_9p|bool
+
 - include_role:
     name: create_data_partition
   tags: [ 'data_partition' ]
 
-# Distro specific
-- include: tasks/install-deps/main.yml
-
 - name: Get nproc
   command: "{{ num_jobs }}"
-  tags: [ 'selftests', 'build', 'bltkrace' ]
+  tags: [ 'selftests', 'build' ]
   register: nproc
 
-- name: Build blktrace
-  tags: [ 'selftests', 'build', 'bltkrace' ]
+- name: Get nproc on host
+  command: "{{ num_jobs }}"
+  tags: [ 'selftests', 'build' ]
+  register: nproc_host
+  when:
+    - bootlinux_9p|bool
+
+- name: Set the target selftest
+  set_fact:
+    target_selftest: "{{ ansible_host | regex_replace('selftests-') | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
+    all_selftest_targets: "{{ play_hosts | join(' ') | regex_replace('selftests-') | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
+  tags: [ 'selftests', 'vars' ]
+
+# We split building selftestss for two reasons because we can have the Linux
+# build out of the node / guest
+#
+# So there are two steps to installing selftests:
+# 1) building selftests
+# 2) installing built selftests
+- name: Build selftests
+  tags: [ 'selftests', 'build' ]
   make:
-    chdir: "{{ blktrace_data }}"
+    chdir: "{{ selftests_data }}"
     jobs: "{{ nproc.stdout }}"
+    params:
+      TARGETS: "{{ target_selftest }}"
+      FORCE_TARGETS: "1"
+  when:
+    - not bootlinux_9p|bool
+
+# We build only what we need. This means if building on the host we peg all
+# the targets we want together so we can build all of them.
+# We use FORCE_TARGETS=1 so to ensure make will fail if a build target failed.
+#
+# Note that some targets will not fail with an error if dependencies are not
+# met.. so you should ensure that build-deps are met before adding a new target
+- name: Build selftests on host
+  tags: [ 'selftests', 'build' ]
+  make:
+    chdir: "{{ selftests_data_9p }}"
+    jobs: "{{ nproc_host.stdout }}"
+    params:
+      TARGETS: "{{ all_selftest_targets }}"
+      FORCE_TARGETS: "1"
+  run_once: true
+  delegate_to: localhost
+  when:
+    - bootlinux_9p|bool
+
+# We use the target node only, not the host as if you've enaabled
+# 9p the path will be available and everything will have been built
+# for us.
+- name: Install selftests
+  tags: [ 'selftests', 'build' ]
+  become: yes
+  become_method: sudo
+  become_flags: 'su - -c'
+  make:
+    chdir: "{{ selftests_data }}"
+    jobs: "{{ nproc.stdout }}"
+    target: install
+    params:
+      O: "{{ selftests_data_target }}"
+      TARGETS: "{{ target_selftest }}"
 
 - name: Reboot system before our test so we know everything is sane
   tags: [ 'selftests', 'run_tests', 'reboot' ]
@@ -34,37 +104,35 @@
   become_method: sudo
   reboot:
     post_reboot_delay: 10
+  when:
+    - not selftests_skip_reboot|bool
 
 - name: Set the path to selftests workflow
   set_fact:
     selftests_workflow_target: "../workflows/selftests/"
   tags: [ 'selftests', 'run_tests', 'copy_results', 'prior_run', 'print_results' , 'augment_expunge_list' ]
 
-- name: Set the path where we collect our selftests results
-  set_fact:
-    selftests_results_target: "../workflows/selftests/results/"
-    selftests_results_full_path: "{{ topdir_path }}/workflows/selftests/results/"
-  tags: [ 'selftests', 'run_tests', 'copy_results', 'prior_run', 'print_results' , 'augment_expunge_list' ]
-
-- name: Print uname for each host
-  tags: [ 'selftests', 'run_tests' ]
-  debug: var=ansible_kernel
-
 - name: Get used target kernel version
-  tags: [ 'selftests', 'copy_results', 'augment_expunge_list' ]
+  tags: [ 'selftests', 'vars', 'copy_results', 'augment_expunge_list' ]
   command: "uname -r"
   register: uname_cmd
 
 - name: Store last kernel variable
   set_fact:
     last_kernel: "{{ uname_cmd.stdout_lines | regex_replace('\\]') | regex_replace('\\[') | replace(\"'\",'') }}"
-  tags: [ 'selftests', 'copy_results', 'augment_expunge_list' ]
+  tags: [ 'selftests', 'vars', 'copy_results', 'augment_expunge_list' ]
   run_once: true
 
-- name: Document used target kernel version
-  local_action: "shell echo {{ last_kernel }} > {{ selftests_results_target }}/last-kernel.txt"
-  tags: [ 'selftests', 'copy_results', 'augment_expunge_list' ]
-  run_once: true
+- name: Set the path where we collect our selftests results
+  set_fact:
+    selftests_results_full_path: "{{ topdir_path }}/workflows/selftests/results/"
+    selftests_workflow_dir: "../workflows/selftests"
+    selftests_results_target: "../workflows/selftests/results/last-run/{{ last_kernel }}"
+  tags: [ 'selftests', 'run_tests', 'copy_results', 'prior_run', 'print_results' , 'augment_expunge_list' ]
+
+- name: Print uname for each host
+  tags: [ 'selftests', 'run_tests' ]
+  debug: var=ansible_kernel
 
 - name: Load configfs module
   tags: [ 'selftests', 'run_tests', 'configfs' ]
@@ -97,19 +165,21 @@
   become_method: sudo
   command: sysctl kernel.printk="8 8 1 7"
 
-- name: Run selftests using oscheck.sh
-  vars:
-    group: "{{ ansible_host | regex_replace('selftests-') | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
+- name: Stop selftests if we're debbugging
+  ansible.builtin.meta: end_play
+  tags: [ 'selftests', 'run_tests', 'vars'  ]
+  when:
+    - selftests_skip_run|bool
+
+- name: Run selftests
   tags: [ 'selftests', 'run_tests' ]
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
-  command: "./oscheck.sh --print-start --print-done --test-group {{ group }} {{ oscheck_extra_args }} {{ all_limit_tests }}"
-  ignore_errors: yes
-  no_log: True
+  command: "./run_kselftest.sh -s"
   args:
-    chdir: "{{ selftests_data_target }}"
-  environment:
+    chdir: "{{ selftests_workdir }}"
+  register: selftests_out
   when:
     - kdevops_run_selftests|bool
 
@@ -129,13 +199,52 @@
   run_once: true
   tags: [ 'selftests', 'copy_results', 'clean_local_results' ]
 
-- name: Look for results for the last run
+- name: Create empty last-run directory
+  local_action: file path="{{ selftests_results_target }}/" state=directory
+  run_once: true
+  tags: [ 'selftests', 'copy_results', 'clean_local_results' ]
+
+- name: Document used target kernel version
+  local_action: "shell echo {{ last_kernel }} > {{ selftests_results_target }}/last-kernel.txt"
+  tags: [ 'selftests', 'copy_results', 'augment_expunge_list' ]
+  run_once: true
+
+- name: Save selftest TAP output
+  tags: [ 'selftests', 'run_tests' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  copy:
+    content: "{{ selftests_out.stdout_lines|join('\n') }}"
+    dest: "{{ selftests_workdir}}/tap.log"
+
+- name: Look for the output.log and sefltest tap output files on {{ selftests_workdir }}
   tags: [ 'selftests', 'copy_results' ]
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
   find:
-    paths: "{{ selftests_data_target }}/results/"
+    paths: "{{ selftests_workdir }}"
     recurse: yes
-    patterns: "*"
-  register: last_run_results
+    patterns:
+      - "output.log"
+      - "kselftest-list.txt"
+      - "tap.log"
+  register: output_log_files
+
+- name: Copy the output files from {{ selftests_workdir }}
+  tags: [ 'selftests', 'copy_results' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  vars:
+    item_with_target: "{{ target_selftest }}.{{ item.path | basename }}"
+  fetch:
+    src: "{{ item.path }}"
+    dest: "{{ selftests_results_target }}/{{ item_with_target }}"
+    flat: yes
+  with_items: "{{ output_log_files.files }}"
+  loop_control:
+    label: "Copying {{ item_with_target }} ..."
+  when:
+    - output_log_files.matched > 0

@@ -9,23 +9,53 @@ endif
 WORKFLOW_ARGS += $(SELFTESTS_ARGS)
 
 DYNAMIC_RUNTIME_VARS := "kdevops_run_selftests": True
-ifneq (,$(RUN_FAILURES))
-DYNAMIC_RUNTIME_VARS += , "run_tests_on_failures": True
-endif
 
 ifneq (,$(SKIP_RUN))
 DYNAMIC_RUNTIME_VARS += , "selftests_skip_run": True
 endif
 
-selftests:
-	$(Q)ansible-playbook -f 30 -i hosts playbooks/selftests.yml --skip-tags run_tests,copy_results $(LIMIT_HOSTS)
+ifneq (,$(SKIP_REBOOT))
+DYNAMIC_RUNTIME_VARS += , "selftests_skip_reboot": True
+endif
 
-selftests-help-menu:
-	@echo "selftests options:"
-	@echo "selftests                         - Runs all enabled selftests"
-	@echo "selftests-firmware                - Runs selftests for firmware_loader"
-	@echo "selftests-kmod                    - Runs selftests for kmod"
-	@echo "selftests-sysctl                  - Runs selftests for proc sysctl"
+SELFTESTS_HELP_TARGETS := selftests-help-main
+SELFTESTS_LIMIT_TARGET :=
+KDEVOPS_HOSTS_PREFIX:=$(subst ",,$(CONFIG_KDEVOPS_HOSTS_PREFIX))
+
+ifeq (y,$(CONFIG_SELFTESTS_MANUAL_COVERAGE))
+SELFTESTS_HELP_TARGETS += selftests-help-menu-targets
+endif
+
+include $(TOPDIR)/workflows/selftests/tests/Makefile.firmware
+include $(TOPDIR)/workflows/selftests/tests/Makefile.kmod
+include $(TOPDIR)/workflows/selftests/tests/Makefile.sysctl
+
+selftests:
+	$(Q)ansible-playbook -f 30 -i hosts playbooks/selftests.yml \
+		--skip-tags run_tests,copy_results \
+		$(LIMIT_HOSTS)
+
+selftests-baseline:
+	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/selftests.yml \
+		--extra-vars '{ $(DYNAMIC_RUNTIME_VARS) }' \
+		--tags vars,run_tests,copy_results $(LIMIT_HOSTS)
+
+selftests-results:
+	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/selftests.yml \
+		--tags vars,copy_results $(LIMIT_HOSTS)
+
+selftests-help-main:
+	@echo "Generic selftests options:"
+	@echo "selftests                         - Build (can be local if using 9p) and then install target selftests (could be to target nodes)"
+	@echo "selftests-baseline                - Runs selftests for all supported targets"
+	@echo "selftests-results                 - Get results for all test runs"
+
+selftests-help-menu: $(SELFTESTS_HELP_TARGETS)
 	@echo ""
 
+selftests-help-menu-targets:
+	@echo ""
+	@echo "Specific target selftests sections:"
+
+PHONY += $(SELFTESTS_HELP_TARGETS)
 HELP_TARGETS += selftests-help-menu
