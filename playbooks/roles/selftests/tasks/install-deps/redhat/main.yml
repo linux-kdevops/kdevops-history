@@ -10,4 +10,6 @@
       - gcc
       - bc
       - sed
+      - rsync
       - git-core
+      - glibc-devel.*i686

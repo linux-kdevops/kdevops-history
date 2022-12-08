@@ -51,6 +51,9 @@
       - make
       - bc
       - sed
+      - rsync
+      - gcc-32bit
+      - glibc-devel-static-32bit
     state: present
   when:
     - repos_present|bool

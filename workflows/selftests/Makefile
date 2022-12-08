@@ -6,8 +6,6 @@ ifeq (y,$(CONFIG_WORKFLOWS_DEDICATED_WORKFLOW))
 export KDEVOPS_HOSTS_TEMPLATE := selftests.j2
 endif
 
-WORKFLOW_ARGS += $(SELFTESTS_ARGS)
-
 DYNAMIC_RUNTIME_VARS := "kdevops_run_selftests": True
 
 ifneq (,$(SKIP_RUN))
@@ -59,3 +57,4 @@ selftests-help-menu-targets:
 
 PHONY += $(SELFTESTS_HELP_TARGETS)
 HELP_TARGETS += selftests-help-menu
+WORKFLOW_ARGS += $(SELFTESTS_ARGS)

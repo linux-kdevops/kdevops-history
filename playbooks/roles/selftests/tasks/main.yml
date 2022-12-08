@@ -24,6 +24,17 @@
   when:
     - bootlinux_9p|bool
 
+- name: Remove /lib/udev/rules.d/50-firmware.rules
+  tags: [ 'selftests', 'deps' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  file:
+    path: "/lib/udev/rules.d/50-firmware.rules"
+    state: absent
+  when:
+    - selftests_section_firmware|bool
+
 - include_role:
     name: create_data_partition
   tags: [ 'data_partition' ]

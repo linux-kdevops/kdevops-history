@@ -15,6 +15,10 @@
       - bc
       - sed
       - git
+      - gcc-multilib
+      - libc6-i386
+      - libc6-dev-i386
+      - rsync
     state: present
     update_cache: yes
   tags: [ 'selftests', 'deps' ]
