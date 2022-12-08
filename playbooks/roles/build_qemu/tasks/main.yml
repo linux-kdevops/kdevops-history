@@ -53,6 +53,7 @@
   git:
     repo: "{{ qemu_git }}"
     dest: "{{ qemu_data }}"
+    version: "{{ qemu_version }}"
   when:
     - build_qemu_now|bool
 

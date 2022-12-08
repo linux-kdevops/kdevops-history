@@ -4,10 +4,12 @@ QEMU_BUILD_SETUP_ARGS :=
 QEMU_BUILD_SETUP_ARGS += qemu_build=True
 
 QEMU_GIT:=$(subst ",,$(CONFIG_QEMU_BUILD_GIT))
+QEMU_GIT_VERSION:=$(subst ",,$(CONFIG_QEMU_BUILD_GIT_VERSION))
 QEMU_DATA:=$(subst ",,$(CONFIG_QEMU_BUILD_GIT_DATA_PATH))
 
 QEMU_BUILD_SETUP_ARGS += qemu_git=$(QEMU_GIT)
 QEMU_BUILD_SETUP_ARGS += qemu_data=\"$(QEMU_DATA)\"
+QEMU_BUILD_SETUP_ARGS += qemu_version='$(QEMU_GIT_VERSION)'
 
 qemu: $(KDEVOPS_EXTRA_VARS)
 	@$(Q)ansible-playbook --connection=local \

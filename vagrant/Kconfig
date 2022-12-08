@@ -239,6 +239,13 @@ config QEMU_BUILD_GIT_DATA_PATH
 	  Note that {{local_dev_path}} corresponds to the location set by the
 	  configuration option CONFIG_NEEDS_LOCAL_DEVELOPMENT_PATH.
 
+config QEMU_BUILD_GIT_VERSION
+	string "The version of qemu to build"
+	default "v7.2.0-rc4"
+	help
+	  This is the target build version of qemu to build. Please use
+	  at least v7.2.0-rc4 for CXL support.
+
 config QEMU_USE_DEVELOPMENT_VERSION
 	bool
 	default y
