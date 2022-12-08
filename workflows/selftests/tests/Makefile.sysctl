@@ -1,6 +1,6 @@
 ifeq (y,$(CONFIG_SELFTESTS_SECTION_SYSCTL))
 SELFTESTS_HELP_TARGETS += selftests-help-menu-target-sysctl
-SELFTESTS_ARGS := selftests_section_sysctl='True'
+SELFTESTS_ARGS += selftests_section_sysctl='True'
 selftests-sysctl:
 	$(Q)$(MAKE) selftests-baseline HOSTS=$(KDEVOPS_HOSTS_PREFIX)-sysctl
 endif
