@@ -30,7 +30,7 @@ make: "make"
 # introduce fact "ansible_processor_nproc": number of usable vcpus #66569
 # https://github.com/ansible/ansible/pull/66569
 target_linux_make_cmd: "{{ make }} -j{{ ansible_processor_vcpus }}"
-target_linux_make_install_cmd: "{{ make }} modules_install install"
+target_linux_make_install_cmd: "{{ target_linux_make_cmd }} modules_install install"
 
 # If defined we'll apply this delta for you.
 # target_linux_extra_patch: foo.patch
