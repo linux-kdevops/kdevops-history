@@ -45,7 +45,8 @@ endif
 WORKFLOW_ARGS += $(BOOTLINUX_ARGS)
 linux-help-menu:
 	@echo "Linux git kernel development options"
-	@echo "linux              - Git clones a linux git tree, build linux and reboots into it"
+	@echo "linux              - Git clones a linux git tree, build Linux, installs and reboots into it"
+	@echo "linux-install      - Only builds, installs Linux and reboots - useful for rapid development"
 	@echo "linux-clone        - Only clones Linux"
 	@echo "linux-grub-setup   - Ensures the appropriate target kernel is set to boot"
 	@echo "linux-reboot       - Reboot guests"
@@ -56,6 +57,13 @@ PHONY += linux
 linux: $(KDEVOPS_NODES)
 	$(Q)ansible-playbook -i \
 		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
+		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS)
+
+PHONY += linux-install
+linux-install: $(KDEVOPS_NODES)
+	$(Q)ansible-playbook -i \
+		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
+		--tags vars,build-linux,install-linux,reboot,uname \
 		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS)
 
 linux-clone-clients: $(KDEVOPS_NODES)
