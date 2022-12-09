@@ -32,6 +32,12 @@
   args:
     chdir: "{{ ndctl_data }}"
 
+- name: Enable unit tests as per meson
+  command: "meson configure -Dtest=enabled -Ddestructive=enabled build"
+  tags: [ 'ndctl' ]
+  args:
+    chdir: "{{ ndctl_data }}"
+
 - name: run meson compile -C build for ndctl
   command: "meson compile -C build"
   tags: [ 'ndctl' ]
@@ -46,3 +52,56 @@
   tags: [ 'ndctl' ]
   args:
     chdir: "{{ ndctl_data }}"
+
+- name: Load configfs module
+  tags: [ 'ndctl', 'cxl-test-prep' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "modprobe configfs"
+  when:
+    - kdevops_run_cxl_tests|bool
+
+- name: Enable low-level messages on console
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: sysctl kernel.printk="8 8 1 7"
+  tags: [ 'ndctl', 'cxl-test-prep' ]
+  when:
+    - kdevops_run_cxl_tests|bool
+
+- name: modprobe cxl_test
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "modprobe cxl_test"
+  tags: [ 'ndctl', 'cxl-test-probe' ]
+  args:
+    chdir: "{{ ndctl_data }}"
+  when:
+    - kdevops_run_cxl_tests|bool
+
+- name: modprobe -r cxl_test
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "modprobe -r cxl_test"
+  tags: [ 'ndctl', 'cxl-test-probe' ]
+  args:
+    chdir: "{{ ndctl_data }}"
+  when:
+    - kdevops_run_cxl_tests|bool
+
+- name: run meson cxl unit test suite
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ignore_errors: yes
+  no_log: True
+  command: "meson test -C build --suite cxl"
+  tags: [ 'ndctl', 'cxl-test-meson' ]
+  args:
+    chdir: "{{ ndctl_data }}"
+  when:
+    - kdevops_run_cxl_tests|bool

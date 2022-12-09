@@ -24,6 +24,7 @@
       - libkeyutils-dev
       - libiniparser-dev
       - bash-completion
+      - jq
     state: present
     update_cache: yes
   tags: [ 'cxl', 'deps' ]

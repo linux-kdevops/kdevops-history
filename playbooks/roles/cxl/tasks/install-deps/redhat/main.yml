@@ -21,3 +21,4 @@
       - keyutils-libs-devel
       - iniparser-devel
       - bash-completion
+      - jq

@@ -73,6 +73,7 @@
       - keyutils-devel
       - libiniparser-dev
       - bash-completion-devel
+      - jq
     state: present
   when:
     - repos_present|bool

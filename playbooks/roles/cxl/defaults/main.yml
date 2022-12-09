@@ -3,3 +3,4 @@
 ndctl_git: "https://github.com/pmem/ndctl.git"
 ndctl_data: "{{ data_path }}/ndctl"
 ndctl_version: "pending"
+kdevops_run_cxl_tests: False
