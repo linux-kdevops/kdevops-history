@@ -329,7 +329,7 @@
   run_once: true
   delegate_to: localhost
 
-- name: Build linux {{ target_linux_tree }} on the client side
+- name: Build {{ target_linux_tree }} on the client side
   command: "{{ target_linux_make_cmd }}"
   register: build
   changed_when: "build.rc == 0"
@@ -338,6 +338,17 @@
   tags: [ 'linux', 'build-linux' ]
   when:
     - not bootlinux_9p|bool
+
+- name: Build {{ target_linux_tree }} cxl_test on the client side
+  command: "{{ target_linux_make_cmd }} M=tools/testing/cxl"
+  register: build_cxl_test
+  changed_when: "build_cxl_test.rc == 0"
+  args:
+    chdir: "{{ target_linux_dir_path }}"
+  tags: [ 'linux', 'build-linux', 'cxl-build' ]
+  when:
+    - not bootlinux_9p|bool
+    - kdevops_workflow_enable_cxl|bool
 
 - name: See if snake-oil cert file is present on client
   stat:
@@ -358,20 +369,33 @@
 
 - name: Get nproc on the host side
   command: "{{ num_jobs }}"
-  tags: [ 'linux', 'build-linux', 'configure' ]
+  tags: [ 'linux', 'build-linux', 'configure', 'cxl-build' ]
   register: nproc_9p
   when:
     - bootlinux_9p|bool
   run_once: true
   delegate_to: localhost
 
-- name: Build linux {{ target_linux_tree }} on the host side using {{ nproc.stdout }} threads
+- name: Build {{ target_linux_tree }} on the host side using {{ nproc_9p.stdout }} threads
   make:
     jobs: "{{ nproc_9p.stdout }}"
     chdir: "{{ bootlinux_9p_host_path }}"
   tags: [ 'linux', 'build-linux' ]
   when:
     - bootlinux_9p|bool
+  run_once: true
+  delegate_to: localhost
+
+- name: Build {{ target_linux_tree }} cxl_test on the host side using {{ nproc_9p.stdout }} threads
+  make:
+    jobs: "{{ nproc_9p.stdout }}"
+    chdir: "{{ bootlinux_9p_host_path }}"
+    params:
+      M: "tools/testing/cxl"
+  tags: [ 'linux', 'build-linux', 'cxl-build' ]
+  when:
+    - bootlinux_9p|bool
+    - kdevops_workflow_enable_cxl|bool
   run_once: true
   delegate_to: localhost
 
@@ -450,7 +474,7 @@
   tags: [ 'linux', 'git', 'config', 'saved' ]
   when: ansible_facts['os_family']|lower == 'redhat'
 
-- name: Install linux {{ target_linux_tree }} on the client side
+- name: Install {{ target_linux_tree }} on the client side
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -460,6 +484,19 @@
   args:
     chdir: "{{ target_linux_dir_path }}"
   tags: [ 'linux', 'install-linux' ]
+
+- name: Install {{ target_linux_tree }} cxl_test on the client side
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: "{{ target_linux_make_install_cmd }} M=tools/testing/cxl"
+  register: install_done
+  changed_when: "install_done.rc == 0"
+  args:
+    chdir: "{{ target_linux_dir_path }}"
+  tags: [ 'linux', 'install-linux', 'cxl-install' ]
+  when:
+    - kdevops_workflow_enable_cxl|bool
 
 - name: Set the default kernel if necessary
   tags: [ 'linux', 'git', 'config', 'saved' ]

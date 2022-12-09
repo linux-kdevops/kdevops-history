@@ -43,6 +43,8 @@ LINUX_CLONE_DEFAULT_TYPE := linux-clone-9p
 endif
 
 WORKFLOW_ARGS += $(BOOTLINUX_ARGS)
+
+PHONY +=  linux-help-menu
 linux-help-menu:
 	@echo "Linux git kernel development options"
 	@echo "linux              - Git clones a linux git tree, build Linux, installs and reboots into it"
@@ -51,7 +53,12 @@ linux-help-menu:
 	@echo "linux-grub-setup   - Ensures the appropriate target kernel is set to boot"
 	@echo "linux-reboot       - Reboot guests"
 	@echo "uname              - Prints current running kernel"
+
+PHONY += linux-help-end
+linux-help-end:
 	@echo ""
+
+LINUX_HELP_EXTRA :=
 
 PHONY += linux
 linux: $(KDEVOPS_NODES)
@@ -102,4 +109,21 @@ uname: $(KDEVOPS_NODES)
 		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
 		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS) --tags uname,vars
 
+ifeq (y,$(CONFIG_KDEVOPS_WORKFLOW_ENABLE_CXL))
+PHONY += linux-cxl
+linux-cxl: $(KDEVOPS_NODES)
+	$(Q)ansible-playbook -i \
+		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
+		--tags 'vars,cxl-build,cxl-install'                             \
+		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS)
+
+PHONY += linux-help-cxl
+linux-help-cxl:
+	@echo "linux-cxl          - Builds cxl_test only and installs it"
+
+LINUX_HELP_EXTRA += linux-help-cxl
+endif
+
 HELP_TARGETS+=linux-help-menu
+HELP_TARGETS+=$(LINUX_HELP_EXTRA)
+HELP_TARGETS+=linux-help-end
