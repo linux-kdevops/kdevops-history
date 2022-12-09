@@ -339,10 +339,27 @@
   when:
     - not bootlinux_9p|bool
 
+- name: See if snake-oil cert file is present on client
+  stat:
+    path: "{{ target_linux_dir_path }}/certs/signing_key.pem"
+  register: snaik_oil_file
+  tags: [ 'linux', 'build-linux' ]
+  when:
+    - not bootlinux_9p|bool
+
+- name: Ensure we allow world to read the snake oil in case of NFS or 9p read only usage
+  file:
+    path: "{{ target_linux_dir_path }}/certs/signing_key.pem"
+    mode: "0755"
+  tags: [ 'linux', 'build-linux' ]
+  when:
+    - not bootlinux_9p|bool
+    - snaik_oil_file.stat.exists
+
 - name: Get nproc on the host side
   command: "{{ num_jobs }}"
-  tags: [ 'qemu', 'configure' ]
-  register: nproc
+  tags: [ 'linux', 'build-linux', 'configure' ]
+  register: nproc_9p
   when:
     - bootlinux_9p|bool
   run_once: true
@@ -350,11 +367,32 @@
 
 - name: Build linux {{ target_linux_tree }} on the host side using {{ nproc.stdout }} threads
   make:
-    jobs: "{{ nproc.stdout }}"
+    jobs: "{{ nproc_9p.stdout }}"
     chdir: "{{ bootlinux_9p_host_path }}"
   tags: [ 'linux', 'build-linux' ]
   when:
     - bootlinux_9p|bool
+  run_once: true
+  delegate_to: localhost
+
+- name: See if snake-oil cert file is present on host
+  stat:
+    path: "{{ bootlinux_9p_host_path }}/certs/signing_key.pem"
+  register: snaik_oil_file_9p
+  tags: [ 'linux', 'build-linux' ]
+  when:
+    - bootlinux_9p|bool
+  run_once: true
+  delegate_to: localhost
+
+- name: Ensure we allow world to read the snake oil in case of NFS or 9p read only usage
+  file:
+    path: "{{ bootlinux_9p_host_path }}/certs/signing_key.pem"
+    mode: "0755"
+  tags: [ 'linux', 'build-linux' ]
+  when:
+    - bootlinux_9p|bool
+    - snaik_oil_file_9p.stat.exists
   run_once: true
   delegate_to: localhost
 
