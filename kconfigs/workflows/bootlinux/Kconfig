@@ -81,7 +81,7 @@ config BOOTLINUX_TREE_TAG
 	default "v5.19-rc4" if BOOTLINUX_STABLE_V519
 	default "v6.0.9" if BOOTLINUX_STABLE_V60
 	default "v6.1-rc6" if BOOTLINUX_STABLE_V61
-	default "next-20221118" if BOOTLINUX_TREE_NEXT
+	default "next-20221207" if BOOTLINUX_TREE_NEXT
 	default "for-next" if BOOTLINUX_TREE_BTRFS_DEVEL
 	help
 	  The git branch / tag or sha1sum to use.
