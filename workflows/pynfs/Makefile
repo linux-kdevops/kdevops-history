@@ -1,3 +1,8 @@
+PYNFS_GIT:=$(subst ",,$(CONFIG_PYNFS_GIT))
+
+PYNFS_ARGS += pynfs_git=$(PYNFS_GIT)
+WORKFLOW_ARGS += $(PYNFS_ARGS)
+
 # Makefile for pynfs targets
 pynfs:
 	$(Q)ansible-playbook -f 30 -i hosts playbooks/pynfs.yml --skip-tags run_tests,copy_results

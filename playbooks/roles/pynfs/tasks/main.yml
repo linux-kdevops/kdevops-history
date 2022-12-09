@@ -51,7 +51,7 @@
     repo: "{{ pynfs_git }}"
     dest: "{{ pynfs_data }}"
     update: yes
-    version: fixes
+    version: master
   retries: 3
   delay: 5
   register: result
@@ -65,7 +65,7 @@
 
 - name: Run pynfs
   tags: [ 'run_tests' ]
-  command: "./testserver.py --json={{ pynfs_data }}/pynfs-{{ item }}-results.json --maketree localhost:{{ export_path }} all"
+  shell: "./testserver.py --json={{ pynfs_data }}/pynfs-{{ item }}-results.json --maketree localhost:{{ nfsd_export_path }} all || true"
   args:
     chdir: "{{ pynfs_data }}/nfs{{ item }}"
   with_items:

@@ -5,6 +5,4 @@
 # We default to not run tests.
 kdevops_run_pynfs: False
 
-pynfs_git: "https://github.com/jtlayton/pynfs.git"
 pynfs_data: "{{ data_path }}/pynfs"
-export_path: "/export"
