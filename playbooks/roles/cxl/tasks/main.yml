@@ -53,8 +53,44 @@
   args:
     chdir: "{{ ndctl_data }}"
 
+- name: Set the path to cxl workflow
+  set_fact:
+    cxl_workflow_target: "../workflows/cxl/"
+  tags: [ 'ndctl', 'cxl-test-prep', 'copy_results' ]
+
+- name: Get used target kernel version
+  tags: [ 'ndctl', 'cxl-test-prep', 'copy_results' ]
+  command: "uname -r"
+  register: uname_cmd
+
+- name: Store last kernel variable
+  set_fact:
+    last_kernel: "{{ uname_cmd.stdout_lines | regex_replace('\\]') | regex_replace('\\[') | replace(\"'\",'') }}"
+  tags: [ 'ndctl', 'cxl-test-prep', 'copy_results' ]
+  run_once: true
+
+- name: Set the path where we collect our cxl results
+  set_fact:
+    cxl_results_full_path: "{{ topdir_path }}/workflows/selftests/results/"
+    cxl_workflow_dir: "../workflows/cxl"
+    cxl_results_target: "../workflows/cxl/results/last-run/{{ last_kernel }}"
+  tags: [ 'ndctl', 'cxl-test-prep', 'copy_results' ]
+
+- name: Print uname for each host
+  tags: [ 'ndctl', 'cxl-test-prep', 'copy_results' ]
+  debug: var=ansible_kernel
+
+- name: Clear out old meson results directory on target hosts
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  file:
+    state: absent
+    path: "{{ ndctl_data }}/{{ ndctl_meson_testlog }}"
+  tags: [ 'ndctl', 'cxl-test-prep', 'copy_results' ]
+
 - name: Load configfs module
-  tags: [ 'ndctl', 'cxl-test-prep' ]
+  tags: [ 'ndctl', 'cxl-test-prep', 'run_tests' ]
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -67,7 +103,7 @@
   become_flags: 'su - -c'
   become_method: sudo
   command: sysctl kernel.printk="8 8 1 7"
-  tags: [ 'ndctl', 'cxl-test-prep' ]
+  tags: [ 'ndctl', 'cxl-test-prep', 'run_tests' ]
   when:
     - kdevops_run_cxl_tests|bool
 
@@ -76,7 +112,7 @@
   become_flags: 'su - -c'
   become_method: sudo
   command: "modprobe cxl_test"
-  tags: [ 'ndctl', 'cxl-test-probe' ]
+  tags: [ 'ndctl', 'cxl-test-probe', 'run_tests' ]
   args:
     chdir: "{{ ndctl_data }}"
   when:
@@ -87,7 +123,7 @@
   become_flags: 'su - -c'
   become_method: sudo
   command: "modprobe -r cxl_test"
-  tags: [ 'ndctl', 'cxl-test-probe' ]
+  tags: [ 'ndctl', 'cxl-test-probe', 'run_test' ]
   args:
     chdir: "{{ ndctl_data }}"
   when:
@@ -100,8 +136,56 @@
   ignore_errors: yes
   no_log: True
   command: "meson test -C build --suite cxl"
-  tags: [ 'ndctl', 'cxl-test-meson' ]
+  tags: [ 'ndctl', 'cxl-test-meson', 'run_tests' ]
   args:
     chdir: "{{ ndctl_data }}"
   when:
     - kdevops_run_cxl_tests|bool
+
+- name: Clean up our localhost results/last-run directory
+  local_action: file path="{{ cxl_results_target }}/{{ item }}" state=absent
+  with_items:
+    - "last-run"
+  loop_control:
+    label: "{{ item }}"
+  run_once: true
+  tags: [ 'ndctl', 'cxl-test-meson', 'copy_results' ]
+
+- name: Create empty last-run directory
+  local_action: file path="{{ cxl_results_target }}/" state=directory
+  run_once: true
+  tags: [ 'ndctl', 'cxl-test-meson', 'copy_results' ]
+
+- name: Document used target kernel version
+  local_action: "shell echo {{ last_kernel }} > {{ cxl_results_target }}/last-kernel.txt"
+  run_once: true
+  tags: [ 'ndctl', 'cxl-test-meson', 'copy_results' ]
+
+- name: Look for our test results {{ ndctl_meson_testlog | basename }}
+  tags: [ 'ndctl', 'cxl-test-meson', 'copy_results' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  find:
+    paths: "{{ ndctl_data }}"
+    recurse: yes
+    patterns:
+      - "{{ ndctl_meson_testlog | basename }}"
+  register: output_log_files
+
+- name: Copy over our test result into {{ cxl_results_target }}
+  tags: [ 'ndctl', 'cxl-test-meson', 'copy_results' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  vars:
+    item_with_target: "{{ item.path | basename }}"
+  fetch:
+    src: "{{ item.path }}"
+    dest: "{{ cxl_results_target }}/{{ item_with_target }}"
+    flat: yes
+  with_items: "{{ output_log_files.files }}"
+  loop_control:
+    label: "Copying {{ item_with_target }} ..."
+  when:
+    - output_log_files.matched > 0

@@ -14,7 +14,9 @@ BOOTLINUX_CXL_HELP :=
 include $(TOPDIR)/workflows/cxl/Makefile.kernel
 
 cxl:
-	$(Q)ansible-playbook -f 30 -i hosts playbooks/cxl.yml $(LIMIT_HOSTS)
+	$(Q)ansible-playbook -f 30 -i hosts playbooks/cxl.yml \
+		--skip-tags run_tests,copy_results \
+		$(LIMIT_HOSTS)
 
 cxl-test-probe:
 	$(Q)ansible-playbook -f 30 -i hosts playbooks/cxl.yml \
@@ -28,12 +30,17 @@ cxl-test-meson:
 		--extra-vars '{ $(DYNAMIC_RUNTIME_VARS) }' \
 		$(LIMIT_HOSTS)
 
+cxl-results:
+	$(Q)ansible-playbook -f 30 -i hosts playbooks/cxl.yml \
+		--tags vars,copy_results $(LIMIT_HOSTS)
+
 
 cxl-help-menu:
 	@echo "cxl development:"
 	@echo "cxl                 - Git clones ncdtl to compile and install the /usr/bin/cxl binary"
 	@echo "cxl-test-probe      - Basic sanity test, only runs loads / unloads the cxl_test driver"
 	@echo "cxl-test-meson      - Runs the ndctl meson unit tests for the CXL test suite"
+	@echo "cxl-results         - Get results for all tests runs"
 
 cxl-help-end:
 	@echo ""
