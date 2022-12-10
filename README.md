@@ -94,6 +94,11 @@ are detected. Documentation for this follows:
 
   * [kdevops kernel-ci](docs/kernel-ci/README.md)
 
+# Video presentations on kdevops or related
+
+  * [https://youtu.be/9PYjRYbc-Ms](2022 - LSFMM - Challenges with running fstests and blktests )
+  * [https://youtu.be/-1KnphkTgNg](2020 - SUSE Labs Conference - kdevops: bringing devops to kernel development)
+
 # Underneath the kdevops hood
 
 Below are sections which get into technical details of how kdevops works.
