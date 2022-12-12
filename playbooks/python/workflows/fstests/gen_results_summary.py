@@ -69,7 +69,12 @@ def print_tests(out_f, testsuite, result_type, type_label):
     found = False
     pos = 0
     for testcase in testsuite:
-        if not isinstance(testcase.result, result_type):
+        result = None
+        for r in testcase.result:
+            if isinstance(r, result_type):
+                result = r
+
+        if result is None:
             continue
         if not found:
             out_f.write('  %s: ' % type_label)
@@ -147,12 +152,13 @@ def print_summary(out_f, testsuite, verbose, print_section):
     if verbose:
         for test_case in testsuite:
             status = 'Pass'
-            if isinstance(test_case.result, Failure):
-                status = 'Failed'
-            if isinstance(test_case.result, Skipped):
-                status = 'Skipped'
-            if isinstance(test_case.result, Error):
-                status = 'Error'
+            for result in test_case.result:
+                if isinstance(result, Failure):
+                    status = 'Failed'
+                if isinstance(result, Skipped):
+                    status = 'Skipped'
+                if isinstance(result, Error):
+                    status = 'Error'
             out_f.write("  %-12s %-8s %ds\n" %
                         (test_case.name, status, test_case.time))
     else:
