@@ -489,7 +489,7 @@
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
-  command: "{{ target_linux_make_install_cmd }} M=tools/testing/cxl"
+  command: "{{ target_linux_make_install_cmd }} M=tools/testing/cxl INSTALL_MOD_DIR=updates"
   register: install_done
   changed_when: "install_done.rc == 0"
   args:
