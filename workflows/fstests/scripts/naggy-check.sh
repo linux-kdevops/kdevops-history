@@ -143,6 +143,10 @@ while true; do
 		fi
 	fi
 	let i=$i+1
+
+	if [[ $NUM_TESTS != "loop" && $i -ge $NUM_TESTS ]]; then
+            exit $RET
+        fi
 done
 
 exit 0
