@@ -83,8 +83,6 @@
       - harfbuzz-devel
       - harfbuzz-icu
       - imath
-      - jack-audio-connection-kit
-      - jack-audio-connection-kit-devel
       - jasper-libs
       - kernel-devel
       - kernel-headers
@@ -217,8 +215,6 @@
       - pkgconf-m4
       - pkgconf-pkg-config
       - polkit-libs
-      - pulseaudio-libs-devel
-      - pulseaudio-libs-glib2-15.0
       - python3-devel
       - python3-docutils
       - python3-imagesize
