@@ -253,7 +253,7 @@ config INSTALL_LOCAL_LINUX_MIRROR
 	  If you enable this kdevops will git clone the main Linux repos needed
 	  for Linux as bare git repositories and then install systemd units
 	  to keep these properly updated. The repositories will be placed
-	  into /mirrror/ directory:
+	  into /mirror/ directory:
 
 	    /mirror/linux.git
 	    /mirror/linux-stable.git
