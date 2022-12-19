@@ -222,7 +222,7 @@ endif
 
 config ENABLE_LOCAL_LINUX_MIRROR
 	bool "Enable kdevops to use your localhost as a git mirror for Linux"
-	default n
+	default $(shell, scripts/check_mirror.sh ENABLE_LOCAL_LINUX_MIRROR)
 	help
 	  When doing build on Linux one of the most timely consuming operations
 	  is doing a git clone on Linux. This is whether you are doing a local
@@ -239,7 +239,7 @@ if ENABLE_LOCAL_LINUX_MIRROR
 
 config USE_LOCAL_LINUX_MIRROR
 	bool "Use local linux mirror"
-	default n
+	default $(shell, scripts/check_mirror.sh USE_LOCAL_LINUX_MIRROR)
 	help
 	  If you have a local Linux mirror already set up, or want to use
 	  the one which kdevops lets you set up, enable this option so that
@@ -247,8 +247,7 @@ config USE_LOCAL_LINUX_MIRROR
 
 config INSTALL_LOCAL_LINUX_MIRROR
 	bool "Install local mirror setup"
-	default n
-	select USE_LOCAL_LINUX_MIRROR
+	default $(shell, scripts/check_mirror.sh INSTALL_LOCAL_LINUX_MIRROR)
 	help
 	  If you enable this kdevops will git clone the main Linux repos needed
 	  for Linux as bare git repositories and then install systemd units
