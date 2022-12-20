@@ -260,8 +260,37 @@ config QEMU_BIN_PATH_LIBVIRT
 
 choice
 	prompt "Libvirt storage pool path"
-	default LIBVIRT_STORAGE_POOL_PATH_CUSTOM_DEFAULT_DISTRO if !DISTRO_SUSE
+	default LIBVIRT_STORAGE_POOL_PATH_INFER_ADVANCED if DISTRO_DEBIAN
+	default LIBVIRT_STORAGE_POOL_PATH_CUSTOM_DEFAULT_DISTRO if !DISTRO_SUSE && !DISTRO_DEBIAN
 	default LIBVIRT_STORAGE_POOL_PATH_CUSTOM_CWD if DISTRO_SUSE
+
+config LIBVIRT_STORAGE_POOL_PATH_INFER_ADVANCED
+	bool "Use an advanced smart inference for what storage pool path to use"
+	help
+	  If you are a power user of kdevops you likely want to enable this.
+	  By default vagrant will assume that if you don't have a virsh pool
+	  that the current directory will become the "default" storage pool
+	  path. This is rather silly for an advanced setup. Consider a setup
+	  where you have a set of different nvme drivers mounted on different
+	  partitions:
+
+	  /dev/nvme0n1 --> /data1 with xfs
+	  /dev/nvme1n1 --> /data2 with btrfs
+	  /dev/nvme2n1 --> /data2 with ext4
+
+	  In this setup, if you have a kdevops instance initialized in
+	  /data1/ somewhere you likely want to use a virsh pool path under
+	  /data1/libvirt/images/ so that all local requests to that drive
+	  go to that storage pool that. By enabling this option kdevops will
+	  infer this information for you and figure out what storage pool path
+	  to use. It will scrape your existing virsh pool-list and use the first
+	  path where the first directory of your current working directory
+	  lies.
+
+	  This is enabled by default on Debian only now as this has been
+	  tested there first. If this gets tested on other distributions
+	  they should migrate over to enable power users to be more lazy
+	  on initial bringups.
 
 config LIBVIRT_STORAGE_POOL_PATH_CUSTOM_CWD
 	bool "Use the current vagrant working directory"
@@ -297,7 +326,8 @@ endchoice
 
 config LIBVIRT_STORAGE_POOL_CREATE
 	bool "Should we build a custom storage pool for you?"
-	default n
+	default n if !LIBVIRT_STORAGE_POOL_PATH_INFER_ADVANCED
+	default $(shell, ./scripts/get_libvirsh_pool_enabled.sh) if LIBVIRT_STORAGE_POOL_PATH_INFER_ADVANCED
 	help
 	  By default vagrant assumes your storage pool name is "default" and
 	  it expects libvirt to have created this for you. If you want to
@@ -308,7 +338,8 @@ config LIBVIRT_STORAGE_POOL_CREATE
 config LIBVIRT_STORAGE_POOL_NAME
 	string "Libvirt storage pool name"
 	depends on LIBVIRT_STORAGE_POOL_CREATE
-	default "default"
+	default "default" if !LIBVIRT_STORAGE_POOL_PATH_INFER_ADVANCED
+	default $(shell, ./scripts/get_libvirsh_pool_name.sh) if LIBVIRT_STORAGE_POOL_PATH_INFER_ADVANCED
 	help
 	  The libvirt storage pool name to use. By default this is "default",
 	  and this is typically defined by libvirt. Even if you create guests
@@ -340,7 +371,8 @@ config LIBVIRT_STORAGE_POOL_NAME
 
 config LIBVIRT_STORAGE_POOL_PATH_CUSTOM
 	string "Libvirt storage pool path"
-	default "/var/lib/libvirt/images/" if !LIBVIRT_STORAGE_POOL_PATH_CUSTOM_CWD
+	default $(shell, ./scripts/get_libvirsh_pool_path.sh) if LIBVIRT_STORAGE_POOL_PATH_INFER_ADVANCED
+	default "/var/lib/libvirt/images/" if LIBVIRT_STORAGE_POOL_PATH_CUSTOM_DEFAULT_DISTRO
 	default $(shell, scripts/cwd-append.sh vagrant) if LIBVIRT_STORAGE_POOL_PATH_CUSTOM_CWD
 	default "/opt/libvirt/images/" if LIBVIRT_STORAGE_POOL_PATH_CUSTOM_MANUAL
 	help
