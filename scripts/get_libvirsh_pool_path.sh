@@ -24,7 +24,7 @@ virsh_get_pool_list
 
 DOES_POOL_EXIST=$(virsh_path_in_pool_list_exists)
 if [[ "$DOES_POOL_EXIST" != "y" ]]; then
-	echo "default"
+	echo "/var/libvirt/images"
 fi
 
 virsh_path_pool_list_path
