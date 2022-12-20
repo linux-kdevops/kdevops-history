@@ -1,5 +1,82 @@
 if BOOTLINUX
 
+config BOOTLINUX_9P
+	bool "Use 9pfs to building Linux"
+	depends on VAGRANT_LIBVIRT
+	depends on LIBVIRT_MACHINE_TYPE_Q35
+	default LIBVIRT_MACHINE_TYPE_Q35
+	help
+	  This will let you choose use 9p to build Linux. What this does is
+	  use your localhost to git clone Linux under the assumption your
+	  host is more powerful than the guests you are going to instantiate.
+	  The localhost then will be used to build Linux using all threads
+	  possible. The installation of Linux on the guest is done only with
+	  the install target, the guest gets read-only access to the host's
+	  path where Linux is closed using 9pfs.
+
+	  You should not have to modify any default 9p settings except maybe
+	  where your localhost path for your git tree is. You should keep
+	  the other settings as-is unless you know what you are doing.
+
+if BOOTLINUX_9P
+
+menu "Modify default 9p configuration"
+config BOOTLINUX_9P_HOST_PATH
+	string "9p host path"
+	default $(shell, echo $PWD/linux)
+	help
+	  This sets the 9p host path that will be used. This is the path
+	  that has your or we'll clone the respective linux git tree.
+	  If you have no git tree present there we'll git clone Linux there
+	  for you. Otherwise we'll just reset the tree for you and build Linux
+	  there for you. We build Linux only once.
+
+config BOOTLINUX_9P_MSIZE
+	int "9p msize"
+	default 131072
+	help
+	  This sets the msize value. Prior to v5.15 this was set to 8 KiB as
+	  default, however this is reported to have produced pretty terrible
+	  performance, and so this was bumped 128 KiB as default after v5.15.
+	  The qemu wiki [0] seems to suggest to use a range between 10-100 MiB
+	  for SATA and howver that is a lie as 500 KiB (512000) is the maximum
+	  value possible. Also, using the max value possible I get a different
+	  value for sha1sum on files! So let's just stick to the default
+	  of 128 KiB (131072). If you are going to update the default value
+	  for msize on kdevops please make sure you test this and it works.
+
+	  [0] https://wiki.qemu.org/Documentation/9psetup
+
+config BOOTLINUX_9P_FSDEV
+	string "9p fsdev"
+	default "kdevops_9p_fsdev"
+	help
+	  This sets the 9p fsdev ID. This is used by libvirt if that is enabled,
+	  and then by the respective mount command.
+
+config BOOTLINUX_9P_SECURITY_MODEL
+	string "9p security model"
+	default "none"
+	help
+	  The security model to use.
+
+config BOOTLINUX_9P_DRIVER
+	string "9p driver to use"
+	default "virtio-9p-pci"
+	help
+	  The security model to use.
+
+config BOOTLINUX_9P_MOUNT_TAG
+	string "9p mount tag"
+	default "kdevops_9p_bootlinux"
+	help
+	  This sets the 9p mount tag to use.
+
+endmenu
+
+endif # BOOTLINUX_9P
+
+
 choice
 	prompt "Type of development version of Linux to use"
 	default BOOTLINUX_DEV
@@ -112,67 +189,5 @@ config BOOTLINUX_SHALLOW_CLONE_DEPTH
 	  Create a shallow clone with a history truncated to the specified
 	  number or revisions. The minimum possible value is 1, otherwise
 	  ignored. Needs git>=1.9.1 to work correctly.
-
-config BOOTLINUX_9P
-	bool "Use 9pfs to building Linux"
-	depends on VAGRANT_LIBVIRT
-	depends on LIBVIRT_MACHINE_TYPE_Q35
-	help
-	  This will let you choose use 9p to build Linux.
-
-if BOOTLINUX_9P
-
-config BOOTLINUX_9P_HOST_PATH
-	string "9p host path"
-	default $(shell, echo $PWD/linux)
-	help
-	  This sets the 9p host path that will be used. This is the path
-	  that has your or we'll clone the respective linux git tree.
-	  If you have no git tree present there we'll git clone Linux there
-	  for you. Otherwise we'll just reset the tree for you and build Linux
-	  there for you. We build Linux only once.
-
-config BOOTLINUX_9P_MSIZE
-	int "9p msize"
-	default 131072
-	help
-	  This sets the msize value. Prior to v5.15 this was set to 8 KiB as
-	  default, however this is reported to have produced pretty terrible
-	  performance, and so this was bumped 128 KiB as default after v5.15.
-	  The qemu wiki [0] seems to suggest to use a range between 10-100 MiB
-	  for SATA and howver that is a lie as 500 KiB (512000) is the maximum
-	  value possible. Also, using the max value possible I get a different
-	  value for sha1sum on files! So let's just stick to the default
-	  of 128 KiB (131072). If you are going to update the default value
-	  for msize on kdevops please make sure you test this and it works.
-
-	  [0] https://wiki.qemu.org/Documentation/9psetup
-
-config BOOTLINUX_9P_FSDEV
-	string "9p fsdev"
-	default "kdevops_9p_fsdev"
-	help
-	  This sets the 9p fsdev ID. This is used by libvirt if that is enabled,
-	  and then by the respective mount command.
-
-config BOOTLINUX_9P_SECURITY_MODEL
-	string "9p security model"
-	default "none"
-	help
-	  The security model to use.
-
-config BOOTLINUX_9P_DRIVER
-	string "9p driver to use"
-	default "virtio-9p-pci"
-	help
-	  The security model to use.
-
-config BOOTLINUX_9P_MOUNT_TAG
-	string "9p mount tag"
-	default "kdevops_9p_bootlinux"
-	help
-	  This sets the 9p mount tag to use.
-
-endif # BOOTLINUX_9P
 
 endif # BOOTLINUX
