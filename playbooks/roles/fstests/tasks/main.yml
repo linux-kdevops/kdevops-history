@@ -469,7 +469,7 @@
     - not run_tests_on_failures|bool
     - kdevops_run_fstests|bool
 
-- name: Set test limit scope from build time settings, this may be empty
+- name: Set test limit scope from CONFIG_FSTESTS_RUN_CUSTOM_TESTS, this may be empty
   set_fact:
     all_limit_tests: "{{ limit_tests }}"
   tags: [ 'oscheck', 'fstests', 'run_tests', 'vars', 'limit-tests' ]
