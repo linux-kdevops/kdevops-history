@@ -289,6 +289,15 @@
     - all_limit_tests is defined
     - all_limit_tests == None
 
+- name: Empty out test no limits have been set
+  set_fact:
+    all_limit_tests: ""
+  tags: [ 'blktests', 'run_tests', 'limit-tests' ]
+  when:
+    - not run_tests_on_failures|bool
+    - kdevops_run_blktests|bool
+    - all_limit_tests is undefined
+
 - name: Run oscheck-get-failures.sh to get list of known failed tests
   vars:
     group: "{{ ansible_host | regex_replace('blktests-') | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
