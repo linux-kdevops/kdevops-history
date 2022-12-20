@@ -42,6 +42,7 @@ playbooks/python/workflows/fstests/gen_results_summary.pyc
 workflows/fstests/new_expunge_files.txt
 workflows/fstests/bad_results.txt
 workflows/fstests/results/*.xz
+workflows/fstests/results/[0-9]*
 workflows/fstests/results/last-run/
 workflows/fstests/results/last-kernel.txt
 workflows/fstests/*/hosts_generated.in
@@ -52,6 +53,8 @@ workflows/blktests/hosts_generated.in
 workflows/blktests/.begin
 workflows/blktests/results/last-run/
 workflows/blktests/results/last-kernel.txt
+workflows/blktests/results/*.xz
+workflows/blktests/results/[0-9]*
 
 workflows/demos/reboot-limit/results/
 
