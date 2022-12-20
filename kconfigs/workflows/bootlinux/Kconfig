@@ -108,12 +108,12 @@ config BOOTLINUX_TREE
 	default "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git" if BOOTLINUX_TREE_LINUS && !USE_LOCAL_LINUX_MIRROR
 	default "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git" if BOOTLINUX_TREE_STABLE && !USE_LOCAL_LINUX_MIRROR
 	default "https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git" if BOOTLINUX_TREE_NEXT && !USE_LOCAL_LINUX_MIRROR
-	default "git://192.168.124.1/mirror/linux.git" if BOOTLINUX_TREE_LINUS && USE_VAGRANT_LIBVIRT_MIRROR && !CONFIG_BOOTLINUX_9P
-	default "git://192.168.124.1/mirror/linux-stable.git" if BOOTLINUX_TREE_STABLE && USE_VAGRANT_LIBVIRT_MIRROR && !CONFIG_BOOTLINUX_9P
-	default "git://192.168.124.1/mirror/linux-next.git" if BOOTLINUX_TREE_NEXT && USE_VAGRANT_LIBVIRT_MIRROR && !CONFIG_BOOTLINUX_9P
-	default "/mirror/linux.git" if BOOTLINUX_TREE_LINUS && USE_VAGRANT_LIBVIRT_MIRROR && CONFIG_BOOTLINUX_9P
-	default "/mirror/linux-stable.git" if BOOTLINUX_TREE_STABLE && USE_VAGRANT_LIBVIRT_MIRROR && CONFIG_BOOTLINUX_9P
-	default "/mirror/linux-next.git" if BOOTLINUX_TREE_NEXT && USE_VAGRANT_LIBVIRT_MIRROR && CONFIG_BOOTLINUX_9P
+	default "git://192.168.124.1/mirror/linux.git" if BOOTLINUX_TREE_LINUS && USE_VAGRANT_LIBVIRT_MIRROR && !BOOTLINUX_9P
+	default "git://192.168.124.1/mirror/linux-stable.git" if BOOTLINUX_TREE_STABLE && USE_VAGRANT_LIBVIRT_MIRROR && !BOOTLINUX_9P
+	default "git://192.168.124.1/mirror/linux-next.git" if BOOTLINUX_TREE_NEXT && USE_VAGRANT_LIBVIRT_MIRROR && !BOOTLINUX_9P
+	default "/mirror/linux.git" if BOOTLINUX_TREE_LINUS && USE_VAGRANT_LIBVIRT_MIRROR && BOOTLINUX_9P
+	default "/mirror/linux-stable.git" if BOOTLINUX_TREE_STABLE && USE_VAGRANT_LIBVIRT_MIRROR && BOOTLINUX_9P
+	default "/mirror/linux-next.git" if BOOTLINUX_TREE_NEXT && USE_VAGRANT_LIBVIRT_MIRROR && BOOTLINUX_9P
 	default "https://github.com/kdave/btrfs-devel.git" if BOOTLINUX_TREE_BTRFS_DEVEL
 	help
 	  The Linux git tree to use.
