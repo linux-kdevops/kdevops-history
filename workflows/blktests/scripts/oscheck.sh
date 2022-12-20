@@ -108,7 +108,7 @@ parse_args $@
 oscheck_run_cmd()
 {
 	if [ "$ONLY_SHOW_CMD" = "false" ]; then
-		echo "LC_ALL=C $OSCHECK_CMD" /tmp/run-cmd.txt
+		echo "LC_ALL=C $OSCHECK_CMD" > /tmp/run-cmd.txt
 		LC_ALL=C $OSCHECK_CMD
 	else
 		echo "LC_ALL=C $OSCHECK_CMD"
