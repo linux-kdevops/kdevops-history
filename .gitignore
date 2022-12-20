@@ -44,7 +44,6 @@ workflows/fstests/bad_results.txt
 workflows/fstests/results/*.xz
 workflows/fstests/results/last-run/
 workflows/fstests/results/last-kernel.txt
-workflows/fstests/results/6.1.0-rc5-next-20221118.xz
 workflows/fstests/*/hosts_generated.in
 workflows/fstests/.begin
 workflows/fstests/*/*.config.generated
