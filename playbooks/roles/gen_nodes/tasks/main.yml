@@ -52,7 +52,7 @@
     path: "{{ fs_config_path }}"
   register: fstests_config_file_reg
   when:
-    - is_fstests
+    - is_fstests|bool
 
 - name: Check if {{ kdevops_nodes }} exists already
   stat:
@@ -104,7 +104,7 @@
   set_fact:
     fstests_enabled_nodes: []
   when:
-    - is_fstests
+    - is_fstests|bool
     - ansible_nodes_template.stat.exists
 
 - name: Check which fstests test types are enabled
@@ -127,7 +127,7 @@
   loop_control:
     label: "Checking for {{ config_val + item.upper() }}"
   when:
-    - is_fstests
+    - is_fstests|bool
     - ansible_nodes_template.stat.exists
 
 - name: Now expand the list of enabled fstests for valid configuration sections
@@ -141,7 +141,7 @@
   loop_control:
     label: "Checking for {{ item.item }} "
   when:
-    - is_fstests
+    - is_fstests|bool
     - ansible_nodes_template.stat.exists
     - item.changed
     - not kdevops_baseline_and_dev
@@ -157,7 +157,7 @@
   loop_control:
     label: "Checking for {{ item.item }} "
   when:
-    - is_fstests
+    - is_fstests|bool
     - ansible_nodes_template.stat.exists
     - item.changed
     - kdevops_baseline_and_dev
@@ -173,7 +173,7 @@
     dest: "{{ topdir_path }}/{{ kdevops_nodes }}"
     force: yes
   when:
-    - is_fstests
+    - is_fstests|bool
     - ansible_nodes_template.stat.exists
 
 - name: Infer enabled blktests test section types
