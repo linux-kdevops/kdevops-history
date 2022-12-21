@@ -2,6 +2,8 @@
 *.o
 *.retry
 
+.kdevops_depcheck
+
 linux
 
 log.txt

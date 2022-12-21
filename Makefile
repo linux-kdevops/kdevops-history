@@ -32,6 +32,7 @@ DEFAULT_DEPS_REQS_EXTRA_VARS :=
 MAKEFLAGS += --no-print-directory
 SHELL := /bin/bash
 HELP_TARGETS := kconfig-help-menu
+KDEVOPS_DEPCHECK = .kdevops.depcheck
 
 PHONY += kconfig-help-menu
 
@@ -42,6 +43,9 @@ else
 export Q=@
 export NQ=echo
 endif
+
+include Makefile.min_deps
+DEFAULT_DEPS += $(KDEVOPS_DEPCHECK)
 
 # This will be used to generate our extra_args.yml file used to pass on
 # configuration data for ansible roles through kconfig.
@@ -242,6 +246,7 @@ PHONY += mrproper
 mrproper:
 	$(Q)$(MAKE) -f scripts/build.Makefile clean
 	$(Q)$(MAKE) -f scripts/build.Makefile $@
+	$(Q)rm -f $(KDEVOPS_DEPCHECK)
 	$(Q)rm -f terraform/*/terraform.tfvars
 	$(Q)rm -f $(KDEVOPS_NODES)
 	$(Q)rm -f $(KDEVOPS_HOSTFILE) $(KDEVOPS_MRPROPER)

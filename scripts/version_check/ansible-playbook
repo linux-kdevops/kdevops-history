@@ -1,0 +1,20 @@
+#!/bin/bash
+
+MIN_REQ="2.13.4"
+OWN_BIN="ansible-playbook"
+OWN_VER=$($OWN_BIN --version | head -1 | awk '{print $(NF)'}  | sed -e 's|]||g')
+
+MIN_REQ_LD=$(echo $MIN_REQ | ${TOPDIR}/scripts/ld-version.sh)
+OWN_VER_LD=$(echo $OWN_VER | ${TOPDIR}/scripts/ld-version.sh)
+
+if [[ $OWN_VER_LD -lt $MIN_REQ_LD ]]; then
+	echo "You need at least $OWN_BIN v$MIN_REQ"
+	echo "Min version: $MIN_REQ"
+	echo "You have   : $OWN_VER"
+	echo "Own  LD: $OWN_VER_LD"
+	echo "Req  LD: $MIN_REQ_LD"
+	exit 1
+fi
+
+echo ansible-playbook: OK
+exit 0
