@@ -1,7 +1,7 @@
 if BOOTLINUX
 
 config BOOTLINUX_9P
-	bool "Use 9pfs to building Linux"
+	bool "Use 9p to build Linux"
 	depends on VAGRANT_LIBVIRT
 	depends on LIBVIRT_MACHINE_TYPE_Q35
 	default LIBVIRT_MACHINE_TYPE_Q35
@@ -12,7 +12,7 @@ config BOOTLINUX_9P
 	  The localhost then will be used to build Linux using all threads
 	  possible. The installation of Linux on the guest is done only with
 	  the install target, the guest gets read-only access to the host's
-	  path where Linux is closed using 9pfs.
+	  path where Linux is closed using 9p.
 
 	  You should not have to modify any default 9p settings except maybe
 	  where your localhost path for your git tree is. You should keep
