@@ -13,10 +13,21 @@ make bringup
 At this point you should be able to run:
 
   * `ssh kdevops`
-  * `ssh kdevops-dev`
 
-We provide two hosts by default, one to be used as a baseline for your kernel
-development, and another for development.
+The host name is set up through the kconfig symbol `CONFIG_KDEVOPS_HOSTS_PREFIX`.
+There are sensible defaults set up for this depending on your virtualization or
+cloud environment, but you should always be aware of what this is going to be
+set up with. To verify you can just:
+
+```bash
+cat hosts
+```
+
+Or just run:
+
+```bash
+grep CONFIG_KDEVOPS_HOSTS_PREFIX .config
+```
 
 ## The devconfig playbook
 

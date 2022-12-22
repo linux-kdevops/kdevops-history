@@ -7,4 +7,3 @@ make destroy
 ```
 
 This will not do anything if you are on bare metal.
-

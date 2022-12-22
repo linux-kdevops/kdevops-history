@@ -5,12 +5,12 @@ testing, a few details needs to be explained about the architecture behind
 the storage drive setup for testing when testing with bare metal or guests,
 and why virtualization is used and how this is all justified.
 
-Tests with the origianl precursor to kdevops,
+Tests with the original precursor to kdevops,
 [oscheck](https://github.com/mcgrof/oscheck), in year 2018 revealed
 that running a full set of fstests against XFS using only RAM and tmpfs Vs
 using truncated files on real SSDs and loopback devices to represent block
 devices saved only about 30 minutes, with a full time time for the tests to be
-about 4-5 hours.  With nvme drives the difference should be even smaller. A
+about 4-5 hours.  With NVMe drives the difference should be even smaller. A
 reason for why running fstests on truncated files Vs pure RAM is comparable is
 because fstests tests are not highly optimized, and tests are all serialized.
 
@@ -36,12 +36,15 @@ is LOOP_SET_DIRECT_IO. This can be used to bypass the cache completely, when
 needed.
 
 Experimention with using truncated files with loopback devices without
-direct IO on nvme drives has proven to be sufficiently fast enough for testing
+direct IO on NVMe drives has proven to be sufficiently fast enough for testing
 with fstests with different filesystems. Direct IO is not used since we have
 relative control over where these drives are if testing a baremetal or a
 reliable cloud solution, and using a bit of page cache doesn't cause real harm
-to our use case. It is also not that important to use direct IO since we are
-not writing to drive things we really care about.
+to our use case. Quite the contrary, *using* the page cache mimics more of
+a real workload, and so we *do* want to typically run fstests *with* the page
+cache. Testing with the loopback drive with only direct-io is surely possible,
+but it is not the default today for kdevops. It is also not that critical to
+use direct IO since we are not writing to the drive things we really care about.
 
 Real drives therefore are not needed to test with fstests.
 

@@ -1,6 +1,7 @@
 # Requirements for kdevops
 
-You must be on a recent Linux distribution or OS X. You must have installed:
+You must be on a recent Linux distribution, we highly recomend a rolling
+Linux distribution or OS X. You must have installed:
 
   * ansible
   * make

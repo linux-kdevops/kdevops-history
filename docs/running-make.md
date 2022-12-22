@@ -19,8 +19,31 @@ Running `make` will do a few more things:
     can always just remove this file, and run `make extra_vars.yaml`
     if you want to regenerate the file.
 
+    At any point in time it is perfectly safe to:
+
+```bash
+rm -f extra_vars.yaml
+make extra_vars.yaml
+```
+
   * Generates the top level ansible host file
 
-  * If using virtualization it will generate the dynamic vagrant nodes
-    file, `kdevops_nodes.yaml`.
+    At any point in time it is perfectly safe to:
 
+```bash
+rm -f hosts
+make hosts
+```
+
+  * If using virtualization it will generate the dynamic Vagrant and vagrant
+    nodes file, `kdevops_nodes.yaml`.
+
+    It is *not* safe to destroy the Vagrantfile if you have done a git fetch
+    and reset for kdevops, given that vagrant requires you to never modify
+    your Vagrantfile *after* you have instantiated guests. kdevops provides
+    a guard file for you so you don't shoot yourself in the foot and make
+    commands won't regenerate the file for you unless you remove this guard.
+
+    The files in question is `vagrant/Vagrantfile`. The respective configuration
+    for the nodes, `vagrant/kdevops_nodes.yaml` should not be updated either,
+    because the Vagrantfile relies on it.

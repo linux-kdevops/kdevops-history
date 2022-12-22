@@ -8,5 +8,8 @@ the systems we just brought up, all you have to run is:
 make linux
 ```
 
-Immediately after this you should be able to ssh into either system, and `uname
--r` should disply the kernel you configured.
+To verify the kernel on it:
+
+```bash
+make uname
+```
