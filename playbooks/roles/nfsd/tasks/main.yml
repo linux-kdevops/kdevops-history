@@ -7,7 +7,7 @@
     disk_setup_device: "{{ nfsd_export_device }}"
     disk_setup_fstype: "{{ nfsd_export_fstype }}"
     disk_setup_label : "{{ nfsd_export_label }}"
-    disk_setup_fs_opts: "{{ nfsd_export_fs_opts -L nfsd_export_label }}"
+    disk_setup_fs_opts: "{{ nfsd_export_fs_opts }} -L {{ nfsd_export_label }}"
     disk_setup_path: "{{ nfsd_export_path }}"
     disk_setup_user: "{{ data_user }}"
     disk_setup_group: "{{ data_group }}"
