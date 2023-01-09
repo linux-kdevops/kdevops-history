@@ -9,10 +9,10 @@ config NDCTL_GIT
 	  The ndctl git tree to clone.
 
 config NDCTL_DATA
-	string "Where to clone the blktests git tree to"
+	string "Where to clone the ndctl git tree to"
 	default "{{data_path}}/ndctl"
 	help
-	  This is the target location of where to clone the blktests git tree.
+	  This is the target location of where to clone the ndctl git tree.
 	  Note that {{data_path}} corresponds to the location set by the
 	  configuration option CONFIG_WORKFLOW_DATA_PATH.
 
