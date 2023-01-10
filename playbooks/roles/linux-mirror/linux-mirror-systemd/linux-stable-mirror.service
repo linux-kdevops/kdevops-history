@@ -5,7 +5,9 @@ ConditionPathExists=/mirror/linux-stable.git
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/git -C /mirror/linux-stable.git fetch --tags
+ExecStartPre=/usr/bin/git -C /mirror/linux-stable.git update --prune
+ExecStart=/usr/bin/git -C /mirror/linux-stable.git fetch --tags --prune
+ExecStartPost=/usr/bin/git -C /mirror/linux-stable.git fetch origin +refs/heads/*:refs/heads/*
 
 [Install]
 WantedBy=multi-user.target

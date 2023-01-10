@@ -57,19 +57,19 @@ mirror:
 	$(Q)rm -f $(MIRROR_PATH)/ignore_kdevops
 	$(Q)if [ ! -d $(TORVALDS_TARGET) ]; then                            \
 	 echo "          CLONE Torvald's tree"                             ;\
-	 git -C $(MIRROR_PATH) clone --bare $(TORVALDS) $(TORVALDS_TARGET) ;\
+	 git -C $(MIRROR_PATH) clone --mirror $(TORVALDS) $(TORVALDS_TARGET) ;\
 	fi
 	$(Q)if [ ! -d $(STABLE_TARGET) ]; then                                                        \
 	 echo "          CLONE linux-stable"                                                         ;\
-	 git -C $(MIRROR_PATH) clone --bare $(STABLE) --reference /mirror/linux.git $(STABLE_TARGET) ;\
+	 git -C $(MIRROR_PATH) clone --mirror $(STABLE) --reference /mirror/linux.git $(STABLE_TARGET) ;\
 	fi
 	$(Q)if [ ! -d $(NEXT_TARGET) ]; then                                                      \
 	  echo "          CLONE linux-next"                                                       ;\
-	  git -C $(MIRROR_PATH) clone --bare $(NEXT) --reference /mirror/linux.git $(NEXT_TARGET) ;\
+	  git -C $(MIRROR_PATH) clone --mirror $(NEXT) --reference /mirror/linux.git $(NEXT_TARGET) ;\
 	fi
 	$(Q)if [ ! -d $(QEMU_TARGET) ]; then                        \
 	  echo "          CLONE qemu"                               ;\
-	  git -C $(MIRROR_PATH) clone --bare $(QEMU) $(QEMU_TARGET) ;\
+	  git -C $(MIRROR_PATH) clone --mirror $(QEMU) $(QEMU_TARGET) ;\
 	fi
 
 install:
