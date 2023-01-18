@@ -40,4 +40,7 @@ if ! _vagrant_lacks_parallel; then
 	ARG='--no-parallel'
 fi
 cd vagrant
+if [[ "$CONFIG_VAGRANT_BOX_UPDATE_ON_BRINGUP" == "y" ]]; then
+	vagrant box update
+fi
 vagrant up $ARG
