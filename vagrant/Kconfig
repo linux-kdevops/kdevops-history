@@ -735,6 +735,15 @@ config VAGRANT_BOX_UPDATE_ON_BRINGUP
 	  manually by the typical distro means to update itself. For example
 	  on debian-testing that's "apt-get update && apt-get dist-upgrade".
 
+config VAGRANT_BOX_UPDATE_ON_BRINGUP
+	bool "Validate Vagrantfile prior to bringup"
+	default y
+	help
+	  Folks hacking on the Vagrantfile may want to ensure they validate
+	  the Vagrantfile first. This will allow developers to identify issues
+	  prior to running some real virtualization commands. Enable this by
+	  default as validation is fast and safe.
+
 config VAGRANT_PREFERRED_KERNEL_CI_SUBJECT_TOPIC
 	string
 	default VAGRANT_BOX if VAGRANT_DEBIAN_BUSTER64
