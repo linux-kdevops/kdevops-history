@@ -14,9 +14,11 @@ default: mconf
 common-objs := confdata.o expr.o menu.o parser.tab.o lexer.lex.c \
                    preprocess.o symbol.o util.o
 
+lexer.lex.c: lexer.l
+	@flex -olexer.lex.c -L lexer.l
+
 parser.tab.c: parser.y
 	@bison -oparser.tab.c --defines=parser.tab.h -t -l parser.y
-	@flex -olexer.lex.c -L lexer.l
 
 conf: conf.o $(common-objs)
 	$(CC) -o conf $^
