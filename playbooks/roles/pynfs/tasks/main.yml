@@ -31,11 +31,6 @@
 # Distro specific
 - include: tasks/install-deps/main.yml
 
-- name: Configure and start up nfsd
-  tags: ['nfsd']
-  include_role:
-    name: nfsd
-
 - name: Remove old pynfs dir as we always clone a fresh tree
   tags: [ 'git', 'pynfs' ]
   become: yes

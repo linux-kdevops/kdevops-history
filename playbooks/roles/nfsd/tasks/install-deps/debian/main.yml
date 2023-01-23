@@ -1,0 +1,17 @@
+---
+- name: Update apt cache
+  become: yes
+  become_method: sudo
+  apt:
+    update_cache: yes
+  tags: linux
+
+- name: Install nfsd dependencies
+  become: yes
+  become_method: sudo
+  apt:
+    name:
+      - nfs-utils
+    state: present
+    update_cache: yes
+  tags: [ 'pynfs', 'deps' ]

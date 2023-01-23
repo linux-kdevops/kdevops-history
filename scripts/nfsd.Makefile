@@ -5,3 +5,6 @@ NFSD_EXTRA_ARGS += nfsd_export_options='$(subst ",,$(CONFIG_NFSD_EXPORT_OPTIONS)
 NFSD_EXTRA_ARGS += nfsd_threads=$(CONFIG_NFSD_THREADS)
 
 ANSIBLE_EXTRA_ARGS += $(NFSD_EXTRA_ARGS)
+
+nfsd:
+	$(Q)ansible-playbook -f 30 -i hosts playbooks/nfsd.yml

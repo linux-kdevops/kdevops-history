@@ -17,6 +17,10 @@ kdevops_stage_2: .config
 
 endif
 
+ifeq (y,$(CONFIG_KDEVOPS_SETUP_NFSD))
+KDEVOPS_BRING_UP_DEPS += nfsd
+endif # KDEVOPS_SETUP_NFSD
+
 bringup: $(KDEVOPS_BRING_UP_DEPS)
 
 destroy: $(KDEVOPS_DESTROY_DEPS)
