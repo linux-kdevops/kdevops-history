@@ -62,6 +62,52 @@ For further examples refer to one of this role's users, the
 [https://github.com/mcgrof/oscheck](oscheck) project from where
 this code originally came from.
 
+Known issues
+-------------
+
+If you are using kdevops to build Linux and fstests this will use
+the `create_partition` role twice, once to create the `/data/`
+partition and then again later to create the `/media/sparsefiles/`
+partition. The first uses the `data_device` and the second uses the
+`sparsefiles_device`. The issue is that typically this looks like on
+extra_vars.yaml:
+
+```bash
+$ egrep "data_device|sparsefiles_device" extra_vars.yaml
+data_device: /dev/nvme0n1
+sparsefiles_device: /dev/nvme1n1
+```
+
+If you run first `make linux` the nvme0n1 drive we intended to use for
+the `data` partition might be correct, but upon reboot it  may switch
+to `/dev/nvme1n1`. The `/data/` mount point would still work as we used
+labels for when creating the filesystem with `mkfs`, but then if that
+happens the creation of the filesystem for `sparsefiles_device` will fail.
+
+So currently we have a limitation to require users of fstest to run
+`make fstests` prior to `make linux`.
+
+We already associate with vagrant the data partition with information of its purpose:
+
+https://github.com/mcgrof/kdevops/blob/master/playbooks/roles/gen_nodes/templates/kdevops_nodes_split_start.j2.yaml#L57
+
+The scratch device:
+
+https://github.com/mcgrof/kdevops/blob/master/playbooks/roles/gen_nodes/templates/kdevops_nodes_split_start.j2.yaml#L59
+
+*and* we actually already extract the purpose, ie, this "data" or
+"scratch" when we're creating the nvme drives for qemu:
+
+https://github.com/mcgrof/kdevops/blob/master/playbooks/roles/gen_nodes/templates/Vagrantfile.j2#L337
+
+So we *could* already even associate this information to the serial
+number easily of the device, it would just mean that we'd have
+to extend the create_partition task to support 'disk_setup_serial_number'
+as an alternative to disk_setup_device:
+
+https://github.com/mcgrof/kdevops/blob/master/playbooks/roles/create_partition/tasks/main.yml
+https://github.com/mcgrof/kdevops/blob/master/playbooks/roles/create_partition/defaults/main.yml
+
 License
 -------
 

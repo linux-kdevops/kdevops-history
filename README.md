@@ -47,6 +47,13 @@ workflow you can just run:
   * `make fstests`
   * `make fstests-baseline`
 
+Be sure to use CONFIG_KDEVOPS_WORKFLOW_DEDICATE_FSTESTS=y unless you know
+what you are doing. Also if you are building Linux be sure to first run
+`make fstests` prior to `make linux` if using vagrant, see this
+[create_data_partition](playbooks/roles/create_partition/README.md)
+documentation for the known issue and suggested fix targetted for future
+kdevops v6.3.
+
 ### Start running blktests in 2 commands
 
 To test a kernel against fstests, for example, if you enable the blktests
@@ -54,6 +61,9 @@ workflow you can just run:
 
   * `make blktests`
   * `make blktests-baseline`
+
+Be sure to use CONFIG_KDEVOPS_WORKFLOW_DEDICATE_BLKTESTS=y unless you know
+what you are doing.
 
 ### Runs some kernel selftests in a parallel manner
 
