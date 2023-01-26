@@ -58,9 +58,7 @@ Below is an example playbook task:
 ```
 
 For further examples refer to one of this role's users, the
-[https://github.com/mcgrof/kdevops](kdevops) project or the
-[https://github.com/mcgrof/oscheck](oscheck) project from where
-this code originally came from.
+[https://github.com/linux-kdevops/kdevops](kdevops) project.
 
 Known issues
 -------------
@@ -89,24 +87,24 @@ So currently we have a limitation to require users of fstest to run
 
 We already associate with vagrant the data partition with information of its purpose:
 
-https://github.com/mcgrof/kdevops/blob/master/playbooks/roles/gen_nodes/templates/kdevops_nodes_split_start.j2.yaml#L57
+https://github.com/linux-kdevops/kdevops/blob/master/playbooks/roles/gen_nodes/templates/kdevops_nodes_split_start.j2.yaml#L57
 
 The scratch device:
 
-https://github.com/mcgrof/kdevops/blob/master/playbooks/roles/gen_nodes/templates/kdevops_nodes_split_start.j2.yaml#L59
+https://github.com/linux-kdevops/kdevops/blob/master/playbooks/roles/gen_nodes/templates/kdevops_nodes_split_start.j2.yaml#L59
 
 *and* we actually already extract the purpose, ie, this "data" or
 "scratch" when we're creating the nvme drives for qemu:
 
-https://github.com/mcgrof/kdevops/blob/master/playbooks/roles/gen_nodes/templates/Vagrantfile.j2#L337
+https://github.com/linux-kdevops/linux-kdevops/blob/master/playbooks/roles/gen_nodes/templates/Vagrantfile.j2#L337
 
 So we *could* already even associate this information to the serial
 number easily of the device, it would just mean that we'd have
 to extend the create_partition task to support 'disk_setup_serial_number'
 as an alternative to disk_setup_device:
 
-https://github.com/mcgrof/kdevops/blob/master/playbooks/roles/create_partition/tasks/main.yml
-https://github.com/mcgrof/kdevops/blob/master/playbooks/roles/create_partition/defaults/main.yml
+https://github.com/linux-kdevops/kdevops/blob/master/playbooks/roles/create_partition/tasks/main.yml
+https://github.com/linux-kdevops/kdevops/blob/master/playbooks/roles/create_partition/defaults/main.yml
 
 License
 -------
