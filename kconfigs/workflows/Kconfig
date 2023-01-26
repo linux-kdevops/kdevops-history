@@ -145,7 +145,8 @@ config KDEVOPS_WORKFLOW_DEDICATE_SELFTESTS
 	select KDEVOPS_WORKFLOW_ENABLE_SELFTESTS
 	help
 	  This will dedicate your configuration only to Linux kernel
-	  selftests work.
+	  selftests work. Note that you will need at least 8 GiB of RAM
+	  for your target guests.
 
 endchoice
 
