@@ -143,6 +143,7 @@ config KDEVOPS_WORKFLOW_DEDICATE_PYNFS
 config KDEVOPS_WORKFLOW_DEDICATE_SELFTESTS
 	bool "Linux kernel selftests"
 	select KDEVOPS_WORKFLOW_ENABLE_SELFTESTS
+	select VAGRANT_MEM_8G if VAGRANT
 	help
 	  This will dedicate your configuration only to Linux kernel
 	  selftests work.
