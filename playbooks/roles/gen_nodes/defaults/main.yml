@@ -46,6 +46,7 @@ libvirt_machine_type: 'pc'
 libvirt_host_passthrough: False
 libvirt_enable_cxl: False
 libvirt_enable_cxl_demo_topo1: False
+libvirt_enable_cxl_demo_topo2: False
 libvirt_nvme_drive_format: 'qcow2'
 
 kdevops_workflows_dedicated_workflow: False

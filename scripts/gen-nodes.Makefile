@@ -60,6 +60,9 @@ GEN_NODES_EXTRA_ARGS += libvirt_enable_cxl='True'
 ifeq (y,$(CONFIG_QEMU_ENABLE_CXL_DEMO_TOPOLOGY_1))
 GEN_NODES_EXTRA_ARGS += libvirt_enable_cxl_demo_topo1='True'
 endif # QEMU_ENABLE_CXL_DEMO_TOPOLOGY_1
+ifeq (y,$(CONFIG_QEMU_ENABLE_CXL_DEMO_TOPOLOGY_2))
+GEN_NODES_EXTRA_ARGS += libvirt_enable_cxl_demo_topo2='True'
+endif # QEMU_ENABLE_CXL_DEMO_TOPOLOGY_2
 endif # CONFIG_QEMU_ENABLE_CXL
 
 endif # CONFIG_LIBVIRT_MACHINE_TYPE_Q35

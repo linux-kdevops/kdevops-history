@@ -281,10 +281,10 @@ Vagrant.configure("2") do |config|
         libvirt.qemuargs :value => "-device"
         libvirt.qemuargs :value => "pxb-pcie,id=pcie.1,bus_nr=32,bus=pcie.0,addr=0x8"
 {% if libvirt_enable_cxl %}
-{% if libvirt_enable_cxl_demo_topo1 %}
         libvirt.qemuargs :value => "-machine"
         libvirt.qemuargs :value => "cxl=on"
 
+{% if libvirt_enable_cxl_demo_topo1 or libvirt_enable_cxl_demo_topo2 %}
 	# CXL host bus
         libvirt.qemuargs :value => "-device"
         libvirt.qemuargs :value => "pxb-cxl,bus=pcie.0,id=cxl.0,bus_nr=52,addr=0x9"
@@ -300,15 +300,19 @@ Vagrant.configure("2") do |config|
         libvirt.qemuargs :value => "memory-backend-file,id=kdevops-cxl-lsa1,share=on,mem-path=#{cxl_lsa1_path},size=256M"
 
         libvirt.qemuargs :value => "-device"
-        libvirt.qemuargs :value => "cxl-rp,port=0,bus=cxl.0,id=kdevops_cxl_root_port1,chassis=0,slot=2"
+        libvirt.qemuargs :value => "cxl-rp,port=0,bus=cxl.0,id=kdevops_cxl_root_port0,chassis=0,slot=2"
 
+{% if libvirt_enable_cxl_demo_topo2 %}
+	libvirt.qemuargs :value => "-device"
+	libvirt.qemuargs :value => "cxl-rp,port=1,bus=cxl.0,id=kdevops_cxl_root_port1,chassis=0,slot=3"
+{% endif %} # TOPO 2
         libvirt.qemuargs :value => "-device"
-        libvirt.qemuargs :value => "cxl-type3,bus=kdevops_cxl_root_port1,memdev=kdevops-cxl-mem1,lsa=kdevops-cxl-lsa1,id=kdevops-cxl-pmem0"
+        libvirt.qemuargs :value => "cxl-type3,bus=kdevops_cxl_root_port0,memdev=kdevops-cxl-mem1,lsa=kdevops-cxl-lsa1,id=kdevops-cxl-pmem0"
 
         libvirt.qemuargs :value => "-M"
         libvirt.qemuargs :value => "cxl-fmw.0.targets.0=cxl.0,cxl-fmw.0.size=512M"
-{% endif %}
-{% endif %}
+{% endif %} # TOPO 1 or 2
+{% endif %} # CXL
 {% endif %}
 
         if server_data['pcipassthrough']

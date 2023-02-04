@@ -1055,15 +1055,24 @@ choice
 	default QEMU_ENABLE_CXL_DEMO_TOPOLOGY_1
 
 config QEMU_ENABLE_CXL_DEMO_TOPOLOGY_1
-	bool "First CXL demo topology - CXL Type 3 device"
+	bool "Basic CXL demo topology with a CXL Type 3 device"
 	help
-	  This is a basic CXL demo topology with just one directly attached CXL
-	  Type 3 device. The kernel CXL core will consume the resource exposed
+	  This is a basic CXL demo topology. It consists of single host brige that
+	  has one root port. A Type 3 persistent memory device is attached to the
+	  root port. This topology is referred to as a passthrough decoder in
+	  kernel terminology. The kernel CXL core will consume the resource exposed
 	  in the ACPI CXL memory layout description, such as Host Managed
 	  Device memory (HDM), CXL Early Discovery Table (CEDT), and the
 	  CXL Fixed Memory Window Structures to publish the root of a
 	  cxl_port decode hierarchy to map regions that represent System RAM,
 	  or Persistent Memory regions to be managed by LIBNVDIMM.
+
+config QEMU_ENABLE_CXL_DEMO_TOPOLOGY_2
+	bool "Host bridge with two root ports"
+	help
+	  This topology extends the first demo topology by placing two root ports
+	  in the host bridge. This ensures that the decoder associated with the
+	  host bridge is not a passthrough decoder.
 
 endchoice
 
