@@ -18,6 +18,7 @@ get_pool_vars
 VIRSH_WORKS=$(virsh_works)
 if [[ "$VIRSH_WORKS" == "n" ]]; then
 	echo "default"
+	exit
 fi
 
 virsh_get_pool_list
@@ -25,6 +26,7 @@ virsh_get_pool_list
 DOES_POOL_EXIST=$(virsh_path_in_pool_list_exists)
 if [[ "$DOES_POOL_EXIST" != "y" ]]; then
 	echo "/var/libvirt/images"
+	exit
 fi
 
 virsh_path_pool_list_path

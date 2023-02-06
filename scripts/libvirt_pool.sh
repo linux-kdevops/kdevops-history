@@ -10,8 +10,8 @@ get_pool_vars()
 		fi
 	fi
 
-	SUDO_ASKPASS=/bin/false sudo -A whoami 2>&1 |
-	if [[ $? -ne 0 ]]; then
+	SUDO_ASKPASS=/bin/false sudo -A whoami 2>&1
+	if [[ $? -eq 0 ]]; then
 		CAN_SUDO="y"
 	fi
 
@@ -22,6 +22,10 @@ get_pool_vars()
 
 virsh_works()
 {
+	if [[ "$USES_QEMU_USER_SESSION" == "n" && "$CAN_SUDO" != "y" ]]; then
+		echo n
+		return
+	fi
 	$REQ_SUDO which virsh 2>&1 > /dev/null
 	if [[ $? -ne 0 ]]; then
 		echo n

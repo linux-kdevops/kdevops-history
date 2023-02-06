@@ -258,9 +258,13 @@ config QEMU_BIN_PATH_LIBVIRT
 	default "/usr/local/bin/qemu-system-x86_64" if QEMU_USE_DEVELOPMENT_VERSION
 	default "/usr/bin/qemu-system-x86_64" if !QEMU_USE_DEVELOPMENT_VERSION
 
+config QEMU_VIRSH_CAN_SUDO
+	bool
+	default $(shell, ./scripts/get_libvirsh_can_sudo.sh)
+
 choice
 	prompt "Libvirt storage pool path"
-	default LIBVIRT_STORAGE_POOL_PATH_INFER_ADVANCED if DISTRO_DEBIAN
+	default LIBVIRT_STORAGE_POOL_PATH_INFER_ADVANCED if DISTRO_DEBIAN && QEMU_VIRSH_CAN_SUDO
 	default LIBVIRT_STORAGE_POOL_PATH_CUSTOM_DEFAULT_DISTRO if !DISTRO_SUSE && !DISTRO_DEBIAN
 	default LIBVIRT_STORAGE_POOL_PATH_CUSTOM_CWD if DISTRO_SUSE
 
