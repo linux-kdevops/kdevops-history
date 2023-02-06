@@ -10,7 +10,7 @@ get_pool_vars()
 		fi
 	fi
 
-	SUDO_ASKPASS=/bin/false sudo -A whoami 2>&1
+	SUDO_ASKPASS=/bin/false sudo -A whoami 2>&1 > /dev/null
 	if [[ $? -eq 0 ]]; then
 		CAN_SUDO="y"
 	fi
