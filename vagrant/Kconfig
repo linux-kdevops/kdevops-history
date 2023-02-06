@@ -296,6 +296,9 @@ config LIBVIRT_STORAGE_POOL_PATH_INFER_ADVANCED
 	  they should migrate over to enable power users to be more lazy
 	  on initial bringups.
 
+	  Eventually this can be the default but it requires high confidence
+	  that the heuristics will work on each distro with their own defaults.
+
 config LIBVIRT_STORAGE_POOL_PATH_CUSTOM_CWD
 	bool "Use the current vagrant working directory"
 	help
