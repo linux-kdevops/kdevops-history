@@ -174,8 +174,8 @@ linux-kdevops organization to contribute findings.
 
 # Video presentations on kdevops or related
 
-  * [https://youtu.be/9PYjRYbc-Ms](2022 - LSFMM - Challenges with running fstests and blktests )
-  * [https://youtu.be/-1KnphkTgNg](2020 - SUSE Labs Conference - kdevops: bringing devops to kernel development)
+  * [https://youtu.be/9PYjRYbc-Ms] (2020 - SUSE Labs Conference - kdevops: bringing devops to kernel development)
+  * [https://youtu.be/-1KnphkTgNg] (2022 - LSFMM - Challenges with running fstests and blktests)
 
 # Underneath the kdevops hood
 
