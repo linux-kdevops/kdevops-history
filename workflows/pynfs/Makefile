@@ -3,6 +3,16 @@ PYNFS_GIT:=$(subst ",,$(CONFIG_PYNFS_GIT))
 PYNFS_ARGS += pynfs_git=$(PYNFS_GIT)
 WORKFLOW_ARGS += $(PYNFS_ARGS)
 
+# The default is our workflow does not have kernel-ci enabled
+PYNFS_KERNEL_CI_LOOP := false
+PYNFS_KERNEL_CI_LOOP_KOTD := false
+
+# If kdevops was configured to enable kernel-ci we define our scripts
+ifeq (y,$(CONFIG_KERNEL_CI))
+PYNFS_KERNEL_CI_LOOP      := scripts/workflows/pynfs/run_kernel_ci.sh
+PYNFS_KERNEL_CI_LOOP_KOTD := scripts/workflows/pynfs/run_kernel_ci_kotd.sh
+endif # CONFIG_KERNEL_CI
+
 # Makefile for pynfs targets
 pynfs:
 	$(Q)ansible-playbook -f 30 -i hosts playbooks/pynfs.yml --skip-tags run_tests,copy_results
