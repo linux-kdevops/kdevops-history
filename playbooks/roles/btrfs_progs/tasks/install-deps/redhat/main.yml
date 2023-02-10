@@ -1,0 +1,13 @@
+---
+- name: Install btrfs-progs build dependencies
+  become: yes
+  become_method: sudo
+  dnf:
+    name:
+      - e2fsprogs-devel
+      - libblkid-devel
+      - libuuid-devel
+      - libzstd-devel
+      - systemd-devel
+      - lzo-devel
+    state: present

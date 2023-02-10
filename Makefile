@@ -146,6 +146,8 @@ LOCALHOST_SETUP_WORK :=
 
 include scripts/install-menuconfig-deps.Makefile
 
+include Makefile.btrfs_progs
+
 ifeq (y,$(CONFIG_QEMU_BUILD))
 include Makefile.build_qemu
 endif # CONFIG_QEMU_BUILD

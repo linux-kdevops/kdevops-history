@@ -1,0 +1,21 @@
+---
+- name: Update apt cache
+  become: yes
+  become_method: sudo
+  apt:
+    update_cache: yes
+  tags: [ 'btrfs-progs', 'update-cache' ]
+
+- name: Install btrfs-progs build dependencies
+  become: yes
+  become_method: sudo
+  apt:
+    name:
+      - libext2fs-dev
+      - pkg-config
+      - libblkid-dev
+      - libzstd-dev
+      - libudev-dev
+      - liblzo2-dev
+    state: present
+  tags: [ 'btrfs-progs', 'build-deps' ]

@@ -1,0 +1,20 @@
+---
+- name: Set generic SUSE specific distro facts
+  set_fact:
+    is_sle: '{{ (ansible_distribution == "SLES") or (ansible_distribution == "SLED") }}'
+    is_leap: '{{ "Leap" in ansible_distribution }}'
+    is_tumbleweed: '{{ "openSUSE Tumbleweed" == ansible_distribution }}'
+
+- name: Install qemu build dependencies
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - e2fsprogs-devel
+      - libblkid-devel
+      - libuuid-devel
+      - libzstd-devel
+      - lzo-devel
+      - zlib-devel
+      - libudev-devel
+    state: present
