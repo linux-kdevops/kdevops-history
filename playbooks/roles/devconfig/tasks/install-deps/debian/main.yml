@@ -5,9 +5,7 @@
   become_method: sudo
   command: "apt-get update  --allow-releaseinfo-change"
   register: release_info_changed
-  changed_when: "release_info_changed.rc == 0"
-  args:
-    warn: no
+  changed_when: release_info_changed.rc == 0
   tags: [ 'apt', 'release-info-change' ]
   when:
     - devconfig_try_upgrade|bool
