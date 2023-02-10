@@ -1,12 +1,12 @@
 # SPDX-License-Identifier: copyleft-next-0.3.1
 
-DYNAMIC_RUNTIME_VARS := "topdir_path": $(TOPDIR_PATH)
+PCIE_RUNTIME_VARS := "topdir_path": $(TOPDIR_PATH)
 
 KDEVOPS_MRPROPER += vagrant/Kconfig.passthrough_libvirt.generated
 
 ifneq (,$(KDEVOPS_ENABLE_PCIE_KCONFIG))
 DYNAMIC_KCONFIG += dynamic_pcipassthrough_kconfig
-DYNAMIC_RUNTIME_VARS += , "kdevops_pcie_dynamic_kconfig": True
+PCIE_RUNTIME_VARS += , "kdevops_pcie_dynamic_kconfig": True
 export KDEVOPS_ENABLE_PCIE_KCONFIG
 endif
 ifeq (,$(KDEVOPS_ENABLE_PCIE_KCONFIG))
@@ -45,7 +45,7 @@ dynamic_pcipassthrough_kconfig:
 	$(Q)ansible-playbook --connection=local \
 		--inventory localhost, \
 		playbooks/gen-pci-kconfig.yml \
-		--extra-vars '{ $(DYNAMIC_RUNTIME_VARS) }' \
+		--extra-vars '{ $(PCIE_RUNTIME_VARS) }' \
 		-e 'ansible_python_interpreter=/usr/bin/python3'
 
 dynamic-kconfig-pci-help:
