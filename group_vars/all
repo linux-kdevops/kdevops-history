@@ -10,7 +10,7 @@ data_group: vagrant
 data_home_dir: "/home/{{ data_user }}"
 
 # Where we put git trees
-data_device: "/dev/nvme0n1"
+data_device: "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_kdevops0"
 data_path: "/data"
 data_fstype: "xfs"
 data_label: "data"
@@ -20,7 +20,7 @@ data_fs_opts: "-L {{ data_label }}"
 make: "make"
 num_jobs: "nproc --all"
 
-sparsefiles_device: "/dev/nvme2n1"
+sparsefiles_device: "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_kdevops1"
 sparsefiles_path: "/media/sparse"
 sparsefiles_fstype: "xfs"
 sparsefiles_label: "sparse"

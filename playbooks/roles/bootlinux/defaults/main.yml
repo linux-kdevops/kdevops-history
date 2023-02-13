@@ -7,7 +7,7 @@ data_path: "/data"
 data_user: "vagrant"
 data_group: "vagrant"
 
-data_device: "/dev/nvme0n1"
+data_device: "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_kdevops0"
 data_fstype: "xfs"
 data_label: "data"
 data_fs_opts: "-L {{ disk_setup_label }}"

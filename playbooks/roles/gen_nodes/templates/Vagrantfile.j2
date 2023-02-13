@@ -342,7 +342,7 @@ Vagrant.configure("2") do |config|
             port_plus = port + 1
 	    key_id_prefix = global_data['libvirt_cfg']['nvme_disk_id_prefix']
 	    disk_id = "#{key_id_prefix}#{port}"
-	    serial_id = "serial#{port}"
+	    serial_id = "kdevops#{port}"
             nvme_disk_postfix = global_data['libvirt_cfg']['nvme_disk_postfix']
             nvme_disk_name = "nvme#{port}n#{port_plus}.#{nvme_disk_postfix}"
             nvme_disk = nvme_path + "/" + "#{nvme_disk_name}"
