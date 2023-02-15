@@ -58,6 +58,14 @@
   args:
     chdir: "{{ pynfs_data }}"
 
+- name: Wait until nfsd grace period ends
+  tags: [ 'run_tests' ]
+  command: /usr/bin/grep Y /proc/fs/nfsd/v4_end_grace
+  register: result
+  retries: 90
+  delay: 1
+  until: result.rc == 0
+
 - name: Run pynfs
   tags: [ 'run_tests' ]
   shell: "./testserver.py --json={{ pynfs_data }}/pynfs-{{ item }}-results.json --maketree localhost:{{ nfsd_export_path }} all || true"
