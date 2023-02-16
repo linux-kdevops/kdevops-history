@@ -65,6 +65,14 @@ workflow you can just run:
 Be sure to use CONFIG_KDEVOPS_WORKFLOW_DEDICATE_BLKTESTS=y unless you know
 what you are doing.
 
+### Start running pynfs in 2 commands
+
+To test the kernel's nfs server with the pynfs testsuite, enable the pynfs
+workflow and then run:
+
+  * `make pynfs`
+  * `make pynfs-baseline`
+
 ### Runs some kernel selftests in a parallel manner
 
 The Linux kernel has a set of sets under tools/testing/selftests which we
