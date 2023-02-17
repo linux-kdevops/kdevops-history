@@ -24,20 +24,30 @@ run_loop()
 		git status >> $KERNEL_CI_FAIL_LOG
 		echo "Results:" >> $KERNEL_CI_FAIL_LOG
 
+		rm -f $KERNEL_CI_DIFF_LOG
+
 		if [ "$ANSIBLE_CALL_RET" -eq 0 ]; then
 			# get latest results files
 			JSON40=$(ls -t1 ${WORKFLOWDIR}/results/*-v4.0.json | head -1)
 			JSON41=$(ls -t1 ${WORKFLOWDIR}/results/*-v4.1.json | head -1)
 
-			${TOPDIR}/scripts/workflows/pynfs/check_pynfs_results.py ${WORKFLOWDIR}/baseline/current-v4.0.json $JSON40 >> $KERNEL_CI_FAIL_LOG
-			RET_40=$?
-			${TOPDIR}/scripts/workflows/pynfs/check_pynfs_results.py ${WORKFLOWDIR}/baseline/current-v4.1.json $JSON41 >> $KERNEL_CI_FAIL_LOG
-			RET_41=$?
+			local tmpfile=$(mktemp)
+			${TOPDIR}/scripts/workflows/pynfs/check_pynfs_results.py ${WORKFLOWDIR}/baseline/current-v4.0.json $JSON40 > $tmpfile
+			RET40=$?
+			if [ "$RET40" -ne 0 ]; then
+				echo "New v4.0 Failures:" >> $KERNEL_CI_DIFF_LOG
+				cat $tmpfile >> $KERNEL_CI_DIFF_LOG
+			fi
+			${TOPDIR}/scripts/workflows/pynfs/check_pynfs_results.py ${WORKFLOWDIR}/baseline/current-v4.1.json $JSON41 > $tmpfile
+			RET41=$?
+			if [ "$RET41" -ne 0 ]; then
+				echo "New v4.1+ Failures:" >> $KERNEL_CI_DIFF_LOG
+				cat $tmpfile >> $KERNEL_CI_DIFF_LOG
+			fi
+			rm $tmpfile
 		fi
 
-		rm -f $KERNEL_CI_DIFF_LOG
-
-		if [[ "$ANSIBLE_CALL_RET" -ne 0 || "$RET_40" -ne 0 || "$RET_41" -ne 0 ]]; then
+		if [[ "$ANSIBLE_CALL_RET" -ne 0 || "$RET40" -ne 0 || "$RET41" -ne 0 ]]; then
 			echo "Test  $COUNT: FAILED!" >> $KERNEL_CI_DIFF_LOG
 			echo "== Test loop count $COUNT" >> $KERNEL_CI_DIFF_LOG
 			echo "$(git describe)" >> $KERNEL_CI_DIFF_LOG
