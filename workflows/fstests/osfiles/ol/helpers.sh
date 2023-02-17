@@ -14,38 +14,8 @@ ol_read_osfile()
 	fi
 }
 
-ol_special_expunges()
-{
-	case "$VERSION_ID" in
-	28) # on 4.16.* kernel
-		if [ "$FSTYP" = "xfs" ] ; then
-			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/xfs/reqs-y2038.txt"
-			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/xfs/reqs-xfsprogs-4.5.txt"
-			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/xfs/maybe-broken.txt"
-			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/xfs/xfsprogs-maintainer.txt"
-		fi
-		;;
-	34)
-		if [ "$FSTYP" = "xfs" ] ; then
-			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/xfs/xfsprogs-maintainer.txt"
-		fi
-		if [ "$FSTYP" = "ext4" ] ; then
-			oscheck_add_expunge_if_exists "${OSCHECK_EXCLUDE_PREFIX}/any/ext4/xfstests-bld-expunges.txt"
-		fi
-		;;
-	esac
-}
-
 ol_skip_groups()
 {
-	case "$VERSION_ID" in
-	28) # on 4.16.* kernel
-		if [ "$FSTYP" = "xfs" ] ; then
-			SKIP_GROUPS="tape clone dedupe dax dangerous_repair dangerous_online_repair broken"
-		fi
-		;;
-	esac
-
 	if [ "$FSTYP" = "xfs" ] ; then
 		SKIP_GROUPS="$SKIP_GROUPS encrypt"
 	fi
@@ -54,20 +24,6 @@ ol_skip_groups()
 	for g in $SKIP_GROUPS; do
 		_SKIP_GROUPS="$_SKIP_GROUPS -x $g"
 	done
-}
-
-ol_restart_ypbind()
-{
-	which ypbind 2 >/dev/null
-	if [ $? -ne 0 ]; then
-		return
-	fi
-
-	case "$VERSION_ID" in
-	28)
-		oscheck_systemctl_restart_ypbind
-		;;
-	esac
 }
 
 ol_distro_kernel_check()
