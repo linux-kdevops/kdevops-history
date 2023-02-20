@@ -49,9 +49,9 @@ pynfs-dev-reset:
 pynfs-help-menu:
 	@echo "pynfs options:"
 	@echo "pynfs                             - Git clone pynfs, build and install it"
-	@echo "pynfs-baseline                    - Run the pynfs test on baseline hosts and collect results"
-	@echo "pynfs-dev                         - Run pynfs on dev hosts and collect results"
-	@echo "pynfs-baseline-kernelci           - Run pynfs kernel-ci loop"
+	@echo "pynfs-{baseline,dev}              - Run the pynfs test on baseline  or dev hosts and collect results"
+	@echo "pynfs-{baseline,dev}-loop"        - Run pynfs in a loop until error or steady state
+	@echo "pynfs-{baseline,dev}-kernelci     - Run pynfs kernel-ci loop"
 	@echo ""
 
 HELP_TARGETS += pynfs-help-menu
