@@ -1,3 +1,5 @@
+export KDEVOPS_HOSTS_TEMPLATE := pynfs.j2
+
 PYNFS_GIT:=$(subst ",,$(CONFIG_PYNFS_GIT))
 
 PYNFS_ARGS += pynfs_git=$(PYNFS_GIT)

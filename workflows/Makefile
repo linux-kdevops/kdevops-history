@@ -30,6 +30,7 @@ include workflows/cxl/Makefile
 endif # CONFIG_KDEVOPS_WORKFLOW_ENABLE_CXL == y
 
 ifeq (y,$(CONFIG_KDEVOPS_WORKFLOW_ENABLE_PYNFS))
+WORKFLOW_ARGS += kdevops_workflow_enable_pynfs='True'
 include workflows/pynfs/Makefile
 endif # CONFIG_KDEVOPS_WORKFLOW_ENABLE_PYNFS == y
 
