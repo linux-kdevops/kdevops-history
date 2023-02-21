@@ -409,6 +409,9 @@ oscheck_run_section()
 		SECTION_ARGS="-s $SECTION"
 	fi
 
+	# Need to do this as RUN_SECTION is used inside of ./check to determine which section to run
+	unset RUN_SECTION
+
 	if [[ "$PRINT_START" == "true" ]]; then
 		NOW=$(date --rfc-3339='seconds' | awk -F"+" '{print $1}')
 		echo "run fstests fstestsstart/000 at $NOW" > /dev/kmsg
