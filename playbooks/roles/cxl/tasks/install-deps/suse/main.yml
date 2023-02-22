@@ -71,9 +71,12 @@
       - libjson-c-devel
       - ruby3.1-rubygem-asciidoctor
       - keyutils-devel
-      - libiniparser-dev
+      - libiniparser-devel
       - bash-completion-devel
       - jq
+      - libtraceevent-devel
+      - libtracefs-devel
     state: present
+    replacefiles: true
   when:
     - repos_present|bool

@@ -22,3 +22,5 @@
       - iniparser-devel
       - bash-completion
       - jq
+      - libtraceevent-devel
+      - libtracefs-devel

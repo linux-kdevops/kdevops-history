@@ -25,6 +25,8 @@
       - libiniparser-dev
       - bash-completion
       - jq
+      - libtraceevent-dev
+      - libtracefs-dev
     state: present
     update_cache: yes
   tags: [ 'cxl', 'deps' ]
