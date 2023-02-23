@@ -425,12 +425,8 @@ oscheck_run_section()
 	fi
 }
 
-oscheck_test_dev_setup()
+_check_dev_setup()
 {
-	if [ "$DRY_RUN" = "true" ]; then
-		return
-	fi
-
 	blkid -t TYPE=$FSTYP $TEST_DEV /dev/null
 	if [[ $? -ne 0 ]]; then
 		echo "FSTYP: $FSTYP Section: $INFER_SECTION with TEST_DEV: $TEST_DEV and MKFS_OPTIONS: $MKFS_OPTIONS TEST_DIR: $TEST_DIR"
@@ -448,7 +444,27 @@ oscheck_test_dev_setup()
 		echo "$(basename $0) initial mount for $TEST_DIR using:"
 		echo $OSCHECK_MOUNT_CMD
 		$OSCHECK_MOUNT_CMD
+		umount $TEST_DIR
 	fi
+}
+
+oscheck_test_dev_setup()
+{
+	if [ "$DRY_RUN" = "true" ]; then
+		return
+	fi
+
+	if [ "$RUN_SECTION" = "all" ]; then
+		for i in $(oscheck_lib_all_fs_sections)
+		do
+			echo "checking section $i"
+			oscheck_lib_parse_config_section $i
+			_check_dev_setup
+		done
+		return
+	fi
+
+	_check_dev_setup
 }
 
 _cleanup() {
@@ -483,6 +499,19 @@ check_test_dev_setup()
 {
 	DEV_SETUP_RET=0
 	if [ "$DRY_RUN" = "true" ]; then
+		return
+	fi
+
+	if [ "$RUN_SECTION" = "all" ]; then
+		for i in $(oscheck_lib_all_fs_sections)
+		do
+			echo "checking section $i"
+			oscheck_lib_parse_config_section $i
+			if [[ ! -e $TEST_DEV ]]; then
+				echo "$TEST_DEV is not present"
+				return 1
+			fi
+		done
 		return
 	fi
 

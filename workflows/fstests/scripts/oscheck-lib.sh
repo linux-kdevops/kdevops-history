@@ -130,7 +130,7 @@ oscheck_set_host_config_vars()
 	fi
 }
 
-parse_config_section() {
+oscheck_lib_parse_config_section() {
 	LOCAL_SECTION=$1
 	if ! $OPTIONS_HAVE_SECTIONS; then
 		return 0
@@ -151,8 +151,8 @@ parse_config_section() {
 
 oscheck_lib_get_host_options_vars()
 {
-	parse_config_section default
-	parse_config_section $RUN_SECTION
+	oscheck_lib_parse_config_section default
+	oscheck_lib_parse_config_section $RUN_SECTION
 }
 
 oscheck_include_os_files()
@@ -453,6 +453,11 @@ oscheck_lib_read_osfiles_verify_kernel()
 	oscheck_distro_kernel_check
 }
 
+oscheck_lib_all_fs_sections()
+{
+	grep "^\[" $HOST_OPTIONS | grep -v "^\[default\]" | sed -e 's|\[||' | sed -e 's|\]||'
+}
+
 oscheck_lib_check_section()
 {
 	if [ ! -e $HOST_OPTIONS ]; then
@@ -461,7 +466,7 @@ oscheck_lib_check_section()
 	if [ "${RUN_SECTION}" == "all" ]; then
 		return 0;
 	fi
-	ALL_FS_SECTIONS=$(grep "^\[" $HOST_OPTIONS | grep -v "^\[default\]" | sed -e 's|\[||' | sed -e 's|\]||')
+	ALL_FS_SECTIONS=$(oscheck_lib_all_fs_sections)
 	SECTION=$RUN_SECTION
 	RUN_SECTION_FOUND=0
 	for valid_section in $ALL_FS_SECTIONS; do
