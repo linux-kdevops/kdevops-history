@@ -164,8 +164,8 @@ def print_summary(out_f, testsuite, verbose, print_section):
     else:
         if failures > 0:
             print_tests(out_f, testsuite, Failure, 'Failures')
-            if errors > 0:
-                print_tests(out_f, testsuite, Error, 'Errors')
+        if errors > 0:
+            print_tests(out_f, testsuite, Error, 'Errors')
 
 def print_property_line(out_f, props, key):
     """Print a line containing the given property."""
