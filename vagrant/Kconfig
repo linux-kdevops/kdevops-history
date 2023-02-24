@@ -263,6 +263,138 @@ config QEMU_VIRSH_CAN_SUDO
 	default $(shell, ./scripts/get_libvirsh_can_sudo.sh)
 
 choice
+	prompt "Libvirt extra storage driver to use"
+	default LIBVIRT_EXTRA_STORAGE_DRIVE_NVME
+
+config LIBVIRT_EXTRA_STORAGE_DRIVE_NVME
+	bool "NVMe"
+	help
+	  Use the qemu nvme driver for extra storage drives. We always expect
+	  to use this as we expect *could* be outperforming the virtio driver.
+	  Only if you enable this will you get support for ZNS too. We expect
+	  the nvme driver to always be the default. It also gives us parity with
+	  cloud bringups.
+
+config LIBVIRT_EXTRA_STORAGE_DRIVE_VIRTIO
+	bool "virtio"
+	help
+	  Use the qemu virtio driver for extra storage drives. Use this if you
+	  are having issues with "nvme timeouts" issues when testing in a loop
+	  with fstests and cannot upgrade your qemu version. If you select this
+	  you won't be able to test ZNS.
+
+config LIBVIRT_EXTRA_STORAGE_DRIVE_IDE
+	bool "ide"
+	help
+	  Use the qemu ide driver for extra storage drives. This is useful for
+	  really old Linux distributions that lack the virtio backend driver.
+
+endchoice
+
+if LIBVIRT_EXTRA_STORAGE_DRIVE_VIRTIO
+
+choice
+	prompt "Libvirt virtio aio"
+	default LIBVIRT_VIRTIO_AIO_MODE_NATIVE
+
+config LIBVIRT_VIRTIO_AIO_MODE_NATIVE
+	bool "aio=native"
+	help
+	  Use the aio=native mode. For some older kernels it is known that
+	  native will cause corruption if used on ext4 or xfs filesystem if
+	  you also use cace=none. This corruption is documented for RHEL:
+
+	  https://access.redhat.com/articles/41313
+	  https://bugzilla.redhat.com/show_bug.cgi?id=615309
+
+	  In terms of performance there are some recommendations to not use
+	  aio=native on sparsefiles. The claim seems to be that a host
+	  filesystems metadata write can block the AIO io_submit() call and
+	  therefore block qemu threads which expect AIO behaviour on the guest.
+	  This is documented when on Openstack nova an aio mode option was
+	  requested to be available for different backends:
+
+	  https://review.opendev.org/c/openstack/nova-specs/+/232514/7/specs/mitaka/approved/libvirt-aio-mode.rst
+
+config LIBVIRT_VIRTIO_AIO_MODE_THREADS
+	bool "aio=threads"
+	help
+	  Use the aio=threads mode. This might be more suitable for you if on
+	  older kernels such as in RHEL6 and using sparsefiles and ext4 or xfs
+	  on this host with cache=none.
+
+endchoice
+
+config LIBVIRT_VIRTIO_AIO_MODE
+	string
+	default "native" if LIBVIRT_VIRTIO_AIO_MODE_NATIVE
+	default "threads" if LIBVIRT_VIRTIO_AIO_MODE_THREADS
+
+choice
+	prompt "Libvirt cache mode"
+	default LIBVIRT_VIRTIO_AIO_CACHE_MODE_NONE
+
+config LIBVIRT_VIRTIO_AIO_CACHE_MODE_NONE
+	bool "cache=none"
+	help
+	  Use the cache=none. IO from the guest is not cached on the host but
+	  it may be kept in a writeback disk cache. This means that the actual
+	  storage device may report a write as completed when the data is still
+	  placed in the host's write queue only, the guest's virtual storage
+	  adapter is informed that there is a writeback cache. So in essence
+	  the guest's writes are directly accessing the host's disk. Use this
+	  option for guests with large IO requirements. This is generally the
+	  best option and is required for live migration.
+
+config LIBVIRT_VIRTIO_AIO_CACHE_MODE_WRITETHROUGH
+	bool "cache=writethrough"
+	help
+	  cache=writethrough. IO from the guest is cached on the host but
+	  written through to the physical medium. Writes are only reported as
+	  completed when the data has been committed to the storage device. The
+	  guest's virtual storage adapter is informed that there is no
+	  writeback cache so the guest does not need to send flush commands
+	  to manage integrity. This mode is slower and prone to scaling issues.
+	  Best used for small number of guests with lower IO reqs. This should
+	  be used on older guests which do not support writeback cache.
+
+config LIBVIRT_VIRTIO_AIO_CACHE_MODE_WRITEBACK
+	bool "cache=writeback"
+	help
+	  cache=writeback. IO from the guest is cached on the host so it is
+	  cached on the host's page cache. Writes are reported to the guest
+	  when they are placed on the host's page cache. The guest's virtual
+	  storage controller is informed of the writeback cache and therefore
+	  expected to send flush commands as needed to manage data integrity.
+
+config LIBVIRT_VIRTIO_AIO_CACHE_MODE_DIRECTSYNC
+	bool "cache=directsync"
+	help
+	  cache=directsync. Writes are reported only when the data has been
+	  committed to the storage controller. The host cache is completely
+	  bypassed. This mode is useful for guests which that do not send
+	  flushes when needed.
+
+config LIBVIRT_VIRTIO_AIO_CACHE_MODE_UNSAFE
+	bool "cache=unsafe"
+	help
+	  cache=unsafe. Similar to writeback except all of the flush commands
+	  from the guest are ignored. This is useful if the one wants to
+	  prioritize performance and one does not care about data loss.
+
+endchoice
+
+config LIBVIRT_VIRTIO_AIO_CACHE_MODE
+	string
+	default "none" if LIBVIRT_VIRTIO_AIO_CACHE_MODE_NONE
+	default "writethrough" if LIBVIRT_VIRTIO_AIO_CACHE_MODE_WRITETHROUGH
+	default "writeback" if LIBVIRT_VIRTIO_AIO_CACHE_MODE_WRITEBACK
+	default "directsync" if LIBVIRT_VIRTIO_AIO_CACHE_MODE_DIRECTSYNC
+	default "unsafe" if LIBVIRT_VIRTIO_AIO_CACHE_MODE_UNSAFE
+
+endif
+
+choice
 	prompt "Libvirt storage pool path"
 	default LIBVIRT_STORAGE_POOL_PATH_INFER_ADVANCED if DISTRO_DEBIAN && QEMU_VIRSH_CAN_SUDO
 	default LIBVIRT_STORAGE_POOL_PATH_CUSTOM_DEFAULT_DISTRO if !DISTRO_SUSE && !DISTRO_DEBIAN
@@ -920,7 +1052,7 @@ endchoice
 
 config QEMU_ENABLE_NVME_ZNS
 	bool "Enable Qemu NVMe ZNS drives"
-	depends on VAGRANT_LIBVIRT
+	depends on VAGRANT_LIBVIRT && LIBVIRT_EXTRA_STORAGE_DRIVE_NVME
 	default n
 	help
 	  If this option is enabled then you can enable NVMe ZNS drives on the

@@ -20,8 +20,6 @@ vagrant_box_version: ""
 vagrant_vcpus_count: 8
 vagrant_mem_mb: 4096
 qemu_bin_path: "/usr/bin/qemu-system-x86_64"
-lacks_nvme_support: False
-lacks_drive_virtio: False
 extra_disk_path: ".vagrant/nvme_disks/"
 extra_disk_driver: "nvme"
 extra_disk_controller: "NVMe"
@@ -53,6 +51,11 @@ libvirt_enable_cxl: False
 libvirt_enable_cxl_demo_topo1: False
 libvirt_enable_cxl_demo_topo2: False
 libvirt_extra_drive_id_prefix: 'drv'
+libvirt_extra_storage_drive_nvme: True
+libvirt_extra_storage_drive_virtio: False
+libvirt_extra_storage_drive_ide: False
+libvirt_extra_storage_virtio_aio_mode: "native"
+libvirt_extra_storage_virtio_aio_cache_mode: "none"
 
 kdevops_workflows_dedicated_workflow: False
 kdevops_workflow_enable_fstests: False

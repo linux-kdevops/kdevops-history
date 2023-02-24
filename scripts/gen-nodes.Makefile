@@ -35,6 +35,18 @@ GEN_NODES_EXTRA_ARGS += libvirt_storage_pool_name='$(subst ",,$(CONFIG_LIBVIRT_S
 GEN_NODES_EXTRA_ARGS += libvirt_storage_pool_path='$(subst ",,$(CONFIG_LIBVIRT_STORAGE_POOL_PATH_CUSTOM))'
 endif
 
+ifeq (y,$(CONFIG_LIBVIRT_EXTRA_STORAGE_DRIVE_IDE))
+GEN_NODES_EXTRA_ARGS += libvirt_extra_storage_drive_nvme='False'
+GEN_NODES_EXTRA_ARGS += libvirt_extra_storage_drive_ide='True'
+endif
+
+ifeq (y,$(CONFIG_LIBVIRT_EXTRA_STORAGE_DRIVE_VIRTIO))
+GEN_NODES_EXTRA_ARGS += libvirt_extra_storage_drive_nvme='False'
+GEN_NODES_EXTRA_ARGS += libvirt_extra_storage_drive_virtio='True'
+GEN_NODES_EXTRA_ARGS += libvirt_extra_storage_virtio_aio_mode='$(subst ",,$(CONFIG_LIBVIRT_VIRTIO_AIO_MODE))'
+GEN_NODES_EXTRA_ARGS += libvirt_extra_storage_virtio_aio_cache_mode='$(subst ",,$(CONFIG_LIBVIRT_VIRTIO_AIO_CACHE_MODE))'
+endif
+
 ifeq (y,$(CONFIG_LIBVIRT_NVME_DRIVE_FORMAT_RAW))
 GEN_NODES_EXTRA_ARGS += vagrant_extra_drive_format='raw'
 endif

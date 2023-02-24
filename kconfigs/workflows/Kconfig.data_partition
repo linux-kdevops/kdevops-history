@@ -1,6 +1,8 @@
 config WORKFLOW_DATA_DEVICE
 	string "The device to use to create the workflow data parition"
-	default "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_kdevops0" if VAGRANT
+	default "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_kdevops0" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_NVME
+	default "/dev/disk/by-id/virtio-kdevops0" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_VIRTIO
+	default "/dev/disk/by-id/ide-kdevops1" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_IDE
 	default "/dev/nvme1n1" if TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE
 	default "/dev/nvme0n1" if TERRAFORM_GCE
 	default "/dev/sdc" if TERRAFORM_AZURE

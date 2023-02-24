@@ -352,15 +352,6 @@ Vagrant.configure("2") do |config|
                 end
               end
             end
-{% if lacks_drive_virtio %}
-            non_nvme_drive_interface = "ide"
-{% else %}
-            non_nvme_drive_interface = "virtio"
-{% endif %}
-{% if lacks_nvme_support %}
-            libvirt.qemuargs :value => "-drive"
-            libvirt.qemuargs :value => "file=#{extra_disk},if=#{non_nvme_drive_interface}"
-{% else %}
 {% if not libvirt_override_machine_type %}
             bus_for_extra_drives = "custom-pci-for-{{ extra_disk_driver }}"
             pci_function = 0 + port
@@ -373,6 +364,15 @@ Vagrant.configure("2") do |config|
             libvirt.qemuargs :value => "pcie-root-port,id=#{bus_for_extra_drives},multifunction=on,bus=pcie.1,addr=0x#{port},chassis=#{chassis}"
             pci_function = "0x0"
 {% endif %}
+{% if libvirt_extra_storage_drive_ide %}
+            libvirt.qemuargs :value => "-drive"
+            libvirt.qemuargs :value => "file=#{extra_disk},if=ide,serial=#{serial_id}"
+{% elif libvirt_extra_storage_drive_virtio %}
+            libvirt.qemuargs :value => "-drive"
+            libvirt.qemuargs :value => "file=#{extra_disk},if=none,aio={{ libvirt_extra_storage_virtio_aio_mode }},cache={{ libvirt_extra_storage_virtio_aio_cache_mode }},id=#{disk_id}"
+            libvirt.qemuargs :value => "-device"
+            libvirt.qemuargs :value => "virtio-blk-pci,scsi=off,drive=#{disk_id},id=virtio-#{disk_id},serial=#{serial_id},bus=#{bus_for_extra_drives},addr=#{pci_function}"
+{% elif libvirt_extra_storage_drive_nvme  %}
             extra_drive_interface = "none"
             if zoned
               libvirt.qemuargs :value => "-drive"
@@ -389,8 +389,8 @@ Vagrant.configure("2") do |config|
               libvirt.qemuargs :value => "-device"
               libvirt.qemuargs :value => "nvme-ns,drive=#{disk_id},bus={{ extra_disk_driver }}#{port},nsid=1"
             end
-            port += 1
 {% endif %}
+            port += 1
 	  end
 	  if provider == "libvirt"
 	    cmd = "sudo chgrp -R #{qemu_group} #{node_custom_data_path}"

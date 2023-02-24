@@ -245,7 +245,9 @@ if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 
 config FSTESTS_SPARSE_DEV
 	string "Device to use to create a filesystem on for sparse files"
-	default "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_kdevops1" if VAGRANT
+	default "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_kdevops1" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_NVME
+	default "/dev/disk/by-id/virtio-kdevops1" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_VIRTIO
+	default "/dev/disk/by-id/ide-kdevops1" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_IDE
 	default "/dev/nvme2n1" if TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE
 	default "/dev/nvme1n1" if TERRAFORM_GCE
 	default "/dev/sde" if TERRAFORM_AZURE
