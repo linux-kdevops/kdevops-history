@@ -1,9 +1,10 @@
 # kernel-ci guest requirements
 
-Today the most complex filesystem to test is the XFS filesystem. It requires
-testing at least 8 different configurations on x86_64, each configuration
-representing one diferent xfs filesystem created with different mkfs.xfs
-parameters.
+Today the most complex filesystems to test is are XFS and btrfs filesystem.
+XFS requires testing at least 9 different configurations on x86_64, each
+configuration representing one diferent xfs filesystem created with different
+mkfs.xfs parameters. For btrfs we have now 19 possible configurations to test
+for.
 
 For instance to create a filesystem with no crc enabled we would use:
 
@@ -12,7 +13,7 @@ For instance to create a filesystem with no crc enabled we would use:
 The trailing commas are not needed but supported by mkfs.xfs. The fstests
 test framework allows one to specify *one* target filesystem to
 test with different parameters in a section. For the XFS filesystem, at
-least for testing against stable kernels, we test 8 different possible
+least for testing against stable kernels, we test 9 different possible
 configurations. If no parameters are passed to mkfs.xfs then the defaults
 will be used, however these defaults can vary depending on the version of
 xfsprogs released, and as such the defaults are relative to the release
@@ -26,11 +27,16 @@ a *section*.
 * *xfs_reflink_1024*: mkfs.xfs -f -m reflink=1,rmapbt=1, -i sparse=1, -b size=1024
 * *xfs_reflink_normapbt*: mkfs.xfs -f -m reflink=1,rmapbt=0, -i sparse=1
 
+etc
+
 The following two use an external log device for meta data, and the realtime_dev
 section name uses also an additional realtime device:
 
 * *xfs_logdev*: mkfs.xfs -f -m crc=1,reflink=0,rmapbt=0, -i sparse=0 -lsize=1g
 * *xfs_realtimedev*: mkfs.xfs -f -lsize=1g
+
+There is also one for the combination of the external log device and the
+realtime device.
 
 ## Verifying fstests configuration works
 
@@ -84,15 +90,18 @@ guest for the section xfs_nocrc_512.
 
 ## kernel-ci guest main OS drive
 
-We will need at least 50 GiB for the main OS to be installed. One drive will
-be used for this.
+We will need at least 50 GiB for the main OS to be installed but in practice
+only about 10 GiB is used. One drive will be used for this.
 
 ## kernel-ci guest data partition
 
 We want to use one partition to mount and use for development files. We refer
 to this as the *data* parition, given we mount this on /data. This can be for
-our testing or for example cloning a Linux git tree and compiling it on the
-guest. 100 GiB should suffice.
+our testing or for example cloning a some fstests from git and other tools
+and compiling it on the guest. Give or take another 10 GiB should suffice but
+we use 100 GiB truncated files for this if using libvirt. Note that 9p is
+supported now if using libvirt so the Linux kernel is git cloned on the host
+side now.
 
 When possible we strive for this to be exposed as an nvme drive, and in order
 to not require a full 100 GiB of physical space, a sparse file can be created
