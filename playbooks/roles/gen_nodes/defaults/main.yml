@@ -8,6 +8,7 @@ kdevops_vagrant_template: '/dev/null'
 kdevops_nodes: "vagrant/kdevops_nodes.yaml"
 kdevops_baseline_and_dev: False
 kdevops_workflow_enable_cxl: False
+kdevops_workflow_enable_pynfs: False
 kdevops_workflow_enable_selftests: False
 
 virtualbox_provider: False
