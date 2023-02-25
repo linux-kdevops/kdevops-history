@@ -21,6 +21,7 @@ vagrant_mem_mb: 4096
 qemu_bin_path: "/usr/bin/qemu-system-x86_64"
 lacks_nvme_support: False
 lacks_drive_virtio: False
+extra_disk_path: ".vagrant/nvme_disks/"
 nvme_zone_enable: False
 nvme_zone_drive_size: 102400
 nvme_zone_zasl: 0

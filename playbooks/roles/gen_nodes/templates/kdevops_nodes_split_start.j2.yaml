@@ -46,8 +46,6 @@ vagrant_global:
     session_public_network_dev: '{{ libvirt_session_public_network_dev }}'
 {% endif %}
 {% endif %}
-  # On the current directory
-  nvme_disk_path: '.vagrant/nvme_disks/'
   # This ends up slightly different depending on the vagrant provider right now.
   # For Virtualbox: /dev/nvme0n1, /dev/nvme0n2, etc.
   # For libvirt:    /dev/nvme0n1, /dev/nvme1n1, etc.
