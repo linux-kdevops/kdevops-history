@@ -25,7 +25,6 @@ vagrant_global:
 {% if libvirt_override_machine_type %}
     machine_type: '{{ libvirt_machine_type }}'
 {% endif %}
-    nvme_disk_id_prefix: 'drv'
     # This lets the ansible role kdevops_vagrant try to infer your default
     # distro group to use for qemu. OpenSUSE and Fedora uses qemu here by
     # default, debian uses libvirt-qemu. You can always override with the
