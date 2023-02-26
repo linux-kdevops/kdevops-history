@@ -150,10 +150,10 @@ Vagrant.configure("2") do |config|
         override.vm.boot_timeout = global_data['boot_timeout']
         vb.memory = global_data["memory"]
         vb.cpus = global_data["cpus"]
-        if global_data['nvme_disks']
+        if global_data['extra_disks']
           port = 0
-          port_count = global_data['nvme_disks'].size()
-          global_data['nvme_disks'].each do |key, value|
+          port_count = global_data['extra_disks'].size()
+          global_data['extra_disks'].each do |key, value|
             size = value['size']
 	    # XXX: the purpose of the nvme drive is unused for now but later we
 	    # can let ansible provision it for our target mount paths
@@ -316,10 +316,10 @@ Vagrant.configure("2") do |config|
             libvirt.pci :domain => value['domain'], :bus => value['bus'], :slot => value['slot'], :function => value['function']
           end
         end
-        if global_data['nvme_disks']
+        if global_data['extra_disks']
           port = 0
-          port_count = global_data['nvme_disks'].size()
-          global_data['nvme_disks'].each do |key, value|
+          port_count = global_data['extra_disks'].size()
+          global_data['extra_disks'].each do |key, value|
             size = value['size']
             zoned = value['zoned']
             if zoned && !global_data['enable_zns']

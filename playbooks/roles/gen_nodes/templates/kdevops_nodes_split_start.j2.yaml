@@ -50,7 +50,7 @@ vagrant_global:
   # For Virtualbox: /dev/nvme0n1, /dev/nvme0n2, etc.
   # For libvirt:    /dev/nvme0n1, /dev/nvme1n1, etc.
   # This is due to how Virtualbox only supports one nvme storage controller
-  nvme_disks:
+  extra_disks:
     data:
       size: 102400
     scratch:
