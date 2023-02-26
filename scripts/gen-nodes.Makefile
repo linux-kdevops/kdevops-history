@@ -36,7 +36,10 @@ GEN_NODES_EXTRA_ARGS += libvirt_storage_pool_path='$(subst ",,$(CONFIG_LIBVIRT_S
 endif
 
 ifeq (y,$(CONFIG_LIBVIRT_NVME_DRIVE_FORMAT_RAW))
-GEN_NODES_EXTRA_ARGS += libvirt_nvme_drive_format='raw'
+GEN_NODES_EXTRA_ARGS += vagrant_extra_drive_format='raw'
+endif
+ifeq (y,$(CONFIG_VAGRANT_VIRTUALBOX))
+GEN_NODES_EXTRA_ARGS += vagrant_extra_drive_format='$(subst ",,$(CONFIG_VIRTUALBOX_EXTRA_DRIVE_FORMAT))'
 endif
 
 ifeq (y,$(CONFIG_VAGRANT_ENABLE_ZNS))

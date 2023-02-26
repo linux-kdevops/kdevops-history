@@ -549,6 +549,33 @@ config VIRTUALBOX_STORAGE_POOL_PATH_CUSTOM
 	  create the nvme files under the directory
 	  /opt/virtualbox/storage/kdevops/.vagrant/nvme_disks/guest-hostname/.
 
+choice
+	prompt "Virtualbox extra drive format"
+	default VIRTUALBOX_EXTRA_DRIVE_VDI
+
+config VIRTUALBOX_EXTRA_DRIVE_VDI
+	bool "vdi"
+	help
+	  Select this option if you want to use the vdi format.
+
+config VIRTUALBOX_EXTRA_DRIVE_VMDK
+	bool "vmdk"
+	help
+	  Select this option if you want to use the vmdk format.
+
+config VIRTUALBOX_EXTRA_DRIVE_VHD
+	bool "vhd"
+	help
+	  Select this option if you want to use the vhd format.
+
+endchoice
+
+config VIRTUALBOX_EXTRA_DRIVE_FORMAT
+	string
+	default "vdi" if VIRTUALBOX_EXTRA_DRIVE_VDI
+	default "vmdk" if VIRTUALBOX_EXTRA_DRIVE_VMDK
+	default "vhd" if VIRTUALBOX_EXTRA_DRIVE_VHD
+
 endif
 
 config LIBVIRT_QEMU_GROUP
