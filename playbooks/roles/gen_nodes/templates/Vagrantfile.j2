@@ -258,7 +258,7 @@ Vagrant.configure("2") do |config|
         # PCI-E. Below assumes i440x. i440x cannot support CXL as it does not
         # suport PCI-E.
         libvirt.qemuargs :value => "-device"
-        libvirt.qemuargs :value => "pci-bridge,id=custom-pci-for-nvme,chassis_nr=1,bus=pci.0,addr=0x8"
+        libvirt.qemuargs :value => "pci-bridge,id=custom-pci-for-{{ extra_disk_driver }},chassis_nr=1,bus=pci.0,addr=0x8"
 {% else %}
 	# This is for exclusive PCIe hierarchies.
 	#
@@ -361,15 +361,15 @@ Vagrant.configure("2") do |config|
             libvirt.qemuargs :value => "file=#{extra_disk},if=#{non_nvme_drive_interface}"
 {% else %}
 {% if not libvirt_override_machine_type %}
-            bus_for_nvme = "custom-pci-for-nvme"
+            bus_for_extra_drives = "custom-pci-for-{{ extra_disk_driver }}"
             pci_function = 0 + port
 {% else %}
 	    # A PCI-E root port must be added per extra drive.
             # Chassis must be something unique for the entire topology it seems (?)
             chassis = 50 + port
-            bus_for_nvme = "pcie-port-for-nvme-#{port}"
+            bus_for_extra_drives = "pcie-port-for-{{ extra_disk_driver }}-#{port}"
             libvirt.qemuargs :value => "-device"
-            libvirt.qemuargs :value => "pcie-root-port,id=#{bus_for_nvme},multifunction=on,bus=pcie.1,addr=0x#{port},chassis=#{chassis}"
+            libvirt.qemuargs :value => "pcie-root-port,id=#{bus_for_extra_drives},multifunction=on,bus=pcie.1,addr=0x#{port},chassis=#{chassis}"
             pci_function = "0x0"
 {% endif %}
 
@@ -377,14 +377,14 @@ Vagrant.configure("2") do |config|
               libvirt.qemuargs :value => "-drive"
               libvirt.qemuargs :value => "file=#{extra_disk},if=none,id=#{disk_id}"
               libvirt.qemuargs :value => "-device"
-              libvirt.qemuargs :value => "nvme,id={{ extra_disk_driver }}#{port},serial=#{serial_id},bus=#{bus_for_nvme},addr=#{pci_function},zoned.zasl=#{zone_zasl}"
+              libvirt.qemuargs :value => "nvme,id={{ extra_disk_driver }}#{port},serial=#{serial_id},bus=#{bus_for_extra_drives},addr=#{pci_function},zoned.zasl=#{zone_zasl}"
               libvirt.qemuargs :value => "-device"
               libvirt.qemuargs :value => "nvme-ns,drive=#{disk_id},bus={{ extra_disk_driver }}#{port},nsid=1,logical_block_size=#{logical_block_size},physical_block_size=#{physical_block_size},zoned=true,zoned.zone_size=#{zone_size},zoned.zone_capacity=#{zone_capacity},zoned.max_open=#{zone_max_open},zoned.max_active=#{zone_max_active}"
             else
               libvirt.qemuargs :value => "-drive"
               libvirt.qemuargs :value => "file=#{extra_disk},if=none,id=#{disk_id}"
               libvirt.qemuargs :value => "-device"
-              libvirt.qemuargs :value => "nvme,id={{ extra_disk_driver }}#{port},serial=#{serial_id},bus=#{bus_for_nvme},addr=#{pci_function}"
+              libvirt.qemuargs :value => "nvme,id={{ extra_disk_driver }}#{port},serial=#{serial_id},bus=#{bus_for_extra_drives},addr=#{pci_function}"
               libvirt.qemuargs :value => "-device"
               libvirt.qemuargs :value => "nvme-ns,drive=#{disk_id},bus={{ extra_disk_driver }}#{port},nsid=1"
             end
