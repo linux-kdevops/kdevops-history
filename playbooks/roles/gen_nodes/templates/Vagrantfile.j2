@@ -237,7 +237,7 @@ Vagrant.configure("2") do |config|
             libvirt.machine_type = global_data['libvirt_cfg']['machine_type']
           end
         end
-        # Add an extra spare PCI or PCI-E root bus to be used for NVME drives.
+        # Add an extra spare PCI or PCI-E root bus to be used for extra drives.
         #
         # We use a dedicated PCI or PCI-E root bus to not clash with defaults
         # which libvirt may use on PCI root bus (pci.0 if PCI, pcie.0 if PCI-E).
@@ -270,7 +270,7 @@ Vagrant.configure("2") do |config|
 	# root ports for extra drives, this will be pcie.1.
 	#
         # We can keep doing this to support new technologies. For instance,
-        # it may be reasoanble to add a PCI-E root bus also to support PCI-E
+        # it may be reasonable to add a PCI-E root bus also to support PCI-E
         # hotplug on PCI-E capable systems and avoid clashes with libvirt
 	# defaults on pcie.0. CXL uses its own host bridge so device
 	# enumeration is pretty well isolated already so no need to do anything
