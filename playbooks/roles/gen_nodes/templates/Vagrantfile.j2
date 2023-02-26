@@ -159,7 +159,7 @@ Vagrant.configure("2") do |config|
 	    # can let ansible provision it for our target mount paths
             purpose = key
             port_plus = port + 1
-            extra_disk = extra_disk_path + "/nvme#{port}n#{port_plus}.{{ vagrant_extra_drive_format }}"
+            extra_disk = extra_disk_path + "/{{ extra_disk_driver }}#{port}n#{port_plus}.{{ vagrant_extra_drive_format }}"
 
             # "Standard" provides a sparse file. That's what we want, we cheat
             # the OS and only use what we need. If you want the real file size
@@ -176,17 +176,17 @@ Vagrant.configure("2") do |config|
               # This command attaches, modifies, and removes a storage
               # controller. After this, virtual media can be attached to the
               # controller with the storageattach command.
-              nvme_name = "nvme#{port}"
+              extra_drive_name = "{{ extra_disk_driver }}#{port}"
               if (! File.file?(extra_disk))
-                vb.customize ["storagectl", :id, "--name", "#{nvme_name}", "--add", "pcie", "--controller", "NVMe", "--portcount", 1, "--bootable", "off"]
+                vb.customize ["storagectl", :id, "--name", "#{extra_drive_name}", "--add", "pcie", "--controller", "{{ extra_disk_controller }}", "--portcount", 1, "--bootable", "off"]
               end
 	      # Now attach the drive
-	      vb.customize ["storageattach", :id, "--storagectl", "#{nvme_name}", "--type", "hdd", "--medium", extra_disk, "--port", 0]
+	      vb.customize ["storageattach", :id, "--storagectl", "#{extra_drive_name}", "--type", "hdd", "--medium", extra_disk, "--port", 0]
             else
               if (port == 0 && !File.file?(extra_disk))
-                vb.customize ["storagectl", :id, "--name", "nvme0", "--add", "pcie", "--controller", "NVMe", "--portcount", port + 1, "--bootable", "off"]
+                vb.customize ["storagectl", :id, "--name", "{{ extra_disk_driver }}0", "--add", "pcie", "--controller", "{{ extra_disk_controller }}", "--portcount", port + 1, "--bootable", "off"]
               end
-	      vb.customize ["storageattach", :id, "--storagectl", "nvme0", "--type", "hdd", "--medium", extra_disk, "--port", port]
+	      vb.customize ["storageattach", :id, "--storagectl", "{{ extra_disk_driver }}0", "--type", "hdd", "--medium", extra_disk, "--port", port]
             end
 
             if global_data['enable_sse4']
@@ -339,7 +339,7 @@ Vagrant.configure("2") do |config|
 	    key_id_prefix = global_data['libvirt_cfg']['nvme_disk_id_prefix']
 	    disk_id = "#{key_id_prefix}#{port}"
 	    serial_id = "kdevops#{port}"
-            extra_disk_name = "nvme#{port}n#{port_plus}.{{ vagrant_extra_drive_format }}"
+            extra_disk_name = "{{ extra_disk_driver }}#{port}n#{port_plus}.{{ vagrant_extra_drive_format }}"
             extra_disk = extra_disk_path + "/" + "#{extra_disk_name}"
             unless File.exist? (extra_disk)
 	      if provider == "libvirt"
@@ -377,16 +377,16 @@ Vagrant.configure("2") do |config|
               libvirt.qemuargs :value => "-drive"
               libvirt.qemuargs :value => "file=#{extra_disk},if=none,id=#{disk_id}"
               libvirt.qemuargs :value => "-device"
-              libvirt.qemuargs :value => "nvme,id=nvme#{port},serial=#{serial_id},bus=#{bus_for_nvme},addr=#{pci_function},zoned.zasl=#{zone_zasl}"
+              libvirt.qemuargs :value => "nvme,id={{ extra_disk_driver }}#{port},serial=#{serial_id},bus=#{bus_for_nvme},addr=#{pci_function},zoned.zasl=#{zone_zasl}"
               libvirt.qemuargs :value => "-device"
-              libvirt.qemuargs :value => "nvme-ns,drive=#{disk_id},bus=nvme#{port},nsid=1,logical_block_size=#{logical_block_size},physical_block_size=#{physical_block_size},zoned=true,zoned.zone_size=#{zone_size},zoned.zone_capacity=#{zone_capacity},zoned.max_open=#{zone_max_open},zoned.max_active=#{zone_max_active}"
+              libvirt.qemuargs :value => "nvme-ns,drive=#{disk_id},bus={{ extra_disk_driver }}#{port},nsid=1,logical_block_size=#{logical_block_size},physical_block_size=#{physical_block_size},zoned=true,zoned.zone_size=#{zone_size},zoned.zone_capacity=#{zone_capacity},zoned.max_open=#{zone_max_open},zoned.max_active=#{zone_max_active}"
             else
               libvirt.qemuargs :value => "-drive"
               libvirt.qemuargs :value => "file=#{extra_disk},if=none,id=#{disk_id}"
               libvirt.qemuargs :value => "-device"
-              libvirt.qemuargs :value => "nvme,id=nvme#{port},serial=#{serial_id},bus=#{bus_for_nvme},addr=#{pci_function}"
+              libvirt.qemuargs :value => "nvme,id={{ extra_disk_driver }}#{port},serial=#{serial_id},bus=#{bus_for_nvme},addr=#{pci_function}"
               libvirt.qemuargs :value => "-device"
-              libvirt.qemuargs :value => "nvme-ns,drive=#{disk_id},bus=nvme#{port},nsid=1"
+              libvirt.qemuargs :value => "nvme-ns,drive=#{disk_id},bus={{ extra_disk_driver }}#{port},nsid=1"
             end
             port += 1
 {% endif %}
@@ -405,7 +405,7 @@ Vagrant.configure("2") do |config|
               exit
             end
 	  end # end of provider check for libvirt
-	end # end of check for nvme disks for libvirt
+	end # end of check for extra disks for libvirt
 {% if bootlinux_9p %}
 
         libvirt.qemuargs :value => "-device"
