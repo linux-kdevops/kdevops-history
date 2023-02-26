@@ -134,8 +134,8 @@ Vagrant.configure("2") do |config|
       host_name = server_data["name"]
       node_custom_data_path = kdevops_pool_path + "/" + "/#{host_name}"
       FileUtils.mkdir_p(node_custom_data_path) unless File.exists?(node_custom_data_path)
-      nvme_path = "#{node_custom_data_path}/" + "{{ extra_disk_path }}"
-      FileUtils.mkdir_p(nvme_path) unless File.exists?(nvme_path)
+      extra_disk_path = "#{node_custom_data_path}/" + "{{ extra_disk_path }}"
+      FileUtils.mkdir_p(extra_disk_path) unless File.exists?(extra_disk_path)
 {% if libvirt_enable_cxl %}
       cxl_path = "#{node_custom_data_path}" + "/cxl"
       FileUtils.mkdir_p(cxl_path) unless File.exists?(cxl_path)
@@ -155,12 +155,12 @@ Vagrant.configure("2") do |config|
           port_count = global_data['extra_disks'].size()
           global_data['extra_disks'].each do |key, value|
             size = value['size']
-	    # XXX: the purpose of the nvme drive is unused for now but later we
+	    # XXX: the purpose of the extra drive is unused for now but later we
 	    # can let ansible provision it for our target mount paths
             purpose = key
             port_plus = port + 1
             extra_disk_postfix = global_data['virtualbox_cfg']['nvme_disk_postfix']
-            extra_disk = nvme_path + "/nvme#{port}n#{port_plus}.#{extra_disk_postfix}"
+            extra_disk = extra_disk_path + "/nvme#{port}n#{port_plus}.#{extra_disk_postfix}"
 
             # "Standard" provides a sparse file. That's what we want, we cheat
             # the OS and only use what we need. If you want the real file size
@@ -196,8 +196,8 @@ Vagrant.configure("2") do |config|
               vb.customize ["setextradata", :id, "VBoxInternal/CPUM/SSE4.2", "1"]
             end
             port += 1
-          end # end of looping all nvme disks
-        end # end of checking for nvme disks
+          end # end of looping all extra disks
+        end # end of checking for extra disks
       end # end of virtualbox provider section
 {% endif %}
 {% if libvirt_provider %}
@@ -247,11 +247,12 @@ Vagrant.configure("2") do |config|
         #
         # PCI: slot 3 function 0 not available for virtio-blk-pci, in use by nvme,id=(null) (Libvirt::Error)
         #
-        # Just create a PCI or PCI-E root bus dedicated for nvme drives. We
+        # Just create a PCI or PCI-E root bus dedicated for extra drives. We
         # use 0x08 to place this PCI / PCI-E root bus as we know this is
         # avilable on modern x86-64 systems. Eventually we may need to bump
         # this to 0x9, but it would be better instead to have vagant-libvirt
-        # speak "add a new PCI or PCI-E root bus" and "add nvme drives".
+        # speak "add a new PCI or PCI-E root bus" and "add extra drives" whether
+        # that is nvme or virtio.
         #
 {% if not libvirt_override_machine_type %}
         # For i440x on x86_64 (default on libvirt as of today) we use PCI, not
@@ -341,7 +342,7 @@ Vagrant.configure("2") do |config|
 	    serial_id = "kdevops#{port}"
             extra_disk_postfix = global_data['libvirt_cfg']['nvme_disk_postfix']
             extra_disk_name = "nvme#{port}n#{port_plus}.#{extra_disk_postfix}"
-            extra_disk = nvme_path + "/" + "#{extra_disk_name}"
+            extra_disk = extra_disk_path + "/" + "#{extra_disk_name}"
             unless File.exist? (extra_disk)
 	      if provider == "libvirt"
 	        cmd = "qemu-img create -f {{ libvirt_nvme_drive_format}}  #{extra_disk} #{size}M"
