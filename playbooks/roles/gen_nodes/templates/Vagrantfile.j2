@@ -155,8 +155,9 @@ Vagrant.configure("2") do |config|
           port_count = global_data['extra_disks'].size()
           global_data['extra_disks'].each do |key, value|
             size = value['size']
-	    # XXX: the purpose of the extra drive is unused for now but later we
-	    # can let ansible provision it for our target mount paths
+	    # The "purpose" value below is currently an unused label at
+	    # the moment. The serial number is we really use with the
+	    # /dev/disk-id to ensure the extra drives are used as intended.
             purpose = key
             port_plus = port + 1
             extra_disk = extra_disk_path + "/{{ extra_disk_driver }}#{port}n#{port_plus}.{{ vagrant_extra_drive_format }}"
