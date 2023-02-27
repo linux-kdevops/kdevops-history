@@ -47,6 +47,7 @@ xfs/154 # buggy test check for missing 'needsrepair' feature in 5.10, lazy basel
 xfs/155 # xfs_repair hangs (possibly after reducing RAM size to 3GB)
 xfs/157
 xfs/158
+xfs/179 # missing commit b25d1984aa88 "xfs: estimate post-merge refcounts correctly"
 xfs/185 # lazy baseline - failure found in at least two sections
 xfs/189 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/195 # lazy baseline - failure found in at least two sections - xfs_nocrc after 5 runs, xfs_reflink after 70 runs
@@ -70,3 +71,4 @@ xfs/506 # lazy baseline - failure found in at least two sections
 xfs/516 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/521 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/528 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
+xfs/557 # missing commit 817644fa4525 "xfs: get root inode correctly at bulkstat"
