@@ -81,6 +81,19 @@ vagrant_global:
       logical_block_size: 4096
 {% endfor %}
 {% endif %}
+{% if libvirt_largeio_enable %}
+{% for n in range(0,libvirt_largeio_pow_limit) %}
+    largio{{ n }}:
+      largio: true
+      size: {{ libvirt_largeio_base_size + (1024 * n)}}
+      physical_block_size: {{ libvirt_largeio_logical_compat_size  * (2 ** n) }}
+{% if libvirt_largeio_logical_compat %}
+      logical_block_size: {{ libvirt_largeio_logical_compat_size }}
+{% else %}
+      logical_block_size: {{ libvirt_largeio_logical_compat_size * (2 ** n) }}
+{% endif %}
+{% endfor %}
+{% endif %}
 
 # Note: vagrant is not a fan of hosts with underscores.
 #

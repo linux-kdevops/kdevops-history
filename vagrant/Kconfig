@@ -1197,6 +1197,89 @@ config QEMU_NVME_ZONE_LOGICAL_BLOCKSIZE
 	default 4096 if !QEMU_CUSTOM_NVME_ZNS
 	default QEMU_CUSTOM_NVME_ZONE_LOGICAL_BLOCKSIZE if QEMU_CUSTOM_NVME_ZNS
 
+config QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
+	bool "Enable Qemu drives for large IO experimentation"
+	depends on VAGRANT_LIBVIRT
+	default n
+	help
+	  If you want to experiment with large IO either with NVMe or virtio
+	  you can enable this option. This will create a few additional drives
+	  which are dedicated for largio experimentation testing.
+
+
+	  If unsure say N.
+
+if QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
+
+config QEMU_EXTRA_DRIVE_LARGEIO_BASE_SIZE
+	int "Qemu extra drive drive base size"
+	default 10240
+	help
+	  The base size of the qemu extra storage drive to expose. The
+	  size is increased by 1 MiB as we go down the list of extra large IO
+	  drives.
+
+config QEMU_EXTRA_DRIVE_LARGEIO_COMPAT
+	bool "Use a compatibility logical block size"
+	default n
+	help
+	  Since older spindle drives used to work with 512 bytes some drives
+	  exist with support to handle 512 writes even if they physically store
+	  more data on their drives for that one 512 byte write. Enable this if
+	  you want to ensure your large IO drives always have a logical block
+	  size restrained by the compatibility size you want to support.
+
+	  By default this is not enabled, and thereore the logical block size
+	  for the large IO drives will be equal to the physical block size.
+
+config QEMU_EXTRA_DRIVE_LARGEIO_COMPAT_SIZE
+	int "Large IO compat size"
+	default 512
+	help
+	  This is the compatibility base block size to use for older drives.
+	  Even if you disable QEMU_EXTRA_DRIVE_LARGEIO_COMPAT, this value will
+	  be used as the base for the computation for the physical block size
+	  for the large IO drives we create for you using the formula:
+
+	    libvirt_largeio_logical_compat_size  * (2 ** n)
+
+	  where n is the index of the large IO drive.
+
+config QEMU_EXTRA_DRIVE_LARGEIO_MAX_POW_LIMIT
+	int "Large IO - number of drives - power"
+	default 12
+	help
+	  We use an iterator to create the number of large drives on the
+	  guest system using:
+
+	    for n in range(0,libvirt_largeio_pow_limit)
+
+	  This provides the value for the libvirt_largeio_pow_limit. By
+	  default we set this to 12 so we get drives of different physical
+	  sizes in powers of 2 ranging from 512 up to 1 GiB. You can reduce
+	  this if you want less drives to experiment with.
+
+endif # QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
+
+config VAGRANT_ENABLE_LARGEIO
+	bool
+	default y if QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
+
+config QEMU_LARGEIO_DRIVE_BASE_SIZE
+	int
+	default 10240 if !QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
+	default QEMU_EXTRA_DRIVE_LARGEIO_BASE_SIZE if QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
+
+config QEMU_LARGEIO_COMPAT_SIZE
+	int
+	default 512 if !QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
+	default QEMU_EXTRA_DRIVE_LARGEIO_COMPAT_SIZE if QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
+
+config QEMU_LARGEIO_MAX_POW_LIMIT
+	int
+	default 12 if !QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
+	default QEMU_EXTRA_DRIVE_LARGEIO_MAX_POW_LIMIT if QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
+
 config QEMU_ENABLE_CXL
 	bool "Enable Qemu CXL devices"
 	depends on VAGRANT_LIBVIRT

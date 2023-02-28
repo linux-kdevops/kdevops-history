@@ -57,6 +57,12 @@ libvirt_extra_storage_drive_ide: False
 libvirt_extra_storage_virtio_aio_mode: "native"
 libvirt_extra_storage_virtio_aio_cache_mode: "none"
 
+libvirt_largeio_enable: False
+libvirt_largeio_logical_compat: False
+libvirt_largeio_logical_compat_size: 512
+libvirt_largeio_base_size: 10240
+libvirt_largeio_pow_limit: 12
+
 kdevops_workflows_dedicated_workflow: False
 kdevops_workflow_enable_fstests: False
 kdevops_workflow_enable_blktests: False

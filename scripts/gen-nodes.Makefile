@@ -66,6 +66,16 @@ GEN_NODES_EXTRA_ARGS += nvme_zone_physical_blocksize='$(subst ",,$(CONFIG_QEMU_N
 GEN_NODES_EXTRA_ARGS += nvme_zone_logical_blocksize='$(subst ",,$(CONFIG_QEMU_NVME_ZONE_LOGICAL_BLOCKSIZE))'
 endif
 
+ifeq (y,$(CONFIG_VAGRANT_ENABLE_LARGEIO))
+GEN_NODES_EXTRA_ARGS += libvirt_largeio_enable='True'
+ifeq (y,$(CONFIG_QEMU_EXTRA_DRIVE_LARGEIO_COMPAT))
+GEN_NODES_EXTRA_ARGS += libvirt_largeio_logical_compat='True'
+endif
+GEN_NODES_EXTRA_ARGS += libvirt_largeio_base_size='$(subst ",,$(CONFIG_QEMU_LARGEIO_DRIVE_BASE_SIZE))'
+GEN_NODES_EXTRA_ARGS += libvirt_largeio_logical_compat_size='$(subst ",,$(CONFIG_QEMU_LARGEIO_COMPAT_SIZE))'
+GEN_NODES_EXTRA_ARGS += libvirt_largeio_pow_limit='$(subst ",,$(CONFIG_QEMU_LARGEIO_MAX_POW_LIMIT))'
+endif
+
 ifeq (y,$(CONFIG_LIBVIRT_MACHINE_TYPE_Q35))
 GEN_NODES_EXTRA_ARGS += libvirt_override_machine_type='True'
 GEN_NODES_EXTRA_ARGS += libvirt_machine_type='q35'

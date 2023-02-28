@@ -323,9 +323,11 @@ Vagrant.configure("2") do |config|
           global_data['extra_disks'].each do |key, value|
             size = value['size']
             zoned = value['zoned']
+            largio = value['largio']
             if zoned && !global_data['enable_zns']
 		next
             end
+            extra_drive_largio_args=""
 	    if zoned
               logical_block_size = value['logical_block_size']
               physical_block_size = value['physical_block_size']
@@ -334,6 +336,13 @@ Vagrant.configure("2") do |config|
               zone_max_open = value['zone_max_open']
               zone_max_active = value['zone_max_active']
               zone_zasl = value['zone_zasl']
+            end
+	    if largio
+              largeio_logical_block_size = value['logical_block_size']
+              largeio_physical_block_size = value['physical_block_size']
+              extra_drive_logical_block_size_args = "logical_block_size=#{largeio_logical_block_size}"
+              extra_drive_physical_block_size_args = "physical_block_size=#{largeio_physical_block_size}"
+              extra_drive_largio_args=",#{extra_drive_logical_block_size_args},#{extra_drive_physical_block_size_args}"
             end
             purpose = key
             port_plus = port + 1
@@ -373,7 +382,7 @@ Vagrant.configure("2") do |config|
             libvirt.qemuargs :value => "-drive"
             libvirt.qemuargs :value => "file=#{extra_disk},if=none,aio={{ libvirt_extra_storage_virtio_aio_mode }},cache={{ libvirt_extra_storage_virtio_aio_cache_mode }},id=#{disk_id}"
             libvirt.qemuargs :value => "-device"
-            libvirt.qemuargs :value => "virtio-blk-pci,scsi=off,drive=#{disk_id},id=virtio-#{disk_id},serial=#{serial_id},bus=#{bus_for_extra_drives},addr=#{pci_function},iothread=kdevops-virtio-iothread-#{port}"
+            libvirt.qemuargs :value => "virtio-blk-pci,scsi=off,drive=#{disk_id},id=virtio-#{disk_id},serial=#{serial_id},bus=#{bus_for_extra_drives},addr=#{pci_function},iothread=kdevops-virtio-iothread-#{port}#{extra_drive_largio_args}"
 {% elif libvirt_extra_storage_drive_nvme  %}
             extra_drive_interface = "none"
             if zoned
@@ -389,7 +398,7 @@ Vagrant.configure("2") do |config|
               libvirt.qemuargs :value => "-device"
               libvirt.qemuargs :value => "nvme,id={{ extra_disk_driver }}#{port},serial=#{serial_id},bus=#{bus_for_extra_drives},addr=#{pci_function}"
               libvirt.qemuargs :value => "-device"
-              libvirt.qemuargs :value => "nvme-ns,drive=#{disk_id},bus={{ extra_disk_driver }}#{port},nsid=1"
+              libvirt.qemuargs :value => "nvme-ns,drive=#{disk_id},bus={{ extra_disk_driver }}#{port},nsid=1#{extra_drive_largio_args}"
             end
 {% endif %}
             port += 1
