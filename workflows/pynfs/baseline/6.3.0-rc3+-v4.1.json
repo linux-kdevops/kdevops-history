@@ -1,0 +1,1674 @@
+{
+    "errors": 0,
+    "failures": 0,
+    "name": "all",
+    "skipped": 91,
+    "testcase": [
+        {
+            "classname": "st_courtesy",
+            "code": "COUR6",
+            "name": "testShareReservationDB03",
+            "time": "101.21723294258118"
+        },
+        {
+            "classname": "st_courtesy",
+            "code": "COUR5",
+            "name": "testShareReservationDB02",
+            "time": "101.15226697921753"
+        },
+        {
+            "classname": "st_courtesy",
+            "code": "COUR4",
+            "name": "testShareReservationDB01",
+            "time": "0.1788654327392578"
+        },
+        {
+            "classname": "st_courtesy",
+            "code": "COUR3",
+            "name": "testShareReservation00",
+            "time": "101.26264095306396"
+        },
+        {
+            "classname": "st_courtesy",
+            "code": "COUR1",
+            "name": "testLockSleepLockU",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_courtesy",
+            "code": "COUR2",
+            "name": "testLockSleepLock",
+            "time": "100.15688824653625"
+        },
+        {
+            "classname": "st_courtesy",
+            "code": "COUR7",
+            "name": "testExpiringManyClients",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_xattr",
+            "code": "XATT5",
+            "name": "testUpdateOfMissingAttr",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_xattr",
+            "code": "XATT7",
+            "name": "testUpdateExistingAttr",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_xattr",
+            "code": "XATT8",
+            "name": "testRemoveNonExistingAttr",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_xattr",
+            "code": "XATT9",
+            "name": "testRemoveExistingAttr",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_xattr",
+            "code": "XATT10",
+            "name": "testListNoAttrs",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_xattr",
+            "code": "XATT11",
+            "name": "testListAttrs",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_xattr",
+            "code": "XATT1",
+            "name": "testGetXattrAttribute",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_xattr",
+            "code": "XATT2",
+            "name": "testGetMissingAttr",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_xattr",
+            "code": "XATT6",
+            "name": "testExclusiveCreateAttr",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_xattr",
+            "code": "XATT4",
+            "name": "testCreateNewIfMissingAttr",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_xattr",
+            "code": "XATT3",
+            "name": "testCreateNewAttr",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFST1",
+            "name": "testStateid1",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFLA1",
+            "name": "testFlexLayoutTestAccess",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFLG2",
+            "name": "testFlexLayoutStress",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFLS3",
+            "name": "testFlexLayoutStatsStraight",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFLS1",
+            "name": "testFlexLayoutStatsSmall",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFLS2",
+            "name": "testFlexLayoutStatsReset",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFLS4",
+            "name": "testFlexLayoutStatsOverflow",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFLORSTALEWRITE",
+            "name": "testFlexLayoutReturnStaleWrite",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFLORSTALEREAD",
+            "name": "testFlexLayoutReturnStaleRead",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFLORSERVERFAULTWRITE",
+            "name": "testFlexLayoutReturnServerFaultWrite",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFLORSERVERFAULTREAD",
+            "name": "testFlexLayoutReturnServerFaultRead",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFLORNXIOWRITE",
+            "name": "testFlexLayoutReturnNxioWrite",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFLORNXIOREAD",
+            "name": "testFlexLayoutReturnNxioRead",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFLORNOSPCWRITE",
+            "name": "testFlexLayoutReturnNospcWrite",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFLORNOSPC",
+            "name": "testFlexLayoutReturnNospcRead",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFLORIOWRITE",
+            "name": "testFlexLayoutReturnIoWrite",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFLORIOREAD",
+            "name": "testFlexLayoutReturnIoRead",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFLOR1",
+            "name": "testFlexLayoutReturnFile",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFLORFBIGWRITE",
+            "name": "testFlexLayoutReturnFbigWrite",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFLORFBIG",
+            "name": "testFlexLayoutReturnFbigRead",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFLORDELAYWRITE",
+            "name": "testFlexLayoutReturnDelayWrite",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFLORDELAYREAD",
+            "name": "testFlexLayoutReturnDelayRead",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFLORACCESSWRITE",
+            "name": "testFlexLayoutReturnAccessWrite",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFLORACCESSREAD",
+            "name": "testFlexLayoutReturnAccessRead",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFLOR100",
+            "name": "testFlexLayoutReturn100",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFLOOS",
+            "name": "testFlexLayoutOldSeqid",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_flex",
+            "code": "FFGDI1",
+            "name": "testFlexGetDevInfo",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_sparse",
+            "code": "ALLOC1",
+            "name": "testAllocateSupported",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_sparse",
+            "code": "ALLOC2",
+            "name": "testAllocateStateidZero",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_sparse",
+            "code": "ALLOC3",
+            "name": "testAllocateStateidOne",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_current_stateid",
+            "code": "CSID3",
+            "name": "testOpenWriteClose",
+            "time": "0.09403204917907715"
+        },
+        {
+            "classname": "st_current_stateid",
+            "code": "CSID8",
+            "name": "testOpenSetattr",
+            "time": "0.07964754104614258"
+        },
+        {
+            "classname": "st_current_stateid",
+            "code": "CSID10",
+            "name": "testOpenSaveFHLookupRestoreFHClose",
+            "time": "0.08538079261779785"
+        },
+        {
+            "classname": "st_current_stateid",
+            "code": "CSID5",
+            "name": "testOpenLookupClose",
+            "time": "0.08004474639892578"
+        },
+        {
+            "classname": "st_current_stateid",
+            "code": "CSID7",
+            "name": "testOpenLayoutGet",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_current_stateid",
+            "code": "CSID9",
+            "name": "testOpenFreestateidClose",
+            "time": "0.10076475143432617"
+        },
+        {
+            "classname": "st_current_stateid",
+            "code": "CSID1",
+            "name": "testOpenAndClose",
+            "time": "0.07999730110168457"
+        },
+        {
+            "classname": "st_current_stateid",
+            "code": "CSID4",
+            "name": "testLockWriteLocku",
+            "time": "0.08769559860229492"
+        },
+        {
+            "classname": "st_current_stateid",
+            "code": "CSID2",
+            "name": "testLockLockU",
+            "time": "0.08600664138793945"
+        },
+        {
+            "classname": "st_current_stateid",
+            "code": "CSID6",
+            "name": "testCloseNoStateid",
+            "time": "0.10422563552856445"
+        },
+        {
+            "classname": "st_block",
+            "code": "BLOCK2",
+            "name": "testStateid2",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_block",
+            "code": "BLOCK1",
+            "name": "testStateid1",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_block",
+            "code": "BLOCK4",
+            "name": "testSplitCommit",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_block",
+            "code": "BLOCK3",
+            "name": "testEmptyCommit",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_reboot",
+            "code": "REBT4c",
+            "name": "testRebootWithManyManyManyClientsDoubleReclaim",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_reboot",
+            "code": "REBT2c",
+            "name": "testRebootWithManyManyManyClients",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_reboot",
+            "code": "REBT4b",
+            "name": "testRebootWithManyManyClientsDoubleReclaim",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_reboot",
+            "code": "REBT2b",
+            "name": "testRebootWithManyManyClients",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_reboot",
+            "code": "REBT4a",
+            "name": "testRebootWithManyClientsDoubleReclaim",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_reboot",
+            "code": "REBT2a",
+            "name": "testRebootWithManyClients",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_reboot",
+            "code": "REBT5",
+            "name": "testRebootWithLateReclaim",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_reboot",
+            "code": "REBT1",
+            "name": "testRebootValid",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_reboot",
+            "code": "REBT3c",
+            "name": "testDoubleRebootWithManyManyManyClients",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_reboot",
+            "code": "REBT3b",
+            "name": "testDoubleRebootWithManyManyClients",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_reboot",
+            "code": "REBT3a",
+            "name": "testDoubleRebootWithManyClients",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_putfh",
+            "code": "PUTFH1s",
+            "name": "testSocket",
+            "time": "0.03026294708251953"
+        },
+        {
+            "classname": "st_putfh",
+            "code": "PUTFH1a",
+            "name": "testLink",
+            "time": "0.030500411987304688"
+        },
+        {
+            "classname": "st_putfh",
+            "code": "PUTFH1r",
+            "name": "testFile",
+            "time": "0.028496980667114258"
+        },
+        {
+            "classname": "st_putfh",
+            "code": "PUTFH1f",
+            "name": "testFifo",
+            "time": "0.024698972702026367"
+        },
+        {
+            "classname": "st_putfh",
+            "code": "PUTFH1d",
+            "name": "testDir",
+            "time": "0.022280454635620117"
+        },
+        {
+            "classname": "st_putfh",
+            "code": "PUTFH1c",
+            "name": "testChar",
+            "time": "0.020778417587280273"
+        },
+        {
+            "classname": "st_putfh",
+            "code": "PUTFH1b",
+            "name": "testBlock",
+            "time": "0.021036148071289062"
+        },
+        {
+            "classname": "st_putfh",
+            "code": "PUTFH2",
+            "name": "testBadHandle",
+            "time": "0.014528036117553711"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM6",
+            "name": "testZeroLengthOldname",
+            "time": "0.1098484992980957"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM7",
+            "name": "testZeroLengthNewname",
+            "time": "0.10134577751159668"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM1s",
+            "name": "testValidSocket",
+            "time": "0.1060023307800293"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM1a",
+            "name": "testValidLink",
+            "time": "0.12013411521911621"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM1r",
+            "name": "testValidFile",
+            "time": "0.1266326904296875"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM1f",
+            "name": "testValidFifo",
+            "time": "0.1107785701751709"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM1d",
+            "name": "testValidDir",
+            "time": "0.141035795211792"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM1c",
+            "name": "testValidChar",
+            "time": "0.12836027145385742"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM1b",
+            "name": "testValidBlock",
+            "time": "0.10693359375"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM21",
+            "name": "testStaleRename",
+            "time": "0.1085505485534668"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM2s",
+            "name": "testSfhSocket",
+            "time": "0.09708285331726074"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM2a",
+            "name": "testSfhLink",
+            "time": "0.09990763664245605"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM2r",
+            "name": "testSfhFile",
+            "time": "0.09220242500305176"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM2f",
+            "name": "testSfhFifo",
+            "time": "0.11352324485778809"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM2c",
+            "name": "testSfhChar",
+            "time": "0.08660197257995605"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM2b",
+            "name": "testSfhBlock",
+            "time": "0.09812045097351074"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM19",
+            "name": "testSelfRenameFile",
+            "time": "0.10739994049072266"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM18",
+            "name": "testSelfRenameDir",
+            "time": "0.10714054107666016"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM5",
+            "name": "testNonExistent",
+            "time": "0.09164714813232422"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM4",
+            "name": "testNoSfh",
+            "time": "0.0969855785369873"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM20",
+            "name": "testLinkRename",
+            "time": "0.1261157989501953"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM17",
+            "name": "testFileToFullDir",
+            "time": "0.13698506355285645"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM15",
+            "name": "testFileToFile",
+            "time": "0.13769292831420898"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM14",
+            "name": "testFileToDir",
+            "time": "0.11825251579284668"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM10",
+            "name": "testDotsOldname",
+            "time": "0.13135647773742676"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM11",
+            "name": "testDotsNewname",
+            "time": "0.11996626853942871"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM12",
+            "name": "testDirToObj",
+            "time": "0.13038182258605957"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM16",
+            "name": "testDirToFullDir",
+            "time": "0.12593722343444824"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM13",
+            "name": "testDirToDir",
+            "time": "0.10800886154174805"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM3s",
+            "name": "testCfhSocket",
+            "time": "0.09765410423278809"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM3a",
+            "name": "testCfhLink",
+            "time": "0.09487223625183105"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM3r",
+            "name": "testCfhFile",
+            "time": "0.09912514686584473"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM3f",
+            "name": "testCfhFifo",
+            "time": "0.09501814842224121"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM3c",
+            "name": "testCfhChar",
+            "time": "0.10754227638244629"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM3b",
+            "name": "testCfhBlock",
+            "time": "0.10511660575866699"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM8",
+            "name": "testBadutf8Oldname",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_rename",
+            "code": "RNM9",
+            "name": "testBadutf8Newname",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_lookupp",
+            "code": "LKPP4",
+            "name": "testXdev",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_lookupp",
+            "code": "LKPP1s",
+            "name": "testSock",
+            "time": "0.026224613189697266"
+        },
+        {
+            "classname": "st_lookupp",
+            "code": "LKPP3",
+            "name": "testNoFH",
+            "time": "0.02516961097717285"
+        },
+        {
+            "classname": "st_lookupp",
+            "code": "LKPP2",
+            "name": "testLookuppRoot",
+            "time": "0.028520584106445312"
+        },
+        {
+            "classname": "st_lookupp",
+            "code": "LKPP1d",
+            "name": "testLookupp",
+            "time": "0.025595664978027344"
+        },
+        {
+            "classname": "st_lookupp",
+            "code": "LKPP1a",
+            "name": "testLink",
+            "time": "0.016962528228759766"
+        },
+        {
+            "classname": "st_lookupp",
+            "code": "LKPP1r",
+            "name": "testFile",
+            "time": "0.014700889587402344"
+        },
+        {
+            "classname": "st_lookupp",
+            "code": "LKPP1f",
+            "name": "testFifo",
+            "time": "0.012963294982910156"
+        },
+        {
+            "classname": "st_lookupp",
+            "code": "LKPP1c",
+            "name": "testChar",
+            "time": "0.014169454574584961"
+        },
+        {
+            "classname": "st_lookupp",
+            "code": "LKPP1b",
+            "name": "testBlock",
+            "time": "0.014205217361450195"
+        },
+        {
+            "classname": "st_getdevicelist",
+            "code": "LAYOUTRET2",
+            "name": "testLayoutReturnFsid",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_getdevicelist",
+            "code": "LAYOUTRET1",
+            "name": "testLayoutReturnFile",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_getdevicelist",
+            "code": "LAYOUTRET3",
+            "name": "testLayoutReturnAll",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_getdevicelist",
+            "code": "LAYOUTCOMMIT1",
+            "name": "testLayoutCommit",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_getdevicelist",
+            "code": "GETLAYOUT1",
+            "name": "testGetLayout",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_getdevicelist",
+            "code": "GETDLIST1",
+            "name": "testGetDevList",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_getdevicelist",
+            "code": "GETDINFO1",
+            "name": "testGetDevInfo",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_getdevicelist",
+            "code": "GETLAYOUT100",
+            "name": "testEMCGetLayout",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_verify",
+            "code": "VF1r",
+            "name": "testMandFile",
+            "time": "0.018758773803710938"
+        },
+        {
+            "classname": "st_delegation",
+            "code": "DELEG9",
+            "name": "testWriteOpenvsReadDeleg",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_delegation",
+            "code": "DELEG2",
+            "name": "testWriteDeleg",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_delegation",
+            "code": "DELEG23",
+            "name": "testServerSelfConflict3",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_delegation",
+            "code": "DELEG1",
+            "name": "testReadDeleg",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_delegation",
+            "code": "DELEG4",
+            "name": "testNoDeleg",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_delegation",
+            "code": "DELEG8",
+            "name": "testDelegRevocation",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_delegation",
+            "code": "DELEG6",
+            "name": "testCBSecParmsNull",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_delegation",
+            "code": "DELEG7",
+            "name": "testCBSecParmsChange",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_delegation",
+            "code": "DELEG5",
+            "name": "testCBSecParms",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_delegation",
+            "code": "DELEG3",
+            "name": "testAnyDeleg",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_open",
+            "code": "OPEN1",
+            "name": "testSupported",
+            "time": "0.11683797836303711"
+        },
+        {
+            "classname": "st_open",
+            "code": "OPEN2",
+            "name": "testServerStateSeqid",
+            "time": "0.11657357215881348"
+        },
+        {
+            "classname": "st_open",
+            "code": "OPEN30",
+            "name": "testReadWrite",
+            "time": "0.12293004989624023"
+        },
+        {
+            "classname": "st_open",
+            "code": "OPEN7",
+            "name": "testOPENClaimFH",
+            "time": "0.12807583808898926"
+        },
+        {
+            "classname": "st_open",
+            "code": "OPEN6",
+            "name": "testEXCLUSIVE4AtNameAttribute",
+            "time": "0.0892181396484375"
+        },
+        {
+            "classname": "st_open",
+            "code": "OPEN8",
+            "name": "testCloseWithZeroSeqid",
+            "time": "0.08376860618591309"
+        },
+        {
+            "classname": "st_open",
+            "code": "OPEN31",
+            "name": "testAnonReadWrite",
+            "time": "0.1051177978515625"
+        },
+        {
+            "classname": "st_trunking",
+            "code": "TRUNK2",
+            "name": "testUseTwoSessions",
+            "time": "0.047006845474243164"
+        },
+        {
+            "classname": "st_trunking",
+            "code": "TRUNK1",
+            "name": "testTwoSessions",
+            "time": "0.028791189193725586"
+        },
+        {
+            "classname": "st_sequence",
+            "code": "SEQ7",
+            "name": "testTooManyOps",
+            "time": "0.024999141693115234"
+        },
+        {
+            "classname": "st_sequence",
+            "code": "SEQ1",
+            "name": "testSupported",
+            "time": "0.020084857940673828"
+        },
+        {
+            "classname": "st_sequence",
+            "code": "SEQ12",
+            "name": "testSessionidSequenceidSlotid",
+            "time": "0.017619609832763672"
+        },
+        {
+            "classname": "st_sequence",
+            "code": "SEQ6",
+            "name": "testRequestTooBig",
+            "time": "0.01654362678527832"
+        },
+        {
+            "classname": "st_sequence",
+            "code": "SEQ10b",
+            "name": "testReplayCache007",
+            "time": "0.08384537696838379"
+        },
+        {
+            "classname": "st_sequence",
+            "code": "SEQ9f",
+            "name": "testReplayCache006",
+            "time": "0.027178525924682617"
+        },
+        {
+            "classname": "st_sequence",
+            "code": "SEQ9e",
+            "name": "testReplayCache005",
+            "time": "0.02789616584777832"
+        },
+        {
+            "classname": "st_sequence",
+            "code": "SEQ9d",
+            "name": "testReplayCache004",
+            "time": "0.027464628219604492"
+        },
+        {
+            "classname": "st_sequence",
+            "code": "SEQ9c",
+            "name": "testReplayCache003",
+            "time": "0.02525019645690918"
+        },
+        {
+            "classname": "st_sequence",
+            "code": "SEQ9b",
+            "name": "testReplayCache002",
+            "time": "0.10390853881835938"
+        },
+        {
+            "classname": "st_sequence",
+            "code": "SEQ9a",
+            "name": "testReplayCache001",
+            "time": "0.02718663215637207"
+        },
+        {
+            "classname": "st_sequence",
+            "code": "SEQ11",
+            "name": "testOpNotInSession",
+            "time": "0.012770891189575195"
+        },
+        {
+            "classname": "st_sequence",
+            "code": "SEQ2",
+            "name": "testNotFirst",
+            "time": "0.023342370986938477"
+        },
+        {
+            "classname": "st_sequence",
+            "code": "SEQ4",
+            "name": "testImplicitBind",
+            "time": "0.0276949405670166"
+        },
+        {
+            "classname": "st_sequence",
+            "code": "SEQ8",
+            "name": "testBadSlot",
+            "time": "0.022392988204956055"
+        },
+        {
+            "classname": "st_sequence",
+            "code": "SEQ5",
+            "name": "testBadSession",
+            "time": "0.004792690277099609"
+        },
+        {
+            "classname": "st_sequence",
+            "code": "SEQ13",
+            "name": "testBadSequenceidAtSlot",
+            "time": "0.02681255340576172"
+        },
+        {
+            "classname": "st_secinfo",
+            "code": "SEC2",
+            "name": "testSupported2",
+            "time": "0.08983850479125977"
+        },
+        {
+            "classname": "st_secinfo",
+            "code": "SEC1",
+            "name": "testSupported",
+            "time": "0.1139826774597168"
+        },
+        {
+            "classname": "st_secinfo_no_name",
+            "code": "SECNN4",
+            "name": "testSupported4",
+            "time": "0.026401519775390625"
+        },
+        {
+            "classname": "st_secinfo_no_name",
+            "code": "SECNN3",
+            "name": "testSupported3",
+            "time": "0.02557849884033203"
+        },
+        {
+            "classname": "st_secinfo_no_name",
+            "code": "SECNN2",
+            "name": "testSupported2",
+            "time": "0.07162642478942871"
+        },
+        {
+            "classname": "st_secinfo_no_name",
+            "code": "SECNN1",
+            "name": "testSupported",
+            "time": "0.024749755859375"
+        },
+        {
+            "classname": "st_reclaim_complete",
+            "code": "RECC1",
+            "name": "testSupported",
+            "time": "0.08169341087341309"
+        },
+        {
+            "classname": "st_reclaim_complete",
+            "code": "RECC2",
+            "name": "testReclaimAfterRECC",
+            "time": "0.10114026069641113"
+        },
+        {
+            "classname": "st_reclaim_complete",
+            "code": "RECC3",
+            "name": "testOpenBeforeRECC",
+            "time": "0.025829076766967773"
+        },
+        {
+            "classname": "st_reclaim_complete",
+            "code": "RECC4",
+            "name": "testDoubleRECC",
+            "time": "0.08742213249206543"
+        },
+        {
+            "classname": "st_destroy_clientid",
+            "code": "DESCID1",
+            "name": "testSupported",
+            "time": "0.013812780380249023"
+        },
+        {
+            "classname": "st_destroy_clientid",
+            "code": "DESCID2",
+            "name": "testDestroyCIDWS",
+            "time": "0.03212571144104004"
+        },
+        {
+            "classname": "st_destroy_clientid",
+            "code": "DESCID8",
+            "name": "testDestroyCIDTwice",
+            "time": "0.018926382064819336"
+        },
+        {
+            "classname": "st_destroy_clientid",
+            "code": "DESCID5",
+            "name": "testDestroyCIDSessionB",
+            "time": "0.02463674545288086"
+        },
+        {
+            "classname": "st_destroy_clientid",
+            "code": "DESCID7",
+            "name": "testDestroyCIDNotOnly",
+            "time": "0.005053281784057617"
+        },
+        {
+            "classname": "st_destroy_clientid",
+            "code": "DESCID6",
+            "name": "testDestroyCIDCSession",
+            "time": "0.021678924560546875"
+        },
+        {
+            "classname": "st_destroy_clientid",
+            "code": "DESCID3",
+            "name": "testDestroyBadCIDWS",
+            "time": "0.0049381256103515625"
+        },
+        {
+            "classname": "st_destroy_clientid",
+            "code": "DESCID4",
+            "name": "testDestroyBadCIDIS",
+            "time": "0.02383899688720703"
+        },
+        {
+            "classname": "st_destroy_session",
+            "code": "DSESS9006",
+            "name": "testDestroyLockConfRace",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_destroy_session",
+            "code": "DSESS1",
+            "name": "testDestroyBasic",
+            "time": "0.12072467803955078"
+        },
+        {
+            "classname": "st_destroy_session",
+            "code": "DSESS9003",
+            "name": "testDestroy3",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_destroy_session",
+            "code": "DSESS9002",
+            "name": "testDestroy2",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_destroy_session",
+            "code": "DSESS9001",
+            "name": "testDestroy",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_destroy_session",
+            "code": "DSESS9005",
+            "name": "testDestoryNotSoleOps",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_destroy_session",
+            "code": "DSESS9004",
+            "name": "testDestoryNotFinalOps",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS28",
+            "name": "testTooSmallMaxReq",
+            "time": "0.015249967575073242"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS25",
+            "name": "testTooSmallMaxRS",
+            "time": "0.013806819915771484"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS2b",
+            "name": "testSupported2b",
+            "time": "0.04107499122619629"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS2",
+            "name": "testSupported2",
+            "time": "0.029080867767333984"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS1",
+            "name": "testSupported1",
+            "time": "0.017580509185791016"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS6",
+            "name": "testReplay2",
+            "time": "0.015436410903930664"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS5b",
+            "name": "testReplay1b",
+            "time": "0.026345491409301758"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS5a",
+            "name": "testReplay1a",
+            "time": "0.026149272918701172"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS5",
+            "name": "testReplay1",
+            "time": "0.01646280288696289"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS27",
+            "name": "testRepTooBigToCache",
+            "time": "0.01602029800415039"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS26",
+            "name": "testRepTooBig",
+            "time": "0.079742431640625"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS19",
+            "name": "testRdmaArray2",
+            "time": "0.011944770812988281"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS18",
+            "name": "testRdmaArray1",
+            "time": "0.01984429359436035"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS17",
+            "name": "testRdmaArray0",
+            "time": "0.019333839416503906"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS10",
+            "name": "testPrincipalCollision2",
+            "time": "0.017253637313842773"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS9",
+            "name": "testPrincipalCollision1",
+            "time": "0.014740705490112305"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS23",
+            "name": "testNotOnlyOp",
+            "time": "0.0129547119140625"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS3",
+            "name": "testNoExchange",
+            "time": "0.005436420440673828"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS22",
+            "name": "testMaxreqs",
+            "time": "0.017499208450317383"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS200",
+            "name": "testManyClients",
+            "time": "0.1592390537261963"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS29",
+            "name": "testDRCMemLeak",
+            "time": "32.80437159538269"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS24",
+            "name": "testCsr_sequence",
+            "time": "0.015371561050415039"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS4",
+            "name": "testContrivedReplay",
+            "time": "0.009850740432739258"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS16a",
+            "name": "testCbSecParmsDec",
+            "time": "0.01232767105102539"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS16",
+            "name": "testCbSecParms",
+            "time": "0.014124631881713867"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS21",
+            "name": "testCallbackVersion",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS20",
+            "name": "testCallbackProgram",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS8",
+            "name": "testBadSeqnum2",
+            "time": "0.014239788055419922"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS7",
+            "name": "testBadSeqnum1",
+            "time": "0.012848615646362305"
+        },
+        {
+            "classname": "st_create_session",
+            "code": "CSESS15",
+            "name": "testBadFlag",
+            "time": "0.009768486022949219"
+        },
+        {
+            "classname": "st_copy",
+            "code": "COPY5",
+            "name": "testZeroLengthCopy",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_compound",
+            "code": "COMP1",
+            "name": "testZeroOps",
+            "time": "0.003634214401245117"
+        },
+        {
+            "classname": "st_compound",
+            "code": "COMP5",
+            "name": "testUndefined",
+            "time": "0.016271114349365234"
+        },
+        {
+            "classname": "st_compound",
+            "code": "COMP4b",
+            "name": "testInvalidMinor2",
+            "time": "0.003826618194580078"
+        },
+        {
+            "classname": "st_compound",
+            "code": "COMP4a",
+            "name": "testInvalidMinor",
+            "time": "0.003875732421875"
+        },
+        {
+            "classname": "st_compound",
+            "code": "COMP2",
+            "name": "testGoodTag",
+            "time": "0.0038657188415527344"
+        },
+        {
+            "classname": "st_compound",
+            "code": "COMP3",
+            "name": "testBadTags",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID6",
+            "name": "testUpdateNonexistant",
+            "time": "0.004415988922119141"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID6h",
+            "name": "testUpdate111",
+            "time": "0.01656174659729004"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID6g",
+            "name": "testUpdate110",
+            "time": "0.015259265899658203"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID6f",
+            "name": "testUpdate101",
+            "time": "0.013635396957397461"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID6e",
+            "name": "testUpdate100",
+            "time": "0.016843318939208984"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID6d",
+            "name": "testUpdate011",
+            "time": "0.009174108505249023"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID6c",
+            "name": "testUpdate010",
+            "time": "0.009934186935424805"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID6b",
+            "name": "testUpdate001",
+            "time": "0.010262250900268555"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID6a",
+            "name": "testUpdate000",
+            "time": "0.011173486709594727"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID1b",
+            "name": "testSupported2",
+            "time": "0.01778864860534668"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID7",
+            "name": "testSupported1a",
+            "time": "0.003489255905151367"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID1",
+            "name": "testSupported",
+            "time": "0.0039141178131103516"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID50",
+            "name": "testSSV",
+            "skipped": 1,
+            "time": "0"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID8",
+            "name": "testNotOnlyOp",
+            "time": "0.003632783889770508"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID5h",
+            "name": "testNoUpdate111",
+            "time": "0.017714738845825195"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID5g",
+            "name": "testNoUpdate110",
+            "time": "0.02360248565673828"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID5fb",
+            "name": "testNoUpdate101b",
+            "time": "0.026571035385131836"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID5f",
+            "name": "testNoUpdate101",
+            "time": "0.0302276611328125"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID5e",
+            "name": "testNoUpdate100",
+            "time": "0.024294376373291016"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID5d",
+            "name": "testNoUpdate011",
+            "time": "0.012298345565795898"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID5c",
+            "name": "testNoUpdate010",
+            "time": "0.014325618743896484"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID5b",
+            "name": "testNoUpdate001",
+            "time": "0.012573003768920898"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID5a",
+            "name": "testNoUpdate000",
+            "time": "0.012256622314453125"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID2",
+            "name": "testNoImplId",
+            "time": "0.003983497619628906"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID3",
+            "name": "testLongArray",
+            "time": "0.002137899398803711"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID9",
+            "name": "testLeasePeriod",
+            "time": "101.04314136505127"
+        },
+        {
+            "classname": "st_exchange_id",
+            "code": "EID4",
+            "name": "testBadFlags",
+            "time": "0.005476951599121094"
+        }
+    ],
+    "tests": 262,
+    "time": 546.1761648654938,
+    "timestamp": "2023-03-20 16:22:10.506308"
+}

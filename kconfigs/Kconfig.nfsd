@@ -36,7 +36,7 @@ config NFSD_EXPORT_PATH
 
 config NFSD_EXPORT_OPTIONS
 	string "The export options to use for the exported fs"
-	default "rw,insecure"
+	default "rw,insecure,no_root_squash"
 	help
 	  The export options that the export should have
 

@@ -68,7 +68,7 @@
 
 - name: Run pynfs
   tags: [ 'run_tests' ]
-  shell: "./testserver.py --json={{ pynfs_data }}/pynfs-{{ item }}-results.json --maketree localhost:{{ nfsd_export_path }} all || true"
+  shell: "./testserver.py --json={{ pynfs_data }}/pynfs-{{ item }}-results.json --maketree --uid=0 --gid=0 localhost:{{ nfsd_export_path }} all || true"
   args:
     chdir: "{{ pynfs_data }}/nfs{{ item }}"
   with_items:
