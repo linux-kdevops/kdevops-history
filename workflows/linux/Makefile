@@ -42,6 +42,7 @@ BOOTLINUX_ARGS	+= bootlinux_9p_mount_tag='$(subst ",,$(CONFIG_BOOTLINUX_9P_MOUNT
 LINUX_CLONE_DEFAULT_TYPE := linux-clone-9p
 endif
 
+BOOTLINUX_ARGS += bootlinux_cxl_test=$(CONFIG_ENABLE_CXL_TEST)
 WORKFLOW_ARGS += $(BOOTLINUX_ARGS)
 
 PHONY +=  linux-help-menu

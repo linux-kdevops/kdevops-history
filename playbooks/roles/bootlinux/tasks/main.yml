@@ -348,7 +348,7 @@
   tags: [ 'linux', 'build-linux', 'cxl-build' ]
   when:
     - not bootlinux_9p|bool
-    - kdevops_workflow_enable_cxl|bool
+    - bootlinux_cxl_test|bool
 
 - name: See if snake-oil cert file is present on client
   stat:
@@ -395,7 +395,7 @@
   tags: [ 'linux', 'build-linux', 'cxl-build' ]
   when:
     - bootlinux_9p|bool
-    - kdevops_workflow_enable_cxl|bool
+    - bootlinux_cxl_test|bool
   run_once: true
   delegate_to: localhost
 

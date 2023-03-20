@@ -44,3 +44,5 @@ bootlinux_9p_security_model: "none"
 bootlinux_9p_driver: "virtio-9p-pci"
 
 kdevops_workflow_enable_cxl: False
+
+bootlinux_cxl_test: False

@@ -1,5 +1,9 @@
 if KDEVOPS_WORKFLOW_ENABLE_CXL
 
+config ENABLE_CXL_TEST
+	bool "Build kernel mock CXL device test modules"
+	default n
+
 config NDCTL_GIT
 	string "The ndctl git tree to clone"
 	default "https://github.com/pmem/ndctl.git" if !GIT_ALTERNATIVES

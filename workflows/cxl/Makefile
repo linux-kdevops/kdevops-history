@@ -7,7 +7,7 @@ CXL_ARGS += ndctl_git='$(subst ",,$(CONFIG_NDCTL_GIT))'
 CXL_ARGS += ndctl_data=\"$(subst ",,$(CONFIG_NDCTL_DATA))\"
 CXL_ARGS += ndctl_version='$(subst ",,$(CONFIG_NDCTL_VERSION))'
 
-DYNAMIC_RUNTIME_VARS := "kdevops_run_cxl_tests": True
+DYNAMIC_RUNTIME_VARS := "kdevops_run_cxl_tests": $(CONFIG_ENABLE_CXL_TEST)
 WORKFLOW_ARGS += $(CXL_ARGS)
 BOOTLINUX_CXL_HELP :=
 
