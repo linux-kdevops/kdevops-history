@@ -5,14 +5,4 @@
   apt:
     name:
       - python3-junitxml
-      - python3-pip
-
-- name: Install junitparser
-  become: yes
-  become_method: sudo
-  pip:
-    name:
-      - junitparser
-  when:
-    - install_local_deps|bool
-  tags: [ 'local_deps' ]
+      - python3-junitparser
