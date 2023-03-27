@@ -255,8 +255,8 @@ endif # QEMU_BUILD
 
 config QEMU_BIN_PATH_LIBVIRT
 	string "Qemu binary path to use"
-	default "/usr/local/bin/qemu-system-x86_64" if QEMU_USE_DEVELOPMENT_VERSION
-	default "/usr/bin/qemu-system-x86_64" if !QEMU_USE_DEVELOPMENT_VERSION
+	default "/usr/local/bin" if QEMU_USE_DEVELOPMENT_VERSION
+	default "/usr/bin" if !QEMU_USE_DEVELOPMENT_VERSION
 
 config QEMU_VIRSH_CAN_SUDO
 	bool
@@ -723,7 +723,7 @@ config KDEVOPS_STORAGE_POOL_PATH
 config QEMU_BIN_PATH
 	string
 	default QEMU_BIN_PATH_LIBVIRT if VAGRANT_LIBVIRT
-	default "/usr/bin/qemu-system-x86_64" if !VAGRANT_LIBVIRT
+	default "/usr/bin" if !VAGRANT_LIBVIRT
 
 config LIBVIRT_URI
 	string
