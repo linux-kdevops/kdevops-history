@@ -111,7 +111,7 @@
     name: "{{ target_linux_dir_path }}"
     src: "{{ bootlinux_9p_mount_tag }}"
     fstype: "9p"
-    opts: "ro,trans=virtio,version=9p2000.L,posixacl,cache=loose"
+    opts: "ro,trans=virtio,version=9p2000.L,posixacl,cache=none"
     state: "mounted"
   tags: [ 'data_partition' ]
   when:
