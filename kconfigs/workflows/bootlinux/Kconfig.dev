@@ -2,7 +2,8 @@ if BOOTLINUX_DEV
 
 choice
 	prompt "Linux development tree to use"
-	default BOOTLINUX_TREE_NEXT
+	default BOOTLINUX_TREE_NEXT if !QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
+	default BOOTLINUX_TREE_MCGROF_NEXT if QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
 
 config BOOTLINUX_TREE_NEXT
 	bool "linux-next"
@@ -13,6 +14,11 @@ config BOOTLINUX_TREE_BTRFS_DEVEL
 	bool "btrfs-devel"
 	help
 	  Use the btrfs-devel tree.
+
+config BOOTLINUX_TREE_MCGROF_NEXT
+	bool "mcgrof-next"
+	help
+	  Use the mcgrof's linux-next tree.
 
 endchoice
 

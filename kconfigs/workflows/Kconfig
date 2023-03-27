@@ -15,11 +15,11 @@ endmenu
 
 choice
 	prompt "Target Linux kernel to use"
-	default WORKFLOW_LINUX_DISTRO
+	default WORKFLOW_LINUX_DISTRO if !QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
+	default WORKFLOW_LINUX_CUSTOM if QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
 
 config WORKFLOW_LINUX_DISTRO
 	bool "Distro kernel"
-	help
 	help
 	  If you are targetting a workflow to run on a distribution kernel
 	  enable this.
