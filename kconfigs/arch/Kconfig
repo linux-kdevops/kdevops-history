@@ -8,6 +8,13 @@ config TARGET_ARCH_X86_64
 	  Enabling this will enable all features / workflows which depend on
 	  the x86_64 architecture.
 
+config TARGET_ARCH_ARM64
+	bool "arm64"
+	select HAVE_ARCH_64K_PAGES
+	help
+	  Enabling this will enable all features / workflows which depend on
+	  the arm64 architecture.
+
 config TARGET_ARCH_PPC64LE
 	bool "ppc64le"
 	select HAVE_ARCH_64K_PAGES

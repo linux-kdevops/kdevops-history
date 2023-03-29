@@ -2,18 +2,24 @@ if TERRAFORM_AWS
 
 choice
 	prompt "AWS region to use"
-	default TERRAFORM_AWS_US_WEST_1
+	default TERRAFORM_AWS_US_WEST_2
 
 config TERRAFORM_AWS_US_WEST_1
-	bool "us-west-1"
+	bool "us-west-1 - North California"
 	help
 	  This option will set the aws region to us-west-1.
+
+config TERRAFORM_AWS_US_WEST_2
+	bool "us-west-2 - Oregon"
+	help
+	  This option will set the aws region to us-west-2.
 
 endchoice
 
 config TERRAFORM_AWS_REGION
 	string "AWS region"
 	default "us-west-1" if TERRAFORM_AWS_US_WEST_1
+	default "us-west-2" if TERRAFORM_AWS_US_WEST_2
 	help
 	  This option will set the aws region to the specified value.
 
@@ -28,14 +34,22 @@ choice
 
 config TERRAFORM_AWS_AV_US_WEST_1B
 	bool "us-west-1b"
+	depends on TERRAFORM_AWS_US_WEST_1
 	help
 	  This option will set the aws availiability region to us-west-1b.
+
+config TERRAFORM_AWS_AV_US_WEST_2B
+	bool "us-west-2b"
+	depends on TERRAFORM_AWS_US_WEST_2
+	help
+	  This option will set the aws availiability region to us-west-2b.
 
 endchoice
 
 config TERRAFORM_AWS_AV_REGION
 	string "AWS availablity region"
 	default "us-west-1b" if TERRAFORM_AWS_AV_US_WEST_1B
+	default "us-west-2b" if TERRAFORM_AWS_AV_US_WEST_2B
 	help
 	  This option will set the aws availablity region to the specified
 	  value.
@@ -66,6 +80,7 @@ config TERRAFORM_AWS_AMI_OWNER
 choice
 	prompt "AWS name search"
 	default TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_X86_64 if TARGET_ARCH_X86_64
+	default TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_ARM64 if TARGET_ARCH_ARM64
 
 config TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_X86_64
 	bool "debian-stretch-hvm-x86_64-*"
@@ -73,11 +88,18 @@ config TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_X86_64
 	help
 	  This option will set aws name search to debian-stretch-hvm-x86_64-*
 
+config TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_ARM64
+	bool "debian-stretch-hvm-arm64-*"
+	depends on TARGET_ARCH_ARM64
+	help
+	  This option will set aws name search to debian-stretch-hvm-arm64-*
+
 endchoice
 
 config TERRAFORM_AWS_NS
 	string "AWS name search"
 	default "debian-stretch-hvm-x86_64-*" if TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_X86_64
+	default "debian-stretch-hvm-arm64-*" if TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_ARM64
 	help
 	  This option will set aws image search to use. Using this filter glob
 	  lets us get the latest ami for this owner / release.
@@ -124,7 +146,8 @@ config TERRAFORM_AWS_VIRT_TYPE
 
 choice
 	prompt "AWS instance type"
-	default TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE
+	default TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE if TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_X86_64
+	default TERRAFORM_AWS_INSTANCE_IS4GEN_MEDIUM if TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_ARM64
 
 config TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE
 	bool "m5ad.4xlarge - $0.824 per Hour"
@@ -132,11 +155,77 @@ config TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE
 	  61 GiB RAM, 16 vcpus, 1 8 GiB main drive, and two additional
 	  300 GiB nvme drives.
 
+config TERRAFORM_AWS_INSTANCE_IS4GEN_MEDIUM
+	bool "is4gen.medium"
+	depends on TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_ARM64
+	help
+	  6 GiB RAM, 1vCPU, 1 x 937 GiB NVMe SSD, 25 Gbps Net, 9.6 Gbps EBS.
+	  https://aws.amazon.com/ec2/instance-types/i4g/
+
+config TERRAFORM_AWS_INSTANCE_IS4GEN_8XLARGE
+	bool "is4gen.8xlarge"
+	depends on TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_ARM64
+	help
+	  192 GiB RAM, 32 vCPUs, 4 x 7500 GiB NVMe SSD, 50 Gbps Net, 19 Gbps EBS.
+	  https://aws.amazon.com/ec2/instance-types/i4g/
+
+config TERRAFORM_AWS_INSTANCE_IS4GEN_8XLARGE
+	bool "is4gen.8xlarge"
+	depends on TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_ARM64
+	help
+	  192 GiB RAM, 32 vCPUs, 4 x 7500 NVMe SSD, 50 Gbps Net, 19 Gbps EBS.
+	  https://aws.amazon.com/ec2/instance-types/i4g/
+
+config TERRAFORM_AWS_INSTANCE_IM4GN_LARGE
+	bool "im4gn.large"
+	depends on TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_ARM64
+	help
+	  8 GiB RAM, 2vCPUs, 1 x 937 GiB NVMe SSD, 25 Gbps Net, 9.5 Gbps EBS.
+	  https://aws.amazon.com/ec2/instance-types/i4g/
+
+config TERRAFORM_AWS_INSTANCE_IM4GN_4XLARGE
+	bool "im4gn.4xlarge"
+	depends on TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_ARM64
+	help
+	  64 GiB RAM, 16 vcpus, 1 x 7500 NVMe SSD, 25 Gbps Net, 9.5 Gbps EBS.
+	  https://aws.amazon.com/ec2/instance-types/i4g/
+
+config TERRAFORM_AWS_INSTANCE_IM4GN_4XLARGE
+	bool "im4gn.4xlarge"
+	depends on TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_ARM64
+	help
+	  64 GiB RAM, 16 vcpus, 1 x 7500 NVMe SSD, 25 Gbps Net, 9.5 Gbps EBS.
+	  https://aws.amazon.com/ec2/instance-types/i4g/
+
+config TERRAFORM_AWS_INSTANCE_I4I_LARGE
+	bool "i4i.large"
+	depends on TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_X86_64
+	help
+	  16 GiB RAM, 2 vcpus, 1 x 468 AWS Nitro SSD, 10 Gbps Net, 10 Gbps EBS.
+	  https://aws.amazon.com/ec2/instance-types/i4i/
+
+config TERRAFORM_AWS_INSTANCE_I4I_METAL
+	depends on TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_X86_64
+	bool "i4i.metal"
+	help
+	  1024 GiB RAM, 128 real cpus?, 8 x 3,750 AWS Nitro SSD,
+	  75 Gbps Net, 40 Gbps EBS. The bees' knees I guess.
+	  https://aws.amazon.com/ec2/instance-types/i4i/
+
 endchoice
 
 config TERRAFORM_AWS_INSTANCE_TYPE
 	string "AWS AMI owner"
 	default "m5ad.4xlarge" if TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE
+	default "is4gen.medium" if TERRAFORM_AWS_INSTANCE_IS4GEN_MEDIUM
+	default "is4gen.8xlarge" if TERRAFORM_AWS_INSTANCE_IS4GEN_8XLARGE
+	default "im4gn.4xlarge" if TERRAFORM_AWS_INSTANCE_IM4GN_4XLARGE
+	default "is4gen.8xlarge" if TERRAFORM_AWS_INSTANCE_IS4GEN_8XLARGE
+	default "im4gn.large" if TERRAFORM_AWS_INSTANCE_IM4GN_LARGE
+	default "im4gn.4xlarge" if TERRAFORM_AWS_INSTANCE_IM4GN_4XLARGE
+	default "im4gn.4xlarge" if TERRAFORM_AWS_INSTANCE_IM4GN_4XLARGE
+	default "i4i.large" if TERRAFORM_AWS_INSTANCE_I4I_LARGE
+	default "i4i.metal" if TERRAFORM_AWS_INSTANCE_I4I_METAL
 	help
 	  This sets the aws instance type. There are many options, so go
 	  read this if you want to expand on this list or just set the value
