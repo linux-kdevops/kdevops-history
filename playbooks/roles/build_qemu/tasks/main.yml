@@ -66,7 +66,7 @@
     - build_qemu_now|bool
 
 - name: run configure for qemu
-  command: "./configure --target-list={{ qemu_target }}"
+  command: "./configure"
   tags: [ 'qemu', 'configure' ]
   args:
     chdir: "{{ qemu_data }}"
