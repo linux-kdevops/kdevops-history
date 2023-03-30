@@ -11,6 +11,14 @@ QEMU_BUILD_SETUP_ARGS += qemu_git=$(QEMU_GIT)
 QEMU_BUILD_SETUP_ARGS += qemu_data=\"$(QEMU_DATA)\"
 QEMU_BUILD_SETUP_ARGS += qemu_version='$(QEMU_GIT_VERSION)'
 
+ifeq (y,$(CONFIG_TARGET_ARCH_X86_64))
+QEMU_BUILD_SETUP_ARGS += qemu_target="x86_64-softmmu"
+endif
+
+ifeq (y,$(CONFIG_TARGET_ARCH_PPC64LE))
+QEMU_BUILD_SETUP_ARGS += qemu_target="ppc64-softmmu"
+endif
+
 qemu: $(KDEVOPS_EXTRA_VARS)
 	@$(Q)ansible-playbook --connection=local \
 		--inventory localhost, \

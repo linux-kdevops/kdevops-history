@@ -258,6 +258,11 @@ config QEMU_BIN_PATH_LIBVIRT
 	default "/usr/local/bin/qemu-system-x86_64" if QEMU_USE_DEVELOPMENT_VERSION
 	default "/usr/bin/qemu-system-x86_64" if !QEMU_USE_DEVELOPMENT_VERSION
 
+config QEMU_INSTALL_DIR_LIBVIRT
+	string "Path to install QEMU "
+	default "/usr/local/bin" if QEMU_USE_DEVELOPMENT_VERSION
+	default "/usr/bin" if !QEMU_USE_DEVELOPMENT_VERSION
+
 config QEMU_VIRSH_CAN_SUDO
 	bool
 	default $(shell, ./scripts/get_libvirsh_can_sudo.sh)

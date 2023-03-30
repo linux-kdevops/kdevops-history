@@ -9,7 +9,20 @@ GEN_NODES_EXTRA_ARGS += vagrant_box_version='$(subst ",,$(CONFIG_VAGRANT_BOX_VER
 GEN_NODES_EXTRA_ARGS += vagrant_vcpus_count='$(subst ",,$(CONFIG_VAGRANT_VCPUS_COUNT))'
 GEN_NODES_EXTRA_ARGS += vagrant_mem_mb='$(subst ",,$(CONFIG_VAGRANT_MEM_MB))'
 
+ifeq (y,$(CONFIG_QEMU_BUILD))
+
+  ifeq (y,$(CONFIG_TARGET_ARCH_X86_64))
+  GEN_NODES_EXTRA_ARGS += qemu_bin_path='$(subst ",,$(CONFIG_QEMU_INSTALL_DIR_LIBVIRT))/qemu-system-x86_64'
+  endif
+
+  ifeq (y,$(CONFIG_TARGET_ARCH_PPC64LE))
+  GEN_NODES_EXTRA_ARGS += qemu_bin_path='$(subst ",,$(CONFIG_QEMU_INSTALL_DIR_LIBVIRT))/qemu-system-ppc64'
+  endif
+
+else
 GEN_NODES_EXTRA_ARGS += qemu_bin_path='$(subst ",,$(CONFIG_QEMU_BIN_PATH))'
+endif
+
 
 GEN_NODES_EXTRA_ARGS += libvirt_uri='$(subst ",,$(CONFIG_LIBVIRT_URI))'
 GEN_NODES_EXTRA_ARGS += libvirt_system_uri='$(subst ",,$(CONFIG_LIBVIRT_SYSTEM_URI))'
