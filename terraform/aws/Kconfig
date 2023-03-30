@@ -28,6 +28,35 @@ config TERRAFORM_AWS_REGION
 
 	  https://docs.aws.amazon.com/general/latest/gr/rande.html
 
+	  Note that if you change region the AMI may change as well even
+	  for the same distribution. At least that applies to Amazon EC2
+	  optimized images. Use the aws console, to set that up it will
+	  ask you for your credentials and then a region. Before adding
+	  an entry for ami image be sure you are on the region and then
+	  query with something like:
+
+	  aws ec2 describe-images --image-ids ami-0efa651876de2a5ce
+
+	  For instance, this AMI belongs to us-west-2 only. us-east* have
+	  other AMIs for the same Amazon 2023 EC2 image. The output from
+	  here tells me:
+
+	  "OwnerId": "137112412989"
+
+	  And that is what vaule to use for that ami-0efa651876de2a5ce
+	  for the TERRAFORM_AWS_AMI_OWNER. To get the ami-* for your regions
+	  just go to your EC2 console, that console will be associated with
+	  a region already. You have to change regions if you want to look
+	  for AMIs in other regions. There are for example two different
+	  ami-* values for Amazon Linux 2023 for different regions. However
+	  they values can be same. For example below are the us-west-2 queries
+	  for Amazon Linux 2023 for x86_64 and then for ARM64.
+
+	  aws ec2 describe-images --image-ids ami-0efa651876de2a5ce | grep OwnerId
+	    "OwnerId": "137112412989",
+	  aws ec2 describe-images --image-ids ami-0699f753302dd8b00 | grep OwnerId
+	    "OwnerId": "137112412989",
+
 choice
 	prompt "AWS availability region to use"
 	default TERRAFORM_AWS_AV_US_WEST_1B
@@ -62,25 +91,42 @@ config TERRAFORM_AWS_AV_REGION
 
 choice
 	prompt "AWS ami owner"
-	default TERRAFORM_AWS_AMI_DEBIAN
+	default TERRAFORM_AWS_AMI_AMAZON_X86_64 if TARGET_ARCH_X86_64
+	default TERRAFORM_AWS_AMI_AMAZON_ARM64 if TARGET_ARCH_ARM64
 
 config TERRAFORM_AWS_AMI_DEBIAN
 	bool "Debian - 379101102735"
 	help
 	  This option will set aws ami owner to Debian.
 
+config TERRAFORM_AWS_AMI_AMAZON_X86_64
+	bool "Amazon Linux 2023 x86_64 - ami-0efa651876de2a5ce"
+	depends on TARGET_ARCH_X86_64 && TERRAFORM_AWS_US_WEST_2
+	help
+	  This option will set aws ami owner to Amazon EC2 images for x86_64.
+
+config TERRAFORM_AWS_AMI_AMAZON_ARM64
+	bool "Amazon Linux 2023 ARM64 - ami-0699f753302dd8b00"
+	depends on TARGET_ARCH_ARM64 && TERRAFORM_AWS_US_WEST_2
+	help
+	  This option will set aws ami owner to Amazon EC2 images for arm64.
+
 endchoice
 
 config TERRAFORM_AWS_AMI_OWNER
 	string "AWS AMI owner"
 	default "379101102735" if TERRAFORM_AWS_AMI_DEBIAN
+	default "137112412989" if TERRAFORM_AWS_AMI_AMAZON_X86_64
+	default "137112412989" if TERRAFORM_AWS_AMI_AMAZON_ARM64
 	help
 	  This option will set aws AMI owner.
 
 choice
 	prompt "AWS name search"
-	default TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_X86_64 if TARGET_ARCH_X86_64
-	default TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_ARM64 if TARGET_ARCH_ARM64
+	default TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_X86_64 if TARGET_ARCH_X86_64 && TERRAFORM_AWS_AMI_DEBIAN
+	default TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_ARM64 if TERRAFORM_AWS_AMI_DEBIAN
+	default TERRAFORM_AWS_NS_AMAZON_2023_X86_64 if TARGET_ARCH_X86_64 && TERRAFORM_AWS_AMI_AMAZON_X86_64
+	default TERRAFORM_AWS_NS_AMAZON_2023_ARM64 if TARGET_ARCH_ARM64 && TERRAFORM_AWS_AMI_AMAZON_ARM64
 
 config TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_X86_64
 	bool "debian-stretch-hvm-x86_64-*"
@@ -94,12 +140,28 @@ config TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_ARM64
 	help
 	  This option will set aws name search to debian-stretch-hvm-arm64-*
 
+config TERRAFORM_AWS_NS_AMAZON_2023_X86_64
+	bool "al2023-*-x86_64"
+	depends on TARGET_ARCH_X86_64
+	help
+	  This option will set aws name search to the latest amazon 2023
+	  optimized image for x86_64.
+
+config TERRAFORM_AWS_NS_AMAZON_2023_ARM64
+	bool "al2023-*-arm64"
+	depends on TARGET_ARCH_ARM64
+	help
+	  This option will set aws name search to the latest amazon 2023
+	  optimized image arm64.
+
 endchoice
 
 config TERRAFORM_AWS_NS
 	string "AWS name search"
 	default "debian-stretch-hvm-x86_64-*" if TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_X86_64
 	default "debian-stretch-hvm-arm64-*" if TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_ARM64
+	default "al2023-*-x86_64" if TERRAFORM_AWS_NS_AMAZON_2023_X86_64
+	default "al2023-*-arm64" if TERRAFORM_AWS_NS_AMAZON_2023_ARM64
 	help
 	  This option will set aws image search to use. Using this filter glob
 	  lets us get the latest ami for this owner / release.
@@ -120,7 +182,7 @@ config TERRAFORM_AWS_NS
 	  Get your image ami id, for debian 9 amd64 on the us-west1 this is
 	  ami-0adbaf2e0ce044437 so you can run:
 
-	  aws ec2 describe-images --image-ids ami-0adbaf2e0ce044437
+	  aws ec2 describe-images --image-ids ami-0adbaf2e0ce044437 | grep Name
 
 	  For details:
 
@@ -146,66 +208,67 @@ config TERRAFORM_AWS_VIRT_TYPE
 
 choice
 	prompt "AWS instance type"
-	default TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE if TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_X86_64
-	default TERRAFORM_AWS_INSTANCE_IS4GEN_MEDIUM if TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_ARM64
+	default TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE if TARGET_ARCH_X86_64
+	default TERRAFORM_AWS_INSTANCE_IS4GEN_MEDIUM if TARGET_ARCH_ARM64
 
 config TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE
 	bool "m5ad.4xlarge - $0.824 per Hour"
+	depends on TARGET_ARCH_X86_64
 	help
 	  61 GiB RAM, 16 vcpus, 1 8 GiB main drive, and two additional
 	  300 GiB nvme drives.
 
 config TERRAFORM_AWS_INSTANCE_IS4GEN_MEDIUM
 	bool "is4gen.medium"
-	depends on TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_ARM64
+	depends on TARGET_ARCH_ARM64
 	help
 	  6 GiB RAM, 1vCPU, 1 x 937 GiB NVMe SSD, 25 Gbps Net, 9.6 Gbps EBS.
 	  https://aws.amazon.com/ec2/instance-types/i4g/
 
 config TERRAFORM_AWS_INSTANCE_IS4GEN_8XLARGE
 	bool "is4gen.8xlarge"
-	depends on TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_ARM64
+	depends on TARGET_ARCH_ARM64
 	help
 	  192 GiB RAM, 32 vCPUs, 4 x 7500 GiB NVMe SSD, 50 Gbps Net, 19 Gbps EBS.
 	  https://aws.amazon.com/ec2/instance-types/i4g/
 
 config TERRAFORM_AWS_INSTANCE_IS4GEN_8XLARGE
 	bool "is4gen.8xlarge"
-	depends on TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_ARM64
+	depends on TARGET_ARCH_ARM64
 	help
 	  192 GiB RAM, 32 vCPUs, 4 x 7500 NVMe SSD, 50 Gbps Net, 19 Gbps EBS.
 	  https://aws.amazon.com/ec2/instance-types/i4g/
 
 config TERRAFORM_AWS_INSTANCE_IM4GN_LARGE
 	bool "im4gn.large"
-	depends on TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_ARM64
+	depends on TARGET_ARCH_ARM64
 	help
 	  8 GiB RAM, 2vCPUs, 1 x 937 GiB NVMe SSD, 25 Gbps Net, 9.5 Gbps EBS.
 	  https://aws.amazon.com/ec2/instance-types/i4g/
 
 config TERRAFORM_AWS_INSTANCE_IM4GN_4XLARGE
 	bool "im4gn.4xlarge"
-	depends on TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_ARM64
+	depends on TARGET_ARCH_ARM64
 	help
 	  64 GiB RAM, 16 vcpus, 1 x 7500 NVMe SSD, 25 Gbps Net, 9.5 Gbps EBS.
 	  https://aws.amazon.com/ec2/instance-types/i4g/
 
 config TERRAFORM_AWS_INSTANCE_IM4GN_4XLARGE
 	bool "im4gn.4xlarge"
-	depends on TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_ARM64
+	depends on TARGET_ARCH_ARM64
 	help
 	  64 GiB RAM, 16 vcpus, 1 x 7500 NVMe SSD, 25 Gbps Net, 9.5 Gbps EBS.
 	  https://aws.amazon.com/ec2/instance-types/i4g/
 
 config TERRAFORM_AWS_INSTANCE_I4I_LARGE
 	bool "i4i.large"
-	depends on TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_X86_64
+	depends on TARGET_ARCH_X86_64
 	help
 	  16 GiB RAM, 2 vcpus, 1 x 468 AWS Nitro SSD, 10 Gbps Net, 10 Gbps EBS.
 	  https://aws.amazon.com/ec2/instance-types/i4i/
 
 config TERRAFORM_AWS_INSTANCE_I4I_METAL
-	depends on TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_X86_64
+	depends on TARGET_ARCH_X86_64
 	bool "i4i.metal"
 	help
 	  1024 GiB RAM, 128 real cpus?, 8 x 3,750 AWS Nitro SSD,
