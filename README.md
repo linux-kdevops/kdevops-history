@@ -178,8 +178,17 @@ linux-kdevops organization to contribute findings.
 
 # Video presentations on kdevops or related
 
-  * [https://youtu.be/9PYjRYbc-Ms](2022 - LSFMM - Challenges with running fstests and blktests )
-  * [https://youtu.be/-1KnphkTgNg](2020 - SUSE Labs Conference - kdevops: bringing devops to kernel development)
+  * [2022 - LSFMM - Challenges with running fstests and blktests](https://youtu.be/9PYjRYbc-Ms)
+  * [2020 - SUSE Labs Conference - kdevops: bringing devops to kernel development](https://youtu.be/-1KnphkTgNg)
+  * [2023 - Live kdevops demo](https://youtu.be/FSY3BMHUyJc) which covers the topics:
+    * an example with AWS with NVMe drives which [support 16k atomic writes](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/storage-twp.html) on ARM64
+    * demonstrates how to ramp up with a custom arbitrary new Linux kernel branch for testing based on linux-next
+    * demonstrates how to start testing btrfs with linux-next
+    * demonstrates how to test with XFS for linux-next
+    * demonstrates initial work on NFS testing with pynfs
+    * demonstrates current CXL workflows / testing
+    * demonstrates how a few stable XFS maintainers are using kdevops to test XFS using local virtualization solutions or cloud solutions
+    * demonstrates dynamic kconfig generation in order to support PCI-passthrough
 
 # Underneath the kdevops hood
 
