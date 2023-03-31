@@ -178,17 +178,28 @@ linux-kdevops organization to contribute findings.
 
 # Video presentations on kdevops or related
 
+  * [2023 - day to day kernel development kdevops demo to fix a bug](https://youtu.be/CfGX51a_Fq0) which covers the topics:
+    * Setting up kdevops to use mirroring for Linux git trees
+    * Using git remotes on your host kdevops linux directory
+    * An example of a real world kernel issue being investigated and fixed upstream
+    * Recommendations and value for reproducers for bugs, in this case stress-ng was used, [more details on the commit that fixes the issue](https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?h=20230328-module-alloc-opts&id=f66db2da670853b2386af23552fd941275a13644)
+    * Using a specific remote branch for development, in this example [20230328-module-alloc-opts](https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230328-module-alloc-opts) was used as an example PATCH v1 series
+    * Using `localversion.*` files to help identify kernel names on Grub prompt
+    * Using `make modules_install install -j100` on your guest using 9p
+    * Console access with virsh console to guest
+    * Console access to pick your kernel at bootup
+    * Example of a small change to a real future v2 patch series
+  * [2023 - Live kdevops demo](https://youtu.be/FSY3BMHUyJc) which covers the topics:
+    * An example with AWS with NVMe drives which [support 16k atomic writes](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/storage-twp.html) on ARM64
+    * Demonstrates how to ramp up with a custom arbitrary new Linux kernel branch for testing based on linux-next
+    * Demonstrates how to start testing btrfs with linux-next
+    * Demonstrates how to test with XFS for linux-next
+    * Demonstrates initial work on NFS testing with pynfs
+    * Demonstrates current CXL workflows / testing
+    * Demonstrates how a few stable XFS maintainers are using kdevops to test XFS using local virtualization solutions or cloud solutions
+    * Demonstrates dynamic kconfig generation in order to support PCI-passthrough
   * [2022 - LSFMM - Challenges with running fstests and blktests](https://youtu.be/9PYjRYbc-Ms)
   * [2020 - SUSE Labs Conference - kdevops: bringing devops to kernel development](https://youtu.be/-1KnphkTgNg)
-  * [2023 - Live kdevops demo](https://youtu.be/FSY3BMHUyJc) which covers the topics:
-    * an example with AWS with NVMe drives which [support 16k atomic writes](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/storage-twp.html) on ARM64
-    * demonstrates how to ramp up with a custom arbitrary new Linux kernel branch for testing based on linux-next
-    * demonstrates how to start testing btrfs with linux-next
-    * demonstrates how to test with XFS for linux-next
-    * demonstrates initial work on NFS testing with pynfs
-    * demonstrates current CXL workflows / testing
-    * demonstrates how a few stable XFS maintainers are using kdevops to test XFS using local virtualization solutions or cloud solutions
-    * demonstrates dynamic kconfig generation in order to support PCI-passthrough
 
 # Underneath the kdevops hood
 
