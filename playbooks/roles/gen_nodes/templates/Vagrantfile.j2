@@ -280,7 +280,13 @@ Vagrant.configure("2") do |config|
 {% if libvirt_enable_cxl %}
         libvirt.qemuargs :value => "-machine"
         libvirt.qemuargs :value => "cxl=on"
-
+	cpus = global_data["cpus"]
+	memory = global_data["memory"]
+	libvirt.numa_nodes = [
+		{:cpus => "0-#{cpus - 1}", :memory => global_data["memory"]}
+	]
+	libvirt.qemuargs :value => "-m"
+	libvirt.qemuargs :value => "maxmem=#{memory *2}M,slots=16"
 {% if libvirt_enable_cxl_demo_topo1 or libvirt_enable_cxl_demo_topo2 %}
 	# CXL host bus
         libvirt.qemuargs :value => "-device"
