@@ -52,6 +52,11 @@ config VAGRANT_VCPUS_32
 	help
 	  Use 32 vCPUs on guests.
 
+config VAGRANT_VCPUS_512
+	bool "512"
+	help
+	  Use 512 vCPUs on guests.
+
 endchoice
 
 config VAGRANT_VCPUS_COUNT
@@ -61,6 +66,7 @@ config VAGRANT_VCPUS_COUNT
 	default 8 if VAGRANT_VCPUS_8
 	default 16 if VAGRANT_VCPUS_16
 	default 32 if VAGRANT_VCPUS_32
+	default 512 if VAGRANT_VCPUS_512
 	help
 	  The number of virtual CPUs to use per guest.
 
