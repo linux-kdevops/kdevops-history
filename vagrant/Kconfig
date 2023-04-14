@@ -23,6 +23,35 @@ config USE_VAGRANT_LIBVIRT_MIRROR
 	default y if USE_LOCAL_LINUX_MIRROR
 	default n if !USE_LOCAL_LINUX_MIRROR
 
+config VAGRANT_LARGE_CPU
+	bool "Enable extrmely large CPU count"
+	depends on VAGRANT_LIBVIRT
+	help
+	  Select this option if you want to enable larger CPUs
+	  over what most KVM / libvirt configurations allow these days.
+	  The maximum number of virtual CPUs you can use can vary
+	  system to system, but if using KVM one can query KVM using
+	  KVM_CHECK_EXTENSION ioctl to /dev/kvm and query for the
+	  KVM_CAP_MAX_VCPUS. Even though this has been 1024 since
+	  commit 074c82c8f7cf8a ("kvm: x86: Increase MAX_VCPUS to 1024")
+	  and this was merged on v5.15 libvirt still uses only max
+	  255. You can also enable an ioapic and iommu to bump you to
+	  288, but these are software emulated and so are slow and
+	  not recommended.
+
+	  We could later add support to make dynconfig support here
+	  to dynamically detect you CPU limits. Most distros  can
+	  use virsh maxvcpus to get the limit but we can later
+	  consider just installing kvmtool as well. For now deal with
+	  a max 255 by default as that seems to be what most rolling
+	  Linux distributions are using..
+
+	  References:
+
+	  https://www.suse.com/support/kb/doc/?id=000019723
+	  https://lwn.net/Articles/658511/
+	  https://git.kernel.org/pub/scm/linux/kernel/git/will/kvmtool.git/
+
 choice
 	prompt "Guest vCPUs"
 	default VAGRANT_VCPUS_8
@@ -52,8 +81,30 @@ config VAGRANT_VCPUS_32
 	help
 	  Use 32 vCPUs on guests.
 
+config VAGRANT_VCPUS_64
+	bool "64"
+	help
+	  Use 64 vCPUs on guests.
+
+config VAGRANT_VCPUS_128
+	bool "128"
+	help
+	  Use 128 vCPUs on guests.
+
+config VAGRANT_VCPUS_255
+	bool "255"
+	help
+	  Use 255 vCPUs on guests.
+
+config VAGRANT_VCPUS_288
+	bool "288"
+	depends on VAGRANT_LARGE_CPU
+	help
+	  Use 288 vCPUs on guests.
+
 config VAGRANT_VCPUS_512
 	bool "512"
+	depends on VAGRANT_LARGE_CPU
 	help
 	  Use 512 vCPUs on guests.
 
@@ -66,6 +117,10 @@ config VAGRANT_VCPUS_COUNT
 	default 8 if VAGRANT_VCPUS_8
 	default 16 if VAGRANT_VCPUS_16
 	default 32 if VAGRANT_VCPUS_32
+	default 64 if VAGRANT_VCPUS_64
+	default 128 if VAGRANT_VCPUS_128
+	default 255 if VAGRANT_VCPUS_255
+	default 288 if VAGRANT_VCPUS_288
 	default 512 if VAGRANT_VCPUS_512
 	help
 	  The number of virtual CPUs to use per guest.
