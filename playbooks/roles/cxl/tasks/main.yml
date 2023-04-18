@@ -53,6 +53,10 @@
   args:
     chdir: "{{ ndctl_data }}"
 
+- name: Convert cxl memory to kernel managed memory
+  include_tasks: cxl-mem-setup/main.yml
+  tags: [ 'cxl-mem-setup' ]
+
 - name: Set the path to cxl workflow
   set_fact:
     cxl_workflow_target: "../workflows/cxl/"

@@ -38,6 +38,10 @@ cxl-results:
 		-f 30 -i hosts playbooks/cxl.yml \
 		--tags vars,copy_results $(LIMIT_HOSTS)
 
+cxl-mem-setup:
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts playbooks/cxl.yml \
+		--tags cxl-mem-setup $(LIMIT_HOSTS)
 
 cxl-help-menu:
 	@echo "cxl development:"
@@ -45,6 +49,7 @@ cxl-help-menu:
 	@echo "cxl-test-probe      - Basic sanity test, only runs loads / unloads the cxl_test driver"
 	@echo "cxl-test-meson      - Runs the ndctl meson unit tests for the CXL test suite"
 	@echo "cxl-results         - Get results for all tests runs"
+	@echo "cxl-mem-setup	   - Convert cxl memory to cpu-less numa node"
 
 cxl-help-end:
 	@echo ""
