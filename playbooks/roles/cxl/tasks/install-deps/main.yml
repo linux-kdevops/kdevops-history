@@ -7,3 +7,6 @@
   when: ansible_facts['os_family']|lower == 'suse'
 - import_tasks: tasks/install-deps/redhat/main.yml
   when: ansible_facts['os_family']|lower == 'redhat'
+
+- name: Install package common to all distros
+  import_tasks: tasks/install-deps/generic.yml
