@@ -132,7 +132,7 @@ Vagrant.configure("2") do |config|
       end
 {% endif %}
       host_name = server_data["name"]
-      node_custom_data_path = kdevops_pool_path + "/" + "/#{host_name}"
+      node_custom_data_path = kdevops_pool_path + "/#{host_name}"
       FileUtils.mkdir_p(node_custom_data_path) unless File.exist?(node_custom_data_path)
       extra_disk_path = "#{node_custom_data_path}/" + "{{ extra_disk_path }}"
       FileUtils.mkdir_p(extra_disk_path) unless File.exist?(extra_disk_path)

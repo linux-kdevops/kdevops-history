@@ -1,5 +1,5 @@
 USER_SYSTEM := ~/.config/systemd/user/
-MIRROR_PATH := /mirror/
+MIRROR_PATH := /mirror
 
 LINUX_SERVICES := linux-mirror.service
 LINUX_SERVICES += linux-stable-mirror.service

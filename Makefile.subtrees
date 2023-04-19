@@ -8,7 +8,7 @@ KCONFIG_GIT_URL_RW   :=  git@github.com:linux-kdevops/kconfig.git
 UPDATE_SSHCONFIG_READ :=  https://github.com/linux-kdevops/update_ssh_config.git
 UPDATE_SSHCONFIG_RW   :=  git@github.com:linux-kdevops/update_ssh_config.git
 
-KCONFIG_DIR :=          scripts/kconfig/
+KCONFIG_DIR :=          scripts/kconfig
 UPDATE_SSHCONFIG_DIR := playbooks/roles/update_ssh_config_vagrant/update_ssh_config/
 LINUX_MIRROR_DIR     := playbooks/roles/linux-mirror/linux-mirror-systemd
 

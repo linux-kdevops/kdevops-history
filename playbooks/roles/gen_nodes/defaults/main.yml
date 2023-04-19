@@ -20,7 +20,7 @@ vagrant_box_version: ""
 vagrant_vcpus_count: 8
 vagrant_mem_mb: 4096
 qemu_bin_path: "/usr/bin/qemu-system-x86_64"
-extra_disk_path: ".vagrant/nvme_disks/"
+extra_disk_path: ".vagrant/nvme_disks"
 extra_disk_driver: "nvme"
 extra_disk_controller: "NVMe"
 nvme_zone_enable: False
