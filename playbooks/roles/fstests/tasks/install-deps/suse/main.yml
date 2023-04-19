@@ -192,7 +192,7 @@
   when:
     - is_sle15sp2|bool or is_sle15sp3|bool or is_sle15sp4|bool or is_sle12sp5|bool
 
-- name:  add benchmark sles12sp5 opensuse repo when needed
+- name: add benchmark sles12sp5 openSUSE repo when needed
   become: yes
   become_method: sudo
   script:
@@ -200,7 +200,7 @@
   when:
     - is_sle12sp5|bool
 
-- name:  add benchmark sles15sp2 opensuse repo when needed
+- name: Add benchmark sles15sp2 openSUSE repo when needed
   become: yes
   become_method: sudo
   script:
@@ -208,7 +208,7 @@
   when:
     - is_sle15sp2|bool
 
-- name:  add benchmark sles15sp3 opensuse repo when needed
+- name: Add benchmark sles15sp3 openSUSE repo when needed
   become: yes
   become_method: sudo
   script:

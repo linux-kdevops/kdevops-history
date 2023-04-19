@@ -1,15 +1,15 @@
 config KDEVOPS_SSH_CONFIG_UPDATE
-	bool "Update your ssh configuration for you?"
+	bool "Update your SSH configuration for you?"
 	default y
 	depends on !SKIP_BRINGUP
 	help
-	  If enabled, your ssh configuration file will be updated for you based
+	  If enabled, your SSH configuration file will be updated for you based
 	  on the results obtained from the bring up. This is useful in case
 	  it is not clear what the IP address of the hosts just created are.
 
 	  This is enabled by default, as this is the promise by kdevops, to be
 	  easy to use with sensible but careful deafults. If you are concerned
-	  for mistakes know that we do a backup of your ssh configuration for
+	  for mistakes know that we do a backup of your SSH configuration for
 	  you just in case.
 
 	  You are encourated to leave this enabled, uness you really don't trust
@@ -38,17 +38,17 @@ config KDEVOPS_SSH_CONFIG_UPDATE_STRICT
 	     LogLevel FATAL
 
 	  You are encouraged to use this. Vagrant does this, and so you can't
-	  disable this if you are using vagrant.
+	  disable this if you are using Vagrant.
 
 config KDEVOPS_SSH_CONFIG_UPDATE_BACKUP
-	bool "Create a backup when updating your ssh config file"
+	bool "Create a backup when updating your SSH config file"
 	default y
 	help
-	  This will create a backup of your ssh configuration file prior to
+	  This will create a backup of your SSH configuration file prior to
 	  doing the update for you. The filename for the backup will be:
 
 	    ~/.ssh/config.backup.kdevops.$method
 
-	  where $method is either vagrant or terraform.
+	  where $method is either Vagrant or terraform.
 
 endif # KDEVOPS_SSH_CONFIG_UPDATE

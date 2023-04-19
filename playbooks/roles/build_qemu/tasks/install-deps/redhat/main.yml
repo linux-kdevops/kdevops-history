@@ -1,5 +1,5 @@
 ---
-- name: Install qemu build dependencies
+- name: Install QEMU build dependencies
   become: yes
   become_method: sudo
   dnf:

@@ -3,22 +3,22 @@ choice
 	default VAGRANT
 
 config VAGRANT
-	bool "Vagrant for local virtualization (KVM / Virtualbox)"
+	bool "Vagrant for local virtualization (KVM / VirtualBox)"
 	select KDEVOPS_SSH_CONFIG_UPDATE_STRICT
 	depends on TARGET_ARCH_X86_64
 	help
-	  This option will enable use of vagrant. Enable this if you want to
+	  This option will enable use of Vagrant. Enable this if you want to
 	  use local virtualization technologies such as KVM with libvirt or
 	  VirtualBox. Enabling this feature will enable you to select which
 	  target guests to use, and configures things for you. It will also
-	  ensure dependencies are installed for vagrant when running:
+	  ensure dependencies are installed for Vagrant when running:
 
 	    make deps
 
 config TERRAFORM
 	bool "Terraform for cloud environments"
 	help
-	  This option will enable use of vagrant. Enable this if you want to
+	  This option will enable use of Vagrant. Enable this if you want to
 	  use terraform to create nodes on a cloud environment such as:
 
 	    * Azure

@@ -89,14 +89,14 @@ at least 3 selftests:
   * `make selftests-baseline`
 
 You can also run specific tests:
-    
+
   * `make selftests-firmware`
   * `make selftests-kmod`
   * `make selftests-sysctl`
 
 ### Get a Linux CXL development environment going and test CXL in just 2 commands:
 
-Using CXL today means you have to build qemu. kdevops supports building qemu
+Using CXL today means you have to build QEUM. kdevops supports building QEMU
 for you, and it will be done for you if you want to enable a CXL development
 environment. To ramp up with CXL (other than bringup and the above linux target)
 just run:
@@ -111,7 +111,7 @@ We have a public chat server up, for now we use discord:
 
   * https://bit.ly/linux-kdevops-chat
 
-## Parts to kdevops 
+## Parts to kdevops
 
 It is best to think about kdevops in phases of your desired target workflow.
 The first thing you need to do is get systems up. You either are going to
@@ -138,7 +138,7 @@ Below is kdevops' recommended documentation reading.
   * [kdevops first run](docs/kdevops-first-run.md)
   * [kdevops running make](docs/running-make.md)
   * [kdevops libvirt storage pool considerations](docs/libvirt-storage-pool.md)
-  * [kdevops PCI-E passthrough support](docs/libvirt-pcie-passthrough.md)
+  * [kdevops PCIe passthrough support](docs/libvirt-pcie-passthrough.md)
   * [kdevops running make bringup](docs/running-make-bringup.md)
   * [kdevops example workflow: running make linux](docs/kdevops-make-linux.md)
   * [kdevops running make destroy](docs/kdevops-make-destroy.md)
@@ -197,7 +197,7 @@ linux-kdevops organization to contribute findings.
     * Demonstrates initial work on NFS testing with pynfs
     * Demonstrates current CXL workflows / testing
     * Demonstrates how a few stable XFS maintainers are using kdevops to test XFS using local virtualization solutions or cloud solutions
-    * Demonstrates dynamic kconfig generation in order to support PCI-passthrough
+    * Demonstrates dynamic Kconfig generation in order to support PCIe-passthrough
   * [2022 - LSFMM - Challenges with running fstests and blktests](https://youtu.be/9PYjRYbc-Ms)
   * [2020 - SUSE Labs Conference - kdevops: bringing devops to kernel development](https://youtu.be/-1KnphkTgNg)
 
@@ -205,18 +205,18 @@ linux-kdevops organization to contribute findings.
 
 Below are sections which get into technical details of how kdevops works.
 
-  * [Why vagrant is used for virtualization](docs/why-vagrant.md)
+  * [Why Vagrant is used for virtualization](docs/why-vagrant.md)
   * [A case for truncated files with loopback block devices](docs/testing-with-loopback.md)
   * [Seeing more issues with loopback / truncated files setup](docs/seeing-more-issues.md)
-  * [adding a new workflow to kdevops](docs/adding-a-new-workflow.md)
-  * [kconfig integration](docs/kconfig-integration.md)
+  * [Adding a new workflow to kdevops](docs/adding-a-new-workflow.md)
+  * [Kconfig integration](docs/kconfig-integration.md)
   * [Motivation behind kdevops](docs/motivations.md)
   * [Linux distribution support](docs/linux-distro-support.md)
-  * [Overriding all ansible role options with one file](docs/ansible-override.md)
-  * [kdevops vagrant support](docs/kdevops-vagrant.md)
+  * [Overriding all Ansible role options with one file](docs/ansible-override.md)
+  * [kdevops Vagrant support](docs/kdevops-vagrant.md)
   * [kdevops terraform suppor - cloud setup with kdevops](docs/kdevops-terraform.md)
-  * [kdevops local ansible roles](docs/ansible-roles.md)
-  * [Tutorial on building your own custom vagrant boxes](docs/custom-vagrant-boxes.md)
+  * [kdevops local Ansible roles](docs/ansible-roles.md)
+  * [Tutorial on building your own custom Vagrant boxes](docs/custom-vagrant-boxes.md)
 
 License
 -------

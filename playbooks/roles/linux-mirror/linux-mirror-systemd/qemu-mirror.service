@@ -1,5 +1,5 @@
 [Unit]
-Description=qemu mirror [qemu.git]
+Description=QEMU mirror [qemu.git]
 Documentation=man:git(1)
 ConditionPathExists=/mirror/qemu.git
 

@@ -13,7 +13,7 @@ config VAGRANT_LIBVIRT
 config VAGRANT_VIRTUALBOX
 	bool "Virtualbox"
 	help
-	  Select this option if you want to use Virtualbox for
+	  Select this option if you want to use VirtualBox for
 	  local virtualization.
 
 endchoice
@@ -24,7 +24,7 @@ config USE_VAGRANT_LIBVIRT_MIRROR
 	default n if !USE_LOCAL_LINUX_MIRROR
 
 config VAGRANT_LARGE_CPU
-	bool "Enable extrmely large CPU count"
+	bool "Enable extremely large CPU count"
 	depends on VAGRANT_LIBVIRT
 	help
 	  Select this option if you want to enable larger CPUs
@@ -40,11 +40,11 @@ config VAGRANT_LARGE_CPU
 	  not recommended.
 
 	  We could later add support to make dynconfig support here
-	  to dynamically detect you CPU limits. Most distros  can
+	  to dynamically detect you CPU limits. Most distros can
 	  use virsh maxvcpus to get the limit but we can later
 	  consider just installing kvmtool as well. For now deal with
 	  a max 255 by default as that seems to be what most rolling
-	  Linux distributions are using..
+	  Linux distributions are using...
 
 	  References:
 
@@ -201,7 +201,7 @@ config LIBVIRT_MACHINE_TYPE_DEFAULT
 	help
 	  Use whatever default the guest was intended to use. This will either
 	  be the machine type used at virt-install time or some other default
-	  by qemu / libvirt. This is important for backward compatibility with
+	  by QEMU / libvirt. This is important for backward compatibility with
 	  older kernels. For example if you enable q35 on an old kernel the old
 	  kernel may not boot. For details refer to kdevops commit 83952e2e532e
 	  ("vagrant/kdevops_nodes.yaml.in: remove machine_type)".
@@ -222,7 +222,7 @@ config LIBVIRT_HOST_PASSTHROUGH
 	default y
 	help
 	  Enable this to be able to also carry the same CPU your host has to
-	  the guest. As per qemu documentation this is the recommended CPU
+	  the guest. As per QEMU documentation this is the recommended CPU
 	  type to use, provided live migration is not required. And we're
 	  not supporting live-migration on kdevops so this our default too.
 	  This will also enable you to use things like perf stat and
@@ -238,63 +238,63 @@ config LIBVIRT_HOST_PASSTHROUGH
 	    \-- make -s -j$(nproc) bzImage
 
 config QEMU_BUILD
-	bool "Should we build qemu for you?"
+	bool "Should we build QEMU for you?"
 	select NEEDS_LOCAL_DEVELOPMENT_PATH
 	help
 	  You only want to enable this option if your distribution package
-	  of qemu does not have support for the features you need. For
-	  example this may be useful if you are a qemu developer or are
+	  of QEMU does not have support for the features you need. For
+	  example this may be useful if you are a QEMU developer or are
 	  relying on technology is still under development or if you have
-	  a custom qemu git URL.
+	  a custom QEMU git URL.
 
 if !QEMU_BUILD
 
 config QEMU_USE_DEVELOPMENT_VERSION
-	bool "Should we look for a development version of qemu?"
+	bool "Should we look for a development version of QEMU?"
 	help
 	  You want to enable this option if for example the currently
-	  available version of qemu does not yet have support for the feature
+	  available version of QEMU does not yet have support for the feature
 	  you are going to be working on.
 
-	  Say yes here if you are compiling your own version of qemu.
+	  Say yes here if you are compiling your own version of QEMU.
 
 endif # !QEMU_BUILD
 
 if QEMU_BUILD
 
 choice
-	prompt "Qemu git URL to use"
+	prompt "QEMU git URL to use"
 	default QEMU_BUILD_UPSTREAM
 
 config QEMU_BUILD_UPSTREAM
-	bool "https://github.com/qemu/qemu.git"
+	bool "https://gitlab.com/qemu-project/qemu.git"
 	help
-	  Select this option if you want to use the upstream qemu git repo.
+	  Select this option if you want to use the upstream QEMU git repo.
 
 config QEMU_BUILD_JIC23
 	bool "https://gitlab.com/jic23/qemu.git"
 	help
-	  Select this option if you want to use Cameron's qemu git repo.
+	  Select this option if you want to use Cameron's QEMU git repo.
 	  This has a few CXL bells and whistles which are not yet upstream.
 
 config QEMU_BUILD_MANUAL
-	bool "Custom qemu git URL"
+	bool "Custom QEMU git URL"
 	help
 	  Select this option if you want to specify your own git URL.
 
 endchoice
 
 config QEMU_BUILD_GIT
-	string "Git tree for qemu to clone on localhost"
+	string "Git tree for QEMU to clone on localhost"
 	default "/mirror/qemu.git" if USE_LOCAL_LINUX_MIRROR && QEMU_BUILD_UPSTREAM || QEMU_BUILD_MANUAL
-	default "https://github.com/qemu/qemu.git" if !USE_LOCAL_LINUX_MIRROR && QEMU_BUILD_UPSTREAM || QEMU_BUILD_MANUAL
+	default "https://gitlab.com/qemu-project/qemu.git" if !USE_LOCAL_LINUX_MIRROR && QEMU_BUILD_UPSTREAM || QEMU_BUILD_MANUAL
 	default "https://gitlab.com/jic23/qemu.git" if !USE_LOCAL_LINUX_MIRROR && QEMU_BUILD_JIC23
 	help
-	  This is the git URL to use to clone and then build qemu for you on
+	  This is the git URL to use to clone and then build QEMU for you on
 	  your localhost.
 
 config QEMU_BUILD_GIT_DATA_PATH
-	string "The destination directory where to clone the qemu git tree"
+	string "The destination directory where to clone the QEMU git tree"
 	default "{{local_dev_path}}/qemu"
 	help
 	  This is the target location of where to clone the above git tree.
@@ -302,10 +302,10 @@ config QEMU_BUILD_GIT_DATA_PATH
 	  configuration option CONFIG_NEEDS_LOCAL_DEVELOPMENT_PATH.
 
 config QEMU_BUILD_GIT_VERSION
-	string "The version of qemu to build"
+	string "The version of QEMU to build"
 	default "v7.2.0"
 	help
-	  This is the target build version of qemu to build. Please use
+	  This is the target build version of QEMU to build. Please use
 	  at least v7.2.0 for CXL support.
 
 config QEMU_USE_DEVELOPMENT_VERSION
@@ -315,12 +315,12 @@ config QEMU_USE_DEVELOPMENT_VERSION
 endif # QEMU_BUILD
 
 config QEMU_BIN_PATH_LIBVIRT
-	string "Qemu binary path to use"
+	string "QEMU binary path to use"
 	default "/usr/local/bin/qemu-system-x86_64" if QEMU_USE_DEVELOPMENT_VERSION
 	default "/usr/bin/qemu-system-x86_64" if !QEMU_USE_DEVELOPMENT_VERSION
 
 config QEMU_INSTALL_DIR_LIBVIRT
-	string "Path to install QEMU "
+	string "Path to install QEMU"
 	default "/usr/local/bin" if QEMU_USE_DEVELOPMENT_VERSION
 	default "/usr/bin" if !QEMU_USE_DEVELOPMENT_VERSION
 
@@ -335,24 +335,24 @@ choice
 config LIBVIRT_EXTRA_STORAGE_DRIVE_NVME
 	bool "NVMe"
 	help
-	  Use the qemu nvme driver for extra storage drives. We always expect
+	  Use the QEMU NVMe driver for extra storage drives. We always expect
 	  to use this as we expect *could* be outperforming the virtio driver.
 	  Only if you enable this will you get support for ZNS too. We expect
-	  the nvme driver to always be the default. It also gives us parity with
+	  the NVMe driver to always be the default. It also gives us parity with
 	  cloud bringups.
 
 config LIBVIRT_EXTRA_STORAGE_DRIVE_VIRTIO
 	bool "virtio"
 	help
-	  Use the qemu virtio driver for extra storage drives. Use this if you
-	  are having issues with "nvme timeouts" issues when testing in a loop
-	  with fstests and cannot upgrade your qemu version. If you select this
+	  Use the QEMU virtio driver for extra storage drives. Use this if you
+	  are having issues with "NVMe timeouts" issues when testing in a loop
+	  with fstests and cannot upgrade your QEMU version. If you select this
 	  you won't be able to test ZNS.
 
 config LIBVIRT_EXTRA_STORAGE_DRIVE_IDE
 	bool "ide"
 	help
-	  Use the qemu ide driver for extra storage drives. This is useful for
+	  Use the QEMU ide driver for extra storage drives. This is useful for
 	  really old Linux distributions that lack the virtio backend driver.
 
 endchoice
@@ -376,7 +376,7 @@ config LIBVIRT_VIRTIO_AIO_MODE_NATIVE
 	  In terms of performance there are some recommendations to not use
 	  aio=native on sparsefiles. The claim seems to be that a host
 	  filesystems metadata write can block the AIO io_submit() call and
-	  therefore block qemu threads which expect AIO behaviour on the guest.
+	  therefore block QEMU threads which expect AIO behaviour on the guest.
 	  This is documented when on Openstack nova an aio mode option was
 	  requested to be available for different backends:
 
@@ -473,7 +473,7 @@ config LIBVIRT_STORAGE_POOL_PATH_INFER_ADVANCED
 	  By default vagrant will assume that if you don't have a virsh pool
 	  that the current directory will become the "default" storage pool
 	  path. This is rather silly for an advanced setup. Consider a setup
-	  where you have a set of different nvme drivers mounted on different
+	  where you have a set of different NVMe drivers mounted on different
 	  partitions:
 
 	  /dev/nvme0n1 --> /data1 with xfs
@@ -524,7 +524,7 @@ config LIBVIRT_STORAGE_POOL_PATH_CUSTOM_MANUAL
 	bool "Custom manual path"
 	help
 	  Select this option if you want to manually specify where to use as
-	  the qemu storage pool path. This is today's default given otherwise
+	  the QEMU storage pool path. This is today's default given otherwise
 	  we may have to muck with the $HOME directory permissions.
 
 endchoice
@@ -582,12 +582,12 @@ config LIBVIRT_STORAGE_POOL_PATH_CUSTOM
 	default "/opt/libvirt/images/" if LIBVIRT_STORAGE_POOL_PATH_CUSTOM_MANUAL
 	help
 	  The path to use for the libvirt storage pool path. Since kdevops uses
-	  vagrant for virtualization this is also the path used to place the
-	  additional nvme drives created. kdevops adds a postfix "kdevops" to
-	  this directory as it wants to allow vagrant full control over that
+	  Vagrant for virtualization this is also the path used to place the
+	  additional NVMe drives created. kdevops adds a postfix "kdevops" to
+	  this directory as it wants to allow Vagrant full control over that
 	  directory. For instance if this is /var/lib/libvirt/images/ kdevops
-	  will let vagrant store images in /var/lib/libvirt/images/ and
-	  the nvme qcow2 files created will go in by default to the directory
+	  will let Vagrant store images in /var/lib/libvirt/images/ and
+	  the NVMe qcow2 files created will go in by default to the directory
 	  /var/lib/libvirt/images/kdevops/.vagrant/nvme_disks/guest-hostname/.
 
 choice
@@ -599,7 +599,7 @@ config LIBVIRT_URI_SYSTEM
 	bool "Use qemu:///system for the URI"
 	help
 	  The first design behind libvirt is to use the system URI, that is,
-	  qemu:///system. All 'system' URIs (be it qemu, lxc, uml, ...)
+	  qemu:///system. All 'system' URIs (be it QEMU, lxc, uml, ...)
 	  connect to the libvirtd daemon running as root which is launched at
 	  system startup. Virtual machines created and run using 'system'
 	  are usually launched as root, unless configured otherwise (for
@@ -637,8 +637,8 @@ config LIBVIRT_URI_SESSION
 
 	  qemu:///session has a serious drawback: since the libvirtd instance
 	  does not have sufficient privileges, the only out of the box network
-	  option is qemu's usermode networking, which has nonobvious
-	  limitations, so its usage is discouraged. More info on qemu
+	  option is QEMU's usermode networking, which has non obvious
+	  limitations, so its usage is discouraged. More info on QEMU
 	  networking options: http://people.gnome.org/~markmc/qemu-networking.html
 	  With regards to kdevops, if you use the session URI we don't
 	  instantiate secondary interfaces with private IP addresses. This is
@@ -649,7 +649,7 @@ config LIBVIRT_URI_SESSION
 	  When this option is enabled we modify vagrant's libvirt default
 	  built-in URI for the session URI, and we also modify the default
 	  network management interface to be virbr0, the default socket
-	  is assumed to be /run/libvirt/libvirt-sock-ro. New kconfig options
+	  is assumed to be /run/libvirt/libvirt-sock-ro. New Kconfig options
 	  can be added later to customize those further if we really need
 	  to.
 
@@ -658,12 +658,12 @@ config LIBVIRT_URI_SESSION
 	  set by default it means it doesn't support it yet and you should
 	  expect things to not work, and put the work to fix / enhance that
 	  somehow. That work likely is not on kdevops... but perhaps this
-	  could be worng. Testing has be done with session support on debian
+	  could be wrong. Testing has be done with session support on Debian
 	  testing, Ubuntu 21.10 and they both have issues. Don't enable session
 	  support manually unless you know what you are doing.
 
 config LIBVIRT_URI_CUSTOM
-	bool "Custom qemu URI"
+	bool "Custom QEMU URI"
 	help
 	  Select this option if you want to manually specify which URI to use.
 	  In other words you know what you are doing.
@@ -671,11 +671,11 @@ config LIBVIRT_URI_CUSTOM
 endchoice
 
 config LIBVIRT_URI_PATH
-	string "Libvirt qemu URI to use"
+	string "Libvirt QEMU URI to use"
 	default "qemu:///system" if LIBVIRT_URI_SYSTEM || LIBVIRT_URI_CUSTOM
 	default "qemu:///session" if LIBVIRT_URI_SESSION
 	help
-	  By default vagrant uses a qemu:///system URI which assumes the libvirt
+	  By default Vagrant uses a qemu:///system URI which assumes the libvirt
 	  daemon runs as a user other than the user which is running the vagrant
 	  commands. Libvirt has support for running the libvirt daemon as other
 	  users using session support. This will be modified to a session URI
@@ -689,7 +689,7 @@ config LIBVIRT_URI_PATH
 	  LIBVIRT_URI_CUSTOM and you know what you are doing.
 
 config LIBVIRT_SYSTEM_URI_PATH
-	string "Libvirt system qemu URI to use"
+	string "Libvirt system QEMU URI to use"
 	default "qemu:///system"
 	help
 	  This is the URI of QEMU system connection, used to obtain the IP
@@ -698,9 +698,9 @@ config LIBVIRT_SYSTEM_URI_PATH
 	  be modified you can do so here. Even if you are using session
 	  support you should leave this with the default qemu:///system setting
 	  as this is still used to ensure your guest's IP address will be
-	  communicated back to vagrant so it determines the guest is up and
+	  communicated back to Vagrant so it determines the guest is up and
 	  you can ssh to it. Setting this to qemu:///session still gets the
-	  guest up but vagrant won't know the guest is up, even though the
+	  guest up but Vagrant won't know the guest is up, even though the
 	  host can ssh to the guest. You should only modify this value if
 	  you know what you are doing.
 
@@ -709,7 +709,7 @@ endif
 if VAGRANT_VIRTUALBOX
 
 choice
-	prompt "Virtualbox storage pool path"
+	prompt "VirtualBox storage pool path"
 	default VIRTUALBOX_STORAGE_POOL_PATH_CUSTOM_MANUAL if !DISTRO_SUSE
 	default VIRTUALBOX_STORAGE_POOL_PATH_CUSTOM_CWD if DISTRO_SUSE
 
@@ -717,8 +717,8 @@ config VIRTUALBOX_STORAGE_POOL_PATH_CUSTOM_CWD
 	bool "Use the current vagrant working directory"
 	help
 	  Select this option if you want to use the vagrant directory inside
-	  where you git cloned kdevops as the vagrant storage pool path where
-	  additional nvme drives will be created. As it is today it
+	  where you git cloned kdevops as the Vagrant storage pool path where
+	  additional NVMe drives will be created. As it is today it
 	  would seem only fedora restricts the $HOME to g-rwx o-rwx and so
 	  by default this option won't work on Fedora by default. This used
 	  to be the old default on kdevops but because of this it should not
@@ -729,26 +729,26 @@ config VIRTUALBOX_STORAGE_POOL_PATH_CUSTOM_MANUAL
 	bool "Custom manual path"
 	help
 	  Select this option if you want to manually specify where to use as
-	  the directory where we'll have kdevops create additional nvme drives
-	  for virtualbox to use. This is today's default given otherwise
+	  the directory where we'll have kdevops create additional NVMe drives
+	  for VirtualBox to use. This is today's default given otherwise
 	  we may have to muck with the $HOME directory permissions.
 
 endchoice
 
 config VIRTUALBOX_STORAGE_POOL_PATH_CUSTOM
-	string "Virtualbox storage pool path"
+	string "VirtualBox storage pool path"
 	default $(shell, scripts/cwd-append.sh vagrant) if VIRTUALBOX_STORAGE_POOL_PATH_CUSTOM_CWD
 	default "/opt/virtualbox/storage/" if VIRTUALBOX_STORAGE_POOL_PATH_CUSTOM_MANUAL
 	help
-	  The path to use for creating additional nvme drives used by
-	  virtualbox. kdevops adds a postfix "kdevops" to this directory as it
-	  wants to allow vagrant full control over that directory. For instance
-	  if this is /opt/virtualbox/storage/ kdevops will have virtualbox
-	  create the nvme files under the directory
+	  The path to use for creating additional NVMe drives used by
+	  VirtualBox. kdevops adds a postfix "kdevops" to this directory as it
+	  wants to allow Vagrant full control over that directory. For instance
+	  if this is /opt/virtualbox/storage/ kdevops will have VirtualBox
+	  create the NVMe files under the directory
 	  /opt/virtualbox/storage/kdevops/.vagrant/nvme_disks/guest-hostname/.
 
 choice
-	prompt "Virtualbox extra drive format"
+	prompt "VirtualBox extra drive format"
 	default VIRTUALBOX_EXTRA_DRIVE_VDI
 
 config VIRTUALBOX_EXTRA_DRIVE_VDI
@@ -828,7 +828,7 @@ config HAVE_SUSE_VAGRANT
 	default $(shell, scripts/check_distro_kconfig.sh suse)
 
 choice
-	prompt "Vagrant Guest Linux distribution to use"
+	prompt "Vagrant guest Linux distribution to use"
 	default VAGRANT_DEBIAN if !HAVE_SUSE_VAGRANT
 	default VAGRANT_SUSE if HAVE_SUSE_VAGRANT
 
@@ -875,7 +875,7 @@ config VAGRANT_SUSE
 	select HAVE_CUSTOM_KDEVOPS_DIR
 	help
 	  This option will set the target guest to SUSE. There is currently
-	  no scriptable way to download vagrant images, however the images
+	  no scriptable way to download Vagrant images, however the images
 	  are available for download via:
 
 	    https://suse.com/download
@@ -891,12 +891,12 @@ config VAGRANT_FEDORA
 	  This option will set the target guest to Fedora.
 
 config VAGRANT_REDHAT_GENERIC
-	bool "Redhat generic"
+	bool "Red Hat generic"
 	select HAVE_CUSTOM_DISTRO_HOST_PREFIX
 	select HAVE_DISTRO_PREFERS_CUSTOM_HOST_PREFIX
 	help
-	  This option will set the target guest to Redhat using the generic
-	  vagrant source as the author. In other words, you are on your own
+	  This option will set the target guest to Red Hat using the generic
+	  Vagrant source as the author. In other words, you are on your own
 	  with these. And you won't be able to do much with these guests
 	  other than get a base guest up. Patches are welcomed to enable
 	  registration to make them more useful.
@@ -945,29 +945,29 @@ config VAGRANT_BOX
 	default "linux-kdevops/debian-xfs-20230427" if VAGRANT_KDEVOPS_DEBIAN_TESTING64_XFS_20230427 || !VAGRANT
 	default VAGRANT_SUSE_BOX if VAGRANT_SUSE
 	help
-	  The vagrant box to use.
+	  The Vagrant box to use.
 
 config VAGRANT_BOX_UPDATE_ON_BRINGUP
-	bool "Run vagrant box update prior to bringup"
+	bool "Run Vagrant box update prior to bringup"
 	default y
 	help
-	  When you use vagrant on a system the target box for the distribution
+	  When you use Vagrant on a system the target box for the distribution
 	  will first be downloaded on its first use. It will not be updated
 	  until you manually run "vagrant box update" on the respective vagrant
 	  directory. This can mean that if your system first used kdevops in
-	  January 2022 and you are using debian-testing, the old version of
-	  debian testing as of January 2022 will be used if you try to
+	  January 2022 and you are using Debian testing, the old version of
+	  Debian testing as of January 2022 will be used if you try to
 	  instantiate a guest in January 2023. This can means your userspace
 	  may be too old to deal with some new kernel features. An example
 	  is zstd module support for initframfs does not work well with old
-	  userspace on debian-testing. The boot will fail when trying to
+	  userspace on Debian testing. The boot will fail when trying to
 	  run "make linux" and it would not be clear why, the reason would be
 	  a failed ext4 module could not be loaded, in fact no modules could
 	  be loaded by the initramfs. To fix the user experience we ensure we
 	  always run "vagrant box update" as the first step to "make bringup".
 
 	  Folks testing stable kernels will use stable distributions, such as
-	  debian bullseye that don't move userspace as often but in fact welcome
+	  Debian bullseye that don't move userspace as often but in fact welcome
 	  their own stable updates to userspace, and this is why this is kept
 	  as enabled by default.
 
@@ -978,7 +978,7 @@ config VAGRANT_BOX_UPDATE_ON_BRINGUP
 	  "make bringup" again. If you are already on an old box and don't
 	  want to destroy your current box image you can just upgrade userspace
 	  manually by the typical distro means to update itself. For example
-	  on debian-testing that's "apt-get update && apt-get dist-upgrade".
+	  on Debian testing that's "apt-get update && apt-get dist-upgrade".
 
 config VAGRANT_BOX_UPDATE_ON_BRINGUP
 	bool "Validate Vagrantfile prior to bringup"
@@ -1020,7 +1020,7 @@ config VAGRANT_BOX_VERSION
 	default "1.0.20210203" if VAGRANT_OPENSUSE_X86_64_TW_1020210203
 	default "0.1.0" if VAGRANT_KDEVOPS_DEBIAN_TESTING64_NEXT_20220629
 	help
-	  The vagrant box version to use. This is set for you depending on the
+	  The Vagrant box version to use. This is set for you depending on the
 	  image you select. You can manually override the version we have last
 	  tested here.
 
@@ -1035,11 +1035,11 @@ config VAGRANT_BOX_VERSION
 endif # !HAVE_VAGRANT_BOX_VERSION
 
 config VAGRANT_LIBVIRT_INSTALL
-	bool "Installs libvirt"
+	bool "Install libvirt"
 	default y if KDEVOPS_FIRST_RUN
 	default n if !KDEVOPS_FIRST_RUN
 	help
-	  If this option is enabled then the ansible role which installs
+	  If this option is enabled then the Ansible role which installs
 	  libvirt for you will be run. The goal will be to ensure you have
 	  libvirt installed and running.
 
@@ -1048,7 +1048,7 @@ config VAGRANT_LIBVIRT_CONFIGURE
 	default y if KDEVOPS_FIRST_RUN
 	default n if !KDEVOPS_FIRST_RUN
 	help
-	  If this option is enabled then the ansible role which configures
+	  If this option is enabled then the Ansible role which configures
 	  libvirt for you will be run. This typically just requires adding the
 	  user to a specific set of groups. The user must log out and back
 	  in again, to ensure the new group takes effect. The goal in the
@@ -1066,24 +1066,24 @@ config VAGRANT_LIBVIRT_VERIFY
 	  To enable a user to be able to spawn libvirt guests as a regular user
 	  a user is typically added to a few groups. These groups are not
 	  effective immediately, and so before a user can assume that they
-	  use vagrant they must verify that the required groups are effective.
-	  If you enable this option, we will spawn an ansible role that will
-	  verfify and ensure that your user is already part of these groups.
+	  use Vagrant they must verify that the required groups are effective.
+	  If you enable this option, we will spawn an Ansible role that will
+	  verify and ensure that your user is already part of these groups.
 	  You can safely say yes here.
 
 config VAGRANT_INSTALL_PRIVATE_BOXES
-	bool "Install private vagrant boxes"
+	bool "Install private Vagrant boxes"
 	default y
 	help
-	  If this option is enabled then the ansible role which installs
-	  additional vagrant boxes will be run. This is useful if for example,
-	  you have private vagrant boxes available and you want to use them.
+	  If this option is enabled then the Ansible role which installs
+	  additional Vagrant boxes will be run. This is useful if for example,
+	  you have private Vagrant boxes available and you want to use them.
 	  You can safely disable this option if you are using only public
-	  vagrant boxes. Enabling this option is safe as well, given no
+	  Vagrant boxes. Enabling this option is safe as well, given no
 	  private boxes would be defined, and so nothing is done.
 
 choice
-	prompt "Libvirt nvme drive file format"
+	prompt "Libvirt NVMe drive file format"
 	depends on VAGRANT_LIBVIRT
 	default LIBVIRT_NVME_DRIVE_FORMAT_RAW
 
@@ -1091,16 +1091,16 @@ config LIBVIRT_NVME_DRIVE_FORMAT_QCOW2
 	bool "Use qcow2 format"
 	help
 	  Select this option if you want to use the qcow2 file format for the
-	  nvme drives created for you. This is useful if you want to use
+	  NVMe drives created for you. This is useful if you want to use
 	  advanced features on the files such as growing them or freezing
 	  them. There may be some odd issues however with very sub-optimal
 	  features such as with discard, however these issues are still being
-	  investingated.
+	  investigated.
 
 config LIBVIRT_NVME_DRIVE_FORMAT_RAW
 	bool "Use raw format"
 	help
-	  Select this option if you want to use the raw file format for the nvme
+	  Select this option if you want to use the raw file format for the NVMe
 	  drives created for you. One of the sweet spots for using raw and 4KiB
 	  block sizes is the advantages of ensuring that when a filesystem
 	  issues a punch hole through fallocate (FALLOC_FL_PUNCH_HOLE) write
@@ -1111,16 +1111,16 @@ config LIBVIRT_NVME_DRIVE_FORMAT_RAW
 	  fallocate (punch) holes on a filesystem with a smaller block
 	  size than the default qcow2 cluster size (say 4 KiB), and so in
 	  theory, this may cause undeterministic delays. In practice this may
-	  end up in nvme timeouts, but these issues are currently being
-	  investigated, and if using the raw format proves to not cause nvme
+	  end up in NVMe timeouts, but these issues are currently being
+	  investigated, and if using the raw format proves to not cause NVMe
 	  timeouts as observed with fstests punch tests while the backend
 	  drive has low space (below 80%) this may become the default for
-	  kdevops as it reflects a possible bug in qemu.
+	  kdevops as it reflects a possible bug in QEMU.
 
 endchoice
 
 config QEMU_ENABLE_NVME_ZNS
-	bool "Enable Qemu NVMe ZNS drives"
+	bool "Enable QEMU NVMe ZNS drives"
 	depends on VAGRANT_LIBVIRT && LIBVIRT_EXTRA_STORAGE_DRIVE_NVME
 	default n
 	help
@@ -1128,7 +1128,7 @@ config QEMU_ENABLE_NVME_ZNS
 	  guests.
 
 config QEMU_CUSTOM_NVME_ZNS
-	bool "Customize Qemu NVMe ZNS settings"
+	bool "Customize QEMU NVMe ZNS settings"
 	depends on QEMU_ENABLE_NVME_ZNS
 	default n
 	help
@@ -1147,36 +1147,36 @@ config QEMU_CUSTOM_NVME_ZNS
 if QEMU_CUSTOM_NVME_ZNS
 
 config QEMU_CUSTOM_NVME_ZONE_DRIVE_SIZE
-	int "Qemu ZNS storage nvme drive size"
+	int "QEMU ZNS storage NVMe drive size"
 	default 102400
 	help
-	  The size of the qemu nvme ZNS drive to expose. We expose 2 NVMe
+	  The size of the QEMU NVMe ZNS drive to expose. We expose 2 NVMe
 	  ZNS drives of 100 GiB by default. This value chagnes its size.
 	  100 GiB is a sensible default given most full fstests require about
 	  50 GiB of data writes.
 
 config QEMU_CUSTOM_NVME_ZONE_ZASL
-	int "Qemu ZNS zasl - zone append size limit power of 2"
+	int "QEMU ZNS zasl - zone append size limit power of 2"
 	default 0
 	help
-	  This is the zone append size limit. If left at 0 qemu will use
+	  This is the zone append size limit. If left at 0 QEMU will use
 	  the maximum data transfer size (MDTS) for the zone size append limit.
 	  Otherwise if this value is set to something other than 0, then the
 	  zone size append limit will equal to 2 to the power of the value set
 	  here multiplied by the minimum memory page size (4096 bytes) but the
-	  qemu promises this value cannot exceed the maximum data transfer size.
+	  QEMU promises this value cannot exceed the maximum data transfer size.
 
 config QEMU_CUSTOM_NVME_ZONE_SIZE
-	string "Qemu ZNS storage nvme zone size"
+	string "QEMU ZNS storage NVMe zone size"
 	default "128M"
 	help
-	  The size the the qemu nvme ZNS zone size. The number of zones are
+	  The size the the QEMU NVMe ZNS zone size. The number of zones are
 	  implied by the driver size / zone size. If there is a remainder
 	  technically that should go into another zone with a smaller zone
 	  capacity.
 
 config QEMU_CUSTOM_NVME_ZONE_CAPACITY
-	string "Qemu ZNS storage nvme zone capacity"
+	string "QEMU ZNS storage NVMe zone capacity"
 	default "0M"
 	help
 	  The size to use for the zone capacity. This may be smaller or equal
@@ -1184,14 +1184,14 @@ config QEMU_CUSTOM_NVME_ZONE_CAPACITY
 	  capacity is equal to the zone size.
 
 config QEMU_CUSTOM_NVME_ZONE_MAX_ACTIVE
-	int "Qemu ZNS storage nvme zone max active"
+	int "QEMU ZNS storage NVMe zone max active"
 	default 0
 	help
 	  The max numbe of active zones. The default of 0 means all zones
 	  can be active at all times.
 
 config QEMU_CUSTOM_NVME_ZONE_MAX_OPEN
-	int "Qemu ZNS storage nvme zone max open"
+	int "QEMU ZNS storage NVMe zone max open"
 	default 0
 	help
 	  The max numbe of open zones. The default of 0 means all zones
@@ -1199,7 +1199,7 @@ config QEMU_CUSTOM_NVME_ZONE_MAX_OPEN
 	  specified this value must be less than or equal to that value.
 
 config QEMU_CUSTOM_NVME_ZONE_PHYSICAL_BLOCKSIZE
-	int "Qemu ZNS storage nvme physical block size"
+	int "QEMU ZNS storage NVMe physical block size"
 	default 4096
 	help
 	  The physical block size to use for ZNS drives. This ends up
@@ -1212,7 +1212,7 @@ config QEMU_CUSTOM_NVME_ZONE_PHYSICAL_BLOCKSIZE
 	  physical_block_size of the component devices.
 
 config QEMU_CUSTOM_NVME_ZONE_LOGICAL_BLOCKSIZE
-	int "Qemu ZNS storage nvme logical block size"
+	int "QEMU ZNS storage NVMe logical block size"
 	default 4096
 	help
 	  The logical block size to use for ZNS drives. This ends up what is
@@ -1267,7 +1267,7 @@ config QEMU_NVME_ZONE_LOGICAL_BLOCKSIZE
 	default QEMU_CUSTOM_NVME_ZONE_LOGICAL_BLOCKSIZE if QEMU_CUSTOM_NVME_ZNS
 
 config QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
-	bool "Enable Qemu drives for large IO experimentation"
+	bool "Enable QEMU drives for large IO experimentation"
 	depends on VAGRANT_LIBVIRT
 	default n
 	help
@@ -1280,10 +1280,10 @@ config QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
 if QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
 
 config QEMU_EXTRA_DRIVE_LARGEIO_BASE_SIZE
-	int "Qemu extra drive drive base size"
+	int "QEMU extra drive drive base size"
 	default 10240
 	help
-	  The base size of the qemu extra storage drive to expose. The
+	  The base size of the QEMU extra storage drive to expose. The
 	  size is increased by 1 MiB as we go down the list of extra large IO
 	  drives.
 
@@ -1297,7 +1297,7 @@ config QEMU_EXTRA_DRIVE_LARGEIO_COMPAT
 	  you want to ensure your large IO drives always have a logical block
 	  size restrained by the compatibility size you want to support.
 
-	  By default this is not enabled, and thereore the logical block size
+	  By default this is not enabled, and therefore the logical block size
 	  for the large IO drives will be equal to the physical block size.
 
 config QEMU_EXTRA_DRIVE_LARGEIO_COMPAT_SIZE
@@ -1349,7 +1349,7 @@ config QEMU_LARGEIO_MAX_POW_LIMIT
 	default QEMU_EXTRA_DRIVE_LARGEIO_MAX_POW_LIMIT if QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
 
 config QEMU_ENABLE_CXL
-	bool "Enable Qemu CXL devices"
+	bool "Enable QEMU CXL devices"
 	depends on VAGRANT_LIBVIRT
 	depends on LIBVIRT_MACHINE_TYPE_Q35
 	depends on QEMU_USE_DEVELOPMENT_VERSION
@@ -1367,7 +1367,7 @@ choice
 config QEMU_ENABLE_CXL_DEMO_TOPOLOGY_1
 	bool "Basic CXL demo topology with a CXL Type 3 device"
 	help
-	  This is a basic CXL demo topology. It consists of single host brige that
+	  This is a basic CXL demo topology. It consists of single host bridge that
 	  has one root port. A Type 3 persistent memory device is attached to the
 	  root port. This topology is referred to as a passthrough decoder in
 	  kernel terminology. The kernel CXL core will consume the resource exposed

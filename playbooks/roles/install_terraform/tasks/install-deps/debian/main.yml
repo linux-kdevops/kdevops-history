@@ -1,12 +1,12 @@
 ---
-- name: Verify terraform installation
+- name: Verify Terraform installation
   command: "which terraform"
   register: terraform_present
   changed_when: terraform_present.rc == 1
   failed_when: terraform_present.rc != 0 and terraform_present.rc != 1
   tags: [ 'terraform', 'verify' ]
 
-- name: Downlaod terraform from the latest release and install locally
+- name: Download Terraform from the latest release and install locally
   become: yes
   become_method: sudo
   unarchive:

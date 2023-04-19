@@ -57,7 +57,7 @@
     - vagrant_present.rc != 0
     - is_tumbleweed
 
-- name: Download vagrant from the latest release and install locally
+- name: Download Vagrant from the latest release and install locally
   become: yes
   become_method: sudo
   unarchive:

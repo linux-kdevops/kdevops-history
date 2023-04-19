@@ -45,7 +45,7 @@
     - force_install_if_present|bool or vagrant_present.rc != 0
   tags: install
 
-- name: Downlaod vagrant from the latest release and install locally
+- name: Download Vagrant from the latest release and install locally
   become: yes
   become_method: sudo
   unarchive:

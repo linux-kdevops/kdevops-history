@@ -12,7 +12,7 @@
   when:
     - postfix_relay_host_setup|bool
 
-- name: check to see if /etc/postfix/main.cf exists
+- name: Check to see if /etc/postfix/main.cf exists
   become: yes
   become_flags: 'su - -c'
   become_method: sudo

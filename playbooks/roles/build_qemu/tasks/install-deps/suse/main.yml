@@ -5,7 +5,7 @@
     is_leap: '{{ "Leap" in ansible_distribution }}'
     is_tumbleweed: '{{ "openSUSE Tumbleweed" == ansible_distribution }}'
 
-- name: Install qemu build dependencies
+- name: Install QEMU build dependencies
   become: yes
   become_method: sudo
   zypper:

@@ -151,7 +151,7 @@
     group: "root"
     mode: 0644
 
-- name: source .kdevops_fstests_setup for root if it is not already done
+- name: Source .kdevops_fstests_setup for root if it is not already done
   vars:
     dev_bash_config: ".bashrc"
   become: yes
@@ -322,7 +322,7 @@
     - fstests_section != "all"
 
 # We have to set the environment variables explicitly because some distros
-# or systems might have on /etc/sudeors env_reset enabled, which gives us
+# or systems might have on /etc/sudoers env_reset enabled, which gives us
 # as root a clean slate of variables.
 - name: Generate loopback disks using sparefiles with gendisk.sh
   tags: [ 'oscheck', 'fstests', 'run_tests', 'gendisks' ]

@@ -439,7 +439,7 @@
     - devconfig_try_install_kdevtools|bool
   tags: kdump
 
-- name: get kdump calibration high
+- name: Get kdump calibration high
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -451,7 +451,7 @@
     - devconfig_try_install_kdevtools|bool
   tags: kdump
 
-- name: get kdump calibration low
+- name: Get kdump calibration low
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -463,7 +463,7 @@
     - devconfig_try_install_kdevtools|bool
   tags: kdump
 
-- name: Check to see if kdump is configured on your grub config
+- name: Check to see if kdump is configured on your GRUB config
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -479,7 +479,7 @@
     - devconfig_try_install_kdevtools|bool
   tags: [ 'kdump' ]
 
-- name: Update grub configuration to add kdump knobs
+- name: Update GRUB configuration to add kdump knobs
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -495,7 +495,7 @@
     - devconfig_try_install_kdevtools|bool
   tags: [ 'kdump' ]
 
-- name: Update your boot grub file if necessary
+- name: Update your boot GRUB file if necessary
   import_tasks: update-grub/main.yml
   when:
     - not kdump_grep.changed

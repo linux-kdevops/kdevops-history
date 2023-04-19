@@ -37,16 +37,16 @@ use the benefit of zswap for compressing certain amount of memory. This
 holds true so long as zswap doesn't actually evict pages from memory to
 disk. We can verify this as follows:
 
-```bash                                                                         
+```bash
 cat /sys/kernel/debug/zswap/written_back_pages
 0
-```  
+```
 
 In this case, 0 indicates that there is nothing from zswap touching disk.
 Additionally, with the default setting of max pool percentage of 20%
 it means zswap will use up to 20% of compressed pool in-memory total,
 and once the amount of compressed pool in-memory used by zswap passes
-this threhold it will start evicting to memory disk. We want to avoid
+this threshold it will start evicting to memory disk. We want to avoid
 evicting to disk as much as possible, and so we recommend increasing this
 to 90%. To enable zswap on kdevops just enable CONFIG_HYPERVISOR_TUNING_ZSWAP.
 To use the recommended value enable for the max pool percent to try ensure

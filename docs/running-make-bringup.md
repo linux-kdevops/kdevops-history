@@ -14,7 +14,7 @@ At this point you should be able to run:
 
   * `ssh kdevops`
 
-The host name is set up through the kconfig symbol `CONFIG_KDEVOPS_HOSTS_PREFIX`.
+The host name is set up through the Kconfig symbol `CONFIG_KDEVOPS_HOSTS_PREFIX`.
 There are sensible defaults set up for this depending on your virtualization or
 cloud environment, but you should always be aware of what this is going to be
 set up with. To verify you can just:
@@ -31,7 +31,7 @@ grep CONFIG_KDEVOPS_HOSTS_PREFIX .config
 
 ## The devconfig playbook
 
-The devconfig playbook is an ansible playbook which is run after your
-nodes are brought up. This installs your .gitconfig, prefered bash hack sripts,
+The devconfig playbook is an Ansible playbook which is run after your
+nodes are brought up. This installs your .gitconfig, preferred bash hack scripts,
 .vimrc, etc. But it also installs a set of packages you likely want installed
 on most systems. This is all configurable.

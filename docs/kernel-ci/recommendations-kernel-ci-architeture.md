@@ -37,7 +37,7 @@ mkfs parameters.
 
 Your host requirements can evolve to support just one filesystem and one
 kernel release, to supporting different filesystems and different kernel
-releases. Let us at least strive to support testing btrfs, xfs and ext4 on
+releases. Let us at least strive to support testing BTRFS, XFS and ext4 on
 at least few kernel releases. Maybe a few stable releases and linux-next.
 Maybe you want to be able to generate tests based on a new development
 branch released which is not yet merged. An assumption here is of course, that

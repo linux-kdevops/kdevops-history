@@ -1,4 +1,4 @@
-# Distributions actively maintaining btrfs support should select this and then
+# Distributions actively maintaining BTRFS support should select this and then
 # be careful to select any of the other HAVE_DISTRO_BTRFS_* below so that
 # testers can know what to test for.
 config HAVE_DISTRO_BTRFS_PREFERS_MANUAL
@@ -15,7 +15,7 @@ config FSTESTS_BTRFS_MANUAL_COVERAGE
 	default n if !HAVE_DISTRO_BTRFS_PREFERS_MANUAL
 	help
 	  By default we aim to spawn enough hosts to cover testing the full
-	  range of supported features upstream on the Linux kernel for btrfs,
+	  range of supported features upstream on the Linux kernel for BTRFS,
 	  and for you to also be able to do development on each section
 	  concurrently. Distributions however may override sensible defaults
 	  and only support certain features. Enabling this option lets you
@@ -82,16 +82,16 @@ config FSTESTS_BTRFS_ENABLES_HOLES
 	bool "Enable testing holes profiles"
 	default y
 	help
-	  Enable this to allow you to test btrfs test profiles which don't
+	  Enable this to allow you to test BTRFS test profiles which don't
 	  enable the no-holes, nor the free space feature. Since the no-holes
-	  feature was added as of v3.14, enablint this will let you test
-	  btrfs for older kernels.
+	  feature was added as of v3.14, enabling this will let you test
+	  BTRFS for older kernels.
 
 config FSTESTS_BTRFS_ENABLES_NOHOLES
 	bool "Enable testing no-holes profiles"
 	default y
 	help
-	  Enable this to allow you to test btrfs test profiles which enable
+	  Enable this to allow you to test BTRFS test profiles which enable
 	  the no-holes feature. The no-holes feature saves a few percent of
 	  metadata when sparse files are used. btrfs-progs enables it as
 	  default as of 5.15, and kernel support was added since v3.14.
@@ -100,7 +100,7 @@ config FSTESTS_BTRFS_ENABLES_FSPACE
 	bool "Enable testing free-space-tree profiles"
 	default y
 	help
-	  Enable this to allow you to test btrfs test profiles which enable
+	  Enable this to allow you to test BTRFS test profiles which enable
 	  free-space-tree feature. The free-space-tree feature persists the
 	  free space cache. btrfs-progs enables it as default as of 5.15, and
 	  kernel support was added since v4.5. This can either be enabled
@@ -111,7 +111,7 @@ config FSTESTS_BTRFS_ENABLES_NOHOFSPACE
 	bool "Enable testing no-holes + free-space-tree profiles"
 	default y
 	help
-	  Enable this to allow you to test btrfs test profiles which enable
+	  Enable this to allow you to test BTRFS test profiles which enable
 	  both the no-holes and free-space-tree feature.
 
 if FSTESTS_BTRFS_ENABLES_HOLES
@@ -273,7 +273,7 @@ config FSTESTS_BTRFS_SECTION_SIMPLE
 	  This will use the following simple profile for data and metadata.
 	  This profile is used to help ensure that issues found when testing
 	  with ZNS are not present with the respective simple profile without
-	  ZNS. We don't expect many folks using btrfs to use the simple profile
+	  ZNS. We don't expect many folks using BTRFS to use the simple profile
 	  but it is supported, so we might as well test it.
 
 config FSTESTS_BTRFS_SECTION_SIMPLE_ZNS

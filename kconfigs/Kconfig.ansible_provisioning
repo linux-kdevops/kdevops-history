@@ -52,24 +52,24 @@ config KDEVOPS_DEVCONFIG_KERNEL_CONSOLE_SETTINGS
 	default "console=tty0 console=tty1 console=ttyS0,115200n8"
 	  help
           Linux kernel console kernel parameters to use. This will be appended
-	  to the grub configuration file /etc/default/grub on the variable
+	  to the GRUB configuration file /etc/default/grub on the variable
           GRUB_CMDLINE_LINUX_DEFAULT, if and only if you did not have any
           console settings already set.
 
 config KDEVOPS_DEVCONFIG_GRUB_SERIAL_COMMAND
-	string "Grub specific serial settings"
+	string "GRUB specific serial settings"
 	default "serial --speed=115200 --unit=0 --parity=no --stop=1"
 	  help
-          Grub console settings to use. This will be appended to the grub
+          GRUB console settings to use. This will be appended to the GRUB
           configuration file /etc/default/grub on the variable
           GRUB_SERIAL_COMMAND, if and only if we did change the your console
           settings as per the above configured kernel parameters passed.
 
 config KDEVOPS_GRUB_TIMEOUT
-	int "Grub timeout"
+	int "GRUB timeout"
 	default 2
 	  help
-          Grub timeout to wait for user interaction to let you pick another
+          GRUB timeout to wait for user interaction to let you pick another
           kernel or boot options.
 
 endif # KDEVOPS_DEVCONFIG_ENABLE_CONSOLE

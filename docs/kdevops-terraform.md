@@ -1,8 +1,8 @@
 # Terraform support
 
-kdevops allows you to provide variability for terraform using kconfig,
-and uses ansible to deploy the files needed to get you going with
-a terraform plan.
+kdevops allows you to provide variability for Terraform using kconfig,
+and uses Ansible to deploy the files needed to get you going with
+a Terraform plan.
 
 Terraform is used to deploy your development hosts on cloud virtual machines.
 Below are the list of clouds providers currently supported:
@@ -27,7 +27,7 @@ make menuconfig
 ```
 
 Under "Bring up methods" you will see the option for
-"Node bring up method (Vagrant for local virtualization (KVM / Virtualbox))".
+"Node bring up method (Vagrant for local virtualization (KVM / VirtualBox))".
 Click on that and then change the option to "Terraform for cloud environments".
 That should let you start configuring your cloud provider options. You can
 use the same main menu to configure specific workflows supported by kdevops,
@@ -35,13 +35,13 @@ by defaults no workflows are enabled, and so all you get is the bringup.
 
 ## Installing dependencies
 
-To instal the dependencies of everything which you just enabled just run:
+To install the dependencies of everything which you just enabled just run:
 
 ```bash
 make
 ```
 
-## Provisioning (bringup) with terraform
+## Provisioning (bringup) with Terraform
 
 You can just use:
 
@@ -60,30 +60,30 @@ terraform init
 terraform plan
 terraform apply
 ```
-### Terraform ssh config update - The add-host-ssh-config terraform module
+### Terraform SSH config update - The add-host-ssh-config Terraform module
 
-We provide support for updating your configured ssh configuration file
+We provide support for updating your configured SSH configuration file
 (typically `~/.ssh/config`) automatically for you, however each cloud provider
 requires support to be added in order for this to work. At the time of this
 writing we support this for all cloud providers we support.
 
-After `make bringup` you should have had your ssh configuration file updated
-automatically with the provisioned hosts. The terraform module
-`add-host-ssh-config` is used to do the work of updating your ssh configuration,
-a module is used to share the code with provioning with vagrant.
+After `make bringup` you should have had your SSH configuration file updated
+automatically with the provisioned hosts. The Terraform module
+`add-host-ssh-config` is used to do the work of updating your SSH configuration,
+a module is used to share the code with provisioning with vagrant.
 
-The terraform module on the registry:
+The Terraform module on the registry:
 
   * https://registry.terraform.io/modules/mcgrof/add-host-ssh-config/kdevops/latest
 
-The terraform source code:
+The Terraform source code:
 
   * https://github.com/mcgrof/terraform-kdevops-add-host-ssh-config
 
-Because the same code is shared between the vagrant ansible role and the
-terraform module, a git subtree is used to maintain the shared code. The
-terraform code downloads the module on its own, while the code for
-the vagrant ansible role has the code present on the kdevops tree as
+Because the same code is shared between the vagrant Ansible role and the
+Terraform module, a git subtree is used to maintain the shared code. The
+Terraform code downloads the module on its own, while the code for
+the Vagrant Ansible role has the code present on the kdevops tree as
 part of its local directories in under:
 
   * `playbooks/roles/update_ssh_config_vagrant/update_ssh_config/`
@@ -97,7 +97,7 @@ read the documentation on:
 
  * [update_ssh_config documentation](playbooks/roles/update_ssh_config_vagrant/update_ssh_config/README.md)
 
-## Destroying nodes with terraform
+## Destroying nodes with Terraform
 
 Just run:
 
@@ -114,9 +114,9 @@ terraform destroy
 
 # If provisioning failed
 
-We run the devconfig ansible role after we update your ssh configuration,
+We run the devconfig Ansible role after we update your SSH configuration,
 as part of the bring up process. If can happen that this can fail due to
-connectivity issues. In such cases, you can run the ansible role yourself
+connectivity issues. In such cases, you can run the Ansible role yourself
 manually:
 
 ```bash
@@ -128,14 +128,14 @@ which we are aware of that we need to pass in as extra arguments to
 the roles we support we automatically build an `extra_vars.yaml` with all
 known extra arguments. We do use this for one argument for the devconfig
 role, and a series of these for the bootlinux role. The `extra_args.yaml`
-file is read by all kdevops ansible roles, it does this on each role with
+file is read by all kdevops Ansible roles, it does this on each role with
 a task, so that users do not have to specify the
 `--extra-args=@extra_args.yaml` argument themselves. We however strive to
 make inferences for sensible defaults for most things.
 
-## Running ansible for worklows
+## Running Ansible for workflows
 
-Before running ansible make sure you can ssh into the hosts listed on
+Before running Ansible make sure you can SSH into the hosts listed on
 ansible/hosts.
 
 ```bash
@@ -147,7 +147,7 @@ documentation.
 
 ## Getting set up with cloud providers
 
-To get set up with cloud providers with terraform we provide some more
+To get set up with cloud providers with Terraform we provide some more
 references below which are specific to each cloud provider.
 
 
@@ -168,13 +168,13 @@ $ openssl x509 -signkey "service-principal.key" -in "service-principal.csr" -req
 $ openssl pkcs12 -export -out "service-principal.pfx" -inkey "service-principal.key" -in "service-principal.crt"
 ```
 
-Use the documentation to get your tentant ID, the applicaiton id, the
+Use the documentation to get your tenant ID, the application id, the
 subscription ID. You will need this to set these variables up:
 
 ```
 $ cat terraform.tfvars
 client_certificate_path = "./service-principal.pfx"
-client_certificate_password = "my-cool-passworsd"
+client_certificate_password = "my-cool-password"
 tenant_id = "SOME-GUID"
 application_id = "SOME-GUID"
 subscription_id = "SOME-GUID"
@@ -183,7 +183,7 @@ subscription_id = "SOME-GUID"
 limit_boxes = "yes"
 limit_num_boxes = 2
 
-# Updating your ssh config not yet supported on Azure :(
+# Updating your SSH config not yet supported on Azure :(
 ssh_config_pubkey_file = "~/.ssh/minicloud.pub"
 ssh_config_user = "yourcoolusername"
 ssh_config = "~/.ssh/config"
@@ -200,9 +200,9 @@ considerably.
 
 #### Minicloud Openstack support
 
-minicloud has a custom setup where the you have to ssh with a special port
+minicloud has a custom setup where the you have to SSH with a special port
 depending on the IP address you get, if you enable minicloud we do this
-computation for you and tell you where to ssh to, but we also have support
+computation for you and tell you where to SSH to, but we also have support
 to update your ~/ssh/config for you.
 
 Please note that minicloud takes a while to update its ports / mac address
@@ -248,7 +248,7 @@ aws_secret_access_key = SECRET_KEY
 ```
 
 The profile above is "default", and you can multiple profiles. By default
-our tarraform's aws vars.tf assumes ~/.aws/credentials as the default
+our Terraform's AWS vars.tf assumes ~/.aws/credentials as the default
 credentials location, and the profile as "default". If this is different
 for you, you can override with the variables:
 
@@ -277,14 +277,14 @@ ssh_config_use_strict_settings = "true"
 ssh_config_backup = "true"
 ```
 
-To read more about shared credentails refer to:
+To read more about shared credentials refer to:
 
   * https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html
   * https://docs.aws.amazon.com/powershell/latest/userguide/shared-credentials-in-aws-powershell.html
 
-### GCE - Google Cloude Compute
+### GCE - Google Compute Engine
 
-This ansible role also supports the GCE on terraform. Below is an example
+This Ansible role also supports the GCE on Terraform. Below is an example
 terraform.tfvars you may end up with:
 
 ```
@@ -303,10 +303,10 @@ ssh_config_use_strict_settings = "true"
 ssh_config_backup = "true"
 ```
 
-To ramp up, you'll need to get the json for your service account through
-the IMA interface. This is documented below. The default name for the
-json credentails file is account.json, you can override this and its
-path with:
+To ramp up, you'll need to get the JSON for your service account through
+the Identity and Access Management (IAM) interface. This is documented below.
+The default name for the JSON credentials file is account.json, you can
+override this and its path with:
 
 ```
 credentials = /home/foo/path/to/some.json
@@ -316,6 +316,6 @@ https://www.terraform.io/docs/providers/google/getting_started.html
 https://www.terraform.io/docs/providers/google/index.html
 https://cloud.google.com/iam/docs/granting-roles-to-service-accounts#granting_access_to_a_service_account_for_a_resource
 
-### OCI - Oracle Cloud Infrastrucure
+### OCI - Oracle Cloud Infrastructure
 
 Someone give me some love.

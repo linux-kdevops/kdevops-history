@@ -6,7 +6,7 @@
     update_cache: yes
   tags: linux
 
-- name: Force dbench compilation on debian
+- name: Force dbench compilation on Debian
   set_fact:
     compile_dbench: False
 

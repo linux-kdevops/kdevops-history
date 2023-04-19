@@ -12,6 +12,6 @@ development and testing as fast as possible.
 # Fork me
 
 You can either fork this project to start your own kdevops project, or you can
-rely on the bare bones `kdevops_install` ansible galaxy role to get going and
-use this project as an example of how to use that ansible role.
+rely on the bare bones `kdevops_install` Ansible galaxy role to get going and
+use this project as an example of how to use that Ansible role.
 

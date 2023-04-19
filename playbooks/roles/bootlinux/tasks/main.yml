@@ -54,17 +54,17 @@
   when:
     - infer_uid_and_group|bool
 
-- name: set target user as a fact
+- name: Set target user as a fact
   set_fact:
     target_user: "{{ username_on_target.stdout }}"
   when:
     - infer_uid_and_group|bool
 
-- name: set hostname_ends_in_dev as a fact
+- name: Set hostname_ends_in_dev as a fact
   set_fact:
     hostname_ends_in_dev: "{{ ansible_hostname | regex_search('^.*-dev$') is not none }}"
 
-- name: Run getent againt that the inferred target user
+- name: Run getent against the inferred target user
   getent:
     database: passwd
     key: "{{ target_user }}"
@@ -72,7 +72,7 @@
   when:
     - infer_uid_and_group|bool
 
-- name: Run getent againt the inferred target group
+- name: Run getent against the inferred target group
   getent:
     database: group
     key: "{{ target_user }}"
@@ -103,7 +103,7 @@
 
 # Distro agnostic stuff to build and boot Linux goes below
 
-- name: mount bootlinux 9p and add to fstab if it does not exist
+- name: Mount bootlinux 9p and add to fstab if it does not exist
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -261,7 +261,7 @@
   run_once: true
   delegate_to: localhost
 
-- name: Copy configuration for linux {{ target_linux_tree }} on the client side
+- name: Copy configuration for Linux {{ target_linux_tree }} on the client side
   template:
     src: "{{ target_linux_config }}"
     dest: "{{ target_linux_dir_path }}/.config"
@@ -272,7 +272,7 @@
   when:
     - not bootlinux_9p|bool
 
-- name: Copy configuration for linux {{ target_linux_tree }} on the host side
+- name: Copy configuration for Linux {{ target_linux_tree }} on the host side
   template:
     src: "{{ target_linux_config }}"
     dest: "{{ bootlinux_9p_host_path }}/.config"
@@ -299,7 +299,7 @@
   run_once: true
   delegate_to: localhost
 
-- name: Configure linux {{ target_linux_tree }} on the client side
+- name: Configure Linux {{ target_linux_tree }} on the client side
   shell: |
     set -o pipefail
     yes "" | make oldconfig
@@ -313,7 +313,7 @@
   when:
     - not bootlinux_9p|bool
 
-- name: Configure linux {{ target_linux_tree }} on the host side
+- name: Configure Linux {{ target_linux_tree }} on the host side
   shell: |
     set -o pipefail
     yes "" | make oldconfig
@@ -422,7 +422,7 @@
 
 # Say you want to remove a kernel you no longer care for:
 # ansible-playbook -i hosts --tags uninstall-linux --extra-vars "uninstall_kernel_ver=4.19.58" bootlinux.yml
-- name: Uninstall an old version of linux manually specified
+- name: Uninstall an old version of Linux manually specified
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -448,7 +448,7 @@
 # preferred first, and fallback to the serial as secondary
 # option. This let's us work with hardware serial consoles
 # say on IPMIs and virtual guests ('virsh console').
-- name: Ensure we can get the grub prompt on reboot
+- name: Ensure we can get the GRUB prompt on reboot
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -458,7 +458,7 @@
     line: GRUB_TERMINAL="console serial"
   tags: [ 'linux', 'git', 'config', 'console' ]
 
-- name: Update your boot grub file if necessary
+- name: Update your boot GRUB file if necessary
   tags: [ 'linux', 'uninstall-linux', 'manual-update-grub', 'console' ]
   import_tasks: update-grub/main.yml
 
@@ -504,7 +504,7 @@
   # when:
   #   - ansible_facts['os_family']|lower != 'redhat'
 
-- name: Reboot into linux {{ target_linux_tree }}
+- name: Reboot into Linux {{ target_linux_tree }}
   become: yes
   become_method: sudo
   reboot:

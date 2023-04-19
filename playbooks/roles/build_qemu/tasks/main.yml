@@ -10,7 +10,7 @@
       skip: true
   tags: vars
 
-- name: Verify local build qemu installation
+- name: Verify local build QEMU installation
   stat:
     path: "{{ qemu_bin_path }}"
   register: qemu_present
@@ -20,18 +20,18 @@
   when:
     - qemu_build|bool
 
-- name: Install build-deps for qemu as per each Linux distribution
+- name: Install build-deps for QEMU as per each Linux distribution
   include_tasks: install-deps/main.yml
   when:
     - qemu_build|bool
     - qemu_force_install_if_present|bool or not qemu_present.stat.exists
 
-- name: Assume we won't build qemu first
+- name: Assume we won't build QEMU first
   set_fact:
     build_qemu_now: False
   tags: vars
 
-- name: Annotate when we are building qemu
+- name: Annotate when we are building QEMU
   set_fact:
     build_qemu_now: True
   when:
@@ -47,7 +47,7 @@
   when:
     - build_qemu_now|bool
 
-- name: git clone qemu
+- name: git clone QEMU
   environment:
     GIT_SSL_NO_VERIFY:  true
   git:
@@ -65,7 +65,7 @@
   when:
     - build_qemu_now|bool
 
-- name: run configure for qemu
+- name: Run configure for QEMU
   command: "./configure --target-list={{ qemu_target }}"
   tags: [ 'qemu', 'configure' ]
   args:
@@ -80,7 +80,7 @@
   when:
     - build_qemu_now|bool
 
-- name: Build qemu
+- name: Build QEMU
   make:
     chdir: "{{ qemu_data }}"
     jobs: "{{ nproc.stdout }}"
@@ -88,7 +88,7 @@
   when:
     - build_qemu_now|bool
 
-- name: Install qemu
+- name: Install QEMU
   become: yes
   become_flags: 'su - -c'
   become_method: sudo

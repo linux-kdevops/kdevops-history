@@ -10,15 +10,15 @@
       skip: true
   tags: vars
 
-- name: get our user
+- name: Get our user
   command: "whoami"
   register: my_user
 
-- name: get our primary group
+- name: Get our primary group
   command: "id -g -n"
   register: my_group
 
-- name: verify ansible nodes template file exists {{ kdevops_nodes_template_full_path }}
+- name: Verify Ansible nodes template file exists {{ kdevops_nodes_template_full_path }}
   stat:
     path: "{{ kdevops_nodes_template_full_path }}"
   register: ansible_nodes_template
@@ -47,7 +47,7 @@
     - ansible_nodes_template.stat.exists
   tags: vars
 
-- name: verify fstest config file file exists {{ fs_config_path }}
+- name: Verify fstest config file file exists {{ fs_config_path }}
   stat:
     path: "{{ fs_config_path }}"
   register: fstests_config_file_reg
@@ -220,7 +220,7 @@
     - ansible_nodes_template.stat.exists
     - kdevops_baseline_and_dev
 
-- name: debug inferring block test types
+- name: Debug inferring block test types
   debug:
     var: blktests_enabled_test_types
   when:
@@ -288,7 +288,7 @@
     - kdevops_workflow_enable_selftests
     - ansible_nodes_template.stat.exists
 
-- name: verify vagrant template file exists {{ kdevops_vagrant_template_full_path }}
+- name: Verify vagrant template file exists {{ kdevops_vagrant_template_full_path }}
   stat:
     path: "{{ kdevops_vagrant_template_full_path }}"
   register: vagrant_template

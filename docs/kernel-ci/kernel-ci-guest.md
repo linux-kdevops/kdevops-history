@@ -1,12 +1,12 @@
 # kernel-ci guest requirements
 
-Today the most complex filesystems to test is are XFS and btrfs filesystem.
+Today the most complex filesystems to test is are XFS and BTRFS filesystem.
 XFS requires testing at least 9 different configurations on x86_64, each
-configuration representing one diferent xfs filesystem created with different
-mkfs.xfs parameters. For btrfs we have now 19 possible configurations to test
+configuration representing one different XFS filesystem created with different
+mkfs.xfs parameters. For BTRFS we have now 19 possible configurations to test
 for.
 
-For instance to create a filesystem with no crc enabled we would use:
+For instance to create a filesystem with no CRC enabled we would use:
 
   * mkfs.xfs -f -m crc=0,reflink=0,rmapbt=0, -i sparse=0
 
@@ -47,7 +47,7 @@ configuration:
 
  * ./check -s xfs_reflink_normapbt generic/003
 
-To verify the same intended configuration was used with xfs you can use:
+To verify the same intended configuration was used with XFS you can use:
 
  * xfs_info /dev/loop5
 
@@ -57,7 +57,7 @@ the filesystem specified in the section configuration.
 ## kernel-ci guest fstests requirements
 
 In order to run tests with fstests one must configure certain variables to
-inform fstests where to find devices to configure with xfs, which are external
+inform fstests where to find devices to configure with XFS, which are external
 log devices -- if one is used -- and which mount path to use for scratch data.
 Each test requires at least one test block device to use to test the filesystem.
 This is represented by the TEST_DEV variable. Then, some tests may require a a
@@ -75,11 +75,11 @@ to use for testing.
 fstests does not run parallelized, running any test can easily create a conflict
 with another test. The design behind fstests are for the tests to run serialized,
 one test at a time. fstests doesn't require much CPU / RAM, however enough to
-not hold a system back is desirable. Experimentation shows 8 vcpus / 8 GIB RAM
+not hold a system back is desirable. Experimentation shows 8 vCPUs / 8 GIB RAM
 more than suffices.
 
 Further testing has been done on one kernel-ci setup to try to reduce the amount
-of memory per guest, and we have determined using 2 GiB per guest with 8 vcpus
+of memory per guest, and we have determined using 2 GiB per guest with 8 vCPUs
 also works fine except for tests use xfs_scratch, this issue has been reported
 through [bsc#1183463](https://bugzilla.suse.com/show_bug.cgi?id=1183463) on test
 xfs/074 on the test section xfs_nocrc_512 and prior work on
@@ -96,20 +96,20 @@ only about 10 GiB is used. One drive will be used for this.
 ## kernel-ci guest data partition
 
 We want to use one partition to mount and use for development files. We refer
-to this as the *data* parition, given we mount this on /data. This can be for
+to this as the *data* partition, given we mount this on /data. This can be for
 our testing or for example cloning a some fstests from git and other tools
 and compiling it on the guest. Give or take another 10 GiB should suffice but
 we use 100 GiB truncated files for this if using libvirt. Note that 9p is
 supported now if using libvirt so the Linux kernel is git cloned on the host
 side now.
 
-When possible we strive for this to be exposed as an nvme drive, and in order
+When possible we strive for this to be exposed as an NVMe drive, and in order
 to not require a full 100 GiB of physical space, a sparse file can be created
 on the host, so that only the data required by the guest is actually used
 on the host. No space is therefore lost on the host. If the guest only used
-10 GiB of storage for its clone of a linux git tree, only 10 GiB of space
+10 GiB of storage for its clone of a Linux git tree, only 10 GiB of space
 is used on the host, even though the guest believes it has a full set of
-100 GiB of space available for its data parition.
+100 GiB of space available for its data partition.
 
 ## kernel-ci guest truncated files
 
@@ -119,17 +119,17 @@ to guarantee a full 20 GiB for each device, and so truncated files can be used.
 Loopback devices can be created on these truncated files so that only the actual
 data required by the test is used on the guest.
 
-Experimentation shows that only about 60 GiB of data is requried to run all
+Experimentation shows that only about 60 GiB of data is required to run all
 any filesystem test.
 
 ## kernel-ci guest requirements diagram
 
-Adding all things up, we need a guest with about 8 vcpus, 8 GiB RAM and only
+Adding all things up, we need a guest with about 8 vCPUs, 8 GiB RAM and only
 need about 192 GiB of storage of space for each guest. When possible we strive
 to push the memory requirements on the guest down to 2 GiB and fix issues
-found. At least for testing XFS this is still work in progress. Testing btrfs,
+found. At least for testing XFS this is still work in progress. Testing BTRFS,
 ext4 and blktests however can be done with just 2 GiB RAM. Since disk IO
-will be our bottlenceck we hope that the truncated files will be on a fast
+will be our bottleneck we hope that the truncated files will be on a fast
 storage medium, the faster, the better. The following is what this ends up
 looking like:
 

@@ -41,7 +41,7 @@ config WORKFLOW_INFER_USER_AND_GROUP
 	  based on passed manual settings. Providing a good guess as defaults
 	  through kconfig about what the target user and group should be for the
 	  data partition for systems created with vagrant is easy, but this is
-	  not as easy when users are using terraform or bare metal. Instead of
+	  not as easy when users are using Terraform or bare metal. Instead of
 	  extending the possible sensible defaults for the target username and
 	  group to use for the data partition based the mechanism used for
 	  bringup or Linux distribution chosen, we also provide support to infer
@@ -50,7 +50,7 @@ config WORKFLOW_INFER_USER_AND_GROUP
 
 	  You can safely enable this feature so we can do this inference. This
 	  helps not have to extend our defaults for a manual settings when
-	  users are using terraform.
+	  users are using Terraform.
 
 if !WORKFLOW_INFER_USER_AND_GROUP
 

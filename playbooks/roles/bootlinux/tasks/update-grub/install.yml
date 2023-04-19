@@ -46,7 +46,7 @@
 #   grub-set-default "1>2"
 #
 # However doing the reverse mapping is something which can get complicated
-# and there is no upstream grub2 support to do this for you. We can simplify
+# and there is no upstream GRUB2 support to do this for you. We can simplify
 # this problem instead by disabling the submenus, with GRUB_DISABLE_SUBMENU=y,
 # making the menu flat and then just querying for the linear mapping using
 # ansible using awk | grep and tail.
@@ -89,7 +89,7 @@
     line: GRUB_DISABLE_SUBMENU=y
   tags: [ 'linux', 'git', 'config', 'saved' ]
 
-- name: Update your boot grub file if necessary to ensure grub flat earth
+- name: Update your boot GRUB file if necessary to ensure GRUB flat earth
   tags: [ 'linux', 'uninstall-linux', 'manual-update-grub', 'console' ]
   import_tasks: update-grub/main.yml
 
@@ -131,7 +131,7 @@
 # is either you do the work to enhance the heuristic or live happy with the
 # assumption that grub2's default of picking the latest kernel is the best
 # option.
-- name: Try to find your target kernel's grub boot entry number now that the menu is flattened for {{ target_linux_tag }} using inferred KERNELRELEASE {{ kernelrelease.stdout}}
+- name: Try to find your target kernel's GRUB boot entry number now that the menu is flattened for {{ target_linux_tag }} using inferred KERNELRELEASE {{ kernelrelease.stdout}}
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -166,9 +166,9 @@
     - grub_boot_number_cmd.rc == 0
     - grub_boot_number_cmd.stdout != ""
 
-- name: Itemize kernel and grub entry we just selected
+- name: Itemize kernel and GRUB entry we just selected
   debug:
-    msg: "{{ target_kernel }} determined to be {{ target_boot_entry }} on the grub2 flat menu. Ran: grub-set-default {{ target_boot_entry }}"
+    msg: "{{ target_kernel }} determined to be {{ target_boot_entry }} on the GRUB2 flat menu. Ran: grub-set-default {{ target_boot_entry }}"
   vars:
     target_kernel: "{{ target_linux_tag | replace('v', '') }}"
     target_boot_entry: "{{ grub_boot_number_cmd.stdout_lines.0 }}"

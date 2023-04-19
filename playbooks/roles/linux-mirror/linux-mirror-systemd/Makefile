@@ -45,7 +45,7 @@ endif
 all: help
 
 help:
-	$(NQ) "mirror:     git clone all mirrors about linux"
+	$(NQ) "mirror:     git clone all mirrors about Linux and QEMU"
 	$(NQ) "install:    install system timers and git-daemon socket activation"
 
 mirror:
@@ -55,20 +55,20 @@ mirror:
 	$(NQ) "          Verify $(USER) can write onto $(MIRROR_PATH)"
 	$(Q)touch $(MIRROR_PATH)/ignore_kdevops
 	$(Q)rm -f $(MIRROR_PATH)/ignore_kdevops
-	$(Q)if [ ! -d $(TORVALDS_TARGET) ]; then                            \
-	 echo "          CLONE Torvald's tree"                             ;\
+	$(Q)if [ ! -d $(TORVALDS_TARGET) ]; then \
+	 echo "          CLONE torvalds/linux tree" ;\
 	 git -C $(MIRROR_PATH) clone --mirror $(TORVALDS) $(TORVALDS_TARGET) ;\
 	fi
-	$(Q)if [ ! -d $(STABLE_TARGET) ]; then                                                        \
-	 echo "          CLONE linux-stable"                                                         ;\
+	$(Q)if [ ! -d $(STABLE_TARGET) ]; then \
+	 echo "          CLONE stable/linux" ;\
 	 git -C $(MIRROR_PATH) clone --mirror $(STABLE) --reference /mirror/linux.git $(STABLE_TARGET) ;\
 	fi
-	$(Q)if [ ! -d $(NEXT_TARGET) ]; then                                                      \
-	  echo "          CLONE linux-next"                                                       ;\
+	$(Q)if [ ! -d $(NEXT_TARGET) ]; then \
+	  echo "          CLONE next/linux-next" ;\
 	  git -C $(MIRROR_PATH) clone --mirror $(NEXT) --reference /mirror/linux.git $(NEXT_TARGET) ;\
 	fi
-	$(Q)if [ ! -d $(QEMU_TARGET) ]; then                        \
-	  echo "          CLONE qemu"                               ;\
+	$(Q)if [ ! -d $(QEMU_TARGET) ]; then \
+	  echo "          CLONE qemu-project/qemu" ;\
 	  git -C $(MIRROR_PATH) clone --mirror $(QEMU) $(QEMU_TARGET) ;\
 	fi
 

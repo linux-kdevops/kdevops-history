@@ -6,7 +6,7 @@
     update_cache: yes
   tags: [ 'qemu', 'update-cache' ]
 
-- name: Install qemu build dependencies
+- name: Install QEMU build dependencies
   become: yes
   become_method: sudo
   apt:

@@ -1,5 +1,5 @@
 ---
-- name: distribution specific setup
+- name: Distribution specific setup
   import_tasks: debian/main.yml
   when: ansible_facts['os_family']|lower == 'debian'
 - import_tasks: suse/main.yml

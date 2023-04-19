@@ -97,8 +97,8 @@ endif # CONFIG_KERNEL_CI
 # partition on each node. If you don't have to have persistant data this is not
 # needed. We enable it just for demonstration purposes as most workflows might
 # need it. In our case the /data partition will be used if you enabled data
-# colletion through CONFIG_REBOOT_LIMIT_ENABLE_DATA_COLLECTION. The only
-# supported method of data colletion right now is systemd-analyze data results.
+# collection through CONFIG_REBOOT_LIMIT_ENABLE_DATA_COLLECTION. The only
+# supported method of data collection right now is systemd-analyze data results.
 #
 # The playbook reboot-limit.yml is used to run all tasks defined except those
 # with tags "run_tests" or "copy_results".

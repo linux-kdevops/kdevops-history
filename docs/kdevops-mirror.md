@@ -6,7 +6,7 @@ document.
 Part of doing Linux kernel development is git cloning Linux or some
 other trees, building, installing, and then running some things. The
 effort to git clone can be quite slow, specially if you are working
-with linux-next or building qemu. And if you are using kdevops on a pretty
+with linux-next or building QEMU. And if you are using kdevops on a pretty
 large system or set of systems that could benefit from a git mirror, kdevops
 supports the ability to setup and git protocol mirror (git://) and start
 mirroring any git tree we want.
@@ -43,29 +43,30 @@ mirroring using `make menuconfig` and enabling the kconfig option
 
 The following git trees are currently mirrored:
 
-  * qemu
-  * linux-next
-  * linux
-  * linux-stable
+  * QEMU main tree (qemu-project/qemu)
+  * The linux-next integration testing tree from Linux Next Group
+  (next/linux-next)
+  * The Linux kernel source tree from Linus Torvalds (torvalds/linux)
+  * The Linux kernel stable tree from the Stable Group (stable/linux)
 
 Root is only used to install the systemd socket activation git daemon.
 Socket activation just means the service will not run or consume memory
-if no one has come knocking on the git port. Systemd unit / timer files
+if no one has come knocking on the git port. systemd unit / timer files
 are used to deploy mirroring support as a regular user for each git tree
 we support. kdevops supports this under the directory
 [linux-mirror-systemd](playbooks/roles/linux-mirror/linux-mirror-systemd/)
 
-The following timers are used for mirroring (we don't yet suppport
+The following timers are used for mirroring (we don't yet support
 variability for this):
 
- * qemu: every 10 minutes
- * linux-next: every 6 hours
- * linux: 10 minutes
- * linux-stable: every 2 hours
+ * qemu-project/qemu: every 10 minutes
+ * next/linux-next: every 6 hours
+ * torvalds/linux: 10 minutes
+ * stable/linux: every 2 hours
 
 ## Manual debugging
 
-Although kdevopss takes care of mirroring support for you, if you want to
+Although kdevops takes care of mirroring support for you, if you want to
 debug things you can run the current make targets manually:
 
 ```bash
@@ -87,9 +88,9 @@ use kdevops in a two separate step phase right now:
 ## TODO
 
 Mirroring supports needs to be enhanced to support variability. Although
-we stuff the code into an ansible directory, we don't in practice use it
+we stuff the code into an Ansible directory, we don't in practice use it
 as such yet. The 'mirror' and 'install' targets need to be converted to
-ansible role tasks. Then we can easily allow for variability.
+Ansible role tasks. Then we can easily allow for variability.
 
 But in the cases that most folks are OK with a mirror on /mirror/ this
 should suffice.

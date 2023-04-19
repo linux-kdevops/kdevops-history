@@ -26,7 +26,7 @@
     update: yes
   tags: [ 'git', 'ndctl' ]
 
-- name: run meson setup build for ndctl
+- name: Run meson setup build for ndctl
   command: "meson setup build"
   tags: [ 'ndctl' ]
   args:
@@ -38,13 +38,13 @@
   args:
     chdir: "{{ ndctl_data }}"
 
-- name: run meson compile -C build for ndctl
+- name: Run meson compile -C build for ndctl
   command: "meson compile -C build"
   tags: [ 'ndctl' ]
   args:
     chdir: "{{ ndctl_data }}"
 
-- name: run meson install -C build
+- name: Run meson install -C build
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -129,7 +129,7 @@
   when:
     - kdevops_run_cxl_tests|bool
 
-- name: run meson cxl unit test suite
+- name: Run meson cxl unit test suite
   become: yes
   become_flags: 'su - -c'
   become_method: sudo

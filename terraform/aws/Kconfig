@@ -279,7 +279,7 @@ config TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE
 	depends on TARGET_ARCH_X86_64
 	help
 	  61 GiB RAM, 16 vcpus, 1 8 GiB main drive, and two additional
-	  300 GiB nvme drives.
+	  300 GiB NVMe drives.
 
 config TERRAFORM_AWS_INSTANCE_IS4GEN_MEDIUM
 	bool "is4gen.medium"

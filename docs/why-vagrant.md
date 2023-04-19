@@ -1,11 +1,11 @@
-# Why vagrant is used for virtualization
+# Why Vagrant is used for virtualization
 
-There are a few reasons why kdevops has embraced vagrant. Below we go through
+There are a few reasons why kdevops has embraced Vagrant. Below we go through
 each of them.
 
-## What is a vagrant box anyway?
+## What is a Vagrant box anyway?
 
-First let's understand what a vagrant box is. A vagrant box is essentially a
+First let's understand what a Vagrant box is. A Vagrant box is essentially a
 tarball (gzip, xc are both supported) with a qcow2 image and a small metadata
 file explaining how large the drive for the guest is.
 
@@ -25,23 +25,23 @@ abstracts this for you, and essentially does just that.
 
 If you are installing a guest with an ISO, you likely will then start doing
 a few custom things as a developer. The first thing most developers do is
-add a sudoers for your username. A vagrant box already comes with these things
+add a sudoers for your username. A Vagrant box already comes with these things
 preset. Also, sensible defaults for the username and root password are set,
 because we don't care about security when doing quick bringups for quick
 development / testing.
 
-Another example setup which vagrant takes care of is bringing up ssh and
-letting you ssh to the guest right away. Below is a list of things vagrant
+Another example setup which Vagrant takes care of is bringing up SSH and
+letting you SSH to the guest right away. Below is a list of things Vagrant
 boxes already come set up with, so you as a developer don't have to do this:
 
   * 1) root/vagrant user password is vagrant
-  * 2) vagrant user on /etc/sudeors does not need a password to gain root
-  * 3) vagrant can create a random ssh key for each guest
+  * 2) Vagrant user on /etc/sudoers does not need a password to gain root
+  * 3) Vagrant can create a random SSH key for each guest
   * 4) Deal with persistent net rules
   * 5) Ensure DHCP will work on the first network interface
   * 6) Ensure the console is allowed
   * 7) Try to use disk partitions by UUID on /etc/fstab
-  * 8) grub disk setup with UUID
+  * 8) GRUB disk setup with UUID
 
 If you'd like to learn more about this read the
 [making custom vagrant boxes documentation](docs/custom-vagrant-boxes.md)
@@ -50,7 +50,7 @@ If you'd like to learn more about this read the
 
 There are different software solutions available which can take
 advantage of your architecture's virtualization features and control
-guests. Examples are libvirt, virtualbox. Vagrant abstracts the
+guests. Examples are libvirt, VirtualBox. Vagrant abstracts the
 virtualization solution used as a "provider" and each provider then
 can support its own way to bring up guests.
 

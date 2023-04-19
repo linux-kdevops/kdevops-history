@@ -17,7 +17,7 @@
     update_cache: yes
   tags: linux
 
-- name: Install nvme tools
+- name: Install NVMe tools
   become: yes
   become_method: sudo
   apt:

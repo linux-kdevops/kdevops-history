@@ -35,7 +35,7 @@ that it isn't easy to pass a file descriptor opened as O_DIRECT, the new ioctl
 is LOOP_SET_DIRECT_IO. This can be used to bypass the cache completely, when
 needed.
 
-Experimention with using truncated files with loopback devices without
+Experimentation with using truncated files with loopback devices without
 direct IO on NVMe drives has proven to be sufficiently fast enough for testing
 with fstests with different filesystems. Direct IO is not used since we have
 relative control over where these drives are if testing a baremetal or a
@@ -50,22 +50,22 @@ Real drives therefore are not needed to test with fstests.
 
 This gives a lot of flexibility for testing filesystems. Using a virtualization
 solution is possible then with truncated files for the pool of test block
-devices. 100GiB sparse files are used on real nvme drives on a host to expose a
-few nvme drives to the guest. One nvme drive is used to place git trees needed
-on a /data/ partition. The guest uses one of the other nvme drives to mount
+devices. 100GiB sparse files are used on real NVMe drives on a host to expose a
+few NVMe drives to the guest. One NVMe drive is used to place git trees needed
+on a /data/ partition. The guest uses one of the other NVMe drives to mount
 /media/sparsefiles/ and before initializing tests with fstests new sparse files
 are created on that mounted partition using truncate, each one with a default
 capacity of 20GiB. Loopback block devices are then set up using these sparse
-files and passed to fstets TEST_DEV and SCRATCH_DEV_POOL. The old core-utils
+files and passed to fstests TEST_DEV and SCRATCH_DEV_POOL. The old core-utils
 truncate is used on the guest instead of util-linux fallocate since we don't
 need to ensure that all the data claimed to exist on each sparse file does
 exist and in order to support older guests using the same tool to create
 sparse files. We provide enough storage space on the sparse files used for the
-nvme drives for the guest. Experience with running fstests on different
+NVMe drives for the guest. Experience with running fstests on different
 filesystems with this setup shows we need only about 50GiB of cumulative space
 to run a full set of fstests against any one filesystem.
 
-Using virtualization on a host where control to power is gauranteed, and
+Using virtualization on a host where control to power is guaranteed, and
 running fstests on these guests with sparse files is another reason why using
 direct IO is not a requirement. However, it should be noted that a set up like
 this can only expose more issues on the underlying guest, these are sorts of
@@ -76,13 +76,13 @@ which support Copy on Write (CoW) on the host where the main guest OS drives
 are placed if you are using bare metal hosts. Creating 20 guests, for example,
 using the same OS for each guest should save us a lot of storage space using
 this strategy. The same partition where the main guest OS resides can be used
-to create the sparse files used to virtualize spare nvme drives for each guest.
-This limits our options on the host to using XFS and btrfs for placing guest
-files, both the OS files and sparse files for the guest nvme drives. The guest
+to create the sparse files used to virtualize spare NVMe drives for each guest.
+This limits our options on the host to using XFS and BTRFS for placing guest
+files, both the OS files and sparse files for the guest NVMe drives. The guest
 has to decide what filesystem to use for their /media/sparsefiles/ mount point,
 this can vary, and so can the target test filesystem. For instance a guest may
-test btrfs with fstests but the sparse files on /media/sparsefiles/ may be
-mounted on an XFS partition.  Likewise a guest testing XFS may use btrfs for
+test BTRFS with fstests but the sparse files on /media/sparsefiles/ may be
+mounted on an XFS partition.  Likewise a guest testing XFS may use BTRFS for
 the sparsefiles in /media/sparsefiles/. Ideally we'd test these combinations
 and also parity, that is where the filesystem being tested with fstests also
 matches the filesystem on /media/sparsefiles/. We strive to all possible

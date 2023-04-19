@@ -10,11 +10,11 @@
       skip: true
   tags: vars
 
-- name: get our user
+- name: Get our user
   command: "whoami"
   register: my_user
 
-- name: get our primary group
+- name: Get our primary group
   command: "id -g -n"
   register: my_group
 
@@ -34,7 +34,7 @@
   when:
     - kdevops_hosts_dest.stat.exists
 
-- name: verify ansible host template file exists {{ kdevops_hosts_template_full_path }}
+- name: Verify Ansible host template file exists {{ kdevops_hosts_template_full_path }}
   stat:
     path: "{{ kdevops_hosts_template_full_path }}"
   register: ansible_hosts_template
@@ -49,14 +49,14 @@
     - ansible_hosts_template.stat.exists
   tags: vars
 
-- name: verify fstest config file file exists {{ fs_config_path }}
+- name: Verify fstest config file file exists {{ fs_config_path }}
   stat:
     path: "{{ fs_config_path }}"
   register: fstests_config_file_reg
   when:
     - is_fstests
 
-- name: Generate the ansible hosts file
+- name: Generate the Ansible hosts file
   tags: [ 'hosts' ]
   template:
     src: "{{ kdevops_hosts_template }}"
@@ -68,7 +68,7 @@
     - not kdevops_workflows_dedicated_workflow
     - ansible_hosts_template.stat.exists
 
-- name: Generate the ansible hosts file for dedicated cxl work
+- name: Generate the Ansible hosts file for dedicated cxl work
   tags: [ 'hosts' ]
   template:
     src: "{{ kdevops_hosts_template }}"
@@ -81,7 +81,7 @@
     - kdevops_workflow_enable_cxl
     - ansible_hosts_template.stat.exists
 
-- name: Generate the ansible hosts file for dedicated pynfs work
+- name: Generate the Ansible hosts file for dedicated pynfs work
   tags: [ 'hosts' ]
   template:
     src: "{{ kdevops_hosts_template }}"
@@ -137,7 +137,7 @@
     - ansible_hosts_template.stat.exists
     - item.changed
 
-- name: Generate the ansible hosts file for a dedicated fstests setup
+- name: Generate the Ansible hosts file for a dedicated fstests setup
   tags: [ 'hosts' ]
   vars:
     fs_config_data: "{{ lookup('file', fs_config_path) }}"
@@ -169,7 +169,7 @@
     - kdevops_workflow_enable_blktests
     - ansible_hosts_template.stat.exists
 
-- name: debug inferring block test types
+- name: Debug inferring block test types
   debug:
     var: blktests_enabled_test_types
   when:
@@ -178,7 +178,7 @@
     - kdevops_workflow_enable_blktests
     - ansible_hosts_template.stat.exists
 
-- name: Generate the ansible hosts file for a dedicated blktests setup
+- name: Generate the Ansible hosts file for a dedicated blktests setup
   tags: [ 'hosts' ]
   template:
     src: "{{ kdevops_hosts_template }}"
@@ -204,7 +204,7 @@
     - kdevops_workflow_enable_selftests
     - ansible_hosts_template.stat.exists
 
-- name: Generate the ansible hosts file for a dedicated selftests setup
+- name: Generate the Ansible hosts file for a dedicated selftests setup
   tags: [ 'hosts' ]
   template:
     src: "{{ kdevops_hosts_template }}"

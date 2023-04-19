@@ -66,10 +66,10 @@ config GIT_ALTERNATIVES
 	  The kdevops project relies on two mirrors for its alternative git
 	  trees:
 
-	    * github
-	    * gitlab
+	    * GitHub
+	    * GitLab
 
-	  We default to using kdevop's github mirror.
+	  We default to using kdevop's GitHub mirror.
 
 	  The list of projects which kdevops currently forks is maintained
 	  below:
@@ -98,20 +98,20 @@ choice
 	depends on GIT_ALTERNATIVES
 
 config GIT_LINUX_KDEVOPS_GITHUB
-	bool "Use kdevops' github trees"
+	bool "Use kdevops' GitHub trees"
 	help
-	  If you enable this option then github will be used as the source
+	  If you enable this option then GitHub will be used as the source
 	  of the mirrored kdevops alternative trees. The list of trees
-	  on github are listed here:
+	  on GitHub are listed here:
 
 	  https://github.com/linux-kdevops/
 
 config GIT_LINUX_KDEVOPS_GITLAB
-	bool "Use kdevops' gitlab trees"
+	bool "Use kdevops' GitLab trees"
 	help
-	  If you enable this option then gitlab will be used as the source
+	  If you enable this option then GitLab will be used as the source
 	  of the mirrored kdevops alternative trees. The list of trees
-	  on gitlab are listed here:
+	  on GitLab are listed here:
 
 	  https://gitlab.com/linux-kdevops/
 
@@ -193,7 +193,7 @@ config HYPERVISOR_TUNING_ZSWAP_MAX_POOL_PERCENT
 	  Zswap's default max pool percentage is set to 20%. This means zswap
 	  will use up to 20% of compressed pool in-memory total, and once the
 	  amount of compressed pool in-memory used by zswap passes this
-	  threhold it will start evicting to memory disk. We want to avoid
+	  threshold it will start evicting to memory disk. We want to avoid
 	  evicting to disk as much as possible, and so we highly recommend
 	  increasing this to 90%.
 
@@ -202,7 +202,7 @@ config HYPERVISOR_TUNING_ZSWAP_MAX_POOL_PERCENT
 	  # cat /sys/module/zswap/parameters/max_pool_percent
 	  # 20
 
-	  Enabling zswap tunning, we'll modify this as follows for you:
+	  Enabling zswap tuning, we'll modify this as follows for you:
 
 	  # echo 90 > /sys/module/zswap/parameters/max_pool_percent
 
@@ -215,7 +215,7 @@ config SETUP_POSTFIX_EMAIL_RELAY_HOST
 	default "test.com" if !HAVE_KDEVOPS_CUSTOM_DEFAULTS
 	default KDEVOPS_DEFAULT_SETUP_POSTFIX_RELAY_HOST if HAVE_KDEVOPS_CUSTOM_DEFAULTS
 	help
-	  The ssh configuration file we should update, for each of the systems
+	  The SSH configuration file we should update, for each of the systems
 	  created.
 
 endif

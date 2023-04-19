@@ -53,13 +53,13 @@
   when:
     - build_btrfs_progs_now|bool
 
-- name: run make clean-all for btrfs_progs
+- name: Run make clean-all for btrfs_progs
   make:
     chdir: "{{ btrfs_progs_data }}"
     target: clean-all
   ignore_errors: yes
 
-- name: run autogen.sh for btrfs_progs
+- name: Run autogen.sh for btrfs_progs
   command: "./autogen.sh"
   tags: [ 'btrfs_progs', 'configure' ]
   args:
@@ -67,7 +67,7 @@
   when:
     - build_btrfs_progs_now|bool
 
-- name: run configure for btrfs_progs
+- name: Run configure for btrfs_progs
   command: "./configure --disable-documentation --enable-experimental --bindir={{ bindir }} --prefix=/usr --exec-prefix=/usr --disable-python"
   tags: [ 'btrfs_progs', 'configure' ]
   args:

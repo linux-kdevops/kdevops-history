@@ -28,23 +28,23 @@ Our requirements are:
 
 # kdevops kernel-ci automation framework
 
-Instead of inventing its own wheel to deal with management of guests, ansible
+Instead of inventing its own wheel to deal with management of guests, Ansible
 has been embraced for detailing how to codify required commands for each
 target workflow. Adding Salt support in the future as an alternative for
 management can surely be done, it would just be a matter of extending new
-kconfig symbols. Using ansible was done first as that is what the author had
+Kconfig symbols. Using Ansible was done first as that is what the author had
 most experience with.
 
-Each target test is considered a "workflow" under kdevops. Using ansible also
+Each target test is considered a "workflow" under kdevops. Using Ansible also
 allows for distribution specific items to be split out and dealt with
 separately. As it stands, support for OpenSUSE, SUSE, Debian, and Fedora are
 provided for all supported workflows. If a new workflow is added, you don't
-need to add support for all distributions, a kconfig "depends on" logic can
+need to add support for all distributions, a Kconfig "depends on" logic can
 easily be used to ensure only support for the few distributions is expressed.
 As it stands though, all currently supported workflows support all supported
 distributions, and developers are highly encouraged to try to add support for
 all of them as well, as the differences in support typically mostly deals with
-package names, grub and the kernel, and that is already dealt with in existing
+package names, GRUB and the kernel, and that is already dealt with in existing
 workflows.
 
 Below is kdevops' kernel-ci recommended documentation reading before trying to

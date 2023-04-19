@@ -10,16 +10,16 @@
       skip: true
   tags: vars
 
-- name: verify terraform variable template file exists {{ kdevops_terraform_tfvars_template_full_path }}
+- name: Verify Terraform variable template file exists {{ kdevops_terraform_tfvars_template_full_path }}
   stat:
     path: "{{ kdevops_nodes_template_full_path }}"
   register: terraform_tfvars_template
 
-- name: get our user
+- name: Get our user
   command: "whoami"
   register: my_user
 
-- name: get our primary group
+- name: Get our primary group
   command: "id -g -n"
   register: my_group
 

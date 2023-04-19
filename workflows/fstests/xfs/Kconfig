@@ -47,13 +47,14 @@ config FSTESTS_XFS_MANUAL_COVERAGE
 	  resources or your target kernel does not enable certain features
 	  which you don't care to test for.
 
-	  Since fstests tests are not parallized and cannot easily be parallized
-	  and since there are many different ways in which you can create an
-	  xfs filesystem we have devised a strategy to split up tests by the
-	  type of xfs configuration used when you created the filesystem. The
-	  fstests suite allows you to specify different configurations using
-	  "sections" on an fstests configuration file. We create then one host
-	  per supported target section for each respective architecture.
+	  Since fstests tests are not parallelized and cannot easily be
+          parallelized and since there are many different ways in which you can
+          create an xfs filesystem we have devised a strategy to split up tests
+          by the type of xfs configuration used when you created the
+          filesystem. The fstests suite allows you to specify different
+          configurations using "sections" on an fstests configuration file. We
+          create then one host per supported target section for each respective
+          architecture.
 
 	  Today this consists of 8 different sections for x86_64, and 9 for
 	  ppc64le and aarc64.
@@ -146,7 +147,7 @@ config FSTESTS_XFS_SECTION_REFLINK_ENABLED
 	  for each allocation group (rmapbt) enabled by default, unless the
 	  section description for its entry explicitly mentions it is disabled.
 	  The reverse-mapping btree index support is currently only used for
-	  online filesystem checking, this however requires userespace tools
+	  online filesystem checking, this however requires userspace tools
 	  support, and that mechanism became feature-complete only as of the
 	  v5.3 kernel release and xfsprogs v5.3 release, with a focus afterwards
 	  towards stabilization and performance optimization.

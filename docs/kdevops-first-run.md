@@ -2,10 +2,10 @@
 
 You shouldn't need much except what is listed on our requirements page.
 However, if you are going to be using virtualization solutions or a cloud
-solution (which will require terraform) you likely want to set up libvirt
-properly or have us try to install terraform for you. We can help you do this.
+solution (which will require Terraform) you likely want to set up libvirt
+properly or have us try to install Terraform for you. We can help you do this.
 
-To help with this we have an option on kconfig which you should enable if it is
+To help with this we have an option on Kconfig which you should enable if it is
 your first time running kdevops, the prompt is for CONFIG_KDEVOPS_FIRST_RUN:
 
 ```
@@ -23,7 +23,7 @@ regular user without needing root, *if* you've enabled local virtualization
 technologies. This is typically done by having your username be part of a few
 special groups, depending on your Linux distribution. Other than that, the
 other amount of work the `first run` stuff does is nags / complains are about
-disabling apparmor / selinux, and maybe needing to reboot.
+disabling AppArmor / SELinux, and maybe needing to reboot.
 
 You should just disable the `CONFIG_KDEVOPS_FIRST_RUN` once kdevops stops
 complaining about things, and then just run `make mrproper` and never, *ever*
@@ -41,9 +41,9 @@ setting this up for the cloud is a bit beyond the scope of this guide.
 
 So let's re-iterate a few goals of the first run stuff:
 
-  * Ensuring your user can run libvirt commands as a regular user withou
+  * Ensuring your user can run libvirt commands as a regular user without
     a password
-  * Disabling selinux / apparmor
+  * Disabling SELinux / AppArmor
   * Optionally install a git mirror for a few git trees you may use often
 
 Disable `CONFIG_KDEVOPS_FIRST_RUN` after you have verified you can kdevops

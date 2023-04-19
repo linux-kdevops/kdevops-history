@@ -8,7 +8,7 @@ make help
 
 # Configuring kdevops
 
-kdevops provides support for vagrant, terraform, bare metal, and optionally
+kdevops provides support for vagrant, Terraform, bare metal, and optionally
 helps you install and configure libvirt, as well as let you choose which git
 tree for Linux to compile, install and boot into, along with which git tag or
 commit ID use, and apply any extra patches you might have. The last step of
@@ -18,9 +18,9 @@ infrastructure. You are encouraged to expand on it for your own needs and a
 few more elaborate projects are referenced later.
 
 What a target system may need will vary depending on your needs and your
-preferences and so the Linux modeling variability language, kconfig, has been
+preferences and so the Linux modeling variability language, Kconfig, has been
 embraced to allow users to configure how kdevops is to be used. You choose
-whether or not to use vagrant, terraform, bare metal, and what bells or
+whether or not to use vagrant, Terraform, bare metal, and what bells or
 whistles to turn on or off.
 
 To configure kdevops use:
@@ -29,19 +29,19 @@ To configure kdevops use:
 make menuconfig
 ```
 
-# Dynamic kconfig
+# Dynamic Kconfig
 
-kdevops also supports dynamic kconfig entries without which some features
+kdevops also supports dynamic Kconfig entries without which some features
 could not be supported. Typically you run 'make menuconfig' to configure
 the Linux kernel the breadth of variability is known, but in the kdevops
 world you may want to tweak a few options which are only specific to your
 platform on which you are running kdevops on. More specifically, in order
-to support PCI-E passthrough support we need to scrape your system's PCI-E
-devices and then give you options for doing PCI-E passthrough onto guests.
-In order to support PCI-E passthrough kdevops supports creating a few
+to support PCIe passthrough support we need to scrape your system's PCIe
+devices and then give you options for doing PCIe passthrough onto guests.
+In order to support PCIe passthrough kdevops supports creating a few
 Kconfig files on-the-fly. But not everyone wants to see these dynamic Kconfig
 files or needs to work with them. And so a new target is provided to support
-those features that need a dynamic kconfig:
+those features that need a dynamic Kconfig:
 
 ```bash
 make dynconfig

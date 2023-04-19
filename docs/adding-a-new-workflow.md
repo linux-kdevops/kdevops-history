@@ -1,7 +1,7 @@
 # Adding a new workflow to kdevops
 
 A demo workflow has been introduced to kdevops to serve the purpose of
-a simple demo but also to help with documentation. The best documention
+a simple demo but also to help with documentation. The best documentation
 is for now to tell refer you to the upstream commit for the workflow
 addition.
 

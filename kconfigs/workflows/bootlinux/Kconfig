@@ -68,7 +68,7 @@ config BOOTLINUX_9P_MSIZE
 	  default, however this is reported to have produced pretty terrible
 	  performance, and so this was bumped 128 KiB as default after v5.15.
 	  The qemu wiki [0] seems to suggest to use a range between 10-100 MiB
-	  for SATA and howver that is a lie as 500 KiB (512000) is the maximum
+	  for SATA and however that is a lie as 500 KiB (512000) is the maximum
 	  value possible. Also, using the max value possible I get a different
 	  value for sha1sum on files! So let's just stick to the default
 	  of 128 KiB (131072). If you are going to update the default value

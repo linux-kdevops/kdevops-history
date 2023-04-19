@@ -35,7 +35,7 @@
     executable: /bin/bash
   tags: [ 'partition' ]
 
-- name: partitions | Read all partitions labels and see if they match {{ disk_setup_label }}
+- name: Partitions | Read all partitions labels and see if they match {{ disk_setup_label }}
   become: yes
   become_method: sudo
   shell: |
@@ -48,7 +48,7 @@
     executable: /bin/bash
   tags: [ 'partition' ]
 
-- name: partitions | check if block {{ disk_setup_device }} exists
+- name: Partitions | Check if block {{ disk_setup_device }} exists
   stat:
     path: "{{ disk_setup_device }}"
     follow: yes
@@ -59,7 +59,7 @@
     label_grep.rc != 0
   tags: [ 'partition' ]
 
-- name: partitions | Read {{ disk_setup_device }} partitions and mountpoints
+- name: Partitions | Read {{ disk_setup_device }} partitions and mountpoints
   shell: |
     set -o pipefail
     lsblk -npr -oNAME,MOUNTPOINT {{ disk_setup_device }}
@@ -73,7 +73,7 @@
     executable: /bin/bash
   tags: [ 'partition' ]
 
-- name: paritions | collect partition information onto part_mounts
+- name: Partitions | Collect partition information onto part_mounts
   set_fact:
     part_mounts: |
       {%- set x = [] -%}
@@ -86,7 +86,7 @@
     result.stdout_lines is defined
   tags: [ 'partition' ]
 
-- name: Create data filesystem iff {{ disk_setup_device }} has no partitions and is not mounted
+- name: Create data filesystem if {{ disk_setup_device }} has no partitions and is not mounted
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -107,7 +107,7 @@
   register: create_data_fs
   tags: [ 'partition' ]
 
-- name: Mount data filesystem iff {{ disk_setup_path }} is not mounted
+- name: Mount data filesystem if {{ disk_setup_path }} is not mounted
   become: yes
   become_flags: 'su - -c'
   become_method: sudo

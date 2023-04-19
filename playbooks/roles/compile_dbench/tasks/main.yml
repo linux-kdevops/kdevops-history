@@ -22,7 +22,7 @@
   when:
     - compile_dbench|bool
 
-- name: run autogen for dbench
+- name: Run autogen for dbench
   command: "./autogen.sh"
   tags: [ 'dbench' ]
   args:
@@ -30,7 +30,7 @@
   when:
     - compile_dbench|bool
 
-- name: run configure for dbench
+- name: Run configure for dbench
   command: "./configure"
   tags: [ 'dbench' ]
   args:

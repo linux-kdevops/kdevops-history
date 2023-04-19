@@ -31,20 +31,20 @@
     dest: /etc/hostname
   tags: hostname
 
-- name: check if the developer has a git config
+- name: Check if the developer has a git config
   delegate_to: localhost
   stat:
     path={{ dev_gitconfig_src }}
   run_once: true
   register: dev_git_config_file
 
-- name: copy the developer's gitconfig *iff* it exists
+- name: Copy the developer's gitconfig *if* it exists
   copy:
     src={{ dev_gitconfig_src }}
     dest={{ dev_gitconfig_dest }}
   when: dev_git_config_file.stat.exists
 
-- name: copy the developer's gitconfig *iff* it exists to root
+- name: Copy the developer's gitconfig *if* it exists to root
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -54,7 +54,7 @@
     remote_src=yes
   when: dev_git_config_file.stat.exists
 
-- name: check if the system has a user vimrc file
+- name: Check if the system has a user vimrc file
   stat:
     path=~/.vimrc
   register: dev_vimrc_file
@@ -67,7 +67,7 @@
   tags: vimrc
   when: not dev_vimrc_file.stat.exists
 
-- name: check if the system has a user vimrc file as root
+- name: Check if the system has a user vimrc file as root
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -86,20 +86,20 @@
   tags: vimrc
   when: not dev_root_vimrc_file.stat.exists
 
-- name: check if the developer has a configuration file with favorite bash hacks
+- name: Check if the developer has a configuration file with favorite bash hacks
   delegate_to: localhost
   stat:
     path={{ dev_bash_config_hacks_src }}
   register: dev_bash_config_file
 
-- name: copy the developer's favorite bash hacks over *iff* it exists
+- name: Copy the developer's favorite bash hacks over *if* it exists
   copy:
     src={{ dev_bash_config_hacks_src }}
     dest={{ dev_bash_config_hacks_dest }}
   when: dev_bash_config_file.stat.exists
   register: dev_bash_config_file_copied
 
-- name: source the developer's bash hack script
+- name: Source the developer's bash hack script
   shell: |
     SOURCE_BASH_HACKS="test -s {{ dev_bash_config_hacks_generic }}  && . {{ dev_bash_config_hacks_generic }} || true"
     if [ -f {{ dev_bash_config }} ]; then
@@ -115,7 +115,7 @@
     executable: /bin/bash
   when: dev_bash_config_file_copied is success
 
-- name: copy the developer's favorite bash hacks over for root *iff* it exists
+- name: Copy the developer's favorite bash hacks over for root *if* it exists
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -125,7 +125,7 @@
   when: dev_bash_config_file.stat.exists
   register: dev_bash_config_file_copied_root
 
-- name: source the developer's bash hack script for root
+- name: Source the developer's bash hack script for root
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -144,13 +144,13 @@
     executable: /bin/bash
   when: dev_bash_config_file_copied_root is success
 
-- name: check to see if system has grub2
+- name: Check to see if system has GRUB2
   stat:
     path=/etc/default/grub
   register: grub2_config_file
   tags: [ 'console' ]
 
-- name: check to see if stupid /etc/default/grub.d/15_timeout.cfg exists
+- name: Check to see if stupid /etc/default/grub.d/15_timeout.cfg exists
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -161,7 +161,7 @@
     - devconfig_enable_console|bool
   tags: [ 'console' ]
 
-- name: remove stupid cloud /etc/default/grub.d/15_timeout.cfg
+- name: Remove stupid cloud /etc/default/grub.d/15_timeout.cfg
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -172,7 +172,7 @@
     - devconfig_enable_console|bool
   tags: [ 'console' ]
 
-- name: Check to see if the grub GRUB_CMDLINE_LINUX is present
+- name: Check to see if the GRUB GRUB_CMDLINE_LINUX is present
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -187,7 +187,7 @@
     - devconfig_enable_console|bool
   tags: [ 'console' ]
 
-- name: Check to see if the grub GRUB_CMDLINE_LINUX is empty
+- name: Check to see if the GRUB GRUB_CMDLINE_LINUX is empty
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -219,7 +219,7 @@
     - devconfig_enable_console|bool
   tags: [ 'console' ]
 
-- name: Check to see if the console is already configured on your grub config
+- name: Check to see if the console is already configured on your GRUB config
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -235,7 +235,7 @@
     - devconfig_enable_console|bool
   tags: [ 'console' ]
 
-- name: Update grub configuration to add console kernel parameters
+- name: Update GRUB configuration to add console kernel parameters
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -251,7 +251,7 @@
     - not cmdline_linux_empty_grep.changed
   tags: [ 'console' ]
 
-- name: Update grub configuration to add console kernel parameters for consoleblank configs
+- name: Update GRUB configuration to add console kernel parameters for consoleblank configs
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -267,7 +267,7 @@
     - not cmdline_linux_empty_grep.changed
   tags: [ 'console' ]
 
-- name: Add new grub console kernel parameters to your empty GRUB_CMDLINE_LINUX
+- name: Add new GRUB console kernel parameters to your empty GRUB_CMDLINE_LINUX
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -284,7 +284,7 @@
     - not console_grep.changed
   tags: [ 'console' ]
 
-- name: Add new grub GRUB_CMDLINE_LINUX with console kernel parameters
+- name: Add new GRUB GRUB_CMDLINE_LINUX with console kernel parameters
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -299,7 +299,7 @@
     - devconfig_enable_console|bool
   tags: [ 'console' ]
 
-- name: Check to see if the grub timeout is defined in your configuration
+- name: Check to see if the GRUB timeout is defined in your configuration
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -314,7 +314,7 @@
     - devconfig_enable_console|bool
   tags: [ 'console' ]
 
-- name: Update grub timeout
+- name: Update GRUB timeout
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -328,7 +328,7 @@
     - grub_timeout_grep.changed
   tags: [ 'console' ]
 
-- name: Add grub timeout
+- name: Add GRUB timeout
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -343,7 +343,7 @@
     - not grub_timeout_grep
   tags: [ 'console' ]
 
-- name: Check to see if the grub serial command is defined
+- name: Check to see if the GRUB serial command is defined
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -358,7 +358,7 @@
     - devconfig_enable_console|bool
   tags: [ 'console' ]
 
-- name: Update grub configuration to add grub console parameters if set
+- name: Update GRUB configuration to add GRUB console parameters if set
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -373,7 +373,7 @@
     - serial_command_grep.changed
   tags: [ 'console' ]
 
-- name: Add grub console parameters
+- name: Add GRUB console parameters
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -388,7 +388,7 @@
     - not serial_command_grep.changed
   tags: [ 'console' ]
 
-- name: Check to see if the grub terminal settings is defined
+- name: Check to see if the GRUB terminal settings is defined
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -407,7 +407,7 @@
 # preferred first, and fallback to the serial as secondary
 # option. This let's us work with hardware serial consoles
 # say on IPMIs and virtual guests ('virsh console').
-- name: Update grub terminal to be serial
+- name: Update GRUB terminal to be serial
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -422,7 +422,7 @@
     - grub_terminal_grep.changed
   tags: [ 'console' ]
 
-- name: Add grub terminal setting
+- name: Add GRUB terminal setting
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -437,14 +437,14 @@
     - not grub_terminal_grep.changed
   tags: [ 'console' ]
 
-- name: Update your boot grub file if necessary
+- name: Update your boot GRUB file if necessary
   import_tasks: update-grub/main.yml
   when:
     - grub2_config_file.stat.exists
     - devconfig_enable_console|bool
     - not console_grep.changed or console_blank_grep.changed
 
-- name: enables systemd's watchdog
+- name: Enables systemd's watchdog
   stat:
     path=/etc/systemd/system.conf
   register: systemd_config_file

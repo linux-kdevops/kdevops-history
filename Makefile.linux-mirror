@@ -8,7 +8,7 @@ MIRROR_CODE      := $(TOPDIR)/playbooks/roles/linux-mirror/linux-mirror-systemd/
 # We don't use jinja2 yet to parse this extra_vars stuff to allow
 # customizations as the defaults seem sensible. However once and if
 # folks want to start adding variability to the how we deploy the
-# linux-mirror ansible can be used:
+# linux-mirror Ansible can be used:
 #kdevops_linux_mirror: $(KDEVOPS_EXTRA_VARS)
 #	$(Q)ansible-playbook --connection=local \
 #		--inventory localhost, \

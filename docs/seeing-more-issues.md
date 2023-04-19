@@ -6,7 +6,7 @@ issues than with a regular bare metal setup.
 If using bare metal we have to consider that the host has its own filesystem.
 And if using virtualization behind the scenes we then have the filesystem where
 the OS for the guest will placed and the sparse files which will be used by each
-guest for its virtual nvme drives. Then the guest may use another filesystem for
+guest for its virtual NVMe drives. Then the guest may use another filesystem for
 the /media/sparsefiles/ mount point. And finally there is the target filesystem
 which is going to be tested.
 

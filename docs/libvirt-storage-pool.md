@@ -1,13 +1,13 @@
 # kdevops libvirt storage pool considerations
 
-Only read this page if you are using libvirt for virtualization with vagrant.
+Only read this page if you are using libvirt for virtualization with Vagrant.
 
-Since kdevops uses vagrant, it is important to understand how vagrant makes
+Since kdevops uses Vagrant, it is important to understand how Vagrant makes
 use of storage within libvirt. And the reason it is important is that the
-way vagrant uses pool strage is rather stupid, and long term can really be
+way Vagrant uses pool storage is rather stupid, and long term can really be
 counter productive if you want to scale.
 
-By default, if you are on a bare new system, using vagrant with libvirt
+By default, if you are on a bare new system, using Vagrant with libvirt
 will assume you want to create a "default" libvirt storage pool on the
 *same* directory where your Vagrantfile is located! This is insanity.
 It is pure bananas. This is specially true that today all distributions other
@@ -63,7 +63,7 @@ Then properly name it, something like:
 
 /data1-btrfs/
 
-To help you reflect that that partition was created with btrfs. Then
+To help you reflect that that partition was created with BTRFS. Then
 when configuring kdevops for this setup you are recommended to set
 two variables with something like the following:
 

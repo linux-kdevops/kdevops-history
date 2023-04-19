@@ -63,7 +63,7 @@
     - is_sle|bool
     - is_sle10|bool or is_sle11|bool or is_sle12sp1|bool
 
-- name: Install nvme tools
+- name: Install NVMe tools
   become: yes
   become_method: sudo
   zypper:
@@ -74,7 +74,7 @@
     - repos_present|bool
     - not lacks_nvme_utils|bool
 
-- name: Install nvme tools
+- name: Install NVMe tools
   become: yes
   become_method: sudo
   zypper:
@@ -187,7 +187,7 @@
   when:
     - is_sle15sp2|bool or is_sle15sp3|bool or is_sle15sp4|bool or is_sle12sp5|bool
 
-- name:  add benchmark sles12sp5 opensuse repo when needed
+- name: Add benchmark sles12sp5 opensuse repo when needed
   become: yes
   become_method: sudo
   script:
@@ -195,7 +195,7 @@
   when:
     - is_sle12sp5|bool
 
-- name:  add benchmark sles15sp2 opensuse repo when needed
+- name: Add benchmark sles15sp2 opensuse repo when needed
   become: yes
   become_method: sudo
   script:
@@ -203,7 +203,7 @@
   when:
     - is_sle15sp2|bool
 
-- name:  add benchmark sles15sp3 opensuse repo when needed
+- name: Add benchmark sles15sp3 opensuse repo when needed
   become: yes
   become_method: sudo
   script:
@@ -270,13 +270,13 @@
     - repos_present|bool
     - compile_nbd|bool
 
-- name: run autogen for nbd
+- name: Run autogen for nbd
   command: "./autogen.sh"
   tags: [ 'blktests', 'nbd' ]
   args:
     chdir: "{{ nbd_data }}"
 
-- name: run configure for nbd
+- name: Run configure for nbd
   command: "./configure"
   tags: [ 'blktests', 'nbd' ]
   args:

@@ -13,7 +13,7 @@
   set_fact:
     obs_project_signkey: "/usr/local/share/{{ obs_project_no_collon }}.pub"
 
-- name: ensure that /usr/local/share/ is a directory
+- name: Ensure that /usr/local/share/ is a directory
   file:
     path: /usr/local/share/
     state: directory
@@ -23,7 +23,7 @@
       set_fact:
         pubkey_url: "{{ obs_url }}projects/{{ obs_project_name }}/public_key"
 
-    - name: fetch the repository's public key
+    - name: Fetch the repository's public key
       become: yes
       become_method: sudo
       get_url:
@@ -33,7 +33,7 @@
 
   when: obs_project_gpg_key is not defined
 
-- name: copy the repository's public key to the remote machine
+- name: Copy the repository's public key to the remote machine
   become: yes
   become_method: sudo
   copy:
@@ -41,7 +41,7 @@
     dest: "{{ obs_project_signkey }}"
   when: obs_project_gpg_key is defined
 
-- name: import the signkey into the rpm key database
+- name: Import the signkey into the rpm key database
   become: yes
   become_method: sudo
   rpm_key:
@@ -49,17 +49,17 @@
     key: "{{ obs_project_signkey }}"
 
 - block:
-    - name: set Leap repository names
+    - name: Set Leap repository names
       set_fact:
         repo_distro_end: "openSUSE_Leap_{{ ansible_distribution_version }}"
       when: 'is_leap | bool'
 
-    - name: set Tumbleweed repository names
+    - name: Set Tumbleweed repository names
       set_fact:
         repo_distro_end: "openSUSE_Tumbleweed"
       when: 'is_tumbleweed | bool'
 
-    - name: set SLE repository names
+    - name: Set SLE repository names
       set_fact:
         repo_distro_end: "SLE_{{ ansible_distribution_version | replace('.', '_SP') }}"
       when: 'is_sle | bool'
@@ -83,7 +83,7 @@
     - ansible_distribution_version == repo.ansible_distribution_version
     - obs_project_name == repo.obs_project_name
 
-- name: try to fetch the obs project .repo file
+- name: Try to fetch the obs project .repo file
   become: yes
   become_method: sudo
   get_url:
@@ -105,7 +105,7 @@
         repo_distro_end: "SLE_{{ ansible_distribution_version | replace('.', '-SP') }}"
       when: 'is_sle | bool'
 
-    - name: try to fetch the project .repo file again
+    - name: Try to fetch the project .repo file again
       become: yes
       become_method: sudo
       get_url:
@@ -127,7 +127,7 @@
   set_fact:
     obs_project_repo_url: "{{ obs_project_repo_base }}/{{ repo_distro_end }}"
 
-- name: add the repository
+- name: Add the repository
   become: yes
   become_method: sudo
   zypper_repository:

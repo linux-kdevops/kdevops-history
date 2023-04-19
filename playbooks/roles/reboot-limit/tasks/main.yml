@@ -14,7 +14,7 @@
     name: create_data_partition
   tags: [ 'data_partition' ]
 
-- name: create the reboot-limit data collection directory for each host
+- name: Create the reboot-limit data collection directory for each host
   become: yes
   become_method: sudo
   file:

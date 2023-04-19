@@ -1,12 +1,12 @@
 ---
-- name: Verify local build qemu installation
+- name: Verify local build QEMU installation
   command: "which qemu-system-x86_64"
   register: qemu_present
   changed_when: qemu_present.rc == 1
   failed_when: qemu_present.rc != 0 and qemu_present.rc != 1
   tags: [ 'qemu', 'verify' ]
 
-- name: Install qemu build dependencies
+- name: Install QEMU build dependencies
   become: yes
   become_method: sudo
   dnf:

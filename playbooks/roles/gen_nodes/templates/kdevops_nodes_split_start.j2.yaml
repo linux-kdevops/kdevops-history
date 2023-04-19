@@ -13,11 +13,11 @@ vagrant_global:
     auto_update: false
     enabled: "true"
     enable_sse4: "true"
-    # To stress test a virtual nvme controller you could peg all disks onto
+    # To stress test a virtual NVMe controller you could peg all disks onto
     # one controller. We want to avoid this as our focus is testing filesystems
-    # and not storage controllers however Virtualbox currently only supports
-    # one nvme storage controller. Set this to true only if you are adding
-    # support for this upstream to Virtualbox.
+    # and not storage controllers however VirtualBox currently only supports
+    # one NVMe storage controller. Set this to true only if you are adding
+    # support for this upstream to VirtualBox.
     nvme_controller_per_disk: false
 {% endif %}
 {% if libvirt_provider %}
@@ -25,12 +25,12 @@ vagrant_global:
 {% if libvirt_override_machine_type %}
     machine_type: '{{ libvirt_machine_type }}'
 {% endif %}
-    # This lets the ansible role kdevops_vagrant try to infer your default
-    # distro group to use for qemu. OpenSUSE and Fedora uses qemu here by
+    # This lets the Ansible role kdevops_vagrant try to infer your default
+    # distro group to use for QEMU. OpenSUSE and Fedora uses QEMU here by
     # default, debian uses libvirt-qemu. You can always override with the
     # environment variable KDEVOPS_VAGRANT_QEMU_GROUP. If not sure edit
-    # /etc/libvirt/qemu.conf user and group settings. If using apparmor /
-    # selinux you may run into snags, but that is out of scope of this project.
+    # /etc/libvirt/qemu.conf user and group settings. If using AppArmor /
+    # SELinux you may run into snags, but that is out of scope of this project.
     qemu_group_auto: true
     qemu_group: 'libvirt-qemu'
     emulator_path: '{{ qemu_bin_path }}'
@@ -43,9 +43,9 @@ vagrant_global:
 {% endif %}
 {% endif %}
   # This ends up slightly different depending on the vagrant provider right now.
-  # For Virtualbox: /dev/nvme0n1, /dev/nvme0n2, etc.
+  # For VirtualBox: /dev/nvme0n1, /dev/nvme0n2, etc.
   # For libvirt:    /dev/nvme0n1, /dev/nvme1n1, etc.
-  # This is due to how Virtualbox only supports one nvme storage controller
+  # This is due to how VirtualBox only supports one NVMe storage controller
   extra_disks:
     data:
       size: 102400
