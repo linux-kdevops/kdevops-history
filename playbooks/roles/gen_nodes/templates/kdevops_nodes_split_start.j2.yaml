@@ -46,6 +46,7 @@ vagrant_global:
   # For VirtualBox: /dev/nvme0n1, /dev/nvme0n2, etc.
   # For libvirt:    /dev/nvme0n1, /dev/nvme1n1, etc.
   # This is due to how VirtualBox only supports one NVMe storage controller
+{% if libvirt_extra_storage_drive_ide %}
   extra_disks:
     data:
       size: 102400
@@ -55,6 +56,44 @@ vagrant_global:
       size: 102400
     extra2:
       size: 102400
+{% elif libvirt_extra_storage_drive_virtio %}
+  extra_disks:
+    data:
+      size: 102400
+      physical_block_size: {{ libvirt_extra_storage_virtio_physical_block_size }}
+      logical_block_size: {{ libvirt_extra_storage_virtio_logical_block_size }}
+    scratch:
+      size: 102400
+      physical_block_size: {{ libvirt_extra_storage_virtio_physical_block_size }}
+      logical_block_size: {{ libvirt_extra_storage_virtio_logical_block_size }}
+    extra1:
+      size: 102400
+      physical_block_size: {{ libvirt_extra_storage_virtio_physical_block_size }}
+      logical_block_size: {{ libvirt_extra_storage_virtio_logical_block_size }}
+    extra2:
+      size: 102400
+      physical_block_size: {{ libvirt_extra_storage_virtio_physical_block_size }}
+      logical_block_size: {{ libvirt_extra_storage_virtio_logical_block_size }}
+{% elif libvirt_extra_storage_drive_nvme %}
+  extra_disks:
+    data:
+      size: 102400
+      physical_block_size: {{ libvirt_extra_storage_nvme_logical_block_size }}
+      logical_block_size: {{ libvirt_extra_storage_nvme_logical_block_size }}
+    scratch:
+      size: 102400
+      physical_block_size: {{ libvirt_extra_storage_nvme_logical_block_size }}
+      logical_block_size: {{ libvirt_extra_storage_nvme_logical_block_size }}
+    extra1:
+      size: 102400
+      physical_block_size: {{ libvirt_extra_storage_nvme_logical_block_size }}
+      logical_block_size: {{ libvirt_extra_storage_nvme_logical_block_size }}
+    extra2:
+      size: 102400
+      physical_block_size: {{ libvirt_extra_storage_nvme_logical_block_size }}
+      logical_block_size: {{ libvirt_extra_storage_nvme_logical_block_size }}
+{% endif %}
+
 {% if nvme_zone_enable %}
 {% for n in range(1,14) %}
     zone{{ n }}:
