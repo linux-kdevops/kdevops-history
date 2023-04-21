@@ -95,7 +95,7 @@ qemu_group = global_data['libvirt_cfg']['qemu_group']
 qemu_group_auto = global_data['libvirt_cfg']['qemu_group_auto']
 
 if qemu_group_auto
-  if File.exists?('/etc/debian_version')
+  if File.exist?('/etc/debian_version')
     qemu_group = 'libvirt-qemu'
   else
     qemu_group = 'qemu'
@@ -133,12 +133,12 @@ Vagrant.configure("2") do |config|
 {% endif %}
       host_name = server_data["name"]
       node_custom_data_path = kdevops_pool_path + "/" + "/#{host_name}"
-      FileUtils.mkdir_p(node_custom_data_path) unless File.exists?(node_custom_data_path)
+      FileUtils.mkdir_p(node_custom_data_path) unless File.exist?(node_custom_data_path)
       extra_disk_path = "#{node_custom_data_path}/" + "{{ extra_disk_path }}"
-      FileUtils.mkdir_p(extra_disk_path) unless File.exists?(extra_disk_path)
+      FileUtils.mkdir_p(extra_disk_path) unless File.exist?(extra_disk_path)
 {% if libvirt_enable_cxl %}
       cxl_path = "#{node_custom_data_path}" + "/cxl"
-      FileUtils.mkdir_p(cxl_path) unless File.exists?(cxl_path)
+      FileUtils.mkdir_p(cxl_path) unless File.exist?(cxl_path)
 {% endif %}
 {% if virtualbox_provider %}
       srv.vm.provider "virtualbox" do |vb, override|
