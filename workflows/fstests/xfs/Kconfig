@@ -123,11 +123,102 @@ config FSTESTS_XFS_SECTION_NOCRC_512
 	default y
 	help
 	  This will create a host to test the baseline of fstests using the
-	  following configuration without CRC enabled using 512 byte block size.
+	  following configuration without CRC enabled using 512 bytes block size.
 	  This is useful to test older kernels which lacked CRC support.
 
 	      [xfs_nocrc_512]
 	      MKFS_OPTIONS='-f -m crc=0,reflink=0,rmapbt=0, -i sparse=0, -b size=512,'
+	      FSTYP=xfs
+
+config FSTESTS_XFS_SECTION_NOCRC_1K
+	bool "Enable testing section: xfs_nocrc_1k"
+	default y
+	help
+	  This will create a host to test the baseline of fstests using the
+	  following configuration without CRC enabled using 1024 bytes (1 KiB)
+          block size.
+	  This is useful to test older kernels which lacked CRC support.
+
+	      [xfs_nocrc_1k]
+	      MKFS_OPTIONS='-f -m crc=0,reflink=0,rmapbt=0, -i sparse=0, -b size=1024,'
+	      FSTYP=xfs
+
+config FSTESTS_XFS_SECTION_NOCRC_2K
+	bool "Enable testing section: xfs_nocrc_2k"
+	default y
+	help
+	  This will create a host to test the baseline of fstests using the
+	  following configuration without CRC enabled using 2048 bytes (2 KiB)
+          block size.
+	  This is useful to test older kernels which lacked CRC support.
+
+	      [xfs_nocrc_2k]
+	      MKFS_OPTIONS='-f -m crc=0,reflink=0,rmapbt=0, -i sparse=0, -b size=2048,'
+	      FSTYP=xfs
+
+config FSTESTS_XFS_SECTION_NOCRC_4K
+	bool "Enable testing section: xfs_nocrc_4k"
+	default y
+	help
+	  This will create a host to test the baseline of fstests using the
+	  following configuration without CRC enabled using 4096 bytes (4 KiB)
+          block size.
+	  This is useful to test older kernels which lacked CRC support.
+
+	      [xfs_nocrc_4k]
+	      MKFS_OPTIONS='-f -m crc=0,reflink=0,rmapbt=0, -i sparse=0, -b size=4096,'
+	      FSTYP=xfs
+
+config FSTESTS_XFS_SECTION_NOCRC_8K
+	bool "Enable testing section: xfs_nocrc_8k"
+	default y
+	help
+	  This will create a host to test the baseline of fstests using the
+	  following configuration without CRC enabled using 8192 bytes (8 KiB)
+          block size.
+	  This is useful to test older kernels which lacked CRC support.
+
+	      [xfs_nocrc_8k]
+	      MKFS_OPTIONS='-f -m crc=0,reflink=0,rmapbt=0, -i sparse=0, -b size=8192,'
+	      FSTYP=xfs
+
+config FSTESTS_XFS_SECTION_NOCRC_16K
+	bool "Enable testing section: xfs_nocrc_16k"
+	default y
+	help
+	  This will create a host to test the baseline of fstests using the
+	  following configuration without CRC enabled using 16384 bytes (16 KiB)
+          block size.
+	  This is useful to test older kernels which lacked CRC support.
+
+	      [xfs_nocrc_16k]
+	      MKFS_OPTIONS='-f -m crc=0,reflink=0,rmapbt=0, -i sparse=0, -b size=16384,'
+	      FSTYP=xfs
+
+config FSTESTS_XFS_SECTION_NOCRC_32K
+	bool "Enable testing section: xfs_nocrc_32k"
+	default y
+	help
+	  This will create a host to test the baseline of fstests using the
+	  following configuration without CRC enabled using 32768 bytes (32 KiB)
+          block size.
+	  This is useful to test older kernels which lacked CRC support.
+
+	      [xfs_nocrc_32k]
+	      MKFS_OPTIONS='-f -m crc=0,reflink=0,rmapbt=0, -i sparse=0, -b size=32768,'
+	      FSTYP=xfs
+
+config FSTESTS_XFS_SECTION_NOCRC_64K
+	bool "Enable testing section: xfs_nocrc_64k"
+	default y
+	help
+	  This will create a host to test the baseline of fstests using the
+	  following configuration without CRC enabled using 65536 bytes (64 KiB)
+          block size.
+	  This is useful to test older kernels which lacked CRC support.
+
+	      [xfs_nocrc_64k]
+	      MKFS_OPTIONS='-f -m crc=0,reflink=0,rmapbt=0, -i sparse=0, -b size=65536,'
 	      FSTYP=xfs
 
 endif # FSTESTS_XFS_SECTION_NOCRC_ENABLED
