@@ -30,8 +30,8 @@ nvme_zone_size: '128M'
 nvme_zone_capacity: 0
 nvme_zone_max_active: 0
 nvme_zone_max_open: 0
-nvme_zone_physical_blocksize: 4096
-nvme_zone_logical_blocksize: 4096
+nvme_zone_physical_block_size: 4096
+nvme_zone_logical_block_size: 4096
 kdevops_storage_pool_path: "/var/lib/libvirt/images/"
 libvirt_storage_pool_create: False
 libvirt_uri: 'qemu:///system'

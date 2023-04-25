@@ -104,8 +104,8 @@ vagrant_global:
       zone_capacity: {{ nvme_zone_capacity }}
       zone_max_active: {{ nvme_zone_max_active }}
       zone_max_open: {{ nvme_zone_max_open }}
-      physical_block_size: {{ nvme_zone_physical_blocksize }}
-      logical_block_size: {{ nvme_zone_logical_blocksize }}
+      physical_block_size: {{ nvme_zone_physical_block_size }}
+      logical_block_size: {{ nvme_zone_logical_block_size }}
 {% endfor %}
 {% for n in range(1,2) %}
     zonenptwo{{ n }}:

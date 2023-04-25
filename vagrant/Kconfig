@@ -1429,7 +1429,7 @@ config QEMU_CUSTOM_NVME_ZONE_MAX_OPEN
 	  can be opened at all times. If the number of active zones is
 	  specified this value must be less than or equal to that value.
 
-config QEMU_CUSTOM_NVME_ZONE_PHYSICAL_BLOCKSIZE
+config QEMU_CUSTOM_NVME_ZONE_PHYSICAL_BLOCK_SIZE
 	int "QEMU ZNS storage NVMe physical block size"
 	default 4096
 	help
@@ -1442,7 +1442,7 @@ config QEMU_CUSTOM_NVME_ZONE_PHYSICAL_BLOCKSIZE
 	  block devices the physical_block_size variable contains the maximum
 	  physical_block_size of the component devices.
 
-config QEMU_CUSTOM_NVME_ZONE_LOGICAL_BLOCKSIZE
+config QEMU_CUSTOM_NVME_ZONE_LOGICAL_BLOCK_SIZE
 	int "QEMU ZNS storage NVMe logical block size"
 	default 4096
 	help
@@ -1487,15 +1487,15 @@ config QEMU_NVME_ZONE_MAX_OPEN
 	default 0 if !QEMU_CUSTOM_NVME_ZNS
 	default QEMU_CUSTOM_NVME_ZONE_MAX_OPEN if QEMU_CUSTOM_NVME_ZNS
 
-config QEMU_NVME_ZONE_PHYSICAL_BLOCKSIZE
+config QEMU_NVME_ZONE_PHYSICAL_BLOCK_SIZE
 	int
 	default 4096 if !QEMU_CUSTOM_NVME_ZNS
-	default QEMU_CUSTOM_NVME_ZONE_PHYSICAL_BLOCKSIZE if QEMU_CUSTOM_NVME_ZNS
+	default QEMU_CUSTOM_NVME_ZONE_PHYSICAL_BLOCK_SIZE if QEMU_CUSTOM_NVME_ZNS
 
-config QEMU_NVME_ZONE_LOGICAL_BLOCKSIZE
+config QEMU_NVME_ZONE_LOGICAL_BLOCK_SIZE
 	int
 	default 4096 if !QEMU_CUSTOM_NVME_ZNS
-	default QEMU_CUSTOM_NVME_ZONE_LOGICAL_BLOCKSIZE if QEMU_CUSTOM_NVME_ZNS
+	default QEMU_CUSTOM_NVME_ZONE_LOGICAL_BLOCK_SIZE if QEMU_CUSTOM_NVME_ZNS
 
 config QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
 	bool "Enable QEMU drives for large IO experimentation"

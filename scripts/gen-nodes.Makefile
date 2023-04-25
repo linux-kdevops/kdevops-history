@@ -169,8 +169,8 @@ GEN_NODES_EXTRA_ARGS += nvme_zone_zasl='$(subst ",,$(CONFIG_QEMU_NVME_ZONE_ZASL)
 GEN_NODES_EXTRA_ARGS += nvme_zone_capacity='$(subst ",,$(CONFIG_QEMU_NVME_ZONE_CAPACITY))'
 GEN_NODES_EXTRA_ARGS += nvme_zone_max_active='$(subst ",,$(CONFIG_QEMU_NVME_ZONE_MAX_ACTIVE))'
 GEN_NODES_EXTRA_ARGS += nvme_zone_max_open='$(subst ",,$(CONFIG_QEMU_NVME_ZONE_MAX_OPEN))'
-GEN_NODES_EXTRA_ARGS += nvme_zone_physical_blocksize='$(subst ",,$(CONFIG_QEMU_NVME_ZONE_PHYSICAL_BLOCKSIZE))'
-GEN_NODES_EXTRA_ARGS += nvme_zone_logical_blocksize='$(subst ",,$(CONFIG_QEMU_NVME_ZONE_LOGICAL_BLOCKSIZE))'
+GEN_NODES_EXTRA_ARGS += nvme_zone_physical_block_size='$(subst ",,$(CONFIG_QEMU_NVME_ZONE_PHYSICAL_BLOCK_SIZE))'
+GEN_NODES_EXTRA_ARGS += nvme_zone_logical_block_size='$(subst ",,$(CONFIG_QEMU_NVME_ZONE_LOGICAL_BLOCK_SIZE))'
 endif
 
 ifeq (y,$(CONFIG_VAGRANT_ENABLE_LARGEIO))
