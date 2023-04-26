@@ -51,6 +51,30 @@ ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_1024))
 FSTESTS_ARGS += fstests_xfs_section_reflink_1024=True
 endif
 
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_2K))
+FSTESTS_ARGS += fstests_xfs_section_reflink_2k=True
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_4K))
+FSTESTS_ARGS += fstests_xfs_section_reflink_4k=True
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_8K))
+FSTESTS_ARGS += fstests_xfs_section_reflink_8k=True
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_16K))
+FSTESTS_ARGS += fstests_xfs_section_reflink_16k=True
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_32K))
+FSTESTS_ARGS += fstests_xfs_section_reflink_32k=True
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_64K))
+FSTESTS_ARGS += fstests_xfs_section_reflink_64k=True
+endif
+
 ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_NORMAPBT))
 FSTESTS_ARGS += fstests_xfs_section_reflink_normapbt=True
 endif
