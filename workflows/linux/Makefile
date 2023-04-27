@@ -73,6 +73,7 @@ linux: $(KDEVOPS_NODES)
 PHONY += linux-install
 linux-install: $(KDEVOPS_NODES)
 	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -i \
+		--ask-become-pass \
 		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
 		--tags vars,build-linux,install-linux,reboot,uname \
 		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS)
@@ -86,6 +87,7 @@ linux-clone-clients: $(KDEVOPS_NODES)
 PHONY += linux-clone-9p
 linux-clone-9p: $(KDEVOPS_NODES)
 	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) --connection=local \
+		--ask-become-pass \
 		--inventory localhost, \
 		$(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
 		-e 'ansible_python_interpreter=/usr/bin/python3' \
