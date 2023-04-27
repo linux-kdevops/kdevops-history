@@ -941,6 +941,7 @@ config VAGRANT_BOX
 	default "opensuse/Leap-15.3.x86_64" if VAGRANT_OPENSUSE_X86_64_LEAP_15_3
 	default "Leap-15.4.x86_64" if VAGRANT_OPENSUSE_X86_64_LEAP_15_4
 	default "linux-kdevops/debian-next-20220629" if VAGRANT_KDEVOPS_DEBIAN_TESTING64_NEXT_20220629 || !VAGRANT
+	default "linux-kdevops/debian-xfs-20230427" if VAGRANT_KDEVOPS_DEBIAN_TESTING64_XFS_20230427 || !VAGRANT
 	default VAGRANT_SUSE_BOX if VAGRANT_SUSE
 	help
 	  The vagrant box to use.
