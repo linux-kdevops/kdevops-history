@@ -226,6 +226,53 @@ You may also want to edit the `config.vm.post_up_message` with whatever.
   config.vm.post_up_message = "this is kernel build for send bug reports to ignore@ignore.org"
 ```
 
+### Example network name resolution
+
+Most distros use udev for consistent names for networking interfaces. If
+you just want to get a box out which will work fast the best way is to just
+append to your grub kernel parameter:
+
+```
+GRUB_CMDLINE_LINUX_DEFAULT="net.ifnames=0 biosdevname=0"
+```
+
+### Example network DHCP fix
+
+On a basic debian console install, so where no Network Manager is installed,
+you want to just have something simply like this, after testing that the
+default network name that comes up is eth0:
+
+```
+# cat /etc/network/interfaces
+# interfaces(5) file used by ifup(8) and ifdown(8)
+# Include files from /etc/network/interfaces.d:
+source-directory /etc/network/interfaces.d
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+allow-hotplug eth0
+iface eth0 inet dhcp
+```
+
+### Ensuring ssh works
+
+You will want to ensure the user ~vagrant has a .ssh/ directory with
+chmod 700 permissions and the vagrant ssh key installed by default.
+When vagrant detects this a new one random one is replaced.
+
+https://github.com/hashicorp/vagrant/tree/main/keys
+
+So just do:
+
+```bash
+mkdir .ssh
+chmod 700 .ssh
+echo ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key >> authorized_keys
+```
+
 ### Creating the vagrant new box file tarball
 
 To create the box file you just tar it up. Assuming you want maximum
