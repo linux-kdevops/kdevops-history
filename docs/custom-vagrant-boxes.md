@@ -297,6 +297,25 @@ There are a a series of adjustments that needed to be made for guests
 to work for older kernel releases, should you need that. This is all
 documented below.
 
+But below is an example simple script
+
+
+```bash
+virt-install --virt-type kvm \
+	--name lio \
+	--arch x86_64 \
+	--cpu host \
+	--location /home/mcgrof/debian-testing-amd64-netinst.iso \
+	--os-variant debiantesting \
+	--memory 8192  --vcpus  8 \
+	--disk pool=data3-xfs,size=20,bus=virtio,format=qcow2 \
+	--graphics none \
+	--network network=vagrant-libvirt-private,model=virtio \
+	--console pty,target_type=serial \
+	--debug \
+	--extra-args "console=ttyS0"
+```
+
 ## Extending the vagrant box definition
 
 A vagrant box is essentially a tarball (gzip, xc are both supported) with a
