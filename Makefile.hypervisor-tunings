@@ -14,7 +14,7 @@ HYPERVISOR_TUNING_ARGS += hypervisor_tunning_zswap_max_pool_percent=$(ZSWAP_MAX_
 endif
 
 kdevops_hypervisor_tunning: $(KDEVOPS_EXTRA_VARS)
-	@$(Q)ansible-playbook --connection=local \
+	@$(Q)ansible-playbook $(ANSIBLE_VERBOSE) --connection=local \
 		--inventory localhost, \
 		$(KDEVOPS_PLAYBOOKS_DIR)/hypervisor-tuning.yml \
 		-e 'ansible_python_interpreter=/usr/bin/python3' \

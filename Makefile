@@ -44,6 +44,10 @@ export Q=@
 export NQ=echo
 endif
 
+ifneq ($(findstring 2, $(V)),)
+  export ANSIBLE_VERBOSE := '-vvv'
+endif
+
 include Makefile.min_deps
 DEFAULT_DEPS += $(KDEVOPS_DEPCHECK)
 
@@ -219,7 +223,7 @@ endif
 
 DEFAULT_DEPS += $(KDEVOPS_HOSTS)
 $(KDEVOPS_HOSTS): .config $(KDEVOPS_HOSTS_TEMPLATE)
-	$(Q)ansible-playbook --connection=local \
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) --connection=local \
 		--inventory localhost, \
 		$(KDEVOPS_PLAYBOOKS_DIR)/gen_hosts.yml \
 		-e 'ansible_python_interpreter=/usr/bin/python3' \
@@ -227,7 +231,7 @@ $(KDEVOPS_HOSTS): .config $(KDEVOPS_HOSTS_TEMPLATE)
 
 DEFAULT_DEPS += $(KDEVOPS_NODES)
 $(KDEVOPS_NODES) $(KDEVOPS_VAGRANT): .config $(KDEVOPS_NODES_TEMPLATE)
-	$(Q)ansible-playbook --connection=local \
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) --connection=local \
 		--inventory localhost, \
 		$(KDEVOPS_PLAYBOOKS_DIR)/gen_nodes.yml \
 		-e 'ansible_python_interpreter=/usr/bin/python3' \

@@ -20,7 +20,7 @@ QEMU_BUILD_SETUP_ARGS += qemu_target="ppc64-softmmu"
 endif
 
 qemu: $(KDEVOPS_EXTRA_VARS)
-	@$(Q)ansible-playbook --connection=local \
+	@$(Q)ansible-playbook $(ANSIBLE_VERBOSE) --connection=local \
 		--inventory localhost, \
 		$(KDEVOPS_PLAYBOOKS_DIR)/build_qemu.yml \
 		-e 'ansible_python_interpreter=/usr/bin/python3' \
@@ -28,7 +28,7 @@ qemu: $(KDEVOPS_EXTRA_VARS)
 PHONY += qemu
 
 qemu-install: $(KDEVOPS_EXTRA_VARS)
-	@$(Q)ansible-playbook --connection=local \
+	@$(Q)ansible-playbook $(ANSIBLE_VERBOSE) --connection=local \
 		--inventory localhost, \
 		$(KDEVOPS_PLAYBOOKS_DIR)/build_qemu.yml \
 		-e 'ansible_python_interpreter=/usr/bin/python3' \
@@ -36,7 +36,7 @@ qemu-install: $(KDEVOPS_EXTRA_VARS)
 PHONY += qemu-install
 
 qemu-configure: $(KDEVOPS_EXTRA_VARS)
-	@$(Q)ansible-playbook --connection=local \
+	@$(Q)ansible-playbook $(ANSIBLE_VERBOSE) --connection=local \
 		--inventory localhost, \
 		$(KDEVOPS_PLAYBOOKS_DIR)/build_qemu.yml \
 		-e 'ansible_python_interpreter=/usr/bin/python3' \
@@ -44,7 +44,7 @@ qemu-configure: $(KDEVOPS_EXTRA_VARS)
 PHONY += qemu-configure
 
 qemu-build: $(KDEVOPS_EXTRA_VARS)
-	@$(Q)ansible-playbook --connection=local \
+	@$(Q)ansible-playbook $(ANSIBLE_VERBOSE) --connection=local \
 		--inventory localhost, \
 		$(KDEVOPS_PLAYBOOKS_DIR)/build_qemu.yml \
 		-e 'ansible_python_interpreter=/usr/bin/python3' \

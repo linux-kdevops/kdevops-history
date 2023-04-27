@@ -7,7 +7,7 @@ POSTFIX_SETUP_ARGS += postfix_relay_host_setup=True
 POSTFIX_SETUP_ARGS += postfix_relay_host=$(POSTFIX_RELAY_HOST)
 
 kdevops_postfix_setup_relay: $(KDEVOPS_EXTRA_VARS)
-	@$(Q)ansible-playbook --connection=local \
+	@$(Q)ansible-playbook $(ANSIBLE_VERBOSE) --connection=local \
 		--inventory localhost, \
 		$(KDEVOPS_PLAYBOOKS_DIR)/postfix_relay_host.yml \
 		-e 'ansible_python_interpreter=/usr/bin/python3' \

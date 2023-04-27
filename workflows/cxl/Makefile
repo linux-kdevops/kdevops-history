@@ -14,24 +14,28 @@ BOOTLINUX_CXL_HELP :=
 include $(TOPDIR)/workflows/cxl/Makefile.kernel
 
 cxl:
-	$(Q)ansible-playbook -f 30 -i hosts playbooks/cxl.yml \
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts playbooks/cxl.yml \
 		--skip-tags run_tests,copy_results \
 		$(LIMIT_HOSTS)
 
 cxl-test-probe:
-	$(Q)ansible-playbook -f 30 -i hosts playbooks/cxl.yml \
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts playbooks/cxl.yml \
 		--tags vars,cxl-test-prep,cxl-test-probe \
 		--extra-vars '{ $(DYNAMIC_RUNTIME_VARS) }' \
 		$(LIMIT_HOSTS)
 
 cxl-test-meson:
-	$(Q)ansible-playbook -f 30 -i hosts playbooks/cxl.yml \
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts playbooks/cxl.yml \
 		--tags vars,cxl-test-prep,cxl-test-meson \
 		--extra-vars '{ $(DYNAMIC_RUNTIME_VARS) }' \
 		$(LIMIT_HOSTS)
 
 cxl-results:
-	$(Q)ansible-playbook -f 30 -i hosts playbooks/cxl.yml \
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts playbooks/cxl.yml \
 		--tags vars,copy_results $(LIMIT_HOSTS)
 
 

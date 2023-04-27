@@ -156,7 +156,7 @@ destroy_terraform:
 	$(Q)$(TOPDIR)/scripts/destroy_terraform.sh
 
 $(KDEVOPS_TFVARS): $(KDEVOPS_TFVARS_TEMPLATE) .config
-	$(Q)ansible-playbook --connection=local \
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) --connection=local \
 		--inventory localhost, \
 		$(KDEVOPS_PLAYBOOKS_DIR)/gen_tfvars.yml \
 		-e 'ansible_python_interpreter=/usr/bin/python3' \

@@ -17,11 +17,14 @@ endif # CONFIG_KERNEL_CI
 
 # Makefile for pynfs targets
 pynfs:
-	$(Q)ansible-playbook -f 30 -i hosts playbooks/pynfs.yml --skip-tags run_tests,copy_results
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts playbooks/pynfs.yml --skip-tags run_tests,copy_results
 
 pynfs-baseline:
-	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/pynfs.yml --tags vars,first_run,reset --extra-vars=@./extra_vars.yaml
-	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/pynfs.yml --tags vars,run_tests,copy_results --extra-vars=@./extra_vars.yaml
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts -l baseline playbooks/pynfs.yml --tags vars,first_run,reset --extra-vars=@./extra_vars.yaml
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts -l baseline playbooks/pynfs.yml --tags vars,run_tests,copy_results --extra-vars=@./extra_vars.yaml
 
 # Once you know the baseline works, you may want to run the baseline in a loop
 # up to the number of times you define. We define this goal in kdevops as
@@ -36,8 +39,10 @@ pynfs-baseline-kernelci:
 
 # Below are the corresponding dev targets
 pynfs-dev-baseline:
-	$(Q)ansible-playbook -f 30 -i hosts -l dev playbooks/pynfs.yml --tags vars,first_run,reset --extra-vars=@./extra_vars.yaml
-	$(Q)ansible-playbook -f 30 -i hosts -l dev playbooks/pynfs.yml --tags vars,run_tests,copy_results --extra-vars=@./extra_vars.yaml
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts -l dev playbooks/pynfs.yml --tags vars,first_run,reset --extra-vars=@./extra_vars.yaml
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts -l dev playbooks/pynfs.yml --tags vars,run_tests,copy_results --extra-vars=@./extra_vars.yaml
 
 pynfs-dev-loop:
 	$(Q)$(PYNFS_KERNEL_CI_LOOP) dev
@@ -46,7 +51,8 @@ pynfs-dev-kernelci:
 	$(Q)$(PYNFS_KERNEL_CI_LOOP_KOTD) dev
 
 pynfs-dev-reset:
-	$(Q)ansible-playbook -f 30 -i hosts -l dev playbooks/pynfs.yml --tags vars,reset --extra-vars=@./extra_vars.yaml
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts -l dev playbooks/pynfs.yml --tags vars,reset --extra-vars=@./extra_vars.yaml
 
 pynfs-help-menu:
 	@echo "pynfs options:"

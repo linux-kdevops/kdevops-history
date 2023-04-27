@@ -35,7 +35,8 @@ endif # CONFIG_WORKFLOW_INFER_USER_AND_GROUP == y
 
 ifeq (y,$(CONFIG_KDEVOPS_WORKFLOW_GIT_CLONES_KDEVOPS_GIT))
 kdevops-git-reset:
-	$(Q)ansible-playbook -f 30 -i hosts playbooks/common.yml --tags vars,kdevops_reset --extra-vars '{ kdevops_git_reset: True }' $(LIMIT_HOSTS)
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts playbooks/common.yml --tags vars,kdevops_reset --extra-vars '{ kdevops_git_reset: True }' $(LIMIT_HOSTS)
 
 kdevops-help-menu:
 	@echo "Common workflow options:"

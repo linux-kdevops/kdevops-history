@@ -68,14 +68,14 @@ extend-extra-args-vagrant:
 	fi
 
 vagrant_private_box_install:
-	$(Q)ansible-playbook -i \
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -i \
 		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/install_vagrant_boxes.yml
 
 vagrant_9p_linux_clone:
 	$(Q)make linux-clone
 
 vagrant_libvirt_pcie_passthrough_permissions:
-	$(Q)ansible-playbook --connection=local \
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) --connection=local \
 		--inventory localhost, \
 		playbooks/libvirt_pcie_passthrough.yml \
 		-e 'ansible_python_interpreter=/usr/bin/python3'
@@ -83,13 +83,13 @@ vagrant_libvirt_pcie_passthrough_permissions:
 bringup_vagrant: $(VAGRANT_PRIVATE_BOX_DEPS) $(VAGRANT_9P_HOST_CLONE) $(VAGRANT_LIBVIRT_PCIE_PASSTHROUGH)
 	$(Q)$(TOPDIR)/scripts/bringup_vagrant.sh
 	$(Q)if [[ "$(CONFIG_KDEVOPS_SSH_CONFIG_UPDATE)" == "y" ]]; then \
-		ansible-playbook --connection=local \
+		ansible-playbook $(ANSIBLE_VERBOSE) --connection=local \
 			--inventory localhost, \
 			playbooks/update_ssh_config_vagrant.yml \
 			-e 'ansible_python_interpreter=/usr/bin/python3' ;\
 	fi
 	$(Q)if [[ "$(CONFIG_KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK)" != "" ]]; then \
-		ansible-playbook -i \
+		ansible-playbook $(ANSIBLE_VERBOSE) -i \
 			$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/$(KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK) ;\
 	fi
 

@@ -10,13 +10,16 @@ endif # HAVE_DISTRO_CUSTOM_KOTD_REPO
 ANSIBLE_CMD_KOTD_ENABLE :=
 
 kotd: $(KDEVOPS_HOSTS) .config
-	$(Q)$(ANSIBLE_CMD_KOTD_ENABLE)ansible-playbook -f 30 -i hosts playbooks/devconfig.yml --tags vars,kotd --extra-vars=@./extra_vars.yaml
+	$(Q)$(ANSIBLE_CMD_KOTD_ENABLE)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts playbooks/devconfig.yml --tags vars,kotd --extra-vars=@./extra_vars.yaml
 
 kotd-baseline: $(KDEVOPS_HOSTS) .config
-	$(Q)$(ANSIBLE_CMD_KOTD_ENABLE)ansible-playbook -f 30 -i hosts -l baseline playbooks/devconfig.yml --tags vars,kotd --extra-vars=@./extra_vars.yaml
+	$(Q)$(ANSIBLE_CMD_KOTD_ENABLE)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts -l baseline playbooks/devconfig.yml --tags vars,kotd --extra-vars=@./extra_vars.yaml
 
 kotd-dev: $(KDEVOPS_HOSTS) .config
-	$(Q)$(ANSIBLE_CMD_KOTD_ENABLE)ansible-playbook -f 30 -i hosts -l dev playbooks/devconfig.yml --tags vars,kotd --extra-vars=@./extra_vars.yaml
+	$(Q)$(ANSIBLE_CMD_KOTD_ENABLE)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts -l dev playbooks/devconfig.yml --tags vars,kotd --extra-vars=@./extra_vars.yaml
 
 kotd-help-menu:
 	@echo "kotd options:"

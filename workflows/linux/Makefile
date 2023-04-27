@@ -66,26 +66,26 @@ LINUX_HELP_EXTRA :=
 
 PHONY += linux
 linux: $(KDEVOPS_NODES)
-	$(Q)ansible-playbook -i \
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -i \
 		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
 		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS)
 
 PHONY += linux-install
 linux-install: $(KDEVOPS_NODES)
-	$(Q)ansible-playbook -i \
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -i \
 		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
 		--tags vars,build-linux,install-linux,reboot,uname \
 		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS)
 
 linux-clone-clients: $(KDEVOPS_NODES)
-	$(Q)ansible-playbook -i \
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -i \
 		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
 		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS) \
 		--tags vars,deps,clone
 
 PHONY += linux-clone-9p
 linux-clone-9p: $(KDEVOPS_NODES)
-	$(Q)ansible-playbook --connection=local \
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) --connection=local \
 		--inventory localhost, \
 		$(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
 		-e 'ansible_python_interpreter=/usr/bin/python3' \
@@ -97,26 +97,26 @@ linux-clone: $(KDEVOPS_NODES) $(LINUX_CLONE_DEFAULT_TYPE)
 
 PHONY += linux-grub-setup
 linux-grub-setup: $(KDEVOPS_NODES)
-	$(Q)ansible-playbook -i \
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -i \
 		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
 		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS) --tags manual-update-grub,saved,vars
 
 PHONY += linux-reboot
 linux-reboot: $(KDEVOPS_NODES)
-	$(Q)ansible-playbook -i \
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -i \
 		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
 		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS) --tags vars,reboot
 
 PHONY += uname
 uname: $(KDEVOPS_NODES)
-	$(Q)ansible-playbook -i \
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -i \
 		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
 		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS) --tags uname,vars
 
 ifeq (y,$(CONFIG_KDEVOPS_WORKFLOW_ENABLE_CXL))
 PHONY += linux-cxl
 linux-cxl: $(KDEVOPS_NODES)
-	$(Q)ansible-playbook -i \
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -i \
 		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
 		--tags 'vars,cxl-build,cxl-install'                             \
 		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS)

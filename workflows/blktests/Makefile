@@ -65,10 +65,12 @@ extend-extra-args-blktests:
 	fi
 
 blktests:
-	$(Q)ansible-playbook -f 30 -i hosts playbooks/blktests.yml --skip-tags run_tests,copy_results $(LIMIT_HOSTS)
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts playbooks/blktests.yml --skip-tags run_tests,copy_results $(LIMIT_HOSTS)
 
 blktests-baseline:
-	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/blktests.yml --tags run_tests,copy_results --extra-vars '{ $(DYNAMIC_RUNTIME_VARS) }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts -l baseline playbooks/blktests.yml --tags run_tests,copy_results --extra-vars '{ $(DYNAMIC_RUNTIME_VARS) }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
 blktests-baseline-loop:
 	$(Q)$(BLKTEST_KERNEL_CI_LOOP) baseline $(LIMIT_HOSTS)
@@ -77,19 +79,24 @@ blktests-baseline-kernelci:
 	$(Q)$(BLKTEST_KERNEL_CI_LOOP_KOTD) baseline $(LIMIT_HOSTS)
 
 blktests-baseline-skip-kdevops-update:
-	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/blktests.yml --tags run_tests,copy_results --skip-tags git_update --extra-vars '{ $(DYNAMIC_RUNTIME_VARS) }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts -l baseline playbooks/blktests.yml --tags run_tests,copy_results --skip-tags git_update --extra-vars '{ $(DYNAMIC_RUNTIME_VARS) }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
 blktests-baseline-run-oscheck-only:
-	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/blktests.yml --tags run_tests,copy_results --skip-tags git_update,reboot,clean_results --extra-vars '{ $(DYNAMIC_RUNTIME_VARS) }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts -l baseline playbooks/blktests.yml --tags run_tests,copy_results --skip-tags git_update,reboot,clean_results --extra-vars '{ $(DYNAMIC_RUNTIME_VARS) }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
 blktests-dev:
-	$(Q)ansible-playbook -f 30 -i hosts -l dev playbooks/blktests.yml --tags run_tests,copy_results --extra-vars '{ $(DYNAMIC_RUNTIME_VARS) }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts -l dev playbooks/blktests.yml --tags run_tests,copy_results --extra-vars '{ $(DYNAMIC_RUNTIME_VARS) }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
 blktests-baseline-results:
-	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/blktests.yml --tags copy_results,print_results --extra-vars '{ kdevops_run_blktests: True }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts -l baseline playbooks/blktests.yml --tags copy_results,print_results --extra-vars '{ kdevops_run_blktests: True }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
 blktests-dev-results:
-	$(Q)ansible-playbook -f 30 -i hosts -l dev playbooks/blktests.yml --tags copy_results,print_results --extra-vars '{ kdevops_run_blktests: True }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts -l dev playbooks/blktests.yml --tags copy_results,print_results --extra-vars '{ kdevops_run_blktests: True }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
 blktests-help-menu:
 	@echo "blktests options:"

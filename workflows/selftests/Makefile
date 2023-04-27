@@ -29,17 +29,20 @@ include $(TOPDIR)/workflows/selftests/tests/Makefile.kmod
 include $(TOPDIR)/workflows/selftests/tests/Makefile.sysctl
 
 selftests:
-	$(Q)ansible-playbook -f 30 -i hosts playbooks/selftests.yml \
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts playbooks/selftests.yml \
 		--skip-tags run_tests,copy_results \
 		$(LIMIT_HOSTS)
 
 selftests-baseline:
-	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/selftests.yml \
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts -l baseline playbooks/selftests.yml \
 		--extra-vars '{ $(DYNAMIC_RUNTIME_VARS) }' \
 		--tags vars,run_tests,copy_results $(LIMIT_HOSTS)
 
 selftests-results:
-	$(Q)ansible-playbook -f 30 -i hosts -l baseline playbooks/selftests.yml \
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts -l baseline playbooks/selftests.yml \
 		--tags vars,copy_results $(LIMIT_HOSTS)
 
 selftests-help-main:

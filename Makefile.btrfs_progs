@@ -5,7 +5,7 @@ BTRFS_PROGS_SETUP_ARGS += btrfs_progs_build=True
 
 PHONY += btrfs-progs
 btrfs-progs: $(KDEVOPS_NODES)
-	@$(Q)ansible-playbook -i \
+	@$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -i \
 		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/btrfs-progs.yml \
 		--extra-vars=$(BTRFS_PROGS_SETUP_ARGS) $(LIMIT_HOSTS)
 
