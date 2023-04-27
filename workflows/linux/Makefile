@@ -8,6 +8,9 @@ TREE_LOCALVERSION:=$(subst ",,$(CONFIG_BOOTLINUX_TREE_LOCALVERSION))
 TREE_SHALLOW_DEPTH:=$(subst ",,$(CONFIG_BOOTLINUX_SHALLOW_CLONE_DEPTH))
 
 TREE_CONFIG:=config-$(TREE_TAG)
+ifeq (y,$(CONFIG_BOOTLINUX_PURE_IOMAP))
+TREE_CONFIG:=config-$(TREE_TAG)-pure-iomap
+endif
 
 # Describes the Linux clone
 BOOTLINUX_ARGS	+= target_linux_git=$(TREE_URL)

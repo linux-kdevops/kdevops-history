@@ -17,8 +17,9 @@ config BOOTLINUX_TREE_BTRFS_DEVEL
 
 config BOOTLINUX_TREE_MCGROF_NEXT
 	bool "mcgrof-next"
+	select BOOTLINUX_HAS_PURE_IOMAP_CONFIG
 	help
-	  Use the mcgrof's linux-next tree.
+	  Use mcgrof's linux-next tree.
 
 endchoice
 

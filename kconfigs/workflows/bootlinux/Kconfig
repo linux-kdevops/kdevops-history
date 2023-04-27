@@ -1,4 +1,33 @@
+config HAVE_SUPPORTS_PURE_IOMAP
+	bool
+
 if BOOTLINUX
+
+config BOOTLINUX_HAS_PURE_IOMAP_CONFIG
+	bool
+
+# For images / distros that do not require CONFIG_BUFFER_HEAD To support this
+# you should have an image / instance which does not require BLK_DEV_MD (RAID
+# support), ext4, vfat, or other older filesystems which require struct buffer
+# head usage.
+#
+# CONFIG_BUFFER_HEAD is only available currently on development branches, not
+# even yet part of linux-next. The branches that have support for this must
+# select BOOTLINUX_HAS_PURE_IOMAP_CONFIG.
+#
+# Instances / images which can boot into a kernel without buffer heads then
+# must also select HAVE_SUPPORTS_PURE_IOMAP
+
+if HAVE_SUPPORTS_PURE_IOMAP
+
+config BOOTLINUX_PURE_IOMAP
+	bool "Use a kernel configuration which disables buffer heads"
+	default HAVE_SUPPORTS_PURE_IOMAP
+	depends on BOOTLINUX_HAS_PURE_IOMAP_CONFIG
+	help
+	  This will let you choose use 9p to build Linux. What this does is
+
+endif # HAVE_SUPPORTS_PURE_IOMAP
 
 config BOOTLINUX_9P
 	bool "Use 9p to build Linux"

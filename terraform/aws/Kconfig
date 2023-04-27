@@ -171,6 +171,7 @@ config TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_ARM64
 
 config TERRAFORM_AWS_NS_AMAZON_2023_X86_64
 	bool "al2023-*-x86_64"
+	select HAVE_SUPPORTS_PURE_IOMAP
 	depends on TARGET_ARCH_X86_64
 	help
 	  This option will set aws name search to the latest amazon 2023
@@ -179,6 +180,7 @@ config TERRAFORM_AWS_NS_AMAZON_2023_X86_64
 config TERRAFORM_AWS_NS_AMAZON_2023_ARM64
 	bool "al2023-*-arm64"
 	depends on TARGET_ARCH_ARM64
+	select HAVE_SUPPORTS_PURE_IOMAP
 	help
 	  This option will set aws name search to the latest amazon 2023
 	  optimized image arm64.
