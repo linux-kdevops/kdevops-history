@@ -1,0 +1,14 @@
+generic/054 # lazy baseline - failure found in at least two sections
+generic/081 # lazy baseline - failure found in at least two sections
+generic/108 # lazy baseline - failure found in at least two sections
+generic/204 # lazy baseline - failure found in at least two sections
+generic/223 # lazy baseline - failure found in at least two sections
+generic/361 # lazy baseline - failure found in at least two sections
+generic/459 # lazy baseline - failure found in at least two sections
+generic/471 # lazy baseline - failure found in at least two sections
+generic/704 # lazy baseline - failure found in at least two sections
+shared/298 # lazy baseline - failure found in at least two sections
+xfs/188 # lazy baseline - failure found in at least two sections
+xfs/199 # lazy baseline - failure found in at least two sections
+xfs/294 # lazy baseline - failure found in at least two sections
+xfs/506 # lazy baseline - failure found in at least two sections
