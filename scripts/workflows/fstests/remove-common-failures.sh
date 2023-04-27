@@ -41,7 +41,7 @@ done
 
 TMP_FILE=$(mktemp)
 for i in $FILES; do
-	cat $i | egrep -v "${COMMON_EXPUNGES[@]}" | sort | uniq > $TMP_FILE
+	cat $i | grep -E -v "${COMMON_EXPUNGES[@]}" | sort | uniq > $TMP_FILE
 	mv $TMP_FILE $i
 	SIZE=$(du -b $i | awk '{print $1}')
 	if [[ -d .git ]]; then
