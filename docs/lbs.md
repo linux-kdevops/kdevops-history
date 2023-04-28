@@ -56,8 +56,10 @@ Enable:
 
 This effectively enables the vagrant image:
 
-  * [https://app.vagrantup.com/linux-kdevops/boxes/debian-xfs-20230427/](kdevops debian-xfs-20230427)
+  * [kdevops debian-xfs-20230427](https://app.vagrantup.com/linux-kdevops/boxes/debian-xfs-20230427/)
+
+If you'd like to work on your own image see [kdevops docs on building custom vagrant images](https://github.com/linux-kdevops/kdevops/blob/master/docs/custom-vagrant-boxes.md).
 
 Today we crash when enabling a LBS at boot on a pure-iomap kernel.
 
-  * large-block-20230426 - [LBS 8k NVMe pure-iomap crash](docs/lbs-pure-iomap-crash.md)
+  * large-block-20230426 - [LBS 8k NVMe pure-iomap crash](lbs-pure-iomap-crash.md)
