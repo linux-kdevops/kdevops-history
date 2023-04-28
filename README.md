@@ -143,6 +143,7 @@ Below is kdevops' recommended documentation reading.
   * [kdevops example workflow: running make linux](docs/kdevops-make-linux.md)
   * [kdevops running make destroy](docs/kdevops-make-destroy.md)
   * [kdevops make mrproper](docs/kdevops-restarting-from-scratch.md)
+  * [kdevops Large Block Size R&D](docs/lbs.md)
 
 # kdevops kernel-ci support
 
