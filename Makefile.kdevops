@@ -17,7 +17,6 @@ PHONY += kdevops_terraform_deps
 
 kdevops_vagrant_install_vagrant:
 	@$(Q)ansible-playbook $(ANSIBLE_VERBOSE) --connection=local \
-		--ask-become-pass \
 		--inventory localhost, \
 		$(KDEVOPS_PLAYBOOKS_DIR)/install_vagrant.yml \
 		-e 'ansible_python_interpreter=/usr/bin/python3'
