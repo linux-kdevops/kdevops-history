@@ -37,10 +37,24 @@ setup_loop()
 {
 	LOOPDEV=$1
 	DISK=$2
+	HAS_LSBLK="0"
+	which lsblk > /dev/null
+	if [[ $? -eq 0 ]]; then
+		HAS_LSBLK="1"
+	fi
 
 	losetup $LOOPDEV 2>/dev/null
 	if [ $? -ne 0 ]; then
-		losetup $LOOPDEV $DISK
+		if [[ "$HAS_LSBLK" == "1" ]]; then
+			SPARSE_INFO=$(lsblk -o 'NAME,LABEL,LOG-SEC' | grep sparsefiles)
+			DEV_NAME=$(echo $SPARSE_INFO | awk '{print $1}')
+			LOGSEC=$(echo $SPARSE_INFO | awk '{print $3}')
+			CMD="losetup --sector-size $LOGSEC $LOOPDEV $DISK"
+			echo $CMD
+			$CMD
+		else
+			losetup $LOOPDEV $DISK
+		fi
 		if [ $? -eq 0 ]; then
 			echo "$LOOPDEV ready"
 		fi
