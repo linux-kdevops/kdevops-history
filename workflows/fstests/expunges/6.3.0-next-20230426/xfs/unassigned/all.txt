@@ -1,1 +1,2 @@
 generic/048 # failing on this will block all testing due to xlog_wait_on_iclog
+generic/074 # another xlog_wait_on_iclog hung task
