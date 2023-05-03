@@ -42,7 +42,7 @@ virsh_works()
 
 virsh_get_pool_list()
 {
-	POOL_LIST=$($REQ_SUDO virsh pool-list| egrep -v "Name|\-\-\-\-\-"|  sed -e '/^$/d' | awk '{print $1}')
+	POOL_LIST=$($REQ_SUDO virsh pool-list| grep -E -v "Name|-----"|  sed -e '/^$/d' | awk '{print $1}')
 }
 
 virsh_path_in_pool_list_exists()
