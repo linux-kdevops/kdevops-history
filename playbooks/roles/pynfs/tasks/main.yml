@@ -80,14 +80,41 @@
   delay: 1
   until: result.rc == 0
 
-- name: Run pynfs
+- name: Run pynfs 4.0
   tags: [ 'run_tests' ]
-  shell: "./testserver.py --json={{ pynfs_data }}/pynfs-{{ item }}-results.json --maketree --uid=0 --gid=0 localhost:{{ nfsd_export_path }}/pynfs/{{ item }} all || true"
+  shell: "./testserver.py --json={{ pynfs_data }}/pynfs-4.0-results.json --maketree --uid=0 --gid=0 localhost:{{ nfsd_export_path }}/pynfs/4.0 all || true"
   args:
-    chdir: "{{ pynfs_data }}/nfs{{ item }}"
-  with_items:
-    - 4.0
-    - 4.1
+    chdir: "{{ pynfs_data }}/nfs4.0"
+  async: 3600
+  poll: 0
+  register: pynfs40_results
+
+- name: Run pynfs 4.1
+  tags: [ 'run_tests' ]
+  shell: "./testserver.py --json={{ pynfs_data }}/pynfs-4.1-results.json --maketree --uid=0 --gid=0 localhost:{{ nfsd_export_path }}/pynfs/4.1 all || true"
+  args:
+    chdir: "{{ pynfs_data }}/nfs4.1"
+  async: 3600
+  poll: 0
+  register: pynfs41_results
+
+- name: Wait for pynfs 4.0 to complete
+  tags: [ 'run_tests' ]
+  async_status:
+    jid: "{{ pynfs40_results.ansible_job_id }}"
+  register: pynfs40_poll_result
+  until: pynfs40_poll_result.finished
+  retries: 60
+  delay: 60
+
+- name: Wait for pynfs 4.1 to complete
+  tags: [ 'run_tests' ]
+  async_status:
+    jid: "{{ pynfs41_results.ansible_job_id }}"
+  register: pynfs41_poll_result
+  until: pynfs41_poll_result.finished
+  retries: 60
+  delay: 60
 
 - name: Get used target kernel version
   tags: [ 'copy_results' ]
