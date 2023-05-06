@@ -33,6 +33,49 @@ _vagrant_lacks_parallel()
 	return 0
 }
 
+vagrant_check_dups()
+{
+	NEW_POSSIBLE_INSTANCES=$(vagrant status --machine-readable | grep ",state," | awk -F"," '{print $2}')
+	EXISTING_USER_INSTANCES=$(vagrant global-status | grep -A 200 "\-\-\-\-\-" | grep -v "\-\-\-\-" | grep -B 200 "     "  | awk '{print $2}')
+	for instance in $NEW_POSSIBLE_INSTANCES ; do
+		INSTANCE_STATE=$(vagrant status --machine-readable | grep ",state," | awk -F",${instance}," '{print $2}' |awk -F"," '{print $2}')
+		# We're dealing with a new local instance which is not created
+		# yet. Now we check to see if globally this user doesn't have
+		# an existing instance already created.
+		if [[ "$INSTANCE_STATE" == "not_created" ]]; then
+			INSTANCE_NEW="true"
+			for old_instance in $EXISTING_USER_INSTANCES; do
+				# An older instance already exists, complain
+				if [[ "$instance" == "$old_instance" ]]; then
+					INSTANCE_NEW="false"
+					break
+				fi
+			done
+			# At this point we're only dealing with not_created
+			# instances *and* we know one does not exist in another
+			# directory for this user.
+
+			kdevops_pool_path="$CONFIG_KDEVOPS_STORAGE_POOL_PATH"
+			# For libvirt we can do one more global sanity check
+			if [[ "$CONFIG_VAGRANT_LIBVIRT" == "y" ]]; then
+				possible_image="${kdevops_pool_path}/vagrant_${instance}.img"
+				if [[ -f $possible_image ]]; then
+					echo "Image for instance $instance already exists ($possible_image), skippin bringup wipe of spare drives ..."
+					continue
+				fi
+			fi
+
+			# If we don't do this, old spare drives might be
+			# left over and we'd be using them up again.
+			spare_drive_instance_dir="${kdevops_pool_path}/kdevops/$instance"
+			if [[ -d ${spare_drive_instance_dir} ]]; then
+				echo "Wiping old instance spare drive directory ... $spare_drive_instance_dir"
+				rm -rf ${kdevops_pool_path}/kdevops/$instance
+			fi
+		fi
+	done
+}
+
 # This is just a workaround for fedora since we have an old vagrant-libvirt
 # plugin that doesn't work with parallel
 ARG=
@@ -50,4 +93,7 @@ if [[ "$CONFIG_VAGRANT_BOX_UPDATE_ON_BRINGUP" == "y" ]]; then
 		exit 1
 	fi
 fi
+
+vagrant_check_dups
+
 vagrant up $ARG
