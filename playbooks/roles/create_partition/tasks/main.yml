@@ -40,7 +40,7 @@
   become_method: sudo
   shell: |
     set -o pipefail
-    find /dev -type b | xargs lsblk -npr -oLABEL | grep -q ^"{{ disk_setup_label }}"
+    lsblk -npr -oLABEL | grep -q ^"{{ disk_setup_label }}"
   register: label_grep
   failed_when: False
   changed_when: False
