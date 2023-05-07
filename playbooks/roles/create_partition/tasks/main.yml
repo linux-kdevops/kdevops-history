@@ -59,6 +59,22 @@
     label_grep.rc != 0
   tags: [ 'partition' ]
 
+- name: Wipe old filesystem if {{ disk_setup_device }} was not on /etc/fstab
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  filesystem:
+    state: absent
+    fstype: "{{ disk_setup_fstype }}"
+    dev: "{{ disk_setup_device }}"
+    opts: "{{ disk_setup_fs_opts }}"
+  when: >
+    fstab_grep_stat != 0 and
+    (mountpoint_stat != 0 and
+     label_grep.rc != 0)
+  register: create_data_fs
+  tags: [ 'partition' ]
+
 - name: Partitions | Read {{ disk_setup_device }} partitions and mountpoints
   shell: |
     set -o pipefail
