@@ -261,6 +261,12 @@ Vagrant.configure("2") do |config|
         libvirt.qemuargs :value => "-device"
         libvirt.qemuargs :value => "pci-bridge,id=custom-pci-for-{{ extra_disk_driver }},chassis_nr=1,bus=pci.0,addr=0x8"
 {% else %}
+{% if libvirt_machine_type == "q35" %}
+        libvirt.qemuargs :value => "-global"
+        libvirt.qemuargs :value => "ICH9-LPC.disable_s3=0"
+        libvirt.qemuargs :value => "-global"
+        libvirt.qemuargs :value => "ICH9-LPC.disable_s4=0"
+{% endif %}
 	# This is for exclusive PCIe hierarchies.
 	#
         # For 'q35' on x86_64 and 'virt' for AArch64 we use can use PCI-E
