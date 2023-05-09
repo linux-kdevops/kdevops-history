@@ -18,12 +18,19 @@ MIRROR_CODE      := $(TOPDIR)/playbooks/roles/linux-mirror/linux-mirror-systemd/
 #
 
 # Since we don't support varabiliity yet, for now we keep it very simple:
-kdevops_linux_mirror: $(KDEVOPS_EXTRA_VARS)
-	$(NQ) Setting up Linux mirror on localhost
+mirror: $(KDEVOPS_EXTRA_VARS)
+	$(NQ) Setting up Linux and QEMU systemd mirrors on localhost
 	$(Q)make -C $(MIRROR_CODE) mirror
 	$(Q)make -C $(MIRROR_CODE) install
 
-PHONY += kdevops_linux_mirror
+PHONY += mirror
 
 ANSIBLE_EXTRA_ARGS += $(LINUX_MIRROR_ARGS)
-LOCALHOST_SETUP_WORK += kdevops_linux_mirror
+LOCALHOST_SETUP_WORK += mirror
+
+mirror-help-menu:
+	@echo "Mirror options:"
+	@echo "mirror		- sets up systemd mirrors (Linux & QEMU)"
+	@echo ""
+
+HELP_TARGETS += mirror-help-menu
