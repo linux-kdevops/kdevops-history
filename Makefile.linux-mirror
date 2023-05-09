@@ -25,12 +25,25 @@ mirror: $(KDEVOPS_EXTRA_VARS)
 
 PHONY += mirror
 
+mirror-status: $(KDEVOPS_EXTRA_VARS)
+	$(NQ) systemd timer units list
+	$(Q)systemctl --user list-timers
+	$(NQ) systemd timer status
+	$(Q)systemctl status --user linux-mirror.timer linux-stable-mirror.timer \
+		linux-next-mirror.timer qemu-mirror.timer
+	$(NQ) systemd service units status
+	$(Q)systemctl status --user linux-mirror.service linux-stable-mirror.service \
+		linux-next-mirror.service qemu-mirror.service
+
+PHONY += mirror-status
+
 ANSIBLE_EXTRA_ARGS += $(LINUX_MIRROR_ARGS)
 LOCALHOST_SETUP_WORK += mirror
 
 mirror-help-menu:
 	@echo "Mirror options:"
 	@echo "mirror		- sets up systemd mirrors (Linux & QEMU)"
+	@echo "mirror-status	- checks systemd mirrors status (Linux & QEMU)"
 	@echo ""
 
 HELP_TARGETS += mirror-help-menu
