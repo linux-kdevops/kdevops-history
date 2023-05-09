@@ -5,7 +5,7 @@ ConditionPathExists=/mirror/qemu.git
 
 [Service]
 Type=oneshot
-ExecStartPre=/usr/bin/git -C /mirror/qemu.git update --prune
+ExecStartPre=/usr/bin/git -C /mirror/qemu.git remote update --prune
 ExecStart=/usr/bin/git -C /mirror/qemu.git fetch --tags --prune
 ExecStartPost=/usr/bin/git -C /mirror/qemu.git fetch origin +refs/heads/*:refs/heads/*
 

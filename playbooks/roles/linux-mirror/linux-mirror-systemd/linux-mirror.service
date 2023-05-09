@@ -5,7 +5,7 @@ ConditionPathExists=/mirror/linux.git
 
 [Service]
 Type=oneshot
-ExecStartPre=/usr/bin/git -C /mirror/linux.git update  --prune
+ExecStartPre=/usr/bin/git -C /mirror/linux.git remote update --prune
 ExecStart=/usr/bin/git -C /mirror/linux.git fetch --tags --prune
 ExecStartPost=/usr/bin/git -C /mirror/linux.git fetch origin +refs/heads/*:refs/heads/*
 
