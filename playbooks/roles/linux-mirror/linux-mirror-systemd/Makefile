@@ -16,16 +16,9 @@ GIT_DAEMON_FILES := git-daemon@.service
 GIT_DAEMON_FILES += git-daemon.socket
 LOCAL_SYSTEMD    := /usr/local/lib/systemd/system/
 
-TORVALDS        := git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
 TORVALDS_TARGET := $(MIRROR_PATH)/linux.git
-
-STABLE          := git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
 STABLE_TARGET   := $(MIRROR_PATH)/linux-stable.git
-
-NEXT            := git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 NEXT_TARGET     := $(MIRROR_PATH)/linux-next.git
-
-QEMU            := https://github.com/qemu/qemu.git
 QEMU_TARGET     := $(MIRROR_PATH)/qemu.git
 
 MIRROR_SERVICES := $(LINUX_SERVICES)

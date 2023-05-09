@@ -264,6 +264,137 @@ config INSTALL_LOCAL_LINUX_MIRROR
 	  first linux-mirror setup and just use USE_LOCAL_LINUX_MIRROR so to
 	  make use of the mirror.
 
+choice
+	prompt "Linux mirror protocol"
+	default MIRROR_TORVALDS_HTTPS
+	depends on INSTALL_LOCAL_LINUX_MIRROR
+
+config MIRROR_TORVALDS_HTTPS
+	bool "HTTPS"
+	help
+	  If you enable this option then HTTPS will be used as the source
+	  of the mirror. The URL is:
+
+	  https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+
+config MIRROR_TORVALDS_HTTPS_GOOGLE
+	bool "HTTPS (Google)"
+	help
+	  If you enable this option then HTTPS will be used as the source
+	  of the mirror and Google URL will be chosen. The URL is:
+
+	  https://kernel.googlesource.com/pub/scm/linux/kernel/git/stable/linux.git
+
+config MIRROR_TORVALDS_GIT
+	bool "Git"
+	help
+	  If you enable this option then git:// protocol will be used as the
+	  source of the mirror. The URL is:
+
+	  git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+
+endchoice
+
+choice
+	prompt "Linux Next mirror protocol/source"
+	default MIRROR_NEXT_HTTPS
+	depends on INSTALL_LOCAL_LINUX_MIRROR
+
+config MIRROR_NEXT_HTTPS
+	bool "HTTPS"
+	help
+	  If you enable this option then HTTPS will be used as the source
+	  of the mirror. The URL is:
+
+	  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+
+config MIRROR_NEXT_HTTPS_GOOGLE
+	bool "HTTPS (Google)"
+	help
+	  If you enable this option then HTTPS will be used as the source
+	  of the mirror and Google URL will be chosen. The URL is:
+
+	  https://kernel.googlesource.com/pub/scm/linux/kernel/git/stable/linux.git
+
+config MIRROR_NEXT_GIT
+	bool "Git"
+	help
+	  If you enable this option then Git protocol will be used as the
+	  source of the mirror. The URL is:
+
+	  git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+
+endchoice
+
+choice
+	prompt "Linux stable mirror protocol/source"
+	default MIRROR_STABLE_HTTPS
+	depends on INSTALL_LOCAL_LINUX_MIRROR
+
+config MIRROR_STABLE_HTTPS
+	bool "HTTPS"
+	help
+	  If you enable this option then HTTPS will be used as the source
+	  of the mirror. The URL is:
+
+	  https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+
+config MIRROR_STABLE_HTTPS_GOOGLE
+	bool "HTTPS (Google)"
+	help
+	  If you enable this option then HTTPS will be used as the source
+	  of the mirror and Google URL will be chosen. The URL is:
+
+          https://kernel.googlesource.com/pub/scm/linux/kernel/git/stable/linux.git
+
+config MIRROR_STABLE_GIT
+	bool "Git"
+	help
+	  If you enable this option then Git protocol will be used as the
+	  source of the mirror. The URL is:
+
+	  git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+
+endchoice
+
+choice
+	prompt "QEMU mirror protocol/source"
+	default MIRROR_QEMU_HTTPS_GITLAB
+	depends on INSTALL_LOCAL_LINUX_MIRROR
+
+config MIRROR_QEMU_HTTPS_GITLAB
+	bool "HTTPS (GitLab)"
+	help
+	  If you enable this option then GitLab HTTPS will be used as the
+	  source of the mirror. The URL is:
+
+	  https://gitlab.com/qemu-project/qemu.git
+
+config MIRROR_QEMU_SSH_GITLAB
+	bool "SSH (GitLab)"
+	help
+	  If you enable this option then GitLab SSH will be used as the source
+	  of the mirror. The URL is:
+
+	  ssh://git@gitlab.com:qemu-project/qemu.git
+
+config MIRROR_QEMU_HTTPS_GITHUB
+	bool "HTTPS (GitHub)"
+	help
+	  If you enable this option then GitHub HTTPS will be used as the
+	  source of the mirror. The URL is:
+
+	  https://github.com/qemu/qemu.git
+
+config MIRROR_QEMU_SSH_GITHUB
+	bool "SSH (GitHub)"
+	help
+	  If you enable this option then GitHub SSH will be used as the source
+	  of the mirror. The URL is:
+
+	  ssh://git@github.com:qemu/qemu.git
+endchoice
+
 endif
 
 config LOCAL_DEVELOPMENT_PATH

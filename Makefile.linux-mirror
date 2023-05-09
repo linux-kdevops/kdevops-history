@@ -34,3 +34,77 @@ mirror-help-menu:
 	@echo ""
 
 HELP_TARGETS += mirror-help-menu
+
+TORVALDS_GIT          := git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+TORVALDS_HTTPS        := https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+TORVALDS_HTTPS_GOOGLE := https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux.git
+export TORVALDS       :=
+
+STABLE_GIT          := git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+STABLE_HTTPS        := https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+STABLE_HTTPS_GOOGLE := https://kernel.googlesource.com/pub/scm/linux/kernel/git/stable/linux.git
+STABLE_TARGET       := $(MIRROR_PATH)/linux-stable.git
+export STABLE       :=
+
+NEXT_GIT          := git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+NEXT_HTTPS        := https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+NEXT_HTTPS_GOOGLE := https://kernel.googlesource.com/pub/scm/linux/kernel/git/next/linux-next.git
+export NEXT       :=
+
+QEMU_HTTPS_GITHUB := https://github.com/qemu/qemu.git
+QEMU_HTTPS_GITLAB := https://gitlab.com/qemu-project/qemu.git
+QEMU_SSH_GITHUB   := ssh://git@github.com:qemu/qemu.git
+QEMU_SSH_GITLAB   := ssh://git@gitlab.com:qemu-project/qemu.git
+export QEMU       :=
+
+ifeq (y,$(CONFIG_MIRROR_TORVALDS_HTTPS))
+TORVALDS := $(TORVALDS_HTTPS)
+endif
+
+ifeq (y,$(CONFIG_MIRROR_TORVALDS_HTTPS_GOOGLE))
+TORVALDS := $(TORVALDS_HTTPS_GOOGLE)
+endif
+
+ifeq (y,$(CONFIG_MIRROR_TORVALDS_GIT))
+TORVALDS := $(TORVALDS_GIT)
+endif
+
+ifeq (y,$(CONFIG_MIRROR_STABLE_HTTPS))
+STABLE := $(STABLE_HTTPS)
+endif
+
+ifeq (y,$(CONFIG_MIRROR_STABLE_HTTPS_GOOGLE))
+STABLE := $(STABLE_HTTPS_GOOGLE)
+endif
+
+ifeq (y,$(CONFIG_MIRROR_STABLE_GIT))
+STABLE := $(STABLE_GIT)
+endif
+
+ifeq (y,$(CONFIG_MIRROR_NEXT_HTTPS))
+NEXT := $(NEXT_HTTPS)
+endif
+
+ifeq (y,$(CONFIG_MIRROR_NEXT_HTTPS_GOOGLE))
+NEXT := $(NEXT_HTTPS_GOOGLE)
+endif
+
+ifeq (y,$(CONFIG_MIRROR_NEXT_GIT))
+NEXT := $(NEXT_GIT)
+endif
+
+ifeq (y,$(CONFIG_MIRROR_QEMU_HTTPS_GITLAB))
+QEMU := $(QEMU_HTTPS_GITLAB)
+endif
+
+ifeq (y,$(CONFIG_MIRROR_QEMU_SSH_GITLAB))
+QEMU := $(QEMU_HTTPS_GITLAB)
+endif
+
+ifeq (y,$(CONFIG_MIRROR_QEMU_HTTPS_GITHUB))
+QEMU := $(QEMU_HTTPS_GITHUB)
+endif
+
+ifeq (y,$(CONFIG_MIRROR_QEMU_SSH_GITHUB))
+QEMU := $(QEMU_HTTPS_GITHUB)
+endif
