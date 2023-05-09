@@ -35,6 +35,10 @@ export Q=@
 export NQ=@echo
 endif
 
+ifneq ($(findstring 2, $(V)),)
+  export GIT_VERBOSE := "--verbose"
+endif
+
 all: help
 
 help:
@@ -50,19 +54,19 @@ mirror:
 	$(Q)rm -f $(MIRROR_PATH)/ignore_kdevops
 	$(Q)if [ ! -d $(TORVALDS_TARGET) ]; then \
 	 echo "          CLONE torvalds/linux tree" ;\
-	 git -C $(MIRROR_PATH) clone --mirror $(TORVALDS) $(TORVALDS_TARGET) ;\
+	 git -C $(MIRROR_PATH) clone $(GIT_VERBOSE) --progress --mirror $(TORVALDS) $(TORVALDS_TARGET) ;\
 	fi
 	$(Q)if [ ! -d $(STABLE_TARGET) ]; then \
 	 echo "          CLONE stable/linux" ;\
-	 git -C $(MIRROR_PATH) clone --mirror $(STABLE) --reference /mirror/linux.git $(STABLE_TARGET) ;\
+	 git -C $(MIRROR_PATH) clone $(GIT_VERBOSE) --progress --mirror $(STABLE) --reference /mirror/linux.git $(STABLE_TARGET) ;\
 	fi
 	$(Q)if [ ! -d $(NEXT_TARGET) ]; then \
 	  echo "          CLONE next/linux-next" ;\
-	  git -C $(MIRROR_PATH) clone --mirror $(NEXT) --reference /mirror/linux.git $(NEXT_TARGET) ;\
+	  git -C $(MIRROR_PATH) clone $(GIT_VERBOSE) --progress --mirror $(NEXT) --reference /mirror/linux.git $(NEXT_TARGET) ;\
 	fi
 	$(Q)if [ ! -d $(QEMU_TARGET) ]; then \
 	  echo "          CLONE qemu-project/qemu" ;\
-	  git -C $(MIRROR_PATH) clone --mirror $(QEMU) $(QEMU_TARGET) ;\
+	  git -C $(MIRROR_PATH) clone $(GIT_VERBOSE) --progress --mirror $(QEMU) $(QEMU_TARGET) ;\
 	fi
 
 install:
