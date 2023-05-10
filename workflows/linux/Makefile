@@ -52,7 +52,7 @@ PHONY +=  linux-help-menu
 linux-help-menu:
 	@echo "Linux git kernel development options"
 	@echo "linux              - Git clones a linux git tree, build Linux, installs and reboots into it"
-	@echo "linux-install      - Only builds, installs Linux and reboots - useful for rapid development"
+	@echo "linux-install      - Only builds and installs Linux - useful for rapid development"
 	@echo "linux-clone        - Only clones Linux"
 	@echo "linux-grub-setup   - Ensures the appropriate target kernel is set to boot"
 	@echo "linux-reboot       - Reboot guests"
@@ -74,7 +74,7 @@ PHONY += linux-install
 linux-install: $(KDEVOPS_NODES)
 	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -i \
 		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
-		--tags vars,build-linux,install-linux,reboot,uname \
+		--tags vars,build-linux,install-linux \
 		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS)
 
 linux-clone-clients: $(KDEVOPS_NODES)
