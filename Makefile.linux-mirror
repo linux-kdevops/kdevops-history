@@ -30,10 +30,10 @@ mirror-status: $(KDEVOPS_EXTRA_VARS)
 	$(Q)systemctl --user list-timers
 	$(NQ) systemd timer status
 	$(Q)systemctl status --user linux-mirror.timer linux-stable-mirror.timer \
-		linux-next-mirror.timer qemu-mirror.timer
+		linux-next-mirror.timer mcgrof-next-mirror.timer qemu-mirror.timer
 	$(NQ) systemd service units status
 	$(Q)systemctl status --user linux-mirror.service linux-stable-mirror.service \
-		linux-next-mirror.service qemu-mirror.service
+		linux-next-mirror.service mcgrof-next-mirror.service qemu-mirror.service
 
 PHONY += mirror-status
 
@@ -63,6 +63,11 @@ NEXT_GIT          := git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-ne
 NEXT_HTTPS        := https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 NEXT_HTTPS_GOOGLE := https://kernel.googlesource.com/pub/scm/linux/kernel/git/next/linux-next.git
 export NEXT       :=
+
+MCGROF_GIT          := git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git
+MCGROF_HTTPS        := https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git
+MCGROF_HTTPS_GOOGLE := https://kernel.googlesource.com/pub/scm/linux/kernel/git/mcgrof/linux-next.git
+export MCGROF       :=
 
 QEMU_HTTPS_GITHUB := https://github.com/qemu/qemu.git
 QEMU_HTTPS_GITLAB := https://gitlab.com/qemu-project/qemu.git
@@ -104,6 +109,18 @@ endif
 
 ifeq (y,$(CONFIG_MIRROR_NEXT_GIT))
 NEXT := $(NEXT_GIT)
+endif
+
+ifeq (y,$(CONFIG_MIRROR_MCGROF_HTTPS))
+MCGROF := $(MCGROF_HTTPS)
+endif
+
+ifeq (y,$(CONFIG_MIRROR_MCGROF_HTTPS_GOOGLE))
+MCGROF := $(MCGROF_HTTPS_GOOGLE)
+endif
+
+ifeq (y,$(CONFIG_MIRROR_MCGROF_GIT))
+MCGROF := $(MCGROF_GIT)
 endif
 
 ifeq (y,$(CONFIG_MIRROR_QEMU_HTTPS_GITLAB))

@@ -48,6 +48,7 @@ The following git trees are currently mirrored:
   (next/linux-next)
   * The Linux kernel source tree from Linus Torvalds (torvalds/linux)
   * The Linux kernel stable tree from the Stable Group (stable/linux)
+  * The Linux kernel mcgrof's tree (mcgrof/linux-next)
 
 Root is only used to install the systemd socket activation git daemon.
 Socket activation just means the service will not run or consume memory
@@ -63,6 +64,7 @@ variability for this):
  * next/linux-next: every 6 hours
  * torvalds/linux: 10 minutes
  * stable/linux: every 2 hours
+ * mcgrof/linux-next: every 6 hours
 
 ## Manual debugging
 
