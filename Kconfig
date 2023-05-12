@@ -267,7 +267,7 @@ config INSTALL_LOCAL_LINUX_MIRROR
 
 choice
 	prompt "Linux mirror protocol"
-	default MIRROR_TORVALDS_HTTPS
+	default MIRROR_TORVALDS_GIT
 	depends on INSTALL_LOCAL_LINUX_MIRROR
 
 config MIRROR_TORVALDS_HTTPS
@@ -298,7 +298,7 @@ endchoice
 
 choice
 	prompt "Linux Next mirror protocol/source"
-	default MIRROR_NEXT_HTTPS
+	default MIRROR_NEXT_GIT
 	depends on INSTALL_LOCAL_LINUX_MIRROR
 
 config MIRROR_NEXT_HTTPS
@@ -329,7 +329,7 @@ endchoice
 
 choice
 	prompt "Linux mcgrof's protocol/source"
-	default MIRROR_MCGROF_HTTPS
+	default MIRROR_MCGROF_GIT
 	depends on INSTALL_LOCAL_LINUX_MIRROR
 
 config MIRROR_MCGROF_HTTPS
@@ -360,7 +360,7 @@ endchoice
 
 choice
 	prompt "Linux stable mirror protocol/source"
-	default MIRROR_STABLE_HTTPS
+	default MIRROR_STABLE_GIT
 	depends on INSTALL_LOCAL_LINUX_MIRROR
 
 config MIRROR_STABLE_HTTPS
