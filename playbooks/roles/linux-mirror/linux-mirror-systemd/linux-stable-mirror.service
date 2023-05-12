@@ -1,5 +1,5 @@
 [Unit]
-Description=linux mirror [linux-stable.git]
+Description=Linux Stable mirror [linux-stable.git]
 Documentation=man:git(1)
 ConditionPathExists=/mirror/linux-stable.git
 

@@ -1,5 +1,5 @@
 [Unit]
-Description=linux mirror query timer [linux.git]
+Description=Linux mirror query timer [linux.git]
 ConditionPathExists=/mirror/linux.git
 
 [Timer]

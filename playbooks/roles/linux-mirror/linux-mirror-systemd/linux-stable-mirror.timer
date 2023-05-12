@@ -1,5 +1,5 @@
 [Unit]
-Description=linux mirror query timer [linux-stable.git]
+Description=Linux Stable mirror query timer [linux-stable.git]
 ConditionPathExists=/mirror/linux-stable.git
 
 [Timer]

@@ -1,5 +1,5 @@
 [Unit]
-Description=linux mirror [linux-next.git]
+Description=Linux Next mirror [linux-next.git]
 Documentation=man:git(1)
 ConditionPathExists=/mirror/linux-next.git
 
