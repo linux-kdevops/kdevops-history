@@ -1,0 +1,6 @@
+runtime	5.183s
+description	test error logging
+exit_status	0
+reason	output
+date	2023-05-15 14:03:35
+status	fail
