@@ -1,1 +1,10 @@
+generic/471 # lazy baseline - failure found in at least two sections
+generic/563 # lazy baseline - failure found in at least two sections
+xfs/157 # lazy baseline - failure found in at least two sections
+xfs/170 # lazy baseline - failure found in at least two sections
 xfs/170 # lazy baseline - failure found in at least two sections: https://gist.github.com/dagmcr/dd940b5081909228bf9924e6c90fad41
+xfs/188 # lazy baseline - failure found in at least two sections
+xfs/205 # lazy baseline - failure found in at least two sections
+xfs/432 # lazy baseline - failure found in at least two sections
+xfs/506 # lazy baseline - failure found in at least two sections
+xfs/516 # lazy baseline - failure found in at least two sections
