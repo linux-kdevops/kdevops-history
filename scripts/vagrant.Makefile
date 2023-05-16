@@ -8,13 +8,9 @@ KDEVOPS_NODES :=		vagrant/kdevops_nodes.yaml
 KDEVOPS_VAGRANT_TEMPLATE :=	$(KDEVOPS_NODES_ROLE_TEMPLATE_DIR)/Vagrantfile.j2
 KDEVOPS_VAGRANT_GENERATED:=	vagrant/.Vagrantfile.generated
 KDEVOPS_VAGRANT :=		vagrant/Vagrantfile
-KDEVOPS_VAGRANT_PROVISIONED :=	vagrant/.provisioned_once
 
 KDEVOPS_MRPROPER +=		$(KDEVOPS_VAGRANT_GENERATED)
 KDEVOPS_MRPROPER +=		$(KDEVOPS_VAGRANT)
-KDEVOPS_MRPROPER +=		$(KDEVOPS_VAGRANT_PROVISIONED)
-
-VAGRANT_POST_VAGRANTUP := $(if $(wildcard $(TOPDIR)/$(KDEVOPS_VAGRANT_PROVISIONED)),,vagrant_post_bringup)
 
 VAGRANT_ARGS += kdevops_vagrant_template_full_path='$(TOPDIR_PATH)/$(KDEVOPS_VAGRANT_TEMPLATE)'
 
@@ -64,12 +60,6 @@ endif
 EXTRA_VAR_INPUTS += extend-extra-args-vagrant
 ANSIBLE_EXTRA_ARGS += $(VAGRANT_ARGS)
 
-VAGRANT_BRINGUP_DEPS :=
-VAGRANT_BRINGUP_DEPS +=  $(VAGRANT_PRIVATE_BOX_DEPS)
-VAGRANT_BRINGUP_DEPS +=  $(VAGRANT_9P_HOST_CLONE)
-VAGRANT_BRINGUP_DEPS +=  $(VAGRANT_LIBVIRT_PCIE_PASSTHROUGH)
-VAGRANT_BRINGUP_DEPS +=  $(VAGRANT_POST_VAGRANTUP)
-
 extend-extra-args-vagrant:
 	@if [[ "$(CONFIG_HAVE_VAGRANT_BOX_URL)" == "y" ]]; then \
 		echo "kdevops_install_vagrant_boxes: True" >> $(KDEVOPS_EXTRA_VARS) ;\
@@ -90,8 +80,8 @@ vagrant_libvirt_pcie_passthrough_permissions:
 		playbooks/libvirt_pcie_passthrough.yml \
 		-e 'ansible_python_interpreter=/usr/bin/python3'
 
-vagrant_post_bringup:
-	$(Q)if [[ -f $(KDEVOPS_VAGRANT_PROVISIONED)" == "y" ]]; then \
+bringup_vagrant: $(VAGRANT_PRIVATE_BOX_DEPS) $(VAGRANT_9P_HOST_CLONE) $(VAGRANT_LIBVIRT_PCIE_PASSTHROUGH)
+	$(Q)$(TOPDIR)/scripts/bringup_vagrant.sh
 	$(Q)if [[ "$(CONFIG_KDEVOPS_SSH_CONFIG_UPDATE)" == "y" ]]; then \
 		ansible-playbook $(ANSIBLE_VERBOSE) --connection=local \
 			--inventory localhost, \
@@ -102,12 +92,6 @@ vagrant_post_bringup:
 		ansible-playbook $(ANSIBLE_VERBOSE) -i \
 			$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/$(KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK) ;\
 	fi
-	$(Q)touch $(KDEVOPS_VAGRANT_PROVISIONED)
-PHONY += vagrant_post_bringup
-
-bringup_vagrant: $(VAGRANT_BRINGUP_DEPS)
-	$(Q)$(TOPDIR)/scripts/bringup_vagrant.sh
-PHONY += bringup_vagrant
 
 destroy_vagrant:
 	$(Q)$(TOPDIR)/scripts/destroy_vagrant.sh
