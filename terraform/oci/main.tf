@@ -41,7 +41,7 @@ resource "oci_core_volume" "kdevops_sparse_disk" {
 
   availability_domain = var.oci_availablity_domain
   display_name = var.oci_sparse_volume_display_name
-  size_in_gbs = 250
+  size_in_gbs = 120
 }
 
 resource "oci_core_volume_attachment" "kdevops_data_volume_attachment" {
