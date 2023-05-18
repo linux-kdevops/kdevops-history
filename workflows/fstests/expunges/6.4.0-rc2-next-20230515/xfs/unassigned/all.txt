@@ -1,4 +1,5 @@
 generic/471 # lazy baseline - failure found in at least two sections
+generic/551 # lazy baseline - failure found in at least two sections
 generic/563 # lazy baseline - failure found in at least two sections
 xfs/157 # lazy baseline - failure found in at least two sections
 xfs/170 # lazy baseline - failure found in at least two sections
