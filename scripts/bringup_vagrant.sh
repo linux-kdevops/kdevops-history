@@ -36,7 +36,7 @@ _vagrant_lacks_parallel()
 vagrant_check_dups()
 {
 	NEW_POSSIBLE_INSTANCES=$(vagrant status --machine-readable | grep ",state," | awk -F"," '{print $2}')
-	EXISTING_USER_INSTANCES=$(vagrant global-status | grep -A 200 "\-\-\-\-\-" | grep -v "\-\-\-\-" | grep -B 200 "     "  | awk '{print $2}')
+	EXISTING_USER_INSTANCES=$(vagrant global-status | grep -A 200 -e "-----" | grep -v -e "----" | grep -B 200 "     "  | awk '{print $2}')
 	for instance in $NEW_POSSIBLE_INSTANCES ; do
 		INSTANCE_STATE=$(vagrant status --machine-readable | grep ",state," | awk -F",${instance}," '{print $2}' |awk -F"," '{print $2}')
 		# We're dealing with a new local instance which is not created

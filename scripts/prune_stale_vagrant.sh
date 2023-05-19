@@ -16,7 +16,7 @@ run_prune_path()
 	if [[ "$1" == "true" ]]; then
 		EVAL_ARGS="--evaluate"
 	fi
-	POOLS=$($SUDO_REQ virsh pool-list | grep -A 2000 "\-\-\-" | grep -v "\-\-\-" | awk '{print $1}')
+	POOLS=$($SUDO_REQ virsh pool-list | grep -A 2000 -e "---" | grep -v -e "---" | awk '{print $1}')
 	for p in $POOLS; do
 		POOL_PATH=$($SUDO_REQ virsh pool-dumpxml $p | grep path | sed -e 's|<path>||' | sed -e 's|</path>||' | awk '{print $1}')
 		echo "Evaluating pool $p with path $POOL_PATH ..."
@@ -91,7 +91,7 @@ EXISTING_USAGE_BYTES=$(du -s --block-size=1 $KDEVOPS_POOL_PATH | awk '{print $1}
 
 echo -e "Existing disk usage:\n$EXISTING_USAGE"
 
-ALL_LIBVIRT_INSTANCES=$($SUDO_REQ virsh list --all --title | grep -A 200 "\-\-\-\-" | grep -v "\-\-\-" | awk '{print $2}')
+ALL_LIBVIRT_INSTANCES=$($SUDO_REQ virsh list --all --title | grep -A 200 -e "----" | grep -v -e "---" | awk '{print $2}')
 
 BYTES_COULD_SAVE=0
 
