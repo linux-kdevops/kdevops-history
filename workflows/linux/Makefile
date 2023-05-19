@@ -68,6 +68,9 @@ LINUX_HELP_EXTRA :=
 PHONY += linux
 linux: $(KDEVOPS_NODES)
 	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -i \
+		'127.0.0.1,' $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux-local.yml \
+		--extra-vars="$(BOOTLINUX_ARGS)"
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -i \
 		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
 		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS)
 

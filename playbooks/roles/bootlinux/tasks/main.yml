@@ -12,14 +12,8 @@
 
 # Distro specific
 - name: Install dependencies
-  include_tasks: install-deps/main.yml
-
-- name: Install dependencies to build Linux on host
-  tags: [ 'deps' ]
-  run_once: true
-  local_action: import_tasks install-deps/main.yml
-  when:
-    - bootlinux_9p|bool
+  include_tasks:
+    file: install-deps/main.yml
 
 # We do this regardless of what distro you use
 - name: Install b4

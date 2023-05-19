@@ -1,0 +1,19 @@
+---
+- name: Import optional extra_args file
+  include_vars: "{{ item }}"
+  ignore_errors: yes
+  with_first_found:
+    - files:
+      - "../extra_vars.yml"
+      - "../extra_vars.yaml"
+      - "../extra_vars.json"
+      skip: true
+  tags: vars
+
+- name: Install dependencies to build Linux on host
+  tags: [ 'deps' ]
+  run_once: true
+  local_action: import_tasks install-deps/main.yml
+  when:
+    - bootlinux_9p|bool
+
