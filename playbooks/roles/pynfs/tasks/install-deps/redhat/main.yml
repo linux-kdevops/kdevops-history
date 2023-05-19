@@ -19,4 +19,3 @@
       - swig
       - python3-gssapi
       - python3-ply
-      - nfs-utils

@@ -11,7 +11,8 @@
   become_method: sudo
   apt:
     name:
-      - nfs-utils
+      - nfs-common
+      - nfs-kernel-server
     state: present
     update_cache: yes
   tags: [ 'pynfs', 'deps' ]
