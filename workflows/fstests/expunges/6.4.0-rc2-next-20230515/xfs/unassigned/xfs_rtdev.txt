@@ -5,6 +5,7 @@ generic/016
 generic/021
 generic/022
 generic/027
+generic/051 # mount: vmalloc error: https://gist.github.com/dagmcr/eb4553f883cee784242d33a168006c04
 generic/058
 generic/060
 generic/061
@@ -33,3 +34,16 @@ generic/275
 generic/300
 generic/312
 generic/334 # oom-kill: xfs_repair: https://gist.github.com/dagmcr/b8fe26666e2f2e060f6cbf447a182f1f
+generic/361
+generic/371
+generic/416
+generic/427
+generic/449
+generic/488
+generic/511
+generic/515
+generic/520
+generic/558
+generic/619
+generic/626
+xfs/015
