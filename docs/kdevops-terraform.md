@@ -317,5 +317,80 @@ https://www.terraform.io/docs/providers/google/index.html
 https://cloud.google.com/iam/docs/granting-roles-to-service-accounts#granting_access_to_a_service_account_for_a_resource
 
 ### OCI - Oracle Cloud Infrastructure
+OCI documentation is located at
+1. https://docs.oracle.com/en-us/iaas/Content/home.htm
+2. https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraform.htm
 
-Someone give me some love.
+The following is a list of OCI specific configuration variables that the user
+needs to provide values (through `make menuconfig` interface).
+  1. `CONFIG_TERRAFORM_SSH_CONFIG_USER`
+	 - User name used for the logging into the cloud instance.
+     - Please use,
+	   - `opc` for Oracle Linux.
+	   - `ubuntu` for Ubuntu Linux
+  2. `CONFIG_TERRAFORM_SSH_CONFIG_PUBKEY_FILE`
+     - Path to user's ssh public key (e.g. `~/.ssh/id_rsa.pub`).
+     - This key will be copied over to the cloud instance during its
+       creation.
+  3. `CONFIG_TERRAFORM_OCI_REGION`
+	 - String representing the name of the region (e.g. `us-ashburn-1`).
+     - https://docs.oracle.com/en-us/iaas/Content/anomaly/using/regions.htm
+     - List of the regions can be found at
+       https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm 
+  4. `CONFIG_TERRAFORM_OCI_TENANCY_OCID`
+	 - OCID of the tenancy being used.
+     - In order to obtain the OCID, Please refer to
+	   https://docs.oracle.com/en-us/iaas/Content/GSG/Tasks/contactingsupport_topic-Finding_Your_Tenancy_OCID_Oracle_Cloud_Identifier.htm 
+  5. `CONFIG_TERRAFORM_OCI_USER_OCID`
+	 - OCID of the user.
+     - In order to obtain the OCID, Please refer to
+       https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five
+  6. `CONFIG_TERRAFORM_OCI_USER_PRIVATE_KEY_PATH`
+	 - Path to API private key.
+	 - Documentation
+	   - Generating API keys.
+	     Refer to section `Generating an API Signing Key (Linux and Mac OS X)`
+	     at
+	     https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm
+	   - Uploading Public API key.
+	     Refer to section `How to Upload the Public Key` at
+	     https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm 
+       - Video: https://www.youtube.com/watch?v=LMvYOSkXF1k
+  7. `CONFIG_TERRAFORM_OCI_USER_FINGERPRINT`
+     - Finger print of the API key.
+  8. `CONFIG_TERRAFORM_OCI_AVAILABLITY_DOMAIN` ="VkEH:US-ASHBURN-AD-3"
+     - String specifying the availability domain to use in the region
+	 - Availability domain names can be obtained from the web page used to
+       launch an cloud instance.
+  9. `CONFIG_TERRAFORM_OCI_COMPARTMENT_OCID`
+	 - OCID of the compartment can be obtained by following the instructions
+	   at
+	   https://docs.oracle.com/en-us/iaas/Content/GSG/Tasks/contactingsupport_topic-Finding_the_OCID_of_a_Compartment.htm
+  10. `CONFIG_TERRAFORM_OCI_SHAPE`="VM.Standard.E2.8"
+      - String representing the name of the compute shape to create.
+      - https://docs.oracle.com/en-us/iaas/Content/Compute/References/computeshapes.htm
+  11. `CONFIG_TERRAFORM_OCI_OS_IMAGE_OCID`
+	  - OCID of the OS image to be installed.
+      - Image's OCID can be obtained by following instructions at
+	    https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformbestpractices_topic-Referencing_Images.htm
+  12. `CONFIG_TERRAFORM_OCI_SUBNET_OCID`
+	  - OCID of the subnet to be assigned to the cloud instance.
+      - Overview:
+        https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/Overview_of_VCNs_and_Subnets.htm
+      - Instructions on how to get a list of available subnets can be found at
+        https://docs.oracle.com/en-us/iaas/Content/Network/Tasks/get-subnet.htm 
+      - Click on the hamburger menu provided the right side of a subnet entry
+        and select `Copy OCID`.
+  13. `CONFIG_TERRAFORM_OCI_DATA_VOLUME_DISPLAY_NAME`
+	  - String representing the name for the `data` disk.
+      - This is used for storing sources and binaries corresponding to Linux
+        kernel, Fstests & Kdevops.
+  14. `CONFIG_TERRAFORM_OCI_DATA_VOLUME_DEVICE_FILE_NAME`
+      - Device node to be used for `data` disk.
+      - Please specify `/dev/oracleoci/oraclevdb` as the device file.
+  15. `CONFIG_TERRAFORM_OCI_SPARSE_VOLUME_DISPLAY_NAME`
+	  - String representing the name for the `sparse` disk.
+      - This is used for creating regular files to back loop devices.
+  16. `CONFIG_TERRAFORM_OCI_SPARSE_VOLUME_DEVICE_FILE_NAME`
+      - Device node to be used for `sparse` disk.
+      - Please specify `/dev/oracleoci/oraclevdc` as the device file.
