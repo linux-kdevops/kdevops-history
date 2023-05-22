@@ -19,8 +19,6 @@
   stat:
     path=/sys/kernel/mm/ksm/run
   register: ksm_enable_file
-  when:
-    - hypervisor_tunning_ksm_enable|bool
   tags: [ 'hypervisor' ]
 
 - name: Enable ksm
@@ -39,8 +37,6 @@
   stat:
     path=/sys/module/zswap/parameters/enabled
   register: zswap_enable_file
-  when:
-    - hypervisor_tunning_zswap_enable|bool
   tags: [ 'hypervisor' ]
 
 - name: Check to see if zswap max pool percent file exists /sys/module/zswap/parameters/max_pool_percent
