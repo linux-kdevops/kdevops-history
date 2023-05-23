@@ -24,10 +24,3 @@ module "ssh_config_update_host_entries_minicloud" {
   backup_postfix           = "kdevops"
   kexalgorithms            = var.ssh_config_kexalgorithms == "" ? "" : var.ssh_config_kexalgorithms
 }
-
-resource "null_resource" "ansible_call_minicloud" {
-  provisioner "local-exec" {
-    command = var.openstack_cloud == "minicloud" ? local.ansible_cmd : "echo ignorng minicloud ansible call"
-  }
-  depends_on = [module.ssh_config_update_host_entries]
-}
