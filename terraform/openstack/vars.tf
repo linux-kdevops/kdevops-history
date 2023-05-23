@@ -21,17 +21,6 @@ variable "ssh_pubkey_data" {
   default = ""
 }
 
-variable "limit_boxes" {
-  description = "Limit the number of nodes created"
-  default     = "no"
-}
-
-# minicloud lets us use 5 max
-variable "limit_num_boxes" {
-  description = "The max number of boxes we're allowing terraform to create for us"
-  default     = "2"
-}
-
 variable "image_name" {
   description = "Type of image"
   default     = "Debian 10 ppc64le"

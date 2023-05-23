@@ -1,13 +1,3 @@
-variable "limit_boxes" {
-  description = "Limit the number of nodes created"
-  default     = "no"
-}
-
-variable "limit_num_boxes" {
-  description = "The max number of boxes we're allowing terraform to create for us"
-  default     = "2"
-}
-
 variable "oci_region" {
   description = "An OCI region"
   default = ""

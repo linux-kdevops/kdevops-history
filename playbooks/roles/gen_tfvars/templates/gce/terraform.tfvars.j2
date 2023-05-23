@@ -5,9 +5,6 @@ machine_type = "{{ terraform_gce_machine_type }}"
 image_name = "{{ terraform_gce_image_name }}"
 scratch_disk_interface = "{{ terraform_gce_scatch_disk_type }}"
 
-limit_boxes = "{{ terraform_limit_boxes }}"
-limit_num_boxes = "{{ terraform_limit_num_boxes }}"
-
 ssh_config_pubkey_file = "{{ kdevops_terraform_ssh_config_pubkey_file }}"
 ssh_config_user = "{{ kdevops_terraform_ssh_config_user }}"
 ssh_config = "{{ sshconfig }}"

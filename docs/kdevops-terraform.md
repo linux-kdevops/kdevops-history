@@ -179,11 +179,6 @@ tenant_id = "SOME-GUID"
 application_id = "SOME-GUID"
 subscription_id = "SOME-GUID"
 
-# Limit set to 2 to enable only 2 hosts form this project
-limit_boxes = "yes"
-limit_num_boxes = 2
-
-# Updating your SSH config not yet supported on Azure :(
 ssh_config_pubkey_file = "~/.ssh/minicloud.pub"
 ssh_config_user = "yourcoolusername"
 ssh_config = "~/.ssh/config"
@@ -216,10 +211,6 @@ instance_prefix = "my-random-project"
 
 image_name = "Debian 10 ppc64le"
 flavor_name = "minicloud.tiny"
-
-# Limit set to 2 to enable only 2 hosts form this project
-limit_boxes = "yes"
-limit_num_boxes = 2
 
 ssh_config_pubkey_file = "~/.ssh/minicloud.pub"
 ssh_config = "~/.ssh/config"
@@ -264,11 +255,6 @@ something like this:
 ```
 aws_region = "us-west-1"
 
-# Limit set to 2 to enable only 2 hosts form this project
-limit_boxes = "yes"
-limit_num_boxes = 2
-
-
 ssh_config_pubkey_file = "~/.ssh/my-aws.pub"
 ssh_config_user = "mcgrof"
 ssh_config = "~/.ssh/config"
@@ -289,11 +275,6 @@ terraform.tfvars you may end up with:
 
 ```
 project = "demo-kdevops"
-limit_num_boxes = 2
-
-# Limit set to 2 to enable only 2 hosts form this project
-limit_boxes = "yes"
-limit_num_boxes = 2
 
 ssh_config_pubkey_file = "~/.ssh/my-gce.pub"
 ssh_config_user = "mcgrof"

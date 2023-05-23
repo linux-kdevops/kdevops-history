@@ -1,14 +1,3 @@
-variable "limit_boxes" {
-  description = "Limit the number of nodes created"
-  default     = "yes"
-}
-
-# Seems to be the default for number of cores allowed on the azure demo account.
-variable "limit_num_boxes" {
-  description = "The max number of boxes we're allowing terraform to create for us"
-  default     = "2"
-}
-
 variable "project" {
   description = "Your project name"
   default     = "some-rando-project"

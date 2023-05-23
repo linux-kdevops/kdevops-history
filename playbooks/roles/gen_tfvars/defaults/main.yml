@@ -1,8 +1,5 @@
 # SPDX-License-Identifier GPL-2.0+
 ---
-terraform_limit_boxes: False
-terraform_limit_num_boxes: 0
-
 # XXX: replace these lower case "false" things by making them
 # not be used somehow. Ie, we want to just use the ansible True / False
 kdevops_terraform_ansible_provision: "false"
@@ -12,8 +9,6 @@ kdevops_terraform_ssh_config_update: "false"
 kdevops_terraform_ssh_config_update_strict: "false"
 kdevops_terraform_ssh_config_update_backup=: "false"
 
-kdevops_terraform_limit_boxes: "false"
-kdevops_terraform_limit_num_boxes: False
 kdevops_terraform_provider: "aws"
 kdevops_terraform_ssh_pubkey_file: "/dev/null"
 kdevops_terraform_ssh_user: "nully"

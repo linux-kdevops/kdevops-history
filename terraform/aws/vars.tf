@@ -1,21 +1,3 @@
-# You may want to enable this if for example your aws subscription is
-# the free trial. As of May 2019 you get only XXX.
-#
-# We set this to true for now to ensure a good experience from users
-# of this fs tests aws provider, assuming they're also using the
-# aws free trial account. Set this to "no" on your terraform.tfvars file
-# to override.
-variable "limit_boxes" {
-  description = "Limit the number of nodes created"
-  default     = "no"
-}
-
-# 4 is be the default for number of boxen allowed on the azure demo account
-variable "limit_num_boxes" {
-  description = "The max number of boxes we're allowing terraform to create for us"
-  default     = "2"
-}
-
 # This is for North california, if you want another one:
 # https://docs.aws.amazon.com/general/latest/gr/rande.html
 variable "aws_region" {

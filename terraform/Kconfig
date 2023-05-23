@@ -8,8 +8,4 @@ menu "Terraform ssh configuration"
 source "terraform/Kconfig.ssh"
 endmenu
 
-menu "Terraform limits"
-source "terraform/Kconfig.limits"
-endmenu
-
 endif # TERRAFORM

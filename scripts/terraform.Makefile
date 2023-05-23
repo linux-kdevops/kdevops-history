@@ -49,11 +49,6 @@ KDEVOPS_MRPROPER += terraform/$(KDEVOPS_CLOUD_PROVIDER)/.terraform.lock.hcl
 
 DEFAULT_DEPS_REQS_EXTRA_VARS += $(KDEVOPS_TFVARS)
 
-ifeq (y,$(CONFIG_TERRAFORM_LIMIT_BOXES))
-TERRAFORM_EXTRA_VARS += terraform_limit_boxes='true'
-TERRAFORM_EXTRA_VARS += terraform_limit_num_boxes='$(subst ",,$(CONFIG_TERRAFORM_LIMIT_NUM_BOXES))'
-endif
-
 ifeq (y,$(CONFIG_TERRAFORM_AWS))
 TERRAFORM_EXTRA_VARS += terraform_aws_region=$(subst ",,$(CONFIG_TERRAFORM_AWS_REGION))
 TERRAFORM_EXTRA_VARS += terraform_aws_av_region=$(subst ",,$(CONFIG_TERRAFORM_AWS_AV_REGION))
