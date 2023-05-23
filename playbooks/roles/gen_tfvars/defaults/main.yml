@@ -1,10 +1,5 @@
 # SPDX-License-Identifier GPL-2.0+
 ---
-# XXX: replace these lower case "false" things by making them
-# not be used somehow. Ie, we want to just use the ansible True / False
-kdevops_terraform_ansible_provision: "false"
-kdevops_ansible_provision_playbook: "/dev/null"
-
 kdevops_terraform_ssh_config_update: False
 kdevops_terraform_ssh_config_update_strict: False
 kdevops_terraform_ssh_config_update_backup: False

@@ -9,11 +9,6 @@ KDEVOPS_NODES_TEMPLATE :=	$(KDEVOPS_NODES_ROLE_TEMPLATE_DIR)/terraform_nodes.tf.
 KDEVOPS_NODES :=		terraform/nodes.tf
 
 TERRAFORM_EXTRA_VARS += kdevops_enable_terraform='True'
-ifeq (y,$(CONFIG_KDEVOPS_DEVCONFIG_ENABLE))
-TERRAFORM_EXTRA_VARS += kdevops_terraform_ansible_provision='true'
-TERRAFORM_EXTRA_VARS += kdevops_terraform_ansible_playbook_dir='$(subst ",,$(CONFIG_KDEVOPS_PLAYBOOK_DIR))'
-TERRAFORM_EXTRA_VARS += kdevops_terraform_ansible_inventory='$(subst ",,$(CONFIG_KDEVOPS_ANSIBLE_INVENTORY_FILE))'
-endif
 
 export KDEVOPS_CLOUD_PROVIDER=aws
 ifeq (y,$(CONFIG_TERRAFORM_AWS))
@@ -146,6 +141,10 @@ ANSIBLE_EXTRA_ARGS += $(TERRAFORM_EXTRA_VARS)
 
 bringup_terraform:
 	$(Q)$(TOPDIR)/scripts/bringup_terraform.sh
+	$(Q)if [[ "$(CONFIG_KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK)" != "" ]]; then \
+		ansible-playbook $(ANSIBLE_VERBOSE) -i \
+			$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/$(KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK) ;\
+	fi
 
 destroy_terraform:
 	$(Q)$(TOPDIR)/scripts/destroy_terraform.sh

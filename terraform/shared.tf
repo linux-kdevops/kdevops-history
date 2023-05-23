@@ -40,41 +40,6 @@ variable "ssh_config_kexalgorithms" {
   default     = ""
 }
 
-variable "ansible_provision" {
-  description = "Set this to true if you want to enable ansible provisioning"
-  default     = "true"
-}
-
-variable "ansible_inventory" {
-  description = "The name of the ansible inventory file"
-  default     = "hosts"
-}
-
-variable "ansible_playbookdir" {
-  description = "The name of the ansible playbook directory"
-  default     = "playbooks"
-}
-
-variable "ansible_provision_playbook" {
-  description = "The name of the playbook to run for provisioning"
-  default     = "devconfig.yml"
-}
-
 locals {
   kdevops_num_boxes = length(var.kdevops_nodes)
-}
-
-data "template_file" "ansible_cmd" {
-  template = file("ansible_provision_cmd.tpl")
-  vars = {
-    inventory          = "../../${var.ansible_inventory}"
-    playbook_dir       = "../../${var.ansible_playbookdir}/"
-    provision_playbook = "${var.ansible_provision_playbook}"
-    extra_args         = "--extra-vars='data_home_dir=/home/${var.ssh_config_user}'"
-  }
-}
-
-locals {
-  skip_ansible_cmd = "echo Skipping ansible provisioning"
-  ansible_cmd      = var.ansible_provision == "True" ? "${data.template_file.ansible_cmd.rendered}" : "${local.skip_ansible_cmd}"
 }
