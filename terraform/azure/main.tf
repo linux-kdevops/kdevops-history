@@ -28,7 +28,7 @@ resource "azurerm_subnet" "kdevops_subnet" {
 }
 
 resource "azurerm_public_ip" "kdevops_publicip" {
-  count               = local.num_boxes
+  count               = local.kdevops_num_boxes
   name                = format("kdevops_pub_ip_%02d", count.index + 1)
   location            = var.resource_location
   resource_group_name = azurerm_resource_group.kdevops_group.name
@@ -62,13 +62,13 @@ resource "azurerm_network_security_group" "kdevops_sg" {
 }
 
 resource "azurerm_network_interface_security_group_association" "kdevops_sg_assoc" {
-  count                     = local.num_boxes
+  count                     = local.kdevops_num_boxes
   network_security_group_id = azurerm_network_security_group.kdevops_sg.id
   network_interface_id      = element(azurerm_network_interface.kdevops_nic.*.id, count.index)
 }
 
 resource "azurerm_network_interface" "kdevops_nic" {
-  count               = local.num_boxes
+  count               = local.kdevops_num_boxes
   name                = format("kdevops_nic_%02d", count.index + 1)
   location            = var.resource_location
   resource_group_name = azurerm_resource_group.kdevops_group.name
@@ -86,7 +86,7 @@ resource "azurerm_network_interface" "kdevops_nic" {
 }
 
 resource "random_id" "randomId" {
-  count = local.num_boxes
+  count = local.kdevops_num_boxes
   keepers = {
     # Generate a new ID only when a new resource group is defined
     resource_group = azurerm_resource_group.kdevops_group.name
@@ -96,7 +96,7 @@ resource "random_id" "randomId" {
 }
 
 resource "azurerm_storage_account" "kdevops_storageaccount" {
-  count                    = local.num_boxes
+  count                    = local.kdevops_num_boxes
   name                     = "diag${element(random_id.randomId.*.hex, count.index)}"
   resource_group_name      = azurerm_resource_group.kdevops_group.name
   location                 = var.resource_location
@@ -109,7 +109,7 @@ resource "azurerm_storage_account" "kdevops_storageaccount" {
 }
 
 resource "azurerm_linux_virtual_machine" "kdevops_vm" {
-  count = local.num_boxes
+  count = local.kdevops_num_boxes
 
   # As of terraform 0.11 there is no easy way to convert a list to a map
   # for the structure we have defined for the vagrant_boxes. We can use
@@ -165,7 +165,7 @@ resource "azurerm_linux_virtual_machine" "kdevops_vm" {
 }
 
 resource "azurerm_managed_disk" "kdevops_data_disk" {
-  count                = local.num_boxes
+  count                = local.kdevops_num_boxes
   name                 = format("kdevops-data-disk-%02d", count.index + 1)
   location             = var.resource_location
   resource_group_name  = azurerm_resource_group.kdevops_group.name
@@ -175,7 +175,7 @@ resource "azurerm_managed_disk" "kdevops_data_disk" {
 }
 
 resource "azurerm_virtual_machine_data_disk_attachment" "kdevops_data_disk" {
-  count                     = local.num_boxes
+  count                     = local.kdevops_num_boxes
   managed_disk_id           = azurerm_managed_disk.kdevops_data_disk[count.index].id
   virtual_machine_id        = element(azurerm_linux_virtual_machine.kdevops_vm.*.id, count.index)
   caching                   = "None"
@@ -184,7 +184,7 @@ resource "azurerm_virtual_machine_data_disk_attachment" "kdevops_data_disk" {
 }
 
 resource "azurerm_managed_disk" "kdevops_scratch_disk" {
-  count                = local.num_boxes
+  count                = local.kdevops_num_boxes
   name                 = format("kdevops-scratch-disk-%02d", count.index + 1)
   location             = var.resource_location
   resource_group_name  = azurerm_resource_group.kdevops_group.name
@@ -194,7 +194,7 @@ resource "azurerm_managed_disk" "kdevops_scratch_disk" {
 }
 
 resource "azurerm_virtual_machine_data_disk_attachment" "kdevops_scratch_disk" {
-  count                     = local.num_boxes
+  count                     = local.kdevops_num_boxes
   managed_disk_id           = azurerm_managed_disk.kdevops_scratch_disk[count.index].id
   virtual_machine_id        = element(azurerm_linux_virtual_machine.kdevops_vm.*.id, count.index)
   caching                   = "None"

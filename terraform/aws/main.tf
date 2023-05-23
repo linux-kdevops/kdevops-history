@@ -57,7 +57,7 @@ resource "aws_key_pair" "kdevops_keypair" {
 }
 
 data "template_file" "script_user_data" {
-  count    = local.num_boxes
+  count    = local.kdevops_num_boxes
   template = file("templates/script.sh")
 
   vars = {
@@ -69,7 +69,7 @@ data "template_file" "script_user_data" {
 }
 
 data "template_file" "cloud_init_user_data" {
-  count    = local.num_boxes
+  count    = local.kdevops_num_boxes
   template = file("templates/config.yaml")
 
   vars = {
@@ -79,7 +79,7 @@ data "template_file" "cloud_init_user_data" {
 }
 
 data "template_cloudinit_config" "kdevops_config" {
-  count         = local.num_boxes
+  count         = local.kdevops_num_boxes
   gzip          = true
   base64_encode = true
 
@@ -107,7 +107,7 @@ data "template_cloudinit_config" "kdevops_config" {
 }
 
 resource "aws_instance" "kdevops_instance" {
-  count           = local.num_boxes
+  count           = local.kdevops_num_boxes
   ami             = data.aws_ami.distro.id
   instance_type   = var.aws_instance_type
   security_groups = [aws_security_group.kdevops_sec_group.id]
@@ -124,23 +124,23 @@ resource "aws_instance" "kdevops_instance" {
 }
 
 resource "aws_ebs_volume" "kdevops_vols" {
-  count             = var.aws_enable_ebs == "yes" ? local.num_boxes * var.aws_ebs_num_volumes_per_instance : 0
+  count             = var.aws_enable_ebs == "yes" ? local.kdevops_num_boxes * var.aws_ebs_num_volumes_per_instance : 0
   availability_zone = var.aws_availability_region
   size = element(
     var.aws_ebs_volume_sizes,
-    ceil(count.index / local.num_boxes),
+    ceil(count.index / local.kdevops_num_boxes),
   )
 }
 
 resource "aws_volume_attachment" "kdevops_att" {
-  count       = var.aws_enable_ebs == "yes" ? local.num_boxes * var.aws_ebs_num_volumes_per_instance : 0
-  device_name = element(var.aws_ebs_device_names, count.index % local.num_boxes)
+  count       = var.aws_enable_ebs == "yes" ? local.kdevops_num_boxes * var.aws_ebs_num_volumes_per_instance : 0
+  device_name = element(var.aws_ebs_device_names, count.index % local.kdevops_num_boxes)
   volume_id   = element(aws_ebs_volume.kdevops_vols.*.id, count.index)
   instance_id = element(aws_instance.kdevops_instance.*.id, count.index)
 }
 
 resource "aws_eip" "kdevops_eip" {
-  count    = local.num_boxes
+  count    = local.kdevops_num_boxes
   instance = element(aws_instance.kdevops_instance.*.id, count.index)
   vpc      = true
 }

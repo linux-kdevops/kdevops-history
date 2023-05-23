@@ -64,10 +64,6 @@ locals {
   kdevops_num_boxes = length(var.kdevops_nodes)
 }
 
-locals {
-  num_boxes = local.kdevops_num_boxes
-}
-
 data "template_file" "ansible_cmd" {
   template = file("ansible_provision_cmd.tpl")
   vars = {

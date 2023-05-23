@@ -1,5 +1,5 @@
 locals {
-  limit_count_minicloud = var.ssh_config_update != "true" || var.openstack_cloud != "minicloud" ? 0 : local.num_boxes
+  limit_count_minicloud = var.ssh_config_update != "true" || var.openstack_cloud != "minicloud" ? 0 : local.kdevops_num_boxes
   shorthosts_minicloud  = openstack_compute_instance_v2.kdevops_instances.*.name
   ports_minicloud = [
     for ip in openstack_compute_instance_v2.kdevops_instances.*.access_ip_v4 :

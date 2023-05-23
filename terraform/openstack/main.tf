@@ -43,7 +43,7 @@ resource "openstack_compute_keypair_v2" "kdevops_keypair" {
 }
 
 resource "openstack_compute_instance_v2" "kdevops_instances" {
-  count           = local.num_boxes
+  count           = local.kdevops_num_boxes
   name            = element(var.kdevops_nodes, count.index)
   image_name      = var.image_name
   flavor_name     = var.flavor_name

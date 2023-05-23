@@ -1,5 +1,5 @@
 data "null_data_source" "group_hostnames_and_ips" {
-  count = local.num_boxes
+  count = local.kdevops_num_boxes
   inputs = {
     value = format(
       "%30s  :  %s",

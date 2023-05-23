@@ -1,5 +1,5 @@
 data "null_data_source" "host_names" {
-  count = local.num_boxes
+  count = local.kdevops_num_boxes
   inputs = {
     value = element(var.kdevops_nodes, count.index),
   }
@@ -10,7 +10,7 @@ output "kdevops_hosts" {
 }
 
 data "azurerm_public_ip" "public_ips" {
-  count               = local.num_boxes
+  count               = local.kdevops_num_boxes
   name                = element(azurerm_public_ip.kdevops_publicip.*.name, count.index)
   resource_group_name = azurerm_resource_group.kdevops_group.name
   depends_on          = [azurerm_linux_virtual_machine.kdevops_vm]
@@ -25,7 +25,7 @@ locals {
 }
 
 data "null_data_source" "group_hostnames_and_ips" {
-  count = local.num_boxes
+  count = local.kdevops_num_boxes
   inputs = {
     # In theory using "${self.triggers["name"]}" and "${self.triggersp["ip"]}"
     # would be nice but it is not supported in this context, only in the

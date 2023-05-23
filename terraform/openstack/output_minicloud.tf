@@ -12,7 +12,7 @@ locals {
 # the tranlation for you.
 # https://github.com/Unicamp-OpenPower/minicloud/wiki/Getting-Started-with-Minicloud
 data "null_data_source" "group_hostnames_and_ports_v2" {
-  count = var.openstack_cloud != "minicloud" ? 0 : local.num_boxes
+  count = var.openstack_cloud != "minicloud" ? 0 : local.kdevops_num_boxes
   inputs = {
     value = format(
       "%30s  :  %s%s%03d%s ",

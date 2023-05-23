@@ -1,5 +1,5 @@
 resource "google_compute_instance" "kdevops_instances" {
-  count        = local.num_boxes
+  count        = local.kdevops_num_boxes
   name         = element(var.kdevops_nodes, count.index)
   machine_type = var.machine_type
   zone         = var.region

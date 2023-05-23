@@ -1,5 +1,5 @@
 resource "oci_core_instance" "kdevops_instance" {
-  count = local.num_boxes
+  count = local.kdevops_num_boxes
 
   availability_domain = var.oci_availablity_domain
   compartment_id = var.oci_compartment_ocid
@@ -25,7 +25,7 @@ resource "oci_core_instance" "kdevops_instance" {
 }
 
 resource "oci_core_volume" "kdevops_data_disk" {
-  count = local.num_boxes
+  count = local.kdevops_num_boxes
 
   compartment_id = var.oci_compartment_ocid
 
@@ -35,7 +35,7 @@ resource "oci_core_volume" "kdevops_data_disk" {
 }
 
 resource "oci_core_volume" "kdevops_sparse_disk" {
-  count = local.num_boxes
+  count = local.kdevops_num_boxes
 
   compartment_id = var.oci_compartment_ocid
 
@@ -45,7 +45,7 @@ resource "oci_core_volume" "kdevops_sparse_disk" {
 }
 
 resource "oci_core_volume_attachment" "kdevops_data_volume_attachment" {
-  count = local.num_boxes
+  count = local.kdevops_num_boxes
 
   attachment_type = "paravirtualized"
   instance_id = element(oci_core_instance.kdevops_instance.*.id, count.index)
@@ -55,7 +55,7 @@ resource "oci_core_volume_attachment" "kdevops_data_volume_attachment" {
 }
 
 resource "oci_core_volume_attachment" "kdevops_sparse_disk_attachment" {
-  count = local.num_boxes
+  count = local.kdevops_num_boxes
 
   attachment_type = "paravirtualized"
   instance_id = element(oci_core_instance.kdevops_instance.*.id, count.index)
