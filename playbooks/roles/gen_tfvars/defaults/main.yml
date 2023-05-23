@@ -5,17 +5,14 @@
 kdevops_terraform_ansible_provision: "false"
 kdevops_ansible_provision_playbook: "/dev/null"
 
-kdevops_terraform_ssh_config_update: "false"
-kdevops_terraform_ssh_config_update_strict: "false"
-kdevops_terraform_ssh_config_update_backup=: "false"
+kdevops_terraform_ssh_config_update: False
+kdevops_terraform_ssh_config_update_strict: False
+kdevops_terraform_ssh_config_update_backup: False
 
 kdevops_terraform_provider: "aws"
 kdevops_terraform_ssh_pubkey_file: "/dev/null"
 kdevops_terraform_ssh_user: "nully"
 kdevops_terraform_ssh_file: "/dev/null"
-kdevops_terraform_ssh_update: False
-kdevops_terraform_ssh_update_strict: False
-kdevops_terraform_ssh_update_backup: False
 
 kdevops_terraform_tfvars_template: "/dev/null"
 kdevops_terraform_tfvars_template_full_path: "/dev/null"

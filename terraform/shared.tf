@@ -10,7 +10,7 @@ variable "ssh_config" {
 
 variable "ssh_config_update" {
   description = "Set this to true if you want terraform to update your ssh_config with the provisioned set of hosts"
-  default     = "true"
+  type        = bool
 }
 
 # Debian AWS ami's use admin as the default user, we override it with cloud-init
@@ -27,12 +27,12 @@ variable "ssh_config_pubkey_file" {
 
 variable "ssh_config_use_strict_settings" {
   description = "Whether or not to use strict settings on ssh_config"
-  default     = "yes"
+  type        = bool
 }
 
 variable "ssh_config_backup" {
   description = "Set this to true if you want to backup your ssh_config per update"
-  default     = "true"
+  type        = bool
 }
 
 variable "ssh_config_kexalgorithms" {

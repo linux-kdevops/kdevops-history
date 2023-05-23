@@ -114,14 +114,14 @@ SSH_CONFIG_USER:=$(subst ",,$(CONFIG_TERRAFORM_SSH_CONFIG_USER))
 TERRAFORM_EXTRA_VARS += data_home_dir=/home/${SSH_CONFIG_USER}
 
 ifeq (y,$(CONFIG_KDEVOPS_SSH_CONFIG_UPDATE))
-TERRAFORM_EXTRA_VARS += kdevops_terraform_ssh_config_update='true'
+TERRAFORM_EXTRA_VARS += kdevops_terraform_ssh_config_update='True'
 
 ifeq (y,$(CONFIG_KDEVOPS_SSH_CONFIG_UPDATE_STRICT))
-TERRAFORM_EXTRA_VARS += kdevops_terraform_ssh_config_update_strict='true'
+TERRAFORM_EXTRA_VARS += kdevops_terraform_ssh_config_update_strict='True'
 endif
 
 ifeq (y,$(CONFIG_KDEVOPS_SSH_CONFIG_UPDATE_BACKUP))
-TERRAFORM_EXTRA_VARS += kdevops_terraform_ssh_config_update_backup='true'
+TERRAFORM_EXTRA_VARS += kdevops_terraform_ssh_config_update_backup='True'
 endif
 
 endif # CONFIG_KDEVOPS_SSH_CONFIG_UPDATE
