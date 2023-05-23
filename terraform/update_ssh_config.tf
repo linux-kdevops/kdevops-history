@@ -3,10 +3,10 @@ module "ssh_config_update_host_entries" {
   version = "3.0.0"
 
   ssh_config               = var.ssh_config
-  update_ssh_config_enable = local.limit_count > 0 ? "true" : ""
+  update_ssh_config_enable = local.kdevops_num_boxes > 0 ? "true" : ""
   cmd                      = "update"
-  shorthosts               = join(",", slice(local.shorthosts, 0, local.limit_count))
-  hostnames                = join(",", slice(local.ipv4s, 0, local.limit_count))
+  shorthosts               = join(",", slice(local.shorthosts, 0, local.kdevops_num_boxes))
+  hostnames                = join(",", slice(local.ipv4s, 0, local.kdevops_num_boxes))
   ports                    = "22"
   user                     = var.ssh_config_user == "" ? "" : var.ssh_config_user
   id                       = replace(var.ssh_config_pubkey_file, ".pub", "")
