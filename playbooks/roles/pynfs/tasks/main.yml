@@ -11,16 +11,16 @@
 
 - name: Set the path where we collect our local pynfs results
   set_fact:
-    pynfs_local_results_dir: "../workflows/pynfs/results"
+    pynfs_workflow_dir: "../workflows/pynfs"
   tags: [ 'vars' ]
 
 - name: Clean up our localhost results directory and files
-  local_action: file path="{{ pynfs_local_results_dir }}/" state=absent
+  local_action: file path="{{ pynfs_workflow_dir }}/results/" state=absent
   run_once: true
   tags: [ 'clean_local_results', 'first_run' ]
 
 - name: Create the local results directory
-  local_action: file path="{{ pynfs_local_results_dir }}/" state=directory
+  local_action: file path="{{ pynfs_workflow_dir }}/results/" state=directory
   run_once: true
   tags: [ 'first_run' ]
 
@@ -82,12 +82,10 @@
 
 - name: Run pynfs
   tags: [ 'run_tests' ]
-  shell: "./testserver.py --json={{ pynfs_data }}/pynfs-{{ item }}-results.json --maketree --uid=0 --gid=0 localhost:{{ nfsd_export_path }}/pynfs/{{ item }} all || true"
-  args:
-    chdir: "{{ pynfs_data }}/nfs{{ item }}"
-  with_items:
-    - 4.0
-    - 4.1
+  script: "{{ pynfs_workflow_dir }}/scripts/run_pynfs.sh"
+  environment:
+    PYNFS_DATA: "{{ pynfs_data }}"
+    NFSD_EXPORT_PATH: "{{ nfsd_export_path }}"
 
 - name: Get used target kernel version
   tags: [ 'copy_results' ]
@@ -107,7 +105,7 @@
   become_method: sudo
   fetch:
     src: "{{ pynfs_data }}/pynfs-{{ item }}-results.json"
-    dest: "{{ pynfs_local_results_dir }}/{{ kernel_rev }}-v{{ item }}.json"
+    dest: "{{ pynfs_workflow_dir }}/results/{{ kernel_rev }}-v{{ item }}.json"
     flat: yes
   with_items:
     - 4.0
