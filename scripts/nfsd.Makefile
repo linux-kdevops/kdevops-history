@@ -8,4 +8,4 @@ ANSIBLE_EXTRA_ARGS += $(NFSD_EXTRA_ARGS)
 
 nfsd:
 	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
-		-f 30 -i hosts playbooks/nfsd.yml
+		-f 30 -i hosts -l nfsd playbooks/nfsd.yml

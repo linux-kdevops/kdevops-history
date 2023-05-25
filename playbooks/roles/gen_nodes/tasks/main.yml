@@ -37,6 +37,18 @@
   when:
     - kdevops_baseline_and_dev
 
+- name: Set nfsd_nodes list
+  set_fact:
+    nfsd_nodes: "{{ [ kdevops_host_prefix + '-nfsd' ] }}"
+  when:
+    - nfsd_threads is defined
+
+- name: Add an nfs server if one was selected
+  set_fact:
+    generic_nodes: "{{ generic_nodes + nfsd_nodes }}"
+  when:
+    - nfsd_threads is defined
+
 - name: Set fstests config file variable for {{ fstests_fstyp }}
   set_fact:
     is_fstests: True
@@ -88,7 +100,7 @@
   tags: [ 'nodes' ]
   vars:
     node_template: "{{ kdevops_nodes_template | basename }}"
-    all_generic_nodes: "{{ generic_nodes }}"
+    all_generic_nodes: "{{ nfsd_nodes }}"
     nodes: "{{ all_generic_nodes }}"
   template:
     src: "{{ node_template }}"

@@ -1,17 +1,12 @@
 [all]
-{{ kdevops_hosts_prefix }}
-{% if kdevops_baseline_and_dev == True %}
-{{ kdevops_hosts_prefix }}-dev
-{% endif %}
+{{ kdevops_hosts_prefix }}-nfsd
 [all:vars]
 ansible_python_interpreter =  "{{ kdevops_python_interpreter }}"
 [baseline]
-{{ kdevops_hosts_prefix }}
+{{ kdevops_hosts_prefix }}-nfsd
 [baseline:vars]
 ansible_python_interpreter =  "{{ kdevops_python_interpreter }}"
-[dev]
-{% if kdevops_baseline_and_dev %}
-{{ kdevops_hosts_prefix }}-dev
-{% endif %}
-[dev:vars]
+[nfsd]
+{{ kdevops_hosts_prefix }}-nfsd
+[nfsd:vars]
 ansible_python_interpreter =  "{{ kdevops_python_interpreter }}"
