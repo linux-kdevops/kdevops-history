@@ -23,11 +23,8 @@
         function: {{ d.function }}
 {% endfor -%}
 {%- endmacro -%}
-{% macro gen_node(n, enable_second_interface, last_octet, this_index, passthrough_enable, passthrough_target_type, passthrough_target, passthrough_devices ) %}
+{% macro gen_node(n, last_octet, this_index, passthrough_enable, passthrough_target_type, passthrough_target, passthrough_devices ) %}
   - name: {{ n }}
-{% if enable_second_interface %}
-    ip: 172.17.8.{{ last_octet | string }}
-{% endif %}
 {% if passthrough_enable and passthrough_devices and passthrough_target_type == "first_guest" and this_index == 1 %}
     pcipassthrough:
 {{ gen_pci_passthrough(passthrough_devices) -}}
@@ -38,8 +35,8 @@
 {{ gen_pci_passthrough_each(n, passthrough_devices) -}}
 {% endif %}
 {% endmacro %}
-{% macro gen_nodes_list(nodes_list, dev, enable_second_interface, octet, passthrough_enable, passthrough_target_type, passthrough_target, passthrough_devices) %}
+{% macro gen_nodes_list(nodes_list, dev, octet, passthrough_enable, passthrough_target_type, passthrough_target, passthrough_devices) %}
 {%- for node in nodes_list -%}
-{{ gen_node(node, enable_second_interface, octet + loop.index, loop.index, passthrough_enable, passthrough_target_type, passthrough_target, passthrough_devices) }}
+{{ gen_node(node, octet + loop.index, loop.index, passthrough_enable, passthrough_target_type, passthrough_target, passthrough_devices) }}
 {%- endfor -%}
 {% endmacro %}
