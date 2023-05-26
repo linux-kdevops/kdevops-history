@@ -1500,7 +1500,6 @@ config QEMU_NVME_ZONE_LOGICAL_BLOCK_SIZE
 config QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
 	bool "Enable QEMU drives for large IO experimentation"
 	depends on VAGRANT_LIBVIRT
-	select VAGRANT_KDEVOPS_DEBIAN_TESTING64_XFS_20230427
 	default n
 	help
 	  If you want to experiment with large IO either with NVMe or virtio
@@ -1508,14 +1507,10 @@ config QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
 	  which are dedicated for largio experimentation testing.
 
 	  For now you will need a distribution with a root filesystem on XFS
-	  or btrfs, and so we force our own custom image for now as no other
-	  vagrant image for distributions does this yet. This is a requirement
+	  or btrfs, and so you will want to enable the kdevops distribution and
+	  VAGRANT_KDEVOPS_DEBIAN_TESTING64_XFS_20230427. This is a requirement
 	  given all block devices must use iomap and that is the only current
 	  way to disable buffer-heads. Eventually this limitation is expected
-	  to be removed but for now don't let users fall into a trap to end
-	  up with non-functional systems or devices for experimentation. Those
-	  that know what they are doing can remove this select for
-	  VAGRANT_KDEVOPS_DEBIAN_TESTING64_XFS_20230427 and move on with life.
 	  You can also use large-block-20230525 with Amazon Linux 2023 on AWS.
 
 	  If unsure say N.
