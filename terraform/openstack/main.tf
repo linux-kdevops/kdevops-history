@@ -54,3 +54,26 @@ resource "openstack_compute_instance_v2" "kdevops_instances" {
   }
 }
 
+resource "openstack_blockstorage_volume_v3" "kdevops_data_disk" {
+  count                = local.kdevops_num_boxes
+  name                 = format("kdevops-data-disk-%02d", count.index + 1)
+  size                 = 80
+}
+
+resource "openstack_blockstorage_volume_v3" "kdevops_scratch_disk" {
+  count                = local.kdevops_num_boxes
+  name                 = format("kdevops-scratch-disk-%02d", count.index + 1)
+  size                 = 80
+}
+
+resource "openstack_compute_volume_attach_v2" "kdevops_data_disk_attach" {
+  count                = local.kdevops_num_boxes
+  volume_id            = openstack_blockstorage_volume_v3.kdevops_data_disk[count.index].id
+  instance_id          = element(openstack_compute_instance_v2.kdevops_instances.*.id, count.index)
+}
+
+resource "openstack_compute_volume_attach_v2" "kdevops_scratch_disk_attach" {
+  count                = local.kdevops_num_boxes
+  volume_id            = openstack_blockstorage_volume_v3.kdevops_scratch_disk[count.index].id
+  instance_id          = element(openstack_compute_instance_v2.kdevops_instances.*.id, count.index)
+}
