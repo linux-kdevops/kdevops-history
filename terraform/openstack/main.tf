@@ -50,7 +50,7 @@ resource "openstack_compute_instance_v2" "kdevops_instances" {
   key_pair        = var.ssh_pubkey_name
   security_groups = [openstack_compute_secgroup_v2.kdevops_security_group.name]
   network {
-    name = var.network_name
+    name = var.public_network_name
   }
 }
 

@@ -40,3 +40,7 @@ variable "instance_prefix" {
   default     = "my-fun"
 }
 
+variable "public_network_name" {
+  description = "The name of the network"
+  default     = "public"
+}
