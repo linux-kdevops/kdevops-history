@@ -11,7 +11,7 @@ module "ssh_config_update_host_entries_minicloud" {
   version = "3.0.0"
 
   ssh_config               = var.ssh_config
-  update_ssh_config_enable = local.kdevops_num_boxes > 0 ? "true" : ""
+  update_ssh_config_enable = (var.openstack_cloud == "minicloud" && local.kdevops_num_boxes > 0) ? "true" : ""
   cmd                      = "update"
   shorthosts               = join(",", slice(local.shorthosts_minicloud, 0, local.kdevops_num_boxes))
   hostnames                = "minicloud.parqtec.unicamp.br"
