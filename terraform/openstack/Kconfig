@@ -58,4 +58,9 @@ config TERRAFORM_OPENSTACK_SSH_PUBKEY_NAME
 	  Name of already existing pubkey or the new one you are about to
 	  upload, this must be set
 
+config TERRAFORM_OPENSTACK_PUBLIC_NETWORK_NAME
+	string "Name of the public network"
+	default "public"
+	help
+	  Name of an already existing public network in the cluster.
 endif # TERRAFORM_OPENSTACK

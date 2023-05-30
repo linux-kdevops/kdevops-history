@@ -49,5 +49,8 @@ resource "openstack_compute_instance_v2" "kdevops_instances" {
   flavor_name     = var.flavor_name
   key_pair        = var.ssh_pubkey_name
   security_groups = [openstack_compute_secgroup_v2.kdevops_security_group.name]
+  network {
+    name = var.network_name
+  }
 }
 

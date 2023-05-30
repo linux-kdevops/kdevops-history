@@ -99,6 +99,7 @@ TERRAFORM_EXTRA_VARS += terraform_openstack_cloud_name=$(subst ",,$(CONFIG_TERRA
 TERRAFORM_EXTRA_VARS += terraform_openstack_instance_prefix=$(subst ",,$(CONFIG_TERRAFORM_TERRAFORM_OPENSTACK_INSTANCE_PREFIX))
 TERRAFORM_EXTRA_VARS += terraform_openstack_flavor=$(subst ",,$(CONFIG_TERRAFORM_OPENSTACK_FLAVOR))
 TERRAFORM_EXTRA_VARS += terraform_openstack_ssh_pubkey_name=$(subst ",,$(CONFIG_TERRAFORM_OPENSTACK_SSH_PUBKEY_NAME))
+TERRAFORM_EXTRA_VARS += terraform_openstack_public_network_name=$(subst ",,$(CONFIG_TERRAFORM_OPENSTACK_PUBLIC_NETWORK_NAME))
 
 ANSIBLE_EXTRA_ARGS_SEPARATED += terraform_openstack_image_name=$(subst $(space),+,$(CONFIG_TERRAFORM_OPENSTACK_IMAGE_NAME))
 endif
