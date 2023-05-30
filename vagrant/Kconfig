@@ -303,10 +303,11 @@ config QEMU_BUILD_GIT_DATA_PATH
 
 config QEMU_BUILD_GIT_VERSION
 	string "The version of QEMU to build"
-	default "v7.2.0"
+	default "v8.0.0-rc1"
 	help
 	  This is the target build version of QEMU to build. Please use
-	  at least v7.2.0 for CXL support.
+	  at least v7.2.0 for CXL support. v8.0.0-rc1 has some build fixes
+	  for newer compilers so it is the default now.
 
 config QEMU_USE_DEVELOPMENT_VERSION
 	bool
