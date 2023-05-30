@@ -17,7 +17,7 @@ provider "openstack" {
   # First clouds-public.yaml is read, then clouds.yaml and last secure.yaml.
   #
   # For more details or examples see:
-  # https://docs.openstack.org/os-client-config/latest/user/configuration.html:W
+  # https://docs.openstack.org/os-client-config/latest/user/configuration.html
   # https://www.inovex.de/blog/managing-secrets-openstack-terraform/
   cloud = var.openstack_cloud
 }
