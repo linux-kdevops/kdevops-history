@@ -32,7 +32,6 @@
     group: root
     mode: 01777
 
-# FIXME: make a template that uses {{ export_path }}
 - name: Create /etc/exports with an export for /exports
   tags: [ 'nfsd' ]
   become: yes
