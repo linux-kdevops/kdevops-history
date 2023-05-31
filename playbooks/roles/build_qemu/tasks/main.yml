@@ -47,7 +47,7 @@
   when:
     - build_qemu_now|bool
 
-- name: git clone QEMU
+- name: git clone QEMU using {{ qemu_git }} on {{ qemu_data }}
   environment:
     GIT_SSL_NO_VERIFY:  true
   git:

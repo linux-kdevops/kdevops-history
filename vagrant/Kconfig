@@ -264,7 +264,7 @@ if QEMU_BUILD
 
 choice
 	prompt "QEMU git URL to use"
-	default QEMU_BUILD_UPSTREAM
+	default QEMU_BUILD_JIC23
 
 config QEMU_BUILD_UPSTREAM
 	bool "https://gitlab.com/qemu-project/qemu.git"
@@ -287,6 +287,7 @@ endchoice
 config QEMU_BUILD_GIT
 	string "Git tree for QEMU to clone on localhost"
 	default "/mirror/qemu.git" if USE_LOCAL_LINUX_MIRROR && QEMU_BUILD_UPSTREAM || QEMU_BUILD_MANUAL
+	default "/mirror/qemu-jic23.git" if USE_LOCAL_LINUX_MIRROR && QEMU_BUILD_JIC23
 	default "https://gitlab.com/qemu-project/qemu.git" if !USE_LOCAL_LINUX_MIRROR && QEMU_BUILD_UPSTREAM || QEMU_BUILD_MANUAL
 	default "https://gitlab.com/jic23/qemu.git" if !USE_LOCAL_LINUX_MIRROR && QEMU_BUILD_JIC23
 	help
@@ -303,7 +304,8 @@ config QEMU_BUILD_GIT_DATA_PATH
 
 config QEMU_BUILD_GIT_VERSION
 	string "The version of QEMU to build"
-	default "v8.0.0-rc1"
+	default "cxl-2023-05-19" if QEMU_BUILD_JIC23
+	default "v8.0.0-rc1" if QEMU_BUILD_UPSTREAM
 	help
 	  This is the target build version of QEMU to build. Please use
 	  at least v7.2.0 for CXL support. v8.0.0-rc1 has some build fixes

@@ -1,0 +1,10 @@
+[Unit]
+Description=QEMU mirror query timer [qemu-jic23.git]
+ConditionPathExists=/mirror/qemu-jic23.git
+
+[Timer]
+OnBootSec=5m
+OnUnitInactiveSec=10m
+
+[Install]
+WantedBy=default.target

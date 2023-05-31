@@ -427,6 +427,44 @@ config MIRROR_QEMU_SSH_GITHUB
 	  ssh://git@github.com:qemu/qemu.git
 endchoice
 
+choice
+	prompt "QEMU jic23 mirror protocol/source"
+	default MIRROR_QEMU_JIC23_HTTPS_GITLAB
+	depends on INSTALL_LOCAL_LINUX_MIRROR
+
+config MIRROR_QEMU_JIC23_HTTPS_GITLAB
+	bool "HTTPS (GitLab)"
+	help
+	  If you enable this option then GitLab HTTPS will be used as the
+	  source of the mirror. The URL is:
+
+	  https://gitlab.com/jic23/qemu.git
+
+config MIRROR_QEMU_JIC23_SSH_GITLAB
+	bool "SSH (GitLab)"
+	help
+	  If you enable this option then GitLab SSH will be used as the source
+	  of the mirror. The URL is:
+
+	  ssh://git@gitlab.com:jic23/qemu.git
+
+config MIRROR_QEMU_JIC23_HTTPS_GITHUB
+	bool "HTTPS (GitHub)"
+	help
+	  If you enable this option then GitHub HTTPS will be used as the
+	  source of the mirror. The URL is:
+
+	  https://github.com/jic23/qemu.git
+
+config MIRROR_QEMU_JIC23_SSH_GITHUB
+	bool "SSH (GitHub)"
+	help
+	  If you enable this option then GitHub SSH will be used as the source
+	  of the mirror. The URL is:
+
+	  ssh://git@github.com:jic23/qemu.git
+endchoice
+
 endif
 
 config LOCAL_DEVELOPMENT_PATH

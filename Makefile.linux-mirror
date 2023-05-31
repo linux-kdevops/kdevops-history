@@ -30,10 +30,12 @@ mirror-status: $(KDEVOPS_EXTRA_VARS)
 	$(Q)systemctl --user list-timers
 	$(NQ) systemd timer status
 	$(Q)systemctl status --user linux-mirror.timer linux-stable-mirror.timer \
-		linux-next-mirror.timer mcgrof-next-mirror.timer qemu-mirror.timer
+		linux-next-mirror.timer mcgrof-next-mirror.timer \
+		qemu-mirror.timer jic23-qemu-mirror.timer
 	$(NQ) systemd service units status
 	$(Q)systemctl status --user linux-mirror.service linux-stable-mirror.service \
-		linux-next-mirror.service mcgrof-next-mirror.service qemu-mirror.service
+		linux-next-mirror.service mcgrof-next-mirror.service \
+		qemu-mirror.service jic23-qemu-mirror.timer
 
 PHONY += mirror-status
 
@@ -74,6 +76,12 @@ QEMU_HTTPS_GITLAB := https://gitlab.com/qemu-project/qemu.git
 QEMU_SSH_GITHUB   := ssh://git@github.com:qemu/qemu.git
 QEMU_SSH_GITLAB   := ssh://git@gitlab.com:qemu-project/qemu.git
 export QEMU       :=
+
+QEMU_JIC23_HTTPS_GITLAB := https://gitlab.com/jic23/qemu.git
+QEMU_JIC23_HTTPS_GITHUB := https://github.com/jic23/qemu.git
+QEMU_JIC23_SSH_GITHUB   := ssh://git@github.com:jic23/qemu.git
+QEMU_JIC23_SSH_GITLAB   := ssh://git@gitlab.com:jic23/qemu.git
+export QEMU_JIC23 :=
 
 ifeq (y,$(CONFIG_MIRROR_TORVALDS_HTTPS))
 TORVALDS := $(TORVALDS_HTTPS)
@@ -137,4 +145,28 @@ endif
 
 ifeq (y,$(CONFIG_MIRROR_QEMU_SSH_GITHUB))
 QEMU := $(QEMU_HTTPS_GITHUB)
+endif
+
+ifeq (y,$(CONFIG_MIRROR_QEMU_SSH_GITLAB))
+QEMU := $(QEMU_HTTPS_GITLAB)
+endif
+
+ifeq (y,$(CONFIG_MIRROR_QEMU_JIC23_HTTPS_GITLAB))
+QEMU_JIC23 := $(QEMU_JIC23_HTTPS_GITLAB)
+endif
+
+ifeq (y,$(CONFIG_MIRROR_QEMU_JIC23_SSH_GITLAB))
+QEMU_JIC23 := $(QEMU_JIC23_HTTPS_GITLAB)
+endif
+
+ifeq (y,$(CONFIG_MIRROR_QEMU_JIC23_HTTPS_GITHUB))
+QEMU_JIC23 := $(QEMU_JIC23_HTTPS_GITHUB)
+endif
+
+ifeq (y,$(CONFIG_MIRROR_QEMU_JIC23_SSH_GITHUB))
+QEMU_JIC23 := $(QEMU_JIC23_HTTPS_GITHUB)
+endif
+
+ifeq (y,$(CONFIG_MIRROR_QEMU_JIC23_SSH_GITLAB))
+QEMU_JIC23 := $(QEMU_JIC23_HTTPS_GITLAB)
 endif
