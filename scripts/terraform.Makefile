@@ -86,6 +86,8 @@ TERRAFORM_EXTRA_VARS += terraform_oci_user_fingerprint=$(subst ",,$(CONFIG_TERRA
 TERRAFORM_EXTRA_VARS += terraform_oci_availablity_domain=$(subst ",,$(CONFIG_TERRAFORM_OCI_AVAILABLITY_DOMAIN))
 TERRAFORM_EXTRA_VARS += terraform_oci_compartment_ocid=$(subst ",,$(CONFIG_TERRAFORM_OCI_COMPARTMENT_OCID))
 TERRAFORM_EXTRA_VARS += terraform_oci_shape=$(subst ",,$(CONFIG_TERRAFORM_OCI_SHAPE))
+TERRAFORM_EXTRA_VARS += terraform_oci_instance_flex_ocpus=$(subst ",,$(CONFIG_TERRAFORM_OCI_INSTANCE_FLEX_OCPUS))
+TERRAFORM_EXTRA_VARS += terraform_oci_instance_flex_memory_in_gbs=$(subst ",,$(CONFIG_TERRAFORM_OCI_INSTANCE_FLEX_MEMORY_IN_GBS))
 TERRAFORM_EXTRA_VARS += terraform_oci_os_image_ocid=$(subst ",,$(CONFIG_TERRAFORM_OCI_OS_IMAGE_OCID))
 ifeq (y, $(CONFIG_TERRAFORM_OCI_ASSIGN_PUBLIC_IP))
 TERRAFORM_EXTRA_VARS += terraform_oci_assign_public_ip=true

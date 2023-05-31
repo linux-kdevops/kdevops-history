@@ -38,6 +38,18 @@ variable "oci_shape" {
   default = ""
 }
 
+variable "oci_instance_flex_ocpus" {
+  description = "The total number of OCPUs available to the instance."
+  type = number
+  default = null
+}
+
+variable "oci_instance_flex_memory_in_gbs" {
+  description = "The total amount of memory available to the instance, in gigabytes."
+  type = number
+  default = null
+}
+
 variable "oci_os_image_ocid" {
   description = "OCID of OS image"
   default = ""

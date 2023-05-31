@@ -375,3 +375,9 @@ needs to provide values (through `make menuconfig` interface).
   16. `CONFIG_TERRAFORM_OCI_SPARSE_VOLUME_DEVICE_FILE_NAME`
       - Device node to be used for `sparse` disk.
       - Please specify `/dev/oracleoci/oraclevdc` as the device file.
+  17. `CONFIG_TERRAFORM_OCI_INSTANCE_FLEX_OCPUS`
+      - Number of OCPUs for a flexiable compute shape.
+      - https://docs.oracle.com/en-us/iaas/Content/Compute/References/computeshapes.htm#flexible
+  18. `CONFIG_TERRAFORM_OCI_INSTANCE_FLEX_MEMORY_IN_GBS`
+      - Amount of RAM in GB for a flexiable compute shape.
+      - https://docs.oracle.com/en-us/iaas/Content/Compute/References/computeshapes.htm#flexible

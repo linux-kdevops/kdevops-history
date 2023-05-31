@@ -56,6 +56,18 @@ config TERRAFORM_OCI_SHAPE
 	  Read this:
 	  https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformproviderconfiguration.htm
 
+config TERRAFORM_OCI_INSTANCE_FLEX_OCPUS
+	int "Number of flexiable instance OCPUs"
+	default 2
+	help
+	  The number of OCPUs to use per flexible instance.
+
+config TERRAFORM_OCI_INSTANCE_FLEX_MEMORY_IN_GBS
+	int "How much RAM to use per flexible instance in GB"
+	default 4
+	help
+	  How much GiB of RAM to use per flexible instance.
+
 config TERRAFORM_OCI_OS_IMAGE_OCID
 	string "OCI OS image OCID"
 	help
