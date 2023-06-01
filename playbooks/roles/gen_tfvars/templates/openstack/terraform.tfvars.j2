@@ -11,3 +11,7 @@ ssh_config = "{{ sshconfig }}"
 ssh_config_update = "{{ kdevops_terraform_ssh_config_update | lower }}"
 ssh_config_use_strict_settings = "{{ kdevops_terraform_ssh_config_update_strict  | lower }}"
 ssh_config_backup = "{{ kdevops_terraform_ssh_config_update_backup | lower }}"
+
+private_net_enabled = "{{ terraform_private_net_enabled | lower }}"
+private_net_prefix = "{{ terraform_private_net_prefix }}"
+private_net_mask = "{{ terraform_private_net_mask }}"

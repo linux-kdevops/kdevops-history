@@ -13,6 +13,10 @@ kdevops_terraform_tfvars_template: "/dev/null"
 kdevops_terraform_tfvars_template_full_path: "/dev/null"
 kdevops_terraform_tfvars: "terraform/terraform.tfvars"
 
+terraform_private_net_enabled: "false"
+terraform_private_net_prefix: ""
+terraform_private_net_mask: 0
+
 terraform_aws_region: "invalid"
 terraform_aws_av_region: "invalid"
 terraform_aws_ami_owner: "invalid"

@@ -40,6 +40,21 @@ variable "ssh_config_kexalgorithms" {
   default     = ""
 }
 
+variable "private_net_enabled" {
+  description = "Is the private network enabled?"
+  default     = "false"
+}
+
+variable "private_net_prefix" {
+  description = "The prefix of the private network"
+  default     = ""
+}
+
+variable "private_net_mask" {
+  description = "The netmask length of the private network"
+  default     = ""
+}
+
 locals {
   kdevops_num_boxes = length(var.kdevops_nodes)
 }

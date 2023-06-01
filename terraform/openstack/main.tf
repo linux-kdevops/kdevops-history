@@ -1,14 +1,16 @@
 # Openstack terraform provider main
 
 resource "openstack_networking_network_v2" "kdevops_private_net" {
+	count		= var.private_net_enabled ? 1 : 0
 	name		= "kdevops_private_net"
 	admin_state_up	= "true"
 }
 
 resource "openstack_networking_subnet_v2" "kdevops_private_subnet" {
+	count		= var.private_net_enabled ? 1 : 0
 	name 		= "kdevops_private_subnet"
-	network_id	= "${openstack_networking_network_v2.kdevops_private_net.id}"
-	cidr		= "10.0.2.0/24"
+	network_id	= "${openstack_networking_network_v2.kdevops_private_net[0].id}"
+	cidr		= format("%s/%d", var.private_net_prefix, var.private_net_mask)
 }
 
 resource "openstack_compute_secgroup_v2" "kdevops_security_group" {
@@ -60,14 +62,17 @@ resource "openstack_compute_instance_v2" "kdevops_instances" {
   flavor_name     = var.flavor_name
   key_pair        = var.ssh_pubkey_name
   security_groups = [openstack_compute_secgroup_v2.kdevops_security_group.name]
+  network {
+    name          = var.public_network_name
+  }
+}
+
+resource "openstack_compute_interface_attach_v2" "kdevops_net_attach" {
+  count           = var.private_net_enabled ? local.kdevops_num_boxes : 0
+  instance_id     = "${openstack_compute_instance_v2.kdevops_instances[count.index].id}"
+  network_id      = "${openstack_networking_network_v2.kdevops_private_net[0].id}"
   # needed to work around race in openstack provider
   depends_on	  = [openstack_networking_subnet_v2.kdevops_private_subnet]
-  network {
-    name = var.public_network_name
-  }
-  network {
-    name = "kdevops_private_net"
-  }
 }
 
 resource "openstack_blockstorage_volume_v3" "kdevops_data_disk" {

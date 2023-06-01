@@ -109,6 +109,12 @@ TERRAFORM_EXTRA_VARS += terraform_openstack_public_network_name=$(subst ",,$(CON
 ANSIBLE_EXTRA_ARGS_SEPARATED += terraform_openstack_image_name=$(subst $(space),+,$(CONFIG_TERRAFORM_OPENSTACK_IMAGE_NAME))
 endif
 
+ifeq (y,$(CONFIG_TERRAFORM_PRIVATE_NET))
+TERRAFORM_EXTRA_VARS += terraform_private_net_enabled='true'
+TERRAFORM_EXTRA_VARS += terraform_private_net_prefix=$(subst ",,$(CONFIG_TERRAFORM_PRIVATE_NET_PREFIX))
+TERRAFORM_EXTRA_VARS += terraform_private_net_mask=$(subst ",,$(CONFIG_TERRAFORM_PRIVATE_NET_MASK))
+endif
+
 SSH_CONFIG_USER:=$(subst ",,$(CONFIG_TERRAFORM_SSH_CONFIG_USER))
 # XXX: add support to auto-infer in devconfig role as we did with the bootlinux
 # role. Then we can re-use the same infer_uid_and_group=True variable and

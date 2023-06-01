@@ -8,4 +8,30 @@ menu "Terraform ssh configuration"
 source "terraform/Kconfig.ssh"
 endmenu
 
+config TERRAFORM_PRIVATE_NET
+	bool "Add a private network for the guests"
+	depends on TERRAFORM_OPENSTACK
+	default y
+	help
+	  This option adds a private network between the various guests
+	  on a separate interface from the public network. This is useful
+	  if you want to run a workflow that involves communications
+	  between the guests. The guests will determine their IPv4 address
+	  via DHCP.
+
+config TERRAFORM_PRIVATE_NET_PREFIX
+	string "Network prefix for private network"
+	default "10.0.3.0"
+	depends on TERRAFORM_PRIVATE_NET
+	help
+	  Network prefix of the private network. It's recommended to use
+	  RFC1918 addresses or something that won't conflict with
+	  globally-routable addresses.
+
+config TERRAFORM_PRIVATE_NET_MASK
+	int "Network mask for private network"
+	default 24
+	depends on TERRAFORM_PRIVATE_NET
+	help
+	  Length of the network mask to use for the private network.
 endif # TERRAFORM
