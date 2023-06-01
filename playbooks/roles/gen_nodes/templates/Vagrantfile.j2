@@ -118,15 +118,7 @@ Vagrant.configure("2") do |config|
       if server_box_version != ""
         srv.vm.box_version = server_box_version
       end
-{% if libvirt_session %}
-      # https://wiki.libvirt.org/page/FAQ#What_is_the_difference_between_qemu:.2F.2F.2Fsystem_and_qemu:.2F.2F.2Fsession.3F_Which_one_should_I_use.3F
-      # qemu:///session has a serious drawback: since the libvirtd instance
-      # does not have sufficient privileges, the only out of the box network
-      # option is qemu's usermode networking, which has nonobvious
-      # limitations, so its usage is discouraged. More info on qemu networking
-      # options: http://people.gnome.org/~markmc/qemu-networking.html
-      srv.vm.network "public_network", :type => "user"
-{% else %}
+{% if not libvirt_session %}
       if ! nested
         srv.vm.network "private_network", ip: server_data["ip"]
       end
