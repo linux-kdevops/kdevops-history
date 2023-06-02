@@ -1,0 +1,4 @@
+---
+- hosts: all
+  roles:
+    - role: update_etc_hosts

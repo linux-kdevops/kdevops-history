@@ -21,7 +21,11 @@ ifeq (y,$(CONFIG_KDEVOPS_SETUP_NFSD))
 KDEVOPS_BRING_UP_DEPS += nfsd
 endif # KDEVOPS_SETUP_NFSD
 
-bringup: $(KDEVOPS_BRING_UP_DEPS)
+update_etc_hosts:
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts playbooks/update_etc_hosts.yml
+
+bringup: $(KDEVOPS_BRING_UP_DEPS) update_etc_hosts
 
 destroy: $(KDEVOPS_DESTROY_DEPS)
 
