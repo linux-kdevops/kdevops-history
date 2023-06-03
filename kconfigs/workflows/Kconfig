@@ -141,7 +141,8 @@ config KDEVOPS_WORKFLOW_DEDICATE_PYNFS
 	bool "pynfs"
 	select KDEVOPS_WORKFLOW_ENABLE_PYNFS
 	help
-	  This will dedicate your configuration only to running pynfs.
+	  This will dedicate your configuration only to running pynfs
+	  (over loopback).
 
 config KDEVOPS_WORKFLOW_DEDICATE_SELFTESTS
 	bool "Linux kernel selftests"
@@ -195,6 +196,7 @@ config KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_CXL
 config KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_PYNFS
 	bool "pynfs"
 	select KDEVOPS_WORKFLOW_ENABLE_PYNFS
+	depends on VAGRANT || TERRAFORM_PRIVATE_NET
 	help
 	  Select this option if you are doing nfsd development and testing,
 	  and want to configure the deployment for testing nfsd via pynfs

@@ -72,8 +72,14 @@
     - 4.0
     - 4.1
 
+- name: Get the hostname of the NFS server
+  tags: [ 'run_tests' ]
+  set_fact:
+    nfsd_hostname: "{{ kdevops_host_prefix }}-nfsd"
+
 - name: Wait until nfsd grace period ends
   tags: [ 'run_tests' ]
+  delegate_to: "{{ nfsd_hostname }}"
   command: /usr/bin/grep Y /proc/fs/nfsd/v4_end_grace
   register: result
   retries: 90
@@ -85,7 +91,7 @@
   script: "{{ pynfs_workflow_dir }}/scripts/run_pynfs.sh"
   environment:
     PYNFS_DATA: "{{ pynfs_data }}"
-    NFSD_EXPORT_PATH: "{{ nfsd_export_path }}"
+    NFSD_EXPORT: "{{ nfsd_hostname }}:{{ nfsd_export_path }}"
 
 - name: Get used target kernel version
   tags: [ 'copy_results' ]
