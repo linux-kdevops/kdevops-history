@@ -269,7 +269,7 @@ if [[ "$CONFIG_KERNEL_CI_EMAIL_REPORT" == "y" ]]; then
 fi
 
 if [[ "$CONFIG_KERNEL_CI_EMAIL_MODIFY_FROM" == "y" ]]; then
-	MAIL_FROM_MOD="-S from='$CONFIG_KERNEL_CI_EMAIL_FROM'"
+	MAIL_FROM_MOD="-r '$CONFIG_KERNEL_CI_EMAIL_FROM'"
 fi
 
 if [[ "$ENABLE_WATCHDOG" == "y" ]]; then
