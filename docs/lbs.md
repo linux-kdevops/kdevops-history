@@ -34,7 +34,8 @@ You can experiment to see if things are good with fio on LBS:
 fio -bs=16k -iodepth=8 -rw=write -ioengine=io_uring -size=200M -name=io_uring_1 -filename=/dev/nvme9n1 -verify=md5
 ```
 
-Today we're able to not-crash when using up to 32 KiB LBS NVMe drives.
+Today we're able to not-crash when using up to 512 KiB LBS NVMe drives for
+both direct IO and buffered IO.
 
 ## Enabling pure-iomap
 
