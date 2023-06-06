@@ -17,9 +17,11 @@ config TERRAFORM_AWS
 config TERRAFORM_AZURE
 	bool "Azure"
 	depends on TARGET_ARCH_X86_64
+	select TERRAFORM_PRIVATE_NET
 	help
 	  Enabling this means you are going to use Azure for your cloud
-	  solution.
+	  solution. Note that Azure requires a private network for the
+	  guests.
 
 config TERRAFORM_OCI
 	bool "OCI - Oracle Cloud Infrastructure"

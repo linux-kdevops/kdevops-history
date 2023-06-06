@@ -10,7 +10,7 @@ endmenu
 
 config TERRAFORM_PRIVATE_NET
 	bool "Add a private network for the guests"
-	depends on TERRAFORM_OPENSTACK
+	depends on TERRAFORM_OPENSTACK || TERRAFORM_AZURE
 	default y
 	help
 	  This option adds a private network between the various guests
