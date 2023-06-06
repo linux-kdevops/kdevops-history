@@ -46,7 +46,7 @@
     repo: "{{ pynfs_git }}"
     dest: "{{ pynfs_data }}"
     update: yes
-    version: master
+    version: "{{ pynfs_git_tag }}"
   retries: 3
   delay: 5
   register: result

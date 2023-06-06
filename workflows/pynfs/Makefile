@@ -3,8 +3,11 @@ export KDEVOPS_HOSTS_TEMPLATE := pynfs.j2
 endif
 
 PYNFS_GIT:=$(subst ",,$(CONFIG_PYNFS_GIT))
-
 PYNFS_ARGS += pynfs_git=$(PYNFS_GIT)
+
+PYNFS_GIT_TAG:=$(subst ",,$(CONFIG_PYNFS_GIT_TAG))
+PYNFS_ARGS += pynfs_git_tag=$(PYNFS_GIT_TAG)
+
 WORKFLOW_ARGS += $(PYNFS_ARGS)
 
 # The default is our workflow does not have kernel-ci enabled

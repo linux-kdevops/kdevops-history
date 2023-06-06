@@ -1,9 +1,15 @@
 if KDEVOPS_WORKFLOW_ENABLE_PYNFS
 
 config PYNFS_GIT
-	string "The pynfs git tree to clone"
-	default "git://git.linux-nfs.org/projects/bfields/pynfs.git"
+	string "pynfs git tree to clone"
+	default "git://git.linux-nfs.org/projects/cdmackay/pynfs.git"
 	help
 	  The pynfs git tree to clone.
+
+config PYNFS_GIT_TAG
+	string "tag, branch or sha1sum"
+	default "master"
+	help
+	  The tag, branch or sha1sum to check out.
 
 endif # KDEVOPS_WORKFLOW_ENABLE_PYNFS
