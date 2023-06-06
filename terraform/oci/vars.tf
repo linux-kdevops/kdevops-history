@@ -48,6 +48,11 @@ variable "oci_instance_display_name" {
   default = ""
 }
 
+variable "oci_assign_public_ip" {
+  description = "Assign public IP to the instance"
+  default = false
+}
+
 variable "oci_subnet_ocid" {
   description = "Subnet OCID"
   default = ""

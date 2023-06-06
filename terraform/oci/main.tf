@@ -13,7 +13,7 @@ resource "oci_core_instance" "kdevops_instance" {
   display_name = element(var.kdevops_nodes, count.index)
 
   create_vnic_details {
-    assign_public_ip = false
+    assign_public_ip = var.oci_assign_public_ip
     subnet_id = var.oci_subnet_ocid
   }
 

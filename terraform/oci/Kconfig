@@ -63,6 +63,14 @@ config TERRAFORM_OCI_OS_IMAGE_OCID
 	  Read this:
 	  https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformproviderconfiguration.htm
 
+config TERRAFORM_OCI_ASSIGN_PUBLIC_IP
+	bool "Assign public IP address to the cloud instance"
+	default y
+	help
+          Select this field if public IP address has to be assigned to
+          the cloud instance. Otherwise a public IP address is
+          assigned.
+
 config TERRAFORM_OCI_SUBNET_OCID
 	string "OCI Subnet OCID"
 	help

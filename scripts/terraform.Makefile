@@ -87,6 +87,11 @@ TERRAFORM_EXTRA_VARS += terraform_oci_availablity_domain=$(subst ",,$(CONFIG_TER
 TERRAFORM_EXTRA_VARS += terraform_oci_compartment_ocid=$(subst ",,$(CONFIG_TERRAFORM_OCI_COMPARTMENT_OCID))
 TERRAFORM_EXTRA_VARS += terraform_oci_shape=$(subst ",,$(CONFIG_TERRAFORM_OCI_SHAPE))
 TERRAFORM_EXTRA_VARS += terraform_oci_os_image_ocid=$(subst ",,$(CONFIG_TERRAFORM_OCI_OS_IMAGE_OCID))
+ifeq (y, $(CONFIG_TERRAFORM_OCI_ASSIGN_PUBLIC_IP))
+TERRAFORM_EXTRA_VARS += terraform_oci_assign_public_ip=true
+else
+TERRAFORM_EXTRA_VARS += terraform_oci_assign_public_ip=false
+endif
 TERRAFORM_EXTRA_VARS += terraform_oci_subnet_ocid=$(subst ",,$(CONFIG_TERRAFORM_OCI_SUBNET_OCID))
 TERRAFORM_EXTRA_VARS += terraform_oci_data_volume_display_name=$(subst ",,$(CONFIG_TERRAFORM_OCI_DATA_VOLUME_DISPLAY_NAME))
 TERRAFORM_EXTRA_VARS += terraform_oci_data_volume_device_file_name=$(subst ",,$(CONFIG_TERRAFORM_OCI_DATA_VOLUME_DEVICE_FILE_NAME))
