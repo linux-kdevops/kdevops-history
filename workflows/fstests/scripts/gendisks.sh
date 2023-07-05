@@ -4,9 +4,9 @@
 # A loopback device is used for each of them. This allows us to save space
 # and deploy the test on any system.
 
-TEST_DEV=""
-FSTYP=""
-MKFS_OPTIONS=""
+: "${TEST_DEV:=""}"
+: "${FSTYP:=""}"
+: "${MKFS_OPTIONS:=""}"
 
 known_hosts()
 {
