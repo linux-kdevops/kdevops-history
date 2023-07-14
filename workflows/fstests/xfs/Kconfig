@@ -103,6 +103,32 @@ config FSTESTS_XFS_SECTION_NOCRC_ENABLED
 	  You should enable this, so that you can ensure your kernel keeps
 	  properly supporting filesystems created on older systems.
 
+config FSTESTS_XFS_ENABLE_LBS
+	bool "Enable testing LBS (large block devices) where block size > 4K"
+	default n
+	help
+	  Enable this if you want to enable testing large block devices, that is,
+	  where the block size is greater than 4k.
+
+if FSTESTS_XFS_ENABLE_LBS
+
+config FSTESTS_XFS_ENABLE_LBS_REAL
+	bool "Enable testing real LBS"
+	default n
+	help
+	  Enable this if you want to enable testing large block devices where
+	  there is an assumption that the device has a physical block size
+	  which matches the block size.
+
+config FSTESTS_XFS_ENABLE_LBS_4KS
+	bool "Enable testing LBS device with 4K sector size"
+	default n
+	help
+	  Enable this if you want to enable testing large block devices on
+	  on drives which are only capable up to 4k physical block size.
+
+endif
+
 if FSTESTS_XFS_SECTION_NOCRC_ENABLED
 
 config FSTESTS_XFS_SECTION_NOCRC
@@ -172,6 +198,7 @@ config FSTESTS_XFS_SECTION_NOCRC_4K
 config FSTESTS_XFS_SECTION_NOCRC_8K
 	bool "Enable testing section: xfs_nocrc_8k"
 	default y
+	depends on FSTESTS_XFS_ENABLE_LBS_REAL
 	help
 	  This will create a host to test the baseline of fstests using the
 	  following configuration without CRC enabled using 8192 bytes (8 KiB)
@@ -182,9 +209,24 @@ config FSTESTS_XFS_SECTION_NOCRC_8K
 	      MKFS_OPTIONS='-f -m crc=0,reflink=0,rmapbt=0, -i sparse=0, -b size=8192,'
 	      FSTYP=xfs
 
+config FSTESTS_XFS_SECTION_NOCRC_8K_4KS
+	bool "Enable testing section: xfs_nocrc_8k_4ks"
+	default y
+	depends on FSTESTS_XFS_ENABLE_LBS_4KS
+	help
+	  This will create a host to test the baseline of fstests using the
+	  following configuration without CRC enabled using 8192 bytes (8 KiB)
+          block size but with 4k sector size.
+	  This is useful to test older kernels which lacked CRC support.
+
+	      [xfs_nocrc_8k]
+	      MKFS_OPTIONS='-f -m crc=0,reflink=0,rmapbt=0, -i sparse=0, -b size=8192, -s size=4k'
+	      FSTYP=xfs
+
 config FSTESTS_XFS_SECTION_NOCRC_16K
 	bool "Enable testing section: xfs_nocrc_16k"
 	default y
+	depends on FSTESTS_XFS_ENABLE_LBS_REAL
 	help
 	  This will create a host to test the baseline of fstests using the
 	  following configuration without CRC enabled using 16384 bytes (16 KiB)
@@ -195,9 +237,24 @@ config FSTESTS_XFS_SECTION_NOCRC_16K
 	      MKFS_OPTIONS='-f -m crc=0,reflink=0,rmapbt=0, -i sparse=0, -b size=16384,'
 	      FSTYP=xfs
 
+config FSTESTS_XFS_SECTION_NOCRC_16K_4KS
+	bool "Enable testing section: xfs_nocrc_16k_4ks"
+	default y
+	depends on FSTESTS_XFS_ENABLE_LBS_4KS
+	help
+	  This will create a host to test the baseline of fstests using the
+	  following configuration without CRC enabled using 16384 bytes (16 KiB)
+          block size but with 4k sector size.
+	  This is useful to test older kernels which lacked CRC support.
+
+	      [xfs_nocrc_16k]
+	      MKFS_OPTIONS='-f -m crc=0,reflink=0,rmapbt=0, -i sparse=0, -b size=16384, -s size=4k'
+	      FSTYP=xfs
+
 config FSTESTS_XFS_SECTION_NOCRC_32K
 	bool "Enable testing section: xfs_nocrc_32k"
 	default y
+	depends on FSTESTS_XFS_ENABLE_LBS_REAL
 	help
 	  This will create a host to test the baseline of fstests using the
 	  following configuration without CRC enabled using 32768 bytes (32 KiB)
@@ -208,9 +265,24 @@ config FSTESTS_XFS_SECTION_NOCRC_32K
 	      MKFS_OPTIONS='-f -m crc=0,reflink=0,rmapbt=0, -i sparse=0, -b size=32768,'
 	      FSTYP=xfs
 
+config FSTESTS_XFS_SECTION_NOCRC_32K_4KS
+	bool "Enable testing section: xfs_nocrc_32k_4ks"
+	default y
+	depends on FSTESTS_XFS_ENABLE_LBS_4KS
+	help
+	  This will create a host to test the baseline of fstests using the
+	  following configuration without CRC enabled using 32768 bytes (32 KiB)
+          block size but on 4k sector size.
+	  This is useful to test older kernels which lacked CRC support.
+
+	      [xfs_nocrc_32k]
+	      MKFS_OPTIONS='-f -m crc=0,reflink=0,rmapbt=0, -i sparse=0, -b size=32768, -s size=4k'
+	      FSTYP=xfs
+
 config FSTESTS_XFS_SECTION_NOCRC_64K
 	bool "Enable testing section: xfs_nocrc_64k"
 	default y
+	depends on FSTESTS_XFS_ENABLE_LBS_REAL
 	help
 	  This will create a host to test the baseline of fstests using the
 	  following configuration without CRC enabled using 65536 bytes (64 KiB)
@@ -219,6 +291,20 @@ config FSTESTS_XFS_SECTION_NOCRC_64K
 
 	      [xfs_nocrc_64k]
 	      MKFS_OPTIONS='-f -m crc=0,reflink=0,rmapbt=0, -i sparse=0, -b size=65536,'
+	      FSTYP=xfs
+
+config FSTESTS_XFS_SECTION_NOCRC_64K_4KS
+	bool "Enable testing section: xfs_nocrc_64k_4ks"
+	default y
+	depends on FSTESTS_XFS_ENABLE_LBS_4KS
+	help
+	  This will create a host to test the baseline of fstests using the
+	  following configuration without CRC enabled using 65536 bytes (64 KiB)
+          block size but on 4k sector size.
+	  This is useful to test older kernels which lacked CRC support.
+
+	      [xfs_nocrc_64k]
+	      MKFS_OPTIONS='-f -m crc=0,reflink=0,rmapbt=0, -i sparse=0, -b size=65536, -s size=4k'
 	      FSTYP=xfs
 
 endif # FSTESTS_XFS_SECTION_NOCRC_ENABLED
@@ -294,6 +380,7 @@ config FSTESTS_XFS_SECTION_REFLINK_4K
 
 config FSTESTS_XFS_SECTION_REFLINK_8K
 	bool "Enable testing section: xfs_reflink_8k"
+	depends on FSTESTS_XFS_ENABLE_LBS_REAL
 	default y
 	help
 	  This will create a host to test the baseline of fstests using the
@@ -304,9 +391,23 @@ config FSTESTS_XFS_SECTION_REFLINK_8K
 	      MKFS_OPTIONS='-f -m reflink=1,rmapbt=1, -i sparse=1, -b size=8192'
 	      FSTYP=xfs
 
+config FSTESTS_XFS_SECTION_REFLINK_8K_4KS
+	bool "Enable testing section: xfs_reflink_8k_4ks"
+	default y
+	depends on FSTESTS_XFS_ENABLE_LBS_4KS
+	help
+	  This will create a host to test the baseline of fstests using the
+	  following configuration which enables reflink using 8192 bytes
+	  block size but on 4k sector size.
+
+	      [xfs_reflink_8k]
+	      MKFS_OPTIONS='-f -m reflink=1,rmapbt=1, -i sparse=1, -b size=8192 -s size=4k'
+	      FSTYP=xfs
+
 config FSTESTS_XFS_SECTION_REFLINK_16K
 	bool "Enable testing section: xfs_reflink_16k"
 	default y
+	depends on FSTESTS_XFS_ENABLE_LBS_REAL
 	help
 	  This will create a host to test the baseline of fstests using the
 	  following configuration which enables reflink using 16384 bytes
@@ -316,9 +417,23 @@ config FSTESTS_XFS_SECTION_REFLINK_16K
 	      MKFS_OPTIONS='-f -m reflink=1,rmapbt=1, -i sparse=1, -b size=16384'
 	      FSTYP=xfs
 
+config FSTESTS_XFS_SECTION_REFLINK_16K_4KS
+	bool "Enable testing section: xfs_reflink_16k_4ks"
+	default y
+	depends on FSTESTS_XFS_ENABLE_LBS_4KS
+	help
+	  This will create a host to test the baseline of fstests using the
+	  following configuration which enables reflink using 16384 bytes
+	  block size but on 4k sector size.
+
+	      [xfs_reflink_16k]
+	      MKFS_OPTIONS='-f -m reflink=1,rmapbt=1, -i sparse=1, -b size=16384, -s size=4k'
+	      FSTYP=xfs
+
 config FSTESTS_XFS_SECTION_REFLINK_32K
 	bool "Enable testing section: xfs_reflink_32k"
 	default y
+	depends on FSTESTS_XFS_ENABLE_LBS_REAL
 	help
 	  This will create a host to test the baseline of fstests using the
 	  following configuration which enables reflink using 32768 bytes
@@ -328,9 +443,23 @@ config FSTESTS_XFS_SECTION_REFLINK_32K
 	      MKFS_OPTIONS='-f -m reflink=1,rmapbt=1, -i sparse=1, -b size=32768'
 	      FSTYP=xfs
 
+config FSTESTS_XFS_SECTION_REFLINK_32K_4KS
+	bool "Enable testing section: xfs_reflink_32k_4ks"
+	default y
+	depends on FSTESTS_XFS_ENABLE_LBS_4KS
+	help
+	  This will create a host to test the baseline of fstests using the
+	  following configuration which enables reflink using 32768 bytes
+	  block size but on 4k sector size.
+
+	      [xfs_reflink_32k]
+	      MKFS_OPTIONS='-f -m reflink=1,rmapbt=1, -i sparse=1, -b size=32768, -s size=4k'
+	      FSTYP=xfs
+
 config FSTESTS_XFS_SECTION_REFLINK_64K
 	bool "Enable testing section: xfs_reflink_64k"
 	default y
+	depends on FSTESTS_XFS_ENABLE_LBS_REAL
 	help
 	  This will create a host to test the baseline of fstests using the
 	  following configuration which enables reflink using 16384 bytes
@@ -338,6 +467,19 @@ config FSTESTS_XFS_SECTION_REFLINK_64K
 
 	      [xfs_reflink_64k]
 	      MKFS_OPTIONS='-f -m reflink=1,rmapbt=1, -i sparse=1, -b size=65536'
+	      FSTYP=xfs
+
+config FSTESTS_XFS_SECTION_REFLINK_64K_4KS
+	bool "Enable testing section: xfs_reflink_64k_4ks"
+	default y
+	depends on FSTESTS_XFS_ENABLE_LBS_4KS
+	help
+	  This will create a host to test the baseline of fstests using the
+	  following configuration which enables reflink using 16384 bytes
+	  block size but on 4k sector size.
+
+	      [xfs_reflink_64k]
+	      MKFS_OPTIONS='-f -m reflink=1,rmapbt=1, -i sparse=1, -b size=65536 -s size=4k'
 	      FSTYP=xfs
 
 config FSTESTS_XFS_SECTION_REFLINK_NORMAPBT
@@ -445,6 +587,10 @@ config FSTESTS_XFS_SECTION_BIGBLOCK
 endif # FSTESTS_XFS_MANUAL_COVERAGE
 
 if !FSTESTS_XFS_MANUAL_COVERAGE
+
+config FSTESTS_XFS_ENABLE_LBS
+	bool
+	default n
 
 config FSTESTS_XFS_SECTION_CRC
 	bool
