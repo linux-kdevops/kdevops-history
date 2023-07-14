@@ -1,0 +1,21 @@
+if BOOTLINUX_TREE_MCGROF_NEXT
+
+choice
+	prompt "mcgrof-next branch to use"
+	default BOOTLINUX_MCGROF_NEXT_LBS
+
+config BOOTLINUX_MCGROF_NEXT_LBS
+	bool "large-block-next"
+	help
+	  Use the latest stable LBS branch which enables all the bells and
+	  whistles for all types of LBS devices.
+
+config BOOTLINUX_MCGROF_NEXT_LBS_NOBDEV
+	bool "large-block-nobdev"
+	help
+	  Use the latest minimal branch for LBS which let's you use LBS
+	  devices with a sectorsize compatibility.
+
+endchoice
+
+endif # BOOTLINUX_TREE_MCGROF_NEXT

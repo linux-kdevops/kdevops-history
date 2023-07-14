@@ -23,4 +23,5 @@ config BOOTLINUX_TREE_MCGROF_NEXT
 
 endchoice
 
+source "kconfigs/workflows/bootlinux/Kconfig.mcgrof"
 endif # BOOTLINUX_DEV
