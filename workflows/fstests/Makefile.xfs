@@ -31,16 +31,32 @@ ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_NOCRC_8K))
 FSTESTS_ARGS += fstests_xfs_section_nocrc_8k=True
 endif
 
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_NOCRC_8K_4KS))
+FSTESTS_ARGS += fstests_xfs_section_nocrc_8k_4ks=True
+endif
+
 ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_NOCRC_16K))
 FSTESTS_ARGS += fstests_xfs_section_nocrc_16k=True
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_NOCRC_16K_4KS))
+FSTESTS_ARGS += fstests_xfs_section_nocrc_16k_4ks=True
 endif
 
 ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_NOCRC_32K))
 FSTESTS_ARGS += fstests_xfs_section_nocrc_32k=True
 endif
 
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_NOCRC_32K_4KS))
+FSTESTS_ARGS += fstests_xfs_section_nocrc_32k_4ks=True
+endif
+
 ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_NOCRC_64K))
 FSTESTS_ARGS += fstests_xfs_section_nocrc_64k=True
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_NOCRC_64K_4ks))
+FSTESTS_ARGS += fstests_xfs_section_nocrc_64k_4ks=True
 endif
 
 ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK))
@@ -63,16 +79,32 @@ ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_8K))
 FSTESTS_ARGS += fstests_xfs_section_reflink_8k=True
 endif
 
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_8K_4KS))
+FSTESTS_ARGS += fstests_xfs_section_reflink_8k_4ks=True
+endif
+
 ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_16K))
 FSTESTS_ARGS += fstests_xfs_section_reflink_16k=True
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_16K_4KS))
+FSTESTS_ARGS += fstests_xfs_section_reflink_16k_4ks=True
 endif
 
 ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_32K))
 FSTESTS_ARGS += fstests_xfs_section_reflink_32k=True
 endif
 
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_32K_4KS))
+FSTESTS_ARGS += fstests_xfs_section_reflink_32k_4ks=True
+endif
+
 ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_64K))
 FSTESTS_ARGS += fstests_xfs_section_reflink_64k=True
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_64K_4KS))
+FSTESTS_ARGS += fstests_xfs_section_reflink_64k_4ks=True
 endif
 
 ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_NORMAPBT))
