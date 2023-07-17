@@ -170,7 +170,7 @@ to commit / push updates without any bottlenecks.
 # kdevops tests results
 
 kdevops has started to enable users / developers to also push results for
-tests. This goes beyond just collecting baseline rusults for known failures,
+tests. This goes beyond just collecting baseline results for known failures,
 this aims to collect *within* all dmesg / bad log files for each test that
 failed.
 
