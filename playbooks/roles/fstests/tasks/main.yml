@@ -222,7 +222,7 @@
     - naggy-check.sh
 
 - name: Create a few directories which kdevops uses for fstests if they do not exist
-  tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' ]
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install', 'generate-fstests-config' ]
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
