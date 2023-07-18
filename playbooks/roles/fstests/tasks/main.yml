@@ -71,14 +71,18 @@
     dbench_git: "https://github.com/linux-kdevops/dbench.git"
   tags: [ 'oscheck', 'git', 'dbench']
 
-- name: Remove any old fstests as we always clone a fresh tree
+- name: Remove any old fstests and install directories
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
   file:
-    path: "{{ fstests_data }}"
+    path: "{{ item }}"
     state: absent
-  tags: [ 'oscheck', 'git', 'fstests']
+  with_items:
+    - "{{ fstests_data }}"
+    - "{{ fstests_data_prefix }}"
+    - "{{ fstests_data_target }}"
+  tags: [ 'oscheck', 'git', 'fstests', 'build' ]
 
 - name: git clone fstests
   git:
@@ -96,6 +100,27 @@
   tags: [ 'oscheck', 'fstests', 'build']
   command: "nproc"
   register: nproc
+
+- name: Create {{ fstests_data_prefix }} if it does not exist
+  tags: [ 'oscheck', 'fstests', 'install', 'root']
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.file:
+    path: "{{ fstests_data_prefix }}"
+    state: directory
+
+- name: Build the configure file for fstests
+  tags: [ 'oscheck', 'fstests', 'build']
+  command: "make configure"
+  args:
+    chdir: "{{ fstests_data }}"
+
+- name: Configure fstests
+  tags: [ 'oscheck', 'fstests', 'build']
+  command: "./configure --prefix={{ fstests_data_prefix }}"
+  args:
+    chdir: "{{ fstests_data }}"
 
 - name: Build fstests
   tags: [ 'oscheck', 'fstests', 'build']
@@ -138,6 +163,16 @@
   tags: [ 'oscheck', 'fstests', 'install', 'root']
   args:
     chdir: "{{ fstests_data }}"
+
+- name: Add symlink for old fstests directory
+  tags: [ 'oscheck', 'fstests', 'install', 'root']
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.file:
+    src: "{{ fstests_data_prefix }}/xfstests"
+    dest: "{{ fstests_data_target }}"
+    state: link
 
 - name: Install root generated .kdevops_fstests_setup
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' ]
