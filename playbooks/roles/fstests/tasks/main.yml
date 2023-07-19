@@ -626,7 +626,6 @@
     TEST_DEV: "{{ fstests_test_dev }}"
     TEST_DIR: "{{ fstests_test_dir }}"
   when:
-    - kdevops_run_fstests|bool
     - fstests_testdev_sparsefile_generation|bool
 
 - name: Capture gendisk output

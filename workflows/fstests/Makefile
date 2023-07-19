@@ -168,7 +168,7 @@ fstests:
 
 fstests-kdevops-setup: $(KDEVOPS_EXTRA_VARS)
 	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
-		-f 30 -i hosts playbooks/fstests.yml --tags vars,kdevops_fstests_setup $(LIMIT_HOSTS)
+		-f 30 -i hosts playbooks/fstests.yml --tags vars,kdevops_fstests_setup,gendisks $(LIMIT_HOSTS)
 
 fstests-baseline:
 	$(Q)PYTHONUNBUFFERED=1 ansible-playbook $(ANSIBLE_VERBOSE) \
