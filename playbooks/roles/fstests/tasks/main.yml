@@ -319,7 +319,40 @@
   when:
     - not fstests_testdev_sparsefile_generation|bool
 
-- name: Get NVMe euis
+- name: End if no NVMe EUIs found per node and no fallback mechanism is provided
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.fail:
+    msg:
+      - "You need at least one NVMe drive with its EUI defined per node, try enabling CONFIG_FSTESTS_TESTDEV_NVME_FALLBACK_MODEL_SERIAL"
+  when:
+    - fstests_testdev_nvme_partition_euis|bool
+    - not fstests_testdev_nvme_fallback_model_serial|bool
+    - euis is success
+    - euis.files is defined
+    - euis.files | length == 0
+
+- name: Fallback look for NVMe drive by model and serial number /dev/disk/by-id/nvme-$(model)-$(serial)
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.find:
+    paths: /dev/disk/by-id/
+    file_type: "link"
+    patterns: 'nvme-*'
+    excludes: 'nvme-QEMU*,nvme-nvme*'
+  register: euis
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
+  when:
+    - euis is success
+    - euis.files is defined
+    - euis.files | length == 0
+    - not fstests_testdev_sparsefile_generation|bool
+    - fstests_testdev_nvme_fallback_model_serial|bool
+
+- name: Get NVMe drives we can use for testing
   set_fact:
     nvme_euis: |
       {%- set x = [] -%}

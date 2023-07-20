@@ -70,6 +70,10 @@ ifeq (y,$(CONFIG_FSTESTS_TESTDEV_NVME_EUIS))
 FSTESTS_ARGS += fstests_testdev_nvme_euis='True'
 endif
 
+ifeq (y,$(CONFIG_FSTESTS_TESTDEV_NVME_FALLBACK_MODEL_SERIAL))
+FSTESTS_ARGS += fstests_testdev_nvme_fallback_model_serial='True'
+endif
+
 endif # CONFIG_FSTESTS_TESTDEV_UNDER_DEVELOPMENT
 
 ifeq (y,$(CONFIG_FSTESTS_TESTDEV_SPARSEFILE_GENERATION))

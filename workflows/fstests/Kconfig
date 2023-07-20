@@ -346,6 +346,26 @@ config FSTESTS_TESTDEV_NVME_EUIS
 
 endchoice
 
+
+config FSTESTS_TESTDEV_NVME_FALLBACK_MODEL_SERIAL
+	bool "Fallback to using NVMe model an serial"
+	depends on FSTESTS_TESTDEV_NVME_PARTITION_EUIS || FSTESTS_TESTDEV_NVME_EUIS
+	default y
+	help
+	  As per the NVMe base specification 2.0c under section 3.2.1.6 NSID and
+	  Namespace Usage, devices which support namespaces, ANA reporting or
+	  NVM sets need to pick one of NGUID, EUI64 or UUID to implement and
+	  suport. So EUIs are not required and not all drives support all these
+	  features. So some drives may exist which don't use EUIs. To help with
+	  this this allows you to use a fallback of the Linux kernel symlink
+	  fallback of:
+
+	    /dev/disk/by-id/nvme-$(model)-$(serial)
+
+	  This mechanism will by default skip qemu NVMe drives.
+
+	  Disable this if you want to only use drives which support EUI symlinks.
+
 if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 
 config FSTESTS_SPARSE_DEV

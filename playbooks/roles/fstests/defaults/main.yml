@@ -28,6 +28,8 @@ fstests_testdev_sparsefile_generation: False
 fstests_testdev_nvme_partition_euis: False
 fstests_testdev_nvme_euis: False
 
+fstests_testdev_nvme_fallback_model_serial: False
+
 sparsefiles_generation: False
 sparsefiles_size: 0
 sparsefiles_filename_prefix: "sparse-disk"
