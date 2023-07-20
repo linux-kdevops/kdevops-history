@@ -205,6 +205,13 @@ config FSTESTS_DATA_TARGET
 	  The directory where fstests will be installed. Modifying this probably
 	  won't work well yet.
 
+config FSTESTS_TESTDEV_UNDER_DEVELOPMENT
+	bool "Enable test drive options still under development"
+	help
+	  You will want to enable this if you know what you are doing and
+	  want to help develop and test new features which let you use
+	  real drives to test fstests with.
+
 choice
 	prompt "Strategy for device pool"
 	default FSTESTS_TESTDEV_SPARSEFILE_GENERATION
@@ -225,19 +232,117 @@ config FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 	  amount of actual space used by all the tests. This varies by the
 	  filesystem you are testing.
 
-	  We'll create 15 sparse files for you, and so you can run tests which
-	  require up to 15 block devices. The TEST_DEV is set to /dev/loop16.
-	  If a LOGWRITES_DEV is used this /dev/loop15 is used.
-	  If a SCRATCH_RTDEV is used this /dev/loop14 is used.
+	  We'll create 12 sparse files for you, and so you can run tests which
+	  require up to 12 block devices.
+
+	  kdevops started using the creation of loop drives starting at
+	  /dev/loop5 instead of /dev/loop0 since its first commit of
+	  gendisks.sh [0]. At least on v3.0 kernel the loopback driver would
+	  would create automatically 8 loopback drives if no max loop was
+	  specified. The practice of starting to use loop5 all the way up to
+	  /dev/loop16 likely started to avoid conflicts with existing old
+	  distribution uses of the first 5 loop drives, and to provide a
+	  consistent way to ensure loop drives are always the same. It just
+	  so happens that if need many partitions on a real drive you create
+	  one extended partition and many logical drives, in that setup you
+	  also start at /dev/<device>5. We upkeep this practice simply for
+	  historic reasons.
+
+	  The first main test device TEST_DEV is set to /dev/loop16.
+	  If a LOGWRITES_DEV is used this /dev/loop15 is used and is used for
+	  power failure tests.
+
+	  TEST_LOGDEV is only used when a filesystem supports an external
+	  journal, this is uses the same /dev/loop15 since we currently disable
+	  LOGWRITES_DEV when testing TEST_LOGDEV. This is just because we ran
+	  out of loop back drives.
+
+	  For XFS with a realtime device TEST_RTDEV uses /dev/loop13 and
+	  SCRATCH_RTDEV set set to /dev/loop14.
 
 	  The SCRATCH_DEV_POOL is set to these devices:
 
 	   /dev/loop5   /dev/loop6   /dev/loop7   /dev/loop8
 	   /dev/loop9   /dev/loop10  /dev/loop11  /dev/loop12
 
-	  With this strategy these loopback devices currently remain unused:
+	  [0] https://github.com/mcgrof/oscheck/commit/218e4a4fce6add0b2b059fb6bf93e1a768e4948d
 
-	   /dev/loop13
+config FSTESTS_TESTDEV_NVME_PARTITION_EUIS
+	bool "Use first real NVMe drive and create partitions"
+	depends on FSTESTS_TESTDEV_UNDER_DEVELOPMENT
+	help
+	  If you want to test using real storage drives the only way
+	  to reliably ensure they are the same drives upon a reboot is
+	  to rely on the /dev/disk/by-id. This strategy will find the
+	  first NVMe drives found on /dev/disk/by-id/nvme.eui.* and it
+	  to create partitions required to test a filesystem on.
+
+	  Note that sparse file generation testing / loop back drive test
+	  (FSTESTS_TESTDEV_SPARSEFILE_GENERATION) relies on 12 drives, it starts
+	  its testing on TEST_DEV on /dev/loop16 and goes back, the loop drive
+	  count starts from /dev/loop16 all the way to /dev/loop5 to mimic what
+	  you would get if you had to create an extended partition and then
+	  create a set of extra logical partitions to test. And so this will
+	  remove all partitions on that drive and then create an extended
+	  partition, followed by 11 logical partitions:
+
+	  /dev/disk/by-id/nvme.eui.*-part5 - /dev/disk/by-id/nvme.eui.*-part16
+
+	  These are symlinks which map to their respective on boot:
+
+	  /dev/nvme*p5 - /dev/nvme*p16
+
+	  Note that the real NVMe drives could be passthrough onto a guest.
+	  This has not been tested without that and so typically qemu nvme
+	  drives are used for the other things.
+
+	  TEST_DEV      uses /dev/*p16
+
+	  When an XFS realtime subvolume is used:
+
+	  SCRATCH_RTDEV uses /dev/*p14
+	  TEST_RTDEV    uses /dev/*p13
+
+	  Both of these are mutually exclusive for now:
+
+	  TEST_LOGDEV   uses /dev/*p15
+	  LOGWRITES_DEV uses /dev/*p15
+
+	  The SCRATCH_DEV_POOL is set to these devices:
+
+	   /dev/*part5   /dev/*part6   /dev/*part7   /dev/*part8
+	   /dev/*part9   /dev/*part10  /dev/*part11  /dev/*part12
+
+	  With this strategy there are no unused partitions.
+
+config FSTESTS_TESTDEV_NVME_EUIS
+	bool "Use at least 7 real NVMe drives detected by EUI"
+	depends on FSTESTS_TESTDEV_UNDER_DEVELOPMENT
+	help
+	  If you want to test using real storage drives the only way
+	  to reliably ensure they are the same drives upon a reboot is
+	  to rely on the /dev/disk/by-id. This strategy will find the
+	  first 7 NVMe drives found on /dev/disk/by-id/nvme.eui.* and use
+	  them to set up the drives for testing.
+
+	  Note that sparse file generation testing / loop back drive test
+	  (FSTESTS_TESTDEV_SPARSEFILE_GENERATION) relies on 11 drives, that's
+	  quite a bit so for now we lower the threshold to 11 drives. If you
+	  don't have this many drives you can instead use the next option
+	  which let's you create partitions for you.
+
+	  Note that the real NVMe drives could be passthrough onto a guest.
+	  This has not been tested without that and so typically qemu nvme
+	  drives are used for the other things.
+
+	  We'll want to populate:
+	  - TEST_DEV
+	  - SCRATCH_DEV_POOL we'll use 5 drives for this
+
+	  Due to lack of drives you won't be able to test using:
+
+	  - LOGWRITES_DEV
+	  - SCRATCH_RTDEV
 
 endchoice
 
@@ -324,6 +429,7 @@ endif # FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 config FSTESTS_TEST_DEV
 	string "The device to use TEST_DEV on fstests"
 	default "/dev/loop16" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
+	depends on FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 	help
 	  To test with fstests one must set the TEST_DEV variable, this sets
 	  the TEST_DEV to use.
@@ -333,6 +439,7 @@ if FSTESTS_XFS_SECTION_LOGDEV
 config FSTESTS_TEST_LOGDEV
 	string "The device to use TEST_LOGDEV on fstests"
 	default "/dev/loop13" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
+	depends on FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 	help
 	  To test with fstests with an external journal you can set this to
 	  device which will be used for the journal.
@@ -364,6 +471,7 @@ config FSTESTS_TEST_DIR
 config FSTESTS_SCRATCH_DEV_POOL
 	string "The list of devices to set in SCRATCH_DEV_POOL"
 	default "/dev/loop5 /dev/loop6 /dev/loop7 /dev/loop8 /dev/loop9 /dev/loop10 /dev/loop11 /dev/loop12" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
+	depends on FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 	help
 	  To set of spare devices to use for the fstests SCRATCH_DEV_POOL.
 
@@ -383,6 +491,7 @@ config FSTESTS_SCRATCH_MNT
 config FSTESTS_LOGWRITES_DEV
 	string "The fstests LOGWRITES_DEV to use for powerfailing tests"
 	default "/dev/loop15" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
+	depends on FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 	help
 	  To set devices to use for the LOGWRITES_DEV, this is used for
 	  power failing tests. This requires and uses the device mapper
@@ -396,6 +505,7 @@ config FSTESTS_LOGWRITES_DEV
 config FSTESTS_SCRATCH_LOGDEV
 	string "The fstests SCRATCH_LOGDEV to use"
 	default "/dev/loop15" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
+	depends on FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 	help
 	  To set devices to use for the SCRATCH_LOGDEV.
 
@@ -404,6 +514,7 @@ if FSTESTS_XFS
 config FSTESTS_TEST_RTDEV
 	string "The fstests TEST_RTDEV to use"
 	default "/dev/loop13" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
+	depends on FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 	depends on FSTESTS_XFS_SECTION_RTDEV
 	help
 	  To set devices to use for the TEST_RTDEV.
@@ -411,6 +522,7 @@ config FSTESTS_TEST_RTDEV
 config FSTESTS_SCRATCH_RTDEV
 	string "The fstests SCRATCH_RTDEV to use"
 	default "/dev/loop14" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
+	depends on FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 	depends on FSTESTS_XFS_SECTION_RTDEV
 	help
 	  To set devices to use for the SCRATCH_RTDEV.
@@ -418,6 +530,7 @@ config FSTESTS_SCRATCH_RTDEV
 config FSTESTS_TEST_RTLOGDEV_
 	string "The fstests TEST_RTDEV to use for the XFS [xfs_rtlogdev]"
 	default "/dev/loop12" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
+	depends on FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 	depends on FSTESTS_XFS_SECTION_RTLOGDEV
 	help
 	  To set devices to use for the TEST_RTDEV for the XFS target test
@@ -427,6 +540,7 @@ config FSTESTS_TEST_RTLOGDEV_
 config FSTESTS_SCRATCH_DEV_POOL_RTLOGDEV
 	string "The list of devices to set in SCRATCH_DEV_POOL used for the XFS [xfs_rtlogdev]"
 	default "/dev/loop5 /dev/loop6 /dev/loop7 /dev/loop8 /dev/loop9 /dev/loop10 /dev/loop11" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
+	depends on FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 	depends on FSTESTS_XFS_SECTION_RTLOGDEV
 	help
 	  To set of spare devices to use for the fstests SCRATCH_DEV_POOL for

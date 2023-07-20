@@ -22,6 +22,12 @@ fstests_test_logdev: "/dev/null"
 fstests_test_logdev_mkfs_opts: "/dev/null"
 fstests_test_dev_zns: "/dev/null"
 fstests_zns_enabled: False
+
+fstests_testdev_under_development: False
+fstests_testdev_sparsefile_generation: False
+fstests_testdev_nvme_partition_euis: False
+fstests_testdev_nvme_euis: False
+
 sparsefiles_generation: False
 sparsefiles_size: 0
 sparsefiles_filename_prefix: "sparse-disk"

@@ -68,6 +68,7 @@
       - libtool
       - gettext
       - ncurses-dev
+      - parted
     state: present
     update_cache: yes
   tags: [ 'fstests', 'deps' ]

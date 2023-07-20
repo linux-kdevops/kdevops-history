@@ -134,6 +134,7 @@
       - openssl-devel
       - libcap-progs
       - fio
+      - parted
     state: present
   when:
     - repos_present|bool

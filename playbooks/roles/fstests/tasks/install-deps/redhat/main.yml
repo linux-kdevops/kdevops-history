@@ -56,3 +56,4 @@
       - libudev-devel
       - python3-devel
       - lzo-devel
+      - parted

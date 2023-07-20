@@ -25,7 +25,10 @@ FSTESTS_ARGS += fs_config_role_path='roles/fstests/templates/$(FS_CONFIG)'
 FSTESTS_ARGS += fstests_data=\"$(FSTESTS_DATA)\"
 FSTESTS_ARGS += fstests_setup_system='$(FSTESTS_SETUP_SYSTEM)'
 FSTESTS_ARGS += fstests_data_target='$(FSTESTS_DATA_TARGET)'
+
+ifeq (y,$(CONFIG_FSTESTS_TESTDEV_SPARSEFILE_GENERATION))
 FSTESTS_ARGS += fstests_test_dev='$(FSTESTS_TEST_DEV)'
+endif
 
 ifeq (y,$(CONFIG_FSTESTS_XFS))
 include $(TOPDIR)/workflows/fstests/Makefile.xfs
@@ -53,6 +56,23 @@ FSTESTS_ARGS += fstests_test_dir='$(FSTESTS_TEST_DIR)'
 FSTESTS_SCRATCH_MNT:=$(subst ",,$(CONFIG_FSTESTS_SCRATCH_MNT))
 FSTESTS_ARGS += fstests_scratch_mnt='$(FSTESTS_SCRATCH_MNT)'
 
+# For now we only use this to ensure you know what you are doing...
+ifeq (y,$(CONFIG_FSTESTS_TESTDEV_UNDER_DEVELOPMENT))
+FSTESTS_ARGS += fstests_testdev_under_developmen='True'
+
+# Only 1 real NVMe drive is required use PCIe passthrough with make dynconfig
+ifeq (y,$(CONFIG_FSTESTS_TESTDEV_NVME_PARTITION_EUIS))
+FSTESTS_ARGS += fstests_testdev_nvme_partition_euis='True'
+endif
+
+# 7 drives are needed, use PCIe passthrough onto the guest with make dynconfig
+ifeq (y,$(CONFIG_FSTESTS_TESTDEV_NVME_EUIS))
+FSTESTS_ARGS += fstests_testdev_nvme_euis='True'
+endif
+
+endif # CONFIG_FSTESTS_TESTDEV_UNDER_DEVELOPMENT
+
+ifeq (y,$(CONFIG_FSTESTS_TESTDEV_SPARSEFILE_GENERATION))
 FSTESTS_LOGWRITES_DEV:=$(subst ",,$(CONFIG_FSTESTS_LOGWRITES_DEV))
 FSTESTS_ARGS += fstests_logwrites_dev='$(FSTESTS_LOGWRITES_DEV)'
 
@@ -63,7 +83,9 @@ FSTESTS_SCRATCH_RTDEV:=$(subst ",,$(CONFIG_FSTESTS_SCRATCH_RTDEV))
 FSTESTS_ARGS += fstests_scratch_rtdev='$(FSTESTS_SCRATCH_RTDEV)'
 
 SPARSE_GEN:=$(subst ",,$(CONFIG_FSTESTS_TESTDEV_SPARSEFILE_GENERATION))
+FSTESTS_ARGS += fstests_testdev_sparsefile_generation='True'
 FSTESTS_ARGS += sparsefiles_generation='$(SPARSE_GEN)'
+endif
 
 ifeq (y,$(CONFIG_CONFIG_BOOTLINUX))
 TREE_TAG:=$(subst ",,$(CONFIG_BOOTLINUX_TREE_TAG))
@@ -85,7 +107,6 @@ export FSTESTS_SPARSE_FILENAME_PREFIX:=$(subst ",,$(CONFIG_FSTESTS_SPARSE_FILENA
 export FSTESTS_RUN_LARGE_DISK_TESTS:=$(subst ",,$(CONFIG_FSTESTS_RUN_LARGE_DISK_TESTS))
 export FSTESTS_RUN_AUTO_GROUP_TESTS:=$(subst ",,$(CONFIG_FSTESTS_RUN_AUTO_GROUP_TESTS))
 export FSTESTS_RUN_CUSTOM_GROUP_TESTS:=$(subst ",,$(CONFIG_FSTESTS_RUN_CUSTOM_GROUP_TESTS))
-
 
 FSTESTS_ARGS += sparsefiles_device='$(SPARSE_DEV)'
 FSTESTS_ARGS += sparsefiles_path='$(FSTESTS_SPARSE_FILE_PATH)'
