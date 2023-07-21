@@ -29,6 +29,8 @@
     disk_setup_user: "{{ data_user }}"
     disk_setup_group: "{{ data_group }}"
   tags: [ 'oscheck', 'sparse_partition' ]
+  when:
+    - fstests_testdev_sparsefile_generation|bool
 
 - name: git clone kdevops
   environment:
