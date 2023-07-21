@@ -657,6 +657,7 @@
     TEST_DIR: "{{ fstests_test_dir }}"
   when:
     - kdevops_run_fstests|bool
+    - fstests_testdev_sparsefile_generation|bool
 
 - name: Set the path where we collect our fstests results
   set_fact:
