@@ -699,7 +699,7 @@
   set_fact:
     fstests_initial_baseline_args: |
       {%- set x = [] -%}
-      {%- for f in check_times.files %}
+      {%- for f in checktime_files.files %}
       {{ x.append(expunge_file + f.path + space) }}
       {%- endfor -%}
       {{ x | join() | trim() }}
