@@ -392,6 +392,7 @@
   when:
     - fstests_testdev_nvme_partition_euis|bool
     - nvme_euis | length == 1
+    - nvme_info.partitions | length != 13
 
 - name: Create extended partition on sigle NVMe drive
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
@@ -407,7 +408,7 @@
     - fstests_testdev_nvme_partition_euis|bool
     - nvme_euis | length == 1
 
-- name: Create 13 logical partitions on sigle NVMe drive
+- name: Create 12 logical partitions on sigle NVMe drive
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
   become: yes
   become_flags: 'su - -c'
