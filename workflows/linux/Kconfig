@@ -119,8 +119,8 @@ config BOOTLINUX_DEV
 
 endchoice
 
-source "kconfigs/workflows/bootlinux/Kconfig.stable"
-source "kconfigs/workflows/bootlinux/Kconfig.dev"
+source "workflows/linux/Kconfig.stable"
+source "workflows/linux/Kconfig.dev"
 
 config BOOTLINUX_TREE_NAME
 	string "Linux tree name"

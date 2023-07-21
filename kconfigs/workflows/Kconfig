@@ -48,7 +48,7 @@ config BOOTLINUX
 
 	  Say y unless you don't want to have 'make linux' do anything.
 
-source "kconfigs/workflows/bootlinux/Kconfig"
+source "workflows/linux/Kconfig"
 endmenu
 endif # WORKFLOW_LINUX_CUSTOM
 
