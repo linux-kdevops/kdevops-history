@@ -12,6 +12,9 @@ oscheck_extra_args: ""
 limit_tests: ""
 dynamic_limit_tests:
 
+fstests_initial_baseline: False
+fstests_initial_baseline_args: ""
+
 fstests_git: "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git"
 fstests_data: "{{ data_path }}/fstests"
 fstests_data_prefix: "{{ data_path }}/fstests-install"

@@ -690,6 +690,26 @@
   when:
     - checktime_files.matched > 0
 
+- name: Use check.time files as expunge variables to help with initial baseline
+  vars:
+    expunge_file: "-E "
+    space: " "
+  set_fact:
+    fstests_initial_baseline_args: |
+      {%- set x = [] -%}
+      {%- for f in check_times.files %}
+      {{ x.append(expunge_file + f.path + space) }}
+      {%- endfor -%}
+      {{ x | join() | trim() }}
+  when:
+    - checktime_files is success
+    - checktime_files.files is defined
+    - checktime_files.files | length > 0
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'checktime' ]
+  when:
+    - fstests_initial_baseline|bool
+
+
 - name: Clear out old results directory
   become: yes
   become_flags: 'su - -c'
@@ -698,6 +718,8 @@
     state: absent
     path: "{{ fstests_data_target }}/results/"
   tags: [ 'oscheck', 'fstests', 'run_tests', 'clean_results' ]
+  when:
+    - not fstests_initial_baseline|bool
 
 - name: Print uname for each host
   tags: [ 'oscheck', 'fstests', 'run_tests' ]
@@ -833,11 +855,12 @@
 - name: Run fstests using ./oscheck.sh --print-start --print-done --test-section {{ fstests_section }} {{ oscheck_extra_args }} {{ all_limit_tests }}
   vars:
     fstests_section: "{{ ansible_host | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
+    initial_baseline_expunges: "{{ fstests_initial_baseline_args | trim }}"
   tags: [ 'oscheck', 'fstests', 'run_tests' ]
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
-  command: "./oscheck.sh --print-start --print-done --test-section {{ fstests_section }} {{ oscheck_extra_args }} {{ all_limit_tests }}"
+  command: "./oscheck.sh --print-start --print-done --test-section {{ fstests_section }} {{ oscheck_extra_args }} {{ all_limit_tests }} {{ initial_baseline_expunges }}"
   ignore_errors: yes
   no_log: True
   args:

@@ -158,6 +158,10 @@ ifneq (,$(SKIP_RUN))
 DYNAMIC_RUNTIME_VARS += , "fstests_skip_run": True
 endif
 
+ifneq (,$(INITIAL_BASELINE))
+DYNAMIC_RUNTIME_VARS += , "fstests_initial_baseline": True
+endif
+
 fstests:
 	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
 		-f 30 -i hosts playbooks/fstests.yml --skip-tags run_tests,copy_results $(LIMIT_HOSTS)
