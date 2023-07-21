@@ -709,10 +709,8 @@
     - checktime_files is success
     - checktime_files.files is defined
     - checktime_files.files | length > 0
-  tags: [ 'oscheck', 'fstests', 'run_tests', 'checktime' ]
-  when:
     - fstests_initial_baseline|bool
-
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'checktime' ]
 
 - name: Clear out old results directory
   become: yes
