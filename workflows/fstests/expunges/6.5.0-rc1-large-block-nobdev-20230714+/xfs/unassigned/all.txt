@@ -2,6 +2,7 @@ generic/008 # runs forever no log
 generic/013 # iomap_readpage_iter + iomap_page_create crash https://gist.github.com/mcgrof/6cea7519e815487f5ea973cac7e93c34
 generic/018 # runs forever no log
 generic/014
+generic/029 # runs forever no log
 generic/061 # diff https://gist.github.com/mcgrof/87bb371242ee35f5b41f3a62c7c22e99
 generic/063 # diff https://gist.github.com/mcgrof/f514324a451e04d6f31126c2755a6ea2
 generic/070 # iomap_readpage_iter + iomap_page_create crash https://gist.github.com/mcgrof/38233f4607be4528d6180e2a1d0a197a
