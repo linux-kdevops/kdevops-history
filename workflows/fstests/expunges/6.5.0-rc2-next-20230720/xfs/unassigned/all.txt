@@ -1,6 +1,9 @@
 generic/175 # seems to be a test bug when using partitions https://gist.github.com/mcgrof/144fd3886b920aa0ecfcae2111d6ad4b
 generic/176 # x86 regression crash https://gist.github.com/mcgrof/b37fc8cf7e6e1b3935242681de1a83e2 fixed by https://lore.kernel.org/all/877cqvl7vr.fsf@nvdebian.thelocal/
-generic/299 # x86 regression crash https://gist.github.com/mcgrof/b37fc8cf7e6e1b3935242681de1a83e2 fixed by https://lore.kernel.org/all/877cqvl7vr.fsf@nvdebian.thelocal/
+generic/175 # seems like a test bug tar -xOJf workflows/fstests/results/mcgrof/libvirt-qemu/20230725/6.5.0-rc2-next-20230720.xz 6.5.0-rc2-next-20230720/xfs_reflink_4k/generic/175.out.bad
 generic/297 # seems to be similar test bug as with generic/175 when using partitions
-generic/298 # seems to be similar test bug as with generic/175 when using partitions
-
+generic/298 # seems to be similar test bug as with generic/175 when using partitions tar -xOJf workflows/fstests/results/mcgrof/libvirt-qemu/20230725/6.5.0-rc2-next-20230720.xz 6.5.0-rc2-next-20230720/xfs_reflink_4k/generic/298.out.bad
+generic/299 # x86 regression crash https://gist.github.com/mcgrof/b37fc8cf7e6e1b3935242681de1a83e2 fixed by https://lore.kernel.org/all/877cqvl7vr.fsf@nvdebian.thelocal/
+generic/471 # real issue or race with loop tar -xOJf workflows/fstests/results/mcgrof/libvirt-qemu/20230725/6.5.0-rc2-next-20230720.xz 6.5.0-rc2-next-20230720/xfs_reflink_4k/generic/471.out.bad
+xfs/188 # could be a test bug tar -xOJf workflows/fstests/results/mcgrof/libvirt-qemu/20230725/6.5.0-rc2-next-20230720.xz 6.5.0-rc2-next-20230720/xfs_reflink_4k/xfs/188.out.bad
+xfs/506 # tar -xOJf workflows/fstests/results/mcgrof/libvirt-qemu/20230725/6.5.0-rc2-next-20230720.xz 6.5.0-rc2-next-20230720/xfs_reflink_4k/xfs/506.out.bad
