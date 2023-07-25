@@ -1625,6 +1625,13 @@ config QEMU_ENABLE_CXL_DEMO_TOPOLOGY_2
 	  in the host bridge. This ensures that the decoder associated with the
 	  host bridge is not a passthrough decoder.
 
+config QEMU_ENABLE_CXL_SWITCH_TOPOLOGY_1
+	bool "CXL switch connected to root port with two down stream ports"
+	help
+	  This topology adds a CXL switch in the topology. A memory device
+	  is connected to one of the down stream ports. The upstream port
+	  is connected to a root port on the host bridge.
+
 endchoice
 
 endif # QEMU_ENABLE_CXL

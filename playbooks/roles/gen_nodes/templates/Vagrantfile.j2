@@ -285,7 +285,6 @@ Vagrant.configure("2") do |config|
 	]
 	libvirt.qemuargs :value => "-m"
 	libvirt.qemuargs :value => "maxmem=#{memory *2}M,slots=16"
-{% if libvirt_enable_cxl_demo_topo1 or libvirt_enable_cxl_demo_topo2 %}
 	# CXL host bus
         libvirt.qemuargs :value => "-device"
         libvirt.qemuargs :value => "pxb-cxl,bus=pcie.0,id=cxl.0,bus_nr=52,addr=0x9"
@@ -307,12 +306,25 @@ Vagrant.configure("2") do |config|
 	libvirt.qemuargs :value => "-device"
 	libvirt.qemuargs :value => "cxl-rp,port=1,bus=cxl.0,id=kdevops_cxl_root_port1,chassis=0,slot=3"
 {% endif %} # TOPO 2
+
+
+{% if libvirt_enable_cxl_switch_topo1 %}
+	libvirt.qemuargs :value => "-device"
+	libvirt.qemuargs :value => "cxl-upstream,bus=kdevops_cxl_root_port0,id=kdevops_cxl_us0,addr=0.0,multifunction=on"
+	libvirt.qemuargs :value => "-device"
+	libvirt.qemuargs :value => "cxl-switch-mailbox-cci,bus=kdevops_cxl_root_port0,addr=0.1,target=kdevops_cxl_us0"
+	libvirt.qemuargs :value => "-device"
+	libvirt.qemuargs :value => "cxl-downstream,port=0,bus=kdevops_cxl_us0,id=kdevops_cxl_swport0,chassis=0,slot=4"
+	libvirt.qemuargs :value => "-device"
+	libvirt.qemuargs :value => "cxl-downstream,port=1,bus=kdevops_cxl_us0,id=kdevops_cxl_swport1,chassis=0,slot=5"
+	libvirt.qemuargs :value => "-device"
+	libvirt.qemuargs :value => "cxl-type3,bus=kdevops_cxl_swport0,memdev=kdevops-cxl-mem1,lsa=kdevops-cxl-lsa1,id=kdevops-cxl-pmem0"
+{% else %} # switch topo1
         libvirt.qemuargs :value => "-device"
         libvirt.qemuargs :value => "cxl-type3,bus=kdevops_cxl_root_port0,memdev=kdevops-cxl-mem1,lsa=kdevops-cxl-lsa1,id=kdevops-cxl-pmem0"
-
+{% endif %} # !switch topo1
         libvirt.qemuargs :value => "-M"
         libvirt.qemuargs :value => "cxl-fmw.0.targets.0=cxl.0,cxl-fmw.0.size=512M"
-{% endif %} # TOPO 1 or 2
 {% endif %} # CXL
 {% endif %}
 
