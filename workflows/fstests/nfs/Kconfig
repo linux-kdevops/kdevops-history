@@ -1,0 +1,77 @@
+config FSTESTS_USE_KDEVOPS_NFSD
+	bool "Test against the kdevops NFS server"
+	select KDEVOPS_SETUP_NFSD
+	default y
+	help
+	  Do you want to test against Linux knfsd as deployed by kdevops?
+	  If so, select this option. If you want to test against another
+	  (already-deployed and reachable) server, disable this and specify
+	  the location.
+
+config FSTESTS_NFS_SERVER_HOST
+	string "Server hostname"
+	default ""
+	depends on !FSTESTS_USE_KDEVOPS_NFSD
+	help
+	  The NFS server hostname or address on which to run the tests.
+
+config FSTESTS_NFS_SERVER_PATH
+	string "Exported path on server"
+	default ""
+	depends on !FSTESTS_USE_KDEVOPS_NFSD
+	help
+	  The NFS server path in which to run the tests.
+
+# Distributions actively maintaining btrfs support should select this and then
+# be careful to select any of the other HAVE_DISTRO_NFS_* below so that
+# testers can know what to test for.
+config HAVE_DISTRO_NFS_PREFERS_MANUAL
+	bool
+	default n
+
+config FSTESTS_NFS_MANUAL_COVERAGE
+	bool "Enable manual coverage selection"
+	default y if HAVE_DISTRO_NFS_PREFERS_MANUAL
+	default n if !HAVE_DISTRO_NFS_PREFERS_MANUAL
+	help
+	  By default we aim to spawn enough hosts to cover testing the full
+	  range of supported features upstream on the Linux kernel for nfs,
+	  and for you to also be able to do development on each section
+	  concurrently. Distributions however may override sensible defaults
+	  and only support certain features. Enabling this option lets you
+	  select and test only specific configurations.
+
+	  By default we enables all tests, but certain distributions may
+	  disable certain features and as such don't need to run certain
+	  type of tests.
+
+	  You can enable this to allow you to override the default test
+	  coverage.
+
+if FSTESTS_NFS_MANUAL_COVERAGE
+
+config FSTESTS_NFS_SECTION_DEFAULT
+	bool "Enable testing section: nfs_default"
+	default y
+	help
+	  Enabling this will test nfs with the default mount options.
+
+config FSTESTS_NFS_SECTION_V3
+	bool "Enable testing section: nfs_v3"
+	default n
+	help
+	  Enabling this will test nfsv3.
+
+endif # FSTESTS_NFS_MANUAL_COVERAGE
+
+if !FSTESTS_NFS_MANUAL_COVERAGE
+
+config FSTESTS_NFS_SECTION_DEFAULT
+	bool
+	default y
+
+config FSTESTS_NFS_SECTION_V3
+	bool
+	default n
+
+endif # !FSTESTS_NFS_MANUAL_COVERAGE

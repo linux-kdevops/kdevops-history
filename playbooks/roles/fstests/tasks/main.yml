@@ -293,6 +293,7 @@
     - fstests_testdev_sparsefile_generation|bool
     - not fstests_debug_localhost|bool
     - host_specific_fstests_config.stat.exists
+    - fstests_fstyp != "nfs"
 
 - name: Copy and force overwrite of the target filesystem fstests configuration
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
@@ -307,6 +308,7 @@
     - fstests_testdev_sparsefile_generation|bool
     - not fstests_debug_localhost|bool
     - not host_specific_fstests_config.stat.exists
+    - fstests_fstyp != "nfs"
 
 - name: Try to see if NVMe EUIs exist on /dev/disk/by-id/nvme-eui.*
   become: yes
@@ -537,6 +539,21 @@
   when:
     - fstests_testdev_nvme_euis|bool
     - nvme_euis | length >= 7
+
+- name: Copy and force overwrite of the target filesystem fstests configuration for NFS
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  vars:
+    fstests_nfs_test_dev: "{{ fstests_nfs_server_host }}:{{ fstests_nfs_server_path }}/fstests/{{ ansible_host }}/test"
+    fstests_nfs_scratch_devpool: "{{ fstests_nfs_server_host }}:{{ fstests_nfs_server_path }}/fstests/{{ ansible_host }}/scratch"
+  template:
+    src: "{{ fstests_fstyp }}/{{ fstests_fstyp }}.config"
+    dest: "{{ fstests_data_target }}/configs/{{ ansible_host }}.config"
+    force: yes
+  when:
+    - fstests_fstyp == "nfs"
 
 - name: Reboot system before our test so we know everything is sane
   tags: [ 'oscheck', 'fstests', 'run_tests', 'reboot' ]
@@ -877,6 +894,9 @@
     FSTESTS_RUN_LARGE_DISK_TESTS: "{{ run_large_disk_tests | default ('') }}"
     FSTESTS_RUN_AUTO_GROUP_TESTS: "{{ run_auto_group_tests }}"
     FSTESTS_RUN_CUSTOM_GROUP_TESTS: "{{ run_custom_group_tests }}"
+    FSTESTS_NFS_SERVER_HOST: "{{ fstests_nfs_server_host }}"
+    FSTESTS_NFS_SERVER_PATH: "{{ fstests_nfs_server_path }}"
+    FSTESTS_ANSIBLE_HOST: "{{ ansible_host }}"
     LIMIT_TESTS: "{{ all_limit_tests }}"
     TEST_DEV: "{{ fstests_test_dev }}"
     TEST_DIR: "{{ fstests_test_dir }}"

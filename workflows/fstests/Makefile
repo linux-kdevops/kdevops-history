@@ -26,6 +26,17 @@ FSTESTS_ARGS += fstests_data=\"$(FSTESTS_DATA)\"
 FSTESTS_ARGS += fstests_setup_system='$(FSTESTS_SETUP_SYSTEM)'
 FSTESTS_ARGS += fstests_data_target='$(FSTESTS_DATA_TARGET)'
 
+ifeq (y,$(CONFIG_FSTESTS_NFS))
+FSTESTS_NFS_SERVER_HOST:=$(subst ",,$(CONFIG_FSTESTS_NFS_SERVER_HOST))
+FSTESTS_NFS_SERVER_PATH:=$(subst ",,$(CONFIG_FSTESTS_NFS_SERVER_PATH))
+ifeq (y,$(CONFIG_FSTESTS_USE_KDEVOPS_NFSD))
+FSTESTS_NFS_SERVER_HOST:=$(subst ",,$(CONFIG_KDEVOPS_HOSTS_PREFIX))-nfsd
+FSTESTS_NFS_SERVER_PATH:=$(subst ",,$(CONFIG_NFSD_EXPORT_PATH))
+endif # CONFIG_FSTESTS_USE_KDEVOPS_NFSD
+FSTESTS_ARGS += fstests_nfs_server_host='$(FSTESTS_NFS_SERVER_HOST)'
+FSTESTS_ARGS += fstests_nfs_server_path='$(FSTESTS_NFS_SERVER_PATH)'
+endif # CONFIG_FSTESTS_NFS
+
 ifeq (y,$(CONFIG_FSTESTS_TESTDEV_SPARSEFILE_GENERATION))
 FSTESTS_ARGS += fstests_test_dev='$(FSTESTS_TEST_DEV)'
 endif
@@ -36,6 +47,10 @@ endif
 
 ifeq (y,$(CONFIG_FSTESTS_BTRFS))
 include $(TOPDIR)/workflows/fstests/btrfs/Makefile
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_NFS))
+include $(TOPDIR)/workflows/fstests/nfs/Makefile
 endif
 
 ifeq (y,$(CONFIG_QEMU_ENABLE_NVME_ZNS))
@@ -163,16 +178,16 @@ DYNAMIC_RUNTIME_VARS += , "fstests_initial_baseline": True
 endif
 
 fstests:
-	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -l baseline,dev \
 		-f 30 -i hosts playbooks/fstests.yml --skip-tags run_tests,copy_results $(LIMIT_HOSTS)
 
 fstests-kdevops-setup: $(KDEVOPS_EXTRA_VARS)
-	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -l baseline,dev \
 		-f 30 -i hosts playbooks/fstests.yml --tags vars,kdevops_fstests_setup,gendisks $(LIMIT_HOSTS)
 
 fstests-baseline:
 	$(Q)PYTHONUNBUFFERED=1 ansible-playbook $(ANSIBLE_VERBOSE) \
-		-f 30 -i hosts -l baseline playbooks/fstests.yml --tags run_tests,copy_results --extra-vars '{ $(DYNAMIC_RUNTIME_VARS) }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
+		-f 30 -i hosts -l baseline playbooks/fstests.yml --tags vars,run_tests,copy_results --extra-vars '{ $(DYNAMIC_RUNTIME_VARS) }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
 fstests-baseline-loop: $(KDEVOPS_EXTRA_VARS)
 	$(Q)$(FSTEST_KERNEL_CI_LOOP) baseline $(LIMIT_HOSTS)
@@ -205,7 +220,7 @@ fstests-config-debug: $(KDEVOPS_EXTRA_VARS)
 
 fstests-dev: $(KDEVOPS_EXTRA_VARS)
 	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
-		-f 30 -i hosts -l dev playbooks/fstests.yml --tags run_tests,copy_results --extra-vars '{ $(DYNAMIC_RUNTIME_VARS) }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
+		-f 30 -i hosts -l dev playbooks/fstests.yml --tags vars,run_tests,copy_results --extra-vars '{ $(DYNAMIC_RUNTIME_VARS) }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
 fstests-baseline-results: $(KDEVOPS_EXTRA_VARS)
 	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \

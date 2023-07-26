@@ -69,6 +69,7 @@
       - gettext
       - ncurses-dev
       - parted
+      - nfs-common
     state: present
     update_cache: yes
   tags: [ 'fstests', 'deps' ]

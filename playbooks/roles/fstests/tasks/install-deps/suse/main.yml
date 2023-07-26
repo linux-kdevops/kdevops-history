@@ -226,3 +226,14 @@
     state: present
   when:
     - add_benchmark_repo|bool
+
+- name: Install nfs-utils
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - nfs-utils
+    state: present
+  when:
+    - repos_present|bool
+    - fstests_fstyp == "nfs"

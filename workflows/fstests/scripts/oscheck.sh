@@ -448,6 +448,28 @@ _check_dev_setup()
 	fi
 }
 
+# For NFS, just blow away and re-create the test and scratch directories
+_check_nfs_setup()
+{
+	if [[ ! -d  $TEST_DIR ]]; then
+		mkdir -p $TEST_DIR
+	fi
+	mount -t nfs $FSTESTS_NFS_SERVER_HOST:$FSTESTS_NFS_SERVER_PATH $TEST_DIR
+	rm -rf $TEST_DIR/fstests/$FSTESTS_ANSIBLE_HOST
+	mkdir -p $TEST_DIR/fstests/$FSTESTS_ANSIBLE_HOST/test
+	mkdir -p $TEST_DIR/fstests/$FSTESTS_ANSIBLE_HOST/scratch
+	umount $TEST_DIR
+}
+
+_check_dev_or_nfs_setup()
+{
+	if [ "$FSTYP" = "nfs" ]; then
+		_check_nfs_setup
+	else
+		_check_dev_setup
+	fi
+}
+
 oscheck_test_dev_setup()
 {
 	if [ "$DRY_RUN" = "true" ]; then
@@ -459,12 +481,11 @@ oscheck_test_dev_setup()
 		do
 			echo "checking section $i"
 			oscheck_lib_parse_config_section $i
-			_check_dev_setup
+			_check_dev_or_nfs_setup
 		done
 		return
 	fi
-
-	_check_dev_setup
+	_check_dev_or_nfs_setup
 }
 
 _cleanup() {
@@ -502,6 +523,11 @@ check_test_dev_setup()
 		return
 	fi
 
+	# FIXME: check server for reachability?
+	if [ "$FSTYP" = "nfs" ]; then
+		return
+	fi
+
 	if [ "$RUN_SECTION" = "all" ]; then
 		for i in $(oscheck_lib_all_fs_sections)
 		do
@@ -525,6 +551,10 @@ check_test_dev_setup()
 check_dev_pool()
 {
 	DEV_POOL_RET=0
+
+	if [ "$FSTYP" = "nfs" ]; then
+		return 0
+	fi
 
 	# If we have a specific setup and don't specify SCRATCH_DEV_POOL just
 	# ignore this particular check.

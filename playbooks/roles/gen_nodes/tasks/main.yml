@@ -189,6 +189,13 @@
     - item.changed
     - kdevops_baseline_and_dev
 
+- name: Add the nfs server if one was selected
+  set_fact:
+    fstests_enabled_nodes: "{{ fstests_enabled_nodes + nfsd_nodes }}"
+  when:
+    - is_fstests|bool
+    - nfsd_threads is defined
+
 - name: Generate the fstests kdevops nodes file using {{ kdevops_nodes_template }} as jinja2 source template
   tags: [ 'hosts' ]
   vars:

@@ -126,3 +126,6 @@ fstests_btrfs_section_nohofspace_lzo: False
 fstests_btrfs_section_nohofspace_zstd: False
 fstests_btrfs_section_simple: False
 fstests_btrfs_section_simple_zns: False
+
+fstests_nfs_section_default: False
+fstests_nfs_section_v3: False
