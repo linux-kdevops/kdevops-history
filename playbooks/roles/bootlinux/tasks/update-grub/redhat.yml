@@ -1,17 +1,23 @@
+- name: Disable Grub menu auto-hide
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: grub2-editenv - unset menu_auto_hide
+
 - name: Determine if system was booted using UEFI
   stat:
-    path: /sys/firmware/efi
+    path: /sys/firmware/efi/efivars
   register: efi_boot
 
-- name: Use /boot/grub2.cfg as the grub configuration file
+- name: Use /etc/grub2.cfg as the grub configuration file
   set_fact:
-    grub_config_file: '/boot/grub2.cfg'
+    grub_config_file: '/etc/grub2.cfg'
   when:
     not efi_boot.stat.exists
 
-- name: Use /boot/efi/EFI/redhat/grub.cfg as the configuration file
+- name: Use /etc/grub2-efi.cfg as the configuration file
   set_fact:
-    grub_config_file: '/boot/efi/EFI/redhat/grub.cfg'
+    grub_config_file: '/etc/grub2-efi.cfg'
   when:
     efi_boot.stat.exists
 
