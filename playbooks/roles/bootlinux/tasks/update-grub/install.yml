@@ -122,8 +122,8 @@
   set_fact:
     determine_default_kernel_id: >-
       for f in $(ls -1 /boot/loader/entries/*.conf); do
-      cat $f | grep id | grep {{ kernelrelease.stdout }};
-      done | awk '{print $2}'
+      cat $f;
+      done | grep title | awk '{ gsub("title ", "", $0); print }' | grep '{{ kernelrelease.stdout }}';
   when:
     ansible_facts['os_family']|lower == 'redhat' and ansible_facts['distribution_major_version'] | int >= 8
 
@@ -158,7 +158,7 @@
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
-  command: "{{ grub_set_default_boot_kernel }} {{ target_boot_entry }}"
+  command: "{{ grub_set_default_boot_kernel }} \"{{ target_boot_entry }}\""
   vars:
     target_boot_entry: "{{ grub_boot_number_cmd.stdout_lines.0 }}"
   tags: [ 'linux', 'git', 'config', 'saved' ]
