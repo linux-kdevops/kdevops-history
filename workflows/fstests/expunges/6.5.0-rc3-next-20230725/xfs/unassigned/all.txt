@@ -1,3 +1,6 @@
+# lazy baseline entries are failures found at least once on multiple XFS test
+# sections. To see the actual *.bad files and *.dmesg files you can use:
+# tar -tOJf workflows/fstests/results/mcgrof/libvirt-qemu/20230727/6.5.0-rc3-next-20230725.xz
 generic/175 # lazy baseline - failure found in at least two sections
 generic/297 # lazy baseline - failure found in at least two sections
 generic/298 # lazy baseline - failure found in at least two sections
