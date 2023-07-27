@@ -1,46 +1,53 @@
-generic/012
-generic/013
-generic/015
-generic/016
-generic/021
-generic/022
-generic/027
-generic/058
-generic/060
-generic/061
-generic/063
-generic/074
-generic/075
-generic/077
-generic/096
-generic/102
-generic/112
-generic/113
-generic/171
-generic/172
-generic/173
-generic/174
-generic/204
-generic/224
-generic/226
-generic/251
-generic/256
-generic/269
-generic/270
-generic/273
-generic/274
-generic/275
-generic/300
-generic/312
-generic/361
-generic/371
-generic/416
-generic/427
-generic/449
-generic/488
-generic/511
-generic/515
-generic/520
-generic/551
-generic/558
-generic/562
+# For example to see rtdev's generic/012 related files:
+#
+# tar -tOJf workflows/fstests/results/mcgrof/libvirt-qemu/20230727/6.5.0-rc3-next-20230725.xz 2>&1 | grep xfs | grep rtdev | grep 012
+#
+# To see the generic/012 out.bad file:
+# tar -xOJf workflows/fstests/results/mcgrof/libvirt-qemu/20230727/6.5.0-rc3-next-20230725.xz 6.5.0-rc3-next-20230725/xfs_rtdev/generic/012.out.bad
+#
+generic/012 # needs investigation
+generic/013 # needs investigation
+generic/015 # might be a test bug
+generic/016 # needs investigation
+generic/021 # needs investigation
+generic/022 # needs investigation
+generic/027 # might be a test bug
+generic/058 # needs investigation
+generic/060 # needs investigation
+generic/061 # needs investigation
+generic/063 # needs investigation
+generic/074 # needs investigation
+generic/075 # needs investigation
+generic/077 # might be a test bug
+generic/096 # might be a test bug
+generic/102 # might be a test bug
+generic/112 # needs investigation
+generic/113 # needs investigation
+generic/171 # might be a test bug
+generic/172 # might be a test bug
+generic/173 # might be a test bug
+generic/174 # might be a test bug
+generic/204 # might be a test bug
+generic/224 # might be a test bug
+generic/226 # might be a test bug
+generic/251 # ran out of space and then corruption?
+generic/256 # might be a test bug
+generic/269 # might be a test bug
+generic/270 # might be a test bug
+generic/273 # might be a test bug
+generic/274 # might be a test bug
+generic/275 # might be a test bug
+generic/300 # might be a test bug
+generic/312 # might be a test bug
+generic/361 # might be a test bug
+generic/371 # might be a test bug
+generic/416 # might be a test bug
+generic/427 # might be a test bug
+generic/449 # might be a test bug
+generic/488 # might be a test bug
+generic/511 # might be a test bug
+generic/515 # might be a test bug
+generic/520 # needs investigation
+generic/551 # needs investigation
+generic/558 # might be a test bug
+generic/562 # never completed

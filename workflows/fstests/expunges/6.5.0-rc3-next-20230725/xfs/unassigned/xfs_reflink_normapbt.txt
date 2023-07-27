@@ -1,1 +1,11 @@
-xfs/301
+# For exmaple to see these failures:
+#
+# tar -tOJf workflows/fstests/results/mcgrof/libvirt-qemu/20230727/6.5.0-rc3-next-20230725.xz 2>&1 | grep xfs | grep normap | grep 301
+#
+# 6.5.0-rc3-next-20230725/xfs_reflink_normapbt/xfs/301.out.bad
+# 6.5.0-rc3-next-20230725/xfs_reflink_normapbt/xfs/301.full
+# 6.5.0-rc3-next-20230725/xfs_reflink_normapbt/xfs/301.dmesg
+
+# To see one file output:
+# tar -xOJf workflows/fstests/results/mcgrof/libvirt-qemu/20230727/6.5.0-rc3-next-20230725.xz 6.5.0-rc3-next-20230725/xfs_reflink_normapbt/xfs/301.out.bad
+xfs/301 # needs investigation
