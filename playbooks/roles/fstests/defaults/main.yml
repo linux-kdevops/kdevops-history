@@ -33,6 +33,7 @@ fstests_testdev_nvme_euis: False
 
 fstests_testdev_nvme_fallback_model_serial: False
 
+nvmes:
 nvme_euis: []
 
 sparsefiles_generation: False

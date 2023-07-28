@@ -318,7 +318,7 @@
     paths: /dev/disk/by-id/
     file_type: "link"
     patterns: 'nvme-eui.*'
-  register: euis
+  register: real_nvme_euis
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
   when:
     - not fstests_testdev_sparsefile_generation|bool
@@ -334,9 +334,19 @@
   when:
     - fstests_testdev_nvme_partition_euis|bool
     - not fstests_testdev_nvme_fallback_model_serial|bool
-    - euis is success
-    - euis.files is defined
-    - euis.files | length == 0
+    - real_nvme_euis is success
+    - real_nvme_euis.files is defined
+    - real_nvme_euis.files | length == 0
+
+- name: Set real nvmes if one is found from EUI list
+  set_fact:
+    nvmes: "{{ real_nvme_euis }}"
+  when:
+    - not fstests_testdev_sparsefile_generation|bool
+    - real_nvme_euis is success
+    - real_nvme_euis.files is defined
+    - real_nvme_euis.files | length > 0
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
 
 - name: Fallback look for NVMe drive by model and serial number /dev/disk/by-id/nvme-$(model)-$(serial)
   become: yes
@@ -347,27 +357,39 @@
     file_type: "link"
     patterns: 'nvme-*'
     excludes: 'nvme-QEMU*,nvme-nvme*'
-  register: euis
+  register: fallback_nvmes
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
   when:
-    - euis is success
-    - euis.files is defined
-    - euis.files | length == 0
+    - real_nvme_euis is success
+    - real_nvme_euis.files is defined
+    - real_nvme_euis.files | length == 0
     - not fstests_testdev_sparsefile_generation|bool
     - fstests_testdev_nvme_fallback_model_serial|bool
+
+- name: Set real nvmes to fallback list if one found
+  set_fact:
+    nvmes: "{{ fallback_nvmes }}"
+  when:
+    - not fstests_testdev_sparsefile_generation|bool
+    - real_nvme_euis is success
+    - real_nvme_euis.files is defined
+    - real_nvme_euis.files | length == 0
+    - fstests_testdev_nvme_fallback_model_serial|bool
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
 
 - name: Get NVMe drives we can use for testing
   set_fact:
     nvme_euis: |
       {%- set x = [] -%}
-      {%- for f in euis.files %}
+      {%- for f in nvmes.files %}
       {{ x.append(f.path) }}
       {%- endfor -%}
       {{ x }}
   when:
     - not fstests_testdev_sparsefile_generation|bool
-    - euis is success
-    - euis.files is defined
+    - nvmes is defined
+    - nvmes is success
+    - nvmes.files is defined
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
 
 - name: Read existing partition information for first NVMe drive with an EUI
