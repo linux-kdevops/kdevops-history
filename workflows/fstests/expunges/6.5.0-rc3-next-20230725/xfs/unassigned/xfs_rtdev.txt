@@ -50,4 +50,22 @@ generic/515 # might be a test bug
 generic/520 # needs investigation
 generic/551 # needs investigation
 generic/558 # might be a test bug
-generic/562 # never completed
+generic/562 # might be a test bug
+# The tests below were run on a second manual run on the guest with
+#
+# ./oscheck.sh --test-section xfs_rtdev -E results/sparse-xfs-rtdev/6.5.0-rc3-next-20230725/check.time
+#
+# This skipped tests ran in the first run. The results:
+#
+# tar -tOJf workflows/fstests/results/mcgrof/libvirt-qemu/20230728/6.5.0-rc3-next-20230728.xz
+#
+# And so to see 619 results:
+#
+# tar -xOJf workflows/fstests/results/mcgrof/libvirt-qemu/20230728/6.5.0-rc3-next-20230725.xz 6.5.0-rc3-next-20230725/xfs_rtdev/generic/619.full
+#
+generic/619 # might be a test bug
+generic/626 # might be a test bug
+xfs/015 # might be a test bug
+xfs/075 # might be a test bug
+xfs/118 # might be a test bug
+xfs/227 # might be a test bug
