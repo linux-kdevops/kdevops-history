@@ -102,6 +102,8 @@
     enabled: yes
     masked: no
   tags: snmpd
+  when:
+    - devconfig_try_install_kdevtools|bool
 
 - name: Start snmpd service
   become: yes
@@ -110,3 +112,5 @@
     name: snmpd
     state: restarted
   tags: snmpd
+  when:
+    - devconfig_try_install_kdevtools|bool
