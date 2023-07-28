@@ -464,24 +464,24 @@
     paths: /dev/disk/by-id/
     file_type: "link"
     patterns: "{{ nvme_main }}-part*"
-  register: part_euis
+  register: part_symlinks
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
   when:
     - fstests_testdev_nvme_partition_euis|bool
     - nvme_symlinks | length == 1
 
-- name: Get new partition NVMe euis
+- name: Get new partition NVMe symlinks
   set_fact:
-    nvme_part_euis: |
+    nvme_parts: |
       {%- set x = [] -%}
-      {%- for f in part_euis.files %}
+      {%- for f in part_symlinks.files %}
       {{ x.append(f.path) }}
       {%- endfor -%}
       {{ x }}
   when:
     - fstests_testdev_nvme_partition_euis|bool
-    - part_euis is success
-    - part_euis.files is defined
+    - part_symlinks is success
+    - part_symlinks.files is defined
     - nvme_symlinks | length == 1
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
 
@@ -492,11 +492,11 @@
   become_method: sudo
   ansible.builtin.fail:
     msg:
-      - "You need at least one extended partition and 12 logical partitions NVMe drives per guest. Detected {{ nvme_part_euis | length }} NVMe drives. Bailing test."
+      - "You need at least one extended partition and 12 logical partitions NVMe drives per guest. Detected {{ nvme_parts | length }} NVMe drives. Bailing test."
   when:
     - fstests_testdev_nvme_partition_euis|bool
     - nvme_symlinks | length == 1
-    - nvme_part_euis | length < 13
+    - nvme_parts | length < 13
 
 - name: Copy and force overwrite of the target filesystem fstests configuration using NVMe partition euis
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
@@ -524,7 +524,7 @@
   when:
     - fstests_testdev_nvme_partition_euis|bool
     - nvme_symlinks | length == 1
-    - nvme_part_euis | length == 13
+    - nvme_parts | length == 13
 
 # fstests sparsefile generation uses 11 loop drives, we'll aim for 7
 # if you are using straight a drive per target disk to test.
