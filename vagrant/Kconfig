@@ -12,6 +12,10 @@ config VAGRANT_LIBVIRT
 
 config VAGRANT_VIRTUALBOX
 	bool "Virtualbox"
+	select EXTRA_STORAGE_SUPPORTS_512
+	select EXTRA_STORAGE_SUPPORTS_1K
+	select EXTRA_STORAGE_SUPPORTS_2K
+	select EXTRA_STORAGE_SUPPORTS_4K
 	help
 	  Select this option if you want to use VirtualBox for
 	  local virtualization.
@@ -372,21 +376,31 @@ choice
 
 config LIBVIRT_EXTRA_STORAGE_NVME_LOGICAL_BLOCK_SIZE_512
 	bool "512 bytes"
+	select EXTRA_STORAGE_SUPPORTS_512
+	select EXTRA_STORAGE_SUPPORTS_1K
+	select EXTRA_STORAGE_SUPPORTS_2K
+	select EXTRA_STORAGE_SUPPORTS_4K
 	help
 	  512 bytes logical block size.
 
 config LIBVIRT_EXTRA_STORAGE_NVME_LOGICAL_BLOCK_SIZE_1K
 	bool "1 KiB"
+	select EXTRA_STORAGE_SUPPORTS_1K
+	select EXTRA_STORAGE_SUPPORTS_2K
+	select EXTRA_STORAGE_SUPPORTS_4K
 	help
 	  1 KiB logical block size.
 
 config LIBVIRT_EXTRA_STORAGE_NVME_LOGICAL_BLOCK_SIZE_2K
 	bool "2 KiB"
+	select EXTRA_STORAGE_SUPPORTS_2K
+	select EXTRA_STORAGE_SUPPORTS_4K
 	help
 	  2 KiB (2048 bytes) logical block size.
 
 config LIBVIRT_EXTRA_STORAGE_NVME_LOGICAL_BLOCK_SIZE_4K
 	bool "4 KiB"
+	select EXTRA_STORAGE_SUPPORTS_4K
 	help
 	  4 KiB (4096 bytes) logical block size.
 
@@ -526,21 +540,31 @@ choice
 
 config LIBVIRT_EXTRA_STORAGE_VIRTIO_LOGICAL_BLOCK_SIZE_512
 	bool "512 bytes"
+	select EXTRA_STORAGE_SUPPORTS_512
+	select EXTRA_STORAGE_SUPPORTS_1K
+	select EXTRA_STORAGE_SUPPORTS_2K
+	select EXTRA_STORAGE_SUPPORTS_4K
 	help
 	  512 bytes logical block size.
 
 config LIBVIRT_EXTRA_STORAGE_VIRTIO_LOGICAL_BLOCK_SIZE_1K
 	bool "1 KiB"
+	select EXTRA_STORAGE_SUPPORTS_1K
+	select EXTRA_STORAGE_SUPPORTS_2K
+	select EXTRA_STORAGE_SUPPORTS_4K
 	help
 	  1 KiB logical block size.
 
 config LIBVIRT_EXTRA_STORAGE_VIRTIO_LOGICAL_BLOCK_SIZE_2K
 	bool "2 KiB"
+	select EXTRA_STORAGE_SUPPORTS_2K
+	select EXTRA_STORAGE_SUPPORTS_4K
 	help
 	  2 KiB (2048 bytes) logical block size.
 
 config LIBVIRT_EXTRA_STORAGE_VIRTIO_LOGICAL_BLOCK_SIZE_4K
 	bool "4 KiB"
+	select EXTRA_STORAGE_SUPPORTS_4K
 	help
 	  4 KiB (4096 bytes) logical block size.
 

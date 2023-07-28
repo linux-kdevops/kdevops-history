@@ -33,6 +33,8 @@ menu "SSH update configuration"
 source "kconfigs/Kconfig.ssh"
 endmenu
 
+source "kconfigs/Kconfig.extra_storage"
+
 config GIT_ALTERNATIVES
 	bool "Use git trees from sources which we know only work"
 	default y

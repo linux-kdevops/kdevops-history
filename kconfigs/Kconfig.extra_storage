@@ -1,0 +1,15 @@
+config EXTRA_STORAGE_SUPPORTS_512
+	bool
+	default n
+
+config EXTRA_STORAGE_SUPPORTS_1K
+	bool
+	default n
+
+config EXTRA_STORAGE_SUPPORTS_2K
+	bool
+	default n
+
+config EXTRA_STORAGE_SUPPORTS_4K
+	bool
+	default n

@@ -122,6 +122,7 @@ config FSTESTS_XFS_ENABLE_LBS_REAL
 
 config FSTESTS_XFS_ENABLE_LBS_4KS
 	bool "Enable testing LBS device with 4K sector size"
+	depends on EXTRA_STORAGE_SUPPORTS_4K
 	default n
 	help
 	  Enable this if you want to enable testing large block devices on
@@ -146,6 +147,7 @@ config FSTESTS_XFS_SECTION_NOCRC
 
 config FSTESTS_XFS_SECTION_NOCRC_512
 	bool "Enable testing section: xfs_nocrc_512"
+	depends on EXTRA_STORAGE_SUPPORTS_512
 	default y
 	help
 	  This will create a host to test the baseline of fstests using the
@@ -158,6 +160,7 @@ config FSTESTS_XFS_SECTION_NOCRC_512
 
 config FSTESTS_XFS_SECTION_NOCRC_1K
 	bool "Enable testing section: xfs_nocrc_1k"
+	depends on EXTRA_STORAGE_SUPPORTS_1K
 	default y
 	help
 	  This will create a host to test the baseline of fstests using the
@@ -171,6 +174,7 @@ config FSTESTS_XFS_SECTION_NOCRC_1K
 
 config FSTESTS_XFS_SECTION_NOCRC_2K
 	bool "Enable testing section: xfs_nocrc_2k"
+	depends on EXTRA_STORAGE_SUPPORTS_2K
 	default y
 	help
 	  This will create a host to test the baseline of fstests using the
@@ -184,6 +188,7 @@ config FSTESTS_XFS_SECTION_NOCRC_2K
 
 config FSTESTS_XFS_SECTION_NOCRC_4K
 	bool "Enable testing section: xfs_nocrc_4k"
+	depends on EXTRA_STORAGE_SUPPORTS_4K
 	default y
 	help
 	  This will create a host to test the baseline of fstests using the
@@ -343,6 +348,7 @@ config FSTESTS_XFS_SECTION_REFLINK
 	      FSTYP=xfs
 
 config FSTESTS_XFS_SECTION_REFLINK_1024
+	depends on EXTRA_STORAGE_SUPPORTS_1K
 	bool "Enable testing section: xfs_reflink_1024"
 	default y
 	help
@@ -355,6 +361,7 @@ config FSTESTS_XFS_SECTION_REFLINK_1024
 	      FSTYP=xfs
 
 config FSTESTS_XFS_SECTION_REFLINK_2K
+	depends on EXTRA_STORAGE_SUPPORTS_2K
 	bool "Enable testing section: xfs_reflink_2k"
 	default y
 	help
@@ -368,6 +375,7 @@ config FSTESTS_XFS_SECTION_REFLINK_2K
 
 config FSTESTS_XFS_SECTION_REFLINK_4K
 	bool "Enable testing section: xfs_reflink_4k"
+	depends on EXTRA_STORAGE_SUPPORTS_4K
 	default y
 	help
 	  This will create a host to test the baseline of fstests using the
