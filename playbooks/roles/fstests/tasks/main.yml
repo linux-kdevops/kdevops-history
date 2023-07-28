@@ -454,16 +454,16 @@
     - fstests_testdev_nvme_partition_euis|bool
     - nvme_symlinks | length == 1
 
-- name: Try to see if new logical NVMe partition EUIs exist on /dev/disk/by-id/nvme-eui.id.part*
+- name: Try to see if new logical NVMe partition exist on /dev/disk/by-id/nvme-*.id.part*
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
   vars:
-    nvme_main_eui: "{{ nvme_symlinks[0] | basename }}"
+    nvme_main: "{{ nvme_symlinks[0] | basename }}"
   ansible.builtin.find:
     paths: /dev/disk/by-id/
     file_type: "link"
-    patterns: "{{ nvme_main_eui}}-part*"
+    patterns: "{{ nvme_main }}-part*"
   register: part_euis
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
   when:
