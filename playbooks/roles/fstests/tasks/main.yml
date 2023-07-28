@@ -379,7 +379,7 @@
 
 - name: Get NVMe drives we can use for testing
   set_fact:
-    nvme_euis: |
+    nvme_symlinks: |
       {%- set x = [] -%}
       {%- for f in nvmes.files %}
       {{ x.append(f.path) }}
@@ -398,12 +398,12 @@
   become_flags: 'su - -c'
   become_method: sudo
   community.general.parted:
-    device: "{{ nvme_euis[0] }}"
+    device: "{{ nvme_symlinks[0] }}"
     unit: MiB
   register: nvme_info
   when:
     - fstests_testdev_nvme_partition_euis|bool
-    - nvme_euis | length == 1
+    - nvme_symlinks | length == 1
 
 - name: Remove all partitions from the first real NVMe drive with an EUI
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
@@ -411,13 +411,13 @@
   become_flags: 'su - -c'
   become_method: sudo
   community.general.parted:
-    device: "{{ nvme_euis[0] }}"
+    device: "{{ nvme_symlinks[0] }}"
     number: '{{ item.num }}'
     state: absent
   loop: '{{ nvme_info.partitions }}'
   when:
     - fstests_testdev_nvme_partition_euis|bool
-    - nvme_euis | length == 1
+    - nvme_symlinks | length == 1
     - nvme_info.partitions | length != 13
 
 - name: Create extended partition on sigle NVMe drive
@@ -426,13 +426,13 @@
   become_flags: 'su - -c'
   become_method: sudo
   community.general.parted:
-    device: "{{ nvme_euis[0] }}"
+    device: "{{ nvme_symlinks[0] }}"
     number: 1
     state: present
     part_type: "extended"
   when:
     - fstests_testdev_nvme_partition_euis|bool
-    - nvme_euis | length == 1
+    - nvme_symlinks | length == 1
 
 - name: Create 12 logical partitions on sigle NVMe drive
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
@@ -443,7 +443,7 @@
     test_partsize: 60
     fuzz: 1
   community.general.parted:
-    device: "{{ nvme_euis[0] }}"
+    device: "{{ nvme_symlinks[0] }}"
     number: '{{ item }}'
     state: present
     part_type: "logical"
@@ -452,14 +452,14 @@
   loop: '{{ range(5, 17) }}'
   when:
     - fstests_testdev_nvme_partition_euis|bool
-    - nvme_euis | length == 1
+    - nvme_symlinks | length == 1
 
 - name: Try to see if new logical NVMe partition EUIs exist on /dev/disk/by-id/nvme-eui.id.part*
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
   vars:
-    nvme_main_eui: "{{ nvme_euis[0] | basename }}"
+    nvme_main_eui: "{{ nvme_symlinks[0] | basename }}"
   ansible.builtin.find:
     paths: /dev/disk/by-id/
     file_type: "link"
@@ -468,7 +468,7 @@
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
   when:
     - fstests_testdev_nvme_partition_euis|bool
-    - nvme_euis | length == 1
+    - nvme_symlinks | length == 1
 
 - name: Get new partition NVMe euis
   set_fact:
@@ -482,7 +482,7 @@
     - fstests_testdev_nvme_partition_euis|bool
     - part_euis is success
     - part_euis.files is defined
-    - nvme_euis | length == 1
+    - nvme_symlinks | length == 1
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
 
 - name: End if 13 paritions NVMe EUIs not found per node one extended 12 logical
@@ -495,7 +495,7 @@
       - "You need at least one extended partition and 12 logical partitions NVMe drives per guest. Detected {{ nvme_part_euis | length }} NVMe drives. Bailing test."
   when:
     - fstests_testdev_nvme_partition_euis|bool
-    - nvme_euis | length == 1
+    - nvme_symlinks | length == 1
     - nvme_part_euis | length < 13
 
 - name: Copy and force overwrite of the target filesystem fstests configuration using NVMe partition euis
@@ -504,26 +504,26 @@
   become_flags: 'su - -c'
   become_method: sudo
   vars:
-    fstests_test_dev: "{{ nvme_euis[0] }}-part16"
-    fstests_logwrites_dev: "{{ nvme_euis[0] }}-part15"
+    fstests_test_dev: "{{ nvme_symlinks[0] }}-part16"
+    fstests_logwrites_dev: "{{ nvme_symlinks[0] }}-part15"
     fstests_scratch_devpool: >-
-      {{ nvme_euis[0] }}-part5
-      {{ nvme_euis[0] }}-part6
-      {{ nvme_euis[0] }}-part7
-      {{ nvme_euis[0] }}-part8
-      {{ nvme_euis[0] }}-part9
-      {{ nvme_euis[0] }}-part10
-      {{ nvme_euis[0] }}-part11
-      {{ nvme_euis[0] }}-part12
-    fstests_scratch_logdev: "{{ nvme_euis[0] }}-part15"
-    fstests_scratch_rtdev: "{{ nvme_euis[0] }}-part14"
+      {{ nvme_symlinks[0] }}-part5
+      {{ nvme_symlinks[0] }}-part6
+      {{ nvme_symlinks[0] }}-part7
+      {{ nvme_symlinks[0] }}-part8
+      {{ nvme_symlinks[0] }}-part9
+      {{ nvme_symlinks[0] }}-part10
+      {{ nvme_symlinks[0] }}-part11
+      {{ nvme_symlinks[0] }}-part12
+    fstests_scratch_logdev: "{{ nvme_symlinks[0] }}-part15"
+    fstests_scratch_rtdev: "{{ nvme_symlinks[0] }}-part14"
   template:
     src: "{{ fstests_fstyp }}/{{ fstests_fstyp }}.config"
     dest: "{{ fstests_data_target }}/configs/{{ ansible_host }}.config"
     force: yes
   when:
     - fstests_testdev_nvme_partition_euis|bool
-    - nvme_euis | length == 1
+    - nvme_symlinks | length == 1
     - nvme_part_euis | length == 13
 
 # fstests sparsefile generation uses 11 loop drives, we'll aim for 7
@@ -535,10 +535,10 @@
   become_method: sudo
   ansible.builtin.fail:
     msg:
-      - "You need at least 7 NVMe drives per guest. Detected {{ nvme_euis | length }} NVMe drives. Bailing test."
+      - "You need at least 7 NVMe drives per guest. Detected {{ nvme_symlinks | length }} NVMe drives. Bailing test."
   when:
     - fstests_testdev_nvme_euis|bool
-    - nvme_euis | length < 7
+    - nvme_symlinks | length < 7
 
 - name: Copy and force overwrite of the target filesystem fstests configuration using NVMe euis
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
@@ -546,21 +546,21 @@
   become_flags: 'su - -c'
   become_method: sudo
   vars:
-    fstests_test_dev: "{{ nvme_euis[0] }}"
-    fstests_logwrites_dev: "{{ nvme_euis[1] }}"
+    fstests_test_dev: "{{ nvme_symlinks[0] }}"
+    fstests_logwrites_dev: "{{ nvme_symlinks[1] }}"
     fstests_scratch_devpool: >-
-      {{ nvme_euis[2] }}
-      {{ nvme_euis[3] }}
-      {{ nvme_euis[4] }}
-      {{ nvme_euis[5] }}
-      {{ nvme_euis[6] }}
+      {{ nvme_symlinks[2] }}
+      {{ nvme_symlinks[3] }}
+      {{ nvme_symlinks[4] }}
+      {{ nvme_symlinks[5] }}
+      {{ nvme_symlinks[6] }}
   template:
     src: "{{ fstests_fstyp }}/{{ fstests_fstyp }}.config"
     dest: "{{ fstests_data_target }}/configs/{{ ansible_host }}.config"
     force: yes
   when:
     - fstests_testdev_nvme_euis|bool
-    - nvme_euis | length >= 7
+    - nvme_symlinks | length >= 7
 
 - name: Copy and force overwrite of the target filesystem fstests configuration for NFS
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
