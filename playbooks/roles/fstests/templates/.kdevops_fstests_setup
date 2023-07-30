@@ -58,5 +58,16 @@ export FSTESTS_TESTDEV_SPARSEFILE_GENERATION='{{ sparsefiles_generation }}'
 export FSTESTS_SPARSE_FILE_SIZE='{{ sparsefiles_size }}'
 export FSTESTS_SPARSE_FILENAME_PREFIX='{{ sparsefiles_filename_prefix }}'
 export FSTESTS_RUN_LARGE_DISK_TESTS='{{ run_large_disk_tests }}'
+export FSTESTS_RUN_AUTO_GROUP_TESTS='{{ run_auto_group_tests }}'
+export FSTESTS_RUN_CUSTOM_GROUP_TESTS='{{ run_custom_group_tests }}'
+{% if fstests_nfs_enable -%}
+export FSTESTS_NFS_SERVER_HOST='{{ fstests_nfs_server_host }}'
+export FSTESTS_NFS_SERVER_PATH='{{ fstests_nfs_server_path }}'
+export FSTESTS_ANSIBLE_HOST='{{ ansible_host }}'
+{% endif %}
 
 parse_config_section_local default
+INFER_SECTION=$(echo $HOST | sed -e 's|-dev||')
+INFER_SECTION=$(echo $INFER_SECTION | sed -e 's|-|_|g')
+INFER_SECTION=$(echo $INFER_SECTION | awk -F"_" '{for (i=2; i <= NF; i++) { printf $i; if (i!=NF) printf "_"}; print NL}')
+parse_config_section_local $INFER_SECTION
