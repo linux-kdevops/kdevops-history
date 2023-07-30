@@ -1181,6 +1181,13 @@
     - xunit_files.matched == 0
     - new_expunge_files_stat.stat.size != 0
 
+- name: Verify last-run kernel directory exists
+  tags: [ 'oscheck', 'fstests', 'copy_results', 'augment_expunge_list' ]
+  delegate_to: localhost
+  stat:
+    path: "{{ fstests_results_full_path }}/last-run/{{ last_kernel }}"
+  register: last_run_kernel_dir
+
 - name: Copy over the last-run into the results directory for archiving into kdevops
   copy:
     src: "{{ fstests_results_full_path }}/last-run/{{ last_kernel }}"
@@ -1188,10 +1195,12 @@
   run_once: true
   tags: [ 'oscheck', 'fstests', 'copy_results', 'augment_expunge_list' ]
   delegate_to: localhost
+  when:
+    - last_run_kernel_dir.stat.exists
 
 # You are encouraged to commit the compressed results of failed tests
 # so we keep an archive
-- name: Compress results {{ fstests_results_full_path }}.xz
+- name: Compress results {{ fstests_results_full_path }}/{{ last_kernel }}.xz
   community.general.archive:
     path: "{{ fstests_results_full_path }}/{{ last_kernel }}"
     dest: "{{ fstests_results_full_path }}/{{ last_kernel }}.xz"
