@@ -1,1 +1,20 @@
+# For view results
+# tar -tOJf workflows/fstests/results/mcgrof/libvirt-qemu/20230731/6.5.0-rc3-next-20230725.xz 2>&1 | grep logdev | grep "generic/042"
+generic/042 # log size too large perhaps fix kdevops to use smaller log or a test bug
+generic/054
+generic/055
+generic/081
+generic/108
+generic/204
+generic/223
+generic/361
+generic/459
+generic/704
+shared/298
+xfs/045
+xfs/158
+xfs/160
+xfs/161
+xfs/199
+xfs/294
 xfs/438 # ran over 17 hours without ending

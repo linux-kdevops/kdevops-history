@@ -66,6 +66,9 @@ generic/562 # might be a test bug
 generic/619 # might be a test bug
 generic/626 # might be a test bug
 xfs/015 # might be a test bug
+xfs/073
 xfs/075 # might be a test bug
 xfs/118 # might be a test bug
 xfs/227 # might be a test bug
+xfs/270
+xfs/513
