@@ -19,6 +19,7 @@ target_linux_git: "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.
 target_linux_shallow_depth: 0
 target_linux_tree: "linux-stable"
 target_linux_dir_path: "{{ data_path }}/{{ target_linux_tree }}"
+kdevops_baseline_and_dev: False
 
 target_linux_tag: "v4.19.133"
 target_linux_delta_file:
@@ -34,6 +35,8 @@ target_linux_make_install_cmd: "{{ target_linux_make_cmd }} modules_install inst
 
 # If defined we'll apply this delta for you.
 # target_linux_extra_patch: foo.patch
+
+bootlinux_b4_am_this_host: False
 
 bootlinux_9p: False
 bootlinux_9p_host_path: "/dev/null"

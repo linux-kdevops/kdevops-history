@@ -25,6 +25,7 @@
   when:
     - target_linux_install_b4 is defined
     - target_linux_install_b4
+    - ansible_facts['os_family']|lower != 'debian'
   tags: linux
 
 - name: Install b4 on host
@@ -37,6 +38,7 @@
     - target_linux_install_b4 is defined
     - target_linux_install_b4
     - bootlinux_9p|bool
+    - ansible_facts['os_family']|lower != 'debian'
   tags: linux
   run_once: true
   delegate_to: localhost
@@ -54,9 +56,17 @@
   when:
     - infer_uid_and_group|bool
 
-- name: Set hostname_ends_in_dev as a fact
+- name: Set bootlinux_b4_am_this_host as a fact for dev hosts only
   set_fact:
-    hostname_ends_in_dev: "{{ ansible_hostname | regex_search('^.*-dev$') is not none }}"
+    bootlinux_b4_am_this_host: "{{ ansible_hostname | regex_search('^.*-dev$') is not none }}"
+  when:
+    - kdevops_baseline_and_dev|bool
+
+- name: Enable b4 am all hosts if not deploying dev and baseline nodes
+  set_fact:
+    bootlinux_b4_am_this_host: True
+  when:
+    - not kdevops_baseline_and_dev|bool
 
 - name: Run getent against the inferred target user
   getent:
@@ -223,7 +233,7 @@
   when:
     - target_linux_apply_patch_message_id is defined
     - target_linux_apply_patch_message_id | length > 0
-    - hostname_ends_in_dev
+    - bootlinux_b4_am_this_host|bool
 
 - name: Variable values
   debug:
@@ -240,7 +250,7 @@
     - not bootlinux_9p|bool
     - target_linux_apply_patch_message_id is defined
     - target_linux_apply_patch_message_id | length > 0
-    - hostname_ends_in_dev
+    - bootlinux_b4_am_this_host|bool
 
 - name: Apply message patch set if requested on the host side
   shell: b4 am -o - {{target_linux_apply_patch_message_id}} | git am
@@ -251,7 +261,7 @@
     - bootlinux_9p|bool
     - target_linux_apply_patch_message_id is defined
     - target_linux_apply_patch_message_id | length > 0
-    - hostname_ends_in_dev
+    - bootlinux_b4_am_this_host|bool
   run_once: true
   delegate_to: localhost
 

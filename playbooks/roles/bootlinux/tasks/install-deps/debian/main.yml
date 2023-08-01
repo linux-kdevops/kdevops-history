@@ -38,5 +38,6 @@
       - python3-pip
       - zstd
       - libncurses-dev
+      - b4
     state: present
   tags: linux
