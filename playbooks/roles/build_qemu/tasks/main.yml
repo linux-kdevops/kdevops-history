@@ -65,8 +65,16 @@
   when:
     - build_qemu_now|bool
 
+- name: Disable downloads
+  command: "meson subprojects download"
+  tags: [ 'qemu', 'configure' ]
+  args:
+    chdir: "{{ qemu_data }}"
+  when:
+    - build_qemu_now|bool
+
 - name: Run configure for QEMU
-  command: "./configure --target-list={{ qemu_target }} --with-git-submodules=validate"
+  command: "./configure --target-list={{ qemu_target }} --disable-download"
   tags: [ 'qemu', 'configure' ]
   args:
     chdir: "{{ qemu_data }}"
