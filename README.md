@@ -65,6 +65,9 @@ on reboot. This is crucial for testing filesystems on real NVMe drives
 on bare metal, the cloud, or virtualization using [PCIe passthrough](docs/libvirt-pcie-passthrough.md),
 all of which kdevops supports.
 
+See [viewing kdevops archived results](docs/viewing-fstests-results.md) to see
+how you can look at existing results file inside kdevops.
+
 ### Start running blktests in 2 commands
 
 To test a kernel against fstests, for example, if you enable the blktests
@@ -217,6 +220,10 @@ failed.
 
 An arbitrary namespace is provided so to enable developers, part of the
 linux-kdevops organization to contribute findings.
+
+See [viewing kdevops archived results](docs/viewing-fstests-results.md) to see
+more details about how to see results. We should add simple wrappers for this
+in the future.
 
 # Video presentations on kdevops or related
 
