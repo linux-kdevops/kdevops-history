@@ -19,6 +19,13 @@ is written by Linux kernel developers, for Linux kernel developers. The
 project aims to enable support for all Linux distributions, and even has
 some support for OS X.
 
+kdevops supports [PCIe passthrough](docs/libvirt-pcie-passthrough.md)
+when using virtualization and allows you to pick and choose onto which guest
+any PCIe device gets passed onto. This could be all devices to one guest
+or you get to pick what device goes to a specific guest. You can for example
+even end up with many guests and each guest gets one PCIe passthrough device
+assigned, all through kconfig.
+
 ## Quick kdevops demos
 
 To give you an idea of the power and goals behind kdevops we provide a few
@@ -49,6 +56,14 @@ workflow you can just run:
 
 Be sure to use CONFIG_KDEVOPS_WORKFLOW_DEDICATE_FSTESTS=y unless you know
 what you are doing.
+
+kdevops supports testing using [truncated files with loopback block devices](docs/testing-with-loopback.md)
+so to minimize disk usage and requirements. However there is also support now
+to use NVMe drive `/dev/disk/by-id/nvme` symlinks, which ensures that if
+you want to [test using real NVMe drives](docs/testing-with-nvme.md) they same NVMe drives will be used
+on reboot. This is crucial for testing filesystems on real NVMe drives
+on bare metal, the cloud, or virtualization using [PCIe passthrough](docs/libvirt-pcie-passthrough.md),
+all of which kdevops supports.
 
 ### Start running blktests in 2 commands
 
@@ -95,6 +110,10 @@ You can also run specific tests:
   * `make selftests-sysctl`
 
 ### CXL stuff
+
+There is CXL support. You can either use virtualized CXL devices or with
+[PCIe passthrough](docs/libvirt-pcie-passthrough.md) you can assign devices
+to guests and create custom topologies.
 
 #### Get a Linux CXL development environment going and test CXL in just 2 commands:
 
@@ -229,7 +248,7 @@ linux-kdevops organization to contribute findings.
 Below are sections which get into technical details of how kdevops works.
 
   * [Why Vagrant is used for virtualization](docs/why-vagrant.md)
-  * [A case for truncated files with loopback block devices](docs/testing-with-loopback.md)
+  * [A case for supporting truncated files with loopback block devices](docs/testing-with-loopback.md)
   * [Seeing more issues with loopback / truncated files setup](docs/seeing-more-issues.md)
   * [Adding a new workflow to kdevops](docs/adding-a-new-workflow.md)
   * [Kconfig integration](docs/kconfig-integration.md)
