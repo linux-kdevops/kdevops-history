@@ -109,7 +109,7 @@ You can also run specific tests:
   * `make selftests-kmod`
   * `make selftests-sysctl`
 
-### CXL stuff
+### CXL
 
 There is CXL support. You can either use virtualized CXL devices or with
 [PCIe passthrough](docs/libvirt-pcie-passthrough.md) you can assign devices
@@ -220,6 +220,26 @@ linux-kdevops organization to contribute findings.
 
 # Video presentations on kdevops or related
 
+  * [May 10, 2023 kdevops: Advances with automation of testing with fstests and blktests](https://www.youtube.com/watch?v=aC4gb0r9Hho&ab_channel=TheLinuxFoundation)
+    * [LWN coverage of this talk](https://lwn.net/Articles/937830/)
+    * A follow up on requests from folks to store failures
+    * [fstests results](./workflows/fstests/results/)
+    * [blktests results](./workflows/blktests/results/)
+    * modules support is confirmed
+    * How folks use kdevops, an example is Amir and Chandan use it to support
+      stable XFS work for different stable kernels using different technologies.
+      Amir uses local virtualization support provided with system resources through Samsung while Chandan uses Oracle Cloud Linux. See
+      the [LSFMM 2023 Linux stable backports](https://www.youtube.com/watch?v=U-f7HlD2Ob4&list=PLbzoR-pLrL6rlmdpJ3-oMgU_zxc1wAhjS&ab_channel=TheLinuxFoundation)
+      video for more details
+    * review 9p support
+    * Chandan added OCI cloud support [kdevops OCI docs](docs/kdevops-terraform.md)
+    * Alibaba cloud support is possible as terraform provider already exists, patches welcomed
+    * arm64 woes - help us debian folks
+    * [Oracle supports us with a free trial on the cloud](https://www.oracle.com/cloud/free/) sign up!
+    * Microsoft evaluating supporting us with credits
+    * SUSE could help with testing but cannot let folks log in
+    * Exciting future integration with patchwork we can learn from eBPF
+      community and their patchwork usage and testing !
   * [2023 - day to day kernel development kdevops demo to fix a bug](https://youtu.be/CfGX51a_Fq0) which covers the topics:
     * Setting up kdevops to use mirroring for Linux git trees
     * Using git remotes on your host kdevops linux directory
@@ -248,6 +268,7 @@ linux-kdevops organization to contribute findings.
 Below are sections which get into technical details of how kdevops works.
 
   * [Why Vagrant is used for virtualization](docs/why-vagrant.md)
+  * [Support for using real NVMe drives with fstsets](docs/testing-with-nvme.md)
   * [A case for supporting truncated files with loopback block devices](docs/testing-with-loopback.md)
   * [Seeing more issues with loopback / truncated files setup](docs/seeing-more-issues.md)
   * [Adding a new workflow to kdevops](docs/adding-a-new-workflow.md)
