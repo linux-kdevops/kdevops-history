@@ -33,6 +33,7 @@ your distribution of choice, enable the Linux kernel workflow, select target
 git tree, and get up and running on a freshly compiled Linux git tree in just
 4 commands:
 
+  * optional : `./scripts/check_ansible.sh`
   * `make menuconfig`
   * `make`
   * `make bringup`
