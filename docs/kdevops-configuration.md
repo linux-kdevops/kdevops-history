@@ -31,18 +31,4 @@ make menuconfig
 
 # Dynamic Kconfig
 
-kdevops also supports dynamic Kconfig entries without which some features
-could not be supported. Typically you run 'make menuconfig' to configure
-the Linux kernel the breadth of variability is known, but in the kdevops
-world you may want to tweak a few options which are only specific to your
-platform on which you are running kdevops on. More specifically, in order
-to support PCIe passthrough support we need to scrape your system's PCIe
-devices and then give you options for doing PCIe passthrough onto guests.
-In order to support PCIe passthrough kdevops supports creating a few
-Kconfig files on-the-fly. But not everyone wants to see these dynamic Kconfig
-files or needs to work with them. And so a new target is provided to support
-those features that need a dynamic Kconfig:
-
-```bash
-make dynconfig
-```
+Refer to [kdevops dynamic configuration](docs/kdevops-dynamic-configuration.md)

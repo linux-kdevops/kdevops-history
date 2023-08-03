@@ -26,6 +26,13 @@ or you get to pick what device goes to a specific guest. You can for example
 even end up with many guests and each guest gets one PCIe passthrough device
 assigned, all through kconfig.
 
+kdevops [PCIe passthrough](docs/libvirt-pcie-passthrough.md) support is
+supported using [kdevops dynamic kconfig](docs/kdevops-dynamic-configuration.md), a
+new target is provided 'make dynconfig' which let's kdevops generate Kconfig
+files dynamically based on your system environment. This mechanism will be
+expanded in the future to make kdevops even more dynamic to support even more
+features.
+
 ## Quick kdevops demos
 
 To give you an idea of the power and goals behind kdevops we provide a few
@@ -280,6 +287,7 @@ Below are sections which get into technical details of how kdevops works.
   * [Seeing more issues with loopback / truncated files setup](docs/seeing-more-issues.md)
   * [Adding a new workflow to kdevops](docs/adding-a-new-workflow.md)
   * [Kconfig integration](docs/kconfig-integration.md)
+  * [kdevops dynamic Kconfig support](docs/kdevops-dynamic-configuration.md)
   * [Motivation behind kdevops](docs/motivations.md)
   * [Linux distribution support](docs/linux-distro-support.md)
   * [Overriding all Ansible role options with one file](docs/ansible-override.md)
