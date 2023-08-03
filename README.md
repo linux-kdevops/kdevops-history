@@ -94,9 +94,11 @@ You can also run specific tests:
   * `make selftests-kmod`
   * `make selftests-sysctl`
 
-### Get a Linux CXL development environment going and test CXL in just 2 commands:
+### CXL stuff
 
-Using CXL today means you have to build QEUM. kdevops supports building QEMU
+#### Get a Linux CXL development environment going and test CXL in just 2 commands:
+
+Using CXL today means you have to build QEMU. kdevops supports building QEMU
 for you, and it will be done for you if you want to enable a CXL development
 environment. To ramp up with CXL (other than bringup and the above linux target)
 just run:
@@ -105,11 +107,30 @@ just run:
   * `make cxl-test-probe`
   * `make cxl-test-meson`
 
-## kdevops chat server
+#### Get a Linux CXL switch testing going
+
+This will use b4 to get some R&D patches for CXL switches.
+
+  * `make defconfig-cxl-switch`
+  * `make -j$(nproc)`
+  * `make bringup`
+  * `make linux`
+  * `make cxl`
+
+## kdevops chats
+
+We use discord and IRC. Right now we have more folks on discord than on IRC.
+
+## kdevops on discord
 
 We have a public chat server up, for now we use discord:
 
   * https://bit.ly/linux-kdevops-chat
+
+### kdevops IRC
+
+We are also on irc.oftc.net on #kdevops
+
 
 ## Parts to kdevops
 
