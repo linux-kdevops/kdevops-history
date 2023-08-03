@@ -131,6 +131,7 @@ The phases of use of kdevops can be split into:
 
 Below is kdevops' recommended documentation reading.
 
+  * [sending patches and contributing to kdevops](docs/contributing.md)
   * [kdevops requirements](docs/requirements.md)
   * [kdevops' evolving make help](docs/evolving-make-help.md)
   * [kdevops configuration](docs/kdevops-configuration.md)
