@@ -1,29 +1,3 @@
-# lazy baseline entries are failures found at least once on multiple XFS test
-# sections. To see the actual *.bad files and *.dmesg files you can use:
-#
-# tar -tOJf workflows/fstests/results/mcgrof/libvirt-qemu/20230727/6.5.0-rc3-next-20230725.xz
-#
-# For example to see all generic/175 failures:
-#
-# tar -tOJf workflows/fstests/results/mcgrof/libvirt-qemu/20230727/6.5.0-rc3-next-20230725.xz 2>&1 | grep generic | grep 175
-# 6.5.0-rc3-next-20230725/xfs_reflink_normapbt/generic/175.out.bad
-# 6.5.0-rc3-next-20230725/xfs_reflink_normapbt/generic/175.full
-# 6.5.0-rc3-next-20230725/xfs_reflink_normapbt/generic/175.dmesg
-# 6.5.0-rc3-next-20230725/xfs_reflink/generic/175.out.bad
-# 6.5.0-rc3-next-20230725/xfs_reflink/generic/175.full
-# 6.5.0-rc3-next-20230725/xfs_reflink/generic/175.dmesg
-# 6.5.0-rc3-next-20230725/xfs_reflink_4k/generic/175.out.bad
-# 6.5.0-rc3-next-20230725/xfs_reflink_4k/generic/175.full
-# 6.5.0-rc3-next-20230725/xfs_reflink_4k/generic/175.dmesg
-# 6.5.0-rc3-next-20230725/xfs_rtdev/generic/175.out.bad
-# 6.5.0-rc3-next-20230725/xfs_rtdev/generic/175.full
-# 6.5.0-rc3-next-20230725/xfs_rtdev/generic/175.dmesg
-#
-# And now to see one individual file:
-#
-# tar -xOJf workflows/fstests/results/mcgrof/libvirt-qemu/20230727/6.5.0-rc3-next-20230725.xz 6.5.0-rc3-next-20230725/xfs_reflink_normapbt/generic/175.out.bad
-# tar -xOJf workflows/fstests/results/mcgrof/libvirt-qemu/20230727/6.5.0-rc3-next-20230725.xz 6.5.0-rc3-next-20230725/xfs_reflink_normapbt/generic/175.dmesg
-#
 generic/175 # seems like a test bug - lazy baseline - failure found in at least two sections
 generic/297 # seems like a test bug - lazy baseline - failure found in at least two sections
 generic/298 # seems like a test bug - lazy baseline - failure found in at least two sections
