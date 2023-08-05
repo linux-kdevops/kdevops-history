@@ -26,6 +26,11 @@ FSTESTS_ARGS += fstests_data=\"$(FSTESTS_DATA)\"
 FSTESTS_ARGS += fstests_setup_system='$(FSTESTS_SETUP_SYSTEM)'
 FSTESTS_ARGS += fstests_data_target='$(FSTESTS_DATA_TARGET)'
 
+ifeq (y,$(CONFIG_FSTESTS_TFB_COPY_ENABLE))
+FSTESTS_ARGS += fstests_tfp_copy_enable='True'
+endif
+
+
 ifeq (y,$(CONFIG_FSTESTS_NFS))
 FSTESTS_ARGS += fstests_nfs_enable='True'
 FSTESTS_NFS_SERVER_HOST:=$(subst ",,$(CONFIG_FSTESTS_NFS_SERVER_HOST))
