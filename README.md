@@ -59,7 +59,7 @@ To test a kernel against fstests, for example, if you enable the fstests
 workflow you can just run:
 
   * `make fstests`
-  * `make fstests-baseline`
+  * `make fstests-results`
 
 Be sure to use CONFIG_KDEVOPS_WORKFLOW_DEDICATE_FSTESTS=y unless you know
 what you are doing.
@@ -82,6 +82,7 @@ workflow you can just run:
 
   * `make blktests`
   * `make blktests-baseline`
+  * `make blktests-results`
 
 Be sure to use CONFIG_KDEVOPS_WORKFLOW_DEDICATE_BLKTESTS=y unless you know
 what you are doing.

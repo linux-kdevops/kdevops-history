@@ -271,6 +271,8 @@ fstests-baseline-results: $(KDEVOPS_EXTRA_VARS)
 		--extra-vars=@./extra_vars.yaml \
 		$(LIMIT_HOSTS)
 
+fstests-results: fstests-baseline-results
+
 fstests-dev-results: $(KDEVOPS_EXTRA_VARS)
 	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
 		-f 30 -i hosts -l dev playbooks/fstests.yml \
