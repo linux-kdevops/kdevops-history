@@ -1028,8 +1028,87 @@
     patterns: "*.out.bad"
   register: failed_tests
 
+- name: Look for TFB results files
+  tags: [ 'copy_results', 'failed_tests', 'tfb' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  find:
+    paths: "{{ fstests_data_target }}/results/"
+    recurse: yes
+    patterns: "*"
+    size: "{{ fstests_tfp_copy_size_limit_bytes }}"
+    excludes: '*.xml,*.md'
+  register: tfb_reg
+  when:
+    - fstests_tfp_copy_enable_list|bool or fstests_tfp_copy_enable|bool
+
+- name: Show TFB results files
+  tags: [ 'copy_results', 'failed_tests', 'tfb' ]
+  debug:
+    msg: "{{ item.path }}"
+  with_items: "{{ tfb_reg.files }}"
+  loop_control:
+    label: "{{ item.path }} {{ item.size | human_readable(true) }}"
+  when:
+    - fstests_tfp_copy_enable_list|bool
+
+- name: Show TFB results total files greater than {{ fstests_tfp_copy_size_limit_bytes | human_readable(true) }}
+  tags: [ 'copy_results', 'failed_tests', 'tfb' ]
+  debug:
+    msg: "Examined {{ tfb_reg.examined }} files and TFB number of files: {{ tfb_reg.matched }}"
+  when:
+    - fstests_tfp_copy_enable_list|bool
+
+- name: Truncate TFB files
+  tags: [ 'copy_results', 'failed_tests', 'tfb' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  copy:
+    content: "kdevops TFB trimming enabled, original file size: {{ item.size | human_readable(true) }}"
+    dest: "{{ item.path }}"
+  with_items: "{{ tfb_reg.files }}"
+  loop_control:
+    label: "{{ item.path }} {{ item.size | human_readable(true) }}"
+  when:
+    - fstests_tfp_copy_enable|bool
+
+# If we want to later add support to copy *all* results file we may
+# want to consider removing *.md TFB files. Use 'future' tag for these
+# sort of things.
+- name: Look for TFB results *.md files
+  tags: [ 'copy_results', 'failed_tests', 'tfb', 'future' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  find:
+    paths: "{{ fstests_data_target }}/results/"
+    recurse: yes
+    patterns: "*.md"
+    size: "{{ fstests_tfp_copy_size_limit_bytes }}"
+  register: tfb_reg
+  when:
+    - False
+    - fstests_tfp_copy_enable_list|bool or fstests_tfp_copy_enable|bool
+
+- name: Remove TFB results *.md files
+  tags: [ 'copy_results', 'failed_tests', 'tfb', 'future' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  file:
+    path: "{{ item.path }}"
+    state: "absent"
+  with_items: "{{ tfb_reg.files }}"
+  loop_control:
+    label: "{{ item.path }} {{ item.size | human_readable(true) }}"
+  when:
+    - False
+    - fstests_tfp_copy_enable_list|bool or fstests_tfp_copy_enable|bool
+
 - name: Copy over all *.bad files which represent failed tests
-  tags: [ 'oscheck', 'fstests', 'copy_results', 'failed_tests' ]
+  tags: [ 'oscheck', 'fstests', 'copy_results', 'copy_final', 'failed_tests', 'tfb' ]
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -1043,6 +1122,7 @@
   loop_control:
     label: "{{ item.path | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
   when:
+    - not fstests_tfp_copy_enable_list|bool
     - failed_tests.matched > 0
 
 - name: Check if respective bad full file exists

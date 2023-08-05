@@ -67,6 +67,10 @@ fstests_debug_localhost: False
 
 kdevops_bootlinux: False
 
+fstests_tfp_copy_enable: False
+fstests_tfp_copy_enable_list: False
+fstests_tfp_copy_size_limit_bytes: 10485760
+
 fstests_xfs_section_crc: False
 fstests_xfs_section_nocrc: False
 fstests_xfs_section_nocrc_512: False

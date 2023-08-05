@@ -223,9 +223,21 @@ fstests-dev: $(KDEVOPS_EXTRA_VARS)
 	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
 		-f 30 -i hosts -l dev playbooks/fstests.yml --tags vars,run_tests,copy_results --extra-vars '{ $(DYNAMIC_RUNTIME_VARS) }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
+fstests-baseline-results-tfb-ls: $(KDEVOPS_EXTRA_VARS)
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts -l baseline playbooks/fstests.yml --tags vars,tfb \
+		--skip-tags copy_final \
+		--extra-vars '{ fstests_tfp_copy_enable_list: True }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
+
+fstests-baseline-results-tfb-trim: $(KDEVOPS_EXTRA_VARS)
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts -l baseline playbooks/fstests.yml --tags vars,tfb \
+		--skip-tags copy_final \
+		--extra-vars '{ fstests_tfp_copy_enable: True }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
+
 fstests-baseline-results: $(KDEVOPS_EXTRA_VARS)
 	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
-		-f 30 -i hosts -l baseline playbooks/fstests.yml --tags copy_results,print_results --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
+		-f 30 -i hosts -l baseline playbooks/fstests.yml --tags copy_results,print_results,tfb --extra-vars '{ kdevops_run_fstests: True }' --extra-vars=@./extra_vars.yaml $(LIMIT_HOSTS)
 
 fstests-dev-results: $(KDEVOPS_EXTRA_VARS)
 	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
@@ -241,6 +253,8 @@ fstests-help-menu:
 	@echo "fstests-config                          - Generates the filesystem configuration file only onto target systems"
 	@echo "fstests-config-debug                    - Generates the filesystem configuration file locally, useful for debugging"
 	@echo ""
+	@echo "fstests-baseline-results-tfb-ls         - Only show a listing of TFB results files other than XML files which are TFB"
+	@echo "fstests-baseline-results-tfb-trim       - Trim all TFB results file other than xml files"
 	@echo "fstests-baseline-results                - Only collect results for baseline hosts"
 	@echo "fstests-dev-results                     - Only collect results for dev hosts"
 	@echo "fstests-baseline-skip-kdevops-update    - Run fstests but skip updating kdevops"

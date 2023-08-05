@@ -48,6 +48,41 @@ config FSTESTS_FSTYP
 	  The filesystem to test. This will be automatically set depending on
 	  the above choice, you however can override this manually.
 
+config FSTESTS_TFB_COPY_ENABLE
+	bool "Enable trimming extremely large output files at copy time"
+	default y
+	help
+	  Some tests may have test bugs leading to insane test *.out.bad file
+	  sizes. An example is generic/251 produces ~14 GiB of 251.out.bad on
+	  the test section xfs_rtlogdev. Although these cases are pathological
+	  and rare kdevops supports copying over test results for failed files
+	  and 'make fstests-baseline-results' will fail for the nodes where
+	  those files are in running out of memory for the task. Enable this
+	  to trim those files based on a max file size.
+
+	  Disable this option if are enabling kdevops kernel-ci and you want to
+	  keep insanely large files. kdevops will only trim large files with
+	  the 'make fstests-baseline-results' command, so if you just run
+	  'make fstests-baseline' kdevops will not trim these files for you.
+	  Since enabling kernel-ci uses the 'make fstests-baseline-results'
+	  kernel-ci would automatically trim large files if this is enabled.
+	  If you don't use the kdevops kernel-ci and are just running baselines
+	  manually, ie, running 'make fstests-baseline' trimming will not happen
+	  unless you manually run 'make fstests-baseline-results'. This allows
+	  you still inspect insanely large files even if this feature is enabled
+	  if running baselines manually.
+
+if FSTESTS_TFB_ENABLE
+
+config FSTESTS_TFB_COPY_LIMIT
+	int "Max size of test results files allowed prior to copy"
+	default 10485760
+	help
+	  Trim files larger than this size in bytes with a simple TFB text on
+	  them. By default we use 10 MiB limit.
+
+endif # FSTESTS_TFB_ENABLE
+
 config FSTESTS_WATCHDOG
 	bool "Enable kdevops fstests watchdog"
 	default y if HAVE_DISTRO_PREFERS_FSTESTS_WATCHDOG
