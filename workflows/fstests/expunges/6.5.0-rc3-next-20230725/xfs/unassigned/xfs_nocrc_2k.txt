@@ -1,5 +1,2 @@
 generic/650 # ran over 18 hours without ending
 xfs/008
-xfs/075
-xfs/168
-xfs/513

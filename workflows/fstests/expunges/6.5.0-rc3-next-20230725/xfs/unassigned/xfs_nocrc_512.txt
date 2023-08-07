@@ -1,8 +1,4 @@
 generic/618
 generic/681
 generic/682
-xfs/009
 xfs/071
-xfs/075
-xfs/168
-xfs/513
