@@ -595,6 +595,9 @@ oscheck_lib_read_osfiles_verify_kernel
 
 if [[ "$LIMIT_TESTS" == "" ]]; then
 	oscheck_handle_skipping_group
+	if [ "$FSTESTS_EXCLUDE_TEST_GROUPS" != "" ]; then
+		_SKIP_GROUPS="$_SKIP_GROUPS -x $FSTESTS_EXCLUDE_TEST_GROUPS"
+	fi
 fi
 
 check_reqs

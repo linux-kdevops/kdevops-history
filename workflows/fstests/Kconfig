@@ -707,6 +707,13 @@ config FSTESTS_RUN_CUSTOM_GROUP_TESTS
 	  To configure fstests to run specific group of tests instead of the
 	  'auto' group.
 
+config FSTESTS_EXCLUDE_TEST_GROUPS
+	string "Comma separated list of groups to be excluded"
+	default ""
+	depends on FSTESTS_RUN_TESTS
+	help
+	   List of test groups to be excluded from being executed.
+
 config FSTESTS_ENABLE_RUN_CUSTOM_TESTS
 	bool "Enable running custom tests"
 	depends on FSTESTS_RUN_TESTS

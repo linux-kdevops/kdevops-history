@@ -999,6 +999,7 @@
     FSTESTS_RUN_LARGE_DISK_TESTS: "{{ run_large_disk_tests | default ('') }}"
     FSTESTS_RUN_AUTO_GROUP_TESTS: "{{ run_auto_group_tests }}"
     FSTESTS_RUN_CUSTOM_GROUP_TESTS: "{{ run_custom_group_tests }}"
+    FSTESTS_EXCLUDE_TEST_GROUPS: "{{ exclude_test_groups }}"
     LIMIT_TESTS: "{{ all_limit_tests }}"
     TEST_DEV: "{{ fstests_test_dev }}"
     TEST_DIR: "{{ fstests_test_dir }}"
