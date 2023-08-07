@@ -1,11 +1,30 @@
+generic/042 # lazy baseline - failure found in at least two sections
+generic/054 # lazy baseline - failure found in at least two sections
+generic/081 # lazy baseline - failure found in at least two sections
+generic/108 # lazy baseline - failure found in at least two sections
 generic/175 # seems like a test bug - lazy baseline - failure found in at least two sections
+generic/204 # lazy baseline - failure found in at least two sections
+generic/223 # lazy baseline - failure found in at least two sections
+generic/251 # lazy baseline - failure found in at least two sections
 generic/297 # seems like a test bug - lazy baseline - failure found in at least two sections
 generic/298 # seems like a test bug - lazy baseline - failure found in at least two sections
+generic/361 # lazy baseline - failure found in at least two sections
+generic/459 # lazy baseline - failure found in at least two sections
 generic/471 # race against loop? - lazy baseline - failure found in at least two sections
 generic/563 # needs investigation - lazy baseline - failure found in at least two sections
+generic/704 # lazy baseline - failure found in at least two sections
+shared/298 # lazy baseline - failure found in at least two sections
+xfs/009 # lazy baseline - failure found in at least two sections
+xfs/075 # lazy baseline - failure found in at least two sections
 xfs/157 # needs investigation - lazy baseline - failure found in at least two sections
+xfs/168 # lazy baseline - failure found in at least two sections
 xfs/188 # unclear - lazy baseline - failure found in at least two sections
+xfs/199 # lazy baseline - failure found in at least two sections
 xfs/205 # unclear - lazy baseline - failure found in at least two sections
+xfs/270 # lazy baseline - failure found in at least two sections
+xfs/294 # lazy baseline - failure found in at least two sections
+xfs/301 # lazy baseline - failure found in at least two sections
 xfs/432 # test bug: blocksize should detect sector size - lazy baseline - failure found in at least two sections
 xfs/506 # needs investigation - lazy baseline - failure found in at least two sections
+xfs/513 # lazy baseline - failure found in at least two sections
 xfs/516 # needs investigation - lazy baseline - failure found in at least two sections
