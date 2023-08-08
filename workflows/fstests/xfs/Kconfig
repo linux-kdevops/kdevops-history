@@ -507,6 +507,18 @@ config FSTESTS_XFS_SECTION_REFLINK_64K_4KS
 	      MKFS_OPTIONS='-f -m reflink=1,rmapbt=1, -i sparse=1, -b size=65536 -s size=4k'
 	      FSTYP=xfs
 
+config FSTESTS_XFS_SECTION_REFLINK_DIR_BSIZE_8K
+	bool "Enable testing section: xfs_reflink_dir_bsize_8k"
+	default y
+	help
+	  This will create a host to test the baseline of fstests using the
+	  following configuration which enables reflink using 8k bytes
+	  directory block size.
+
+	      [xfs_reflink_dir_bsize_8k]
+	      MKFS_OPTIONS='-f -m reflink=1,rmapbt=1, -i sparse=1, -n size=8k'
+	      FSTYP=xfs
+
 config FSTESTS_XFS_SECTION_REFLINK_NORMAPBT
 	bool "Enable testing section: xfs_reflink_normapbt"
 	default y
