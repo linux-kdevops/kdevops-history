@@ -1,3 +1,7 @@
+ifeq (y,$(CONFIG_FSTESTS_XFS_QUOTA_ENABLED))
+FSTESTS_ARGS += fstests_xfs_mount_quota_opts='$(CONFIG_FSTESTS_XFS_MOUNT_QUOTA_OPTS)'
+endif
+
 ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_LOGDEV))
 FSTESTS_ARGS += fstests_test_logdev='$(subst ",,$(CONFIG_FSTESTS_TEST_LOGDEV))'
 FSTESTS_ARGS_DIRECT += fstests_test_logdev_mkfs_opts='$(subst ",,$(CONFIG_FSTESTS_TEST_LOGDEV_MKFS_OPTS))'

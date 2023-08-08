@@ -33,6 +33,20 @@ config HAVE_DISTRO_XFS_SUPPORTS_RT
 	bool
 	default n
 
+config FSTESTS_XFS_QUOTA_ENABLED
+	bool "Enable XFS quota"
+	default n
+	help
+	  Pass '-o usrquota,grpquota,prjquota' when mounting an fs.
+
+if FSTESTS_XFS_QUOTA_ENABLED
+config FSTESTS_XFS_MOUNT_QUOTA_OPTS
+	string "Quota options to be passed during mount"
+	default ""
+	help
+	  The quota options to be passed when mounting a filesystem.
+endif # FSTESTS_XFS_QUOTA_ENABLED
+
 config FSTESTS_XFS_MANUAL_COVERAGE
 	bool "Enable manual coverage selection"
 	default y if HAVE_DISTRO_XFS_PREFERS_MANUAL
