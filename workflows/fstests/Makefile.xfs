@@ -139,6 +139,10 @@ ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_NORMAPBT))
 FSTESTS_ARGS += fstests_xfs_section_reflink_normapbt=True
 endif
 
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_STRIPE_LEN))
+FSTESTS_ARGS += fstests_xfs_section_reflink_stripe_len=True
+endif
+
 ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_DIR_BSIZE_8K))
 FSTESTS_ARGS += fstests_xfs_section_reflink_dir_bsize_8k=True
 endif

@@ -101,6 +101,7 @@ fstests_xfs_section_nocrc_64k_4ks: False
 fstests_xfs_section_reflink: False
 fstests_xfs_section_reflink_1024: False
 fstests_xfs_section_reflink_normapbt: False
+fstests_xfs_section_reflink_stripe_len: False
 fstests_xfs_section_reflink_logdev: False
 fstests_xfs_section_reflink_2k: False
 fstests_xfs_section_reflink_4k: False
