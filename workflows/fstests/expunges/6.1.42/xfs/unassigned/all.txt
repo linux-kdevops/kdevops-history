@@ -18,8 +18,6 @@ xfs/154 # fails on multiple sections already
 xfs/155 # xfs_repair fails (possibly after reducing RAM size to 3GB)
 xfs/158 # fails on multiple sections already
 xfs/168 # fails on two sections already
-xfs/179 # missing commit b25d1984aa88 "xfs: estimate post-merge refcounts correctly"
 xfs/216 # fails on multiple sections maybe xfsprogs version change?
 xfs/301 # fails on multiple sections already
 xfs/506
-xfs/557 # missing commit 817644fa4525 "xfs: get root inode correctly at bulkstat"
