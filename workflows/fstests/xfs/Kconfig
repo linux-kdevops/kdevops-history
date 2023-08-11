@@ -43,6 +43,14 @@ config FSTESTS_XFS_SECTION_LOGDEV_ENABLED
 	  Enabling this option allows you to test xfs configurations
 	  which use an external log device.
 
+config FSTESTS_XFS_SECTION_RTDEV_ENABLED
+	bool "Enable testing sections which use a realtime device"
+	default y if HAVE_DISTRO_XFS_SUPPORTS_RT
+	default n if !HAVE_DISTRO_XFS_SUPPORTS_RT
+	help
+	  Enabling this option allows you to test xfs configurations
+	  which use a realtime device.
+
 if FSTESTS_XFS_QUOTA_ENABLED
 config FSTESTS_XFS_MOUNT_QUOTA_OPTS
 	string "Quota options to be passed during mount"
