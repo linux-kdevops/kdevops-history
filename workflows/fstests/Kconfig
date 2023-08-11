@@ -654,7 +654,7 @@ config FSTESTS_SCRATCH_RTDEV
 	  To set devices to use for the SCRATCH_RTDEV.
 
 config FSTESTS_TEST_RTLOGDEV_RTDEV
-	string "The fstests TEST_RTDEV to use for the XFS [xfs_rtlogdev]"
+	string "The fstests TEST_RTDEV to use for XFS when both logdev and rtdev are required"
 	default "/dev/loop12" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 	depends on FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 	depends on FSTESTS_XFS_SECTION_RTDEV_ENABLED

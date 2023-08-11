@@ -129,6 +129,45 @@ config FSTESTS_XFS_SECTION_CRC_LOGDEV
 	      FSTYP=xfs
 endif # FSTESTS_XFS_SECTION_LOGDEV_ENABLED
 
+if FSTESTS_XFS_SECTION_RTDEV_ENABLED
+config FSTESTS_XFS_SECTION_CRC_RTDEV
+	bool "Enable testing section: xfs_crc_rtdev"
+	help
+	  This will create a host to test the baseline of fstests
+	  using the realtime device. This is only useful if your
+	  kernel actually is built with CONFIG_XFS_RT=y which most
+	  distributions disable these days. This enables a host which
+	  will use the following configuration:
+
+	      [xfs_crc_rtdev]
+	      FSTYP=xfs
+	      TEST_DEV="/dev/some-dev"
+	      TEST_RTDEV="/dev/some-rt-dev"
+	      MKFS_OPTIONS="-f -m reflink=0,rmapbt=0, -d rtinherit=1"
+	      SCRATCH_RTDEV=@FSTESTSSCRATCHRTDEV@
+	      USE_EXTERNAL=yes
+
+if FSTESTS_XFS_SECTION_LOGDEV_ENABLED
+config FSTESTS_XFS_SECTION_CRC_LOGDEV_RTDEV
+	bool "Enable testing section: xfs_crc_logdev_rtdev"
+	help
+	  This will create a host to test the baseline of fstests
+	  using both an external journal and a realtime device as
+	  well.  This is only useful if your kernel actually is built
+	  with CONFIG_XFS_RT=y which most distributions disable these
+	  days.
+
+	      [xfs_crc_logdev_rtdev]
+	      FSTYP=xfs
+	      TEST_DEV="/dev/some-dev"
+	      TEST_RTDEV="/dev/some-rt-dev"
+	      MKFS_OPTIONS="-f -m reflink=0,rmapbt=0, -d rtinherit=1 -lsize=1g"
+	      SCRATCH_RTDEV="/dev/some-rt-dev"
+	      SCRATCH_LOGDEV=/dev/some-device
+	      USE_EXTERNAL=yes
+endif # FSTESTS_XFS_SECTION_LOGDEV_ENABLED
+endif # FSTESTS_XFS_SECTION_RTDEV_ENABLED
+
 config FSTESTS_XFS_SECTION_NOCRC_ENABLED
 	bool "Enable testing sections which don't have CRC enabled"
 	default n if HAVE_DISTRO_XFS_IGNORES_NOCRC
@@ -573,40 +612,6 @@ config FSTESTS_XFS_SECTION_REFLINK_NORMAPBT
 	      FSTYP=xfs
 
 endif # FSTESTS_XFS_SECTION_REFLINK_ENABLED
-
-if FSTESTS_XFS_SECTION_RTDEV_ENABLED
-
-config FSTESTS_XFS_SECTION_RTDEV
-	bool "Enable testing section: xfs_rtdev"
-	default y if HAVE_DISTRO_XFS_SUPPORTS_RT
-	default n if !HAVE_DISTRO_XFS_SUPPORTS_RT
-	help
-	  This will create a host to test the baseline of fstests using the
-	  which enables the realtime device. This is only useful if your kernel
-	  actually is built with CONFIG_XFS_RT=y which most distributions
-	  disable these days. This enables a host which will use the following
-	  configuration:
-
-	      [xfs_rtdev]
-	      FSTYP=xfs
-	      TEST_DEV="/dev/some-dev"
-	      TEST_RTDEV="/dev/some-rt-dev"
-	      MKFS_OPTIONS="-f -lsize=1g -d rtinherit=1"
-	      SCRATCH_RTDEV=@FSTESTSSCRATCHRTDEV@
-
-if FSTESTS_XFS_SECTION_LOGDEV_ENABLED
-
-config FSTESTS_XFS_SECTION_RTLOGDEV
-	bool "Enable testing section: xfs_rtlogdev"
-	default y if HAVE_DISTRO_XFS_SUPPORTS_RT
-	default n if !HAVE_DISTRO_XFS_SUPPORTS_RT
-	help
-	  This will create a host to test the baseline of fstests using the
-	  which enables both an external journal and a realtime device as well.
-	  This is only useful if your kernel actually is built
-	  with CONFIG_XFS_RT=y which most distributions disable these days.
-endif # FSTESTS_XFS_SECTION_LOGDEV_ENABLED
-endif # FSTESTS_XFS_SECTION_RTDEV_ENABLED
 
 config FSTESTS_XFS_SECTION_BIGBLOCK
 	bool "Enable testing section: xfs_bigblock"

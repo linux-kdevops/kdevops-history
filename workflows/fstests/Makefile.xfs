@@ -15,6 +15,14 @@ ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_CRC_LOGDEV))
 FSTESTS_ARGS += fstests_xfs_section_crc_logdev=True
 endif
 
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_CRC_RTDEV))
+FSTESTS_ARGS += fstests_xfs_section_crc_rtdev=True
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_CRC_LOGDEV_RTDEV))
+FSTESTS_ARGS += fstests_xfs_section_crc_logdev_rtdev=True
+endif
+
 ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_NOCRC))
 FSTESTS_ARGS += fstests_xfs_section_nocrc=True
 endif
@@ -121,14 +129,6 @@ endif
 
 ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_DIR_BSIZE_8K))
 FSTESTS_ARGS += fstests_xfs_section_reflink_dir_bsize_8k=True
-endif
-
-ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_RTDEV))
-FSTESTS_ARGS += fstests_xfs_section_rtdev=True
-endif
-
-ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_RTLOGDEV))
-FSTESTS_ARGS += fstests_xfs_section_rtlogdev=True
 endif
 
 ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_BIGBLOCK))
