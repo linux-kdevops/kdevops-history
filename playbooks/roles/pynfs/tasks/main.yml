@@ -17,7 +17,7 @@
 - name: Clean up our localhost results directory and files
   local_action: file path="{{ pynfs_workflow_dir }}/results/" state=absent
   run_once: true
-  tags: [ 'clean_local_results', 'first_run' ]
+  tags: [ 'clean_local_results' ]
 
 - name: Create the local results directory
   local_action: file path="{{ pynfs_workflow_dir }}/results/" state=directory
