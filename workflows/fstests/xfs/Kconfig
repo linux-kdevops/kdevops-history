@@ -574,6 +574,8 @@ config FSTESTS_XFS_SECTION_REFLINK_NORMAPBT
 
 endif # FSTESTS_XFS_SECTION_REFLINK_ENABLED
 
+if FSTESTS_XFS_SECTION_RTDEV_ENABLED
+
 config FSTESTS_XFS_SECTION_RTDEV
 	bool "Enable testing section: xfs_rtdev"
 	default y if HAVE_DISTRO_XFS_SUPPORTS_RT
@@ -603,8 +605,8 @@ config FSTESTS_XFS_SECTION_RTLOGDEV
 	  which enables both an external journal and a realtime device as well.
 	  This is only useful if your kernel actually is built
 	  with CONFIG_XFS_RT=y which most distributions disable these days.
-
 endif # FSTESTS_XFS_SECTION_LOGDEV_ENABLED
+endif # FSTESTS_XFS_SECTION_RTDEV_ENABLED
 
 config FSTESTS_XFS_SECTION_BIGBLOCK
 	bool "Enable testing section: xfs_bigblock"
