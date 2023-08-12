@@ -25,10 +25,6 @@ config HAVE_DISTRO_XFS_SUPPORTS_EXTERNAL_LOG
 	bool
 	default n
 
-config HAVE_DISTRO_XFS_IGNORES_EXTERNAL_LOG
-	bool
-	default n
-
 config HAVE_DISTRO_XFS_SUPPORTS_RT
 	bool
 	default n
@@ -109,6 +105,21 @@ config FSTESTS_XFS_SECTION_CRC
 	      [xfs]
 	      MKFS_OPTIONS='-f -m crc=1,reflink=0,rmapbt=0, -i sparse=0'
 	      FSTYP=xfs
+
+if FSTESTS_XFS_SECTION_LOGDEV_ENABLED
+config FSTESTS_XFS_SECTION_CRC_LOGDEV
+	bool "Enable testing section: xfs_crc_logdev"
+	help
+	  This will create a host to test the baseline of fstests using the
+	  following configuration which enables the usage of writing metadata
+	  to an external log device.
+
+	      [xfs_crc_logdev]
+	      MKFS_OPTIONS="-f -m crc=1,reflink=0,rmapbt=0, -i sparse=0 -lsize=1g"
+	      SCRATCH_LOGDEV=/dev/some-device
+	      USE_EXTERNAL=yes
+	      FSTYP=xfs
+endif # FSTESTS_XFS_SECTION_LOGDEV_ENABLED
 
 config FSTESTS_XFS_SECTION_NOCRC_ENABLED
 	bool "Enable testing sections which don't have CRC enabled"
@@ -575,20 +586,6 @@ config FSTESTS_XFS_SECTION_RTDEV
 
 if FSTESTS_XFS_SECTION_LOGDEV_ENABLED
 
-config FSTESTS_XFS_SECTION_LOGDEV
-	bool "Enable testing section: xfs_logdev"
-	default y
-	help
-	  This will create a host to test the baseline of fstests using the
-	  following configuration which enables the usage of writing metadata
-	  to an external log device.
-
-	      [xfs_logdev]
-	      MKFS_OPTIONS="-f -m crc=1,reflink=0,rmapbt=0, -i sparse=0 -lsize=1g"
-	      SCRATCH_LOGDEV=/dev/some-device
-	      USE_EXTERNAL=yes
-	      FSTYP=xfs
-
 config FSTESTS_XFS_SECTION_RTLOGDEV
 	bool "Enable testing section: xfs_rtlogdev"
 	default y if HAVE_DISTRO_XFS_SUPPORTS_RT
@@ -653,7 +650,7 @@ config FSTESTS_XFS_SECTION_REFLINK_NORMAPBT
 	bool
 	default y
 
-config FSTESTS_XFS_SECTION_LOGDEV
+config FSTESTS_XFS_SECTION_LOGDEV_ENABLED
 	bool
 	default y
 
