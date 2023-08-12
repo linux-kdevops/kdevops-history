@@ -34,3 +34,4 @@ xfs/294 # lazy baseline - failure found in at least two sections
 xfs/301 # fails on multiple sections already
 xfs/495 # lazy baseline - failure found in at least two sections
 xfs/506
+xfs/598

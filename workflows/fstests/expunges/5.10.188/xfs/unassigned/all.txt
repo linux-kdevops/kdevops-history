@@ -72,3 +72,4 @@ xfs/506 # lazy baseline - failure found in at least two sections
 xfs/516 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/521 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
 xfs/528 # lazy baseline - failure found in at least two sections - when host uses xfs for truncated files
+xfs/598

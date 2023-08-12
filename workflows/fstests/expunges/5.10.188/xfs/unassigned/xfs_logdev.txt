@@ -6,6 +6,8 @@ generic/204
 generic/223
 generic/361
 generic/704
+generic/730
+generic/731
 shared/298
 xfs/017
 xfs/160
