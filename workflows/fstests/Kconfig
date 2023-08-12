@@ -560,7 +560,7 @@ config FSTESTS_TEST_DEV
 	  To test with fstests one must set the TEST_DEV variable, this sets
 	  the TEST_DEV to use.
 
-if FSTESTS_XFS_SECTION_LOGDEV
+if FSTESTS_XFS_SECTION_LOGDEV_ENABLED
 
 config FSTESTS_TEST_LOGDEV
 	string "The device to use TEST_LOGDEV on fstests"

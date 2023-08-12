@@ -39,6 +39,14 @@ config FSTESTS_XFS_QUOTA_ENABLED
 	help
 	  Pass '-o usrquota,grpquota,prjquota' when mounting an fs.
 
+config FSTESTS_XFS_SECTION_LOGDEV_ENABLED
+	bool "Enable testing sections which use an external log device"
+	default y if HAVE_DISTRO_XFS_SUPPORTS_EXTERNAL_LOG
+	default n if !HAVE_DISTRO_XFS_SUPPORTS_EXTERNAL_LOG
+	help
+	  Enabling this option allows you to test xfs configurations
+	  which use an external log device.
+
 if FSTESTS_XFS_QUOTA_ENABLED
 config FSTESTS_XFS_MOUNT_QUOTA_OPTS
 	string "Quota options to be passed during mount"
@@ -547,15 +555,7 @@ config FSTESTS_XFS_SECTION_REFLINK_NORMAPBT
 
 endif # FSTESTS_XFS_SECTION_REFLINK_ENABLED
 
-config FSTESTS_XFS_SECTION_EXTERNAL_LOGS
-	bool "Enable testing sections which use an external log device"
-	default n if HAVE_DISTRO_XFS_IGNORES_EXTERNAL_LOG
-	default y if HAVE_DISTRO_XFS_SUPPORTS_EXTERNAL_LOG
-	help
-	  Enabling this option allows you to test xfs configuration which
-	  require the use of an external log device.
-
-if FSTESTS_XFS_SECTION_EXTERNAL_LOGS
+if FSTESTS_XFS_SECTION_LOGDEV_ENABLED
 
 config FSTESTS_XFS_SECTION_LOGDEV
 	bool "Enable testing section: xfs_logdev"
@@ -599,7 +599,7 @@ config FSTESTS_XFS_SECTION_RTLOGDEV
 	  This is only useful if your kernel actually is built
 	  with CONFIG_XFS_RT=y which most distributions disable these days.
 
-endif # FSTESTS_XFS_SECTION_EXTERNAL_LOGS
+endif # FSTESTS_XFS_SECTION_LOGDEV_ENABLED
 
 config FSTESTS_XFS_SECTION_BIGBLOCK
 	bool "Enable testing section: xfs_bigblock"
