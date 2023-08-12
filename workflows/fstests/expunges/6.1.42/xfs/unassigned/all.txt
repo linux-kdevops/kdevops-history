@@ -3,10 +3,13 @@ generic/054 # lazy baseline - failure found in at least two sections
 generic/055 # lazy baseline - failure found in at least two sections
 generic/081 # lazy baseline - failure found in at least two sections
 generic/108 # lazy baseline - failure found in at least two sections
+generic/175 # buggy test uses uninitialized variable i as input argument to truncate
 generic/204 # lazy baseline - failure found in at least two sections
 generic/223 # lazy baseline - failure found in at least two sections
 generic/241
 generic/273 # lazy baseline - failure found in at least two sections
+generic/297 # buggy test uses uninitialized variable i as input argument to truncate
+generic/298 # buggy test uses uninitialized variable i as input argument to truncate
 generic/361 # lazy baseline - failure found in at least two sections
 generic/455 # fails on two sections already
 generic/459 # fails on multiple sections maybe xfsprogs version?

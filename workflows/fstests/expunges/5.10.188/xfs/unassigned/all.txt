@@ -1,8 +1,11 @@
 generic/019 # fails for at least one config every run (after enabling CONFIG_FAIL_MAKE_REQUEST)
 generic/050 # lazy baseline - failure found in at least two sections
+generic/175 # buggy test uses uninitialized variable i as input argument to truncate
 generic/241
 generic/270 # lazy baseline - failure found in at least two sections (maybe related to)
 generic/273 # fails on xfs_reflink_1024 with a failure rate is 1/10 but chances are it will fail in others too https://gist.github.com/mcgrof/89d8349f899ff07ba4dda19264034db2
+generic/297 # buggy test uses uninitialized variable i as input argument to truncate
+generic/298 # buggy test uses uninitialized variable i as input argument to truncate
 generic/320 # failure rate is about 1/30 hung task on  xfs_reflink_normapbt https://gist.github.com/mcgrof/752cff159077b2fdf722d83382b1c337
 generic/373 # cross-fs reflink
 generic/374 # cross-fs dedupe
