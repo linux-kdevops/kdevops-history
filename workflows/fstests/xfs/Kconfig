@@ -147,6 +147,42 @@ config FSTESTS_XFS_SECTION_CRC_RTDEV
 	      SCRATCH_RTDEV=@FSTESTSSCRATCHRTDEV@
 	      USE_EXTERNAL=yes
 
+config FSTESTS_XFS_SECTION_CRC_RTDEV_EXTSIZE_28K
+	bool "Enable testing section: xfs_crc_rtdev_extsize_28k"
+	help
+	  This will create a host to test the baseline of fstests
+	  using the realtime device with real time extent size of
+	  28k. This is only useful if your kernel actually is built
+	  with CONFIG_XFS_RT=y which most distributions disable these
+	  days. This enables a host which will use the following
+	  configuration:
+
+	      [xfs_crc_rtdev_extsize_28k]
+	      FSTYP=xfs
+	      TEST_DEV="/dev/some-dev"
+	      TEST_RTDEV="/dev/some-rt-dev"
+	      MKFS_OPTIONS="-f -m reflink=0,rmapbt=0, -d rtinherit=1 -r extsize=28k"
+	      SCRATCH_RTDEV=@FSTESTSSCRATCHRTDEV@
+	      USE_EXTERNAL=yes
+
+config FSTESTS_XFS_SECTION_CRC_RTDEV_EXTSIZE_64K
+	bool "Enable testing section: xfs_crc_rtdev_extsize_64k"
+	help
+	  This will create a host to test the baseline of fstests
+	  using the realtime device with real time extent size of
+	  64k. This is only useful if your kernel actually is built
+	  with CONFIG_XFS_RT=y which most distributions disable these
+	  days. This enables a host which will use the following
+	  configuration:
+
+	      [xfs_crc_rtdev_extsize_64k]
+	      FSTYP=xfs
+	      TEST_DEV="/dev/some-dev"
+	      TEST_RTDEV="/dev/some-rt-dev"
+	      MKFS_OPTIONS="-f -m reflink=0,rmapbt=0, -d rtinherit=1 -r extsize=64k"
+	      SCRATCH_RTDEV=@FSTESTSSCRATCHRTDEV@
+	      USE_EXTERNAL=yes
+
 if FSTESTS_XFS_SECTION_LOGDEV_ENABLED
 config FSTESTS_XFS_SECTION_CRC_LOGDEV_RTDEV
 	bool "Enable testing section: xfs_crc_logdev_rtdev"

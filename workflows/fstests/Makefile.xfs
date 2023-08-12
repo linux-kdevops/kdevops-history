@@ -19,6 +19,14 @@ ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_CRC_RTDEV))
 FSTESTS_ARGS += fstests_xfs_section_crc_rtdev=True
 endif
 
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_CRC_RTDEV_EXTSIZE_28K))
+FSTESTS_ARGS += fstests_xfs_section_crc_rtdev_extsize_28k=True
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_CRC_RTDEV_EXTSIZE_64K))
+FSTESTS_ARGS += fstests_xfs_section_crc_rtdev_extsize_64k=True
+endif
+
 ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_CRC_LOGDEV_RTDEV))
 FSTESTS_ARGS += fstests_xfs_section_crc_logdev_rtdev=True
 endif
