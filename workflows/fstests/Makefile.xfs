@@ -87,6 +87,10 @@ ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK))
 FSTESTS_ARGS += fstests_xfs_section_reflink=True
 endif
 
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_LOGDEV))
+FSTESTS_ARGS += fstests_xfs_section_reflink_logdev=True
+endif
+
 ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_1024))
 FSTESTS_ARGS += fstests_xfs_section_reflink_1024=True
 endif

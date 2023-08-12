@@ -465,6 +465,23 @@ config FSTESTS_XFS_SECTION_REFLINK
 	      MKFS_OPTIONS='-f -m reflink=1,rmapbt=1, -i sparse=1,'
 	      FSTYP=xfs
 
+if FSTESTS_XFS_SECTION_LOGDEV_ENABLED
+config FSTESTS_XFS_SECTION_REFLINK_LOGDEV
+	bool "Enable testing section: xfs_reflink_logdev"
+	default y
+	help
+	  This will create a host to test the baseline of fstests using the
+	  following configuration which enables the usage of writing metadata
+	  to an external log device.
+
+	      [xfs_reflink_logdev]
+	      MKFS_OPTIONS="-f -m reflink=1,rmapbt=1, -i sparse=1 -lsize=1g"
+	      SCRATCH_LOGDEV=/dev/some-device
+	      USE_EXTERNAL=yes
+	      FSTYP=xfs
+
+endif # FSTESTS_XFS_SECTION_LOGDEV_ENABLED
+
 config FSTESTS_XFS_SECTION_REFLINK_1024
 	depends on EXTRA_STORAGE_SUPPORTS_1K
 	bool "Enable testing section: xfs_reflink_1024"
