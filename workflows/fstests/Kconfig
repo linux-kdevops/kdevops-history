@@ -658,6 +658,7 @@ config FSTESTS_TEST_RTLOGDEV_RTDEV
 	default "/dev/loop12" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 	depends on FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 	depends on FSTESTS_XFS_SECTION_RTDEV_ENABLED
+	depends on FSTESTS_XFS_SECTION_LOGDEV_ENABLED
 	help
 	  To set devices to use for the TEST_RTDEV for the XFS target test
 	  [xfs_rtlogdev]. This uses both an external journal device and a
@@ -668,6 +669,7 @@ config FSTESTS_SCRATCH_DEV_POOL_RTLOGDEV
 	default "/dev/loop5 /dev/loop6 /dev/loop7 /dev/loop8 /dev/loop9 /dev/loop10 /dev/loop11" if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 	depends on FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 	depends on FSTESTS_XFS_SECTION_RTDEV_ENABLED
+	depends on FSTESTS_XFS_SECTION_LOGDEV_ENABLED
 	help
 	  To set of spare devices to use for the fstests SCRATCH_DEV_POOL for
 	  testing with the XFS [xfs_rtlogdev].
