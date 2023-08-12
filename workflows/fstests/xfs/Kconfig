@@ -676,6 +676,18 @@ config FSTESTS_XFS_SECTION_REFLINK_STRIPE_LEN
 	      MKFS_OPTIONS='-f -m reflink=1,rmapbt=1, -i sparse=1, -d su=128k,sw=4'
 	      FSTYP=xfs
 
+config FSTESTS_XFS_SECTION_REFLINK_NREXT64
+	bool "Enable testing section: xfs_reflink_nrext64"
+	default y
+	help
+	  This will create a host to test the baseline of fstests
+	  using the following configuration which enables reflink
+	  along with enabling nrext64 feature.
+
+	      [xfs_reflink_stripe_len]
+	      MKFS_OPTIONS='-f -m reflink=1,rmapbt=1, -i sparse=1, -i nrext64=1'
+	      FSTYP=xfs
+
 endif # FSTESTS_XFS_SECTION_REFLINK_ENABLED
 
 config FSTESTS_XFS_SECTION_BIGBLOCK

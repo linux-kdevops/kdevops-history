@@ -147,6 +147,10 @@ ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_DIR_BSIZE_8K))
 FSTESTS_ARGS += fstests_xfs_section_reflink_dir_bsize_8k=True
 endif
 
+ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_REFLINK_NREXT64))
+FSTESTS_ARGS += fstests_xfs_section_reflink_nrext64=True
+endif
+
 ifeq (y,$(CONFIG_FSTESTS_XFS_SECTION_BIGBLOCK))
 FSTESTS_ARGS += fstests_xfs_section_bigblock=True
 endif
