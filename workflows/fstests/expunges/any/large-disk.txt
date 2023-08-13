@@ -9,7 +9,7 @@ generic/038
 generic/048
 
 # Requires a large test device, the test is not clear how big.
-generic/213" # takes 0s
+generic/213 # takes 0s
 
 # These just say the scratch device is too small but in other types of words.
 # It is unclear what the exact requirements are.
