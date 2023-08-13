@@ -1,3 +1,11 @@
+ifeq (y,$(CONFIG_FSTESTS_XFS_BUILD_CUSTOM_XFSPROGS))
+FSTESTS_ARGS += fstests_xfs_build_custom_xfsprogs=True
+FSTESTS_ARGS += fstests_xfs_xfsprogs_git='$(CONFIG_FSTESTS_XFS_XFSPROGS_GIT)'
+FSTESTS_ARGS += fstests_xfs_xfsprogs_commit='$(CONFIG_FSTESTS_XFS_XFSPROGS_COMMIT)'
+FSTESTS_ARGS += fstests_xfs_xfsprogs_data='$(CONFIG_FSTESTS_XFS_XFSPROGS_DATA)'
+FSTESTS_ARGS += fstests_xfs_xfsprogs_install_path='$(CONFIG_FSTESTS_XFS_XFSPROGS_INSTALL_PATH)'
+endif
+
 ifeq (y,$(CONFIG_FSTESTS_XFS_QUOTA_ENABLED))
 FSTESTS_ARGS += fstests_xfs_mount_quota_opts='$(CONFIG_FSTESTS_XFS_MOUNT_QUOTA_OPTS)'
 endif

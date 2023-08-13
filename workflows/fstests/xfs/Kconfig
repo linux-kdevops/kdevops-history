@@ -29,6 +29,38 @@ config HAVE_DISTRO_XFS_SUPPORTS_RT
 	bool
 	default n
 
+config FSTESTS_XFS_BUILD_CUSTOM_XFSPROGS
+	bool "Build and install custom Xfsprogs"
+	default n
+	help
+	  Enable this option to build and install a custom version of Xfsprogs.
+
+config FSTESTS_XFS_XFSPROGS_GIT
+	string "The Xfsprogs git tree to clone"
+	default "https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git"
+	depends on FSTESTS_XFS_BUILD_CUSTOM_XFSPROGS
+	help
+	  The Xfsprogs git tree to clone
+
+config FSTESTS_XFS_XFSPROGS_COMMIT
+	string "The Xfsprogs commit to checkout"
+	default "master"
+	depends on FSTESTS_XFS_BUILD_CUSTOM_XFSPROGS
+	help
+	  The Xfsprogs commit to checkout.
+
+config FSTESTS_XFS_XFSPROGS_DATA
+	string "Location on test machine to clone the xfsprogs git tree"
+	default "{{data_path}}/xfsprogs"
+	help
+	  Location on test machine to clone the xfsprogs git tree
+
+config FSTESTS_XFS_XFSPROGS_INSTALL_PATH
+	string "Destination path to install Xfsprogs binaries"
+	default "/usr/local/"
+	help
+	  Destination path to install Xfsprogs binaries
+
 config FSTESTS_XFS_QUOTA_ENABLED
 	bool "Enable XFS quota"
 	default n

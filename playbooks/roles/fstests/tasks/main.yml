@@ -53,6 +53,64 @@
 # Distro specific
 - include: tasks/install-deps/main.yml
 
+- name: Clone xfsprogs git repository
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  git:
+    repo: "{{ fstests_xfs_xfsprogs_git }}"
+    dest: "{{ fstests_xfs_xfsprogs_data }}"
+    update: yes
+    version: "{{ fstests_xfs_xfsprogs_commit }}"
+  retries: 3
+  delay: 5
+  register: result
+  until: not result.failed
+  tags: [ 'oscheck', 'git', 'fstests']
+  when: 'fstests_xfs_build_custom_xfsprogs|bool'
+
+- name: Configure xfsprogs
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  make:
+    chdir: "{{ fstests_xfs_xfsprogs_data }}"
+    target: configure
+  tags: ['oscheck', 'fstests', 'build']
+  when: 'fstests_xfs_build_custom_xfsprogs|bool'
+
+- name: Build xfsprogs
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  make:
+    chdir: "{{ fstests_xfs_xfsprogs_data }}"
+  tags: ['oscheck', 'fstests', 'build']
+  when: 'fstests_xfs_build_custom_xfsprogs|bool'
+
+- name: Install xfsprogs
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  make:
+    target: install
+    params:
+      DIST_ROOT: "{{ fstests_xfs_xfsprogs_install_path }}"
+    chdir: "{{ fstests_xfs_xfsprogs_data }}"
+  tags: ['oscheck', 'fstests', 'build']
+  when: 'fstests_xfs_build_custom_xfsprogs|bool'
+
+- name: Setup $PATH environment variable to access custom xfsprogs binaries
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  lineinfile:
+    path: "/root/.bashrc"
+    line: "export PATH={{ fstests_xfs_xfsprogs_install_path }}/usr/sbin/:$PATH"
+    state: present
+  tags: ['oscheck', 'fstests', 'build']
+  when: 'fstests_xfs_build_custom_xfsprogs|bool'
+
 - name: Create {{ truncated_path }} if needed
   include_role:
     name: create_partition

@@ -87,3 +87,28 @@
     packages:
       - btrfs-progs
   when: ansible_distribution == 'Fedora'
+
+- name: Install dependencies for building xfsprogs
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  dnf:
+    name: "{{ packages }}"
+    enablerepo: "*"
+  retries: 3
+  delay: 5
+  register: result
+  until: result.rc == 0
+  vars:
+    packages:
+      - inih-devel
+      - libedit-devel
+      - libicu-devel
+      - lvm2-devel
+      - userspace-rcu-devel
+      - device-mapper-devel
+      - device-mapper-event-devel
+      - libselinux-devel
+      - libsepol-devel
+      - pcre2-devel
+  when: 'fstests_xfs_build_custom_xfsprogs|bool'
