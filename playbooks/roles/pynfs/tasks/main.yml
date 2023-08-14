@@ -80,7 +80,7 @@
 - name: Wait until nfsd grace period ends
   tags: [ 'run_tests' ]
   delegate_to: "{{ nfsd_hostname }}"
-  command: /usr/bin/grep Y /proc/fs/nfsd/v4_end_grace
+  command: /usr/bin/grep -q Y /proc/fs/nfsd/v4_end_grace
   register: result
   retries: 90
   delay: 1
