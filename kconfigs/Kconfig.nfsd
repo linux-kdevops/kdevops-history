@@ -1,10 +1,22 @@
 # FIXME: need defaults for terraform hosts
-config NFSD_EXPORT_DEVICE
-	string "Device to be exported"
-        default "/dev/nvme3n1"
+config NFSD_EXPORT_DEVICE_0
+	string "First device to be exported"
+	default "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_kdevops2" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_NVME
+	default "/dev/disk/by-id/virtio-kdevops2" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_VIRTIO
+	default "/dev/disk/by-id/ide-kdevops2" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_IDE
+	default ""
 	help
-	  To set up nfsd for testing, we give it a filesystem to export. This
-	  block device houses that filesystem.
+	  To set up nfsd for testing, we give it filesystems to export. This
+	  block device houses the first filesystem.
+
+config NFSD_EXPORT_DEVICE_1
+	string "Second device to be exported"
+	default "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_kdevops3" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_NVME
+	default "/dev/disk/by-id/virtio-kdevops3" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_VIRTIO
+	default "/dev/disk/by-id/ide-kdevops3" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_IDE
+	help
+	  To set up nfsd for testing, we give it filesystems to export. This
+	  block device houses the second filesystem.
 
 choice
 	prompt "Type of filesystem to export"
@@ -28,11 +40,12 @@ config NFSD_EXPORT_FSTYPE
 	default "ext4" if NFSD_EXPORT_FSTYPE_EXT4
 
 config NFSD_EXPORT_PATH
-	string "The path to mount the device to be exported"
+	string "The path under which to mount the devices to be exported."
 	default "/export"
 	help
 	  This is the path that will be exported from the nfsd server. The
-	  export_device gets mounted here.
+	  export devices are mounted here under numbered directories starting
+	  with 0.
 
 config NFSD_EXPORT_OPTIONS
 	string "The export options to use for the exported fs"

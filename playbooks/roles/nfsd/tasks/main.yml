@@ -8,16 +8,29 @@
 - import_tasks: tasks/install-deps/redhat/main.yml
   when: ansible_facts['os_family']|lower == 'redhat'
 
-- name: Create and mount exported filesystem
+- name: Create and mount first exported filesystem
   tags: [ 'nfsd' ]
   include_role:
     name: create_partition
   vars:
-    disk_setup_device: "{{ nfsd_export_device }}"
+    disk_setup_device: "{{ nfsd_export_device_0 }}"
     disk_setup_fstype: "{{ nfsd_export_fstype }}"
-    disk_setup_label : "{{ nfsd_export_label }}"
-    disk_setup_fs_opts: "{{ nfsd_export_fs_opts }} -L {{ nfsd_export_label }}"
-    disk_setup_path: "{{ nfsd_export_path }}"
+    disk_setup_label : "{{ nfsd_export_label }}0"
+    disk_setup_fs_opts: "{{ nfsd_export_fs_opts }} -L {{ nfsd_export_label }}0"
+    disk_setup_path: "{{ nfsd_export_path }}/0"
+    disk_setup_user: "{{ data_user }}"
+    disk_setup_group: "{{ data_group }}"
+
+- name: Create and mount second exported filesystem
+  tags: [ 'nfsd' ]
+  include_role:
+    name: create_partition
+  vars:
+    disk_setup_device: "{{ nfsd_export_device_1 }}"
+    disk_setup_fstype: "{{ nfsd_export_fstype }}"
+    disk_setup_label : "{{ nfsd_export_label }}1"
+    disk_setup_fs_opts: "{{ nfsd_export_fs_opts }} -L {{ nfsd_export_label }}1 "
+    disk_setup_path: "{{ nfsd_export_path }}/1"
     disk_setup_user: "{{ data_user }}"
     disk_setup_group: "{{ data_group }}"
 

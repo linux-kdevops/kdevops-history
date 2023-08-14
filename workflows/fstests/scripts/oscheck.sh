@@ -454,10 +454,16 @@ _check_nfs_setup()
 	if [[ ! -d  $TEST_DIR ]]; then
 		mkdir -p $TEST_DIR
 	fi
-	mount -t nfs $FSTESTS_NFS_SERVER_HOST:$FSTESTS_NFS_SERVER_PATH $TEST_DIR
+
+	echo "mount -t nfs ${FSTESTS_NFS_SERVER_HOST_0}:${FSTESTS_NFS_SERVER_PATH_0} ${TEST_DIR}"
+	mount -t nfs ${FSTESTS_NFS_SERVER_HOST_0}:${FSTESTS_NFS_SERVER_PATH_0} ${TEST_DIR}
 	rm -rf $TEST_DIR/fstests/$FSTESTS_ANSIBLE_HOST
-	mkdir -p $TEST_DIR/fstests/$FSTESTS_ANSIBLE_HOST/test
-	mkdir -p $TEST_DIR/fstests/$FSTESTS_ANSIBLE_HOST/scratch
+	mkdir -p $TEST_DIR/fstests/$FSTESTS_ANSIBLE_HOST
+	umount $TEST_DIR
+
+	mount -t nfs ${FSTESTS_NFS_SERVER_HOST_1}:${FSTESTS_NFS_SERVER_PATH_1} ${TEST_DIR}
+	rm -rf $TEST_DIR/fstests/$FSTESTS_ANSIBLE_HOST
+	mkdir -p $TEST_DIR/fstests/$FSTESTS_ANSIBLE_HOST
 	umount $TEST_DIR
 }
 

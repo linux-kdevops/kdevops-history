@@ -64,13 +64,13 @@
   become_flags: 'su - -c'
   become_method: sudo
   file:
-    path: /export/pynfs/{{ item }}
+    path: /export/{{ item }}/pynfs/{{ ansible_host }}
     state: directory
     owner: root
     group: root
   with_items:
-    - 4.0
-    - 4.1
+    - 0
+    - 1
 
 - name: Get the hostname of the NFS server
   tags: [ 'run_tests' ]
@@ -92,6 +92,7 @@
   environment:
     PYNFS_DATA: "{{ pynfs_data }}"
     NFSD_EXPORT: "{{ nfsd_hostname }}:{{ nfsd_export_path }}"
+    ANSIBLE_HOST: "{{ ansible_host }}"
 
 - name: Get used target kernel version
   tags: [ 'copy_results' ]

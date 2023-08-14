@@ -568,8 +568,8 @@
   become_flags: 'su - -c'
   become_method: sudo
   vars:
-    fstests_nfs_test_dev: "{{ fstests_nfs_server_host }}:{{ fstests_nfs_server_path }}/fstests/{{ ansible_host }}/test"
-    fstests_nfs_scratch_devpool: "{{ fstests_nfs_server_host }}:{{ fstests_nfs_server_path }}/fstests/{{ ansible_host }}/scratch"
+    fstests_nfs_test_dev: "{{ fstests_nfs_server_host0 }}:{{ fstests_nfs_server_path0 }}/fstests/{{ ansible_host }}"
+    fstests_nfs_scratch_devpool: "{{ fstests_nfs_server_host1 }}:{{ fstests_nfs_server_path1 }}/fstests/{{ ansible_host }}"
   template:
     src: "{{ fstests_fstyp }}/{{ fstests_fstyp }}.config"
     dest: "{{ fstests_data_target }}/configs/{{ ansible_host }}.config"
