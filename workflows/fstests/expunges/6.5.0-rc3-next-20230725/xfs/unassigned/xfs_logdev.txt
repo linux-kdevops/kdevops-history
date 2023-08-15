@@ -1,6 +1,10 @@
 generic/055
+generic/730
+generic/731
 xfs/045
 xfs/158
 xfs/160
 xfs/161
 xfs/438 # ran over 17 hours without ending
+xfs/597
+xfs/598
