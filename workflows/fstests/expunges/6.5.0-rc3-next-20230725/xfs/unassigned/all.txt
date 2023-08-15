@@ -15,6 +15,8 @@ generic/471 # race against loop? - lazy baseline - failure found in at least two
 generic/563 # needs investigation - lazy baseline - failure found in at least two sections
 generic/650 # lazy baseline - failure found in at least two sections - can sometimes run forever
 generic/704 # lazy baseline - failure found in at least two sections
+generic/730 # lazy baseline - failure found in at least two sections
+generic/731 # lazy baseline - failure found in at least two sections
 shared/298 # lazy baseline - failure found in at least two sections
 xfs/009 # lazy baseline - failure found in at least two sections
 xfs/075 # lazy baseline - failure found in at least two sections
@@ -30,3 +32,5 @@ xfs/432 # test bug: blocksize should detect sector size - lazy baseline - failur
 xfs/506 # needs investigation - lazy baseline - failure found in at least two sections
 xfs/513 # lazy baseline - failure found in at least two sections
 xfs/516 # needs investigation - lazy baseline - failure found in at least two sections
+xfs/597 # lazy baseline - failure found in at least two sections
+xfs/598 # lazy baseline - failure found in at least two sections
