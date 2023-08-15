@@ -726,6 +726,7 @@
     src: "{{ item.path }}"
     dest: "{{ fstests_workflow_dir }}/{{ item.path | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
     flat: yes
+    validate_checksum: False
   with_items: "{{ checktime_files.files }}"
   loop_control:
     label: "{{ item.path | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
@@ -955,6 +956,7 @@
     src: "{{ item.path }}"
     dest: "{{ fstests_results_target }}/{{ item_path_without_host | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
     flat: yes
+    validate_checksum: False
   with_items: "{{ checktime_files.files }}"
   loop_control:
     label: "{{ item.path | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
@@ -983,6 +985,7 @@
     src: "{{ item.path }}"
     dest: "{{ fstests_results_target }}/{{ item_path_without_host | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
     flat: yes
+    validate_checksum: False
   with_items: "{{ checklog_files.files }}"
   loop_control:
     label: "{{ item.path | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
@@ -1011,6 +1014,7 @@
     src: "{{ item.path }}"
     dest: "{{ fstests_results_target }}/{{ item_path_without_host | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
     flat: yes
+    validate_checksum: False
   with_items: "{{ xunit_files.files }}"
   loop_control:
     label: "{{ item.path | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
@@ -1118,6 +1122,7 @@
     src: "{{ item.path }}"
     dest: "{{ fstests_results_target }}/{{ item_path_without_host | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
     flat: yes
+    validate_checksum: False
   with_items: "{{ failed_tests.files }}"
   loop_control:
     label: "{{ item.path | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
@@ -1159,6 +1164,7 @@
     src: "{{ item.stat.path }}"
     dest: "{{ fstests_results_target }}/{{ item_path_without_host | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
     flat: yes
+    validate_checksum: False
   with_items: "{{ bad_full_file_stats.results }}"
   loop_control:
     label: "Copying over {{ tests_name }}"
@@ -1200,6 +1206,7 @@
     src: "{{ item.stat.path }}"
     dest: "{{ fstests_results_target }}/{{ item_path_without_host | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
     flat: yes
+    validate_checksum: False
   with_items: "{{ bad_dmesg_file_stats.results }}"
   loop_control:
     label: "Copying over dmesg {{ tests_name }}"
