@@ -719,9 +719,6 @@
 
 - name: Copy prior check.time files from {{ fstests_data_target }}
   tags: [ 'oscheck', 'fstests', 'run_tests', 'checktime' ]
-  become: yes
-  become_flags: 'su - -c'
-  become_method: sudo
   fetch:
     src: "{{ item.path }}"
     dest: "{{ fstests_workflow_dir }}/{{ item.path | regex_replace(fstests_data_target | regex_escape()) | regex_replace('^/', '') }}"
@@ -947,9 +944,6 @@
 
 - name: Copy the latest run check.time files from {{ fstests_data_target }}
   tags: [ 'oscheck', 'fstests', 'copy_results', 'checktime' ]
-  become: yes
-  become_flags: 'su - -c'
-  become_method: sudo
   vars:
     item_path_without_host: "{{ item.path | regex_replace('results') | regex_replace(ansible_host) }}"
   fetch:
@@ -976,9 +970,6 @@
 
 - name: Copy the latest run check.log files from {{ fstests_data_target }}
   tags: [ 'oscheck', 'fstests', 'copy_results', 'checklog' ]
-  become: yes
-  become_flags: 'su - -c'
-  become_method: sudo
   vars:
     item_path_without_host: "{{ item.path | regex_replace('results') | regex_replace(ansible_host) }}"
   fetch:
@@ -1005,9 +996,6 @@
 
 - name: Copy xunit results files from {{ fstests_data_target }}
   tags: [ 'oscheck', 'fstests', 'copy_results', 'xunit' ]
-  become: yes
-  become_flags: 'su - -c'
-  become_method: sudo
   vars:
     item_path_without_host: "{{ item.path | regex_replace('results') | regex_replace(ansible_host) }}"
   fetch:
@@ -1113,9 +1101,6 @@
 
 - name: Copy over all *.bad files which represent failed tests
   tags: [ 'oscheck', 'fstests', 'copy_results', 'copy_final', 'failed_tests', 'tfb' ]
-  become: yes
-  become_flags: 'su - -c'
-  become_method: sudo
   vars:
     item_path_without_host: "{{ item.path | regex_replace('results') | regex_replace(ansible_host) }}"
   fetch:
@@ -1151,9 +1136,6 @@
 
 - name: Copy test full bad result file over
   tags: [ 'oscheck', 'fstests', 'copy_results', 'failed_tests' ]
-  become: yes
-  become_flags: 'su - -c'
-  become_method: sudo
   vars:
     tests_full_group_dir: "{{ item.item.path | dirname }}"
     tests_group_dir: "{{ tests_full_group_dir | split('/') | last }}"
@@ -1193,9 +1175,6 @@
 
 - name: Copy test dmesg results file over
   tags: [ 'oscheck', 'fstests', 'copy_results', 'failed_tests' ]
-  become: yes
-  become_flags: 'su - -c'
-  become_method: sudo
   vars:
     tests_full_group_dir: "{{ item.item.path | dirname }}"
     tests_group_dir: "{{ tests_full_group_dir | split('/') | last }}"
