@@ -61,19 +61,7 @@ workflow you can just run:
   * `make fstests`
   * `make fstests-results`
 
-Be sure to use CONFIG_KDEVOPS_WORKFLOW_DEDICATE_FSTESTS=y unless you know
-what you are doing.
-
-kdevops supports testing using [truncated files with loopback block devices](docs/testing-with-loopback.md)
-so to minimize disk usage and requirements. However there is also support now
-to use NVMe drive `/dev/disk/by-id/nvme` symlinks, which ensures that if
-you want to [test using real NVMe drives](docs/testing-with-nvme.md) they same NVMe drives will be used
-on reboot. This is crucial for testing filesystems on real NVMe drives
-on bare metal, the cloud, or virtualization using [PCIe passthrough](docs/libvirt-pcie-passthrough.md),
-all of which kdevops supports.
-
-See [viewing kdevops archived results](docs/viewing-fstests-results.md) to see
-how you can look at existing results file inside kdevops.
+For more details see [kdevops fstests docs](docs/fstests.md)
 
 ### Start running blktests in 2 commands
 
@@ -84,10 +72,9 @@ workflow you can just run:
   * `make blktests-baseline`
   * `make blktests-results`
 
-Be sure to use CONFIG_KDEVOPS_WORKFLOW_DEDICATE_BLKTESTS=y unless you know
-what you are doing.
+For more details see [kdevops blktests docs](docs/blktests.md)
 
-### Start running pynfs in 2 commands
+### Start testing NFS with in 2 commands
 
 To test the kernel's nfs server with the pynfs testsuite, enable the pynfs
 workflow and then run:
@@ -95,21 +82,11 @@ workflow and then run:
   * `make pynfs`
   * `make pynfs-baseline`
 
+For more details see [kdevops nfs docs](docs/nfs.md)
+
 ### Runs some kernel selftests in a parallel manner
 
-The Linux kernel has a set of sets under tools/testing/selftests which we
-call "Kernel selftests". Read the [Linux kernel selftests documentation](https://www.kernel.org/doc/html/latest/dev-tools/kselftest.html).
-Running selftests used to be fast back in the day when we only had a few
-kernel selftests. But these days there are many kernel selftests. Part of
-the beauty of Linux kernel selftests is that there are no rules -- you make
-your rules. The only rules are at least expicitly mentioning a few targets
-for Makefiles so that the overall selftests facility knows what target to
-call to run some tests. Part of the complexity in selftests these days is
-that due to the lack of rules, you may end up needing a bit of dependencies
-installed on the target node you want to run the tests on. Kdevops will take
-care of that for you, and so selftests support are added by each developer
-which wants to help make this easier for users. Today there is support for
-at least 3 selftests:
+kdevops supports running Linux kernel selftests in parallel, this is as easy as:
 
   * `make selftests`
   * `make selftests-baseline`
@@ -120,32 +97,15 @@ You can also run specific tests:
   * `make selftests-kmod`
   * `make selftests-sysctl`
 
+For more details see [kdevops nfs docs](docs/selftests.md)
+
 ### CXL
 
 There is CXL support. You can either use virtualized CXL devices or with
 [PCIe passthrough](docs/libvirt-pcie-passthrough.md) you can assign devices
-to guests and create custom topologies.
-
-#### Get a Linux CXL development environment going and test CXL in just 2 commands:
-
-Using CXL today means you have to build QEMU. kdevops supports building QEMU
-for you, and it will be done for you if you want to enable a CXL development
-environment. To ramp up with CXL (other than bringup and the above linux target)
-just run:
-
-  * `make cxl`
-  * `make cxl-test-probe`
-  * `make cxl-test-meson`
-
-#### Get a Linux CXL switch testing going
-
-This will use b4 to get some R&D patches for CXL switches.
-
-  * `make defconfig-cxl-switch`
-  * `make -j$(nproc)`
-  * `make bringup`
-  * `make linux`
-  * `make cxl`
+to guests and create custom topologies. kdevops let you build and install
+the latest CXL enabled qemu version as well for you. For more details
+refer to [kdevops cxl docs](docs/cxl.md)
 
 ## kdevops chats
 
@@ -160,7 +120,6 @@ We have a public chat server up, for now we use discord:
 ### kdevops IRC
 
 We are also on irc.oftc.net on #kdevops
-
 
 ## Parts to kdevops
 
@@ -178,7 +137,28 @@ The phases of use of kdevops can be split into:
 
 ---
 
-# kdevops documentation
+# kdevops workflow documentation
+
+A kdevops workflow is a type of target work environment you want to run in.
+Different workflows have different kernel requirements, sometimes cloud or qemu
+requirements and also enable new make targets for building things or test
+targets. Some workflows are generic and may be shared such as that for Linux to
+configure and build it. Building and installing Linux is however optional if you
+want to just use the kernel that comes with your Linux distribution.
+
+## kdevops shared workflows
+
+* [kdevops example workflow: running make linux](docs/kdevops-make-linux.md)
+
+## kdevops workflows which may be dedicated
+
+  * [kdevops fstests docs](docs/fstests.md)
+  * [kdevops blktests docs](docs/blktets.md)
+  * [kdevops CXL docs](docs/cxl.md)
+  * [kdevops NFS docs](docs/nfs.md)
+  * [kdevops selftests docs](docs/selftests.md)
+
+# kdevops general documentation
 
 Below is kdevops' recommended documentation reading.
 
@@ -192,7 +172,6 @@ Below is kdevops' recommended documentation reading.
   * [kdevops libvirt storage pool considerations](docs/libvirt-storage-pool.md)
   * [kdevops PCIe passthrough support](docs/libvirt-pcie-passthrough.md)
   * [kdevops running make bringup](docs/running-make-bringup.md)
-  * [kdevops example workflow: running make linux](docs/kdevops-make-linux.md)
   * [kdevops running make destroy](docs/kdevops-make-destroy.md)
   * [kdevops make mrproper](docs/kdevops-restarting-from-scratch.md)
   * [kdevops Large Block Size R&D](docs/lbs.md)
@@ -212,7 +191,6 @@ other workflows do not yet support a kernel-ci.
 Documentation for this follows:
 
   * [kdevops kernel-ci](docs/kernel-ci/README.md)
-
 
 # kdevops organization
 
@@ -283,7 +261,6 @@ in the future.
 Below are sections which get into technical details of how kdevops works.
 
   * [Why Vagrant is used for virtualization](docs/why-vagrant.md)
-  * [Support for using real NVMe drives with fstsets](docs/testing-with-nvme.md)
   * [A case for supporting truncated files with loopback block devices](docs/testing-with-loopback.md)
   * [Seeing more issues with loopback / truncated files setup](docs/seeing-more-issues.md)
   * [Adding a new workflow to kdevops](docs/adding-a-new-workflow.md)
