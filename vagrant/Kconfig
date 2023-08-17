@@ -1140,6 +1140,7 @@ config VAGRANT_SUSE
 
 config VAGRANT_FEDORA
 	bool "Fedora"
+	select HAVE_VAGRANT_BOX_VERSION
 	select HAVE_DISTRO_XFS_PREFERS_MANUAL if FSTESTS_XFS
 	select HAVE_DISTRO_BTRFS_PREFERS_MANUAL if FSTESTS_BTRFS
 	select HAVE_DISTRO_EXT4_PREFERS_MANUAL if FSTESTS_EXT4
@@ -1193,7 +1194,7 @@ config VAGRANT_BOX
 	default "debian/bullseye64" if VAGRANT_DEBIAN_BULLSEYE64
 	default "debian/buster64" if VAGRANT_DEBIAN_BUSTER64
 	default "opensuse/Tumbleweed.x86_64" if VAGRANT_OPENSUSE_X86_64_TW
-	default "fedora/37-cloud-base" if VAGRANT_FEDORA_X86_64_37_CLOUD_BASE
+	default "fedora/38-cloud-base" if VAGRANT_FEDORA
 	default "generic/rhel8" if VAGRANT_REDHAT_GENERIC_RHEL8_X86_64
 	default "generic/rhel9" if VAGRANT_REDHAT_GENERIC_RHEL9_X86_64
 	default "opensuse/Leap-15.3.x86_64" if VAGRANT_OPENSUSE_X86_64_LEAP_15_3
