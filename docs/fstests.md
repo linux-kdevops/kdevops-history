@@ -59,7 +59,42 @@ You can use real NVMe drivse on nodes which are on baremetal, the cloud,
 or virtualization using [PCIe passthrough](docs/libvirt-pcie-passthrough.md).
 kdevops supports all these and automates it setup for you.
 
+# Running fstests
+
+Just run:
+
+  * `make fstests`
+  * `make fstests-baseline`
+  * `make fstests-results`
+
+## Seeing regresions
+
+To see regressions:
+
+  * `git diff`
+
+## Commit new expunges
+
+If you know these failures are real, you can commit them:
+
+  * `git add workflows/fstests/expunges/<path-to-kernel>`
+
+It would be nice for you to commit back over results to our archive, specially
+if you are adding expunges for a kernel.
+
+To do that do:
+
+bash
+```
+TODO
+```
+
 # Seeing kdevops community fstests results
 
 See [viewing kdevops archived results](docs/viewing-fstests-results.md) to see
 how you can look at existing results file inside kdevops.
+
+TODO:
+  * provide a python script to query all results for a specific test or filesystem.
+  * this should assume your current configured kernel first and optionally
+    let you override that

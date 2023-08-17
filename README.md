@@ -59,6 +59,7 @@ To test a kernel against fstests, for example, if you enable the fstests
 workflow you can just run:
 
   * `make fstests`
+  * `make fstests-baseline`
   * `make fstests-results`
 
 For more details see [kdevops fstests docs](docs/fstests.md)
