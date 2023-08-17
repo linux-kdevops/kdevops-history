@@ -52,3 +52,6 @@ echo mkdir -p $MY_DIR
 echo cp $RESULTS_TARBALL $MY_DIR
 echo cp .config $MY_DIR/kdevops.config
 
+mkdir -p $MY_DIR
+cp $RESULTS_TARBALL $MY_DIR
+cp .config $MY_DIR/kdevops.config
