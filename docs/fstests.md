@@ -86,14 +86,32 @@ To do that do:
 
 bash
 ```
-TODO
+scripts/workflows/fstests/copy-results.sh
 ```
 
 ## Augment expunges for a kernel
 
-If you know this is a real failure which we need to expunge
-(TODO: document rationale for this)
-you can augment the shared expunge list to help with our known test baseline.
+If you know this is a real failure which we need to expunge the test so to
+help reduce the amount of time to test *by default*. Although it is important
+to verify if a test is still occurring, that is a secondary step we can work
+on. Developers and users are encouraged to augment the shared expunge list to
+help with our known test baseline.
+
+Baselines are available for upstream all Linux kernel releases, linux-next,
+development kernel branches, custom R&D branches, and standard Linux
+distributions.
+
+If you are not a developer, you can still use kdevops to help test your
+distribution kernel baseline, and track the known failures. If some of these
+failures are crashes, and you've already updated your latest kernel for that
+release, you may want to report the kernel failing to the Linux distribution.
+
+If you are not a developer, you can also help track baselines for the latest
+Linux kernels, or stable kernels, and linux-next. If testing Linus' kernel
+be sure to use the latest tip tree from Linus' tree. If using stable kernels
+make sure they are still listed as supported on kernel.org first, and then
+use the latest point release. If using linux-next, be sure to use the
+latest linux-next tag.
 
 ## Confidence in a baseline
 
