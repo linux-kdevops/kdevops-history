@@ -265,9 +265,25 @@
   run_once: true
   delegate_to: localhost
 
+- name: Check whether config-kdevops exists
+  stat:
+    path: "{{ role_path }}/templates/config-kdevops"
+  register: config_kdevops
+  delegate_to: localhost
+
+- name: Found config-kdevops, using it for template
+  set_fact:
+    linux_config: "config-kdevops"
+  when: config_kdevops.stat.exists
+
+- name: No config-kdevops, looking for {{ target_linux_config }}
+  set_fact:
+    linux_config: "{{ target_linux_config }}"
+  when: not config_kdevops.stat.exists
+
 - name: Copy configuration for Linux {{ target_linux_tree }} on the client side
   template:
-    src: "{{ target_linux_config }}"
+    src: "{{ linux_config }}"
     dest: "{{ target_linux_dir_path }}/.config"
     owner: "{{ data_user }}"
     group: "{{ data_group }}"
@@ -278,7 +294,7 @@
 
 - name: Copy configuration for Linux {{ target_linux_tree }} on the host side
   template:
-    src: "{{ target_linux_config }}"
+    src: "{{ linux_config }}"
     dest: "{{ bootlinux_9p_host_path }}/.config"
     mode: 0644
   tags: [ 'linux', 'git', 'config' ]
