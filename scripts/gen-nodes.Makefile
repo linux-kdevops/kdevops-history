@@ -56,9 +56,10 @@ endif
 ifeq (y,$(CONFIG_LIBVIRT_EXTRA_STORAGE_DRIVE_VIRTIO))
 GEN_NODES_EXTRA_ARGS += libvirt_extra_storage_drive_nvme='False'
 GEN_NODES_EXTRA_ARGS += libvirt_extra_storage_drive_virtio='True'
-GEN_NODES_EXTRA_ARGS += libvirt_extra_storage_virtio_aio_mode='$(subst ",,$(CONFIG_LIBVIRT_VIRTIO_AIO_MODE))'
-GEN_NODES_EXTRA_ARGS += libvirt_extra_storage_virtio_aio_cache_mode='$(subst ",,$(CONFIG_LIBVIRT_VIRTIO_AIO_CACHE_MODE))'
 endif
+
+GEN_NODES_EXTRA_ARGS += libvirt_extra_storage_aio_mode='$(subst ",,$(CONFIG_LIBVIRT_AIO_MODE))'
+GEN_NODES_EXTRA_ARGS += libvirt_extra_storage_aio_cache_mode='$(subst ",,$(CONFIG_LIBVIRT_AIO_CACHE_MODE))'
 
 ifeq (y,$(CONFIG_LIBVIRT_EXTRA_STORAGE_DRIVE_NVME))
 ifeq (y,$(CONFIG_LIBVIRT_EXTRA_STORAGE_NVME_LOGICAL_BLOCK_SIZE_512))

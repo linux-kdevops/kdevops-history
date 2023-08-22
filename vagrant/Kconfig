@@ -615,13 +615,11 @@ config LIBVIRT_EXTRA_STORAGE_VIRTIO_LOGICAL_BLOCK_SIZE_2M
 
 endchoice
 
-if LIBVIRT_EXTRA_STORAGE_DRIVE_VIRTIO
-
 choice
-	prompt "Libvirt virtio aio"
-	default LIBVIRT_VIRTIO_AIO_MODE_NATIVE
+	prompt "Libvirt aio mode"
+	default LIBVIRT_AIO_MODE_NATIVE
 
-config LIBVIRT_VIRTIO_AIO_MODE_NATIVE
+config LIBVIRT_AIO_MODE_NATIVE
 	bool "aio=native"
 	help
 	  Use the aio=native mode. For some older kernels it is known that
@@ -640,25 +638,30 @@ config LIBVIRT_VIRTIO_AIO_MODE_NATIVE
 
 	  https://review.opendev.org/c/openstack/nova-specs/+/232514/7/specs/mitaka/approved/libvirt-aio-mode.rst
 
-config LIBVIRT_VIRTIO_AIO_MODE_THREADS
+config LIBVIRT_AIO_MODE_THREADS
 	bool "aio=threads"
 	help
 	  Use the aio=threads mode. This might be more suitable for you if on
 	  older kernels such as in RHEL6 and using sparsefiles and ext4 or xfs
 	  on this host with cache=none.
 
+config LIBVIRT_AIO_MODE_IO_URING
+	bool "aio=io_uring"
+	help
+	  Use the aio=io_uring mode. This is currently experimental.
 endchoice
 
-config LIBVIRT_VIRTIO_AIO_MODE
+config LIBVIRT_AIO_MODE
 	string
-	default "native" if LIBVIRT_VIRTIO_AIO_MODE_NATIVE
-	default "threads" if LIBVIRT_VIRTIO_AIO_MODE_THREADS
+	default "native" if LIBVIRT_AIO_MODE_NATIVE
+	default "threads" if LIBVIRT_AIO_MODE_THREADS
+	default "io_uring" if LIBVIRT_AIO_MODE_IO_URING
 
 choice
 	prompt "Libvirt cache mode"
-	default LIBVIRT_VIRTIO_AIO_CACHE_MODE_NONE
+	default LIBVIRT_AIO_CACHE_MODE_NONE
 
-config LIBVIRT_VIRTIO_AIO_CACHE_MODE_NONE
+config LIBVIRT_AIO_CACHE_MODE_NONE
 	bool "cache=none"
 	help
 	  Use the cache=none. IO from the guest is not cached on the host but
@@ -670,7 +673,7 @@ config LIBVIRT_VIRTIO_AIO_CACHE_MODE_NONE
 	  option for guests with large IO requirements. This is generally the
 	  best option and is required for live migration.
 
-config LIBVIRT_VIRTIO_AIO_CACHE_MODE_WRITETHROUGH
+config LIBVIRT_AIO_CACHE_MODE_WRITETHROUGH
 	bool "cache=writethrough"
 	help
 	  cache=writethrough. IO from the guest is cached on the host but
@@ -682,7 +685,7 @@ config LIBVIRT_VIRTIO_AIO_CACHE_MODE_WRITETHROUGH
 	  Best used for small number of guests with lower IO reqs. This should
 	  be used on older guests which do not support writeback cache.
 
-config LIBVIRT_VIRTIO_AIO_CACHE_MODE_WRITEBACK
+config LIBVIRT_AIO_CACHE_MODE_WRITEBACK
 	bool "cache=writeback"
 	help
 	  cache=writeback. IO from the guest is cached on the host so it is
@@ -691,7 +694,7 @@ config LIBVIRT_VIRTIO_AIO_CACHE_MODE_WRITEBACK
 	  storage controller is informed of the writeback cache and therefore
 	  expected to send flush commands as needed to manage data integrity.
 
-config LIBVIRT_VIRTIO_AIO_CACHE_MODE_DIRECTSYNC
+config LIBVIRT_AIO_CACHE_MODE_DIRECTSYNC
 	bool "cache=directsync"
 	help
 	  cache=directsync. Writes are reported only when the data has been
@@ -699,7 +702,7 @@ config LIBVIRT_VIRTIO_AIO_CACHE_MODE_DIRECTSYNC
 	  bypassed. This mode is useful for guests which that do not send
 	  flushes when needed.
 
-config LIBVIRT_VIRTIO_AIO_CACHE_MODE_UNSAFE
+config LIBVIRT_AIO_CACHE_MODE_UNSAFE
 	bool "cache=unsafe"
 	help
 	  cache=unsafe. Similar to writeback except all of the flush commands
@@ -708,15 +711,13 @@ config LIBVIRT_VIRTIO_AIO_CACHE_MODE_UNSAFE
 
 endchoice
 
-config LIBVIRT_VIRTIO_AIO_CACHE_MODE
+config LIBVIRT_AIO_CACHE_MODE
 	string
-	default "none" if LIBVIRT_VIRTIO_AIO_CACHE_MODE_NONE
-	default "writethrough" if LIBVIRT_VIRTIO_AIO_CACHE_MODE_WRITETHROUGH
-	default "writeback" if LIBVIRT_VIRTIO_AIO_CACHE_MODE_WRITEBACK
-	default "directsync" if LIBVIRT_VIRTIO_AIO_CACHE_MODE_DIRECTSYNC
-	default "unsafe" if LIBVIRT_VIRTIO_AIO_CACHE_MODE_UNSAFE
-
-endif
+	default "none" if LIBVIRT_AIO_CACHE_MODE_NONE
+	default "writethrough" if LIBVIRT_AIO_CACHE_MODE_WRITETHROUGH
+	default "writeback" if LIBVIRT_AIO_CACHE_MODE_WRITEBACK
+	default "directsync" if LIBVIRT_AIO_CACHE_MODE_DIRECTSYNC
+	default "unsafe" if LIBVIRT_AIO_CACHE_MODE_UNSAFE
 
 choice
 	prompt "Libvirt storage pool path"

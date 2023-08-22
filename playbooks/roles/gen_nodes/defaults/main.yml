@@ -55,8 +55,8 @@ libvirt_extra_drive_id_prefix: 'drv'
 libvirt_extra_storage_drive_nvme: True
 libvirt_extra_storage_drive_virtio: False
 libvirt_extra_storage_drive_ide: False
-libvirt_extra_storage_virtio_aio_mode: "native"
-libvirt_extra_storage_virtio_aio_cache_mode: "none"
+libvirt_extra_storage_aio_mode: "native"
+libvirt_extra_storage_aio_cache_mode: "none"
 libvirt_extra_storage_nvme_logical_block_size: 512
 libvirt_extra_storage_virtio_logical_block_size: 512
 libvirt_extra_storage_virtio_physical_block_size: 512
