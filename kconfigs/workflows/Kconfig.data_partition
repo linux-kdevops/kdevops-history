@@ -105,7 +105,7 @@ config WORKFLOW_DATA_FSTYPE_BTRFS
 endchoice
 
 config WORKFLOW_DATA_FSTYPE
-	string "The filesystem target to use"
+	string
 	default "xfs" if WORKFLOW_DATA_FSTYPE_XFS
 	default "ext4" if WORKFLOW_DATA_FSTYPE_EXT4
 	default "btrfs" if WORKFLOW_DATA_FSTYPE_BTRFS
