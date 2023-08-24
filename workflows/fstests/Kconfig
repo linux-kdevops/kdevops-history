@@ -39,7 +39,7 @@ config FSTESTS_NFS
 endchoice
 
 config FSTESTS_FSTYP
-	string "The filesystem to test with fstests"
+	string
 	default "xfs" if FSTESTS_XFS
 	default "btrfs" if FSTESTS_BTRFS
 	default "ext4" if FSTESTS_EXT4
@@ -460,7 +460,7 @@ config FSTESTS_SPARSE_EXT4
 endchoice
 
 config FSTESTS_SPARSE_FSTYPE
-	string "Filesystem to use to create where the sparse files will live"
+	string
 	default "xfs" if FSTESTS_SPARSE_XFS
 	default "btrfs" if FSTESTS_SPARSE_BTRFS
 	default "ext4" if FSTESTS_SPARSE_EXT4
