@@ -83,7 +83,7 @@
 
 - name: Get nproc
   command: "{{ num_jobs }}"
-  tags: [ 'qemu', 'configure' ]
+  tags: [ 'qemu', 'configure', 'build' ]
   register: nproc
   when:
     - build_qemu_now|bool
