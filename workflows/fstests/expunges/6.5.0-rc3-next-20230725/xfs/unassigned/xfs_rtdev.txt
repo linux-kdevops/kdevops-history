@@ -46,3 +46,4 @@ xfs/015 # might be a test bug
 xfs/073
 xfs/118 # might be a test bug
 xfs/227 # might be a test bug
+xfs/442
