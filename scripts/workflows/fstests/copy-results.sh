@@ -38,7 +38,7 @@ fi
 TYPE="libvirt-qemu"
 if ! grep -q "libvirt_provider: True" $VARS; then
 	TYPE="cloud"
-	if ! grep -q terraform; then
+	if ! grep -q terraform $VARS; then
 		TYPE="custom"
 	fi
 fi
