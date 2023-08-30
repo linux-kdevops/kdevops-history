@@ -115,7 +115,7 @@ config VAGRANT_VCPUS_512
 endchoice
 
 config VAGRANT_VCPUS_COUNT
-	int "Number of guest vCPUs"
+	int
 	default 2 if VAGRANT_VCPUS_2
 	default 4 if VAGRANT_VCPUS_4
 	default 8 if VAGRANT_VCPUS_8
@@ -176,7 +176,7 @@ config VAGRANT_MEM_32G
 endchoice
 
 config VAGRANT_MEM_MB
-	int "How much RAM to use per guest in MB"
+	int
 	default 2048 if VAGRANT_MEM_2G
 	default 3072 if VAGRANT_MEM_3G
 	default 4096 if VAGRANT_MEM_4G
