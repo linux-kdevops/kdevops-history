@@ -86,7 +86,6 @@
 
 - name: Override user and group with inferred settings if feature is enabled
   set_fact:
-    user: "hplip"
     data_user: "{{ target_user }}"
     data_group: "{{ ((getent_on_group.values() | first).values() | first).keys() | first }}"
   when:
