@@ -48,5 +48,5 @@ Furthermore, your workflow can override this to something different if needed.
 
 Docs for each are split up:
 
-  * [gen_nodes for vagrant](docs/the-gen-nodes-ansible-role-vagrant.md)
-  * [gen_nodes for terraform](docs/the-gen-nodes-ansible-role-terraform.md)
+  * [gen_nodes for vagrant](the-gen-nodes-ansible-role-vagrant.md)
+  * [gen_nodes for terraform](the-gen-nodes-ansible-role-terraform.md)
