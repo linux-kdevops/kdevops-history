@@ -617,10 +617,11 @@ endchoice
 
 choice
 	prompt "Libvirt aio mode"
-	default LIBVIRT_AIO_MODE_NATIVE
+	default LIBVIRT_AIO_MODE_IO_URING
 
 config LIBVIRT_AIO_MODE_NATIVE
 	bool "aio=native"
+	depends on !KDEVOPS_LIBVIRT_PCIE_PASSTHROUGH
 	help
 	  Use the aio=native mode. For some older kernels it is known that
 	  native will cause corruption if used on ext4 or xfs filesystem if
@@ -635,6 +636,8 @@ config LIBVIRT_AIO_MODE_NATIVE
 	  therefore block QEMU threads which expect AIO behaviour on the guest.
 	  This is documented when on Openstack nova an aio mode option was
 	  requested to be available for different backends:
+
+	  If you want to use PCIe passthrough you cannot use aio=native.
 
 	  https://review.opendev.org/c/openstack/nova-specs/+/232514/7/specs/mitaka/approved/libvirt-aio-mode.rst
 
