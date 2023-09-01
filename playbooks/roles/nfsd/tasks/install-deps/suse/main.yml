@@ -5,4 +5,5 @@
   zypper:
     name:
       - nfs-utils
+      - lvm2
     state: present

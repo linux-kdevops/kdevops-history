@@ -427,6 +427,13 @@ oscheck_run_section()
 
 _check_dev_setup()
 {
+	mkdir -p $TEST_DIR
+
+	# Nothing to be done for NFS
+	if [ "$FSTYP" = "nfs" ]; then
+		return
+	fi
+
 	blkid -t TYPE=$FSTYP $TEST_DEV /dev/null
 	if [[ $? -ne 0 ]]; then
 		echo "FSTYP: $FSTYP Section: $INFER_SECTION with TEST_DEV: $TEST_DEV and MKFS_OPTIONS: $MKFS_OPTIONS TEST_DIR: $TEST_DIR"
@@ -435,9 +442,6 @@ _check_dev_setup()
 		$CMD
 	fi
 
-	if [[ ! -d  $TEST_DIR ]]; then
-		mkdir -p $TEST_DIR
-	fi
 	check_mount $TEST_DIR
 	if [ $? -ne 0 ]; then
 		OSCHECK_MOUNT_CMD="mount $TEST_OPTIONS $TEST_FS_MOUNT_OPTS $SELINUX_MOUNT_OPTIONS  $TEST_DEV $TEST_DIR"
@@ -445,34 +449,6 @@ _check_dev_setup()
 		echo $OSCHECK_MOUNT_CMD
 		$OSCHECK_MOUNT_CMD
 		umount $TEST_DIR
-	fi
-}
-
-# For NFS, just blow away and re-create the test and scratch directories
-_check_nfs_setup()
-{
-	if [[ ! -d  $TEST_DIR ]]; then
-		mkdir -p $TEST_DIR
-	fi
-
-	echo "mount -t nfs ${FSTESTS_NFS_SERVER_HOST_0}:${FSTESTS_NFS_SERVER_PATH_0} ${TEST_DIR}"
-	mount -t nfs ${FSTESTS_NFS_SERVER_HOST_0}:${FSTESTS_NFS_SERVER_PATH_0} ${TEST_DIR}
-	rm -rf $TEST_DIR/fstests/$FSTESTS_ANSIBLE_HOST
-	mkdir -p $TEST_DIR/fstests/$FSTESTS_ANSIBLE_HOST
-	umount $TEST_DIR
-
-	mount -t nfs ${FSTESTS_NFS_SERVER_HOST_1}:${FSTESTS_NFS_SERVER_PATH_1} ${TEST_DIR}
-	rm -rf $TEST_DIR/fstests/$FSTESTS_ANSIBLE_HOST
-	mkdir -p $TEST_DIR/fstests/$FSTESTS_ANSIBLE_HOST
-	umount $TEST_DIR
-}
-
-_check_dev_or_nfs_setup()
-{
-	if [ "$FSTYP" = "nfs" ]; then
-		_check_nfs_setup
-	else
-		_check_dev_setup
 	fi
 }
 
@@ -487,11 +463,11 @@ oscheck_test_dev_setup()
 		do
 			echo "checking section $i"
 			oscheck_lib_parse_config_section $i
-			_check_dev_or_nfs_setup
+			_check_dev_setup
 		done
 		return
 	fi
-	_check_dev_or_nfs_setup
+	_check_dev_setup
 }
 
 _cleanup() {

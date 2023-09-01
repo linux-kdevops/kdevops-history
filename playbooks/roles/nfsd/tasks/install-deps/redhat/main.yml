@@ -12,3 +12,4 @@
   vars:
     packages:
       - nfs-utils
+      - lvm2

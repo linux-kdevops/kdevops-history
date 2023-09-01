@@ -58,24 +58,31 @@
   args:
     chdir: "{{ pynfs_data }}"
 
-- name: Make pynfs directory hierarchy
-  tags: [ 'pynfs' ]
-  become: yes
-  become_flags: 'su - -c'
-  become_method: sudo
-  file:
-    path: /export/{{ item }}/pynfs/{{ ansible_host }}
-    state: directory
-    owner: root
-    group: root
-  with_items:
-    - 0
-    - 1
-
-- name: Get the hostname of the NFS server
-  tags: [ 'run_tests' ]
+- name: Get the hostname of the NFS server and base volname
+  tags: [ 'vars' ]
   set_fact:
     nfsd_hostname: "{{ kdevops_host_prefix }}-nfsd"
+    volname_base: "{{ ansible_host }}-pynfs"
+
+- name: Create an export for NFSv4.0 testing
+  tags: [ 'pynfs' ]
+  include_role:
+    name: nfsd_add_export
+  vars:
+    server_host: "{{ nfsd_hostname }}"
+    export_volname: "{{ volname_base }}-4.0"
+    export_fstype: "{{ nfsd_export_fstype }}"
+    export_size: 10g
+
+- name: Create an export for NFSv4.1 testing
+  tags: [ 'pynfs' ]
+  include_role:
+    name: nfsd_add_export
+  vars:
+    server_host: "{{ nfsd_hostname }}"
+    export_volname: "{{ volname_base }}-4.1"
+    export_fstype: "{{ nfsd_export_fstype }}"
+    export_size: 10g
 
 - name: Wait until nfsd grace period ends
   tags: [ 'run_tests' ]
@@ -91,7 +98,7 @@
   script: "{{ pynfs_workflow_dir }}/scripts/run_pynfs.sh"
   environment:
     PYNFS_DATA: "{{ pynfs_data }}"
-    NFSD_EXPORT: "{{ nfsd_hostname }}:{{ nfsd_export_path }}"
+    EXPORT_BASE: "{{ nfsd_hostname }}:{{ nfsd_export_path }}/{{ volname_base }}"
     ANSIBLE_HOST: "{{ ansible_host }}"
 
 - name: Get used target kernel version

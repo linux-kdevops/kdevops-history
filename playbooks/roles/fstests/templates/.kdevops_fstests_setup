@@ -61,10 +61,7 @@ export FSTESTS_RUN_LARGE_DISK_TESTS='{{ run_large_disk_tests }}'
 export FSTESTS_RUN_AUTO_GROUP_TESTS='{{ run_auto_group_tests }}'
 export FSTESTS_RUN_CUSTOM_GROUP_TESTS='{{ run_custom_group_tests }}'
 {% if fstests_nfs_enable -%}
-export FSTESTS_NFS_SERVER_HOST_0='{{ fstests_nfs_server_host0 }}'
-export FSTESTS_NFS_SERVER_PATH_0='{{ fstests_nfs_server_path0 }}'
-export FSTESTS_NFS_SERVER_HOST_1='{{ fstests_nfs_server_host1 }}'
-export FSTESTS_NFS_SERVER_PATH_1='{{ fstests_nfs_server_path1 }}'
+export FSTESTS_NFS_SERVER_HOST='{{ fstests_nfs_server_host }}'
 export FSTESTS_ANSIBLE_HOST='{{ ansible_host }}'
 {% endif %}
 

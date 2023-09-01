@@ -598,14 +598,43 @@
     - fstests_testdev_nvme_euis|bool
     - nvme_symlinks | length >= 7
 
+- name: Set the export volname prefix
+  tags: vars
+  set_fact:
+    volname_prefix: "{{ ansible_host }}-fstests"
+
+- name: Create NFS export for test vol
+  include_role:
+    name: nfsd_add_export
+  vars:
+    server_host: "{{ fstests_nfs_server_host }}"
+    export_volname: "{{ volname_prefix }}-t"
+    export_fstype: "{{ nfsd_export_fstype }}"
+    export_size: 20g
+  when:
+    - fstests_fstyp == "nfs"
+    - fstests_nfs_use_kdevops_nfsd|bool
+
+- name: Create NFS export for scratch vol
+  include_role:
+    name: nfsd_add_export
+  vars:
+    server_host: "{{ fstests_nfs_server_host }}"
+    export_volname: "{{ volname_prefix }}-s"
+    export_fstype: "{{ nfsd_export_fstype }}"
+    export_size: 20g
+  when:
+    - fstests_fstyp == "nfs"
+    - fstests_nfs_use_kdevops_nfsd|bool
+
 - name: Copy and force overwrite of the target filesystem fstests configuration for NFS
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
   vars:
-    fstests_nfs_test_dev: "{{ fstests_nfs_server_host0 }}:{{ fstests_nfs_server_path0 }}/fstests/{{ ansible_host }}"
-    fstests_nfs_scratch_devpool: "{{ fstests_nfs_server_host1 }}:{{ fstests_nfs_server_path1 }}/fstests/{{ ansible_host }}"
+    fstests_nfs_test_dev: "{{ fstests_nfs_server_host }}:{{ nfsd_export_path }}/{{ volname_prefix }}-t"
+    fstests_nfs_scratch_devpool: "{{ fstests_nfs_server_host }}:{{ nfsd_export_path }}/{{ volname_prefix }}-s"
   template:
     src: "{{ fstests_fstyp }}/{{ fstests_fstyp }}.config"
     dest: "{{ fstests_data_target }}/configs/{{ ansible_host }}.config"

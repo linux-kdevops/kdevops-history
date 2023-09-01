@@ -1,0 +1,48 @@
+- name: Create a new LVM partition
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  delegate_to: "{{ server_host }}"
+  community.general.lvol:
+    vg: exports
+    lv: "{{ export_volname }}"
+    size: "{{ export_size }}"
+
+- name: Format new volume for {{ export_fstype }}
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  delegate_to: "{{ server_host }}"
+  filesystem:
+    fstype: "{{ export_fstype }}"
+    dev: "/dev/exports/{{ export_volname }}"
+
+- name: Mount volume under the /export
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  delegate_to: "{{ server_host }}"
+  mount:
+    path: "/export/{{ export_volname }}"
+    src: "/dev/exports/{{ export_volname }}"
+    fstype: "{{ export_fstype }}"
+    state: mounted
+
+- name: Create an exports.d file for the new fs
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  delegate_to: "{{ server_host }}"
+  template:
+    src: exports.j2
+    dest: /etc/exports.d/{{ export_volname }}.exports
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Reload the exports table
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  delegate_to: "{{ server_host }}"
+  command: /usr/sbin/exportfs -ra

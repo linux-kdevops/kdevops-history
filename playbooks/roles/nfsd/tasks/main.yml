@@ -8,55 +8,6 @@
 - import_tasks: tasks/install-deps/redhat/main.yml
   when: ansible_facts['os_family']|lower == 'redhat'
 
-- name: Create and mount first exported filesystem
-  tags: [ 'nfsd' ]
-  include_role:
-    name: create_partition
-  vars:
-    disk_setup_device: "{{ nfsd_export_device_0 }}"
-    disk_setup_fstype: "{{ nfsd_export_fstype }}"
-    disk_setup_label : "{{ nfsd_export_label }}0"
-    disk_setup_fs_opts: "{{ nfsd_export_fs_opts }} -L {{ nfsd_export_label }}0"
-    disk_setup_path: "{{ nfsd_export_path }}/0"
-    disk_setup_user: "{{ data_user }}"
-    disk_setup_group: "{{ data_group }}"
-
-- name: Create and mount second exported filesystem
-  tags: [ 'nfsd' ]
-  include_role:
-    name: create_partition
-  vars:
-    disk_setup_device: "{{ nfsd_export_device_1 }}"
-    disk_setup_fstype: "{{ nfsd_export_fstype }}"
-    disk_setup_label : "{{ nfsd_export_label }}1"
-    disk_setup_fs_opts: "{{ nfsd_export_fs_opts }} -L {{ nfsd_export_label }}1 "
-    disk_setup_path: "{{ nfsd_export_path }}/1"
-    disk_setup_user: "{{ data_user }}"
-    disk_setup_group: "{{ data_group }}"
-
-- name: Make the exported filesystem a world-writeable sticky dir
-  tags: [ 'nfsd' ]
-  become: yes
-  become_flags: 'su - -c'
-  become_method: sudo
-  ansible.builtin.file:
-    path: "{{ nfsd_export_path }}"
-    owner: root
-    group: root
-    mode: 01777
-
-- name: Create /etc/exports with an export for /exports
-  tags: [ 'nfsd' ]
-  become: yes
-  become_flags: 'su - -c'
-  become_method: sudo
-  template:
-    src: exports.j2
-    dest: /etc/exports
-    owner: root
-    group: root
-    mode: 0644
-
 - name: Generate /etc/nfs.conf
   tags: [ 'nfsd' ]
   become: yes
@@ -68,6 +19,14 @@
     owner: root
     group: root
     mode: 0644
+
+- name: Create a new LVM VG
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  community.general.lvg:
+    vg: "exports"
+    pvs: "{{ nfsd_export_device_0 }},{{ nfsd_export_device_1 }}"
 
 - name: Start up nfsd
   tags: [ 'nfsd' ]

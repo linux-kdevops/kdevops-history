@@ -133,6 +133,7 @@ fstests_btrfs_section_simple: False
 fstests_btrfs_section_simple_zns: False
 
 fstests_nfs_enable: False
+fstests_nfs_use_kdevops_nfsd: False
 fstests_nfs_section_default: False
 fstests_nfs_section_v40: False
 fstests_nfs_section_v3: False

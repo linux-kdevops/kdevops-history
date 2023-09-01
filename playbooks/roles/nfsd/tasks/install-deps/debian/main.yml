@@ -6,6 +6,7 @@
     name:
       - nfs-common
       - nfs-kernel-server
+      - lvm2
     state: present
     update_cache: yes
   tags: [ 'pynfs', 'deps' ]

@@ -8,5 +8,5 @@ NFSD_EXTRA_ARGS += nfsd_threads=$(CONFIG_NFSD_THREADS)
 ANSIBLE_EXTRA_ARGS += $(NFSD_EXTRA_ARGS)
 
 nfsd:
-	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) --extra-vars=@./extra_vars.yaml \
 		-f 30 -i hosts -l nfsd playbooks/nfsd.yml

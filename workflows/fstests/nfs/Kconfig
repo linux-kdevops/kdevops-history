@@ -8,33 +8,15 @@ config FSTESTS_USE_KDEVOPS_NFSD
 	  (already-deployed and reachable) server, disable this and specify
 	  the location.
 
-config FSTESTS_NFS_SERVER_HOST_0
+config FSTESTS_NFS_SERVER_HOST
 	string "Test Server hostname"
 	default ""
 	depends on !FSTESTS_USE_KDEVOPS_NFSD
 	help
-	  The NFS server hostname or address that houses the "test" filesystem.
-
-config FSTESTS_NFS_SERVER_PATH_0
-	string "Exported path on test server"
-	default ""
-	depends on !FSTESTS_USE_KDEVOPS_NFSD
-	help
-	  The NFS server path to use for the "test" filesystem.
-
-config FSTESTS_NFS_SERVER_HOST_1
-	string "Scratch server hostname"
-	default ""
-	depends on !FSTESTS_USE_KDEVOPS_NFSD
-	help
-	  The NFS server hostname or address that houses the "scratch" filesystem.
-
-config FSTESTS_NFS_SERVER_PATH_1
-	string "Exported path on scratch server"
-	default ""
-	depends on !FSTESTS_USE_KDEVOPS_NFSD
-	help
-	  The NFS server path to use for the "scratch" filesystem.
+	  The NFS server hostname or address to test against. Note that
+	  the clients will expect that an appropriate hierarchy is already
+	  created for them to mount and use.
+	  FIXME: document how to make that.
 
 # Distributions actively maintaining btrfs support should select this and then
 # be careful to select any of the other HAVE_DISTRO_NFS_* below so that

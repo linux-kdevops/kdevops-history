@@ -7,7 +7,7 @@ config NFSD_EXPORT_DEVICE_0
 	default ""
 	help
 	  To set up nfsd for testing, we give it filesystems to export. This
-	  block device houses the first filesystem.
+	  block device is used as a PV for LVM, and volumes are provisioned from it.
 
 config NFSD_EXPORT_DEVICE_1
 	string "Second device to be exported"
@@ -16,7 +16,7 @@ config NFSD_EXPORT_DEVICE_1
 	default "/dev/disk/by-id/ide-kdevops3" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_IDE
 	help
 	  To set up nfsd for testing, we give it filesystems to export. This
-	  block device houses the second filesystem.
+	  block device is used as a PV for LVM, and volumes are provisioned from it.
 
 choice
 	prompt "Type of filesystem to export"
