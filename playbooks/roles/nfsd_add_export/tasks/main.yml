@@ -22,6 +22,7 @@
   become_flags: 'su - -c'
   become_method: sudo
   delegate_to: "{{ server_host }}"
+  throttle: 1  # running this in parallel can clobber fstab changes
   mount:
     path: "/export/{{ export_volname }}"
     src: "/dev/exports/{{ export_volname }}"
