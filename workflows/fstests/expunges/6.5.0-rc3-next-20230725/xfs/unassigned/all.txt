@@ -22,6 +22,7 @@ generic/730 # lazy baseline - failure found in at least two sections
 generic/731 # lazy baseline - failure found in at least two sections
 shared/298 # lazy baseline - failure found in at least two sections
 xfs/009 # lazy baseline - failure found in at least two sections
+xfs/059 # lazy baseline - failure found in at least two sections
 xfs/060 # lazy baseline - failure found in at least two sections
 xfs/075 # lazy baseline - failure found in at least two sections
 xfs/157 # needs investigation - lazy baseline - failure found in at least two sections
