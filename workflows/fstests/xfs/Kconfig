@@ -203,6 +203,7 @@ config FSTESTS_XFS_SECTION_NOCRC_4K
 config FSTESTS_XFS_SECTION_NOCRC_8K
 	bool "Enable testing section: xfs_nocrc_8k"
 	default y
+	depends on BROKEN
 	depends on FSTESTS_XFS_ENABLE_LBS_REAL
 	help
 	  This will create a host to test the baseline of fstests using the
@@ -217,6 +218,7 @@ config FSTESTS_XFS_SECTION_NOCRC_8K
 config FSTESTS_XFS_SECTION_NOCRC_8K_4KS
 	bool "Enable testing section: xfs_nocrc_8k_4ks"
 	default y
+	depends on BROKEN
 	depends on FSTESTS_XFS_ENABLE_LBS_4KS
 	help
 	  This will create a host to test the baseline of fstests using the
@@ -388,6 +390,7 @@ config FSTESTS_XFS_SECTION_REFLINK_4K
 
 config FSTESTS_XFS_SECTION_REFLINK_8K
 	bool "Enable testing section: xfs_reflink_8k"
+	depends on BROKEN
 	depends on FSTESTS_XFS_ENABLE_LBS_REAL
 	default y
 	help
@@ -402,7 +405,7 @@ config FSTESTS_XFS_SECTION_REFLINK_8K
 config FSTESTS_XFS_SECTION_REFLINK_8K_4KS
 	bool "Enable testing section: xfs_reflink_8k_4ks"
 	default y
-	depends on FSTESTS_XFS_ENABLE_LBS_4KS
+	depends on FSTESTS_XFS_ENABLE_LBS_8KS
 	help
 	  This will create a host to test the baseline of fstests using the
 	  following configuration which enables reflink using 8192 bytes
