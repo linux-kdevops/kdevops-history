@@ -123,7 +123,7 @@ source "workflows/linux/Kconfig.stable"
 source "workflows/linux/Kconfig.dev"
 
 config BOOTLINUX_TREE_NAME
-	string "Linux tree name"
+	string
 	default "linux" if BOOTLINUX_TREE_LINUS
 	default "linux-stable" if BOOTLINUX_TREE_STABLE
 	default "linux-next" if BOOTLINUX_TREE_NEXT
@@ -131,7 +131,7 @@ config BOOTLINUX_TREE_NAME
 	default "mcgrof-next" if BOOTLINUX_TREE_MCGROF_NEXT
 
 config BOOTLINUX_TREE
-	string "Linux git tree URL"
+	string
 	default "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git" if BOOTLINUX_TREE_LINUS && !USE_LOCAL_LINUX_MIRROR
 	default "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git" if BOOTLINUX_TREE_STABLE && !USE_LOCAL_LINUX_MIRROR
 	default "https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git" if BOOTLINUX_TREE_NEXT && !USE_LOCAL_LINUX_MIRROR
@@ -144,9 +144,6 @@ config BOOTLINUX_TREE
 	default "/mirror/linux-next.git" if BOOTLINUX_TREE_NEXT && USE_VAGRANT_LIBVIRT_MIRROR && BOOTLINUX_9P
 	default "/mirror/mcgrof-next.git" if BOOTLINUX_TREE_MCGROF_NEXT && USE_VAGRANT_LIBVIRT_MIRROR && BOOTLINUX_9P
 	default "https://github.com/kdave/btrfs-devel.git" if BOOTLINUX_TREE_BTRFS_DEVEL
-
-	help
-	  The Linux git tree to use.
 
 config BOOTLINUX_TEST_MESSAGE_ID
 	bool "Test mailing list message ID"
@@ -177,7 +174,7 @@ config BOOTLINUX_TEST_MESSAGE_ID_INSTALL_B4
 	  When enabled, b4 will be installed using pip
 
 config BOOTLINUX_TREE_TAG
-	string "Git tree branch / tag / sha1sum to use"
+	string
 	default "v4.19" if BOOTLINUX_TREE_LINUS
 	default "v4.19.133" if BOOTLINUX_STABLE_V419
 	default "v5.4.210" if BOOTLINUX_STABLE_V54
@@ -191,8 +188,6 @@ config BOOTLINUX_TREE_TAG
 	default "for-next" if BOOTLINUX_TREE_BTRFS_DEVEL
 	default "large-block-20230525" if BOOTLINUX_MCGROF_NEXT_LBS
 	default "large-block-nobdev-20230720" if BOOTLINUX_MCGROF_NEXT_LBS_NOBDEV
-	help
-	  The git branch / tag or sha1sum to use.
 
 config BOOTLINUX_TREE_LOCALVERSION
 	string "Linux local version to use"
