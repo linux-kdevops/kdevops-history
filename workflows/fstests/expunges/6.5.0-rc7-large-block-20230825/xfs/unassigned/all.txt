@@ -6,7 +6,7 @@ generic/108 # lazy baseline - failure found in at least two sections
 generic/175 # seems like a test bug - lazy baseline - failure found in at least two sections
 generic/204 # lazy baseline - failure found in at least two sections
 generic/223 # lazy baseline - failure found in at least two sections
-generic/251 # lazy baseline - failure found in at least two sections
+generic/251 # crashes on xfs_reflink_16k_4ks https://gist.github.com/mcgrof/13e3ef6309ad7c8e997e0e49a4cc80f0 lazy baseline - failure found in at least two sections
 generic/297 # seems like a test bug - lazy baseline - failure found in at least two sections
 generic/298 # seems like a test bug - lazy baseline - failure found in at least two sections
 generic/361 # lazy baseline - failure found in at least two sections
