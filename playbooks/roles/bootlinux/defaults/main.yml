@@ -1,7 +1,7 @@
 # SPDX-License-Identifier copyleft-next-0.3.1
 ---
 kdevops_bootlinux: False
-infer_uid_and_group: True
+infer_uid_and_group: False
 
 data_path: "/data"
 data_user: "vagrant"
