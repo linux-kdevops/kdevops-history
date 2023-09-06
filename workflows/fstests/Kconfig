@@ -754,4 +754,10 @@ config FSTESTS_RUN_LARGE_DISK_TESTS
 	  to run. The "large disk" requirement is test dependent, but
 	  typically, it means a disk with capacity of at several 10G.
 
+config FSTESTS_SOAK_DURATION
+	int "Custom Soak duration to be used"
+	default 0
+	help
+	  Custom Soak duration to be used during test execution.
+
 endif # KDEVOPS_WORKFLOW_ENABLE_FSTESTS
