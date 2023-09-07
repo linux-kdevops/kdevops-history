@@ -1,0 +1,37 @@
+if BOOTLINUX_TREE_JLAYTON_LINUX
+
+choice
+	prompt "jlayton-linux branch to use"
+	default BOOTLINUX_JLAYTON_LINUX_KDEVOPS
+
+config BOOTLINUX_JLAYTON_LINUX_KDEVOPS
+	bool "kdevops"
+	help
+	  Use the kdevops branch.
+
+config BOOTLINUX_JLAYTON_LINUX_IVERSION
+	bool "iversion-next"
+	help
+	  Use the iversion-next branch.
+
+config BOOTLINUX_JLAYTON_LINUX_CUSTOM
+	bool "Custom branch name"
+	help
+	  Use a custom branch name.
+
+endchoice
+
+config BOOTLINUX_JLAYTON_LINUX_CUSTOM_NAME
+	string "Custom branch name"
+	default "kdevops"
+	depends on BOOTLINUX_JLAYTON_LINUX_CUSTOM
+	help
+	  Custom branch name to use for Jeff Layton's linux tree.
+
+config BOOTLINUX_JLAYTON_LINUX_TAG
+	string
+	default BOOTLINUX_JLAYTON_LINUX_CUSTOM_NAME if BOOTLINUX_JLAYTON_LINUX_CUSTOM
+	default "kdevops" if BOOTLINUX_JLAYTON_LINUX_KDEVOPS
+	default "iversion-next" if BOOTLINUX_JLAYTON_LINUX_IVERSION
+
+endif # BOOTLINUX_TREE_JLAYTON_LINUX
