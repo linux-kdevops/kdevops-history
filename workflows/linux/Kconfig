@@ -102,7 +102,6 @@ endmenu
 
 endif # BOOTLINUX_9P
 
-
 choice
 	prompt "Type of development version of Linux to use"
 	default BOOTLINUX_DEV
@@ -117,10 +116,36 @@ config BOOTLINUX_DEV
 	help
 	  This will let you choose from development Linux trees only.
 
+config BOOTLINUX_CUSTOM
+	bool "Custom Linux releases"
+	help
+	  This will let you enter in your own git tree URL / branch / ID.
+
 endchoice
 
 source "workflows/linux/Kconfig.stable"
 source "workflows/linux/Kconfig.dev"
+
+if BOOTLINUX_CUSTOM
+
+config BOOTLINUX_CUSTOM_NAME
+	string "Custom Linux kernel tree name"
+	default "torvalds-linux"
+	help
+	  Short name to describe your custom tree. This will be used for the
+	  the path used to place linux on the nodes on /data/$BOOTLINUX_TREE_NAME.
+
+config BOOTLINUX_CUSTOM_URL
+	string "Custom git tree URL"
+	default "git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git"
+
+config BOOTLINUX_CUSTOM_TAG
+	string "Custom Linux kernel tag or branch to use"
+	default "master"
+	help
+	  The git ID or branch name to check out to compile linux.
+
+endif # BOOTLINUX_CUSTOM
 
 config BOOTLINUX_TREE_NAME
 	string
@@ -129,6 +154,7 @@ config BOOTLINUX_TREE_NAME
 	default "linux-next" if BOOTLINUX_TREE_NEXT
 	default "btrfs-devel" if BOOTLINUX_TREE_BTRFS_DEVEL
 	default "mcgrof-next" if BOOTLINUX_TREE_MCGROF_NEXT
+	default BOOTLINUX_CUSTOM_NAME if BOOTLINUX_CUSTOM
 
 config BOOTLINUX_TREE
 	string
@@ -144,6 +170,7 @@ config BOOTLINUX_TREE
 	default "/mirror/linux-next.git" if BOOTLINUX_TREE_NEXT && USE_VAGRANT_LIBVIRT_MIRROR && BOOTLINUX_9P
 	default "/mirror/mcgrof-next.git" if BOOTLINUX_TREE_MCGROF_NEXT && USE_VAGRANT_LIBVIRT_MIRROR && BOOTLINUX_9P
 	default "https://github.com/kdave/btrfs-devel.git" if BOOTLINUX_TREE_BTRFS_DEVEL
+	default BOOTLINUX_CUSTOM_URL if BOOTLINUX_CUSTOM
 
 config BOOTLINUX_TEST_MESSAGE_ID
 	bool "Test mailing list message ID"
@@ -188,6 +215,7 @@ config BOOTLINUX_TREE_TAG
 	default "for-next" if BOOTLINUX_TREE_BTRFS_DEVEL
 	default "large-block-20230825" if BOOTLINUX_MCGROF_NEXT_LBS
 	default "large-block-nobdev-20230825" if BOOTLINUX_MCGROF_NEXT_LBS_NOBDEV
+	default BOOTLINUX_CUSTOM_TAG if BOOTLINUX_CUSTOM
 
 config BOOTLINUX_TREE_LOCALVERSION
 	string "Linux local version to use"
