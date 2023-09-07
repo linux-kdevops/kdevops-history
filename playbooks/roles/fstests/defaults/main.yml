@@ -12,6 +12,8 @@ oscheck_extra_args: ""
 limit_tests: ""
 dynamic_limit_tests:
 
+fstests_start_after: False
+fstests_start_after_test: ""
 fstests_initial_baseline: False
 fstests_initial_baseline_args: ""
 

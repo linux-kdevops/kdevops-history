@@ -169,6 +169,23 @@ just run:
 ./scripts/workflows/fstests/lazy-baseline.sh
 ```
 
+# Initial baseline help
+
+When you work on a new baseline often you are running into crashes and want
+to pick up testing after the last test you know that crashed. To help with this
+you can use:
+
+```bash
+make fstests-baseline START_AFTER=generic/451
+```
+
+This will skip testing until *after* generic/451, and so it assumes you are
+not using  random order.
+
+This makes use of a patch merged on kdevops's version of fstests which is
+not yet merged on upstream fstests, which adds support for the
+[fstests check --start-after](https://lore.kernel.org/all/20230907221030.3037715-1-mcgrof@kernel.org/).
+
 # Seeing kdevops community fstests results
 
 See [viewing kdevops archived results](docs/viewing-fstests-results.md) to see

@@ -181,6 +181,11 @@ ifneq (,$(INITIAL_BASELINE))
 DYNAMIC_RUNTIME_VARS += , "fstests_initial_baseline": True
 endif
 
+ifneq (,$(START_AFTER))
+DYNAMIC_RUNTIME_VARS += , "fstests_start_after": True
+DYNAMIC_RUNTIME_VARS += , "fstests_start_after_test": "$(START_AFTER)"
+endif
+
 fstests:
 	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -l baseline,dev \
 		-f 30 -i hosts playbooks/fstests.yml --skip-tags run_tests,copy_results $(LIMIT_HOSTS)

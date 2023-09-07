@@ -815,6 +815,22 @@
     - fstests_initial_baseline|bool
   tags: [ 'oscheck', 'fstests', 'run_tests', 'checktime' ]
 
+- name: Expand tests to skip for initial baseline
+  set_fact:
+    fstests_initial_baseline_args: "--start-after {{ fstests_start_after_test }}"
+  when:
+    - fstests_start_after|bool
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'checktime' ]
+
+- name: Verify use of START_AFTER
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
+  ansible.builtin.fail:
+    msg:
+      - "You used START_AFTER={{ fstests_start_after_test }} and it must not be empty"
+  when:
+    - fstests_start_after|bool
+    - fstests_start_after_test == ""
+
 - name: Clear out old results directory
   become: yes
   become_flags: 'su - -c'
