@@ -1198,7 +1198,7 @@ config VAGRANT_BOX
 	default "debian/bullseye64" if VAGRANT_DEBIAN_BULLSEYE64
 	default "debian/buster64" if VAGRANT_DEBIAN_BUSTER64
 	default "opensuse/Tumbleweed.x86_64" if VAGRANT_OPENSUSE_X86_64_TW
-	default "fedora/38-cloud-base" if VAGRANT_FEDORA
+	default VAGRANT_FEDORA_BOX_STRING if VAGRANT_FEDORA
 	default "generic/rhel8" if VAGRANT_REDHAT_GENERIC_RHEL8_X86_64
 	default "generic/rhel9" if VAGRANT_REDHAT_GENERIC_RHEL9_X86_64
 	default "opensuse/Leap-15.3.x86_64" if VAGRANT_OPENSUSE_X86_64_LEAP_15_3

@@ -1,6 +1,12 @@
 # SPDX-License-Identifier: copyleft-next-0.3.1
 if VAGRANT_FEDORA
 
+config VAGRANT_FEDORA_BOX_STRING
+	string "Vagrant box string"
+	default "fedora/38-cloud-base"
+	help
+	  This is the box string that vagrant should use.
+
 config VAGRANT_FEDORA_OLD_RELEASE
 	bool "Is this an old release (pre-Fedora 32)?"
 	default n
