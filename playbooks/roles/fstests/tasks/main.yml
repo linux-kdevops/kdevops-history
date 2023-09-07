@@ -469,6 +469,7 @@
   when:
     - fstests_testdev_nvme_partition_euis|bool
     - nvme_symlinks | length >= 1
+    - nvme_info.partitions | length < 13
 
 - name: Create 12 logical partitions on sigle NVMe drive
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
@@ -489,6 +490,7 @@
   when:
     - fstests_testdev_nvme_partition_euis|bool
     - nvme_symlinks | length >= 1
+    - nvme_info.partitions | length < 13
 
 - name: Try to see if new logical NVMe partition exist on /dev/disk/by-id/nvme-*.id.part*
   become: yes
