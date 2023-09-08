@@ -12,6 +12,25 @@
     - vagrant_rhel_org_id
     - vagrant_rhel_activation_key
 
+- name: Check whether custom repofile exists
+  stat:
+    path: "{{ devconfig_custom_yum_repofile }}"
+  register: custom_repofile
+  delegate_to: localhost
+
+- name: Add custom yum repo
+  become: yes
+  become_method: sudo
+  copy:
+    src: "{{ devconfig_custom_yum_repofile }}"
+    dest: "/etc/yum.repos.d/{{ devconfig_custom_yum_repofile | basename }}"
+    owner: root
+    group: root
+    mode: 0644
+  when:
+    - devconfig_custom_yum_repofile
+    - custom_repofile.stat.exists
+
 - name: Refresh cache and upgrade all present packages
   become: yes
   become_method: sudo

@@ -27,6 +27,14 @@ config KDEVOPS_TRY_REFRESH_REPOS
 	  Disabling this is a good idea if all you want to do is test raw
 	  bring up of kdevops.
 
+config KDEVOPS_CUSTOM_YUM_REPOFILE
+	string "Custom yum repo file"
+	depends on DISTRO_FEDORA
+	default ""
+	help
+	  Add a custom yum repo file to /etc/yum.repos.d before updating? Leave blank to
+	  disable this feature or set to repofile path on local machine.
+
 config KDEVOPS_TRY_UPDATE_SYSTEMS
 	bool "Try to update target hosts on bringup?"
 	depends on KDEVOPS_TRY_REFRESH_REPOS
