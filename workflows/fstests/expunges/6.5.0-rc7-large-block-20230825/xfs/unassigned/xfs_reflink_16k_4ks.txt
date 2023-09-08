@@ -5,3 +5,5 @@ generic/450 # https://gist.github.com/mcgrof/327111e26cc876ae24915c8498b546e4
 generic/451 # crashes on real 16k probably will here too https://gist.github.com/mcgrof/b2ab741f7e8b78306fb65886787d0b37
 generic/476 # https://gist.github.com/mcgrof/c5be642c03901e84a0117dd336345004
 xfs/041 # seems like a test bug with xfstests/src/fill2fs https://gist.github.com/mcgrof/ed48ac0ee2ccfe6a0e91b68026fef6a0
+xfs/080 
+xfs/165
