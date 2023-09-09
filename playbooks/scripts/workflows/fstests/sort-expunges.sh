@@ -25,6 +25,9 @@ FILES=$(find $DIR -name \*.txt)
 
 for i in $FILES; do
 	TMP=${i}.tmp
+	if [ -L $i ]; then
+		continue
+	fi
 	cat $i | sort | uniq > $TMP
 	mv $TMP $i
 done
