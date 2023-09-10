@@ -19,4 +19,5 @@ xfs/041 # seems like a test bug with xfstests/src/fill2fs https://gist.github.co
 xfs/073
 xfs/080
 xfs/165
+xfs/297 # failure rate about ~ 1/10 https://gist.github.com/mcgrof/531e1f9e03d63e6c032630f5ef529631
 xfs/442 # crash https://gist.github.com/mcgrof/763139a352b6044327ca491e4c6b27fd
