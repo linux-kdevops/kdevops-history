@@ -188,7 +188,7 @@ not yet merged on upstream fstests, which adds support for the
 
 # Seeing kdevops community fstests results
 
-See [viewing kdevops archived results](docs/viewing-fstests-results.md) to see
+See [viewing kdevops archived results](viewing-fstests-results.md) to see
 how you can look at existing results file inside kdevops.
 
 TODO:
