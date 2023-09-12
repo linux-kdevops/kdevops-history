@@ -4,6 +4,7 @@
   become_method: sudo
   zypper:
     name:
-      - nfs-utils
       - lvm2
+      - nfs-utils
+      - policycoreutils
     state: present

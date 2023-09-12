@@ -9,7 +9,6 @@
   when: ansible_facts['os_family']|lower == 'redhat'
 
 - name: Generate /etc/nfs.conf
-  tags: [ 'nfsd' ]
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -28,8 +27,64 @@
     vg: "exports"
     pvs: "{{ nfsd_export_device_0 }},{{ nfsd_export_device_1 }}"
 
+- name: Create {{ nfsd_export_path }}
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.file:
+    path: "{{ nfsd_export_path }}"
+    state: directory
+    mode: 0755
+
+- name: Test whether SELinux is enabled
+  command: /usr/sbin/selinuxenabled
+  ignore_errors: yes
+  register: selinux_status
+
+- name: Copy SELinux type enforcement file to server
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  copy:
+    src: "{{ playbook_dir }}/roles/nfsd/templates/nfsd_policy.te"
+    dest: "/root/nfsd_policy.te"
+    owner: root
+    group: root
+    mode: 0644
+  when: selinux_status.rc == 0
+
+- name: Convert SELinux type enforcement file to a policy module
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: /usr/bin/checkmodule -M -m -o /root/nfsd_policy.mod /root/nfsd_policy.te
+  when: selinux_status.rc == 0
+
+- name: Compile SELinux policy module into policy package
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: /usr/bin/semodule_package -o /root/nfsd_policy.pp -m /root/nfsd_policy.mod
+  when: selinux_status.rc == 0
+
+- name: Install SELinux policy module
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: /usr/sbin/semodule -i /root/nfsd_policy.pp
+  when: selinux_status.rc == 0
+
+- name: Allow nfsd full access to {{ nfsd_export_path }}
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  community.general.sefcontext:
+    target: "{{ nfsd_export_path }}(/.*)?"
+    setype: public_content_rw_t
+    state: present
+  when: selinux_status.rc == 0
+
 - name: Start up nfsd
-  tags: [ 'nfsd' ]
   become: yes
   become_flags: 'su - -c'
   become_method: sudo

@@ -29,6 +29,19 @@
     fstype: "{{ export_fstype }}"
     state: mounted
 
+- name: Test whether SELinux is enabled
+  command: /usr/sbin/selinuxenabled
+  ignore_errors: yes
+  register: selinux_status
+  delegate_to: "{{ server_host }}"
+
+- name: Fix SELinux file context under new mount
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  command: /usr/sbin/restorecon -R "{{ nfsd_export_path }}/{{ export_volname }}"
+  when: selinux_status.rc == 0
+
 - name: Create an exports.d file for the new fs
   become: yes
   become_flags: 'su - -c'

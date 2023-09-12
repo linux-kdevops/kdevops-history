@@ -11,5 +11,6 @@
   until: result.rc == 0
   vars:
     packages:
-      - nfs-utils
       - lvm2
+      - nfs-utils
+      - policycoreutils

@@ -4,9 +4,10 @@
   become_method: sudo
   apt:
     name:
+      - lvm2
       - nfs-common
       - nfs-kernel-server
-      - lvm2
+      - policycoreutils
     state: present
     update_cache: yes
   tags: [ 'pynfs', 'deps' ]
