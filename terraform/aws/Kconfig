@@ -164,22 +164,11 @@ config TERRAFORM_AWS_NS
 
 	  https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-images.html
 
-choice
-	prompt "AWS virt type"
-	default TERRAFORM_AWS_VIRT_TYPE_HVM
-
-config TERRAFORM_AWS_VIRT_TYPE_HVM
-	bool "hvm"
-	help
-	  This option will set aws virt type to hvm.
-
-endchoice
-
 config TERRAFORM_AWS_VIRT_TYPE
 	string "AWS virt type"
-	default "hvm" if TERRAFORM_AWS_VIRT_TYPE_HVM
+	default "hvm"
 	help
-	  This option will set aws virt type. It must match your your
+	  This option will set AWS virt type. It must match your your
 	  preferred image filter used above for name search.
 
 choice
