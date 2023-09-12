@@ -1,4 +1,19 @@
 ---
+- name: Install epel-release if we're not on Fedora
+  become: yes
+  become_method: sudo
+  yum:
+    update_cache: yes
+    name: "{{ packages }}"
+  retries: 3
+  delay: 5
+  register: result
+  until: result.rc == 0
+  vars:
+    packages:
+      - epel-release
+  when: ansible_distribution != "Fedora"
+
 - name: Install build dependencies for fstests
   become: yes
   become_method: sudo
@@ -25,7 +40,6 @@
       - xfsdump
       - xfsprogs-xfs_scrub
       - e2fsprogs
-      - btrfs-progs
       - gawk
       - util-linux
       - uuid
@@ -58,3 +72,18 @@
       - lzo-devel
       - parted
       - nfs-utils
+
+- name: Install btrfs-progs
+  become: yes
+  become_method: sudo
+  yum:
+    update_cache: yes
+    name: "{{ packages }}"
+  retries: 3
+  delay: 5
+  register: result
+  until: result.rc == 0
+  vars:
+    packages:
+      - btrfs-progs
+  when: ansible_distribution == 'Fedora'

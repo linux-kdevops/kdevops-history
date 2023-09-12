@@ -9,4 +9,18 @@
     packages:
       - xfsprogs
       - e2fsprogs
+
+- name: Install btrfs-progs
+  become: yes
+  become_method: sudo
+  yum:
+    update_cache: yes
+    name: "{{ packages }}"
+  retries: 3
+  delay: 5
+  register: result
+  until: result.rc == 0
+  vars:
+    packages:
       - btrfs-progs
+  when: ansible_distribution == 'Fedora'

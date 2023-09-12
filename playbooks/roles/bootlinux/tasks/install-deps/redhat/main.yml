@@ -1,4 +1,19 @@
 ---
+- name: Install epel-release if we're not on Fedora
+  become: yes
+  become_method: sudo
+  yum:
+    update_cache: yes
+    name: "{{ packages }}"
+  retries: 3
+  delay: 5
+  register: result
+  until: result.rc == 0
+  vars:
+    packages:
+      - epel-release
+  when: ansible_distribution != "Fedora"
+
 - name: Install packages we care about
   become: yes
   become_method: sudo
@@ -34,7 +49,6 @@
       - ncurses-devel
       - xfsprogs
       - e2fsprogs
-      - btrfs-progs
       - elfutils-libelf-devel
       - ntfs-3g
       - mdadm
@@ -46,6 +60,21 @@
       - openssl-devel
       - dwarves
       - zstd
+
+- name: Install btrfs-progs
+  become: yes
+  become_method: sudo
+  yum:
+    update_cache: yes
+    name: "{{ packages }}"
+  retries: 3
+  delay: 5
+  register: result
+  until: result.rc == 0
+  vars:
+    packages:
+      - btrfs-progs
+  when: ansible_distribution == 'Fedora'
 
 - name: Remove packages that mess with initramfs
   become: yes

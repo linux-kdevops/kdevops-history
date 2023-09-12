@@ -21,6 +21,21 @@
   when:
     - devconfig_try_upgrade|bool
 
+- name: Install epel-release if we're not on Fedora
+  become: yes
+  become_method: sudo
+  yum:
+    update_cache: yes
+    name: "{{ packages }}"
+  retries: 3
+  delay: 5
+  register: result
+  until: result.rc == 0
+  vars:
+    packages:
+      - epel-release
+  when: ansible_distribution != "Fedora"
+
 - name: Build install package list
   set_fact:
     packages:
@@ -29,7 +44,6 @@
       - git-core
       - e2fsprogs
       - xfsprogs
-      - btrfs-progs
       - xfsdump
       - lvm2
       - gcc
@@ -48,6 +62,21 @@
       - ncurses-devel
       - openssh-server
       - net-snmp
+
+- name: Install btrfs-progs
+  become: yes
+  become_method: sudo
+  yum:
+    update_cache: yes
+    name: "{{ packages }}"
+  retries: 3
+  delay: 5
+  register: result
+  until: result.rc == 0
+  vars:
+    packages:
+      - btrfs-progs
+  when: ansible_distribution == 'Fedora'
 
 - name: Add GNU screen to install package list
   set_fact:
