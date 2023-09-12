@@ -77,7 +77,7 @@ choice
 	default TERRAFORM_AWS_AMI_AMAZON_ARM64 if TARGET_ARCH_ARM64
 
 config TERRAFORM_AWS_AMI_DEBIAN
-	bool "Debian - 379101102735"
+	bool "Debian"
 	help
 	  This option will set AWS AMI owner to Debian.
 
@@ -119,9 +119,71 @@ config TERRAFORM_AWS_SLE15_SP4_ARM64
 
 endchoice
 
+if TERRAFORM_AWS_AMI_DEBIAN
+
+choice
+	prompt "AWS debian release to use"
+	default TERRAFORM_AWS_NS_DEBIAN_12_X86_64 if TARGET_ARCH_X86_64
+	default TERRAFORM_AWS_NS_DEBIAN_12_ARM64 if TARGET_ARCH_ARM64
+
+config TERRAFORM_AWS_NS_DEBIAN_12_X86_64
+	bool "Debian 12 - Bookworm x86_64"
+	depends on TARGET_ARCH_X86_64
+	help
+	  This option will set aws name search to debian-12-hvm-amd64-*
+	  Note, to expand on this get the AMI owner ID and then you can
+	  see what is available with something like this:
+
+	  aws ec2 describe-images --owners 136693071363  --query 'Images[*].[Description]'
+
+	  In theory we should be able to just automate Kconfig language then
+	  for AWS for a distro using 'make dynconfig' on kdevops.
+
+config TERRAFORM_AWS_NS_DEBIAN_12_ARM64
+	bool "Debian 12 - Bookworm ARM64"
+	depends on TARGET_ARCH_ARM64
+	help
+	  This option will set aws name search to debian-12-hvm-arm64-*
+
+config TERRAFORM_AWS_NS_DEBIAN_11_X86_64
+	bool "Debian 11 - Bullseye x86_64"
+	depends on TARGET_ARCH_X86_64
+	help
+	  This option will set aws name search to debian-11-hvm-amd64-*
+
+config TERRAFORM_AWS_NS_DEBIAN_11_ARM64
+	bool "Debian 11 - Bullseye arm64"
+	depends on TARGET_ARCH_ARM64
+	help
+	  This option will set aws name search to debian-11-hvm-arm64-*
+
+config TERRAFORM_AWS_NS_DEBIAN_STRETCH_X86_64
+	bool "debian-stretch-hvm-x86_64-"
+	depends on TARGET_ARCH_X86_64
+	help
+	  This option will set aws name search to debian-stretch-hvm-x86_64-*
+	  This is no longer supported by the debian community.
+
+config TERRAFORM_AWS_NS_DEBIAN_STRETCH_ARM64
+	bool "debian-stretch-hvm-arm64-"
+	depends on TARGET_ARCH_ARM64
+	help
+	  This option will set aws name search to debian-stretch-hvm-arm64-*
+	  This is no longer supported by the debian community.
+
+endchoice
+
+config TERRAFORM_AWS_AMI_DEBIAN_OWNER
+	string
+	default "136693071363" if TERRAFORM_AWS_NS_DEBIAN_12_X86_64 || TERRAFORM_AWS_NS_DEBIAN_12_ARM64
+	default "136693071363" if TERRAFORM_AWS_NS_DEBIAN_11_X86_64 || TERRAFORM_AWS_NS_DEBIAN_11_ARM64
+	default "379101102735" if TERRAFORM_AWS_NS_DEBIAN_STRETCH_X86_64 || TERRAFORM_AWS_NS_DEBIAN_STRETCH_ARM64
+
+endif
+
 config TERRAFORM_AWS_AMI_OWNER
 	string
-	default "379101102735" if TERRAFORM_AWS_AMI_DEBIAN
+	default TERRAFORM_AWS_AMI_DEBIAN_OWNER if TERRAFORM_AWS_AMI_DEBIAN
 	default "137112412989" if TERRAFORM_AWS_AMI_AMAZON_X86_64 || TERRAFORM_AWS_AMI_AMAZON_ARM64
 	default "309956199498" if TERRAFORM_AWS_RHEL9_X86_64 || TERRAFORM_AWS_RHEL9_ARM64
 	default "013907871322" if TERRAFORM_AWS_SLE15_SP4_X86_64 || TERRAFORM_AWS_SLE15_SP4_ARM64
@@ -130,8 +192,12 @@ config TERRAFORM_AWS_AMI_OWNER
 
 config TERRAFORM_AWS_NS
 	string
-	default "debian-stretch-hvm-x86_64-*" if TARGET_ARCH_X86_64 && TERRAFORM_AWS_AMI_DEBIAN
-	default "debian-stretch-hvm-arm64-*" if TARGET_ARCH_ARM64 && TERRAFORM_AWS_AMI_DEBIAN
+	default "debian-12-amd64-*" if TERRAFORM_AWS_NS_DEBIAN_12_X86_64
+	default "debian-12-arm64-*" if TERRAFORM_AWS_NS_DEBIAN_12_ARM64
+	default "debian-11-amd64-*" if TERRAFORM_AWS_NS_DEBIAN_11_X86_64
+	default "debian-11-arm64-*" if TERRAFORM_AWS_NS_DEBIAN_11_ARM64
+	default "debian-stretch-hvm-x86_64-*" if TERRAFORM_AWS_NS_DEBIAN_STRETCH_X86_64
+	default "debian-stretch-hvm-arm64-*" if TERRAFORM_AWS_NS_DEBIAN_STRETCH_ARM64
 	default "al2023-*-x86_64" if TARGET_ARCH_X86_64 && TERRAFORM_AWS_AMI_AMAZON_X86_64
 	default "al2023-*-arm64" if TARGET_ARCH_ARM64 && TERRAFORM_AWS_AMI_AMAZON_ARM64
 	default "RHEL-9.*x86_64-*" if TARGET_ARCH_X86_64 && TERRAFORM_AWS_RHEL9_X86_64
