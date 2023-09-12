@@ -8,23 +8,14 @@ config TERRAFORM_GCE_PROJECT_NAME
 	  the actual name of the project you have created using the
 	  GCE interface.
 
-choice
-	prompt "Choose GCE region location to use"
-	default TERRAFORM_GCE_WEST_2C
-
-config TERRAFORM_GCE_WEST_2C
-	bool "us-west2-c"
-	help
-	  This option will set the gce region location to us-west2-c.
-
-endchoice
-
 config TERRAFORM_GCE_REGION_LOCATION
 	string "GCE region location"
-	default "us-west2-c" if TERRAFORM_GCE_WEST_2C
+	default "us-west2-c"
 	help
-	  This option will set the gce region location. For more examples:
+	  This option will set the GCE region location. For more examples:
 	  https://cloud.google.com/compute/docs/regions-zones/
+
+	  Documentation: https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_instance#zone
 
 choice
 	prompt "Choose GCE Machine type"
@@ -45,7 +36,7 @@ config TERRAFORM_GCE_MACHINE_N1_STANDARD_8
 endchoice
 
 config TERRAFORM_GCE_MACHINE_TYPE
-	string "GCE Machine type"
+	string
 	default "n1-standard-1" if TERRAFORM_GCE_MACHINE_N1_STANDARD_1
 	default "n1-standard-8" if TERRAFORM_GCE_MACHINE_N1_STANDARD_8
 	help
@@ -54,40 +45,23 @@ config TERRAFORM_GCE_MACHINE_TYPE
 
 	  https://cloud.google.com/compute/docs/machine-types
 
-choice
-	prompt "Choose GCE scratch disk interface to use"
-	default TERRAFORM_GCE_SCRATCH_DISK_NVME
-
-config TERRAFORM_GCE_SCRATCH_DISK_NVME
-	bool "NVME"
-	help
-	  This option sets the scratch disk interface to NVMe.
-
-endchoice
+	  Documentation: https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_instance#machine_type
 
 config TERRAFORM_GCE_SCRATCH_DISK_INTERFACE
-	string "GCE scratch disk interface"
-	default "NVME" if TERRAFORM_GCE_SCRATCH_DISK_NVME
+	string "GCE scratch disk interface to use"
+	default "NVME"
 	help
-	  This option will set gce scratch disk interface.
+	  This option will set GCE scratch disk interface.
 
-choice
-	prompt "Choose GCE image to use"
-	default TERRAFORM_GCE_IMAGE_DEBIAN_10
-
-config TERRAFORM_GCE_IMAGE_DEBIAN_10
-	bool "debian-cloud/debian-10"
-	depends on TARGET_ARCH_X86_64
-	help
-	  This option sets the gce image to debian-cloud/debian-10.
-
-endchoice
+	  Documentation: https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_instance#scratch_disk
 
 config TERRAFORM_GCE_IMAGE
-	string "GCE image name to use"
-	default "debian-cloud/debian-10" if TERRAFORM_GCE_IMAGE_DEBIAN_10
+	string "GCE image to use"
+	default "debian-cloud/debian-10"
 	help
-	  This option will set gce image to debian-cloud/debian-10.
+	  This option will set GCE image to debian-cloud/debian-10.
+
+	  Documentation: https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_instance#image
 
 config TERRAFORM_GCE_JSON_CREDENTIALS_PATH
 	string "GCE json credential file path"
