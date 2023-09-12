@@ -7,21 +7,21 @@ choice
 config TERRAFORM_AWS_US_WEST_1
 	bool "us-west-1 - North California"
 	help
-	  This option will set the aws region to us-west-1.
+	  This option will set the AWS region to us-west-1.
 
 config TERRAFORM_AWS_US_WEST_2
 	bool "us-west-2 - Oregon"
 	help
-	  This option will set the aws region to us-west-2.
+	  This option will set the AWS region to us-west-2.
 
 endchoice
 
 config TERRAFORM_AWS_REGION
-	string "AWS region"
+	string
 	default "us-west-1" if TERRAFORM_AWS_US_WEST_1
 	default "us-west-2" if TERRAFORM_AWS_US_WEST_2
 	help
-	  This option will set the aws region to the specified value.
+	  This option will set the AWS region to the specified value.
 
 	  If you wish to expand on this list send a patch after reading
 	  this list:
@@ -30,7 +30,7 @@ config TERRAFORM_AWS_REGION
 
 	  Note that if you change region the AMI may change as well even
 	  for the same distribution. At least that applies to Amazon EC2
-	  optimized images. Use the aws console, to set that up it will
+	  optimized images. Use the AWS console, to set that up it will
 	  ask you for your credentials and then a region. Before adding
 	  an entry for ami image be sure you are on the region and then
 	  query with something like:
@@ -57,30 +57,12 @@ config TERRAFORM_AWS_REGION
 	  aws ec2 describe-images --image-ids ami-0699f753302dd8b00 | grep OwnerId
 	    "OwnerId": "137112412989",
 
-choice
-	prompt "AWS availability region to use"
-	default TERRAFORM_AWS_AV_US_WEST_1B
-
-config TERRAFORM_AWS_AV_US_WEST_1B
-	bool "us-west-1b"
-	depends on TERRAFORM_AWS_US_WEST_1
-	help
-	  This option will set the aws availiability region to us-west-1b.
-
-config TERRAFORM_AWS_AV_US_WEST_2B
-	bool "us-west-2b"
-	depends on TERRAFORM_AWS_US_WEST_2
-	help
-	  This option will set the aws availiability region to us-west-2b.
-
-endchoice
-
 config TERRAFORM_AWS_AV_REGION
-	string "AWS availablity region"
-	default "us-west-1b" if TERRAFORM_AWS_AV_US_WEST_1B
-	default "us-west-2b" if TERRAFORM_AWS_AV_US_WEST_2B
+	string
+	default "us-west-1b" if TERRAFORM_AWS_US_WEST_1
+	default "us-west-2b" if TERRAFORM_AWS_US_WEST_2
 	help
-	  This option will set the aws availablity region to the specified
+	  This option will set the AWS availablity region to the specified
 	  value.
 
 	  If you wish to expand on this list send a patch after reading this
