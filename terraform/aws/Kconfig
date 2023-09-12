@@ -72,141 +72,72 @@ config TERRAFORM_AWS_AV_REGION
 	  https://gist.github.com/neilstuartcraig/0ccefcf0887f29b7f240
 
 choice
-	prompt "AWS ami owner"
+	prompt "AWS AMI owner"
 	default TERRAFORM_AWS_AMI_AMAZON_X86_64 if TARGET_ARCH_X86_64
 	default TERRAFORM_AWS_AMI_AMAZON_ARM64 if TARGET_ARCH_ARM64
 
 config TERRAFORM_AWS_AMI_DEBIAN
 	bool "Debian - 379101102735"
 	help
-	  This option will set aws ami owner to Debian.
+	  This option will set AWS AMI owner to Debian.
 
 config TERRAFORM_AWS_AMI_AMAZON_X86_64
 	bool "Amazon Linux 2023 x86_64 - ami-0efa651876de2a5ce"
 	depends on TARGET_ARCH_X86_64 && TERRAFORM_AWS_US_WEST_2
 	help
-	  This option will set aws ami owner to Amazon EC2 images for x86_64.
+	  This option will set AWS AMI owner to Amazon EC2 images for x86_64.
 
 config TERRAFORM_AWS_AMI_AMAZON_ARM64
 	bool "Amazon Linux 2023 ARM64 - ami-0699f753302dd8b00"
 	depends on TARGET_ARCH_ARM64 && TERRAFORM_AWS_US_WEST_2
 	help
-	  This option will set aws ami owner to Amazon EC2 images for arm64.
+	  This option will set AWS AMI owner to Amazon EC2 images for arm64.
 
 config TERRAFORM_AWS_RHEL9_X86_64
 	bool "RHEL9 x86_64 - ami-0dda7e535b65b6469"
 	depends on TARGET_ARCH_X86_64 && TERRAFORM_AWS_US_WEST_2
 	help
-	  This option will set aws ami owner to RHEL9 for x86_64.
+	  This option will set AWS AMI owner to RHEL9 for x86_64.
 
 config TERRAFORM_AWS_RHEL9_ARM64
 	bool "RHEL9 x86_64 - ami-08911268ee09cb08e"
 	depends on TARGET_ARCH_ARM64 && TERRAFORM_AWS_US_WEST_2
 	help
-	  This option will set aws ami owner to RHEL9 for ARM64
+	  This option will set AWS AMI owner to RHEL9 for ARM64
 
 config TERRAFORM_AWS_SLE15_SP4_X86_64
 	bool "SUSE Linux Enterprise Server 15 SP4 x86_64 - ami-079ba66a5e9f2b70e"
 	depends on TARGET_ARCH_X86_64 && TERRAFORM_AWS_US_WEST_2
 	help
-	  This option will set aws ami owner to SLE15-SP4 for x86_64.
+	  This option will set AWS AMI owner to SLE15-SP4 for x86_64.
 
 config TERRAFORM_AWS_SLE15_SP4_ARM64
 	bool "SUSE Linux Enterprise Server 15 SP4 ARM64 - ami-00f902c807805f51a"
 	depends on TARGET_ARCH_ARM64 && TERRAFORM_AWS_US_WEST_2
 	help
-	  This option will set aws ami owner to SLE15-SP4 for arm64.
+	  This option will set AWS AMI owner to SLE15-SP4 for arm64.
 
 endchoice
 
 config TERRAFORM_AWS_AMI_OWNER
-	string "AWS AMI owner"
+	string
 	default "379101102735" if TERRAFORM_AWS_AMI_DEBIAN
 	default "137112412989" if TERRAFORM_AWS_AMI_AMAZON_X86_64 || TERRAFORM_AWS_AMI_AMAZON_ARM64
 	default "309956199498" if TERRAFORM_AWS_RHEL9_X86_64 || TERRAFORM_AWS_RHEL9_ARM64
 	default "013907871322" if TERRAFORM_AWS_SLE15_SP4_X86_64 || TERRAFORM_AWS_SLE15_SP4_ARM64
 	help
-	  This option will set aws AMI owner.
-
-choice
-	prompt "AWS name search"
-	default TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_X86_64 if TARGET_ARCH_X86_64 && TERRAFORM_AWS_AMI_DEBIAN
-	default TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_ARM64 if TERRAFORM_AWS_AMI_DEBIAN
-	default TERRAFORM_AWS_NS_AMAZON_2023_X86_64 if TARGET_ARCH_X86_64 && TERRAFORM_AWS_AMI_AMAZON_X86_64
-	default TERRAFORM_AWS_NS_AMAZON_2023_ARM64 if TARGET_ARCH_ARM64 && TERRAFORM_AWS_AMI_AMAZON_ARM64
-	default TERRAFORM_NS_RHEL9_X86_64 if TARGET_ARCH_X86_64 && TERRAFORM_AWS_RHEL9_X86_64
-	default TERRAFORM_NS_RHEL9_ARM64 if TARGET_ARCH_ARM64 && TERRAFORM_AWS_RHEL9_ARM64
-	default TERRAFORM_NS_SLE15SP4_X86_64 if TARGET_ARCH_X86_64 && TERRAFORM_AWS_SLE15_SP4_X86_64
-	default TERRAFORM_NS_SLE15SP4_ARM64 if TARGET_ARCH_ARM64 && TERRAFORM_AWS_SLE15_SP4_ARM64
-
-config TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_X86_64
-	bool "debian-stretch-hvm-x86_64-*"
-	depends on TARGET_ARCH_X86_64
-	help
-	  This option will set aws name search to debian-stretch-hvm-x86_64-*
-
-config TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_ARM64
-	bool "debian-stretch-hvm-arm64-*"
-	depends on TARGET_ARCH_ARM64
-	help
-	  This option will set aws name search to debian-stretch-hvm-arm64-*
-
-config TERRAFORM_AWS_NS_AMAZON_2023_X86_64
-	bool "al2023-*-x86_64"
-	select HAVE_SUPPORTS_PURE_IOMAP
-	depends on TARGET_ARCH_X86_64
-	help
-	  This option will set aws name search to the latest amazon 2023
-	  optimized image for x86_64.
-
-config TERRAFORM_AWS_NS_AMAZON_2023_ARM64
-	bool "al2023-*-arm64"
-	depends on TARGET_ARCH_ARM64
-	select HAVE_SUPPORTS_PURE_IOMAP
-	help
-	  This option will set aws name search to the latest amazon 2023
-	  optimized image arm64.
-
-config TERRAFORM_NS_RHEL9_X86_64
-	bool "RHEL-9.*x86_64-*"
-	depends on TARGET_ARCH_X86_64
-	help
-	  This option will set aws name search to the latest RHEL9
-	  image for x86_64.
-
-config TERRAFORM_NS_RHEL9_ARM64
-	bool "RHEL-9.*arm64-*"
-	depends on TARGET_ARCH_ARM64
-	help
-	  This option will set aws name search to the latest RHEL9
-	  image for arm64.
-
-config TERRAFORM_NS_SLE15SP4_X86_64
-	bool "suse-sles-15-sp4-*x86_64"
-	depends on TARGET_ARCH_X86_64
-	help
-	  This option will set aws name search to the latest SLE15-SP4
-	  image for x86_64.
-
-config TERRAFORM_NS_SLE15SP4_ARM64
-	bool "suse-sles-15-sp4-*arm64"
-	depends on TARGET_ARCH_ARM64
-	help
-	  This option will set aws name search to the latest SLE15-SP4
-	  image for arm64.
-
-endchoice
+	  This option will set AWS AMI owner.
 
 config TERRAFORM_AWS_NS
-	string "AWS name search"
-	default "debian-stretch-hvm-x86_64-*" if TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_X86_64
-	default "debian-stretch-hvm-arm64-*" if TERRAFORM_AWS_NS_DEBIAN_STRETCH_HVM_ARM64
-	default "al2023-*-x86_64" if TERRAFORM_AWS_NS_AMAZON_2023_X86_64
-	default "al2023-*-arm64" if TERRAFORM_AWS_NS_AMAZON_2023_ARM64
-	default "RHEL-9.*x86_64-*" if TERRAFORM_NS_RHEL9_X86_64
-	default "RHEL-9.*arm64-*" if TERRAFORM_NS_RHEL9_ARM64
-	default "suse-sles-15-sp4-*x86_64" if TERRAFORM_NS_SLE15SP4_X86_64
-	default "suse-sles-15-sp4-*arm64" if TERRAFORM_NS_SLE15SP4_ARM64
+	string
+	default "debian-stretch-hvm-x86_64-*" if TARGET_ARCH_X86_64 && TERRAFORM_AWS_AMI_DEBIAN
+	default "debian-stretch-hvm-arm64-*" if TARGET_ARCH_ARM64 && TERRAFORM_AWS_AMI_DEBIAN
+	default "al2023-*-x86_64" if TARGET_ARCH_X86_64 && TERRAFORM_AWS_AMI_AMAZON_X86_64
+	default "al2023-*-arm64" if TARGET_ARCH_ARM64 && TERRAFORM_AWS_AMI_AMAZON_ARM64
+	default "RHEL-9.*x86_64-*" if TARGET_ARCH_X86_64 && TERRAFORM_AWS_RHEL9_X86_64
+	default "RHEL-9.*arm64-*" if TARGET_ARCH_ARM64 && TERRAFORM_AWS_RHEL9_ARM64
+	default "suse-sles-15-sp4-*x86_64" if TARGET_ARCH_X86_64 && TERRAFORM_AWS_SLE15_SP4_X86_64
+	default "suse-sles-15-sp4-*arm64" if TARGET_ARCH_ARM64 && TERRAFORM_AWS_SLE15_SP4_ARM64
 	help
 	  This option will set aws image search to use. Using this filter glob
 	  lets us get the latest ami for this owner / release.
