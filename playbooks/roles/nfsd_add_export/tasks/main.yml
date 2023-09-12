@@ -39,6 +39,7 @@
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
+  delegate_to: "{{ server_host }}"
   command: /usr/sbin/restorecon -R "{{ nfsd_export_path }}/{{ export_volname }}"
   when: selinux_status.rc == 0
 
