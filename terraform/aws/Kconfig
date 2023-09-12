@@ -243,7 +243,7 @@ config TERRAFORM_AWS_INSTANCE_I4I_METAL
 endchoice
 
 config TERRAFORM_AWS_INSTANCE_TYPE
-	string "AWS AMI owner"
+	string
 	default "m5ad.4xlarge" if TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE
 	default "is4gen.medium" if TERRAFORM_AWS_INSTANCE_IS4GEN_MEDIUM
 	default "is4gen.8xlarge" if TERRAFORM_AWS_INSTANCE_IS4GEN_8XLARGE
