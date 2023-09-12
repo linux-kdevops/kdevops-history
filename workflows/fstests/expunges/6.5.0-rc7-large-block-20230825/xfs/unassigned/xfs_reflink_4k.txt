@@ -1,6 +1,3 @@
 generic/388
-generic/491 # possible regression
-generic/630 # possible regression
 generic/645
 generic/670 # failure rate of about 1/50
-xfs/166 # possible regression

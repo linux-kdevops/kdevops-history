@@ -5,21 +5,14 @@ generic/133 # fails on both 16k_4ks and 16k https://gist.github.com/mcgrof/cde26
 generic/176 # https://gist.github.com/mcgrof/960e2d9e6255078316f06a02682df604
 generic/209
 generic/263
-generic/269 # crashes withy failure rate ~ 1/20 https://gist.github.com/mcgrof/7d3279414c11d59dc08f90576ac96d0b
-generic/270 # crashes on 16k_4ks but likely also here too https://gist.github.com/mcgrof/ad9e18fb1081a47dbbc9ddb51eb8cedb
 generic/311
 generic/418 # crashes on 16k_4ks but likely also here too https://gist.github.com/mcgrof/59c6298c0744f3bc2e1e919721b3c255
 generic/436
-generic/450 # crashes on 16k_4ks but likely also here too https://gist.github.com/mcgrof/327111e26cc876ae24915c8498b546e4
 generic/451 # crashes https://gist.github.com/mcgrof/b2ab741f7e8b78306fb65886787d0b37
-generic/476 # https://gist.github.com/mcgrof/c5be642c03901e84a0117dd336345004
-generic/491 # failure rate 1/4
 generic/547 # failure rate 1/20 https://gist.github.com/mcgrof/da812a4f280fe6894c31e6b191658f84
 xfs/008
 xfs/013 # crash https://gist.github.com/mcgrof/17119a46d1e0f53107f56cb09c0a16a7
 xfs/041 # seems like a test bug with xfstests/src/fill2fs https://gist.github.com/mcgrof/ed48ac0ee2ccfe6a0e91b68026fef6a0
-xfs/073
 xfs/080
 xfs/165
-xfs/297 # failure rate about ~ 1/10 https://gist.github.com/mcgrof/531e1f9e03d63e6c032630f5ef529631
 xfs/442 # crash https://gist.github.com/mcgrof/763139a352b6044327ca491e4c6b27fd
