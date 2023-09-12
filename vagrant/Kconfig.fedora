@@ -5,7 +5,9 @@ config VAGRANT_FEDORA_BOX_STRING
 	string "Vagrant box string"
 	default "fedora/38-cloud-base"
 	help
-	  This is the box string that vagrant should use.
+	  This is the box string that vagrant should use. This is typically
+	  something like fedora/??-cloud-base or generic/rhel?. We default
+	  to the latest Fedora cloud-base release.
 
 config VAGRANT_FEDORA_OLD_RELEASE
 	bool "Is this an old release (pre-Fedora 32)?"
