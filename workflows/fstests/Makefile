@@ -75,10 +75,6 @@ FSTESTS_ARGS += fstests_test_dir='$(FSTESTS_TEST_DIR)'
 FSTESTS_SCRATCH_MNT:=$(subst ",,$(CONFIG_FSTESTS_SCRATCH_MNT))
 FSTESTS_ARGS += fstests_scratch_mnt='$(FSTESTS_SCRATCH_MNT)'
 
-# For now we only use this to ensure you know what you are doing...
-ifeq (y,$(CONFIG_FSTESTS_TESTDEV_UNDER_DEVELOPMENT))
-FSTESTS_ARGS += fstests_testdev_under_developmen='True'
-
 # Only 1 real NVMe drive is required use PCIe passthrough with make dynconfig
 ifeq (y,$(CONFIG_FSTESTS_TESTDEV_NVME_PARTITION_EUIS))
 FSTESTS_ARGS += fstests_testdev_nvme_partition_euis='True'
@@ -92,8 +88,6 @@ endif
 ifeq (y,$(CONFIG_FSTESTS_TESTDEV_NVME_FALLBACK_MODEL_SERIAL))
 FSTESTS_ARGS += fstests_testdev_nvme_fallback_model_serial='True'
 endif
-
-endif # CONFIG_FSTESTS_TESTDEV_UNDER_DEVELOPMENT
 
 ifeq (y,$(CONFIG_FSTESTS_TESTDEV_SPARSEFILE_GENERATION))
 FSTESTS_LOGWRITES_DEV:=$(subst ",,$(CONFIG_FSTESTS_LOGWRITES_DEV))
