@@ -60,7 +60,7 @@ config KERNEL_CI_STEADY_STATE_GOAL
 
 config KERNEL_CI_STEADY_STATE_INCREMENTAL
 	bool "Bound kernel-ci tests with an incremental steady-state goal"
-	default n
+	default y
 	help
 	  Enable this so that kernel-ci loop will bail once a certain number
 	  of full loops have passed without resetting the counter on failures.
