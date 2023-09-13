@@ -84,11 +84,23 @@
     state: present
   when: selinux_status.rc == 0
 
+# FIXME: open ports instead
+- name: Populate service facts
+  service_facts:
+
+- name: Turn off firewalld
+  become: yes
+  ansible.builtin.systemd_service:
+    name: firewalld.service
+    enabled: false
+    state: stopped
+  when: '"firewalld.service" in ansible_facts.services'
+
 - name: Start up nfsd
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
-  ansible.builtin.systemd:
+  ansible.builtin.systemd_service:
     name: nfs-server.service
     enabled: true
     state: reloaded
