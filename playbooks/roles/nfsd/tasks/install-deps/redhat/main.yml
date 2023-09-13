@@ -11,6 +11,8 @@
   until: result.rc == 0
   vars:
     packages:
+      - checkpolicy
       - lvm2
       - nfs-utils
       - policycoreutils
+      - python3-policycoreutils
