@@ -318,7 +318,6 @@ config FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 
 config FSTESTS_TESTDEV_NVME_PARTITION_EUIS
 	bool "Use first real NVMe drive and create partitions"
-	depends on FSTESTS_TESTDEV_UNDER_DEVELOPMENT
 	select EXTRA_STORAGE_SUPPORTS_512
 	select EXTRA_STORAGE_SUPPORTS_1K
 	select EXTRA_STORAGE_SUPPORTS_2K
@@ -374,7 +373,6 @@ config FSTESTS_TESTDEV_NVME_EUIS
 	select EXTRA_STORAGE_SUPPORTS_1K
 	select EXTRA_STORAGE_SUPPORTS_2K
 	select EXTRA_STORAGE_SUPPORTS_4K
-	depends on FSTESTS_TESTDEV_UNDER_DEVELOPMENT
 	help
 	  If you want to test using real storage drives the only way
 	  to reliably ensure they are the same drives upon a reboot is
