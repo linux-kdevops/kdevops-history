@@ -13,8 +13,8 @@ generic/547 # failure rate 1/20 https://gist.github.com/mcgrof/da812a4f280fe6894
 xfs/008
 xfs/013 # crash https://gist.github.com/mcgrof/17119a46d1e0f53107f56cb09c0a16a7
 xfs/041 # seems like a test bug with xfstests/src/fill2fs https://gist.github.com/mcgrof/ed48ac0ee2ccfe6a0e91b68026fef6a0
+xfs/080
 xfs/128 # manually inspect if kmemleaks leads to crash for xfs/129
 xfs/129 # failure rate ~ 1/30 crash https://gist.github.com/mcgrof/123a17550e12b1d528e08483eb6608d6
-xfs/080
 xfs/165
 xfs/442 # crash https://gist.github.com/mcgrof/763139a352b6044327ca491e4c6b27fd
