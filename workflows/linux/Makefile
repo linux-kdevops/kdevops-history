@@ -45,6 +45,12 @@ BOOTLINUX_ARGS	+= bootlinux_9p_mount_tag='$(subst ",,$(CONFIG_BOOTLINUX_9P_MOUNT
 LINUX_CLONE_DEFAULT_TYPE := linux-clone-9p
 endif
 
+DYNAMIC_RUNTIME_VARS :=
+
+ifneq (,$(KVER))
+DYNAMIC_RUNTIME_VARS += "uninstall_kernel_ver": "$(KVER)"
+endif
+
 BOOTLINUX_ARGS += bootlinux_cxl_test=$(CONFIG_ENABLE_CXL_TEST)
 WORKFLOW_ARGS += $(BOOTLINUX_ARGS)
 
@@ -54,6 +60,7 @@ linux-help-menu:
 	@echo "linux              - Git clones a linux git tree, build Linux, installs and reboots into it"
 	@echo "linux-deploy       - Builds, installs, updates GRUB and reboots - useful for rapid development"
 	@echo "linux-install      - Only builds and installs Linux"
+	@echo "linux-uninstall    - Remove a kernel you can pass arguments for the version such as KVER=6.5.0-rc7-next-20230825"
 	@echo "linux-clone        - Only clones Linux"
 	@echo "linux-grub-setup   - Ensures the appropriate target kernel is set to boot"
 	@echo "linux-reboot       - Reboot guests"
@@ -87,6 +94,14 @@ linux-install: $(KDEVOPS_NODES)
 		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
 		--tags vars,build-linux,install-linux \
 		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS)
+
+PHONY += linux-uninstall
+linux-uninstall:
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -i \
+		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
+		--tags uninstall-linux \
+		--extra-vars '{ $(DYNAMIC_RUNTIME_VARS) }'
+		$(LIMIT_HOSTS)
 
 linux-clone-clients: $(KDEVOPS_NODES)
 	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -i \
