@@ -791,6 +791,38 @@ config LIBVIRT_STORAGE_POOL_PATH_CUSTOM_MANUAL
 
 endchoice
 
+config LIBVIRT_STORAGE_POOL_PATH_AUTO
+	string
+	default $(shell, ./scripts/get_libvirsh_pool_path.sh) if LIBVIRT_STORAGE_POOL_PATH_INFER_ADVANCED
+	default "/var/lib/libvirt/images" if LIBVIRT_STORAGE_POOL_PATH_CUSTOM_DEFAULT_DISTRO
+	default $(shell, scripts/cwd-append.sh vagrant) if LIBVIRT_STORAGE_POOL_PATH_CUSTOM_CWD
+	help
+	  The path to use for the libvirt storage pool path. Since kdevops uses
+	  Vagrant for virtualization this is also the path used to place the
+	  additional NVMe drives created. kdevops adds a postfix "kdevops" to
+	  this directory as it wants to allow Vagrant full control over that
+	  directory. For instance if this is /var/lib/libvirt/images/ kdevops
+	  will let Vagrant store images in /var/lib/libvirt/images/ and
+	  the NVMe qcow2 files created will go in by default to the directory
+	  /var/lib/libvirt/images/kdevops/.vagrant/nvme_disks/guest-hostname/.
+
+if LIBVIRT_STORAGE_POOL_PATH_CUSTOM_MANUAL
+
+config LIBVIRT_STORAGE_POOL_PATH_CUSTOM
+	string "Custom libvirt storage pool location"
+	default "/var/lib/libvirt/images"
+	help
+	  The path to use for the libvirt storage pool path. Since kdevops uses
+	  Vagrant for virtualization this is also the path used to place the
+	  additional NVMe drives created. kdevops adds a postfix "kdevops" to
+	  this directory as it wants to allow Vagrant full control over that
+	  directory. For instance if this is /var/lib/libvirt/images/ kdevops
+	  will let Vagrant store images in /var/lib/libvirt/images/ and
+	  the NVMe qcow2 files created will go in by default to the directory
+	  /var/lib/libvirt/images/kdevops/.vagrant/nvme_disks/guest-hostname/.
+
+endif
+
 config LIBVIRT_STORAGE_POOL_CREATE
 	bool "Should we build a custom storage pool for you?"
 	default n if !LIBVIRT_STORAGE_POOL_PATH_INFER_ADVANCED
@@ -835,22 +867,6 @@ config LIBVIRT_STORAGE_POOL_NAME
 	  which would make it obvious what it is for other users on the system.
 	  For instance you may want to use a volume name of "data2" for a path
 	  on a partition on /data2/ or something like that.
-
-config LIBVIRT_STORAGE_POOL_PATH_CUSTOM
-	string "Libvirt storage pool path"
-	default $(shell, ./scripts/get_libvirsh_pool_path.sh) if LIBVIRT_STORAGE_POOL_PATH_INFER_ADVANCED
-	default "/var/lib/libvirt/images/" if LIBVIRT_STORAGE_POOL_PATH_CUSTOM_DEFAULT_DISTRO
-	default $(shell, scripts/cwd-append.sh vagrant) if LIBVIRT_STORAGE_POOL_PATH_CUSTOM_CWD
-	default "/opt/libvirt/images/" if LIBVIRT_STORAGE_POOL_PATH_CUSTOM_MANUAL
-	help
-	  The path to use for the libvirt storage pool path. Since kdevops uses
-	  Vagrant for virtualization this is also the path used to place the
-	  additional NVMe drives created. kdevops adds a postfix "kdevops" to
-	  this directory as it wants to allow Vagrant full control over that
-	  directory. For instance if this is /var/lib/libvirt/images/ kdevops
-	  will let Vagrant store images in /var/lib/libvirt/images/ and
-	  the NVMe qcow2 files created will go in by default to the directory
-	  /var/lib/libvirt/images/kdevops/.vagrant/nvme_disks/guest-hostname/.
 
 choice
 	prompt "Libvirt URI"
@@ -1045,7 +1061,8 @@ config LIBVIRT_QEMU_GROUP
 
 config KDEVOPS_STORAGE_POOL_PATH
 	string
-	default LIBVIRT_STORAGE_POOL_PATH_CUSTOM if VAGRANT_LIBVIRT
+	default LIBVIRT_STORAGE_POOL_PATH_AUTO if VAGRANT_LIBVIRT && !LIBVIRT_STORAGE_POOL_PATH_CUSTOM_MANUAL
+	default LIBVIRT_STORAGE_POOL_PATH_CUSTOM if VAGRANT_LIBVIRT && LIBVIRT_STORAGE_POOL_PATH_CUSTOM_MANUAL
 	default VIRTUALBOX_STORAGE_POOL_PATH_CUSTOM if VAGRANT_VIRTUALBOX
 
 config QEMU_BIN_PATH
