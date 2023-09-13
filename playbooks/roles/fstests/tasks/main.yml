@@ -331,6 +331,7 @@
     - not fstests_debug_localhost|bool
     - host_specific_fstests_config.stat.exists
     - fstests_fstyp != "nfs"
+    - fstests_fstyp != "tmpfs"
 
 - name: Copy and force overwrite of the target filesystem fstests configuration
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
@@ -346,6 +347,7 @@
     - not fstests_debug_localhost|bool
     - not host_specific_fstests_config.stat.exists
     - fstests_fstyp != "nfs"
+    - fstests_fstyp != "tmpfs"
 
 - name: Try to see if NVMe EUIs exist on /dev/disk/by-id/nvme-eui.*
   become: yes

@@ -139,3 +139,11 @@ fstests_nfs_use_kdevops_nfsd: False
 fstests_nfs_section_default: False
 fstests_nfs_section_v40: False
 fstests_nfs_section_v3: False
+
+fstests_tmpfs_enable: False
+fstests_tmpfs_test_dev: "/mnt/test"
+fstests_tmpfs_scratch_devpool: "/mnt/scratch"
+fstests_tmpfs_section_default: False
+fstests_tmpfs_section_noswap: False
+fstests_tmpfs_section_huge: False
+fstests_tmpfs_huge_mode: "never"

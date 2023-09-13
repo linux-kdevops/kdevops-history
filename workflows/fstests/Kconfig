@@ -36,6 +36,11 @@ config FSTESTS_NFS
 	help
 	  This will target testing the Network File System (NFS).
 
+config FSTESTS_TMPFS
+	bool "tmpfs"
+	help
+	  This will target testing the tmpfs (Virtual Memory File System, former shmem filesystem).
+
 endchoice
 
 config FSTESTS_FSTYP
@@ -44,6 +49,7 @@ config FSTESTS_FSTYP
 	default "btrfs" if FSTESTS_BTRFS
 	default "ext4" if FSTESTS_EXT4
 	default "nfs" if FSTESTS_NFS
+	default "tmpfs" if FSTESTS_TMPFS
 	help
 	  The filesystem to test. This will be automatically set depending on
 	  the above choice, you however can override this manually.
@@ -230,6 +236,14 @@ endmenu
 
 endif # FSTESTS_NFS
 
+if FSTESTS_TMPFS
+
+menu "Configure how tmpfs should be tested"
+source "workflows/fstests/tmpfs/Kconfig"
+endmenu
+
+endif # FSTESTS_TMPFS
+
 config FSTESTS_GIT
 	string "The fstests git tree to clone"
 	default "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git" if !GIT_ALTERNATIVES
@@ -260,6 +274,8 @@ config FSTESTS_TESTDEV_UNDER_DEVELOPMENT
 	  You will want to enable this if you know what you are doing and
 	  want to help develop and test new features which let you use
 	  real drives to test fstests with.
+
+if !FSTESTS_TMPFS
 
 choice
 	prompt "Strategy for device pool"
@@ -401,6 +417,7 @@ config FSTESTS_TESTDEV_NVME_EUIS
 
 endchoice
 
+endif # FSTESTS_TMPFS
 
 config FSTESTS_TESTDEV_NVME_FALLBACK_MODEL_SERIAL
 	bool "Fallback to using NVMe model an serial"
