@@ -1,5 +1,17 @@
 ---
 # Install dependenciesfor oscheck on Red Hat based systems
+
+- name: Register system with Red Hat
+  become: yes
+  community.general.redhat_subscription:
+    state: present
+    org_id: "{{ vagrant_rhel_org_id }}"
+    activationkey: "{{ vagrant_rhel_activation_key }}"
+    force_register: true
+  when:
+    - vagrant_rhel_org_id
+    - vagrant_rhel_activation_key
+
 - name: Refresh cache and upgrade all present packages
   become: yes
   become_method: sudo
