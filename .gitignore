@@ -4,7 +4,7 @@
 
 .kdevops_depcheck
 
-linux
+./linux
 
 log.txt
 logtime.txt
