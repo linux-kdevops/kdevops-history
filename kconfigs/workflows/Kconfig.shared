@@ -45,11 +45,16 @@ config WORKFLOW_MAKE_CMD
 
 endif
 
+config WORKFLOW_KDEVOPS_GIT_CUSTOM
+	bool "Enable custom git tree of kdevops to clone on targets"
+	select HAVE_CUSTOM_KDEVOPS_GIT
+	help
+	  Enable custom kdevops git tree to clone on targets.
+
+if WORKFLOW_KDEVOPS_GIT_CUSTOM
+
 config WORKFLOW_KDEVOPS_GIT
 	string "Git tree of kdevops to clone on targets"
-	default "https://github.com/linux-kdevops/kdevops.git" if !GIT_ALTERNATIVES && !HAVE_CUSTOM_KDEVOPS_GIT
-	default "https://github.com/linux-kdevops/kdevops.git" if GIT_LINUX_KDEVOPS_GITHUB
-	default "https://gitlab.com/linux-kdevops/kdevops.git" if GIT_LINUX_KDEVOPS_GITLAB
 	default CUSTOM_KDEVOPS_GIT if HAVE_CUSTOM_KDEVOPS_GIT
 	help
 	  Some workflows want to also clone a version of kdevops on each target.
@@ -58,6 +63,38 @@ config WORKFLOW_KDEVOPS_GIT
 	  local expunge list grows, and so a 'git diff' against the kdevops git
 	  tree will reveal if there are any regressions against the known
 	  baseline.
+
+config WORKFLOW_KDEVOPS_GIT_VERSION
+	string "Git tree version (branch/tag/commit) of kdevops to clone on targets"
+	default "HEAD"
+	help
+	  Specify the verison of the custom kdevops git repository to check out
+	  on each target.
+endif # WORKFLOW_KDEVOPS_GIT_CUSTOM
+
+
+if !WORKFLOW_KDEVOPS_GIT_CUSTOM
+
+config WORKFLOW_KDEVOPS_GIT
+	string
+	default "https://github.com/linux-kdevops/kdevops.git" if !GIT_ALTERNATIVES && !HAVE_CUSTOM_KDEVOPS_GIT
+	default "https://github.com/linux-kdevops/kdevops.git" if GIT_LINUX_KDEVOPS_GITHUB
+	default "https://gitlab.com/linux-kdevops/kdevops.git" if GIT_LINUX_KDEVOPS_GITLAB
+	help
+	  Some workflows want to also clone a version of kdevops on each target.
+	  An example of this is when using the fstests workflow, which carries
+	  a set of expunge lists to track known failures. Upon new failures the
+	  local expunge list grows, and so a 'git diff' against the kdevops git
+	  tree will reveal if there are any regressions against the known
+	  baseline.
+
+config WORKFLOW_KDEVOPS_GIT_VERSION
+	default "HEAD"
+	help
+	  Specify the verison of the custom kdevops git repository to check out
+	  on each target.
+
+endif # !WORKFLOW_KDEVOPS_GIT_CUSTOM
 
 config WORKFLOW_KDEVOPS_GIT_DATA
 	string "The destination directory where to clone the git tree"
