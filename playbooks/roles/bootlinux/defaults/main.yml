@@ -33,6 +33,8 @@ make: "make"
 target_linux_make_cmd: "{{ make }} -j{{ ansible_processor_vcpus }}"
 target_linux_make_install_cmd: "{{ target_linux_make_cmd }} modules_install install"
 
+uninstall_kernel_enable: False
+
 # If defined we'll apply this delta for you.
 # target_linux_extra_patch: foo.patch
 

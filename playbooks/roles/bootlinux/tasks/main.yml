@@ -439,29 +439,70 @@
   run_once: true
   delegate_to: localhost
 
-# Say you want to remove a kernel you no longer care for:
-# ansible-playbook -i hosts --tags uninstall-linux --extra-vars "uninstall_kernel_ver=4.19.58" bootlinux.yml
-- name: Uninstall an old version of Linux manually specified
+- name: Run uname before
+  command: "uname -r"
+  register: uname_cmd_before
+  tags: [ 'uninstall-linux' ]
+
+- name: Check kernel uname for uninstall
+  debug:
+    msg: "Target kernel {{ target_linux_tag }} Running kernel {{ running_kernel }}"
+  vars:
+    running_kernel: "{{ uname_cmd_before.stdout_lines.0 }}"
+  tags: [ 'uninstall-linux' ]
+
+- name: Set kernel version if user did not provide one with KVER command line argument
+  set_fact:
+    uninstall_kernel_ver: "{{ uname_cmd_before.stdout_lines.0 }}"
+  tags: [ 'uninstall-linux' ]
+  when:
+    - uninstall_kernel_enable|bool
+    - uninstall_kernel_ver is not defined
+
+- name: Check if files for old kernel exist
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.find:
+    paths:
+      - "/boot/"
+      - "/lib/modules/"
+    patterns:
+      - "vmlinuz-{{ uninstall_kernel_ver }}"
+      - "vmlinuz-{{ uninstall_kernel_ver }}.old"
+      - "vmlinuz-{{ uninstall_kernel_ver }}+.old"
+      - "initrd.img-{{ uninstall_kernel_ver }}"
+      - "initrd.img-{{ uninstall_kernel_ver }}.old"
+      - "initrd.img-{{ uninstall_kernel_ver }}+.old"
+      - "config-{{ uninstall_kernel_ver }}"
+      - "config-{{ uninstall_kernel_ver }}.old"
+      - "config-{{ uninstall_kernel_ver }}+.old"
+      - "System.map-{{ uninstall_kernel_ver }}"
+      - "System.map-{{ uninstall_kernel_ver }}.old"
+      - "System.map-{{ uninstall_kernel_ver }}+.old"
+      - "{{ uninstall_kernel_ver }}"
+      - "{{ uninstall_kernel_ver }}+"
+  register: found_uninstall_kfiles
+  tags: [ 'linux', 'uninstall-linux' ]
+  when:
+    - uninstall_kernel_enable|bool
+    - uninstall_kernel_ver is defined
+
+- name: Remove an old version of Linux manually specified
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
   file:
     state: absent
-    path: "{{ item }}"
+    path: "{{ item.path }}"
   tags: [ 'linux', 'uninstall-linux' ]
   with_items:
-    - "/boot/vmlinuz-{{ uninstall_kernel_ver }}"
-    - "/boot/vmlinuz-{{ uninstall_kernel_ver }}.old"
-    - "/boot/initrd.img-{{ uninstall_kernel_ver }}"
-    - "/boot/initrd.img-{{ uninstall_kernel_ver }}.old"
-    - "/boot/config-{{ uninstall_kernel_ver }}"
-    - "/boot/config-{{ uninstall_kernel_ver }}.old"
-    - "/boot/System.map-{{ uninstall_kernel_ver }}"
-    - "/boot/System.map-{{ uninstall_kernel_ver }}.old"
-    - "/lib/modules/{{ uninstall_kernel_ver }}"
+    - "{{ found_uninstall_kfiles.files }}"
   loop_control:
-    label: "{{ item }}"
-  when: uninstall_kernel_ver is defined
+    label: "Removing found {{ item.path }}"
+  when:
+    - uninstall_kernel_enable|bool
+    - uninstall_kernel_ver is defined
 
 # We use "console serial" so to enable real consoles to be
 # preferred first, and fallback to the serial as secondary
