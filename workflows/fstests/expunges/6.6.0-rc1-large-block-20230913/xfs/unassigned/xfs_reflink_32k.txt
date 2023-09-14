@@ -15,8 +15,6 @@ xfs/008
 xfs/013 # crash https://gist.github.com/mcgrof/17119a46d1e0f53107f56cb09c0a16a7
 xfs/041 # seems like a test bug with xfstests/src/fill2fs https://gist.github.com/mcgrof/ed48ac0ee2ccfe6a0e91b68026fef6a0
 xfs/080
-xfs/128 # manually inspect if kmemleaks leads to crash for xfs/129
-xfs/129 # failure rate ~ 1/30 crash https://gist.github.com/mcgrof/123a17550e12b1d528e08483eb6608d6
 xfs/165
 xfs/166 # seems real on 32k and 64k https://gist.github.com/mcgrof/c4f50962abf33b2eaef8249a48d23fc5
 xfs/234 # test bug? Cannot dump with sectorsize of 32k https://gist.github.com/mcgrof/c0c5cdb5393cd270120d099f7973e5e8
