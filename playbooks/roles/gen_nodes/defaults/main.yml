@@ -64,6 +64,7 @@ libvirt_extra_storage_virtio_physical_block_size: 512
 libvirt_largeio_enable: False
 libvirt_largeio_logical_compat: False
 libvirt_largeio_logical_compat_size: 512
+libvirt_largeio_drives_per_space: 6
 libvirt_largeio_base_size: 10240
 libvirt_largeio_pow_limit: 12
 

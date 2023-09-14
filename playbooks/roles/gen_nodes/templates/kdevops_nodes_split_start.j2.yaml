@@ -66,6 +66,7 @@ vagrant_global:
       size: 102400
       physical_block_size: {{ libvirt_extra_storage_virtio_physical_block_size }}
       logical_block_size: {{ libvirt_extra_storage_virtio_logical_block_size }}
+{% if not libvirt_largeio_enable %}
     extra1:
       size: 102400
       physical_block_size: {{ libvirt_extra_storage_virtio_physical_block_size }}
@@ -74,6 +75,7 @@ vagrant_global:
       size: 102400
       physical_block_size: {{ libvirt_extra_storage_virtio_physical_block_size }}
       logical_block_size: {{ libvirt_extra_storage_virtio_logical_block_size }}
+{% endif %}
 {% elif libvirt_extra_storage_drive_nvme %}
   extra_disks:
     data:
@@ -84,6 +86,7 @@ vagrant_global:
       size: 102400
       physical_block_size: {{ libvirt_extra_storage_nvme_logical_block_size }}
       logical_block_size: {{ libvirt_extra_storage_nvme_logical_block_size }}
+{% if not libvirt_largeio_enable %}
     extra1:
       size: 102400
       physical_block_size: {{ libvirt_extra_storage_nvme_logical_block_size }}
@@ -92,6 +95,7 @@ vagrant_global:
       size: 102400
       physical_block_size: {{ libvirt_extra_storage_nvme_logical_block_size }}
       logical_block_size: {{ libvirt_extra_storage_nvme_logical_block_size }}
+{% endif %}
 {% endif %}
 
 {% if nvme_zone_enable %}
@@ -121,16 +125,25 @@ vagrant_global:
 {% endfor %}
 {% endif %}
 {% if libvirt_largeio_enable %}
-{% for n in range(0,libvirt_largeio_pow_limit) %}
-    largio{{ n }}:
+{% set ns = namespace(lbs_idx=1)  %}
+{% set max_pbs = libvirt_largeio_logical_compat_size  * (2 ** libvirt_largeio_pow_limit) %}
+{% for n in range(0,libvirt_largeio_pow_limit+1) %}
+{% for x in range(0,libvirt_largeio_drives_per_space) %}
+{% set ns2 = namespace(pbs=libvirt_largeio_logical_compat_size  * (2 ** n)) %}
+{% set ns3 = namespace(pbs_next_two=ns2.pbs * (2*(x-1))) %}
+{% if (ns2.pbs == 512 or ns2.pbs == 4096 or ns2.pbs >= 16384) and (ns3.pbs_next_two <= max_pbs) %}
+    largio{{ ns.lbs_idx }}:
       largio: true
-      size: {{ libvirt_largeio_base_size + (1024 * n)}}
-      physical_block_size: {{ libvirt_largeio_logical_compat_size  * (2 ** n) }}
+      size: {{ libvirt_largeio_base_size }}
+      physical_block_size: {{ ns2.pbs }}
 {% if libvirt_largeio_logical_compat %}
       logical_block_size: {{ libvirt_largeio_logical_compat_size }}
 {% else %}
-      logical_block_size: {{ libvirt_largeio_logical_compat_size * (2 ** n) }}
+      logical_block_size: {{ ns2.pbs }}
 {% endif %}
+{% set ns.lbs_idx = ns.lbs_idx + 1 %}
+{% endif %}
+{% endfor %}
 {% endfor %}
 {% endif %}
 

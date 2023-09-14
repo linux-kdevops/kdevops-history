@@ -1555,6 +1555,44 @@ config QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
 
 if QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
 
+config QEMU_EXTRA_DRIVE_LARGEIO_NUM_DRIVES_PER_SPACE
+	int "How many qemu drives to create per each target size"
+	default 4
+	help
+	  If you are going to try to mess with LBS on 4k LBA you can experiment
+	  with:
+
+	  - 4k block size
+	  - 8k block size
+	  - 16k block size
+	  - 32k block size
+	  - 64k block size
+
+	  So in total 4 drives. For a drive with an LBA format of 16k, you can
+	  only experiment with block sizes:
+
+	  - 16k block size
+	  - 32k block size
+	  - 64k block size
+
+	  In theory you can experiment up to MAX_PAGECACHE_ORDER and to make
+	  things worse some filesystems can use block sizes which are not power
+	  of two. For now filesystems only support up to max block size 64k, so
+	  we can just keep the max drive sizes down a bit. Likewise twice the
+	  PAGE_SIZE is not supported as we require at least order 2 so 16k as
+	  folios use the 3rd page for the deferred list. So you really only need
+	  for 4k today:
+
+	  - 4k block size
+	  - 16k block size
+	  - 32k block size
+	  - 64k block size
+
+	  If we create 4 drives per space you can have 4 for basic baseline
+	  coverage testing. It seems the max limit is about 20 drives per
+	  qemu pcie port today, if you enable more than the default 4, good
+	  luck!
+
 config QEMU_EXTRA_DRIVE_LARGEIO_BASE_SIZE
 	int "QEMU extra drive drive base size"
 	default 10240
@@ -1591,12 +1629,16 @@ config QEMU_EXTRA_DRIVE_LARGEIO_COMPAT_SIZE
 
 config QEMU_EXTRA_DRIVE_LARGEIO_MAX_POW_LIMIT
 	int "Large IO - number of drives - power"
-	default 12
+	default 7
 	help
 	  We use an iterator to create the number of large drives on the
 	  guest system using:
 
 	    for n in range(0,libvirt_largeio_pow_limit)
+	       pbs = compat_size * (2 ** n)
+
+	  Using a compat_size of 512 means we go up to 64k physical block
+	  size by using the default of 7.
 
 	  This provides the value for the libvirt_largeio_pow_limit. By
 	  default we set this to 12 so we get drives of different physical
