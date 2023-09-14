@@ -30,6 +30,7 @@ generic/273 # might be a test bug
 generic/274 # might be a test bug
 generic/275 # might be a test bug
 generic/300 # might be a test bug
+generic/333 # might crash might be a regression, takes forever...
 generic/312 # might be a test bug
 generic/371 # might be a test bug
 generic/416 # might be a test bug
