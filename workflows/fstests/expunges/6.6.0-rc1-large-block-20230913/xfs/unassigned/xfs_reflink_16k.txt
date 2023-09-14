@@ -1,8 +1,5 @@
-generic/085 # https://gist.github.com/mcgrof/6bf0b2bef70e3578431861c6a98ea2eb
 generic/091
 generic/130
-generic/133 # fails on both 16k_4ks and 16k https://gist.github.com/mcgrof/cde26212e3db3ddea13fcc55133ec2b8 https://gist.github.com/mcgrof/ea16d31e8b31f39f009c15fd4bcba6fb
-generic/176 # https://gist.github.com/mcgrof/960e2d9e6255078316f06a02682df604
 generic/209
 generic/263
 generic/311
