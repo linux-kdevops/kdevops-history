@@ -95,8 +95,12 @@ linux-install:
 		--tags vars,build-linux,install-linux \
 		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS)
 
+# Just something like this for now:
+# ansible-playbook -i hosts --tags uninstall-linux --extra-vars "uninstall_kernel_ver=6.6.0-rc1-large-block-20230913+" playbooks/bootlinux.yml 
+# I can't figure out why this is not working yet with the $(DYNAMIC_RUNTIME_VARS).
 PHONY += linux-uninstall
 linux-uninstall:
+	echo This is broken for now...
 	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -i \
 		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
 		--tags uninstall-linux \
