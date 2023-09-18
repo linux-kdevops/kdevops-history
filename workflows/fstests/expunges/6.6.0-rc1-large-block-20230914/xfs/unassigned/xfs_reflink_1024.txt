@@ -1,1 +1,9 @@
+generic/075 # possible regression
+generic/091 # possible regression
+generic/112 # possible regression
+generic/127 # possible regression
+generic/263 # possible regression
 generic/457 # possible regression crash https://gist.github.com/mcgrof/f182b250a9d091f77dc85782a83224b3
+generic/469 # # possible regression
+xfs/155 # possible regression
+xfs/420 # possible regression
