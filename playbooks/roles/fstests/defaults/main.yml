@@ -145,5 +145,7 @@ fstests_tmpfs_test_dev: "/mnt/test"
 fstests_tmpfs_scratch_devpool: "/mnt/scratch"
 fstests_tmpfs_section_default: False
 fstests_tmpfs_section_noswap: False
-fstests_tmpfs_section_huge: False
-fstests_tmpfs_huge_mode: "never"
+fstests_tmpfs_enable_huge: False
+fstests_tmpfs_section_huge_never: False
+fstests_tmpfs_section_huge_always: False
+fstests_tmpfs_section_huge_within_size: False

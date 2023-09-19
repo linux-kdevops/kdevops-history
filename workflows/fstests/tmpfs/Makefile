@@ -18,6 +18,22 @@ ifeq (y,$(CONFIG_FSTESTS_TMPFS_SECTION_NOSWAP))
 FSTESTS_ARGS += fstests_tmpfs_section_noswap=True
 endif
 
-ifeq (y,$(CONFIG_FSTESTS_TMPFS_SECTION_HUGE))
-FSTESTS_ARGS += fstests_tmpfs_section_huge=True
+ifeq (y,$(CONFIG_FSTESTS_TMPFS_ENABLE_HUGE))
+FSTESTS_ARGS += fstests_tmpfs_enable_huge=True
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_TMPFS_SECTION_HUGE_NEVER))
+FSTESTS_ARGS += fstests_tmpfs_section_huge_never=True
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_TMPFS_SECTION_HUGE_ALWAYS))
+FSTESTS_ARGS += fstests_tmpfs_section_huge_always=True
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_TMPFS_SECTION_HUGE_WITHIN_SIZE))
+FSTESTS_ARGS += fstests_tmpfs_section_huge_within_size=True
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_TMPFS_SECTION_HUGE_ADVISE))
+FSTESTS_ARGS += fstests_tmpfs_section_huge_advise=True
 endif

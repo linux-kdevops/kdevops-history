@@ -1,6 +1,6 @@
 config FSTESTS_TMPFS_MANUAL_COVERAGE
 	bool "Enable manual coverage selection"
-	default n
+	default y
 	help
 	  By default we aim to spawn enough hosts to cover testing the full
 	  range of supported features upstream on the Linux kernel for tmpfs,
@@ -26,41 +26,45 @@ config FSTESTS_TMPFS_SECTION_DEFAULT
 
 config FSTESTS_TMPFS_SECTION_NOSWAP
 	bool "Enable testing section: tmpfs_noswap"
-	default n
+	default y
 	help
 	  Enabling this will disable swap. By default swap is enabled.
 
-choice
-	prompt "Choose huge mode"
-	default FSTESTS_TMPFS_HUGE_NEVER
-
-config FSTESTS_TMPFS_HUGE_NEVER
-	bool "Never"
+config FSTESTS_TMPFS_ENABLE_HUGE
+	bool "Enable testing section huge pages"
+	default y
 	help
-	  Do not allocate huge pages.
+	  Enabling this will enable you to test huge pages.
 
-config FSTESTS_TMPFS_HUGE_ALWAYS
+if FSTESTS_TMPFS_ENABLE_HUGE
+
+config FSTESTS_TMPFS_SECTION_HUGE_NEVER
+	bool "Never"
+	default y
+	help
+	  Never allow huge pages.
+
+config FSTESTS_TMPFS_SECTION_HUGE_ALWAYS
 	bool "Always"
+	default y
 	help
 	  Attempt to allocate huge page every time a new page is needed.
 
-config FSTESTS_TMPFS_HUGE_WITHIN_SIZE
+config FSTESTS_TMPFS_SECTION_HUGE_WITHIN_SIZE
 	bool "Within size"
+	default y
 	help
-	  Only allocate huge page if it will be fully within i_size. Also respect madvise(2) hints.
+	  Only allocate huge page if it will be fully within i_size. Also respect
+	  madvise(2) hints.
 
-config FSTESTS_TMPFS_HUGE_ADVISE
+config FSTESTS_TMPFS_SECTION_HUGE_ADVISE
 	bool "Advise"
+	default y
 	help
 	  Only allocate huge page if requested with madvise(2).
-endchoice
 
-config FSTESTS_TMPFS_HUGE_MODE
-	string
-	default "never" if FSTESTS_TMPFS_HUGE_NEVER
-	default "always" if FSTESTS_TMPFS_HUGE_ALWAYS
-	default "within_size" if FSTESTS_TMPFS_HUGE_WITHIN_SIZE
-	default "advise" if FSTESTS_TMPFS_HUGE_ADVISE
+
+endif # FSTESTS_TMPFS_ENABLE_HUGE
 
 endif # FSTESTS_TMPFS_MANUAL_COVERAGE
 
@@ -72,10 +76,17 @@ config FSTESTS_TMPFS_SECTION_DEFAULT
 
 config FSTESTS_TMPFS_SECTION_NOSWAP
 	bool
-	default n
 
-config FSTESTS_TMPFS_HUGE_MODE
-	string
-	default "huge=never"
+config FSTESTS_TMPFS_SECTION_HUGE_NEVER
+	bool
+
+config FSTESTS_TMPFS_SECTION_HUGE_ALWAYS
+	bool
+
+config FSTESTS_TMPFS_SECTION_HUGE_WITHIN_SIZE
+	bool
+
+config FSTESTS_TMPFS_SECTION_HUGE_ADVISE
+	bool
 
 endif # !FSTESTS_TMPFS_MANUAL_COVERAGE
