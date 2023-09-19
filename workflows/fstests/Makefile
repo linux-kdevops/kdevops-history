@@ -30,16 +30,6 @@ ifeq (y,$(CONFIG_FSTESTS_TFB_COPY_ENABLE))
 FSTESTS_ARGS += fstests_tfp_copy_enable='True'
 endif
 
-ifeq (y,$(CONFIG_FSTESTS_NFS_ENABLE))
-FSTESTS_ARGS += fstests_nfs_enable='True'
-FSTESTS_NFS_SERVER_HOST:=$(subst ",,$(CONFIG_FSTESTS_NFS_SERVER_HOST))
-ifeq (y,$(CONFIG_FSTESTS_USE_KDEVOPS_NFSD))
-FSTESTS_NFS_SERVER_HOST:=$(subst ",,$(CONFIG_KDEVOPS_HOSTS_PREFIX))-nfsd
-FSTESTS_ARGS += fstests_nfs_use_kdevops_nfsd='True'
-endif # CONFIG_FSTESTS_USE_KDEVOPS_NFSD
-FSTESTS_ARGS += fstests_nfs_server_host='$(FSTESTS_NFS_SERVER_HOST)'
-endif # CONFIG_FSTESTS_NFS
-
 ifeq (y,$(CONFIG_FSTESTS_TESTDEV_SPARSEFILE_GENERATION))
 FSTESTS_ARGS += fstests_test_dev='$(FSTESTS_TEST_DEV)'
 endif

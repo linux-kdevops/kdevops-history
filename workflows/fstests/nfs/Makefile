@@ -1,3 +1,11 @@
+FSTESTS_ARGS += fstests_nfs_enable='True'
+FSTESTS_NFS_SERVER_HOST:=$(subst ",,$(CONFIG_FSTESTS_NFS_SERVER_HOST))
+ifeq (y,$(CONFIG_FSTESTS_USE_KDEVOPS_NFSD))
+FSTESTS_NFS_SERVER_HOST:=$(subst ",,$(CONFIG_KDEVOPS_HOSTS_PREFIX))-nfsd
+FSTESTS_ARGS += fstests_nfs_use_kdevops_nfsd='True'
+endif # CONFIG_FSTESTS_USE_KDEVOPS_NFSD
+FSTESTS_ARGS += fstests_nfs_server_host='$(FSTESTS_NFS_SERVER_HOST)'
+
 ifeq (y,$(CONFIG_FSTESTS_NFS_SECTION_DEFAULT))
 FSTESTS_ARGS += fstests_nfs_section_default=True
 endif
