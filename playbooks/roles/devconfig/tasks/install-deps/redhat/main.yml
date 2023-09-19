@@ -17,6 +17,7 @@
     path: "{{ devconfig_custom_yum_repofile }}"
   register: custom_repofile
   delegate_to: localhost
+  when: devconfig_custom_yum_repofile is defined
 
 - name: Add custom yum repo
   become: yes
