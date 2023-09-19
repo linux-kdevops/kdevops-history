@@ -30,10 +30,6 @@ ifeq (y,$(CONFIG_FSTESTS_TFB_COPY_ENABLE))
 FSTESTS_ARGS += fstests_tfp_copy_enable='True'
 endif
 
-ifeq (y,$(CONFIG_FSTESTS_TESTDEV_SPARSEFILE_GENERATION))
-FSTESTS_ARGS += fstests_test_dev='$(FSTESTS_TEST_DEV)'
-endif
-
 ifeq (y,$(CONFIG_FSTESTS_XFS))
 include $(TOPDIR)/workflows/fstests/Makefile.xfs
 endif
@@ -82,7 +78,17 @@ ifeq (y,$(CONFIG_FSTESTS_TESTDEV_NVME_FALLBACK_MODEL_SERIAL))
 FSTESTS_ARGS += fstests_testdev_nvme_fallback_model_serial='True'
 endif
 
+ifeq (y,$(CONFIG_CONFIG_BOOTLINUX))
+TREE_TAG:=$(subst ",,$(CONFIG_BOOTLINUX_TREE_TAG))
+FSTESTS_ARGS += fstests_perf_config='$(PROJECTRELEASE)-kernel-$(TREE_TAG)'
+endif
+ifeq (,$(CONFIG_CONFIG_BOOTLINUX))
+FSTESTS_ARGS += fstests_perf_config='$(PROJECTRELEASE)-kernel-distro'
+endif
+
 ifeq (y,$(CONFIG_FSTESTS_TESTDEV_SPARSEFILE_GENERATION))
+
+FSTESTS_ARGS += fstests_test_dev='$(FSTESTS_TEST_DEV)'
 FSTESTS_LOGWRITES_DEV:=$(subst ",,$(CONFIG_FSTESTS_LOGWRITES_DEV))
 FSTESTS_ARGS += fstests_logwrites_dev='$(FSTESTS_LOGWRITES_DEV)'
 
@@ -95,17 +101,6 @@ FSTESTS_ARGS += fstests_scratch_rtdev='$(FSTESTS_SCRATCH_RTDEV)'
 SPARSE_GEN:=$(subst ",,$(CONFIG_FSTESTS_TESTDEV_SPARSEFILE_GENERATION))
 FSTESTS_ARGS += fstests_testdev_sparsefile_generation='True'
 FSTESTS_ARGS += sparsefiles_generation='$(SPARSE_GEN)'
-endif
-
-ifeq (y,$(CONFIG_CONFIG_BOOTLINUX))
-TREE_TAG:=$(subst ",,$(CONFIG_BOOTLINUX_TREE_TAG))
-FSTESTS_ARGS += fstests_perf_config='$(PROJECTRELEASE)-kernel-$(TREE_TAG)'
-endif
-ifeq (,$(CONFIG_CONFIG_BOOTLINUX))
-FSTESTS_ARGS += fstests_perf_config='$(PROJECTRELEASE)-kernel-distro'
-endif
-
-ifeq (y,$(CONFIG_FSTESTS_TESTDEV_SPARSEFILE_GENERATION))
 
 export FSTESTS_TESTDEV_SPARSEFILE_GENERATION:=y
 SPARSE_DEV:=$(subst ",,$(CONFIG_FSTESTS_SPARSE_DEV))
