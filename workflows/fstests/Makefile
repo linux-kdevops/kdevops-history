@@ -30,8 +30,7 @@ ifeq (y,$(CONFIG_FSTESTS_TFB_COPY_ENABLE))
 FSTESTS_ARGS += fstests_tfp_copy_enable='True'
 endif
 
-
-ifeq (y,$(CONFIG_FSTESTS_NFS))
+ifeq (y,$(CONFIG_FSTESTS_NFS_ENABLE))
 FSTESTS_ARGS += fstests_nfs_enable='True'
 FSTESTS_NFS_SERVER_HOST:=$(subst ",,$(CONFIG_FSTESTS_NFS_SERVER_HOST))
 ifeq (y,$(CONFIG_FSTESTS_USE_KDEVOPS_NFSD))
