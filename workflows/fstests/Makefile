@@ -41,7 +41,8 @@ endif # CONFIG_FSTESTS_USE_KDEVOPS_NFSD
 FSTESTS_ARGS += fstests_nfs_server_host='$(FSTESTS_NFS_SERVER_HOST)'
 endif # CONFIG_FSTESTS_NFS
 
-ifeq (y,$(CONFIG_FSTESTS_TMPFS))
+# We can later remove this when kconfig gets extra_vars.yaml output support
+ifeq (y,$(CONFIG_FSTESTS_TMPFS_ENABLE))
 FSTESTS_ARGS += fstests_tmpfs_enable='True'
 endif # CONFIG_FSTESTS_TMPFS
 
