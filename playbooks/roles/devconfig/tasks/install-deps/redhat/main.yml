@@ -29,7 +29,7 @@
     group: root
     mode: 0644
   when:
-    - devconfig_custom_yum_repofile
+    - devconfig_custom_yum_repofile is defined
     - custom_repofile.stat.exists
 
 - name: Refresh cache and upgrade all present packages
