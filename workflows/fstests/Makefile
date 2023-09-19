@@ -41,11 +41,6 @@ endif # CONFIG_FSTESTS_USE_KDEVOPS_NFSD
 FSTESTS_ARGS += fstests_nfs_server_host='$(FSTESTS_NFS_SERVER_HOST)'
 endif # CONFIG_FSTESTS_NFS
 
-# We can later remove this when kconfig gets extra_vars.yaml output support
-ifeq (y,$(CONFIG_FSTESTS_TMPFS_ENABLE))
-FSTESTS_ARGS += fstests_tmpfs_enable='True'
-endif # CONFIG_FSTESTS_TMPFS
-
 ifeq (y,$(CONFIG_FSTESTS_TESTDEV_SPARSEFILE_GENERATION))
 FSTESTS_ARGS += fstests_test_dev='$(FSTESTS_TEST_DEV)'
 endif
@@ -62,9 +57,9 @@ ifeq (y,$(CONFIG_FSTESTS_NFS))
 include $(TOPDIR)/workflows/fstests/nfs/Makefile
 endif
 
-#ifeq (y,$(CONFIG_FSTESTS_TMPFS))
-#include $(TOPDIR)/workflows/fstests/tmpfs/Makefile
-#endif
+ifeq (y,$(CONFIG_FSTESTS_TMPFS))
+include $(TOPDIR)/workflows/fstests/tmpfs/Makefile
+endif
 
 ifeq (y,$(CONFIG_QEMU_ENABLE_NVME_ZNS))
 FSTESTS_ARGS += fstests_test_dev_zns='$(subst ",,$(CONFIG_FSTESTS_TEST_DEV_ZNS))'
