@@ -145,8 +145,8 @@ fstests_nfs_section_v40: False
 fstests_nfs_section_v3: False
 
 fstests_tmpfs_enable: False
-fstests_tmpfs_test_dev: "/mnt/test"
-fstests_tmpfs_scratch_devpool: "/mnt/scratch"
+fstests_tmpfs_test_dev: "/media/test"
+fstests_tmpfs_scratch_devpool: "/media/scratch"
 fstests_tmpfs_section_default: False
 fstests_tmpfs_section_noswap: False
 fstests_tmpfs_enable_huge: False
