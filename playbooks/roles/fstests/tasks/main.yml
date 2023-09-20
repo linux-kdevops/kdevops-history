@@ -300,7 +300,7 @@
     dest: "{{ target_config }}"
     force: yes
   when:
-    - fstests_testdev_sparsefile_generation|bool
+    - fstests_generate_simple_config_enable|bool
     - fstests_debug_localhost|bool
     - host_specific_fstests_config.stat.exists
 
@@ -313,7 +313,7 @@
     dest: "{{ topdir_path }}/workflows/fstests/{{ fstests_fstyp }}/{{ fstests_fstyp }}.config.generated"
     force: yes
   when:
-    - not fstests_testdev_nvme_euis and not fstests_testdev_nvme_partition_euis | bool
+    - fstests_generate_simple_config_enable|bool
     - fstests_debug_localhost|bool
     - not host_specific_fstests_config.stat.exists
 
@@ -327,11 +327,9 @@
     dest: "{{ fstests_data_target }}/configs/{{ ansible_host }}.config"
     force: yes
   when:
-    - fstests_testdev_sparsefile_generation|bool
+    - fstests_generate_simple_config_enable|bool
     - not fstests_debug_localhost|bool
     - host_specific_fstests_config.stat.exists
-    - fstests_fstyp != "nfs"
-    - fstests_fstyp != "tmpfs"
 
 - name: Copy and force overwrite of the target filesystem fstests configuration
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
@@ -343,11 +341,9 @@
     dest: "{{ fstests_data_target }}/configs/{{ ansible_host }}.config"
     force: yes
   when:
-    - fstests_testdev_sparsefile_generation|bool
+    - fstests_generate_simple_config_enable|bool
     - not fstests_debug_localhost|bool
     - not host_specific_fstests_config.stat.exists
-    - fstests_fstyp != "nfs"
-    - fstests_fstyp != "tmpfs"
 
 - name: Try to see if NVMe EUIs exist on /dev/disk/by-id/nvme-eui.*
   become: yes
@@ -360,7 +356,7 @@
   register: real_nvme_euis
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
   when:
-    - (not fstests_testdev_sparsefile_generation) and (fstests_testdev_nvme_partition_euis or fstests_testdev_nvme_euis) | bool
+    - fstests_generate_nvme_live_config_enable|bool
 
 - name: End if no NVMe EUIs found per node and no fallback mechanism is provided
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
@@ -381,7 +377,7 @@
   set_fact:
     nvmes: "{{ real_nvme_euis }}"
   when:
-    - (not fstests_testdev_sparsefile_generation) and (fstests_testdev_nvme_partition_euis or fstests_testdev_nvme_euis) | bool
+    - fstests_generate_nvme_live_config_enable|bool
     - real_nvme_euis is success
     - real_nvme_euis.files is defined
     - real_nvme_euis.files | length > 0
@@ -402,14 +398,14 @@
     - real_nvme_euis is success
     - real_nvme_euis.files is defined
     - real_nvme_euis.files | length == 0
-    - (not fstests_testdev_sparsefile_generation) and (fstests_testdev_nvme_partition_euis or fstests_testdev_nvme_euis) | bool
+    - fstests_generate_nvme_live_config_enable|bool
     - fstests_testdev_nvme_fallback_model_serial|bool
 
 - name: Set real nvmes to fallback list if one found
   set_fact:
     nvmes: "{{ fallback_nvmes }}"
   when:
-    - (not fstests_testdev_sparsefile_generation) and (fstests_testdev_nvme_partition_euis or fstests_testdev_nvme_euis) | bool
+    - fstests_generate_nvme_live_config_enable|bool
     - real_nvme_euis is success
     - real_nvme_euis.files is defined
     - real_nvme_euis.files | length == 0
@@ -425,7 +421,7 @@
       {%- endfor -%}
       {{ x }}
   when:
-    - (not fstests_testdev_sparsefile_generation) and (fstests_testdev_nvme_partition_euis or fstests_testdev_nvme_euis) | bool
+    - fstests_generate_nvme_live_config_enable|bool
     - nvmes is defined
     - nvmes is success
     - nvmes.files is defined

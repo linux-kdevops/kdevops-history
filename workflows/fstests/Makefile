@@ -30,6 +30,18 @@ ifeq (y,$(CONFIG_FSTESTS_TFB_COPY_ENABLE))
 FSTESTS_ARGS += fstests_tfp_copy_enable='True'
 endif
 
+ifeq (y,$(CONFIG_FSTESTS_USES_NO_DEVICES))
+FSTESTS_ARGS += fstests_uses_no_devices='True'
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_GENERATE_SIMPLE_CONFIG_ENABLE))
+FSTESTS_ARGS += fstests_generate_simple_config_enable='True'
+endif
+
+ifeq (y,$(CONFIG_FSTESTS_GENERATE_NVME_LIVE_CONFIG_ENABLE))
+FSTESTS_ARGS += fstests_generate_nvme_live_config_enable='True'
+endif
+
 ifeq (y,$(CONFIG_FSTESTS_XFS))
 include $(TOPDIR)/workflows/fstests/Makefile.xfs
 endif

@@ -434,6 +434,10 @@ _check_dev_setup()
 		return
 	fi
 
+	if [ "$FSTESTS_USES_NO_DEVICES" = "True" ]; then
+		return
+	fi
+
 	blkid -t TYPE=$FSTYP $TEST_DEV /dev/null
 	if [[ $? -ne 0 ]]; then
 		echo "FSTYP: $FSTYP Section: $INFER_SECTION with TEST_DEV: $TEST_DEV and MKFS_OPTIONS: $MKFS_OPTIONS TEST_DIR: $TEST_DIR"

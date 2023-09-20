@@ -28,6 +28,10 @@ fstests_test_logdev_mkfs_opts: "/dev/null"
 fstests_test_dev_zns: "/dev/null"
 fstests_zns_enabled: False
 
+fstests_uses_no_devices: False
+fstests_generate_simple_config_enable: False
+fstests_generate_nvme_live_config_enable: False
+
 fstests_testdev_under_development: False
 fstests_testdev_sparsefile_generation: False
 fstests_testdev_nvme_partition_euis: False

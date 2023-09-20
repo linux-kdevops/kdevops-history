@@ -30,6 +30,15 @@ config FSTESTS_TMPFS_ENABLE
 config FSTESTS_NFS_ENABLE
 	bool
 
+config FSTESTS_USES_NO_DEVICES
+	bool
+
+config FSTESTS_GENERATE_SIMPLE_CONFIG_ENABLE
+	bool
+
+config FSTESTS_GENERATE_NVME_LIVE_CONFIG_ENABLE
+	bool
+
 choice
 	prompt "Target filesystem to test"
 	default FSTESTS_BTRFS
@@ -58,6 +67,8 @@ config FSTESTS_NFS
 config FSTESTS_TMPFS
 	bool "tmpfs"
 	select FSTESTS_TMPFS_ENABLE
+	select FSTESTS_USES_NO_DEVICES
+	select FSTESTS_GENERATE_SIMPLE_CONFIG_ENABLE
 	help
 	  This will target testing the tmpfs (Virtual Memory File System).
 
@@ -303,6 +314,7 @@ choice
 
 config FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 	bool "Create sparse files for test devices"
+	select FSTESTS_GENERATE_SIMPLE_CONFIG_ENABLE
 	help
 	  When testing a filesystem with fstests you must provide the
 	  test devices to be used to test. By selecting this option
@@ -358,6 +370,7 @@ config FSTESTS_TESTDEV_NVME_PARTITION_EUIS
 	select EXTRA_STORAGE_SUPPORTS_1K
 	select EXTRA_STORAGE_SUPPORTS_2K
 	select EXTRA_STORAGE_SUPPORTS_4K
+	select FSTESTS_GENERATE_NVME_LIVE_CONFIG_ENABLE
 	help
 	  If you want to test using real storage drives the only way
 	  to reliably ensure they are the same drives upon a reboot is
@@ -409,6 +422,7 @@ config FSTESTS_TESTDEV_NVME_EUIS
 	select EXTRA_STORAGE_SUPPORTS_1K
 	select EXTRA_STORAGE_SUPPORTS_2K
 	select EXTRA_STORAGE_SUPPORTS_4K
+	select FSTESTS_GENERATE_NVME_LIVE_CONFIG_ENABLE
 	help
 	  If you want to test using real storage drives the only way
 	  to reliably ensure they are the same drives upon a reboot is
