@@ -1,3 +1,24 @@
+if BOOTLINUX_TREE_MCGROF_LINUS
+
+choice
+	prompt "mcgrof-linus branch to use"
+	default BOOTLINUX_MCGROF_LINUS_LBS
+
+config BOOTLINUX_MCGROF_LINUS_LBS
+	bool "large-block-linus"
+	help
+	  Use the latest LBS branch based on Linus' tree.
+
+config BOOTLINUX_MCGROF_LINUS_LBS_NOBDEV
+	bool "large-block-linus-nobdev"
+	help
+	  Use the latest minimal branch for LBS which let's you use LBS
+	  devices with a sectorsize compatibility based on Linus' tree.
+
+endchoice
+
+endif # BOOTLINUX_TREE_MCGROF_LINUS
+
 if BOOTLINUX_TREE_MCGROF_NEXT
 
 choice

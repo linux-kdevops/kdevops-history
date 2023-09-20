@@ -5,11 +5,13 @@ LINUX_SERVICES := linux-mirror.service
 LINUX_SERVICES += linux-stable-mirror.service
 LINUX_SERVICES += linux-next-mirror.service
 LINUX_SERVICES += mcgrof-next-mirror.service
+LINUX_SERVICES += mcgrof-linus-mirror.service
 
 LINUX_TIMERS := linux-mirror.timer
 LINUX_TIMERS += linux-stable-mirror.timer
 LINUX_TIMERS += linux-next-mirror.timer
 LINUX_TIMERS += mcgrof-next-mirror.timer
+LINUX_TIMERS += mcgrof-linus-mirror.timer
 
 QEMU_SERVICES  := qemu-mirror.service
 QEMU_SERVICES  += qemu-jic23-mirror.service
@@ -23,6 +25,7 @@ LOCAL_SYSTEMD    := /usr/local/lib/systemd/system/
 TORVALDS_TARGET		:= $(MIRROR_PATH)/linux.git
 STABLE_TARGET		:= $(MIRROR_PATH)/linux-stable.git
 NEXT_TARGET		:= $(MIRROR_PATH)/linux-next.git
+MCGROF_TARGET_LINUS	:= $(MIRROR_PATH)/mcgrof-linus.git
 MCGROF_TARGET		:= $(MIRROR_PATH)/mcgrof-next.git
 QEMU_TARGET     	:= $(MIRROR_PATH)/qemu.git
 QEMU_JIC23_TARGET	:= $(MIRROR_PATH)/qemu-jic23.git
@@ -73,6 +76,10 @@ mirror:
 	$(Q)if [ ! -d $(MCGROF_TARGET) ]; then \
 	  echo "          CLONE mcgrof/linux-next" ;\
 	  git -C $(MIRROR_PATH) clone $(GIT_VERBOSE) --progress --mirror $(MCGROF) --reference /mirror/linux.git $(MCGROF_TARGET) ;\
+	fi
+	$(Q)if [ ! -d $(MCGROF_TARGET_LINUS) ]; then \
+	  echo "          CLONE mcgrof/linux" ;\
+	  git -C $(MIRROR_PATH) clone $(GIT_VERBOSE) --progress --mirror $(MCGROF_LINUS) --reference /mirror/linux.git $(MCGROF_TARGET_LINUS) ;\
 	fi
 	$(Q)if [ ! -d $(QEMU_TARGET) ]; then \
 	  echo "          CLONE qemu-project/qemu" ;\

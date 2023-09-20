@@ -1,0 +1,39 @@
+if BOOTLINUX_LINUS
+
+choice
+	prompt "Linux tree based on Linus' tree to use"
+	default BOOTLINUX_TREE_LINUS
+
+config BOOTLINUX_TREE_LINUS
+	bool "linux"
+	help
+	  Use Linus Torvald's linux tree.
+
+config BOOTLINUX_TREE_MCGROF_LINUS
+	bool "mcgrof-linus"
+	help
+	  Branches in mcgrof's tree based on Linus' tree.
+
+endchoice
+
+if BOOTLINUX_TREE_LINUS
+
+choice
+	prompt "Linus' tag or branch to use"
+	default BOOTLINUX_LINUS_66_RC2
+
+config BOOTLINUX_LINUS_MASTER
+	bool "master"
+	help
+	  Use the master branch, the top of Linus' tree.
+
+config BOOTLINUX_LINUS_66_RC2
+	bool "v6.6-rc2"
+	help
+	  Use the v6.6-rc2 tag.
+
+endchoice
+
+endif # BOOTLINUX_TREE_LINUS
+
+endif # BOOTLINUX_LINUS

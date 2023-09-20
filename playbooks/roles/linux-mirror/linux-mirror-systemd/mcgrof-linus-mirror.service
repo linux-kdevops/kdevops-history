@@ -1,0 +1,13 @@
+[Unit]
+Description=Linux mcgrof's linus mirror [mcgrof-linus.git]
+Documentation=man:git(1)
+ConditionPathExists=/mirror/mcgrof-linus.git
+
+[Service]
+Type=oneshot
+ExecStartPre=/usr/bin/git -C /mirror/mcgrof-linus.git remote update --prune
+ExecStart=/usr/bin/git -C /mirror/mcgrof-linus.git fetch --tags --prune
+ExecStartPost=/usr/bin/git -C /mirror/mcgrof-linus.git fetch origin +refs/heads/*:refs/heads/*
+
+[Install]
+WantedBy=multi-user.target

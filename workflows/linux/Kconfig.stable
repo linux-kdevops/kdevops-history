@@ -14,6 +14,11 @@ config BOOTLINUX_TREE_STABLE
 	help
 	  Use the linux-stable tree.
 
+config BOOTLINUX_TREE_MCGROF_LINUS
+	bool "mcgrof-linus"
+	help
+	  Branches in mcgrof's tree based on Linus' tree.
+
 endchoice
 
 if BOOTLINUX_TREE_STABLE

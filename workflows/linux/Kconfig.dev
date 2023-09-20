@@ -28,7 +28,4 @@ config BOOTLINUX_TREE_MCGROF_NEXT
 
 endchoice
 
-source "workflows/linux/Kconfig.mcgrof"
-source "workflows/linux/Kconfig.jlayton"
-
 endif # BOOTLINUX_DEV

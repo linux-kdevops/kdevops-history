@@ -106,7 +106,7 @@ config MIRROR_NEXT_GIT
 endchoice
 
 choice
-	prompt "Linux mcgrof's protocol/source"
+	prompt "Linux mcgrof's linux-next fork protocol/source"
 	default MIRROR_MCGROF_GIT
 	depends on INSTALL_LOCAL_LINUX_MIRROR
 
@@ -127,6 +127,37 @@ config MIRROR_MCGROF_HTTPS_GOOGLE
 	  https://kernel.googlesource.com/pub/scm/linux/kernel/git/mcgrof/linux-next.git
 
 config MIRROR_MCGROF_GIT
+	bool "Git"
+	help
+	  If you enable this option then Git protocol will be used as the
+	  source of the mirror. The URL is:
+
+	  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git
+
+endchoice
+
+choice
+	prompt "Linux mcgrof's linux fork protocol/source"
+	default MIRROR_MCGROF_LINUS_GIT
+	depends on INSTALL_LOCAL_LINUX_MIRROR
+
+config MIRROR_MCGROF_LINUS_HTTPS
+	bool "HTTPS"
+	help
+	  If you enable this option then HTTPS will be used as the source
+	  of the mirror. The URL is:
+
+	  https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git
+
+config MIRROR_MCGROF_LINUS_HTTPS_GOOGLE
+	bool "HTTPS (Google)"
+	help
+	  If you enable this option then HTTPS will be used as the source
+	  of the mirror and Google URL will be chosen. The URL is:
+
+	  https://kernel.googlesource.com/pub/scm/linux/kernel/git/mcgrof/linux-next.git
+
+config MIRROR_MCGROF_LINUS_GIT
 	bool "Git"
 	help
 	  If you enable this option then Git protocol will be used as the
