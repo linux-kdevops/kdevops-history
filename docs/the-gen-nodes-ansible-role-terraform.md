@@ -2,7 +2,7 @@
 
 The `gen_nodes` ansible role is used to let us generate certain target files we
 need upon bringup. The amount of files it generates will depend on the features
-you have enabled. For cloud environments terraform is supported ans the
+you have enabled. For cloud environments terraform is supported and the
 following files are generated:
 
   * The `KDEVOPS_NODES` file: defines which nodes to create

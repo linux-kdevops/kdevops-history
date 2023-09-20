@@ -1,7 +1,7 @@
 # kdevops evolving make help
 
 kdevops is designed to be used by simple make targets. At each step you can
-find out which options you have to use bu just running:
+find out which options you have to use by just running:
 
 ```bash
 make help

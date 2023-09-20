@@ -76,13 +76,13 @@ the Linux kernel selftsets. Although we started out with only a few kernel
 selftests, and although a rule behind support for kernel seflftests was to
 not have rules, a basic rule of thumb was for them to not take too long.
 The default kernel selftests timeout is 45 seconds, and we already have
-96 selftests which override this timeout ot be greater than 45 seconds.
+96 selftests which override this timeout to be greater than 45 seconds.
 So now we have many kernel selftests and running all kernel selftests can
 take time. Likewise kernel selftests does not treat a timeout as fatal.
 We now have upstream kernel sefltests support [to override the default selftets timeout on test
 runners](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f6a01213e3f812b645cd1079167bf47fc45bb0c8)
 and this enables test runners like kdevops to let dedicated test workflows
-override the default timeout of 45 seconds and if we want let us worfklow
+override the default timeout of 45 seconds and if we want let us workflow
 treat these as fatal.
 
 What kdevops does then is to let us parallelize kernel selftests by having
@@ -108,7 +108,7 @@ filesystem will support a different set of filesystem configurations.
 
 For blktests we aim to support a guest per target block driver.
 
-## Future enhancements to parallization with k8
+## Future enhancements to parallelization with k8
 
 It should be possible to evaluate using kubernetes (k8) as an alternative
 to just splitting up tests per target features one wants to test. Instead

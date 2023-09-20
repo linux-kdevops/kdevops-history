@@ -97,7 +97,7 @@ make sure we parity with the variable names and kconfig options used. That
 will obviously grow the `extra_vars.yaml` file without much need though,
 so one option to fix that and not go crazy with how many variables we
 output is to have an option in Kconfig below a Kconfig symbol which let's
-us specify which ones are targetted for yaml output. This might bring
+us specify which ones are targeted for yaml output. This might bring
 complexities but if the size of the yaml output is of cooncern it is one
 way to go about this. If the length of the yaml file is of no concern then
 this feature is not needed.

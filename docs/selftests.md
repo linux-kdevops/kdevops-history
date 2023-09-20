@@ -5,7 +5,7 @@ call "Kernel selftests". Read the [Linux kernel selftests documentation](https:/
 Running selftests used to be fast back in the day when we only had a few
 kernel selftests. But these days there are many kernel selftests. Part of
 the beauty of Linux kernel selftests is that there are no rules -- you make
-your rules. The only rules are at least expicitly mentioning a few targets
+your rules. The only rules are at least explicitly mentioning a few targets
 for Makefiles so that the overall selftests facility knows what target to
 call to run some tests. Part of the complexity in selftests these days is
 that due to the lack of rules, you may end up needing a bit of dependencies

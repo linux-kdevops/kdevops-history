@@ -29,7 +29,7 @@ that implementation. After this effort flush requests are now respected when
 needed on the loop block driver. Before this users of loopback block devices
 only had the option to choose between really bad performance using O_SYNC to
 make it as though each write(2) was followed by a call to fsync(2), or not do
-this and risk loosing data when using loopback block devices. On the v4.4 kernel
+this and risk losing data when using loopback block devices. On the v4.4 kernel
 support was added to use an ioctl to enable O_DIRECT on loopback drives given
 that it isn't easy to pass a file descriptor opened as O_DIRECT, the new ioctl
 is LOOP_SET_DIRECT_IO. This can be used to bypass the cache completely, when
