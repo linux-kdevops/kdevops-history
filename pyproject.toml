@@ -1,0 +1,5 @@
+[tool.codespell]
+builtin = "clear,rare,informal,usage,code,names"
+summary = ''
+ignore-words-list = 'iam'
+write-changes = ''
