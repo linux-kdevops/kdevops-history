@@ -9,7 +9,7 @@ Other than using Kconfig to let you configure your bring up environment and
 requirements kdevops also brings the options that fstests offers into Kconfig,
 and so enables an easy way to configure you fstests test environment.
 
-# kdevops fstess dedicated workflow
+# kdevops fstests dedicated workflow
 
 If you are going to test a filesystem you really want to enable a dedicated
 workflow (`CONFIG_KDEVOPS_WORKFLOW_DEDICATE_FSTESTS=y`) as that allows kdevops
@@ -190,6 +190,98 @@ not yet merged on upstream fstests, which adds support for the
 
 See [viewing kdevops archived results](viewing-fstests-results.md) to see
 how you can look at existing results file inside kdevops.
+
+# How to add a new filesystem test profile
+
+kdevops strives to supports making make adding new test profiles as easy as
+just adding  Kconfig option for it and the respective fstests configuration
+entry. The fact that you have to do more work today is a limitation of kconfig
+we plan to expand on.
+
+Adding a new target test profile for a filesystem is super easy. All you have
+to do is add a test profile, so for example, the tmpfs filesystem has:
+
+```
+playbooks/roles/fstests/templates/tmpfs/tmpfs.config
+```
+
+In it you will see a `[default]` section, this section is special, it allows
+kdevops's wrapper script oscheck.sh to read all variables in it, so it can
+share them all for all sections. Each of kdevop's scripts ensures to process
+these variables before proceeding.
+
+To add a new section just add the name so for example [tmpfs_huge_always]
+was added, and then a respective Kconfig entry for it with the name
+matching name FSTESTS_TMPFS_SECTION_HUGE_ALWAYS was added under:
+
+```
+playbooks/roles/fstests/templates/tmpfs/tmpfs.config
+```
+
+The templates directory is used as that is the default place ansible lets
+us stuff in template files we can use with the ansible template task so we
+can use jinja2 to parse variables you may have set up.
+
+That's it! Well, due to limitations you will also want to add respective
+ansible default variables for the filesystem, and a respective Makefile
+entry which switches the default to True when the Makefile detects it is
+enabled. For tmpfs that is:
+
+```
+workflows/fstests/tmpfs/Makefile
+```
+
+Each test section will create a new node / guest / cloud node to test.
+
+Once we extend kconfig to support an extra_vars.yaml output and
+we can also select which kconfig entries we want to be output, then these
+Makefile hacks are no longer needed.
+
+# How to verify if a filesystem test configuration looks OK
+
+You you are expanding a filesystem configuraiton file you can test and verify
+if your changes make sense with:
+
+```bash
+make fstests-config-debug
+```
+
+This will allow you to edit just the template file, Kconfig file, the
+ansible defaults file, the respective Makefile for the filesystem and see
+immediately (without bringup) if the changes look OK.
+
+# How kdevops verifies filesystem test sections
+
+It is painful to spawn nodes up only to realize you messed things up in
+your configuration. Because of this kdevops does a bit of sanity checking
+to verify that if you enabled a target section we will first ensure it is
+a valid test section.
+
+The ansible role gen_nodes is used for this, see:
+
+```
+playbooks/roles/gen_nodes/tasks/main.yml
+```
+
+The task to review are:
+
+  * "Check which fstests test types are enabled"
+
+This will look do first a;
+
+```
+"{{ lookup('file', fs_config_path) }}"
+```
+
+This looks for the filesystem configuration, in the case of tmpfs this is:
+
+```
+playbooks/roles/fstests/templates/tmpfs/tmpfs.config
+```
+
+It will try to look for all CONFIG_FSTESTS_' + fs + '_SECTION_' entries in
+your `.config` file. It will ignore the `[default]` section as it is shared.
+Then it looks for all filesystem configurations enabled with `=y`.
 
 TODO:
   * provide a python script to query all results for a specific test or filesystem.
