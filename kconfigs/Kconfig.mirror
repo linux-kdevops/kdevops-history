@@ -36,6 +36,7 @@ config INSTALL_LOCAL_LINUX_MIRROR
 	    /mirror/linux-stable.git
 	    /mirror/linux-next.git
 	    /mirror/mcgrof-next.git
+	    /mirror/mcgrof-linus.git
 
 	  Enabling this even if you already have the repositories does nothing
 	  so it is safe to keep this enabled even after your first linux-mirror
@@ -74,6 +75,12 @@ config MIRROR_TORVALDS_GIT
 
 endchoice
 
+config MIRROR_TORVALDS_URL
+	string
+	default "git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git" if MIRROR_TORVALDS_GIT
+	default "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git" if MIRROR_TORVALDS_HTTPS
+	default "https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux.git" if MIRROR_TORVALDS_HTTPS_GOOGLE
+
 choice
 	prompt "Linux Next mirror protocol/source"
 	default MIRROR_NEXT_GIT
@@ -104,6 +111,12 @@ config MIRROR_NEXT_GIT
 	  git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 
 endchoice
+
+config MIRROR_NEXT_URL
+	string
+	default "git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git" if MIRROR_NEXT_GIT
+	default "https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git" if MIRROR_NEXT_HTTPS
+	default "https://kernel.googlesource.com/pub/scm/linux/kernel/git/next/linux-next.git" if MIRROR_NEXT_HTTPS
 
 choice
 	prompt "Linux mcgrof's linux-next fork protocol/source"
@@ -136,6 +149,12 @@ config MIRROR_MCGROF_GIT
 
 endchoice
 
+config MIRROR_MCGROF_URL
+	string
+	default "git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git" if MIRROR_MCGROF_GIT
+	default "https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git" if MIRROR_MCGROF_HTTPS
+	default "https://kernel.googlesource.com/pub/scm/linux/kernel/git/mcgrof/linux-next.git" if MIRROR_MCGROF_HTTPS_GOOGLE
+
 choice
 	prompt "Linux mcgrof's linux fork protocol/source"
 	default MIRROR_MCGROF_LINUS_GIT
@@ -167,6 +186,12 @@ config MIRROR_MCGROF_LINUS_GIT
 
 endchoice
 
+config MIRROR_MCGROF_LINUS_URL
+	string
+	default "git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git" if MIRROR_MCGROF_LINUS_GIT
+	default "https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git" if MIRROR_MCGROF_LINUS_HTTPS
+	default "https://kernel.googlesource.com/pub/scm/linux/kernel/git/mcgrof/linux.git" if MIRROR_MCGROF_LINUS_HTTPS_GOOGLE
+
 choice
 	prompt "Linux stable mirror protocol/source"
 	default MIRROR_STABLE_GIT
@@ -197,6 +222,12 @@ config MIRROR_STABLE_GIT
 	  git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
 
 endchoice
+
+config MIRROR_STABLE_URL
+	string
+	default "git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git" if MIRROR_STABLE_GIT
+	default "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git" if MIRROR_STABLE_HTTPS
+	default "https://kernel.googlesource.com/pub/scm/linux/kernel/git/stable/linux.git" if MIRROR_STABLE_HTTPS_GOOGLE
 
 choice
 	prompt "QEMU mirror protocol/source"
@@ -236,6 +267,13 @@ config MIRROR_QEMU_SSH_GITHUB
 	  ssh://git@github.com:qemu/qemu.git
 endchoice
 
+config MIRROR_QEMU_URL
+	string
+	default "https://github.com/qemu/qemu.git" if MIRROR_QEMU_HTTPS_GITHUB
+	default "ssh://git@github.com:qemu/qemu.git" if MIRROR_QEMU_SSH_GITHUB
+	default "https://gitlab.com/qemu-project/qemu.git" if MIRROR_QEMU_HTTPS_GITLAB
+	default "ssh://git@gitlab.com:qemu-project/qemu.git" if MIRROR_QEMU_SSH_GITLAB
+
 choice
 	prompt "QEMU jic23 mirror protocol/source"
 	default MIRROR_QEMU_JIC23_HTTPS_GITLAB
@@ -273,5 +311,12 @@ config MIRROR_QEMU_JIC23_SSH_GITHUB
 
 	  ssh://git@github.com:jic23/qemu.git
 endchoice
+
+config MIRROR_QEMU_JIC23_URL
+	string
+	default "https://github.com/jic23/qemu.git" if MIRROR_QEMU_JIC23_HTTPS_GITHUB
+	default "ssh://git@github.com:jic23/qemu.git" if MIRROR_QEMU_JIC23_SSH_GITHUB
+	default "https://gitlab.com/jic23/qemu.git" if MIRROR_QEMU_JIC23_HTTPS_GITLAB
+	default "ssh://git@gitlab.com:jic23/qemu.git" if MIRROR_QEMU_JIC23_SSH_GITLAB
 
 endif
