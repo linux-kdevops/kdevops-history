@@ -55,7 +55,7 @@ NVMe drive support relies on the symlinks:
 For more details refer to [test using real NVMe drives](docs/testing-with-nvme.md).
 The symlinks are used to ensure the same drives are used upon reboot.
 
-You can use real NVMe drivse on nodes which are on baremetal, the cloud,
+You can use real NVMe drives on nodes which are on baremetal, the cloud,
 or virtualization using [PCIe passthrough](docs/libvirt-pcie-passthrough.md).
 kdevops supports all these and automates it setup for you.
 
@@ -239,7 +239,7 @@ Makefile hacks are no longer needed.
 
 # How to verify if a filesystem test configuration looks OK
 
-You you are expanding a filesystem configuraiton file you can test and verify
+You you are expanding a filesystem configuration file you can test and verify
 if your changes make sense with:
 
 ```bash
@@ -279,7 +279,7 @@ This looks for the filesystem configuration, in the case of tmpfs this is:
 playbooks/roles/fstests/templates/tmpfs/tmpfs.config
 ```
 
-It will try to look for all CONFIG_FSTESTS_' + fs + '_SECTION_' entries in
+It will try to look for all '`CONFIG_FSTESTS_`' + fs + '`_SECTION_`' entries in
 your `.config` file. It will ignore the `[default]` section as it is shared.
 Then it looks for all filesystem configurations enabled with `=y`.
 
