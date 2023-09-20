@@ -1,0 +1,42 @@
+generic/021 # needs investigation - lazy baseline - failure found in at least two sections
+generic/042 # lazy baseline - failure found in at least two sections
+generic/054 # lazy baseline - failure found in at least two sections
+generic/081 # lazy baseline - failure found in at least two sections
+generic/108 # lazy baseline - failure found in at least two sections
+generic/175 # seems like a test bug - lazy baseline - failure found in at least two sections
+generic/204 # lazy baseline - failure found in at least two sections
+generic/223 # lazy baseline - failure found in at least two sections
+generic/251 # crashes on xfs_reflink_16k_4ks https://gist.github.com/mcgrof/13e3ef6309ad7c8e997e0e49a4cc80f0 lazy baseline - failure found in at least two sections
+generic/297 # seems like a test bug - lazy baseline - failure found in at least two sections
+generic/298 # seems like a test bug - lazy baseline - failure found in at least two sections
+generic/361 # lazy baseline - failure found in at least two sections
+generic/455 # lazy baseline - failure found in at least two sections
+generic/459 # lazy baseline - failure found in at least two sections
+generic/465 # lazy baseline - failure found in at least two sections
+generic/471 # race against loop? - lazy baseline - failure found in at least two sections
+generic/482 # lazy baseline - failure found in at least two sections
+generic/563 # needs investigation - lazy baseline - failure found in at least two sections
+generic/650 # lazy baseline - failure found in at least two sections - can sometimes run forever
+generic/704 # lazy baseline - failure found in at least two sections
+generic/730 # lazy baseline - failure found in at least two sections
+generic/731 # lazy baseline - failure found in at least two sections
+shared/298 # lazy baseline - failure found in at least two sections
+xfs/009 # lazy baseline - failure found in at least two sections
+xfs/059 # lazy baseline - failure found in at least two sections
+xfs/060 # lazy baseline - failure found in at least two sections
+xfs/075 # lazy baseline - failure found in at least two sections
+xfs/157 # needs investigation - lazy baseline - failure found in at least two sections
+xfs/168 # lazy baseline - failure found in at least two sections
+xfs/188 # unclear - lazy baseline - failure found in at least two sections
+xfs/199 # lazy baseline - failure found in at least two sections
+xfs/205 # unclear - lazy baseline - failure found in at least two sections
+xfs/242 # lazy baseline - failure found in at least two sections
+xfs/270 # lazy baseline - failure found in at least two sections
+xfs/294 # lazy baseline - failure found in at least two sections
+xfs/301 # lazy baseline - failure found in at least two sections
+xfs/432 # test bug: blocksize should detect sector size - lazy baseline - failure found in at least two sections
+xfs/506 # needs investigation - lazy baseline - failure found in at least two sections
+xfs/513 # lazy baseline - failure found in at least two sections
+xfs/516 # needs investigation - lazy baseline - failure found in at least two sections
+xfs/597 # lazy baseline - failure found in at least two sections
+xfs/598 # lazy baseline - failure found in at least two sections
