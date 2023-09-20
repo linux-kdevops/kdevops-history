@@ -306,7 +306,7 @@ config FSTESTS_TESTDEV_UNDER_DEVELOPMENT
 	  want to help develop and test new features which let you use
 	  real drives to test fstests with.
 
-if !FSTESTS_TMPFS
+if !FSTESTS_TMPFS && !FSTESTS_NFS
 
 choice
 	prompt "Strategy for device pool"
