@@ -19,7 +19,7 @@ config FSTESTS_TMPFS_MANUAL_COVERAGE
 if FSTESTS_TMPFS_MANUAL_COVERAGE
 
 config FSTESTS_TMPFS_SECTION_DEFAULT
-	bool "Enable testing section default"
+	bool "Enable testing section default: tmpfs_default"
 	default y
 	help
 	  Enabling this will test tmpfs with the default mount options.
@@ -33,27 +33,27 @@ config FSTESTS_TMPFS_ENABLE_NOSWAP
 if FSTESTS_TMPFS_ENABLE_NOSWAP
 
 config FSTESTS_TMPFS_SECTION_NOSWAP_HUGE_NEVER
-	bool "Enable testing section: tmpfs_noswap_huge_never"
+	bool "Enable testing section noswap: tmpfs_noswap_huge_never"
 	default n
 	help
 	  With swap disabled, never allocate huge pages.
 
 config FSTESTS_TMPFS_SECTION_NOSWAP_HUGE_ALWAYS
-	bool "Enable testing section: tmpfs_noswap_huge_always"
+	bool "Enable testing section noswap: tmpfs_noswap_huge_always"
 	default n
 	help
 	  With swap disabled, attempt to allocate huge page every time a new
 	  page is needed.
 
 config FSTESTS_TMPFS_SECTION_NOSWAP_HUGE_WITHIN_SIZE
-	bool "Enable testing section: tmpfs_noswap_huge_within_size"
+	bool "Enable testing section noswap: tmpfs_noswap_huge_within_size"
 	default n
 	help
 	  With swap disabled, only allocate huge page if it will be fully
 	  within i_size. Also respect madvise(2) hints.
 
 config FSTESTS_TMPFS_SECTION_NOSWAP_HUGE_ADVISE
-	bool "Enable testing section: tmpfs_noswap_huge_advise"
+	bool "Enable testing section noswap: tmpfs_noswap_huge_advise"
 	default n
 	help
 	  With swap disabled, only allocate huge page if requested with madvise(2).
@@ -69,20 +69,20 @@ config FSTESTS_TMPFS_ENABLE_HUGE
 if FSTESTS_TMPFS_ENABLE_HUGE
 
 config FSTESTS_TMPFS_SECTION_HUGE_ALWAYS
-	bool "Enable testing section: tmpfs_huge_always"
+	bool "Enable testing section huge: tmpfs_huge_always"
 	default n
 	help
 	  Attempt to allocate huge page every time a new page is needed.
 
 config FSTESTS_TMPFS_SECTION_HUGE_WITHIN_SIZE
-	bool "Enable testing section: tmpfs_huge_within_size"
+	bool "Enable testing section huge: tmpfs_huge_within_size"
 	default n
 	help
 	  Only allocate huge page if it will be fully within i_size. Also respect
 	  madvise(2) hints.
 
 config FSTESTS_TMPFS_SECTION_HUGE_ADVISE
-	bool "Enable testing section: tmpfs_huge_advise"
+	bool "Enable testing section huge: tmpfs_huge_advise"
 	default n
 	help
 	  Only allocate huge page if requested with madvise(2).
