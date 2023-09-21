@@ -22,15 +22,15 @@ ifeq (y,$(CONFIG_FSTESTS_TMPFS_SECTION_NOSWAP_HUGE_NEVER))
 FSTESTS_ARGS += fstests_tmpfs_section_noswap_huge_never=True
 endif
 
-ifeq (y,$(CONFIG_FSTESTS_TMPFS_SECTION_NOSWAP_noswap_huge_ALWAYS))
+ifeq (y,$(CONFIG_FSTESTS_TMPFS_SECTION_NOSWAP_HUGE_ALWAYS))
 FSTESTS_ARGS += fstests_tmpfs_section_noswap_huge_always=True
 endif
 
-ifeq (y,$(CONFIG_FSTESTS_TMPFS_SECTION_NOSWAP_noswap_huge_WITHIN_SIZE))
+ifeq (y,$(CONFIG_FSTESTS_TMPFS_SECTION_NOSWAP_HUGE_WITHIN_SIZE))
 FSTESTS_ARGS += fstests_tmpfs_section_noswap_huge_within_size=True
 endif
 
-ifeq (y,$(CONFIG_FSTESTS_TMPFS_SECTION_NOSWAP_noswap_huge_ADVISE))
+ifeq (y,$(CONFIG_FSTESTS_TMPFS_SECTION_NOSWAP_HUGE_ADVISE))
 FSTESTS_ARGS += fstests_tmpfs_section_noswap_huge_advise=True
 endif
 
