@@ -68,6 +68,16 @@
       - epel-release
   when: ansible_distribution != "Fedora"
 
+- name: Enable epel repository
+  become: yes
+  become_method: sudo
+  command:
+    argv:
+      - yum-config-manager
+      - --enable
+      - "{{ 'ol' + ansible_facts['distribution_major_version'] + '_developer_EPEL' }}"
+  when: ansible_distribution == 'OracleLinux'
+
 - name: Build install package list
   set_fact:
     packages:
