@@ -8,6 +8,7 @@ generic/263
 generic/311
 generic/418 # fails on 16k and 16k_4ks https://gist.github.com/mcgrof/59c6298c0744f3bc2e1e919721b3c255
 generic/436
+generic/451 # crashes https://gist.github.com/mcgrof/7cded61f6d921b7037d974f2bb4a2175
 generic/547 # failure rate 1/20 https://gist.github.com/mcgrof/da812a4f280fe6894c31e6b191658f84
 xfs/008
 xfs/041 # seems like a test bug with xfstests/src/fill2fs https://gist.github.com/mcgrof/ed48ac0ee2ccfe6a0e91b68026fef6a0
