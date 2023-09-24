@@ -4,20 +4,10 @@ choice
 	prompt "Linux stable tree to use"
 	default BOOTLINUX_TREE_STABLE
 
-config BOOTLINUX_TREE_LINUS
-	bool "linux"
-	help
-	  Use Linus Torvald's linux tree.
-
 config BOOTLINUX_TREE_STABLE
 	bool "linux-stable"
 	help
 	  Use the linux-stable tree.
-
-config BOOTLINUX_TREE_MCGROF_LINUS
-	bool "mcgrof-linus"
-	help
-	  Branches in mcgrof's tree based on Linus' tree.
 
 endchoice
 
