@@ -1,7 +1,9 @@
 generic/085 # crash null pointer https://gist.github.com/mcgrof/d0c59f783c879a4353bb2ea386193067
 generic/091
 generic/130
+generic/133 # Waits forever
 generic/209
+generic/251 # Hung
 generic/263
 generic/311
 generic/418 # fails on 16k and 16k_4ks https://gist.github.com/mcgrof/59c6298c0744f3bc2e1e919721b3c255
