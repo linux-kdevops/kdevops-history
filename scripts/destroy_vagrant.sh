@@ -24,3 +24,7 @@ for i in $UNINIT_CURRENT_INSTANCES; do
 		rm -rf $UNINIT_INSTANCE_SPARE_DRIVE_DIR
 	fi
 done
+
+if [[ -f $(basename "$KDEVOPS_VAGRANT_PROVISIONED") ]];
+	rm -f $(basename "$KDEVOPS_VAGRANT_PROVISIONED") ]];
+fi
