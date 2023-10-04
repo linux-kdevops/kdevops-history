@@ -25,6 +25,6 @@ for i in $UNINIT_CURRENT_INSTANCES; do
 	fi
 done
 
-if [[ -f $(basename "$KDEVOPS_VAGRANT_PROVISIONED") ]];
+if [[ -f $(basename "$KDEVOPS_VAGRANT_PROVISIONED") ]]; then
 	rm -f $(basename "$KDEVOPS_VAGRANT_PROVISIONED") ]];
 fi
