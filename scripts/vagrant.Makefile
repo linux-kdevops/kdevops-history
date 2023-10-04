@@ -16,9 +16,6 @@ KDEVOPS_MRPROPER +=		$(KDEVOPS_VAGRANT_PROVISIONED)
 
 VAGRANT_ARGS += kdevops_vagrant_template_full_path='$(TOPDIR_PATH)/$(KDEVOPS_VAGRANT_TEMPLATE)'
 
-KDEVOPS_BRING_UP_DEPS := bringup_vagrant
-KDEVOPS_DESTROY_DEPS := destroy_vagrant
-
 VAGRANT_ARGS += kdevops_enable_vagrant=True
 VAGRANT_ARGS += kdevops_vagrant='$(KDEVOPS_VAGRANT)'
 VAGRANT_ARGS += kdevops_vagrant_generated='$(KDEVOPS_VAGRANT_GENERATED)'
@@ -77,6 +74,9 @@ VAGRANT_BRINGUP_DEPS +=  $(VAGRANT_9P_HOST_CLONE)
 VAGRANT_BRINGUP_DEPS +=  $(VAGRANT_LIBVIRT_PCIE_PASSTHROUGH)
 VAGRANT_BRINGUP_DEPS +=  $(KDEVOPS_VAGRANT_PROVISIONED)
 
+KDEVOPS_BRING_UP_DEPS := bringup_vagrant $(VAGRANT_BRINGUP_DEPS)
+KDEVOPS_DESTROY_DEPS := destroy_vagrant
+
 extend-extra-args-vagrant:
 	@if [[ "$(CONFIG_HAVE_VAGRANT_BOX_URL)" == "y" ]]; then \
 		echo "kdevops_install_vagrant_boxes: True" >> $(KDEVOPS_EXTRA_VARS) ;\
@@ -110,7 +110,7 @@ $(KDEVOPS_VAGRANT_PROVISIONED):
 	fi
 	$(Q)touch $(KDEVOPS_VAGRANT_PROVISIONED)
 
-bringup_vagrant: $(VAGRANT_BRINGUP_DEPS)
+bringup_vagrant:
 	$(Q)$(TOPDIR)/scripts/bringup_vagrant.sh
 PHONY += bringup_vagrant
 
