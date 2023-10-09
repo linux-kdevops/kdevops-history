@@ -244,8 +244,8 @@
   git:
     repo: "{{ kdevops_git }}"
     dest: "{{ kdevops_data }}"
+    version: "{{ kdevops_git_version }}"
     update: yes
-    version: master
   retries: 3
   delay: 5
   register: result
