@@ -72,12 +72,11 @@ VAGRANT_BRINGUP_DEPS :=
 VAGRANT_BRINGUP_DEPS +=  $(VAGRANT_PRIVATE_BOX_DEPS)
 VAGRANT_BRINGUP_DEPS +=  $(VAGRANT_9P_HOST_CLONE)
 VAGRANT_BRINGUP_DEPS +=  $(VAGRANT_LIBVIRT_PCIE_PASSTHROUGH)
-VAGRANT_BRINGUP_DEPS +=  $(KDEVOPS_VAGRANT_PROVISIONED)
 
-KDEVOPS_BRING_UP_DEPS := $(VAGRANT_BRINGUP_DEPS)
+KDEVOPS_BRING_UP_DEPS := bringup_vagrant
+# Provisioning goes last
+KDEVOPS_BRING_UP_DEPS += $(KDEVOPS_VAGRANT_PROVISIONED)
 
-# This should go last as it is the one that brings up the guests
-KDEVOPS_BRING_UP_DEPS += bringup_vagrant
 KDEVOPS_DESTROY_DEPS := destroy_vagrant
 
 extend-extra-args-vagrant:
@@ -113,7 +112,7 @@ $(KDEVOPS_VAGRANT_PROVISIONED):
 	fi
 	$(Q)touch $(KDEVOPS_VAGRANT_PROVISIONED)
 
-bringup_vagrant:
+bringup_vagrant: $(VAGRANT_BRINGUP_DEPS)
 	$(Q)$(TOPDIR)/scripts/bringup_vagrant.sh
 PHONY += bringup_vagrant
 
