@@ -9,6 +9,11 @@ config BOOTLINUX_TREE_LINUS
 	help
 	  Use Linus Torvald's linux tree.
 
+config BOOTLINUX_TREE_KDEVOPS_LINUS
+	bool "kdevops-linus"
+	help
+	  Branches in kdevops' tree based on Linus' tree.
+
 config BOOTLINUX_TREE_MCGROF_LINUS
 	bool "mcgrof-linus"
 	help

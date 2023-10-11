@@ -4,12 +4,14 @@ MIRROR_PATH := /mirror
 LINUX_SERVICES := linux-mirror.service
 LINUX_SERVICES += linux-stable-mirror.service
 LINUX_SERVICES += linux-next-mirror.service
+LINUX_SERVICES += kdevops-linus-mirror.service
 LINUX_SERVICES += mcgrof-next-mirror.service
 LINUX_SERVICES += mcgrof-linus-mirror.service
 
 LINUX_TIMERS := linux-mirror.timer
 LINUX_TIMERS += linux-stable-mirror.timer
 LINUX_TIMERS += linux-next-mirror.timer
+LINUX_TIMERS += kdevops-linus-mirror.timer
 LINUX_TIMERS += mcgrof-next-mirror.timer
 LINUX_TIMERS += mcgrof-linus-mirror.timer
 
@@ -25,6 +27,7 @@ LOCAL_SYSTEMD    := /usr/local/lib/systemd/system/
 TORVALDS_TARGET		:= $(MIRROR_PATH)/linux.git
 STABLE_TARGET		:= $(MIRROR_PATH)/linux-stable.git
 NEXT_TARGET		:= $(MIRROR_PATH)/linux-next.git
+KDEVOPS_TARGET_LINUS	:= $(MIRROR_PATH)/kdevops-linus.git
 MCGROF_TARGET_LINUS	:= $(MIRROR_PATH)/mcgrof-linus.git
 MCGROF_TARGET		:= $(MIRROR_PATH)/mcgrof-next.git
 QEMU_TARGET     	:= $(MIRROR_PATH)/qemu.git
@@ -72,6 +75,10 @@ mirror:
 	$(Q)if [ ! -d $(NEXT_TARGET) ]; then \
 	  echo "          CLONE next/linux-next" ;\
 	  git -C $(MIRROR_PATH) clone $(GIT_VERBOSE) --progress --mirror $(NEXT) --reference /mirror/linux.git $(NEXT_TARGET) ;\
+	fi
+	$(Q)if [ ! -d $(KDEVOPS_TARGET_LINUS) ]; then \
+	  echo "          CLONE kdevops/linux" ;\
+	  git -C $(MIRROR_PATH) clone $(GIT_VERBOSE) --progress --mirror $(KDEVOPS_LINUS) --reference /mirror/linux.git $(KDEVOPS_TARGET_LINUS) ;\
 	fi
 	$(Q)if [ ! -d $(MCGROF_TARGET) ]; then \
 	  echo "          CLONE mcgrof/linux-next" ;\

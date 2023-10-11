@@ -31,9 +31,11 @@ mirror-status: $(KDEVOPS_EXTRA_VARS)
 	$(NQ) systemd timer status
 	$(Q)systemctl status --user linux-mirror.timer linux-stable-mirror.timer \
 		linux-next-mirror.timer mcgrof-next-mirror.timer \
+		kdevops-linus-mirror.timer \
 		qemu-mirror.timer jic23-qemu-mirror.timer
 	$(NQ) systemd service units status
 	$(Q)systemctl status --user linux-mirror.service linux-stable-mirror.service \
+		kdevops-linus-mirror.service \
 		linux-next-mirror.service mcgrof-next-mirror.service \
 		qemu-mirror.service jic23-qemu-mirror.timer
 
@@ -53,6 +55,7 @@ HELP_TARGETS += mirror-help-menu
 export TORVALDS		:= $(subst ",,$(CONFIG_MIRROR_TORVALDS_URL))
 export STABLE		:= $(subst ",,$(CONFIG_MIRROR_STABLE_URL))
 export NEXT		:= $(subst ",,$(CONFIG_MIRROR_NEXT_URL))
+export KDEVOPS_LINUS	:= $(subst ",,$(CONFIG_MIRROR_KDEVOPS_URL))
 export MCGROF		:= $(subst ",,$(CONFIG_MIRROR_MCGROF_URL))
 export MCGROF_LINUS	:= $(subst ",,$(CONFIG_MIRROR_MCGROF_LINUS_URL))
 export QEMU		:= $(subst ",,$(CONFIG_MIRROR_QEMU_URL))

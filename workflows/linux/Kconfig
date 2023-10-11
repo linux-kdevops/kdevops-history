@@ -135,6 +135,7 @@ source "workflows/linux/Kconfig.dev"
 
 # Later on we could automate this with 'make dynconfig' and reading
 # dynamically kernel.org's sources / branches.
+source "workflows/linux/Kconfig.kdevops"
 source "workflows/linux/Kconfig.mcgrof"
 source "workflows/linux/Kconfig.jlayton"
 
@@ -165,6 +166,7 @@ config BOOTLINUX_TREE_NAME
 	default "linux-stable" if BOOTLINUX_TREE_STABLE
 	default "linux-next" if BOOTLINUX_TREE_NEXT
 	default "btrfs-devel" if BOOTLINUX_TREE_BTRFS_DEVEL
+	default "kdevops-linus" if BOOTLINUX_TREE_KDEVOPS_LINUS
 	default "mcgrof-linus" if BOOTLINUX_TREE_MCGROF_LINUS
 	default "mcgrof-next" if BOOTLINUX_TREE_MCGROF_NEXT
 	default "jlayton-linux" if BOOTLINUX_TREE_JLAYTON_LINUX
@@ -177,6 +179,7 @@ config BOOTLINUX_TREE
 	default "https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git" if BOOTLINUX_TREE_NEXT && !USE_LOCAL_LINUX_MIRROR
 	default "https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git" if BOOTLINUX_TREE_MCGROF_NEXT && !USE_LOCAL_LINUX_MIRROR
 	default "https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git" if BOOTLINUX_TREE_MCGROF_NEXT && !USE_LOCAL_LINUX_MIRROR
+	default BOOTLINUX_TREE_KDEVOPS_URL if BOOTLINUX_TREE_KDEVOPS_LINUS
 	default "git://192.168.124.1/mirror/linux.git" if BOOTLINUX_TREE_LINUS && USE_VAGRANT_LIBVIRT_MIRROR && !BOOTLINUX_9P
 	default "git://192.168.124.1/mirror/linux-stable.git" if BOOTLINUX_TREE_STABLE && USE_VAGRANT_LIBVIRT_MIRROR && !BOOTLINUX_9P
 	default "git://192.168.124.1/mirror/linux-next.git" if BOOTLINUX_TREE_NEXT && USE_VAGRANT_LIBVIRT_MIRROR && !BOOTLINUX_9P
@@ -231,6 +234,7 @@ config BOOTLINUX_TREE_TAG
 	default "linux-6.1.y" if BOOTLINUX_STABLE_V61
 	default "next-20230913" if BOOTLINUX_TREE_NEXT
 	default "for-next" if BOOTLINUX_TREE_BTRFS_DEVEL
+	default BOOTLINUX_KDEVOPS_TREE_TAG if BOOTLINUX_TREE_KDEVOPS_LINUS
 	default "large-block-linus" if BOOTLINUX_MCGROF_LINUS_LBS
 	default "large-block-linus-nobdev" if BOOTLINUX_MCGROF_LINUS_LBS_NOBDEV
 	default "large-block-20230915" if BOOTLINUX_MCGROF_NEXT_LBS

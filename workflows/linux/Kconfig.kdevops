@@ -1,0 +1,24 @@
+if BOOTLINUX_TREE_KDEVOPS_LINUS
+
+choice
+	prompt "kdevops-linus branch to use"
+	default BOOTLINUX_KDEVOPS_LINUS_LBS_MINORDER
+
+config BOOTLINUX_KDEVOPS_LINUS_LBS_MINORDER
+	bool "large-block-minorder"
+	help
+	  Use the latest LBS branch based on Linus' tree.
+
+endchoice
+
+config BOOTLINUX_TREE_KDEVOPS_URL
+	string
+	default "https://github.com/linux-kdevops/linux.git" if BOOTLINUX_TREE_KDEVOPS_LINUS && !USE_LOCAL_LINUX_MIRROR
+	default "/mirror/kdevops-linus.git" if BOOTLINUX_TREE_KDEVOPS_LINUS && USE_VAGRANT_LIBVIRT_MIRROR && BOOTLINUX_9P
+
+config BOOTLINUX_KDEVOPS_TREE_TAG
+	string
+	default "large-block-minorder" if BOOTLINUX_TREE_KDEVOPS_LINUS
+
+endif # BOOTLINUX_TREE_KDEVOPS_LINUS
+
