@@ -1,0 +1,13 @@
+[Unit]
+Description=Linux kdevops linus mirror [kdevops-linus.git]
+Documentation=man:git(1)
+ConditionPathExists=/mirror/kdevops-linus.git
+
+[Service]
+Type=oneshot
+ExecStartPre=/usr/bin/git -C /mirror/kdevops-linus.git remote update --prune
+ExecStart=/usr/bin/git -C /mirror/kdevops-linus.git fetch --tags --prune
+ExecStartPost=/usr/bin/git -C /mirror/kdevops-linus.git fetch origin +refs/heads/*:refs/heads/*
+
+[Install]
+WantedBy=multi-user.target

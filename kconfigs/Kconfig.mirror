@@ -35,6 +35,7 @@ config INSTALL_LOCAL_LINUX_MIRROR
 	    /mirror/linux.git
 	    /mirror/linux-stable.git
 	    /mirror/linux-next.git
+	    /mirror/kdevops-linus.git
 	    /mirror/mcgrof-next.git
 	    /mirror/mcgrof-linus.git
 
@@ -80,6 +81,25 @@ config MIRROR_TORVALDS_URL
 	default "git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git" if MIRROR_TORVALDS_GIT
 	default "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git" if MIRROR_TORVALDS_HTTPS
 	default "https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux.git" if MIRROR_TORVALDS_HTTPS_GOOGLE
+
+choice
+	prompt "Linux kdevops's linux fork protocol/source"
+	default MIRROR_KDEVOPS_LINUS_GIT
+	depends on INSTALL_LOCAL_LINUX_MIRROR
+
+config MIRROR_KDEVOPS_LINUS_HTTPS
+	bool "HTTPS"
+	help
+	  If you enable this option then HTTPS will be used as the source
+	  of the mirror. The URL is:
+
+	  https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git
+
+endchoice
+
+config MIRROR_KDEVOPS_LINUS_URL
+	string
+	default "https://github.com/linux-kdevops/linux.git" if MIRROR_KDEVOPS_LINUS_HTTPS
 
 choice
 	prompt "Linux Next mirror protocol/source"
