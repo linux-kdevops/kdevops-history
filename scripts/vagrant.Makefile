@@ -74,7 +74,10 @@ VAGRANT_BRINGUP_DEPS +=  $(VAGRANT_9P_HOST_CLONE)
 VAGRANT_BRINGUP_DEPS +=  $(VAGRANT_LIBVIRT_PCIE_PASSTHROUGH)
 VAGRANT_BRINGUP_DEPS +=  $(KDEVOPS_VAGRANT_PROVISIONED)
 
-KDEVOPS_BRING_UP_DEPS := bringup_vagrant $(VAGRANT_BRINGUP_DEPS)
+KDEVOPS_BRING_UP_DEPS := $(VAGRANT_BRINGUP_DEPS)
+
+# This should go last as it is the one that brings up the guests
+KDEVOPS_BRING_UP_DEPS += bringup_vagrant
 KDEVOPS_DESTROY_DEPS := destroy_vagrant
 
 extend-extra-args-vagrant:
