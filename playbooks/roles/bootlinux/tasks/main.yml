@@ -307,14 +307,14 @@
   tags: [ 'linux', 'git', 'config' ]
   when:
     - not bootlinux_9p|bool
-    - target_linux_localversion is defined
+    - target_linux_localversion is defined and target_linux_localversion != ""
 
 - name: Set kernel localversion if requested on the host side
   shell: "echo {{ target_linux_localversion }} > {{ bootlinux_9p_host_path }}/localversion"
   tags: [ 'linux', 'git', 'config' ]
   when:
     - bootlinux_9p|bool
-    - target_linux_localversion is defined
+    - target_linux_localversion is defined and target_linux_localversion != ""
   run_once: true
   delegate_to: localhost
 
