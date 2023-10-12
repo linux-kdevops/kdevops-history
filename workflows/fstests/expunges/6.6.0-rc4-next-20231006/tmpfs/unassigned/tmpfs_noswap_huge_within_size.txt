@@ -1,4 +1,10 @@
 generic/080
 generic/126
 generic/193
+generic/204
+generic/226
+generic/256
+generic/277
+generic/278
+generic/279
 generic/551
