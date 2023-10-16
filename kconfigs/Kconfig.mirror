@@ -84,7 +84,7 @@ config MIRROR_TORVALDS_URL
 
 choice
 	prompt "Linux kdevops's linux fork protocol/source"
-	default MIRROR_KDEVOPS_LINUS_GIT
+	default MIRROR_KDEVOPS_LINUS_HTTPS
 	depends on INSTALL_LOCAL_LINUX_MIRROR
 
 config MIRROR_KDEVOPS_LINUS_HTTPS
