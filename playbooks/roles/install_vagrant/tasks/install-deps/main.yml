@@ -8,14 +8,20 @@
       skip: true
   tags: vars
 
-- name: Distribution specific setup
-  import_tasks: debian/main.yml
+- name: Debian-specific setup
+  include_tasks: debian/main.yml
   when: ansible_facts['os_family']|lower == 'debian'
-- import_tasks: suse/main.yml
+
+- name: SuSE-specific setup
+  include_tasks: suse/main.yml
   when: ansible_facts['os_family']|lower == 'suse'
-- import_tasks: redhat/main.yml
+
+- name: Red Hat Enterprise-specific setup
+  include_tasks: redhat/main.yml
   when:
     - ansible_facts['os_family']|lower == 'redhat'
     - ansible_facts['distribution']|lower != "fedora"
-- import_tasks: fedora/main.yml
+
+- name: Fedora-specific setup
+  include_tasks: fedora/main.yml
   when: ansible_facts['distribution']|lower == "fedora"
