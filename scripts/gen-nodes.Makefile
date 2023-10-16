@@ -45,7 +45,7 @@ endif
 ifeq (y,$(CONFIG_LIBVIRT_STORAGE_POOL_CREATE))
 GEN_NODES_EXTRA_ARGS += libvirt_storage_pool_create='True'
 GEN_NODES_EXTRA_ARGS += libvirt_storage_pool_name='$(subst ",,$(CONFIG_LIBVIRT_STORAGE_POOL_NAME))'
-GEN_NODES_EXTRA_ARGS += libvirt_storage_pool_path='$(subst ",,$(CONFIG_LIBVIRT_STORAGE_POOL_PATH_CUSTOM))'
+GEN_NODES_EXTRA_ARGS += libvirt_storage_pool_path='$(subst ",,$(CONFIG_KDEVOPS_STORAGE_POOL_PATH))'
 endif
 
 ifeq (y,$(CONFIG_LIBVIRT_EXTRA_STORAGE_DRIVE_IDE))
