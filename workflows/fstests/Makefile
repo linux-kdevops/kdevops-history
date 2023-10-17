@@ -137,7 +137,7 @@ DYNAMIC_RUNTIME_VARS += , "fstests_start_after_test": "$(START_AFTER)"
 endif
 
 fstests:
-	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -l baseline,dev \
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -l localhost,baseline,dev \
 		-f 30 -i hosts playbooks/fstests.yml --skip-tags run_tests,copy_results $(LIMIT_HOSTS)
 
 fstests-kdevops-setup: $(KDEVOPS_EXTRA_VARS)
