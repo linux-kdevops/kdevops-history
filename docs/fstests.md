@@ -67,7 +67,19 @@ Just run:
   * `make fstests-baseline`
   * `make fstests-results`
 
-## Seeing regresions
+# Running fstests against only a set of tests
+
+You can run tests only against a smaller subset of tests with something like;
+
+```bash
+make fstests-baseline TESTS="generic/531 xfs/008 xfs/013"
+```
+
+The expunges are always respected however, so be sure you don't have
+these on your expunges if you want to run a test against specific tests.
+We could later add an option to ignore expunges.
+
+## Review regressions
 
 To see regressions:
 
@@ -168,6 +180,9 @@ just run:
 ```bash
 ./scripts/workflows/fstests/lazy-baseline.sh
 ```
+
+If you want a high confidence in a baseline you want to avoid the lazy-baseline
+as much as possible.
 
 # Initial baseline help
 
