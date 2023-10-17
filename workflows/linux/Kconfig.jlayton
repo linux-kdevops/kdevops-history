@@ -38,4 +38,8 @@ config BOOTLINUX_JLAYTON_TREE_NAME
 	string
 	default "jlayton-linux"
 
+config BOOTLINUX_JLAYTON_TREE_URL
+	string
+	default "git://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git" if BOOTLINUX_TREE_JLAYTON_LINUX
+
 endif # BOOTLINUX_TREE_JLAYTON_LINUX
