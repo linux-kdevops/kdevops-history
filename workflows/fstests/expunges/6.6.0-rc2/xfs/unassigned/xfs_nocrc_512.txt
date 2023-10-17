@@ -3,3 +3,4 @@ generic/681
 generic/682
 xfs/013 # failure rate ~ 1/2 assert https://gist.github.com/mcgrof/e40d8f3b478257068c2006f5da5ab389
 xfs/071
+xfs/559 # failure rate ~ 1/3

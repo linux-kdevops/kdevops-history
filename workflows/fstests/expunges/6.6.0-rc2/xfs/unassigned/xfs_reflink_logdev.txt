@@ -1,2 +1,9 @@
+xfs/045 # failure rate ~ 1/3
+xfs/132 # failure rate ~ 1/3
+xfs/158 # failure rate ~ 1/3
+xfs/160 # failure rate ~ 1/3
+xfs/263 # failure rate ~ 1/3
 xfs/437 # hung taks https://gist.github.com/mcgrof/1cc274f3533b8da2384fc3bb4a1c9863
-xfs/438 failure rate ~ 1/2 # hung task https://gist.github.com/mcgrof/26257214e30dad56b38b4b08dd596a78
+xfs/438 # failure rate ~ 1/2 # hung task https://gist.github.com/mcgrof/26257214e30dad56b38b4b08dd596a78
+xfs/507 # failure rate ~ 1/3
+xfs/559 # failure rate ~ 1/3
