@@ -72,4 +72,8 @@ config BOOTLINUX_TREE_STABLE_TAG
 	default "v6.0.9" if BOOTLINUX_STABLE_V60
 	default "linux-6.1.y" if BOOTLINUX_STABLE_V61
 
+config BOOTLINUX_TREE_STABLE_NAME
+	string
+	default "linux-stable" if BOOTLINUX_TREE_STABLE
+
 endif # BOOTLINUX_STABLE

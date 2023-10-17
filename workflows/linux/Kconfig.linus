@@ -56,6 +56,10 @@ config BOOTLINUX_TREE_LINUS_TAG
 	default "v6.6-rc4" if BOOTLINUX_LINUS_66_RC2
 	default "v6.6-rc5" if BOOTLINUX_LINUS_66_RC5
 
+config BOOTLINUX_TREE_LINUS_NAME
+	string
+	default "linux"
+
 endif # BOOTLINUX_TREE_LINUS
 
 endif # BOOTLINUX_LINUS

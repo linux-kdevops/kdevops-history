@@ -34,4 +34,8 @@ config BOOTLINUX_JLAYTON_LINUX_TAG
 	default "kdevops" if BOOTLINUX_JLAYTON_LINUX_KDEVOPS
 	default "iversion-next" if BOOTLINUX_JLAYTON_LINUX_IVERSION
 
+config BOOTLINUX_JLAYTON_TREE_NAME
+	string
+	default "jlayton-linux"
+
 endif # BOOTLINUX_TREE_JLAYTON_LINUX

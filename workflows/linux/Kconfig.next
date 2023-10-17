@@ -2,6 +2,10 @@ if BOOTLINUX_TREE_NEXT
 
 config BOOTLINUX_TREE_NEXT_TAG
 	string
-	default "next-20230913" if BOOTLINUX_TREE_NEXT
+	default "next-20230913"
+
+config BOOTLINUX_TREE_NEXT_NAME
+	string
+	default "linux-next"
 
 endif # BOOTLINUX_TREE_NEXT

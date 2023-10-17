@@ -2,6 +2,10 @@ if BOOTLINUX_TREE_BTRFS_DEVEL
 
 config BOOTLINUX_TREE_BTRFS_DEVEL_TAG
 	string
-	default "btrfs-devel" if BOOTLINUX_TREE_BTRFS_DEVEL
+	default "btrfs-devel"
+
+config BOOTLINUX_TREE_BTRFS_DEVEL_NAME
+	string
+	default "btrfs-devel"
 
 endif # BOOTLINUX_TREE_BTRFS_DEVEL

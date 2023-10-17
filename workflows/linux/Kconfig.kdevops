@@ -13,12 +13,15 @@ endchoice
 
 config BOOTLINUX_TREE_KDEVOPS_URL
 	string
-	default "https://github.com/linux-kdevops/linux.git" if BOOTLINUX_TREE_KDEVOPS_LINUS && !USE_LOCAL_LINUX_MIRROR
-	default "/mirror/kdevops-linus.git" if BOOTLINUX_TREE_KDEVOPS_LINUS && USE_VAGRANT_LIBVIRT_MIRROR && BOOTLINUX_9P
+	default "https://github.com/linux-kdevops/linux.git" if !USE_LOCAL_LINUX_MIRROR
+	default "/mirror/kdevops-linus.git" if USE_VAGRANT_LIBVIRT_MIRROR && BOOTLINUX_9P
 
 config BOOTLINUX_KDEVOPS_TREE_TAG
 	string
-	default "large-block-minorder" if BOOTLINUX_TREE_KDEVOPS_LINUS
+	default "large-block-minorder"
+
+config BOOTLINUX_KDEVOPS_TREE_NAME
+	string
+	default "kdevops-linus"
 
 endif # BOOTLINUX_TREE_KDEVOPS_LINUS
-
