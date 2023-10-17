@@ -1,12 +1,15 @@
 ---
-# tasks to install dependencies for pynfs
-- name: oscheck distribution ospecific setup
-  import_tasks: tasks/install-deps/debian/main.yml
-  when: ansible_facts['os_family']|lower == 'debian'
-- import_tasks: tasks/install-deps/suse/main.yml
-  when: ansible_facts['os_family']|lower == 'suse'
-- import_tasks: tasks/install-deps/redhat/main.yml
-  when: ansible_facts['os_family']|lower == 'redhat'
+- name: Debian-specific setup
+  ansible.builtin.include_tasks: roles/nfsd/tasks/install-deps/debian/main.yml
+  when: ansible_os_family == 'Debian'
+
+- name: SuSE-specific setup
+  ansible.builtin.include_tasks: roles/nfsd/tasks/install-deps/suse/main.yml
+  when: ansible_os_family == 'Suse'
+
+- name: Red Hat-specific setup
+  ansible.builtin.include_tasks: roles/nfsd/tasks/install-deps/redhat/main.yml
+  when: ansible_os_family == 'RedHat'
 
 - name: Generate /etc/nfs.conf
   become: yes
