@@ -139,6 +139,8 @@ source "workflows/linux/Kconfig.kdevops"
 source "workflows/linux/Kconfig.mcgrof"
 source "workflows/linux/Kconfig.jlayton"
 
+source "workflows/linux/Kconfig.btrfs"
+
 if BOOTLINUX_CUSTOM
 
 config BOOTLINUX_CUSTOM_NAME
@@ -224,13 +226,10 @@ config BOOTLINUX_TREE_TAG
 	string
 	default BOOTLINUX_TREE_LINUS_TAG if BOOTLINUX_TREE_LINUS
 	default BOOTLINUX_TREE_STABLE_TAG if BOOTLINUX_STABLE
-	default "next-20230913" if BOOTLINUX_TREE_NEXT
-	default "for-next" if BOOTLINUX_TREE_BTRFS_DEVEL
+	default BOOTLINUX_TREE_NEXT_TAG if BOOTLINUX_TREE_NEXT
+	default BOOTLINUX_TREE_BTRFS_DEVEL_TAG if BOOTLINUX_TREE_BTRFS_DEVEL
 	default BOOTLINUX_KDEVOPS_TREE_TAG if BOOTLINUX_TREE_KDEVOPS_LINUS
-	default "large-block-linus" if BOOTLINUX_MCGROF_LINUS_LBS
-	default "large-block-linus-nobdev" if BOOTLINUX_MCGROF_LINUS_LBS_NOBDEV
-	default "large-block-20230915" if BOOTLINUX_MCGROF_NEXT_LBS
-	default "large-block-nobdev-20230915" if BOOTLINUX_MCGROF_NEXT_LBS_NOBDEV
+	default BOOTLINUX_MCGROF_TREE_TAG if BOOTLINUX_MCGROF_TREE
 	default BOOTLINUX_TREE_JLAYTON_LINUX_TAG if BOOTLINUX_TREE_JLAYTON_LINUX
 	default BOOTLINUX_CUSTOM_TAG if BOOTLINUX_CUSTOM
 
