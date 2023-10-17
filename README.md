@@ -53,6 +53,10 @@ git tree, and get up and running on a freshly compiled Linux git tree in just
   * `make linux`
   * `make linux HOSTS="kdevops-xfs-crc kdevops-xfs-reflink"` for example if you wanted to restrict running the above command only to the two hosts listed
 
+To uninstall the "6.6.0-rc2" kernel from all nodes:
+
+  * `make linux-uninstall KVER="6.6.0-rc2"`
+
 ### Start running fstests in 2 commands
 
 To test a kernel against fstests, for example, if you enable the fstests
