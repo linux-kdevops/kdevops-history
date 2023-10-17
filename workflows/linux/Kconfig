@@ -169,7 +169,7 @@ config BOOTLINUX_TREE_NAME
 	default "linux-next" if BOOTLINUX_TREE_NEXT
 	default "btrfs-devel" if BOOTLINUX_TREE_BTRFS_DEVEL
 	default "kdevops-linus" if BOOTLINUX_TREE_KDEVOPS_LINUS
-	default "mcgrof-linus" if BOOTLINUX_TREE_MCGROF_LINUS
+	default BOOTLINUX_MCGROF_TREE_NAME if BOOTLINUX_MCGROF_TREE
 	default "mcgrof-next" if BOOTLINUX_TREE_MCGROF_NEXT
 	default "jlayton-linux" if BOOTLINUX_TREE_JLAYTON_LINUX
 	default BOOTLINUX_CUSTOM_NAME if BOOTLINUX_CUSTOM
