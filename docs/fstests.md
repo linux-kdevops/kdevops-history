@@ -75,9 +75,9 @@ You can run tests only against a smaller subset of tests with something like;
 make fstests-baseline TESTS="generic/531 xfs/008 xfs/013"
 ```
 
-The expunges are always respected however, so be sure you don't have
-these on your expunges if you want to run a test against specific tests.
-We could later add an option to ignore expunges.
+The expunge will will *not* be used if the TESTS argument is used and so
+running the above will *ensure* the tests are run even if they are known to
+crash on a system for a target section.
 
 ## Review regressions
 
