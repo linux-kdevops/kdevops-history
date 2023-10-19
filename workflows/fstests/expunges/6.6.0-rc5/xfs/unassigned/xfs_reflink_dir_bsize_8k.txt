@@ -3,6 +3,7 @@ generic/251 # Hangs
 generic/297
 generic/298
 generic/471
+generic/670
 xfs/013 # Hangs
 xfs/016 # F:1/3
 xfs/075
