@@ -18,7 +18,7 @@ config VAGRANT_FEDORA_OLD_RELEASE
 	  configurations by default in the fstests workflow.
 
 config VAGRANT_RHEL_REGISTER
-	bool "Register this host with Red Hat?"
+	bool "Register the guests with Red Hat?"
 	default n
 	help
 	  Official RHEL installations require a subscription before you can download
