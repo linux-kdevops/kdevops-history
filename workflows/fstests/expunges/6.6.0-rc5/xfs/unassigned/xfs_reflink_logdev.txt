@@ -1,2 +1,35 @@
+generic/042
+generic/054
+generic/055
+generic/081
+generic/108
+generic/175
+generic/204
+generic/223
+generic/297
+generic/298
+generic/361
+generic/471
+generic/704
+generic/730
+generic/731
+shared/298
+xfs/002
 xfs/013 # assert failure rate ~ 1/3 https://gist.github.com/mcgrof/183e573797d0e7863c1f50eff6a2b8c5
+xfs/045
+xfs/075
+xfs/132
+xfs/157
+xfs/158
+xfs/160
+xfs/188
+xfs/199
+xfs/263
+xfs/270
+xfs/294
 xfs/438 # hung task failure rate ~ 1/2 https://gist.github.com/mcgrof/b85b52245b0a91c5e1d02caaf42b0c65
+xfs/507
+xfs/513
+xfs/559
+xfs/597
+xfs/598
