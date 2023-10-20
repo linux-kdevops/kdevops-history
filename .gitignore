@@ -3,11 +3,10 @@
 *.retry
 
 .kdevops\.depcheck
-vagrant/.provisioned_once
 
 guestfs/
 
-/linux
+linux/
 
 log.txt
 logtime.txt
@@ -29,6 +28,8 @@ scripts/workflows/lib/__pycache__/
 vagrant/kdevops_nodes.yaml
 vagrant/.Vagrantfile.generated
 vagrant/Vagrantfile
+vagrant/.provisioned_once
+.vagrant/
 
 include/
 
@@ -43,6 +44,8 @@ playbooks/secret.yml
 playbooks/python/workflows/fstests/__pycache__/
 playbooks/python/workflows/fstests/lib/__pycache__/
 playbooks/python/workflows/fstests/gen_results_summary.pyc
+
+workflows/pynfs/results/
 
 workflows/fstests/new_expunge_files.txt
 workflows/fstests/bad_results.txt
