@@ -44,7 +44,7 @@ if ! grep -q "libvirt_provider: True" $VARS; then
 fi
 
 TODAY="$(date -I| sed -e 's|-||g')"
-MY_DIR="workflows/fstests/results/$USER/$FSTYP/$TYPE/$TODAY"
+MY_DIR="workflows/fstests/results/archive/$USER/$FSTYP/$TYPE/$TODAY"
 
 echo -e "\nRunning:\n"
 

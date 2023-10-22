@@ -51,6 +51,8 @@ workflows/fstests/results/last-kernel.txt
 workflows/fstests/*/hosts_generated.in
 workflows/fstests/.begin
 workflows/fstests/*/*.config.generated
+workflows/fstests/*
+workflows/fstests/!archive/
 
 workflows/blktests/hosts_generated.in
 workflows/blktests/.begin
