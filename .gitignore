@@ -2,7 +2,8 @@
 *.o
 *.retry
 
-.kdevops_depcheck
+.kdevops\.depcheck
+vagrant/.provisioned_once
 
 ./linux
 
