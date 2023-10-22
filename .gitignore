@@ -5,7 +5,7 @@
 .kdevops\.depcheck
 vagrant/.provisioned_once
 
-./linux
+/linux
 
 log.txt
 logtime.txt
