@@ -6,6 +6,7 @@ generic/670
 xfs/009
 xfs/060
 xfs/075
+xfs/155
 xfs/188
 xfs/242
 xfs/270
