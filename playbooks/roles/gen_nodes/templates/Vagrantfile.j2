@@ -391,14 +391,14 @@ Vagrant.configure("2") do |config|
 {% endif %}
 {% if libvirt_extra_storage_drive_ide %}
             libvirt.qemuargs :value => "-drive"
-            libvirt.qemuargs :value => "file=#{extra_disk},aio={{ libvirt_extra_storage_aio_mode }},cache={{ libvirt_extra_storage_aio_cache_mode }},if=ide,serial=#{serial_id}"
+            libvirt.qemuargs :value => "file=#{extra_disk},format={{ vagrant_extra_drive_format }},if=ide,serial=#{serial_id}"
 {% elif libvirt_extra_storage_drive_virtio %}
             virtio_pbs = "{{ libvirt_extra_storage_virtio_physical_block_size }}"
             virtio_lbs = "{{ libvirt_extra_storage_virtio_logical_block_size }}"
             libvirt.qemuargs :value => "-object"
             libvirt.qemuargs :value => "iothread,id=kdevops-virtio-iothread-#{port}"
             libvirt.qemuargs :value => "-drive"
-            libvirt.qemuargs :value => "file=#{extra_disk},if=none,aio={{ libvirt_extra_storage_aio_mode }},cache={{ libvirt_extra_storage_aio_cache_mode }},id=#{disk_id}"
+            libvirt.qemuargs :value => "file=#{extra_disk},format={{ vagrant_extra_drive_format }},if=none,aio={{ libvirt_extra_storage_virtio_aio_mode }},cache={{ libvirt_extra_storage_virtio_aio_cache_mode }},id=#{disk_id}"
             libvirt.qemuargs :value => "-device"
             libvirt.qemuargs :value => "virtio-blk-pci,scsi=off,drive=#{disk_id},id=virtio-#{disk_id},serial=#{serial_id},bus=#{bus_for_extra_drives},addr=#{pci_function},iothread=kdevops-virtio-iothread-#{port}#{extra_drive_largio_args},logical_block_size=#{virtio_lbs},physical_block_size=#{virtio_pbs}"
 {% elif libvirt_extra_storage_drive_nvme  %}
@@ -409,14 +409,14 @@ Vagrant.configure("2") do |config|
             extra_drive_interface = "none"
             if zoned
               libvirt.qemuargs :value => "-drive"
-              libvirt.qemuargs :value => "file=#{extra_disk},if=#{extra_drive_interface},aio={{ libvirt_extra_storage_aio_mode }},cache={{ libvirt_extra_storage_aio_cache_mode }},id=#{disk_id}"
+              libvirt.qemuargs :value => "file=#{extra_disk},format={{ vagrant_extra_drive_format }},if=#{extra_drive_interface},id=#{disk_id}"
               libvirt.qemuargs :value => "-device"
               libvirt.qemuargs :value => "nvme,id={{ extra_disk_driver }}#{port},serial=#{serial_id},bus=#{bus_for_extra_drives},addr=#{pci_function},zoned.zasl=#{zone_zasl}"
               libvirt.qemuargs :value => "-device"
               libvirt.qemuargs :value => "nvme-ns,drive=#{disk_id},bus={{ extra_disk_driver }}#{port},nsid=1,logical_block_size=#{logical_block_size},physical_block_size=#{physical_block_size},zoned=true,zoned.zone_size=#{zone_size},zoned.zone_capacity=#{zone_capacity},zoned.max_open=#{zone_max_open},zoned.max_active=#{zone_max_active}"
             else
               libvirt.qemuargs :value => "-drive"
-              libvirt.qemuargs :value => "file=#{extra_disk},if=#{extra_drive_interface},aio={{ libvirt_extra_storage_aio_mode }},cache={{ libvirt_extra_storage_aio_cache_mode }},id=#{disk_id}"
+              libvirt.qemuargs :value => "file=#{extra_disk},format={{ vagrant_extra_drive_format }},if=#{extra_drive_interface},id=#{disk_id}"
               libvirt.qemuargs :value => "-device"
               libvirt.qemuargs :value => "nvme,id={{ extra_disk_driver }}#{port},serial=#{serial_id},bus=#{bus_for_extra_drives},addr=#{pci_function}"
               libvirt.qemuargs :value => "-device"
