@@ -49,7 +49,7 @@ workflows/fstests/results/[0-9]*
 workflows/fstests/results/last-run/
 workflows/fstests/results/last-kernel.txt
 workflows/fstests/results/*
-workflows/fstests/results/!archive/
+!workflows/fstests/results/archive/
 workflows/fstests/*/hosts_generated.in
 workflows/fstests/.begin
 workflows/fstests/*/*.config.generated
