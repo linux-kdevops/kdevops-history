@@ -5,6 +5,7 @@ generic/471
 xfs/033
 xfs/075
 xfs/188
+xfs/242 # F:1/6
 xfs/270
 xfs/301
 xfs/513
