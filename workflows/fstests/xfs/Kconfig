@@ -86,9 +86,10 @@ config FSTESTS_XFS_SECTION_RTDEV_ENABLED
 if FSTESTS_XFS_QUOTA_ENABLED
 config FSTESTS_XFS_MOUNT_QUOTA_OPTS
 	string "Quota options to be passed during mount"
-	default ""
+	default "usrquota,grpquota,prjquota"
 	help
 	  The quota options to be passed when mounting a filesystem.
+
 endif # FSTESTS_XFS_QUOTA_ENABLED
 
 config FSTESTS_XFS_MANUAL_COVERAGE
