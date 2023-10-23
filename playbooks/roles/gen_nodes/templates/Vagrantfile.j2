@@ -398,7 +398,7 @@ Vagrant.configure("2") do |config|
             libvirt.qemuargs :value => "-object"
             libvirt.qemuargs :value => "iothread,id=kdevops-virtio-iothread-#{port}"
             libvirt.qemuargs :value => "-drive"
-            libvirt.qemuargs :value => "file=#{extra_disk},format={{ vagrant_extra_drive_format }},if=none,aio={{ libvirt_extra_storage_aio_mode }},cache={{ libvirt_extra_storage_aio_mode }},id=#{disk_id}"
+            libvirt.qemuargs :value => "file=#{extra_disk},format={{ vagrant_extra_drive_format }},if=none,aio={{ libvirt_extra_storage_aio_mode }},cache={{ libvirt_extra_storage_aio_cache_mode }},id=#{disk_id}"
             libvirt.qemuargs :value => "-device"
             libvirt.qemuargs :value => "virtio-blk-pci,scsi=off,drive=#{disk_id},id=virtio-#{disk_id},serial=#{serial_id},bus=#{bus_for_extra_drives},addr=#{pci_function},iothread=kdevops-virtio-iothread-#{port}#{extra_drive_largio_args},logical_block_size=#{virtio_lbs},physical_block_size=#{virtio_pbs}"
 {% elif libvirt_extra_storage_drive_nvme  %}
