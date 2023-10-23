@@ -44,7 +44,19 @@ if ! grep -q "libvirt_provider: True" $VARS; then
 fi
 
 TODAY="$(date -I| sed -e 's|-||g')"
-MY_DIR="workflows/fstests/results/archive/$USER/$FSTYP/$TYPE/$TODAY"
+COUNT="0001"
+MY_DIR="workflows/fstests/results/archive/$USER/$FSTYP/$TYPE/${TODAY}-${COUNT}"
+
+while [[ -d $MY_DIR ]]; do
+	let COUNT=$COUNT+1
+	if [[ $COUNT -ge 10000 ]]; then
+		echo "You passed 9999 tests, update archive limit\n"
+		exit 1
+	fi
+	echo "Count: $COUNT"
+	COUNT="$(printf "%04d\n" $COUNT)"
+	MY_DIR="workflows/fstests/results/archive/$USER/$FSTYP/$TYPE/${TODAY}-${COUNT}"
+done
 
 echo -e "\nRunning:\n"
 
