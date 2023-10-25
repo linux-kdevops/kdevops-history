@@ -1,0 +1,4 @@
+- name: Distribution specific setup
+  import_tasks: redhat/main.yml
+  when:
+    - ansible_facts['os_family']|lower == 'redhat'

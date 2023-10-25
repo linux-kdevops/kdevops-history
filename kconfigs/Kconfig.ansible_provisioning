@@ -142,4 +142,30 @@ config KDEVOPS_PYTHON_OLD_INTERPRETER
 	  so that we can specify it on older systems. You can then use the
 	  KDEVOPSPYTHONOLDINTERPRETER value on your hosts.in file on old
 	  systems so that this gets properly placed.
+
+if KDEVOPS_DEVCONFIG_ENABLE
+config KDEVOPS_DEVCONFIG_ENABLE_CUSTOM_REPOS
+	bool "Allow user to add custom repositories and install packages from them"
+	default n
+	help
+          Enable Kconfig options to allow user to add custom package
+          repositories and to also specify packages to be installed
+          from them.
+
+config KDEVOPS_DEVCONFIG_CUSTOM_REPOS
+	string "Comma separated list of custom repositories to be enabled"
+	default ""
+	depends on KDEVOPS_DEVCONFIG_ENABLE_CUSTOM_REPOS=y
+	help
+	  Comma separated list of custom repositories to be enabled
+
+config KDEVOPS_DEVCONFIG_CUSTOM_PACKAGES
+	string "Comma separated list of custom packages to be installed"
+	default ""
+	depends on KDEVOPS_DEVCONFIG_ENABLE_CUSTOM_REPOS=y
+	help
+	  Comma separated list of custom packages to be installed
+
+endif # KDEVOPS_DEVCONFIG_ENABLE
+
 endif # KDEVOPS_ANSIBLE_PROVISION_ENABLE

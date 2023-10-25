@@ -20,6 +20,11 @@
 - name: Install dependencies
   import_tasks: install-deps/main.yml
 
+- name: Configure custom repositories and install packages
+  import_tasks: config-custom-repos-and-packages/main.yml
+  when:
+    - ansible_facts['os_family']|lower == 'redhat'
+
 # Distro agnostic stuff goes below
 
 - name: Ensure /etc/hostname is set
