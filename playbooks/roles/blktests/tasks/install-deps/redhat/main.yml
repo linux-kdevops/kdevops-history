@@ -12,6 +12,7 @@
       - git-core
       - automake
       - gcc
+      - gcc-c++
       - libuuid
       - libuuid-devel
       - quota
@@ -45,3 +46,5 @@
       - gdbm-libs
       - fio
       - dbench
+      - device-mapper-multipath
+      - pciutils
