@@ -11,6 +11,7 @@ xfs/155
 xfs/188
 xfs/242
 xfs/270
+xfs/301 # F:1/8 quota enabled
 xfs/513
 xfs/559
 xfs/597
