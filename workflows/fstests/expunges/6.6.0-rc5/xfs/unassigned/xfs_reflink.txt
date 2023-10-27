@@ -2,6 +2,8 @@ generic/175
 generic/297
 generic/298
 generic/471
+generic/516
+generic/517
 xfs/008
 xfs/059
 xfs/075
