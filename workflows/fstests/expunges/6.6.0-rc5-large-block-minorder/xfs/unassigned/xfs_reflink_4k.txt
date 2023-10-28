@@ -1,0 +1,18 @@
+generic/175
+generic/297
+generic/298
+generic/455 # F:1/8
+generic/471
+generic/670
+xfs/009
+xfs/060
+xfs/075
+xfs/155
+xfs/188
+xfs/242
+xfs/270
+xfs/301 # F:1/8 quota enabled
+xfs/513
+xfs/559
+xfs/597
+xfs/598
