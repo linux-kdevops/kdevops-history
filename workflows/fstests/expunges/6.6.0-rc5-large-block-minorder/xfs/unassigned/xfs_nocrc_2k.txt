@@ -2,6 +2,7 @@ generic/455 # non-fatal possible regression?
 generic/471
 generic/607
 xfs/008
+xfs/051 # F:1/11
 xfs/075
 xfs/168
 xfs/188

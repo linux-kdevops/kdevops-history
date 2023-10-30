@@ -3,6 +3,7 @@ generic/465
 generic/471
 xfs/016 # quota enabled
 xfs/018
+xfs/051 # F:1/11
 xfs/075
 xfs/188
 xfs/270
