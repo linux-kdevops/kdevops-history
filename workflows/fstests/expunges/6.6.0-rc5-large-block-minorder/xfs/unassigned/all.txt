@@ -1,0 +1,1 @@
+generic/475 # xfs assert ip->i_nblocks == 0, file: fs/xfs/xfs_inode.c, line: 2359 https://gist.github.com/mcgrof/5d6f504f4695ba27cea7df5d63f35197
