@@ -14,7 +14,7 @@ usage()
 	echo ""
 }
 
-if [[ $# -le 1 ]]; then
+if [[ $# -lt 1 ]]; then
 	usage
 	exit
 fi
