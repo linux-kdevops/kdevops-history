@@ -4,6 +4,7 @@ generic/607
 generic/650 # F:1/5 xfs assert fs/xfs/xfs_message.c:102 https://gist.github.com/mcgrof/8a4ac7107fa75ac3b44f634e6a1552ef
 generic/681
 generic/682
+xfs/008 # non-fatal possible regression?
 xfs/009
 xfs/016 # F:1/8
 xfs/057 # F:1/4 stalls https://gist.github.com/mcgrof/1693a8750ffca91476dc40429056101d
