@@ -758,6 +758,22 @@ config FSTESTS_SOAK_DURATION
 	int "Custom Soak duration to be used"
 	default 0
 	help
-	  Custom Soak duration to be used during test execution.
+	  Custom Soak duration to be used during test execution. If you set this
+	  to a non-zero value then fstests will increase the amount of time it
+	  takes to run certain tests which are time based and support using
+	  SOAK_DURATION. A moderate high value setting for this is 9900 which is
+	  2.5 hours.
+
+	  As of 2023-10-31 that consists of the following tests which use either
+	  fsstress or fsx or fio:
+
+	  - generic/019 - fsstress + fio + disk-failure-simulation|dio/aio/mmap
+	  - generic/476 - fsstress - multithreaded write
+	  - generic/521 - fsx - direct IO
+	  - generic/522 - fsx - buffered IO
+	  - generic/616 - fsx - iouring (-U) buffered IO
+	  - generic/617 - fsx - iouring (-U) direct IO
+	  - generic/642 - fsstress - multithreaded xattr testing
+	  - generic/650 - fsstress - multithreaded write + CPU hotplug
 
 endif # KDEVOPS_WORKFLOW_ENABLE_FSTESTS
