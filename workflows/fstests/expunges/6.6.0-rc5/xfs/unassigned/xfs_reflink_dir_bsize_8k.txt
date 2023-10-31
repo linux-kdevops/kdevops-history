@@ -1,7 +1,9 @@
 generic/175
 generic/251 # Hangs
+generic/269 # SOAK_DURATION=9900
 generic/297
 generic/298
+generic/455 # SOAK_DURATION=9900
 generic/471
 generic/531 # F:1/5 xfs assert fs/xfs/xfs_message.c:102 https://gist.github.com/mcgrof/fee63ab2a0c62aad91b112f599ea3f4a
 generic/670
