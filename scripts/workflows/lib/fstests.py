@@ -18,6 +18,21 @@ def fstests_check_pid(host):
         return pid
     return 0
 
+# Later on we can automate this list with a git grep on the fstests
+# tests/ directory, and we inject this here.
+def fstests_test_uses_soak_duration(testname):
+    USES_SOAK_DURATION = [ "generic/019" ]
+    USES_SOAK_DURATION += [ "generic/476" ]
+    USES_SOAK_DURATION += [ "generic/521" ]
+    USES_SOAK_DURATION += [ "generic/522" ]
+    USES_SOAK_DURATION += [ "generic/616" ]
+    USES_SOAK_DURATION += [ "generic/617" ]
+    USES_SOAK_DURATION += [ "generic/642" ]
+    USES_SOAK_DURATION += [ "generic/650" ]
+    if testname in USES_SOAK_DURATION:
+        return True
+    return False
+
 def get_fstest_host(host, basedir, kernel, section, config):
     stall_suspect = False
     if kernel == "Uname-issue":
@@ -44,6 +59,11 @@ def get_fstest_host(host, basedir, kernel, section, config):
 
     delta = d2 - d1
     delta_seconds = int(delta.total_seconds())
+
+    soak_duration_seconds = 0
+    if "CONFIG_FSTESTS_SOAK_DURATION" in config:
+        soak_duration_seconds = config["CONFIG_FSTESTS_SOAK_DURATION"].strip('\"')
+        soak_duration_seconds = int(soak_duration_seconds)
 
     if "CONFIG_FSTESTS_WATCHDOG" not in config:
         enable_watchdog = False
@@ -84,6 +104,9 @@ def get_fstest_host(host, basedir, kernel, section, config):
         # minutes
         elif checktime >  0:
             suspect_crash_time_seconds = 60 * hung_fast_test_max_time
+
+        if (fstests_test_uses_soak_duration(last_test):
+            suspect_crash_time_seconds += soak_duration_seconds
 
         if delta_seconds >= suspect_crash_time_seconds and 'fstestsstart/000' not in last_test and 'fstestsend/000' not in last_test:
             stall_suspect = True
