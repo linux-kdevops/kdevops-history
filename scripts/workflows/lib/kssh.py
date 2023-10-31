@@ -62,6 +62,26 @@ def first_process_name_pid(host, process_name):
             return 0
         return int(stdout)
 
+def prog_exists(host, prog):
+    cmd = ['ssh', host,
+           'sudo',
+           'which',
+           prog ]
+    process = subprocess.Popen(cmd,
+                               stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                               close_fds=True, universal_newlines=True)
+    data = None
+    try:
+        data = process.communicate(timeout=120)
+    except subprocess.TimeoutExpired:
+        return False
+    else:
+        stdout = data[0]
+        process.wait()
+        if process.returncode != 0:
+            return False
+        return True
+
 def get_uname(host):
     cmd = ['ssh', host, 'uname', '-r' ]
     process = subprocess.Popen(cmd,
@@ -89,6 +109,15 @@ def get_test(host, suite):
            '|', 'grep', '"' + run_string + '"',
            '|', 'awk', '-F"' + run_string + ' "', '\'{print $2}\'',
            '|', 'tail', '-1' ]
+    if prog_exists(host, 'journalctl'):
+        cmd = ['ssh', host,
+               'sudo',
+               'journalctl',
+               '-k',
+               '-g'
+               '"' + run_string + '"'
+               '|', 'awk', '-F"' + run_string + ' "', '\'{print $2}\'',
+               '|', 'tail', '-1' ]
     process = subprocess.Popen(cmd,
                                stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                                close_fds=True, universal_newlines=True)
