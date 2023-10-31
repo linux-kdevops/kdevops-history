@@ -105,7 +105,7 @@ def get_fstest_host(host, basedir, kernel, section, config):
         elif checktime >  0:
             suspect_crash_time_seconds = 60 * hung_fast_test_max_time
 
-        if (fstests_test_uses_soak_duration(last_test):
+        if fstests_test_uses_soak_duration(last_test):
             suspect_crash_time_seconds += soak_duration_seconds
 
         if delta_seconds >= suspect_crash_time_seconds and 'fstestsstart/000' not in last_test and 'fstestsend/000' not in last_test:
