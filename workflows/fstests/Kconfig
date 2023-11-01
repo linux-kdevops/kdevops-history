@@ -292,6 +292,12 @@ config FSTESTS_DATA
 	  Note that {{data_path}} corresponds to the location set by the
 	  configuration option CONFIG_WORKFLOW_DATA_PATH.
 
+config FSTESTS_GIT_VERSION
+	string "The fstests git tree version(branch/tag/commit)"
+	default "HEAD"
+	help
+	  The fstests git tree version.
+
 config FSTESTS_DATA_TARGET
 	string "The target fstests install directory"
 	default "/var/lib/xfstests"

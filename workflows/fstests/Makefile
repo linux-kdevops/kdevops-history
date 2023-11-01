@@ -16,9 +16,11 @@ endif
 
 FSTESTS_GIT:=$(subst ",,$(CONFIG_FSTESTS_GIT))
 FSTESTS_DATA:=$(subst ",,$(CONFIG_FSTESTS_DATA))
+FSTESTS_GIT_VERSION:=$(subst ",,$(CONFIG_FSTESTS_GIT_VERSION))
 FSTESTS_DATA_TARGET:=$(subst ",,$(CONFIG_FSTESTS_DATA_TARGET))
 
 FSTESTS_ARGS += fstests_git=$(FSTESTS_GIT)
+FSTESTS_ARGS += fstests_git_version=$(FSTESTS_GIT_VERSION)
 FSTESTS_ARGS += fstests_fstyp='$(FSTYP)'
 FS_CONFIG='$(FSTYP)/$(FSTYP).config'
 FSTESTS_ARGS += fs_config_role_path='roles/fstests/templates/$(FS_CONFIG)'
