@@ -22,6 +22,8 @@ def fstests_check_pid(host):
 # tests/ directory, and we inject this here.
 def fstests_test_uses_soak_duration(testname):
     USES_SOAK_DURATION = [ "generic/019" ]
+    USES_SOAK_DURATION += [ "generic/388" ]
+    USES_SOAK_DURATION += [ "generic/475" ]
     USES_SOAK_DURATION += [ "generic/476" ]
     USES_SOAK_DURATION += [ "generic/521" ]
     USES_SOAK_DURATION += [ "generic/522" ]
@@ -29,6 +31,7 @@ def fstests_test_uses_soak_duration(testname):
     USES_SOAK_DURATION += [ "generic/617" ]
     USES_SOAK_DURATION += [ "generic/642" ]
     USES_SOAK_DURATION += [ "generic/650" ]
+    USES_SOAK_DURATION += [ "generic/648" ]
     if testname in USES_SOAK_DURATION:
         return True
     return False

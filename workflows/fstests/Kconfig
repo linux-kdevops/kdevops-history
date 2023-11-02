@@ -771,15 +771,19 @@ config FSTESTS_SOAK_DURATION
 	  2.5 hours.
 
 	  As of 2023-10-31 that consists of the following tests which use either
-	  fsstress or fsx or fio:
+	  fsstress or fsx or fio. Tests either use SOAK_DURATION directly or they
+	  use the helper loop such as _soak_loop_running().
 
 	  - generic/019 - fsstress + fio + disk-failure-simulation|dio/aio/mmap
 	  - generic/476 - fsstress - multithreaded write
+	  - generic/388 - fsstress + shutdowns after log recovery
+	  - generic/475 - fsstress + disk failures on scratch device
 	  - generic/521 - fsx - direct IO
 	  - generic/522 - fsx - buffered IO
 	  - generic/616 - fsx - iouring (-U) buffered IO
 	  - generic/617 - fsx - iouring (-U) direct IO
 	  - generic/642 - fsstress - multithreaded xattr testing
+	  - generic/648 - fsstress + disk failures on loopback
 	  - generic/650 - fsstress - multithreaded write + CPU hotplug
 
 endif # KDEVOPS_WORKFLOW_ENABLE_FSTESTS
