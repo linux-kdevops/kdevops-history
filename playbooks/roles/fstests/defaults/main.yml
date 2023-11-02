@@ -19,6 +19,7 @@ fstests_initial_baseline: False
 fstests_initial_baseline_args: ""
 
 fstests_git: "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git"
+fstests_git_version: "master"
 fstests_data: "{{ data_path }}/fstests"
 fstests_data_prefix: "{{ data_path }}/fstests-install"
 fstests_data_target: "/var/lib/xfstests/"
