@@ -14,6 +14,7 @@ xfs/051 # F:1/11
 xfs/075
 xfs/188
 xfs/270
+xfs/301 # possible regression - F:1/2 fails on many non-LBS profiles so retest in a loop on non-LBS
 xfs/513
 xfs/559
 xfs/597

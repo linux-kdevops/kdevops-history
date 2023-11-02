@@ -1,12 +1,13 @@
-xfs/041 # xfs assert fs/xfs/xfs_message.c:102 https://gist.github.com/mcgrof/24abd01e5fe714d3f81f99af4b93b841
 generic/048
 generic/219
 generic/251
 generic/275
 generic/436
 generic/471
+generic/645 # F:1/2 needs looking into but fails at least on xfs_nocrc also
 xfs/008
 xfs/030
+xfs/041 # xfs assert fs/xfs/xfs_message.c:102 https://gist.github.com/mcgrof/24abd01e5fe714d3f81f99af4b93b841
 xfs/599 # Possible test bug reported https://lore.kernel.org/fstests/ZULu%2FRm%2FEiBY8ZzG@bombadil.infradead.org/T/#u
 xfs/075 # needs looking into
 xfs/104 # needs looking into
