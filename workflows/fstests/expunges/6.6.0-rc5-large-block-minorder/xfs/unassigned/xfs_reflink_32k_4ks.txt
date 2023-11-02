@@ -12,6 +12,7 @@ generic/436
 generic/455
 generic/457
 generic/471
+generic/476 # F:1/2 VM_BUG_ON_FOLIO(index & (folio_nr_pages(folio) - 1), folio) https://gist.github.com/mcgrof/dbcd80e00eb9a2a5c544662fc428474f
 generic/482
 generic/704
 generic/730
