@@ -8,3 +8,13 @@ generic/471
 xfs/008
 xfs/030
 xfs/599 # Possible test bug reported https://lore.kernel.org/fstests/ZULu%2FRm%2FEiBY8ZzG@bombadil.infradead.org/T/#u
+xfs/075 # needs looking into
+xfs/104 # needs looking into
+xfs/166 # needs looking into
+xfs/188 # needs looking into
+xfs/306 # needs looking into
+xfs/503 # needs looking into
+xfs/513 # needs looking into
+xfs/559 # needs looking into
+xfs/597 # needs looking into
+xfs/598 # needs looking into

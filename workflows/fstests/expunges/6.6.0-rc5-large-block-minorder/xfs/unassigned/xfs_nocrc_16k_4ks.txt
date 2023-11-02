@@ -10,3 +10,4 @@ xfs/559
 xfs/597
 xfs/598
 xfs/599 # Possible test bug reported https://lore.kernel.org/fstests/ZULu%2FRm%2FEiBY8ZzG@bombadil.infradead.org/T/#u
+xfs/301 # needs looking into

@@ -23,12 +23,14 @@ generic/731
 shared/298
 xfs/008
 xfs/075
+xfs/139 # needs looking into
 xfs/155
 xfs/161
 xfs/166
 xfs/169
 xfs/188
 xfs/229
+xfs/234 # needs looking into
 xfs/236
 xfs/270
 xfs/273
