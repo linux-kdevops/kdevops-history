@@ -5,6 +5,7 @@ generic/471
 xfs/016
 xfs/018
 xfs/051 # F:1/11
+xfs/060 # F:1/13
 xfs/075
 xfs/141
 xfs/188

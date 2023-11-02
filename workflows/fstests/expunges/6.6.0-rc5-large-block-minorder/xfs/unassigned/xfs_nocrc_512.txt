@@ -9,9 +9,11 @@ xfs/009
 xfs/016 # F:1/8
 xfs/051 # F:1/11
 xfs/057 # F:1/4 stalls https://gist.github.com/mcgrof/1693a8750ffca91476dc40429056101d
+xfs/059 # F:1/13
 xfs/071
 xfs/075
 xfs/188
+xfs/242 # F:1/13
 xfs/273
 xfs/301 # F:1/7
 xfs/495
