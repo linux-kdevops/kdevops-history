@@ -15,6 +15,7 @@ xfs/168 # Hung task possible regression? https://gist.github.com/mcgrof/d9e76aab
 xfs/188
 xfs/242
 xfs/270
+xfs/229 # F:1/14 compaction triggered BUG ! include/linux/page-flags.h:314 https://gist.github.com/mcgrof/ed4a3c025337434231303d70fefea684
 xfs/301 # F:1/8 quota enabled
 xfs/513
 xfs/559
