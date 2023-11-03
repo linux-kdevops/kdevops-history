@@ -786,4 +786,43 @@ config FSTESTS_SOAK_DURATION
 	  - generic/648 - fsstress + disk failures on loopback
 	  - generic/650 - fsstress - multithreaded write + CPU hotplug
 
+	  The tests below use _scratch_xfs_stress_scrub() to stress
+	  test an with fsstress with scrub or an alternate xfs_db operation.
+
+	  - xfs/285
+	  - xfs/517
+	  - xfs/560
+	  - xfs/561
+	  - xfs/562
+	  - xfs/565
+	  - xfs/570
+	  - xfs/571
+	  - xfs/572
+	  - xfs/573
+	  - xfs/574
+	  - xfs/575
+	  - xfs/576
+	  - xfs/577
+	  - xfs/578
+	  - xfs/579
+	  - xfs/580
+	  - xfs/581
+	  - xfs/582
+	  - xfs/583
+	  - xfs/584
+	  - xfs/585
+	  - xfs/586
+	  - xfs/587
+	  - xfs/588
+	  - xfs/589
+	  - xfs/590
+	  - xfs/591
+	  - xfs/592
+	  - xfs/593
+	  - xfs/594
+	  - xfs/595
+	  - xfs/727
+	  - xfs/729
+	  - xfs/800
+
 endif # KDEVOPS_WORKFLOW_ENABLE_FSTESTS
