@@ -1,2 +1,3 @@
 generic/475 # xfs assert ip->i_nblocks == 0, file: fs/xfs/xfs_inode.c, line: 2359 https://gist.github.com/mcgrof/5d6f504f4695ba27cea7df5d63f35197
-xfs/051 # F:1/12 test bug fixed in newest xfsprogs https://lore.kernel.org/all/c51514a4-b643-42dc-9db0-5ec51b5e184a@samsung.com/T/#
+generic/269 # test bug - remove me once we update the fstests on kdevops
+xfs/051 # remove me once we update fstests on kdevops F:1/12 test bug fixed in newest xfsprogs https://lore.kernel.org/all/c51514a4-b643-42dc-9db0-5ec51b5e184a@samsung.com/T/#u
