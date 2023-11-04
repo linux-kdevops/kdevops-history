@@ -42,7 +42,16 @@ def print_fstest_host_status(host, verbose, basedir, config):
         return
 
     if not verbose:
-        percent_done_str = "%.0f%%" % (percent_done)
+        soak_duration_seconds = 0
+        if "CONFIG_FSTESTS_SOAK_DURATION" in config:
+            soak_duration_seconds = config["CONFIG_FSTESTS_SOAK_DURATION"].strip('\"')
+            soak_duration_seconds = int(soak_duration_seconds)
+        uses_soak = fstests.fstests_test_uses_soak_duration(last_test)
+        is_soaking = uses_soak and soak_duration_seconds != 0
+        soaking_str = ""
+        if is_soaking:
+            soaking_str = "(soak)"
+        percent_done_str = "%.0f%% %s" % (percent_done, soaking_str)
         sys.stdout.write("%35s%20s%20s%20s%20s%15s%30s\n" % (host, last_test, percent_done_str, str(delta_seconds), str(checktime), stall_str, kernel))
         return
 
