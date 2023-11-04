@@ -4,6 +4,7 @@ generic/297
 generic/298
 generic/455
 generic/471
+generic/531 # SOAK_DURATION=9900 assert bp->b_flags & XBF_DONE, file: fs/xfs/xfs_trans_buf.c https://gist.github.com/mcgrof/e169257f7a139243171d7e0202673bec
 generic/648 # SOAK_DURATION=9900 xfs assert ip->i_nblocks == 0 https://gist.github.com/mcgrof/25a3a851f25513669ef6ecc37e778251
 xfs/013 # F:1/14 xfs assert bp->b_flags & XBF_DONE https://gist.github.com/mcgrof/ab61de6d6de7a9b1673e47dc06bd7a3c
 xfs/016
