@@ -8,6 +8,7 @@ generic/648 # SOAK_DURATION=9900 xfs assert ip->i_nblocks == 0 https://gist.gith
 generic/670
 xfs/009
 xfs/051 # F:1/11
+xfs/059 # F:1/15
 xfs/060
 xfs/075
 xfs/155
