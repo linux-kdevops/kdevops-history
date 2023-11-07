@@ -6,6 +6,7 @@ generic/531 # F:1/15 xfs assert bp->b_flags & XBF_DONE fs/xfs/xfs_message.c http
 xfs/016
 xfs/018
 xfs/051 # F:1/11
+xfs/059 # F:1/18
 xfs/060 # F:1/13
 xfs/075
 xfs/141
