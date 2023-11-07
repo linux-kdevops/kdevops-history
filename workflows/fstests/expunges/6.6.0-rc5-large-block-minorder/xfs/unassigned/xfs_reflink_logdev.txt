@@ -38,3 +38,4 @@ xfs/513
 xfs/559
 xfs/597
 xfs/598
+xfs/648 # SOAK_DURATION=9900 xfs assert p->i_nblocks == 0, file: fs/xfs/xfs_inode.c https://gist.github.com/mcgrof/5347050f3d8a8dbadf1ae7fa4ff28aa4
