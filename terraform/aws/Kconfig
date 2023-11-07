@@ -14,15 +14,6 @@ config TERRAFORM_AWS_US_WEST_2
 	help
 	  This option will set the AWS region to us-west-2.
 
-endchoice
-
-config TERRAFORM_AWS_REGION
-	string
-	default "us-west-1" if TERRAFORM_AWS_US_WEST_1
-	default "us-west-2" if TERRAFORM_AWS_US_WEST_2
-	help
-	  This option will set the AWS region to the specified value.
-
 	  If you wish to expand on this list send a patch after reading
 	  this list:
 
@@ -57,11 +48,23 @@ config TERRAFORM_AWS_REGION
 	  aws ec2 describe-images --image-ids ami-0699f753302dd8b00 | grep OwnerId
 	    "OwnerId": "137112412989",
 
-config TERRAFORM_AWS_AV_REGION
+endchoice
+
+config TERRAFORM_AWS_REGION
 	string
-	default "us-west-1b" if TERRAFORM_AWS_US_WEST_1
-	default "us-west-2b" if TERRAFORM_AWS_US_WEST_2
+	default "us-west-2" if TERRAFORM_AWS_US_WEST_2
+	default "us-west-1" if TERRAFORM_AWS_US_WEST_1
+
+if TERRAFORM_AWS_US_WEST_2
+
+choice
+	prompt "AWS West 2 AV region to use"
+	default TERRAFORM_AWS_AV_REGION_WEST_2B
+
+config TERRAFORM_AWS_AV_REGION_WEST_1B
+	bool "us-west-1b"
 	help
+	  This option will set the AWS AV region to us-west-1b.
 	  This option will set the AWS availablity region to the specified
 	  value.
 
@@ -70,6 +73,26 @@ config TERRAFORM_AWS_AV_REGION
 
 	  https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html
 	  https://gist.github.com/neilstuartcraig/0ccefcf0887f29b7f240
+
+config TERRAFORM_AWS_AV_REGION_WEST_2B
+	bool "us-west-2b"
+	help
+	  This option will set the AWS AV region to us-west-2b.
+
+config TERRAFORM_AWS_AV_REGION_WEST_2D
+	bool "us-west-2d"
+	help
+	  This option will set the AWS AV region to us-west-2d.
+
+endchoice
+
+endif # TERRAFORM_AWS_US_WEST_2
+
+config TERRAFORM_AWS_AV_REGION
+	string
+	default "us-west-1b" if TERRAFORM_AWS_AV_REGION_WEST_1B
+	default "us-west-2b" if TERRAFORM_AWS_AV_REGION_WEST_2B
+	default "us-west-2d" if TERRAFORM_AWS_AV_REGION_WEST_2D
 
 choice
 	prompt "AWS AMI owner"
@@ -307,7 +330,7 @@ config TERRAFORM_AWS_INSTANCE_I4I_METAL
 	  https://aws.amazon.com/ec2/instance-types/i4i/
 
 config TERRAFORM_AWS_INSTANCE_C7A_METAL_48XL
-	depends on TARGET_ARCH_X86_64
+	depends on TARGET_ARCH_X86_64 && TERRAFORM_AWS_AV_REGION_WEST_2D
 	bool "c7a.metal-48xl"
 	help
 	  192 core, 384 GiB RAM, EBS drive.
