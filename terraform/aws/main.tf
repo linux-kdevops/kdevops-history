@@ -124,17 +124,14 @@ resource "aws_instance" "kdevops_instance" {
 }
 
 resource "aws_ebs_volume" "kdevops_vols" {
-  count             = var.aws_enable_ebs == "yes" ? local.kdevops_num_boxes * var.aws_ebs_num_volumes_per_instance : 0
+  count             = var.aws_enable_ebs == "true" ? local.kdevops_num_boxes * var.aws_ebs_num_volumes_per_instance : 0
   availability_zone = var.aws_availability_region
-  size = element(
-    var.aws_ebs_volume_sizes,
-    ceil(count.index / local.kdevops_num_boxes),
-  )
+  size = var.aws_ebs_volume_size
 }
 
 resource "aws_volume_attachment" "kdevops_att" {
-  count       = var.aws_enable_ebs == "yes" ? local.kdevops_num_boxes * var.aws_ebs_num_volumes_per_instance : 0
-  device_name = element(var.aws_ebs_device_names, count.index % local.kdevops_num_boxes)
+  count       = var.aws_enable_ebs == "true" ? local.kdevops_num_boxes * var.aws_ebs_num_volumes_per_instance : 0
+  device_name = element(var.aws_ebs_device_names, count.index)
   volume_id   = element(aws_ebs_volume.kdevops_vols.*.id, count.index)
   instance_id = element(aws_instance.kdevops_instance.*.id, count.index)
 }

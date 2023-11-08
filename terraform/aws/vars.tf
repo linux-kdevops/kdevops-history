@@ -87,12 +87,11 @@ variable "aws_ebs_num_volumes_per_instance" {
 # nvme drive. But subsequent EBS drivers get pegged as nvme as well. *And*
 # even if you want to use nvme, you must use /dev/sdh /dev/sdh here...
 #
-# To avoid this mess just pick a damn instance name with the drive setup
-# you need for development, if you can afford it.
+# https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/device_naming.html#available-ec2-device-names
 variable "aws_ebs_device_names" {
   description = "The EBS device names to use"
   type        = list(string)
-  default     = ["/dev/sdh", "/dev/sdh"]
+  default     = [ "/dev/sdf", "/dev/sdg", "/dev/sdh", "/dev/sdi", "/dev/sdj", "/dev/sdk", "/dev/sdl", "/dev/sdm", "/dev/sdn", "/dev/sdo", "/dev/sdp" ]
 }
 
 # The t2.micro comes with 8 GiB of storage.
@@ -100,13 +99,9 @@ variable "aws_ebs_device_names" {
 # AWS Free Tier includes 30GB of Storage, 2 million I/Os, and 1GB of snapshot
 # storage with Amazon Elastic Block Store (EBS).
 #
-# Note: if using two hosts and you specify here 30 and 150, this means the
-# first EBS will be pegged on to the first host with 30 GiB, and the second
-# EBS to the second host with 150 GiB in size.
-variable "aws_ebs_volume_sizes" {
-  type        = list(string)
+variable "aws_ebs_volume_size" {
   description = "Size in GiB for each of the volumes"
-  default     = ["150", "160"]
+  default     = "4"
 }
 
 # We had to use this as aws terraform provider doesn't have a way to set

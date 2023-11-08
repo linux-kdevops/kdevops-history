@@ -360,4 +360,169 @@ config TERRAFORM_AWS_INSTANCE_TYPE
 
 	  The AWS free trial limits you to 750 hours of only t2.micro.
 
+config TERRAFORM_AWS_ENABLE_EBS_VOLUMES
+	bool "Enable EBS volumes"
+	help
+	  Enable this to enable EBS volumes.
+
+if TERRAFORM_AWS_ENABLE_EBS_VOLUMES
+
+choice
+	prompt "Number of EBS volumes"
+	default TERRAFORM_AWS_EBS_NUM_VOLUMES_PER_INSTANCE_4
+
+config TERRAFORM_AWS_EBS_NUM_VOLUMES_PER_INSTANCE_1
+	bool "1"
+	help
+	  Use 1 EBS volumes on instances.
+
+config TERRAFORM_AWS_EBS_NUM_VOLUMES_PER_INSTANCE_2
+	bool "2"
+	help
+	  Use 2 EBS volumes on instances.
+
+config TERRAFORM_AWS_EBS_NUM_VOLUMES_PER_INSTANCE_3
+	bool "3"
+	help
+	  Use 3 EBS volumes on instances.
+
+config TERRAFORM_AWS_EBS_NUM_VOLUMES_PER_INSTANCE_4
+	bool "4"
+	help
+	  Use 4 volumes on instances.
+
+config TERRAFORM_AWS_EBS_NUM_VOLUMES_PER_INSTANCE_5
+	bool "5"
+	help
+	  Use 5 volumes on instances.
+
+config TERRAFORM_AWS_EBS_NUM_VOLUMES_PER_INSTANCE_6
+	bool "6"
+	help
+	  Use 6 volumes on instances.
+
+config TERRAFORM_AWS_EBS_NUM_VOLUMES_PER_INSTANCE_7
+	bool "7"
+	help
+	  Use 7 volumes on instances.
+
+config TERRAFORM_AWS_EBS_NUM_VOLUMES_PER_INSTANCE_8
+	bool "8"
+	help
+	  Use 8 EBS volumes on instances.
+
+config TERRAFORM_AWS_EBS_NUM_VOLUMES_PER_INSTANCE_9
+	bool "9"
+	help
+	  Use 9 EBS volumes on instances.
+
+config TERRAFORM_AWS_EBS_NUM_VOLUMES_PER_INSTANCE_10
+	bool "10"
+	help
+	  Use 10 EBS volumes on instances.
+
+endchoice
+
+config TERRAFORM_AWS_EBS_NUM_VOLUMES_PER_INSTANCE
+	int
+	default 1 if TERRAFORM_AWS_EBS_NUM_VOLUMES_PER_INSTANCE_1
+	default 2 if TERRAFORM_AWS_EBS_NUM_VOLUMES_PER_INSTANCE_2
+	default 3 if TERRAFORM_AWS_EBS_NUM_VOLUMES_PER_INSTANCE_3
+	default 4 if TERRAFORM_AWS_EBS_NUM_VOLUMES_PER_INSTANCE_4
+	default 5 if TERRAFORM_AWS_EBS_NUM_VOLUMES_PER_INSTANCE_5
+	default 6 if TERRAFORM_AWS_EBS_NUM_VOLUMES_PER_INSTANCE_6
+	default 7 if TERRAFORM_AWS_EBS_NUM_VOLUMES_PER_INSTANCE_7
+	default 8 if TERRAFORM_AWS_EBS_NUM_VOLUMES_PER_INSTANCE_8
+	default 9 if TERRAFORM_AWS_EBS_NUM_VOLUMES_PER_INSTANCE_9
+	default 10 if TERRAFORM_AWS_EBS_NUM_VOLUMES_PER_INSTANCE_10
+
+choice
+	prompt "Volume size to for all EBS volumes"
+	default TERRAFORM_AWS_EBS_VOLUME_SIZE_32G
+
+config TERRAFORM_AWS_EBS_VOLUME_SIZE_2G
+	bool "2G"
+	help
+	  Use 2 GiB EBS volumes.
+
+config TERRAFORM_AWS_EBS_VOLUME_SIZE_4G
+	bool "4G"
+	help
+	  Use 4 GiB EBS volumes.
+
+config TERRAFORM_AWS_EBS_VOLUME_SIZE_8G
+	bool "8G"
+	help
+	  Use 8 GiB EBS volumes.
+
+config TERRAFORM_AWS_EBS_VOLUME_SIZE_16G
+	bool "16G"
+	help
+	  Use 16 GiB EBS volumes.
+
+config TERRAFORM_AWS_EBS_VOLUME_SIZE_32G
+	bool "32G"
+	help
+	  Use 32 GiB EBS volumes.
+
+config TERRAFORM_AWS_EBS_VOLUME_SIZE_64G
+	bool "64G"
+	help
+	  Use 64 GiB EBS volumes.
+
+config TERRAFORM_AWS_EBS_VOLUME_SIZE_128G
+	bool "128G"
+	help
+	  Use 128 GiB EBS volumes.
+
+config TERRAFORM_AWS_EBS_VOLUME_SIZE_256G
+	bool "256G"
+	help
+	  Use 256 GiB EBS volumes.
+
+config TERRAFORM_AWS_EBS_VOLUME_SIZE_512G
+	bool "512G"
+	help
+	  Use 512 GiB EBS volumes.
+
+config TERRAFORM_AWS_EBS_VOLUME_SIZE_1024G
+	bool "1024G"
+	help
+	  Use 1024 GiB EBS volumes.
+
+config TERRAFORM_AWS_EBS_VOLUME_SIZE_2048G
+	bool "2048G"
+	help
+	  Use 2048 GiB EBS volumes.
+
+config TERRAFORM_AWS_EBS_VOLUME_SIZE_3078G
+	bool "3078G"
+	help
+	  Use 3078 GiB EBS volumes.
+
+config TERRAFORM_AWS_EBS_VOLUME_SIZE_4096G
+	bool "4096G"
+	help
+	  Use 4096 GiB EBS volumes.
+
+endchoice
+
+config TERRAFORM_TERRAFORM_AWS_EBS_VOLUME_SIZE
+	int
+	default 2 if TERRAFORM_AWS_EBS_VOLUME_SIZE_2G
+	default 4 if TERRAFORM_AWS_EBS_VOLUME_SIZE_4G
+	default 8 if TERRAFORM_AWS_EBS_VOLUME_SIZE_8G
+	default 16 if TERRAFORM_AWS_EBS_VOLUME_SIZE_16G
+	default 32 if TERRAFORM_AWS_EBS_VOLUME_SIZE_32G
+	default 64 if TERRAFORM_AWS_EBS_VOLUME_SIZE_64G
+	default 128 if TERRAFORM_AWS_EBS_VOLUME_SIZE_128G
+	default 256 if TERRAFORM_AWS_EBS_VOLUME_SIZE_255G
+	default 512 if TERRAFORM_AWS_EBS_VOLUME_SIZE_512G
+	default 1024 if TERRAFORM_AWS_EBS_VOLUME_SIZE_1024G
+	default 2048 if TERRAFORM_AWS_EBS_VOLUME_SIZE_2048G
+	default 3078 if TERRAFORM_AWS_EBS_VOLUME_SIZE_3078G
+	default 4096 if TERRAFORM_AWS_EBS_VOLUME_SIZE_4096G
+
+endif # TERRAFORM_AWS_ENABLE_EBS_VOLUMES
+
 endif # TERRAFORM_AWS
