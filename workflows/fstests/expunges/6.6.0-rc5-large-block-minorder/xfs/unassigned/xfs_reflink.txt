@@ -6,6 +6,8 @@ generic/471
 generic/516
 generic/517
 generic/531 # F:1/17 xfs assert bp->b_flags & XBF_DONE, file: fs/xfs/xfs_trans_buf.c https://gist.github.com/mcgrof/4185a54c4b67b1a7ce00b4e4244f61d0
+generic/648 # SOAK_DURATION=9900 xfs assert ip->i_nblocks == 0 fs/xfs/xfs_inode.c, https://gist.github.com/mcgrof/1e506ecbe898b45428d6e7febfc02db1
+generic/670 # F:1/16
 xfs/008
 xfs/051 # F:1/11
 xfs/059
