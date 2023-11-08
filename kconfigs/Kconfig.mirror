@@ -1,3 +1,5 @@
+if !TERRAFORM
+
 config ENABLE_LOCAL_LINUX_MIRROR
 	bool "Enable kdevops to use your localhost as a git mirror for Linux"
 	default $(shell, scripts/check_mirror.sh ENABLE_LOCAL_LINUX_MIRROR)
@@ -340,3 +342,4 @@ config MIRROR_QEMU_JIC23_URL
 	default "ssh://git@gitlab.com:jic23/qemu.git" if MIRROR_QEMU_JIC23_SSH_GITLAB
 
 endif
+endif # TERRAFORM
