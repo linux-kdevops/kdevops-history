@@ -6,6 +6,7 @@ generic/471
 generic/648 # SOAK_DURATION=9900 xfs assert ip->i_nblocks == 0, file: fs/xfs/xfs_inode.c https://gist.github.com/mcgrof/84b4153d582a8ac92566f18adc62fb59
 generic/670 # quota enabled
 xfs/009
+xfs/013 # Hung task https://gist.github.com/Panky-codes/81759e9c075d8b94a115c23a1a8501e3
 xfs/051 # F:1/11
 xfs/060
 xfs/075
