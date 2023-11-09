@@ -9,6 +9,7 @@ generic/531 # F:1/17 xfs assert bp->b_flags & XBF_DONE, file: fs/xfs/xfs_trans_b
 generic/648 # SOAK_DURATION=9900 xfs assert ip->i_nblocks == 0 fs/xfs/xfs_inode.c, https://gist.github.com/mcgrof/1e506ecbe898b45428d6e7febfc02db1
 generic/670 # F:1/16
 xfs/008
+xfs/013 # F:1/115 xfs assert bp->b_flags & XBF_DONE fs/xfs/xfs_trans_buf.c:241 https://gist.github.com/mcgrof/0a2dd092ea36d09d65e52d063e967269
 xfs/051 # F:1/11
 xfs/059
 xfs/060 # F:1/11
