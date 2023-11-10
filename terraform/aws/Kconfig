@@ -329,6 +329,12 @@ config TERRAFORM_AWS_INSTANCE_I4I_METAL
 	  75 Gbps Net, 40 Gbps EBS. The bees' knees I guess.
 	  https://aws.amazon.com/ec2/instance-types/i4i/
 
+config TERRAFORM_AWS_INSTANCE_C7A_8XLARGE
+	depends on TARGET_ARCH_X86_64 && TERRAFORM_AWS_AV_REGION_WEST_2D
+	bool "c7a.8xlarge"
+	help
+	  32 core, 64 GiB RAM, EBS drives.
+
 config TERRAFORM_AWS_INSTANCE_C7A_METAL_48XL
 	depends on TARGET_ARCH_X86_64 && TERRAFORM_AWS_AV_REGION_WEST_2D
 	bool "c7a.metal-48xl"
@@ -350,15 +356,8 @@ config TERRAFORM_AWS_INSTANCE_TYPE
 	default "im4gn.4xlarge" if TERRAFORM_AWS_INSTANCE_IM4GN_4XLARGE
 	default "i4i.large" if TERRAFORM_AWS_INSTANCE_I4I_LARGE
 	default "i4i.metal" if TERRAFORM_AWS_INSTANCE_I4I_METAL
+	default "c7a.8xlarge" if TERRAFORM_AWS_INSTANCE_C7A_8XLARGE
 	default "c7a.metal-48xl" if TERRAFORM_AWS_INSTANCE_C7A_METAL_48XL
-	help
-	  This sets the aws instance type. There are many options, so go
-	  read this if you want to expand on this list or just set the value
-	  here:
-
-	  https://aws.amazon.com/ec2/instance-types/
-
-	  The AWS free trial limits you to 750 hours of only t2.micro.
 
 config TERRAFORM_AWS_ENABLE_EBS_VOLUMES
 	bool "Enable EBS volumes"
