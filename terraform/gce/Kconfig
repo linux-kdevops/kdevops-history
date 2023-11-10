@@ -76,4 +76,8 @@ config TERRAFORM_GCE_JSON_CREDENTIALS_PATH
 	    o https://cloud.google.com/iam/docs/creating-managing-service-account-keys
 	    o https://cloud.google.com/iam/docs/granting-roles-to-service-accounts#granting_access_to_a_service_account_for_a_resource
 
+config TERRAFORM_GCE_DATA_VOLUME_DEVICE_FILE_NAME
+	string
+	default "/dev/nvme0n1"
+
 endif # TERRAFORM_GCE

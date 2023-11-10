@@ -172,4 +172,7 @@ config TERRAFORM_AZURE_APPLICATION_ID
 	help
 	  The application ID to use.
 
+config TERRAFORM_AZURE_DATA_VOLUME_DEVICE_FILE_NAME
+	string "/dev/sdc"
+
 endif # TERRAFORM_AZURE

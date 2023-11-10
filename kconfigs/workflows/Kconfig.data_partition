@@ -1,13 +1,10 @@
-config WORKFLOW_DATA_DEVICE
-	string "The device to use to create the workflow data parition"
-	default "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_kdevops0" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_NVME
-	default "/dev/disk/by-id/virtio-kdevops0" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_VIRTIO
-	default "/dev/disk/by-id/ide-kdevops1" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_IDE
-	default "/dev/nvme1n1" if TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE
-	default "/dev/nvme0n1" if TERRAFORM_GCE
-	default "/dev/sdc" if TERRAFORM_AZURE
-	default TERRAFORM_OCI_DATA_VOLUME_DEVICE_FILE_NAME if TERRAFORM_OCI
+config WORKFLOW_DATA_DEVICE_ENABLE_CUSTOM
+	bool "Enable custom device to use to create the workflow data parition"
 	help
+	  Only enable this if you want to override the defaut data device.
+	  Typically we have enough heuristics with kconfig to get this right
+	  for you.
+
 	  Workflows require data to be passed onto each target host. When doing
 	  development or testing on target workflows you often want to keep
 	  around the data so you can reinstall the OS on a target host without
@@ -22,6 +19,24 @@ config WORKFLOW_DATA_DEVICE
 	  sources if you are developing on Linux, or the fstests git tree if
 	  you are testing fstests. Additionally configuration data used for
 	  your target workflows.
+
+config WORKFLOW_DATA_DEVICE_CUSTOM
+	string "Custom device to use to create the workflow data parition"
+	default "/dev/nvme0n1"
+	depends on WORKFLOW_DATA_DEVICE_ENABLE_CUSTOM
+	help
+	  Set this to whatever custom device you want.
+
+config WORKFLOW_DATA_DEVICE
+	string
+	default "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_kdevops0" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_NVME
+	default "/dev/disk/by-id/virtio-kdevops0" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_VIRTIO
+	default "/dev/disk/by-id/ide-kdevops1" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_IDE
+	default TERRAFORM_GCE_DATA_VOLUME_DEVICE_FILE_NAME if TERRAFORM_GCE
+	default TERRAFORM_AZURE_DATA_VOLUME_DEVICE_FILE_NAME if TERRAFORM_AZURE
+	default TERRAFORM_AWS_DATA_VOLUME_DEVICE_FILE_NAME if TERRAFORM_AWS
+	default TERRAFORM_OCI_DATA_VOLUME_DEVICE_FILE_NAME if TERRAFORM_OCI
+	default WORKFLOW_DATA_DEVICE_CUSTOM if WORKFLOW_DATA_DEVICE_ENABLE_CUSTOM
 
 config WORKFLOW_DATA_PATH
 	string "Directory path to place data for workflows"
