@@ -8,7 +8,9 @@
     group: root
     mode: 0644
   with_items: "{{ kdevops_devconfig_custom_repos | trim | split(',') }}"
-  when: kdevops_devconfig_custom_repos | trim | length > 1
+  when:
+    - kdevops_devconfig_custom_repos
+    - kdevops_devconfig_custom_repos | trim | length > 1
 
 - name: Install custom packages
   become: yes
@@ -20,4 +22,6 @@
   register: result
   until: result.rc == 0
   with_items: "{{ kdevops_devconfig_custom_packages | trim | split(',') }}"
-  when: kdevops_devconfig_custom_packages | trim | length > 1
+  when:
+    - kdevops_devconfig_custom_packages
+    - kdevops_devconfig_custom_packages | trim | length > 1
