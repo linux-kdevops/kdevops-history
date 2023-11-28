@@ -325,6 +325,14 @@ Vagrant.configure("2") do |config|
 {% endif %} # !switch topo1
         libvirt.qemuargs :value => "-M"
         libvirt.qemuargs :value => "cxl-fmw.0.targets.0=cxl.0,cxl-fmw.0.size=512M"
+{% if libvirt_enable_qmp %}
+        libvirt.qemuargs :value => "-qmp"
+{% if libvirt_qemu_qmp_wait %}
+        libvirt.qemuargs :value => "{{ libvirt_qemu_qmp_string }},wait=on"
+{% else %} # !qmp_wait
+        libvirt.qemuargs :value => "{{ libvirt_qemu_qmp_string }},wait=off"
+{% endif %} # libvirt_qemu_qmp_wait
+{% endif %} # libvirt_enable_qmp
 {% endif %} # CXL
 {% endif %}
 

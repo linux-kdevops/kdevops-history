@@ -1679,6 +1679,21 @@ config QEMU_ENABLE_CXL
 
 if QEMU_ENABLE_CXL
 
+config QEMU_START_QMP_ON_TCP_SOCKET
+	bool "Start QMP on a TCP socket"
+	default n
+	if QEMU_START_QMP_ON_TCP_SOCKET
+	config QEMU_QMP_COMMAND_LINE_STRING
+	string "Qemu command line string for qmp"
+	default "tcp:localhost:4444,server"
+	help
+	  Option for qmp interface (from https://wiki.qemu.org/Documentation/QMP).
+
+	config QEMU_QMP_WAIT_ON
+	bool "Let Qemu instance wait for qmp connection"
+	default n
+	endif # QEMU_START_QMP_ON_TCP_SOCKET
+
 choice
 	prompt "CXL topology to enable"
 	default QEMU_ENABLE_CXL_DEMO_TOPOLOGY_1

@@ -191,6 +191,15 @@ GEN_NODES_EXTRA_ARGS += libvirt_machine_type='q35'
 
 ifeq (y,$(CONFIG_QEMU_ENABLE_CXL))
 GEN_NODES_EXTRA_ARGS += libvirt_enable_cxl='True'
+ifeq (y,$(CONFIG_QEMU_START_QMP_ON_TCP_SOCKET))
+GEN_NODES_EXTRA_ARGS += libvirt_enable_qmp='True'
+GEN_NODES_EXTRA_ARGS += libvirt_qemu_qmp_string='$(subst ",,$(CONFIG_QEMU_QMP_COMMAND_LINE_STRING))'
+ifeq (y,$(CONFIG_QEMU_QMP_WAIT_ON))
+GEN_NODES_EXTRA_ARGS += libvirt_qemu_qmp_wait='True'
+else
+GEN_NODES_EXTRA_ARGS += libvirt_qemu_qmp_wait='False'
+endif # CONFIG_QEMU_QMP_WAIT_ON
+endif # CONFIG_QEMU_START_QMP_ON_TCP_SOCKET
 ifeq (y,$(CONFIG_QEMU_ENABLE_CXL_DEMO_TOPOLOGY_1))
 GEN_NODES_EXTRA_ARGS += libvirt_enable_cxl_demo_topo1='True'
 endif # QEMU_ENABLE_CXL_DEMO_TOPOLOGY_1
