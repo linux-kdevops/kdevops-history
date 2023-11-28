@@ -57,6 +57,10 @@
   include_tasks: cxl-mem-setup/main.yml
   tags: [ 'cxl-mem-setup' ]
 
+- name: Create a dynamic capacity region for further dc extent add operations
+  include_tasks: cxl-create-dc-region/main.yml
+  tags: [ 'cxl-create-dc-region' ]
+
 - name: Set the path to cxl workflow
   set_fact:
     cxl_workflow_target: "../workflows/cxl/"

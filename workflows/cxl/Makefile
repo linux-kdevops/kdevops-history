@@ -43,6 +43,11 @@ cxl-mem-setup:
 		-f 30 -i hosts playbooks/cxl.yml \
 		--tags cxl-mem-setup $(LIMIT_HOSTS)
 
+cxl-create-dc-region:
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
+		-f 30 -i hosts playbooks/cxl.yml \
+		--tags cxl-create-dc-region $(LIMIT_HOSTS)
+
 cxl-help-menu:
 	@echo "cxl development:"
 	@echo "cxl                 - Git clones ncdtl to compile and install the /usr/bin/cxl binary"
@@ -50,6 +55,7 @@ cxl-help-menu:
 	@echo "cxl-test-meson      - Runs the ndctl meson unit tests for the CXL test suite"
 	@echo "cxl-results         - Get results for all tests runs"
 	@echo "cxl-mem-setup	   - Convert cxl memory to cpu-less numa node"
+	@echo "cxl-create-dc-region	   - Create a DC region so DC extents can be added further"
 
 cxl-help-end:
 	@echo ""

@@ -1,0 +1,27 @@
+---
+
+- name: Create a DC region before DC extents can be added
+  become: yes
+  become_method: sudo
+  shell: "rid=0; \
+          region=$(cat /sys/bus/cxl/devices/decoder0.0/create_dc_region); \
+          echo $region > /sys/bus/cxl/devices/decoder0.0/create_dc_region; \
+          echo 256 > /sys/bus/cxl/devices/$region/interleave_granularity; \
+          echo 1 > /sys/bus/cxl/devices/$region/interleave_ways; \
+          echo dc$rid >/sys/bus/cxl/devices/decoder2.0/mode; \
+          echo 0x40000000 >/sys/bus/cxl/devices/decoder2.0/dpa_size; \
+          echo 0x40000000 > /sys/bus/cxl/devices/$region/size; \
+          echo  decoder2.0 > /sys/bus/cxl/devices/$region/target0; \
+          echo 1 > /sys/bus/cxl/devices/$region/commit; \
+          echo $region > /sys/bus/cxl/drivers/cxl_region/bind"
+  tags: [ 'cxl-create-dc-region' ]
+
+- name: Show the DC region created
+  become: no
+  shell: "cxl list -uR"
+  register: command_output
+  tags: [ 'cxl-create-dc-region' ]
+
+- debug:
+      var: command_output.stdout_lines
+  tags: [ 'cxl-create-dc-region' ]
