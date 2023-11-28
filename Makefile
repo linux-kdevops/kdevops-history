@@ -110,6 +110,10 @@ ifeq (y,$(CONFIG_VAGRANT))
 include scripts/vagrant.Makefile
 endif
 
+ifeq (y,$(CONFIG_GUESTFS))
+include scripts/guestfs.Makefile
+endif
+
 ifeq (y,$(CONFIG_WORKFLOWS))
 include workflows/Makefile
 endif # CONFIG_WORKFLOWS

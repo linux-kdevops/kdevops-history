@@ -1,0 +1,223 @@
+<domain type='kvm' xmlns:qemu='http://libvirt.org/schemas/domain/qemu/1.0'>
+  <name>{{ hostname }}</name>
+  <memory unit='MiB'>{{ vagrant_mem_mb }}</memory>
+  <currentMemory unit='MiB'>{{ vagrant_mem_mb }}</currentMemory>
+  <vcpu placement='static'>{{ vagrant_vcpus_count }}</vcpu>
+  <os>
+    <type arch='x86_64' machine='pc-q35-8.1'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+  </features>
+  <cpu mode='{{ 'host-passthrough' if libvirt_host_passthrough else 'host-model' }}' migratable='off'/>
+  <clock offset='utc'>
+    <timer name='rtc' tickpolicy='catchup'/>
+    <timer name='pit' tickpolicy='delay'/>
+    <timer name='hpet' present='no'/>
+  </clock>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+  <pm>
+    <suspend-to-mem enabled='no'/>
+    <suspend-to-disk enabled='no'/>
+  </pm>
+  <devices>
+    <emulator>{{ qemu_bin_path }}</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='{{ kdevops_storage_pool_path }}/guestfs/{{ hostname }}/root.qcow2' index='1'/>
+      <backingStore/>
+      <target dev='vda' bus='virtio'/>
+      <alias name='virtio-disk0'/>
+      <address type='pci' domain='0x0000' bus='0x04' slot='0x00' function='0x0'/>
+    </disk>
+    <controller type='usb' index='0' model='qemu-xhci' ports='15'>
+      <alias name='usb'/>
+      <address type='pci' domain='0x0000' bus='0x02' slot='0x00' function='0x0'/>
+    </controller>
+    <controller type='pci' index='0' model='pcie-root'>
+      <alias name='pcie.0'/>
+    </controller>
+    <controller type='pci' index='1' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='1' port='0x8'/>
+      <alias name='pci.1'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x0' multifunction='on'/>
+    </controller>
+    <controller type='pci' index='2' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='2' port='0x9'/>
+      <alias name='pci.2'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x1'/>
+    </controller>
+    <controller type='pci' index='3' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='3' port='0xa'/>
+      <alias name='pci.3'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x2'/>
+    </controller>
+    <controller type='pci' index='4' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='4' port='0xb'/>
+      <alias name='pci.4'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x3'/>
+    </controller>
+    <controller type='pci' index='5' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='5' port='0xc'/>
+      <alias name='pci.5'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x4'/>
+    </controller>
+    <controller type='pci' index='6' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='6' port='0xd'/>
+      <alias name='pci.6'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x5'/>
+    </controller>
+    <controller type='pci' index='7' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='7' port='0xe'/>
+      <alias name='pci.7'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x6'/>
+    </controller>
+    <controller type='pci' index='8' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='8' port='0xf'/>
+      <alias name='pci.8'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x7'/>
+    </controller>
+    <controller type='pci' index='9' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='9' port='0x10'/>
+      <alias name='pci.9'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x0' multifunction='on'/>
+    </controller>
+    <controller type='pci' index='10' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='10' port='0x11'/>
+      <alias name='pci.10'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x1'/>
+    </controller>
+    <controller type='pci' index='11' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='11' port='0x12'/>
+      <alias name='pci.11'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x2'/>
+    </controller>
+    <controller type='pci' index='12' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='12' port='0x13'/>
+      <alias name='pci.12'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x3'/>
+    </controller>
+    <controller type='pci' index='13' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='13' port='0x14'/>
+      <alias name='pci.13'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x4'/>
+    </controller>
+    <controller type='pci' index='14' model='pcie-root-port'>
+      <model name='pcie-root-port'/>
+      <target chassis='14' port='0x15'/>
+      <alias name='pci.14'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x5'/>
+    </controller>
+    <controller type='sata' index='0'>
+      <alias name='ide'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x1f' function='0x2'/>
+    </controller>
+    <controller type='virtio-serial' index='0'>
+      <alias name='virtio-serial0'/>
+      <address type='pci' domain='0x0000' bus='0x03' slot='0x00' function='0x0'/>
+    </controller>
+    <interface type='bridge'>
+      <source bridge='virbr0'/>
+      <target dev='tap0'/>
+      <model type='virtio'/>
+      <alias name='net0'/>
+      <address type='pci' domain='0x0000' bus='0x01' slot='0x00' function='0x0'/>
+    </interface>
+    <serial type='pty'>
+      <source path='/dev/pts/2'/>
+      <target type='isa-serial' port='0'>
+        <model name='isa-serial'/>
+      </target>
+      <alias name='serial0'/>
+      <log file='{{ guestfs_path }}/{{ hostname }}/console.log' append='on'/>
+    </serial>
+    <console type='pty' tty='/dev/pts/2'>
+      <source path='/dev/pts/2'/>
+      <target type='serial' port='0'/>
+      <alias name='serial0'/>
+    </console>
+    <channel type='unix'>
+      <source mode='bind'/>
+      <target type='virtio' name='org.qemu.guest_agent.0' state='connected'/>
+      <alias name='channel0'/>
+      <address type='virtio-serial' controller='0' bus='0' port='1'/>
+    </channel>
+    <audio id='1' type='none'/>
+    <watchdog model='itco' action='reset'>
+      <alias name='watchdog0'/>
+    </watchdog>
+    <memballoon model='virtio'>
+      <alias name='balloon0'/>
+      <address type='pci' domain='0x0000' bus='0x05' slot='0x00' function='0x0'/>
+    </memballoon>
+    <rng model='virtio'>
+      <backend model='random'>/dev/urandom</backend>
+      <alias name='rng0'/>
+      <address type='pci' domain='0x0000' bus='0x06' slot='0x00' function='0x0'/>
+    </rng>
+  </devices>
+  <seclabel type='dynamic' model='selinux' relabel='yes'>
+    <label>unconfined_u:unconfined_r:svirt_t:s0:c279,c814</label>
+    <imagelabel>unconfined_u:object_r:svirt_image_t:s0:c279,c814</imagelabel>
+  </seclabel>
+  <qemu:commandline>
+    <qemu:arg value='-global'/>
+    <qemu:arg value='ICH9-LPC.disable_s3=0'/>
+    <qemu:arg value='-global'/>
+    <qemu:arg value='ICH9-LPC.disable_s4=0'/>
+    <qemu:arg value='-device'/>
+    <qemu:arg value='pxb-pcie,id=pcie.1,bus_nr=32,bus=pcie.0,addr=0x8'/>
+{% if libvirt_extra_storage_drive_ide %}
+{% for n in range(0,4) %}
+    <qemu:arg value='-drive'/>
+    <qemu:arg value='file={{ kdevops_storage_pool_path }}/guestfs/{{ hostname }}/extra{{ n }}.{{ libvirt_extra_drive_format }},format={{ libvirt_extra_drive_format }},aio={{ libvirt_extra_storage_aio_mode }},cache={{ libvirt_extra_storage_aio_cache_mode }},if=ide,serial=kdevops{{ n }}'/>
+{% endfor %}
+{% elif libvirt_extra_storage_drive_virtio %}
+{% for n in range(0,4) %}
+    <qemu:arg value='-device'/>
+    <qemu:arg value='pcie-root-port,id=pcie-port-for-virtio-{{ n }},multifunction=on,bus=pcie.1,addr=0x{{ n }},chassis=5{{ n }}'/>
+    <qemu:arg value="-object"/>
+    <qemu:arg value="iothread,id=kdevops-virtio-iothread-{{ n }}"/>
+    <qemu:arg value="-drive"/>
+    <qemu:arg value="file={{ kdevops_storage_pool_path }}/guestfs/{{ hostname }}/extra{{ n }}.{{ libvirt_extra_drive_format }},format={{ libvirt_extra_drive_format }},if=none,aio={{ libvirt_extra_storage_aio_mode }},cache={{ libvirt_extra_storage_aio_cache_mode }},id=drv{{ n }}"/>
+    <qemu:arg value="-device"/>
+    <qemu:arg value="virtio-blk-pci,scsi=off,drive=drv{{ n }},id=virtio-drv{{ n }},serial=kdevops{{ n }},bus=pcie-port-for-virtio-{{ n }},addr=0x0,iothread=kdevops-virtio-iothread-{{ n }},logical_block_size={{ libvirt_extra_storage_virtio_logical_block_size }},physical_block_size={{ libvirt_extra_storage_virtio_physical_block_size }}"/>
+{% endfor %}
+{% elif libvirt_extra_storage_drive_nvme  %}
+{% for n in range(0,4) %}
+    <qemu:arg value='-device'/>
+    <qemu:arg value='pcie-root-port,id=pcie-port-for-nvme-{{ n }},multifunction=on,bus=pcie.1,addr=0x{{ n }},chassis=5{{ n }}'/>
+    <qemu:arg value='-drive'/>
+    <qemu:arg value='file={{ kdevops_storage_pool_path }}/guestfs/{{ hostname }}/extra{{ n }}.{{ libvirt_extra_drive_format }},format={{ libvirt_extra_drive_format }},if=none,id=drv{{ n }}'/>
+    <qemu:arg value='-device'/>
+    <qemu:arg value='nvme,id=nvme{{ n }},serial=kdevops{{ n }},bus=pcie-port-for-nvme-{{ n }},addr=0x0'/>
+    <qemu:arg value='-device'/>
+    <qemu:arg value='nvme-ns,drive=drv{{ n }},bus=nvme{{ n }},nsid=1,logical_block_size=512,physical_block_size=512'/>
+{% endfor %}
+{% endif %}
+{% if bootlinux_9p %}
+    <qemu:arg value='-device'/>
+    <qemu:arg value='{{ bootlinux_9p_driver }},fsdev={{ bootlinux_9p_fsdev }},mount_tag={{ bootlinux_9p_mount_tag }},bus=pcie.0,addr=0x10'/>
+    <qemu:arg value='-fsdev'/>
+    <qemu:arg value='local,id={{ bootlinux_9p_fsdev }},path={{ bootlinux_9p_host_path }},security_model={{ bootlinux_9p_security_model }}'/>
+{% endif %}
+  </qemu:commandline>
+</domain>
+

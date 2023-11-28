@@ -18,6 +18,12 @@
   command: "id -g -n"
   register: my_group
 
+- name: Create guestfs directory
+  ansible.builtin.file:
+    path: "{{ guestfs_path }}"
+    state: directory
+  when: kdevops_enable_guestfs
+
 - name: Verify Ansible nodes template file exists {{ kdevops_nodes_template_full_path }}
   stat:
     path: "{{ kdevops_nodes_template_full_path }}"
@@ -350,3 +356,27 @@
     - kdevops_enable_vagrant|bool
     - vagrant_template.stat.exists
     - not vagrant_dest.stat.exists
+
+- name: Import list of guest nodes
+  include_vars: "{{ topdir_path }}/{{ kdevops_nodes }}"
+  ignore_errors: yes
+  when:
+    - kdevops_enable_guestfs
+
+- name: Create local directories for each of the guests
+  ansible.builtin.file:
+    path: "{{ guestfs_path }}/{{ item.name }}"
+    state: directory
+  with_items: "{{ guestfs_nodes }}"
+  when: kdevops_enable_guestfs
+
+- name: Generate XML files for the libvirt guests
+  vars:
+    hostname: "{{ item.name }}"
+  template:
+    src: "guestfs_{{ libvirt_machine_type }}.j2.xml"
+    dest: "{{ topdir_path }}/guestfs/{{ hostname }}/{{ hostname }}.xml"
+    force: yes
+  with_items: "{{ guestfs_nodes }}"
+  when:
+    - kdevops_enable_guestfs

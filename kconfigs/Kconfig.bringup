@@ -15,6 +15,12 @@ config VAGRANT
 
 	    make deps
 
+config GUESTFS
+	bool "Use guestfs-tools for local virtualization via KVM and libvirt (EXPERIMENTAL)"
+	help
+	  This option will use libguestfs utilities instead of Vagrant to build
+	  guest images and spin them up using libvirt with KVM.
+
 config TERRAFORM
 	bool "Terraform for cloud environments"
 	select EXTRA_STORAGE_SUPPORTS_512
@@ -50,6 +56,22 @@ config SKIP_BRINGUP
 	  have already provisioned through other means.
 
 endchoice
+
+if GUESTFS
+config VIRT_BUILDER_OS_VERSION
+       string "virt-builder os-version"
+       default "fedora-39"
+       help
+         Have virt-builder use this os-version string to
+         build a root image for the guest. Run "virt-builder -l"
+         to get a list of operating systems and versions supported
+         by guestfs.
+endif # GUESTFS
+
+config LIBVIRT
+	bool
+	depends on VAGRANT_LIBVIRT_SELECT || GUESTFS
+	default y
 
 source "vagrant/Kconfig"
 source "terraform/Kconfig"

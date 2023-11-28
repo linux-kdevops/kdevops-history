@@ -5,6 +5,8 @@
 .kdevops\.depcheck
 vagrant/.provisioned_once
 
+guestfs/
+
 /linux
 
 log.txt

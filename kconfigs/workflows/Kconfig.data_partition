@@ -71,6 +71,7 @@ if !WORKFLOW_INFER_USER_AND_GROUP
 
 config WORKFLOW_DATA_USER
 	string "The username to use to chown on the target data workflow directory"
+	default "kdevops" if GUESTFS
 	default "vagrant" if VAGRANT
 	default TERRAFORM_SSH_CONFIG_USER if TERRAFORM
 	help
@@ -78,6 +79,7 @@ config WORKFLOW_DATA_USER
 
 config WORKFLOW_DATA_GROUP
 	string "The group to use to chown on the target data workflow directory"
+	default "kdevops" if GUESTFS
 	default "vagrant" if VAGRANT
 	default TERRAFORM_SSH_CONFIG_USER if TERRAFORM_AWS_AMI_DEBIAN || TERRAFORM_AZURE_IMAGE_PUBLISHER_DEBIAN
 	default "users" if !TERRAFORM_AWS_AMI_DEBIAN && !TERRAFORM_AZURE_IMAGE_PUBLISHER_DEBIAN

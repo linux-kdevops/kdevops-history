@@ -203,6 +203,100 @@ config USE_LIBVIRT_MIRROR
 	default y if USE_LOCAL_LINUX_MIRROR
 	default n if !USE_LOCAL_LINUX_MIRROR
 
+config QEMU_BUILD
+	bool "Should we build QEMU for you?"
+	select NEEDS_LOCAL_DEVELOPMENT_PATH
+	help
+	  You only want to enable this option if your distribution package
+	  of QEMU does not have support for the features you need. For
+	  example this may be useful if you are a QEMU developer or are
+	  relying on technology is still under development or if you have
+	  a custom QEMU git URL.
+
+if !QEMU_BUILD
+
+config QEMU_USE_DEVELOPMENT_VERSION
+	bool "Should we look for a development version of QEMU?"
+	help
+	  You want to enable this option if for example the currently
+	  available version of QEMU does not yet have support for the feature
+	  you are going to be working on.
+
+	  Say yes here if you are compiling your own version of QEMU.
+
+endif # !QEMU_BUILD
+
+if QEMU_BUILD
+
+choice
+	prompt "QEMU git URL to use"
+	default QEMU_BUILD_JIC23
+
+config QEMU_BUILD_UPSTREAM
+	bool "https://gitlab.com/qemu-project/qemu.git"
+	help
+	  Select this option if you want to use the upstream QEMU git repo.
+
+config QEMU_BUILD_JIC23
+	bool "https://gitlab.com/jic23/qemu.git"
+	help
+	  Select this option if you want to use Cameron's QEMU git repo.
+	  This has a few CXL bells and whistles which are not yet upstream.
+
+config QEMU_BUILD_MANUAL
+	bool "Custom QEMU git URL"
+	help
+	  Select this option if you want to specify your own git URL.
+
+endchoice
+
+config QEMU_BUILD_GIT
+	string "Git tree for QEMU to clone on localhost"
+	default "/mirror/qemu.git" if USE_LOCAL_LINUX_MIRROR && QEMU_BUILD_UPSTREAM || QEMU_BUILD_MANUAL
+	default "/mirror/qemu-jic23.git" if USE_LOCAL_LINUX_MIRROR && QEMU_BUILD_JIC23
+	default "https://gitlab.com/qemu-project/qemu.git" if !USE_LOCAL_LINUX_MIRROR && QEMU_BUILD_UPSTREAM || QEMU_BUILD_MANUAL
+	default "https://gitlab.com/jic23/qemu.git" if !USE_LOCAL_LINUX_MIRROR && QEMU_BUILD_JIC23
+	help
+	  This is the git URL to use to clone and then build QEMU for you on
+	  your localhost.
+
+config QEMU_BUILD_GIT_DATA_PATH
+	string "The destination directory where to clone the QEMU git tree"
+	default "{{local_dev_path}}/qemu"
+	help
+	  This is the target location of where to clone the above git tree.
+	  Note that {{local_dev_path}} corresponds to the location set by the
+	  configuration option CONFIG_NEEDS_LOCAL_DEVELOPMENT_PATH.
+
+config QEMU_BUILD_GIT_VERSION
+	string "The version of QEMU to build"
+	default "cxl-2023-05-19" if QEMU_BUILD_JIC23
+	default "v8.0.0-rc1" if QEMU_BUILD_UPSTREAM
+	help
+	  This is the target build version of QEMU to build. Please use
+	  at least v7.2.0 for CXL support. v8.0.0-rc1 has some build fixes
+	  for newer compilers so it is the default now.
+
+config QEMU_USE_DEVELOPMENT_VERSION
+	bool
+	default y
+
+endif # QEMU_BUILD
+
+config QEMU_BIN_PATH_LIBVIRT
+	string "QEMU binary path to use"
+	default "/usr/local/bin/qemu-system-x86_64" if QEMU_USE_DEVELOPMENT_VERSION
+	default "/usr/bin/qemu-system-x86_64" if !QEMU_USE_DEVELOPMENT_VERSION
+
+config QEMU_INSTALL_DIR_LIBVIRT
+	string "Path to install QEMU"
+	default "/usr/local/bin" if QEMU_USE_DEVELOPMENT_VERSION
+	default "/usr/bin" if !QEMU_USE_DEVELOPMENT_VERSION
+
+config QEMU_VIRSH_CAN_SUDO
+	bool
+	default $(shell, ./scripts/get_libvirsh_can_sudo.sh)
+
 config LIBVIRT_LARGE_CPU
 	bool "Enable extremely large CPU count"
 	depends on LIBVIRT
@@ -414,100 +508,6 @@ config LIBVIRT_HOST_PASSTHROUGH
 	    page-faults,tlb:tlb_flush  \
 	      --pre 'make -s mrproper defconfig' \
 	    \-- make -s -j$(nproc) bzImage
-
-config QEMU_BUILD
-	bool "Should we build QEMU for you?"
-	select NEEDS_LOCAL_DEVELOPMENT_PATH
-	help
-	  You only want to enable this option if your distribution package
-	  of QEMU does not have support for the features you need. For
-	  example this may be useful if you are a QEMU developer or are
-	  relying on technology is still under development or if you have
-	  a custom QEMU git URL.
-
-if !QEMU_BUILD
-
-config QEMU_USE_DEVELOPMENT_VERSION
-	bool "Should we look for a development version of QEMU?"
-	help
-	  You want to enable this option if for example the currently
-	  available version of QEMU does not yet have support for the feature
-	  you are going to be working on.
-
-	  Say yes here if you are compiling your own version of QEMU.
-
-endif # !QEMU_BUILD
-
-if QEMU_BUILD
-
-choice
-	prompt "QEMU git URL to use"
-	default QEMU_BUILD_JIC23
-
-config QEMU_BUILD_UPSTREAM
-	bool "https://gitlab.com/qemu-project/qemu.git"
-	help
-	  Select this option if you want to use the upstream QEMU git repo.
-
-config QEMU_BUILD_JIC23
-	bool "https://gitlab.com/jic23/qemu.git"
-	help
-	  Select this option if you want to use Cameron's QEMU git repo.
-	  This has a few CXL bells and whistles which are not yet upstream.
-
-config QEMU_BUILD_MANUAL
-	bool "Custom QEMU git URL"
-	help
-	  Select this option if you want to specify your own git URL.
-
-endchoice
-
-config QEMU_BUILD_GIT
-	string "Git tree for QEMU to clone on localhost"
-	default "/mirror/qemu.git" if USE_LOCAL_LINUX_MIRROR && QEMU_BUILD_UPSTREAM || QEMU_BUILD_MANUAL
-	default "/mirror/qemu-jic23.git" if USE_LOCAL_LINUX_MIRROR && QEMU_BUILD_JIC23
-	default "https://gitlab.com/qemu-project/qemu.git" if !USE_LOCAL_LINUX_MIRROR && QEMU_BUILD_UPSTREAM || QEMU_BUILD_MANUAL
-	default "https://gitlab.com/jic23/qemu.git" if !USE_LOCAL_LINUX_MIRROR && QEMU_BUILD_JIC23
-	help
-	  This is the git URL to use to clone and then build QEMU for you on
-	  your localhost.
-
-config QEMU_BUILD_GIT_DATA_PATH
-	string "The destination directory where to clone the QEMU git tree"
-	default "{{local_dev_path}}/qemu"
-	help
-	  This is the target location of where to clone the above git tree.
-	  Note that {{local_dev_path}} corresponds to the location set by the
-	  configuration option CONFIG_NEEDS_LOCAL_DEVELOPMENT_PATH.
-
-config QEMU_BUILD_GIT_VERSION
-	string "The version of QEMU to build"
-	default "cxl-2023-05-19" if QEMU_BUILD_JIC23
-	default "v8.0.0-rc1" if QEMU_BUILD_UPSTREAM
-	help
-	  This is the target build version of QEMU to build. Please use
-	  at least v7.2.0 for CXL support. v8.0.0-rc1 has some build fixes
-	  for newer compilers so it is the default now.
-
-config QEMU_USE_DEVELOPMENT_VERSION
-	bool
-	default y
-
-endif # QEMU_BUILD
-
-config QEMU_BIN_PATH_LIBVIRT
-	string "QEMU binary path to use"
-	default "/usr/local/bin/qemu-system-x86_64" if QEMU_USE_DEVELOPMENT_VERSION
-	default "/usr/bin/qemu-system-x86_64" if !QEMU_USE_DEVELOPMENT_VERSION
-
-config QEMU_INSTALL_DIR_LIBVIRT
-	string "Path to install QEMU"
-	default "/usr/local/bin" if QEMU_USE_DEVELOPMENT_VERSION
-	default "/usr/bin" if !QEMU_USE_DEVELOPMENT_VERSION
-
-config QEMU_VIRSH_CAN_SUDO
-	bool
-	default $(shell, ./scripts/get_libvirsh_can_sudo.sh)
 
 choice
 	prompt "Libvirt extra storage driver to use"

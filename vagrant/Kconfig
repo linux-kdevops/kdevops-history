@@ -1,10 +1,9 @@
 if VAGRANT
-
 choice
 	prompt "Vagrant virtualization technology to use"
-	default LIBVIRT
+	default VAGRANT_LIBVIRT_SELECT
 
-config LIBVIRT
+config VAGRANT_LIBVIRT_SELECT
 	bool "Libvirt"
 	help
 	  Select this option if you want to use KVM / libvirt for
@@ -172,7 +171,6 @@ config VAGRANT_KDEVOPS
 	help
 	  This option will let you select custom kernel builds by the
 	  kdevops project. The distributions may vary and are are specified.
-
 endchoice
 
 config HAVE_VAGRANT_BOX_VERSION
@@ -252,7 +250,6 @@ config VAGRANT_PREFERRED_KERNEL_CI_SUBJECT_TOPIC
 	string
 	default VAGRANT_BOX if VAGRANT_DEBIAN_BUSTER64
 	default VAGRANT_BOX if VAGRANT_DEBIAN_BULLSEYE64
-
 
 config HAVE_VAGRANT_BOX_URL
 	bool
