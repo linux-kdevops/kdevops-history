@@ -54,6 +54,7 @@ libvirt_qemu_qmp_wait: False
 libvirt_enable_cxl_demo_topo1: False
 libvirt_enable_cxl_demo_topo2: False
 libvirt_enable_cxl_switch_topo1: False
+libvirt_enable_cxl_dcd_topo1: False
 libvirt_extra_drive_id_prefix: 'drv'
 libvirt_extra_storage_drive_nvme: True
 libvirt_extra_storage_drive_virtio: False

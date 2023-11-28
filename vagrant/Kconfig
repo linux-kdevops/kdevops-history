@@ -1725,6 +1725,14 @@ config QEMU_ENABLE_CXL_SWITCH_TOPOLOGY_1
 	  is connected to one of the down stream ports. The upstream port
 	  is connected to a root port on the host bridge.
 
+config QEMU_ENABLE_CXL_DEMO_DCD_TOPOLOGY_1
+	bool "CXL DCD demo directly attached to a single-port HB"
+	help
+	  This topology adds a DCD device in the topology, directly attached to
+	  a host bridge with only one root port.
+	  The device has zero (volatile or non-volatile) static capacity
+	  and 2 dynamic capacity regions where dynamic extents can be added.
+
 endchoice
 
 endif # QEMU_ENABLE_CXL

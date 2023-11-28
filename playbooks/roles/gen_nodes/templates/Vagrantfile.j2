@@ -292,7 +292,7 @@ Vagrant.configure("2") do |config|
 
         cxl_mem1_path = cxl_path + "/cxl-mem1.raw"
         libvirt.qemuargs :value => "-object"
-        libvirt.qemuargs :value => "memory-backend-file,id=kdevops-cxl-mem1,share=on,mem-path=#{cxl_mem1_path},size=256M"
+        libvirt.qemuargs :value => "memory-backend-file,id=kdevops-cxl-mem1,share=on,mem-path=#{cxl_mem1_path},size=4G"
 
 	# Label Storage Area, used to store CXL namespace labels and region labels
         cxl_lsa1_path = cxl_path + "/cxl-lsa1.raw"
@@ -319,12 +319,17 @@ Vagrant.configure("2") do |config|
 	libvirt.qemuargs :value => "cxl-downstream,port=1,bus=kdevops_cxl_us0,id=kdevops_cxl_swport1,chassis=0,slot=5"
 	libvirt.qemuargs :value => "-device"
 	libvirt.qemuargs :value => "cxl-type3,bus=kdevops_cxl_swport0,memdev=kdevops-cxl-mem1,lsa=kdevops-cxl-lsa1,id=kdevops-cxl-pmem0"
-{% else %} # switch topo1
+{% else %} # !switch topo1
+	{% if not libvirt_enable_cxl_dcd_topo1 %}
         libvirt.qemuargs :value => "-device"
         libvirt.qemuargs :value => "cxl-type3,bus=kdevops_cxl_root_port0,memdev=kdevops-cxl-mem1,lsa=kdevops-cxl-lsa1,id=kdevops-cxl-pmem0"
+	{% else %} # dcd_topo1
+        libvirt.qemuargs :value => "-device"
+        libvirt.qemuargs :value => "cxl-type3,bus=kdevops_cxl_root_port0,nonvolatile-dc-memdev=kdevops-cxl-mem1,lsa=kdevops-cxl-lsa1,id=kdevops-cxl-dcd0,num-dc-regions=2"
+	{% endif %} # dcd topo1
 {% endif %} # !switch topo1
         libvirt.qemuargs :value => "-M"
-        libvirt.qemuargs :value => "cxl-fmw.0.targets.0=cxl.0,cxl-fmw.0.size=512M"
+        libvirt.qemuargs :value => "cxl-fmw.0.targets.0=cxl.0,cxl-fmw.0.size=8G"
 {% if libvirt_enable_qmp %}
         libvirt.qemuargs :value => "-qmp"
 {% if libvirt_qemu_qmp_wait %}
