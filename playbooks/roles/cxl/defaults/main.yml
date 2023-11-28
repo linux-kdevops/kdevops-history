@@ -5,3 +5,5 @@ ndctl_data: "{{ data_path }}/ndctl"
 ndctl_version: "pending"
 ndctl_meson_testlog: "build/meson-logs/testlog.txt"
 kdevops_run_cxl_tests: False
+kdevops_enable_cxl_dcd: False
+kdevops_qmp_str: "tcp:localhost:4444,server"

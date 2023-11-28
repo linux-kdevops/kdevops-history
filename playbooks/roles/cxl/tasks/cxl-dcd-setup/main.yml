@@ -1,0 +1,79 @@
+---
+
+- name: Add DC extents to the hosts
+  shell: " \
+          qmp_port_str={{ qmp_port_str }}; \
+          qmp_port=`echo $qmp_port_str | awk -F'[^0-9]+' '{ print $2 }'`;\
+          qmp_str=' \
+          { \"execute\": \"qmp_capabilities\" } \
+          { \"execute\": \"cxl-add-dynamic-capacity\",
+            \"arguments\": {
+              \"path\": \"/machine/peripheral/kdevops-cxl-dcd0\",
+              \"region-id\": 0,
+              \"extents\": [
+                {
+                  \"offset\": 0,
+                  \"len\": 128
+                },
+                {
+                  \"offset\": 128,
+                  \"len\": 256
+                }
+                ]
+            }
+          } '; \
+          echo $qmp_str | ncat localhost $qmp_port"
+  register: command_output
+  tags: [ 'cxl-dcd-setup' ]
+  delegate_to: localhost
+
+- debug: var=command_output.stdout_lines
+  tags: [ 'cxl-dcd-setup' ]
+
+- name: Show DC extents added
+  become: no
+  shell: "ls /sys/bus/cxl/devices/decoder0.0/region0/dax_region0/ -lt"
+  register: command_output
+  tags: [ 'cxl-dcd-setup' ]
+
+- debug: var=command_output.stdout_lines
+  tags: [ 'cxl-dcd-setup' ]
+
+- name: Create dax devices for DC region
+  become: yes
+  become_method: sudo
+  shell: "daxctl create-device region0"
+  register: command_output
+  tags: [ 'cxl-dcd-setup' ]
+
+- debug: var=command_output.stdout_lines
+  tags: [ 'cxl-dcd-setup' ]
+
+- name: Show dax devices added
+  become: no
+  shell: "ls /dev/dax* -lt"
+  register: command_output
+  tags: [ 'cxl-dcd-setup' ]
+
+- debug: var=command_output.stdout_lines
+  tags: [ 'cxl-dcd-setup' ]
+
+- name: Convert dax devices to system RAM and online
+  become: yes
+  become_method: sudo
+  shell: "daxctl reconfigure-device --mode=system-ram --no-online dax0.1; \
+          daxctl online-memory dax0.1;"
+  register: command_output
+  tags: [ 'cxl-dcd-setup' ]
+
+- debug: var=command_output.stdout_lines
+  tags: [ 'cxl-dcd-setup' ]
+
+- name: Show system memory with lsmem
+  become: no
+  shell: "lsmem"
+  register: command_output
+  tags: [ 'cxl-dcd-setup' ]
+
+- debug: var=command_output.stdout_lines
+  tags: [ 'cxl-dcd-setup' ]

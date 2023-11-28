@@ -56,10 +56,22 @@
 - name: Convert cxl memory to kernel managed memory
   include_tasks: cxl-mem-setup/main.yml
   tags: [ 'cxl-mem-setup' ]
+  when:
+    - not kdevops_enable_cxl_dcd|bool
 
 - name: Create a dynamic capacity region for further dc extent add operations
   include_tasks: cxl-create-dc-region/main.yml
   tags: [ 'cxl-create-dc-region' ]
+  when:
+    - kdevops_enable_cxl_dcd|bool
+
+- name: Setup CXL DCD device as system ram
+  include_tasks: cxl-dcd-setup/main.yml
+  vars:
+    qmp_port_str: "{{ kdevops_qmp_str }}"
+  tags: [ 'cxl-dcd-setup' ]
+  when:
+    - kdevops_enable_cxl_dcd|bool
 
 - name: Set the path to cxl workflow
   set_fact:
