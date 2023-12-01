@@ -12,7 +12,7 @@
 
 # Distro specific
 - name: Install dependencies
-  include_tasks: install-deps/main.yml
+  import_tasks: install-deps/main.yml
 
 - name: git clone dbench
   git:
