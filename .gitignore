@@ -69,6 +69,8 @@ workflows/blktests/results/[0-9]*
 
 workflows/demos/reboot-limit/results/
 
+workflows/gitr/results/
+
 # For now we ignore all results as we have work to do:
 # - copy only data for failed tests
 # - envision a way so that regressions are clearly visible with a git diff

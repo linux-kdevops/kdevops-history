@@ -152,6 +152,13 @@ config KDEVOPS_WORKFLOW_DEDICATE_SELFTESTS
 	  selftests work. Note that you will need at least 8 GiB of RAM
 	  for your target guests.
 
+config KDEVOPS_WORKFLOW_DEDICATE_GITR
+	bool "gitr"
+	select KDEVOPS_WORKFLOW_ENABLE_GITR
+	help
+	  This will dedicate your configuration to running only the
+	  multi-threaded git regression workflow.
+
 endchoice
 
 endif
@@ -209,6 +216,14 @@ config KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_SELFTESTS
 	  Select this option if you are doing Linux kernel developent and
 	  testing with sefltests.
 
+config KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_GITR
+	bool "gitr"
+	select KDEVOPS_WORKFLOW_ENABLE_GITR
+	depends on VAGRANT || TERRAFORM_PRIVATE_NET
+	help
+	  Select this option if you want to configure the deployment for
+	  testing via the multi-threaded git regression workflow.
+
 endif # !WORKFLOWS_DEDICATED_WORKFLOW
 
 config KDEVOPS_WORKFLOW_ENABLE_FSTESTS
@@ -261,6 +276,16 @@ menu "Enable Linux kernel selftests"
 source "workflows/selftests/Kconfig"
 endmenu
 endif # KDEVOPS_WORKFLOW_ENABLE_SELFTESTS
+
+config KDEVOPS_WORKFLOW_ENABLE_GITR
+	bool
+	default y if KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_GITR || KDEVOPS_WORKFLOW_DEDICATE_GITR
+
+if KDEVOPS_WORKFLOW_ENABLE_GITR
+menu "Configure and run the git regression suite"
+source "workflows/gitr/Kconfig"
+endmenu
+endif # KDEVOPS_WORKFLOW_ENABLE_GITR
 
 config KDEVOPS_WORKFLOW_GIT_CLONES_KDEVOPS_GIT
 	bool

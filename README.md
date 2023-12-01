@@ -105,7 +105,7 @@ workflow you can just run:
 
 For more details see [kdevops blktests docs](docs/blktests.md)
 
-### Start testing NFS with in 2 commands
+### Start testing NFS in 2 commands
 
 To test the kernel's nfs server with the pynfs testsuite, enable the pynfs
 workflow and then run:
@@ -114,6 +114,16 @@ workflow and then run:
   * `make pynfs-baseline`
 
 For more details see [kdevops nfs docs](docs/nfs.md)
+
+### Start running the git regression suite in 2 commands
+
+To test a kernel using the git regression suite, enable the gitr workflow
+and then run:
+
+  * `make gitr`
+  * `make gitr-baseline`
+
+For more details see [kdevops gitr docs](docs/gitr.md)
 
 ### Runs some kernel selftests in a parallel manner
 
