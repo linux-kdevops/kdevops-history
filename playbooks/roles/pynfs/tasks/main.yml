@@ -29,7 +29,8 @@
   tags: [ 'data_partition' ]
 
 # Distro specific
-- include: tasks/install-deps/main.yml
+- name: Install dependencies
+  include_tasks: install-deps/main.yml
 
 - name: Remove old pynfs dir as we always clone a fresh tree
   tags: [ 'git', 'pynfs' ]

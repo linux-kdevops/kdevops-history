@@ -51,7 +51,8 @@
   tags: [ 'oscheck', 'data_partition' ]
 
 # Distro specific
-- include: tasks/install-deps/main.yml
+- name: Install dependencies
+  include_tasks: install-deps/main.yml
 
 - name: Clone xfsprogs git repository
   become: yes
