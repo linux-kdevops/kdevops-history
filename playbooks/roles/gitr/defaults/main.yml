@@ -1,0 +1,9 @@
+# SPDX-License-Identifier GPL-2.0+
+---
+# Our sensible defaults for the gitr role.
+#
+# The default is to not run the gitr tests.
+kdevops_run_gitr: False
+
+gitr_uses_no_devices: False
+gitr_nfs_use_kdevops_nfsd: False

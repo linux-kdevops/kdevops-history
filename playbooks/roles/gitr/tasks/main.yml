@@ -1,0 +1,214 @@
+---
+- name: Import optional extra_args file
+  include_vars: "{{ item }}"
+  ignore_errors: yes
+  with_first_found:
+    - files:
+      - "../extra_vars.yml"
+      - "../extra_vars.yaml"
+      - "../extra_vars.json"
+      skip: true
+  tags: vars
+
+- name: Set the path where we collect gitr test results
+  tags: [ 'vars' ]
+  set_fact:
+    gitr_workflow_dir: "../workflows/gitr"
+
+- name: Clean up localhost results directory and files
+  tags: [ 'clean_local_results' ]
+  local_action: file path="{{ gitr_workflow_dir }}/results/" state=absent
+  run_once: true
+
+- name: Create the results directory
+  tags: [ 'first_run' ]
+  local_action: file path="{{ gitr_workflow_dir }}/results/" state=directory
+  run_once: true
+
+- name: Remove the old test file system, if needed
+  tags: [ 'gitr' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.posix.mount:
+    path: "{{ gitr_mnt }}"
+    state: unmounted
+
+- name: Create the file system under test, if needed
+  tags: [ 'gitr' ]
+  include_role:
+    name: create_partition
+  vars:
+    disk_setup_device: "{{ gitr_device }}"
+    disk_setup_fstype: "{{ gitr_fstype }}"
+    disk_setup_label : "{{ gitr_label }}"
+    disk_setup_fs_opts: "-L {{ gitr_label }}"
+    disk_setup_path: "{{ gitr_mnt }}"
+    disk_setup_mount_opts: "{{ gitr_mount_opts }}"
+    disk_setup_user: "{{ data_user }}"
+    disk_setup_group: "{{ data_group }}"
+  when:
+    - not gitr_uses_no_devices|bool
+
+- name: Create the tmpfs file system under test, if needed
+  tags: [ 'gitr' ]
+  include_role:
+    name: create_tmpfs
+  vars:
+    tmpfs_mnt_options: "{{ gitr_mount_opts }}"
+    tmpfs_mounted_on: "{{ gitr_mnt }}"
+    tmpfs_user: "{{ data_user }}"
+    tmpfs_group: "{{ data_group }}"
+  when:
+    - gitr_fstype == "tmpfs"
+
+- name: Create an NFSD export for testing
+  include_role:
+    name: nfsd_add_export
+  vars:
+    server_host: "{{ gitr_nfs_server_host }}"
+    export_volname: "{{ gitr_nfs_server_export }}"
+    export_options: "{{ nfsd_export_options }}"
+    export_fstype: "{{ nfsd_export_fstype }}"
+    export_size: 5g
+    export_user: "{{ data_user }}"
+    export_group: "{{ data_group }}"
+  when:
+    - gitr_nfs_use_kdevops_nfsd|bool
+    - gitr_fstype == "nfs"
+
+- name: Create the NFS mount under test, if needed
+  tags: [ 'gitr' ]
+  include_role:
+    name: create_nfs_mount
+  vars:
+    nfs_mounted_on: "{{ gitr_mnt }}"
+    nfs_server_hostname: "{{ gitr_nfs_server_host }}"
+    nfs_server_export: "{{ nfsd_export_path }}/{{ gitr_nfs_server_export }}"
+    nfs_mount_options: "{{ gitr_mount_opts }}"
+  when:
+    - gitr_fstype == "nfs"
+
+- include: tasks/install-deps/main.yml
+
+- name: Remove old git dir
+  tags: [ 'gitr' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.file:
+    path: "{{ gitr_mnt }}/git"
+    state: absent
+
+- name: git clone git
+  tags: [ 'gitr' ]
+  ansible.builtin.git:
+    repo: "{{ gitr_repo }}"
+    dest: "{{ gitr_mnt }}/git"
+    update: yes
+    version: "{{ gitr_repo_commit }}"
+  retries: 3
+  delay: 5
+  register: result
+  until: not result.failed
+
+- name: Get nproc
+  tags: [ 'gitr', 'build', 'vars' ]
+  ansible.builtin.command: "{{ num_jobs }}"
+  register: nproc
+  changed_when: False
+
+- name: Build git
+  tags: [ 'gitr', 'build' ]
+  community.general.make:
+    chdir: "{{ gitr_mnt }}/git"
+    jobs: "{{ nproc.stdout }}"
+
+- name: Run the full git regression suite
+  tags: [ 'run_tests' ]
+  community.general.make:
+    chdir: "{{ gitr_mnt }}/git"
+    target: "test"
+    jobs: "{{ nproc.stdout }}"
+  register: gitr_results
+  failed_when: False
+  changed_when: False
+
+- name: Capture RPC statistics
+  tags: [ 'copy_results' ]
+  ansible.builtin.command: "mountstats --rpc"
+  register: rpc_results
+  when:
+    - gitr_fstype == "nfs"
+
+- name: Capture transport statistics
+  tags: [ 'copy_results' ]
+  ansible.builtin.command: "mountstats --xprt"
+  register: xprt_results
+  when:
+    - gitr_fstype == "nfs"
+
+- name: Save git regression test output to a file
+  tags: [ 'copy_results' ]
+  ansible.builtin.copy:
+    content: "{{ gitr_results.stdout_lines|join('\n') }}"
+    dest: "{{ gitr_mnt }}/gitr.stdout"
+
+- name: Save RPC statistics to a file
+  tags: [ 'copy_results' ]
+  ansible.builtin.copy:
+    content: "{{ rpc_results.stdout_lines|join('\n') }}"
+    dest: "{{ gitr_mnt }}/gitr.rpc"
+  when:
+    - gitr_fstype == "nfs"
+
+- name: Save transport statistics to a file
+  tags: [ 'copy_results' ]
+  ansible.builtin.copy:
+    content: "{{ xprt_results.stdout_lines|join('\n') }}"
+    dest: "{{ gitr_mnt }}/gitr.xprt"
+  when:
+    - gitr_fstype == "nfs"
+
+- name: Get used target kernel version
+  tags: [ 'copy_results' ]
+  ansible.builtin.command: "uname -r"
+  register: uname_cmd
+
+- name: Store kernel_rev variable
+  tags: [ 'copy_results' ]
+  set_fact:
+    kernel_rev: "{{ uname_cmd.stdout_lines | regex_replace('\\]') | regex_replace('\\[') | replace(\"'\",'') }}"
+  run_once: true
+
+- name: Copy regression results over
+  tags: [ 'copy_results' ]
+  ansible.builtin.fetch:
+    src: "{{ gitr_mnt }}/gitr.stdout"
+    dest: "{{ gitr_workflow_dir }}/results/{{ kernel_rev }}.stdout"
+    flat: yes
+
+- name: Copy RPC statistics over
+  tags: [ 'copy_results' ]
+  ansible.builtin.fetch:
+    src: "{{ gitr_mnt }}/gitr.rpc"
+    dest: "{{ gitr_workflow_dir }}/results/{{ kernel_rev }}.rpc"
+    flat: yes
+  when:
+    - gitr_fstype == "nfs"
+
+- name: Copy transport statistics over
+  tags: [ 'copy_results' ]
+  ansible.builtin.fetch:
+    src: "{{ gitr_mnt }}/gitr.xprt"
+    dest: "{{ gitr_workflow_dir }}/results/{{ kernel_rev }}.xprt"
+    flat: yes
+  when:
+    - gitr_fstype == "nfs"
+
+# XXX: This is working now, but it should copy the failures into a log file
+- name: Report failures
+  tags: [ 'copy_results' ]
+  debug:
+    msg: "{{ gitr_results.stderr_lines }}"
+  when: gitr_results.stderr | length > 0

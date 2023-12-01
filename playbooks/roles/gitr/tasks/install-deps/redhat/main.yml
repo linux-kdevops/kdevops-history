@@ -1,0 +1,38 @@
+---
+- name: Install build dependencies for git
+  become: yes
+  become_method: sudo
+  yum:
+    update_cache: yes
+    name: "{{ packages }}"
+  retries: 3
+  delay: 5
+  register: result
+  until: result.rc == 0
+  vars:
+    packages:
+      - expat-devel
+      - gcc
+      - gettext
+      - git-core
+      - libcurl-devel
+      - openssl-devel
+      - zlib-devel
+
+- name: Install run-time dependencies for git regression tests
+  become: yes
+  become_method: sudo
+  yum:
+    update_cache: yes
+    name: "{{ packages }}"
+  retries: 3
+  delay: 5
+  register: result
+  until: result.rc == 0
+  vars:
+    packages:
+      - cvs
+      - cvsps
+      - git-email
+      - subversion
+#     - subversion-perl
