@@ -5,7 +5,7 @@ This documents support for that.
 
 Bugs found are tracked on each filesystem:
 
-  * [xfs reported bugs](docs/xfs-bugs.md)
+  * [xfs reported bugs](xfs-bugs.md)
 
 # kdevops fstests configuration
 
