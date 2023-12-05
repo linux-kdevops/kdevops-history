@@ -12,3 +12,5 @@ not yet reported on linux-next or rc kernels.
   * [korg#218226](https://bugzilla.kernel.org/show_bug.cgi?id=218226) - XFS: Assertion failed: bp->b_flags & XBF_DONE, file: fs/xfs/xfs_trans_buf.c, line: 241 
   * [korg#216114](https://bugzilla.kernel.org/show_bug.cgi?id=216114) - page dumped because: VM_BUG_ON_FOLIO(!folio_contains(folio, index)) and kernel BUG at mm/truncate.c:669!
   * [korg#218227](https://bugzilla.kernel.org/show_bug.cgi?id=218227) - fsstress + compaction
+  * [korg#218229](https://bugzilla.kernel.org/show_bug.cgi?id=218229) - xfs/438 hung
+  * [korg#218230](https://bugzilla.kernel.org/show_bug.cgi?id=218230) - xfs/538 hung
