@@ -14,7 +14,7 @@ xfs/060
 xfs/075
 xfs/155
 xfs/188
-xfs/229 # F:1/14 compaction triggered BUG ! include/linux/page-flags.h:314 https://gist.github.com/mcgrof/ed4a3c025337434231303d70fefea684
+xfs/229 # F:1/14 korg#218227 fsstress + compaction
 xfs/242
 xfs/270
 xfs/301 # F:1/8 quota enabled
