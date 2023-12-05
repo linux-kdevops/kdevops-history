@@ -3,6 +3,10 @@
 kdevops has support testing Linux filesystems using the fstests test suite.
 This documents support for that.
 
+Bugs found are tracked on each filesystem:
+
+  * [xfs reported bugs](docs/xfs-bugs.md)
+
 # kdevops fstests configuration
 
 Other than using Kconfig to let you configure your bring up environment and
