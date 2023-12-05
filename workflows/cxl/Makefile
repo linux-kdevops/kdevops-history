@@ -66,6 +66,8 @@ cxl-help-menu:
 	@echo "cxl-results         - Get results for all tests runs"
 	@echo "cxl-mem-setup	   - Convert cxl memory to cpu-less numa node"
 	@echo "cxl-create-dc-region	   - Create a DC region so DC extents can be added further"
+
+cxl-dcd-help:
 	@echo "cxl-dcd-setup	   - Add DC extents to DC region, create dax device and convert to system RAM and online"
 
 cxl-help-end:
@@ -73,4 +75,7 @@ cxl-help-end:
 
 HELP_TARGETS += cxl-help-menu
 HELP_TARGETS += $(BOOTLINUX_CXL_HELP)
+ifeq (y,$(CONFIG_QEMU_ENABLE_CXL_DEMO_DCD_TOPOLOGY_1))
+HELP_TARGETS += cxl-dcd-help
+endif
 HELP_TARGETS += cxl-help-end
