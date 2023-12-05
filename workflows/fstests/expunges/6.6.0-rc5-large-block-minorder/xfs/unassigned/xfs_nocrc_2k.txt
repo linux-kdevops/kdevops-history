@@ -1,5 +1,5 @@
 generic/273 # F:1/19
-generic/388 # SOAK_DURATION=9900 xfs assert ip->i_nblocks == 0 https://gist.github.com/mcgrof/c1c8b1dc76fdc1032a5f0aab6c2a14bf
+generic/388 # korg#218224 XFS: Assertion failed: ip->i_nblocks == 0 file: fs/xfs/xfs_inode.c, line: 2359
 generic/455 # non-fatal possible regression?
 generic/471
 generic/607

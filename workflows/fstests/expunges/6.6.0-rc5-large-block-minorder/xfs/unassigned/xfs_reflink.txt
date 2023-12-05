@@ -6,7 +6,7 @@ generic/471
 generic/516
 generic/517
 generic/531 # F:1/17 xfs assert bp->b_flags & XBF_DONE, file: fs/xfs/xfs_trans_buf.c https://gist.github.com/mcgrof/4185a54c4b67b1a7ce00b4e4244f61d0
-generic/648 # SOAK_DURATION=9900 xfs assert ip->i_nblocks == 0 fs/xfs/xfs_inode.c, https://gist.github.com/mcgrof/1e506ecbe898b45428d6e7febfc02db1
+generic/648 # korg#218224 XFS: Assertion failed: ip->i_nblocks == 0 file: fs/xfs/xfs_inode.c, line: 2359
 generic/670 # F:1/16
 xfs/008
 xfs/013 # F:1/115 xfs assert bp->b_flags & XBF_DONE fs/xfs/xfs_trans_buf.c:241 https://gist.github.com/mcgrof/0a2dd092ea36d09d65e52d063e967269
