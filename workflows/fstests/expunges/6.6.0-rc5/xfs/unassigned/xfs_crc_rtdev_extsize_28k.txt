@@ -2,7 +2,7 @@ generic/251 # F:1/5 korg#218226 xfs assert fs/xfs/xfs_message.c:102
 generic/388 # korg#218225 xfs assert (irec->br_blockcount & ~XFS_IEXT_LENGTH_MASK) == 0
 generic/465
 generic/471
-generic/531 # F:1/15 xfs assert bp->b_flags & XBF_DONE fs/xfs/xfs_message.c https://gist.github.com/mcgrof/a339c5f7f2a6b5af08f2b373e0c80294
+generic/531 # korg#218226 xfs assert fs/xfs/xfs_message.c:102
 xfs/016
 xfs/018
 xfs/051 # F:1/11
@@ -12,7 +12,7 @@ xfs/075
 xfs/141
 xfs/188
 xfs/270
-xfs/502 # F:1/13 xfs assert bp->b_flags & XBF_DONE https://gist.github.com/mcgrof/129316fad6a7f2c19d2263df30aea2e6
+xfs/502 # F:1/13 korg#218226 xfs assert fs/xfs/xfs_message.c:102
 xfs/513
 xfs/556
 xfs/559
