@@ -1,8 +1,8 @@
-generic/388 # SOAK_DURATION=9900 xfs BUG at fs/xfs/xfs_message.c:102 https://gist.github.com/mcgrof/155c431f5804921ff10a59a12710cbb0
+generic/388 # korg#218226 xfs assert fs/xfs/xfs_message.c:102
 generic/471
 generic/482 # F:1/8
 generic/607
-generic/650 # F:1/5 xfs assert fs/xfs/xfs_message.c:102 https://gist.github.com/mcgrof/8a4ac7107fa75ac3b44f634e6a1552ef
+generic/650 # F:1/5 korg#218226 xfs assert fs/xfs/xfs_message.c:102
 generic/681
 generic/682
 xfs/008 # non-fatal possible regression?

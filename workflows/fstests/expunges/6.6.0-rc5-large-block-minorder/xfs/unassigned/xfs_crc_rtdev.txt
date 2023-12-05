@@ -1,7 +1,7 @@
-generic/251 # xfs assert fs/xfs/xfs_message.c:102 F:1/4 https://gist.github.com/mcgrof/56b9e68c408c653f6286735259ff52e9
+generic/251 # korg#218226 xfs assert fs/xfs/xfs_message.c:102
 generic/465 # F:1/7
 generic/471
-generic/531 # F:1/11 xfs assert fs/xfs/xfs_message.c:102 https://gist.github.com/mcgrof/eb56d1cb8e44d90b4a73ebf031c28125
+generic/531 # F:1/11 korg#218226 xfs assert fs/xfs/xfs_message.c:102
 xfs/018
 xfs/066 # F:1/20 compaction triggered bug ! https://gist.github.com/mcgrof/0831c332fa33157fd6dadf9bf4bfc068
 xfs/075
