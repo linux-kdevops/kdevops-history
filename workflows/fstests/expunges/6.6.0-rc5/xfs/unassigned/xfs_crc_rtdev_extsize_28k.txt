@@ -1,5 +1,5 @@
 generic/251 # F:1/5 xfs assert on fs/xfs/xfs_message.c:102 https://gist.github.com/mcgrof/88a092f0679baf01571c3fdea85ab523
-generic/388 # xfs assert (irec->br_blockcount & ~XFS_IEXT_LENGTH_MASK) == 0, file: fs/xfs/libxfs/xfs_iext_tree.c, line: 58 https://gist.github.com/mcgrof/c1ba31f56bbb69fda6138e128f76f3ee
+generic/388 # korg#218225 xfs assert (irec->br_blockcount & ~XFS_IEXT_LENGTH_MASK) == 0
 generic/465
 generic/471
 generic/531 # F:1/15 xfs assert bp->b_flags & XBF_DONE fs/xfs/xfs_message.c https://gist.github.com/mcgrof/a339c5f7f2a6b5af08f2b373e0c80294
