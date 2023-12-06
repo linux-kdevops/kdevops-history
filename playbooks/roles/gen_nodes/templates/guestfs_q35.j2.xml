@@ -187,7 +187,9 @@
 {% if libvirt_extra_storage_drive_ide %}
 {% for n in range(0,4) %}
     <qemu:arg value='-drive'/>
-    <qemu:arg value='file={{ kdevops_storage_pool_path }}/guestfs/{{ hostname }}/extra{{ n }}.{{ libvirt_extra_drive_format }},format={{ libvirt_extra_drive_format }},aio={{ libvirt_extra_storage_aio_mode }},cache={{ libvirt_extra_storage_aio_cache_mode }},if=ide,serial=kdevops{{ n }}'/>
+    <qemu:arg value='file={{ kdevops_storage_pool_path }}/guestfs/{{ hostname }}/extra{{ n }}.{{ libvirt_extra_drive_format }},format={{ libvirt_extra_drive_format }},aio={{ libvirt_extra_storage_aio_mode }},cache={{ libvirt_extra_storage_aio_cache_mode }},if=none,id=drv{{ n }}'/>
+    <qemu:arg value='-device'/>
+    <qemu:arg value="ide-hd,drive=drv{{ n }},bus=ide.{{ n }},serial=kdevops{{ n }}"/>
 {% endfor %}
 {% elif libvirt_extra_storage_drive_virtio %}
 {% for n in range(0,4) %}
