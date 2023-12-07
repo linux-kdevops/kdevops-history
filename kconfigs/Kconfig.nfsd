@@ -1,9 +1,9 @@
 # FIXME: need defaults for terraform hosts
 config NFSD_EXPORT_DEVICE_0
 	string "First device to be exported"
-	default "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_kdevops2" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_NVME
-	default "/dev/disk/by-id/virtio-kdevops2" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_VIRTIO
-	default "/dev/disk/by-id/ide-kdevops2" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_IDE
+	default "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_kdevops2" if LIBVIRT && LIBVIRT_EXTRA_STORAGE_DRIVE_NVME
+	default "/dev/disk/by-id/virtio-kdevops2" if LIBVIRT && LIBVIRT_EXTRA_STORAGE_DRIVE_VIRTIO
+	default "/dev/disk/by-id/ide-kdevops2" if LIBVIRT && LIBVIRT_EXTRA_STORAGE_DRIVE_IDE
 	default ""
 	help
 	  To set up nfsd for testing, we give it filesystems to export. This
@@ -11,9 +11,9 @@ config NFSD_EXPORT_DEVICE_0
 
 config NFSD_EXPORT_DEVICE_1
 	string "Second device to be exported"
-	default "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_kdevops3" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_NVME
-	default "/dev/disk/by-id/virtio-kdevops3" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_VIRTIO
-	default "/dev/disk/by-id/ide-kdevops3" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_IDE
+	default "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_kdevops3" if LIBVIRT && LIBVIRT_EXTRA_STORAGE_DRIVE_NVME
+	default "/dev/disk/by-id/virtio-kdevops3" if LIBVIRT && LIBVIRT_EXTRA_STORAGE_DRIVE_VIRTIO
+	default "/dev/disk/by-id/ide-kdevops3" if LIBVIRT && LIBVIRT_EXTRA_STORAGE_DRIVE_IDE
 	help
 	  To set up nfsd for testing, we give it filesystems to export. This
 	  block device is used as a PV for LVM, and volumes are provisioned from it.
