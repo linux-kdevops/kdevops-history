@@ -14,7 +14,7 @@ kdevops_workflow_enable_selftests: False
 virtualbox_provider: False
 libvirt_provider: False
 
-vagrant_extra_drive_format: 'qcow2'
+libvirt_extra_drive_format: 'qcow2'
 vagrant_box: "debian/testing64"
 vagrant_box_version: ""
 vagrant_vcpus_count: 8

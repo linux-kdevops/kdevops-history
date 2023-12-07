@@ -29,7 +29,7 @@ endif
 
 VAGRANT_ARGS += kdevops_storage_pool_user='$(USER)'
 
-ifeq (y,$(CONFIG_VAGRANT_LIBVIRT))
+ifeq (y,$(CONFIG_LIBVIRT))
 VAGRANT_ARGS += libvirt_provider=True
 
 QEMU_GROUP:=$(subst ",,$(CONFIG_LIBVIRT_QEMU_GROUP))
@@ -51,9 +51,9 @@ ifeq (y,$(CONFIG_BOOTLINUX_9P))
 VAGRANT_9P_HOST_CLONE := vagrant_9p_linux_clone
 endif
 
-VAGRANT_LIBVIRT_PCIE_PASSTHROUGH :=
+LIBVIRT_PCIE_PASSTHROUGH :=
 ifeq (y,$(CONFIG_KDEVOPS_LIBVIRT_PCIE_PASSTHROUGH))
-VAGRANT_LIBVIRT_PCIE_PASSTHROUGH := vagrant_libvirt_pcie_passthrough_permissions
+LIBVIRT_PCIE_PASSTHROUGH := libvirt_pcie_passthrough_permissions
 endif
 
 ifneq ($(strip $(CONFIG_VAGRANT_RHEL_ORG_ID)),)
@@ -71,7 +71,7 @@ ANSIBLE_EXTRA_ARGS += $(VAGRANT_ARGS)
 VAGRANT_BRINGUP_DEPS :=
 VAGRANT_BRINGUP_DEPS +=  $(VAGRANT_PRIVATE_BOX_DEPS)
 VAGRANT_BRINGUP_DEPS +=  $(VAGRANT_9P_HOST_CLONE)
-VAGRANT_BRINGUP_DEPS +=  $(VAGRANT_LIBVIRT_PCIE_PASSTHROUGH)
+VAGRANT_BRINGUP_DEPS +=  $(LIBVIRT_PCIE_PASSTHROUGH)
 
 KDEVOPS_BRING_UP_DEPS := bringup_vagrant
 # Provisioning goes last
@@ -93,7 +93,7 @@ vagrant_private_box_install:
 vagrant_9p_linux_clone:
 	$(Q)make linux-clone
 
-vagrant_libvirt_pcie_passthrough_permissions:
+libvirt_pcie_passthrough_permissions:
 	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) --connection=local \
 		--inventory localhost, \
 		playbooks/libvirt_pcie_passthrough.yml \

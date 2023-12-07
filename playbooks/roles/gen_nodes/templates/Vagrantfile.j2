@@ -152,7 +152,7 @@ Vagrant.configure("2") do |config|
 	    # /dev/disk-id to ensure the extra drives are used as intended.
             purpose = key
             port_plus = port + 1
-            extra_disk = extra_disk_path + "/{{ extra_disk_driver }}#{port}n#{port_plus}.{{ vagrant_extra_drive_format }}"
+            extra_disk = extra_disk_path + "/{{ extra_disk_driver }}#{port}n#{port_plus}.{{ libvirt_extra_drive_format }}"
 
             # "Standard" provides a sparse file. That's what we want, we cheat
             # the OS and only use what we need. If you want the real file size
@@ -160,7 +160,7 @@ Vagrant.configure("2") do |config|
             # like to hear about it. We use sparse files for libvirt as well
             # and should try to keep setup in sync.
             if (! File.file?(extra_disk))
-              vb.customize ["createmedium", "disk", "--filename", extra_disk, "--variant", "Standard", "--format", "{{ vagrant_extra_drive_format | upper }}", "--size", size]
+              vb.customize ["createmedium", "disk", "--filename", extra_disk, "--variant", "Standard", "--format", "{{ libvirt_extra_drive_format | upper }}", "--size", size]
             end
             # Virtualbox supports only one nvme controller... this will fail
             # unless you are a Virtualbox hacker adding support for this :)
@@ -378,11 +378,11 @@ Vagrant.configure("2") do |config|
 	    key_id_prefix = "{{ libvirt_extra_drive_id_prefix }}"
 	    disk_id = "#{key_id_prefix}#{port}"
 	    serial_id = "kdevops#{port}"
-            extra_disk_name = "{{ extra_disk_driver }}#{port}n#{port_plus}.{{ vagrant_extra_drive_format }}"
+            extra_disk_name = "{{ extra_disk_driver }}#{port}n#{port_plus}.{{ libvirt_extra_drive_format }}"
             extra_disk = extra_disk_path + "/" + "#{extra_disk_name}"
             unless File.exist? (extra_disk)
 	      if provider == "libvirt"
-	        cmd = "qemu-img create -f {{ vagrant_extra_drive_format }}  #{extra_disk} #{size}M"
+	        cmd = "qemu-img create -f {{ libvirt_extra_drive_format }}  #{extra_disk} #{size}M"
 	        ok = system(cmd)
 	        if ! ok
                   puts "Command failed: #{cmd}"
@@ -404,14 +404,14 @@ Vagrant.configure("2") do |config|
 {% endif %}
 {% if libvirt_extra_storage_drive_ide %}
             libvirt.qemuargs :value => "-drive"
-            libvirt.qemuargs :value => "file=#{extra_disk},format={{ vagrant_extra_drive_format }},aio={{ libvirt_extra_storage_aio_mode }},cache={{ libvirt_extra_storage_aio_cache_mode }},if=ide,serial=#{serial_id}"
+            libvirt.qemuargs :value => "file=#{extra_disk},format={{ libvirt_extra_drive_format }},aio={{ libvirt_extra_storage_aio_mode }},cache={{ libvirt_extra_storage_aio_cache_mode }},if=ide,serial=#{serial_id}"
 {% elif libvirt_extra_storage_drive_virtio %}
             virtio_pbs = "{{ libvirt_extra_storage_virtio_physical_block_size }}"
             virtio_lbs = "{{ libvirt_extra_storage_virtio_logical_block_size }}"
             libvirt.qemuargs :value => "-object"
             libvirt.qemuargs :value => "iothread,id=kdevops-virtio-iothread-#{port}"
             libvirt.qemuargs :value => "-drive"
-            libvirt.qemuargs :value => "file=#{extra_disk},format={{ vagrant_extra_drive_format }},if=none,aio={{ libvirt_extra_storage_aio_mode }},cache={{ libvirt_extra_storage_aio_cache_mode }},id=#{disk_id}"
+            libvirt.qemuargs :value => "file=#{extra_disk},format={{ libvirt_extra_drive_format }},if=none,aio={{ libvirt_extra_storage_aio_mode }},cache={{ libvirt_extra_storage_aio_cache_mode }},id=#{disk_id}"
             libvirt.qemuargs :value => "-device"
             libvirt.qemuargs :value => "virtio-blk-pci,scsi=off,drive=#{disk_id},id=virtio-#{disk_id},serial=#{serial_id},bus=#{bus_for_extra_drives},addr=#{pci_function},iothread=kdevops-virtio-iothread-#{port}#{extra_drive_largio_args},logical_block_size=#{virtio_lbs},physical_block_size=#{virtio_pbs}"
 {% elif libvirt_extra_storage_drive_nvme  %}
@@ -422,14 +422,14 @@ Vagrant.configure("2") do |config|
             extra_drive_interface = "none"
             if zoned
               libvirt.qemuargs :value => "-drive"
-              libvirt.qemuargs :value => "file=#{extra_disk},format={{ vagrant_extra_drive_format }},aio={{ libvirt_extra_storage_aio_mode }},cache={{ libvirt_extra_storage_aio_cache_mode }},if=#{extra_drive_interface},id=#{disk_id}"
+              libvirt.qemuargs :value => "file=#{extra_disk},format={{ libvirt_extra_drive_format }},aio={{ libvirt_extra_storage_aio_mode }},cache={{ libvirt_extra_storage_aio_cache_mode }},if=#{extra_drive_interface},id=#{disk_id}"
               libvirt.qemuargs :value => "-device"
               libvirt.qemuargs :value => "nvme,id={{ extra_disk_driver }}#{port},serial=#{serial_id},bus=#{bus_for_extra_drives},addr=#{pci_function},zoned.zasl=#{zone_zasl}"
               libvirt.qemuargs :value => "-device"
               libvirt.qemuargs :value => "nvme-ns,drive=#{disk_id},bus={{ extra_disk_driver }}#{port},nsid=1,logical_block_size=#{logical_block_size},physical_block_size=#{physical_block_size},zoned=true,zoned.zone_size=#{zone_size},zoned.zone_capacity=#{zone_capacity},zoned.max_open=#{zone_max_open},zoned.max_active=#{zone_max_active}"
             else
               libvirt.qemuargs :value => "-drive"
-              libvirt.qemuargs :value => "file=#{extra_disk},format={{ vagrant_extra_drive_format }},aio={{ libvirt_extra_storage_aio_mode }},cache={{ libvirt_extra_storage_aio_cache_mode }},if=#{extra_drive_interface},id=#{disk_id}"
+              libvirt.qemuargs :value => "file=#{extra_disk},format={{ libvirt_extra_drive_format }},aio={{ libvirt_extra_storage_aio_mode }},cache={{ libvirt_extra_storage_aio_cache_mode }},if=#{extra_drive_interface},id=#{disk_id}"
               libvirt.qemuargs :value => "-device"
               libvirt.qemuargs :value => "nvme,id={{ extra_disk_driver }}#{port},serial=#{serial_id},bus=#{bus_for_extra_drives},addr=#{pci_function}"
               libvirt.qemuargs :value => "-device"

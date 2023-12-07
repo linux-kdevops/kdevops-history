@@ -316,7 +316,7 @@ config BLKTESTS_SECTION_ZBD
 	default n if !HAVE_DISTRO_BLKTESTS_TEST_ZBD
 	help
 	  This will create a host to test zone block devices.
-	  You can enable VAGRANT_ENABLE_ZNS to test qemu nvme
+	  You can enable LIBVIRT_ENABLE_ZNS to test qemu nvme
 	  drives instead of having blktests use nbd.
 
 endif # BLKTESTS_MANUAL_COVERAGE

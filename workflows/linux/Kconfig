@@ -28,7 +28,7 @@ endif # HAVE_SUPPORTS_PURE_IOMAP
 
 config BOOTLINUX_9P
 	bool "Use 9p to build Linux"
-	depends on VAGRANT_LIBVIRT
+	depends on LIBVIRT
 	depends on LIBVIRT_MACHINE_TYPE_Q35
 	default LIBVIRT_MACHINE_TYPE_Q35
 	help

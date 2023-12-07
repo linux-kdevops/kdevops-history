@@ -6,8 +6,8 @@ GEN_NODES_EXTRA_ARGS += kdevops_nodes_template_full_path='$(TOPDIR_PATH)/$(KDEVO
 
 GEN_NODES_EXTRA_ARGS += vagrant_box='$(subst ",,$(CONFIG_VAGRANT_BOX))'
 GEN_NODES_EXTRA_ARGS += vagrant_box_version='$(subst ",,$(CONFIG_VAGRANT_BOX_VERSION))'
-GEN_NODES_EXTRA_ARGS += vagrant_vcpus_count='$(subst ",,$(CONFIG_VAGRANT_VCPUS_COUNT))'
-GEN_NODES_EXTRA_ARGS += vagrant_mem_mb='$(subst ",,$(CONFIG_VAGRANT_MEM_MB))'
+GEN_NODES_EXTRA_ARGS += libvirt_vcpus_count='$(subst ",,$(CONFIG_LIBVIRT_VCPUS_COUNT))'
+GEN_NODES_EXTRA_ARGS += libvirt_mem_mb='$(subst ",,$(CONFIG_LIBVIRT_MEM_MB))'
 
 ifeq (y,$(CONFIG_QEMU_BUILD))
 
@@ -31,7 +31,7 @@ ifeq (y,$(CONFIG_LIBVIRT_HOST_PASSTHROUGH))
 GEN_NODES_EXTRA_ARGS += libvirt_host_passthrough='True'
 endif
 
-ifeq (y,$(CONFIG_VAGRANT_LIBVIRT))
+ifeq (y,$(CONFIG_LIBVIRT))
 GEN_NODES_EXTRA_ARGS += libvirt_qemu_group='$(subst ",,$(CONFIG_LIBVIRT_QEMU_GROUP))'
 endif
 
@@ -155,14 +155,14 @@ GEN_NODES_EXTRA_ARGS += libvirt_extra_storage_virtio_logical_block_size='512'
 endif
 endif
 
-ifeq (y,$(CONFIG_LIBVIRT_NVME_DRIVE_FORMAT_RAW))
-GEN_NODES_EXTRA_ARGS += vagrant_extra_drive_format='raw'
+ifeq (y,$(CONFIG_LIBVIRT_EXTRA_DRIVE_FORMAT_RAW))
+GEN_NODES_EXTRA_ARGS += libvirt_extra_drive_format='raw'
 endif
 ifeq (y,$(CONFIG_VAGRANT_VIRTUALBOX))
-GEN_NODES_EXTRA_ARGS += vagrant_extra_drive_format='$(subst ",,$(CONFIG_VIRTUALBOX_EXTRA_DRIVE_FORMAT))'
+GEN_NODES_EXTRA_ARGS += libvirt_extra_drive_format='$(subst ",,$(CONFIG_VIRTUALBOX_EXTRA_DRIVE_FORMAT))'
 endif
 
-ifeq (y,$(CONFIG_VAGRANT_ENABLE_ZNS))
+ifeq (y,$(CONFIG_LIBVIRT_ENABLE_ZNS))
 GEN_NODES_EXTRA_ARGS += nvme_zone_enable='True'
 GEN_NODES_EXTRA_ARGS += nvme_zone_drive_size='$(subst ",,$(CONFIG_QEMU_NVME_ZONE_DRIVE_SIZE))'
 GEN_NODES_EXTRA_ARGS += nvme_zone_size='$(subst ",,$(CONFIG_QEMU_NVME_ZONE_SIZE))'
@@ -174,7 +174,7 @@ GEN_NODES_EXTRA_ARGS += nvme_zone_physical_block_size='$(subst ",,$(CONFIG_QEMU_
 GEN_NODES_EXTRA_ARGS += nvme_zone_logical_block_size='$(subst ",,$(CONFIG_QEMU_NVME_ZONE_LOGICAL_BLOCK_SIZE))'
 endif
 
-ifeq (y,$(CONFIG_VAGRANT_ENABLE_LARGEIO))
+ifeq (y,$(CONFIG_LIBVIRT_ENABLE_LARGEIO))
 GEN_NODES_EXTRA_ARGS += libvirt_largeio_enable='True'
 ifeq (y,$(CONFIG_QEMU_EXTRA_DRIVE_LARGEIO_COMPAT))
 GEN_NODES_EXTRA_ARGS += libvirt_largeio_logical_compat='True'

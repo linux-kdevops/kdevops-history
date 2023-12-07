@@ -31,7 +31,7 @@ if [[ "$CONFIG_LIBVIRT_URI_SESSION" == "y" ]]; then
 	SUDO_REQ=""
 fi
 
-if [[ "$CONFIG_VAGRANT_LIBVIRT" != "y" ]]; then
+if [[ "$CONFIG_LIBVIRT" != "y" ]]; then
 	echo "Only libvirt is supported at this time for this prune"
 	exit 1
 fi

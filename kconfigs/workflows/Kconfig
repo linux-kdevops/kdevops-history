@@ -196,7 +196,7 @@ config KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_CXL
 config KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_PYNFS
 	bool "pynfs"
 	select KDEVOPS_WORKFLOW_ENABLE_PYNFS
-	depends on VAGRANT || TERRAFORM_PRIVATE_NET
+	depends on LIBVIRT || TERRAFORM_PRIVATE_NET
 	help
 	  Select this option if you are doing nfsd development and testing,
 	  and want to configure the deployment for testing nfsd via pynfs

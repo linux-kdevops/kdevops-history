@@ -57,7 +57,7 @@ vagrant_check_dups()
 
 			kdevops_pool_path="$CONFIG_KDEVOPS_STORAGE_POOL_PATH"
 			# For libvirt we can do one more global sanity check
-			if [[ "$CONFIG_VAGRANT_LIBVIRT" == "y" ]]; then
+			if [[ "$CONFIG_LIBVIRT" == "y" ]]; then
 				possible_image="${kdevops_pool_path}/vagrant_${instance}.img"
 				if [[ -f $possible_image ]]; then
 					echo "Image for instance $instance already exists ($possible_image), skippin bringup wipe of spare drives ..."

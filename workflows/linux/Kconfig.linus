@@ -63,8 +63,8 @@ config BOOTLINUX_TREE_LINUS_NAME
 config BOOTLINUX_TREE_LINUS_URL
 	string
 	default "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git" if !USE_LOCAL_LINUX_MIRROR
-	default "git://192.168.124.1/mirror/linux.git" if USE_VAGRANT_LIBVIRT_MIRROR && !BOOTLINUX_9P
-	default "/mirror/linux.git" if USE_VAGRANT_LIBVIRT_MIRROR && BOOTLINUX_9P
+	default "git://192.168.124.1/mirror/linux.git" if USE_LIBVIRT_MIRROR && !BOOTLINUX_9P
+	default "/mirror/linux.git" if USE_LIBVIRT_MIRROR && BOOTLINUX_9P
 
 endif # BOOTLINUX_TREE_LINUS
 

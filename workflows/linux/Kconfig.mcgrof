@@ -62,8 +62,8 @@ config BOOTLINUX_MCGROF_TREE_NAME
 config BOOTLINUX_MCGROF_TREE_URL
 	string
 	default "https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git" if BOOTLINUX_TREE_MCGROF_NEXT && !USE_LOCAL_LINUX_MIRROR
-	default "/mirror/mcgrof-next.git" if BOOTLINUX_TREE_MCGROF_NEXT && USE_VAGRANT_LIBVIRT_MIRROR && BOOTLINUX_9P
+	default "/mirror/mcgrof-next.git" if BOOTLINUX_TREE_MCGROF_NEXT && USE_LIBVIRT_MIRROR && BOOTLINUX_9P
 	default "https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git" if BOOTLINUX_TREE_MCGROF_LINUS && !USE_LOCAL_LINUX_MIRROR
-	default "/mirror/mcgrof-linus.git" if BOOTLINUX_TREE_MCGROF_LINUS && USE_VAGRANT_LIBVIRT_MIRROR && BOOTLINUX_9P
+	default "/mirror/mcgrof-linus.git" if BOOTLINUX_TREE_MCGROF_LINUS && USE_LIBVIRT_MIRROR && BOOTLINUX_9P
 
 endif # BOOTLINUX_TREE_MCGROF_LINUS || BOOTLINUX_TREE_MCGROF_NEXT
