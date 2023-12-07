@@ -3,8 +3,8 @@
   become: yes
   command: /usr/bin/dnf config-manager --enable codeready-builder-for-rhel-{{ ansible_distribution_major_version }}-{{ ansible_architecture }}-rpms
   when:
-    - vagrant_rhel_org_id is defined
-    - vagrant_rhel_activation_key is defined
+    - rhel_org_id is defined
+    - rhel_activation_key is defined
 
 - name: Install build dependencies for pynfs
   become: yes

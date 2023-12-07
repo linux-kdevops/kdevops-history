@@ -56,12 +56,12 @@ ifeq (y,$(CONFIG_KDEVOPS_LIBVIRT_PCIE_PASSTHROUGH))
 LIBVIRT_PCIE_PASSTHROUGH := libvirt_pcie_passthrough_permissions
 endif
 
-ifneq ($(strip $(CONFIG_VAGRANT_RHEL_ORG_ID)),)
-ifneq ($(strip $(CONFIG_VAGRANT_RHEL_ACTIVATION_KEY)),)
-RHEL_ORG_ID:=$(subst ",,$(CONFIG_VAGRANT_RHEL_ORG_ID))
-RHEL_ACTIVATION_KEY:=$(subst ",,$(CONFIG_VAGRANT_RHEL_ACTIVATION_KEY))
-VAGRANT_ARGS += vagrant_rhel_org_id="$(RHEL_ORG_ID)"
-VAGRANT_ARGS += vagrant_rhel_activation_key="$(RHEL_ACTIVATION_KEY)"
+ifneq ($(strip $(CONFIG_RHEL_ORG_ID)),)
+ifneq ($(strip $(CONFIG_RHEL_ACTIVATION_KEY)),)
+RHEL_ORG_ID:=$(subst ",,$(CONFIG_RHEL_ORG_ID))
+RHEL_ACTIVATION_KEY:=$(subst ",,$(CONFIG_RHEL_ACTIVATION_KEY))
+VAGRANT_ARGS += rhel_org_id="$(RHEL_ORG_ID)"
+VAGRANT_ARGS += rhel_activation_key="$(RHEL_ACTIVATION_KEY)"
 endif
 endif
 

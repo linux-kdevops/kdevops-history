@@ -41,5 +41,5 @@ devconfig_enable_sysctl_mm_overcommit_memory: False
 devconfig_sysctl_conf: "/etc/sysctl.conf"
 devconfig_sysctl_mm_overcommit_memory: 0
 
-vagrant_rhel_org_id: ""
-vagrant_rhel_activation_key: ""
+rhel_org_id: ""
+rhel_activation_key: ""

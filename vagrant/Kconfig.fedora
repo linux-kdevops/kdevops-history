@@ -17,7 +17,7 @@ config VAGRANT_FEDORA_OLD_RELEASE
 	  features. Enabling this will disable testing certain
 	  configurations by default in the fstests workflow.
 
-config VAGRANT_RHEL_REGISTER
+config RHEL_REGISTER
 	bool "Register the guests with Red Hat?"
 	default n
 	help
@@ -25,16 +25,16 @@ config VAGRANT_RHEL_REGISTER
 	  packages from their core repos. Enable this if you're deploying an official
 	  RHEL cloud image (e.g. generic/rhel9).
 
-config VAGRANT_RHEL_ORG_ID
+config RHEL_ORG_ID
 	string "Red Hat Organization Identifier"
-	depends on VAGRANT_RHEL_REGISTER
+	depends on RHEL_REGISTER
 	default ""
 	help
 	  Enter the Red Hat Organizational ID for your subscription here.
 
-config VAGRANT_RHEL_ACTIVATION_KEY
+config RHEL_ACTIVATION_KEY
 	string "Red Hat Activation Key"
-	depends on VAGRANT_RHEL_REGISTER
+	depends on RHEL_REGISTER
 	default ""
 	help
 	  Enter the Activation Key to use when registering systems.
