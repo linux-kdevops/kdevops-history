@@ -29,9 +29,9 @@ config WORKFLOW_DATA_DEVICE_CUSTOM
 
 config WORKFLOW_DATA_DEVICE
 	string
-	default "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_kdevops0" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_NVME
-	default "/dev/disk/by-id/virtio-kdevops0" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_VIRTIO
-	default "/dev/disk/by-id/ide-kdevops1" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_IDE
+	default "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_kdevops0" if LIBVIRT && LIBVIRT_EXTRA_STORAGE_DRIVE_NVME
+	default "/dev/disk/by-id/virtio-kdevops0" if LIBVIRT && LIBVIRT_EXTRA_STORAGE_DRIVE_VIRTIO
+	default "/dev/disk/by-id/ide-kdevops1" if LIBVIRT && LIBVIRT_EXTRA_STORAGE_DRIVE_IDE
 	default TERRAFORM_GCE_DATA_VOLUME_DEVICE_FILE_NAME if TERRAFORM_GCE
 	default TERRAFORM_AZURE_DATA_VOLUME_DEVICE_FILE_NAME if TERRAFORM_AZURE
 	default TERRAFORM_AWS_DATA_VOLUME_DEVICE_FILE_NAME if TERRAFORM_AWS
