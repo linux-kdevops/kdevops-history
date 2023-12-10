@@ -1,4 +1,40 @@
 ---
+- name: Get username we are using
+  command:
+    cmd: whoami
+  register: username_on_target
+  when:
+    - infer_uid_and_group|bool
+
+- name: Set target user as a fact
+  set_fact:
+    target_user: "{{ username_on_target.stdout }}"
+  when:
+    - infer_uid_and_group|bool
+
+- name: Run getent against the inferred target user
+  getent:
+    database: passwd
+    key: "{{ target_user }}"
+  register: getent_running_user
+  when:
+    - infer_uid_and_group|bool
+
+- name: Run getent against the inferred target group
+  getent:
+    database: group
+    key: "{{ target_user }}"
+  register: getent_on_group
+  when:
+    - infer_uid_and_group|bool
+
+- name: Override user and group with inferred settings if feature is enabled
+  set_fact:
+    data_user: "{{ target_user }}"
+    data_group: "{{ ((getent_on_group.values() | first).values() | first).keys() | first }}"
+  when:
+    - infer_uid_and_group|bool
+
 - name: Create {{ data_path }} partition if not created yet
   include_role:
     name: create_partition
