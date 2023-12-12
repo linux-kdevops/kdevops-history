@@ -56,6 +56,15 @@ config KDEVOPS_TRY_INSTALL_KDEV_TOOLS
 	  most kernel developers might prefer to have installed on target
 	  systems.
 
+config KDEVOPS_SETUP_KTLS
+	bool "Configure ktls on the hosts with self-signed CA"
+	default n
+	help
+	  Enabling this will have kdevops create a self-signed certificate
+	  authority, and configure tlshd on the hosts to use it. This is
+	  necessary for testing RPC over TLS, or some NVMe over fabrics
+	  configurations.
+
 config KDEVOPS_SETUP_NFSD
 	bool "Set up the kernel nfs server"
 	default n

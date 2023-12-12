@@ -1,0 +1,10 @@
+---
+- name: Install ktls dependencies
+  become: yes
+  become_method: sudo
+  apt:
+    name:
+      - python3-cryptography
+      - ktls-utils
+    state: present
+    update_cache: yes

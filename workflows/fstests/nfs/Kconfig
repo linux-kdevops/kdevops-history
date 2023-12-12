@@ -54,11 +54,18 @@ config FSTESTS_NFS_SECTION_DEFAULT
 	  time of this writing, this makes the client autonegotiate an NFS
 	  version, starting with v4.2 if it's available.
 
+config FSTESTS_NFS_SECTION_TLS
+	bool "Enable testing section: nfs_tls"
+	default n
+	depends on KDEVOPS_SETUP_KTLS
+	help
+	  Enabling this will test with the xprtsec=tls mount option.
+
 config FSTESTS_NFS_SECTION_V40
 	bool "Enable testing section: nfs_v40"
 	default n
 	help
-	  Enabling this will test NFSv4.0
+	  Enabling this will test NFSv4.0.
 
 config FSTESTS_NFS_SECTION_V3
 	bool "Enable testing section: nfs_v3"

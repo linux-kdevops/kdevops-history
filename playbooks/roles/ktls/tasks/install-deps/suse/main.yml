@@ -1,0 +1,9 @@
+---
+- name: Install ktls dependencies
+  become: yes
+  become_method: sudo
+  zypper:
+    state: present
+    name:
+      - python3-cryptography
+      - ktls-utils

@@ -1,0 +1,15 @@
+---
+- name: Install ktls dependencies
+  become: yes
+  become_method: sudo
+  dnf:
+    update_cache: yes
+    name: "{{ packages }}"
+  retries: 3
+  delay: 5
+  register: result
+  until: result.rc == 0
+  vars:
+    packages:
+      - python3-cryptography
+      - ktls-utils
