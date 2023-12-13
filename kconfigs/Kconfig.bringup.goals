@@ -62,8 +62,7 @@ config KDEVOPS_SETUP_KTLS
 	help
 	  Enabling this will have kdevops create a self-signed certificate
 	  authority, and configure tlshd on the hosts to use it. This is
-	  necessary for testing RPC over TLS, or some NVMe over fabrics
-	  configurations.
+	  necessary for testing RPC over TLS, or NVMe over TCP.
 
 config KDEVOPS_SETUP_NFSD
 	bool "Set up the kernel nfs server"
