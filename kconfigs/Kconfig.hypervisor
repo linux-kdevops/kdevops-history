@@ -15,7 +15,7 @@ if HYPERVISOR_TUNING
 
 config HYPERVISOR_TUNING_KSM
 	bool "Enable Kernel same page merging on the host"
-	default y if VAGRANT
+	default y if LIBVIRT || VAGRANT_VIRTUALBOX
 	help
 	  Enabling KSM can save tons of memory, in some kernel-ci systems with
 	  about 60 guests it has saved about 135 GiB of RAM. If you enable this
@@ -29,7 +29,7 @@ config HYPERVISOR_TUNING_KSM
 
 config HYPERVISOR_TUNING_ZSWAP
 	bool "Enable zswap on the host"
-	default y if VAGRANT
+	default y if LIBVIRT || VAGRANT_VIRTUALBOX
 	help
 	  Zswap is a lightweight compressed cache for swap pages
 	  Although in theory designed for swap, you can enable zswap and still

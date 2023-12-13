@@ -105,7 +105,7 @@ config BLKTESTS_WATCHDOG_RESET_HUNG_SYSTEMS
 	bool "Reset systems when the watchdog detects they are hung"
 	default y if HAVE_DISTRO_PREFERS_BLKTESTS_WATCHDOG_RESET
 	default n if !HAVE_DISTRO_PREFERS_BLKTESTS_WATCHDOG_RESET
-	depends on VAGRANT
+	depends on LIBVIRT
 	depends on BLKTESTS_WATCHDOG_KILL_TASKS_ON_HANG
 	help
 	  If this option is enabled, kdevops will reset all systems after a

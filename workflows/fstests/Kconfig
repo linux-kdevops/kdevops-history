@@ -213,7 +213,7 @@ config FSTESTS_WATCHDOG_RESET_HUNG_SYSTEMS
 	bool "Reset systems when the watchdog detects they are hung"
 	default y if HAVE_DISTRO_PREFERS_FSTESTS_WATCHDOG_RESET
 	default n if !HAVE_DISTRO_PREFERS_FSTESTS_WATCHDOG_RESET
-	depends on VAGRANT
+	depends on LIBVIRT
 	depends on FSTESTS_WATCHDOG_KILL_TASKS_ON_HANG
 	help
 	  If this option is enabled, kdevops will reset all systems after a
@@ -482,9 +482,9 @@ if FSTESTS_TESTDEV_SPARSEFILE_GENERATION
 
 config FSTESTS_SPARSE_DEV
 	string "Device to use to create a filesystem on for sparse files"
-	default "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_kdevops1" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_NVME
-	default "/dev/disk/by-id/virtio-kdevops1" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_VIRTIO
-	default "/dev/disk/by-id/ata-QEMU_HARDDISK_kdevops1" if VAGRANT && LIBVIRT_EXTRA_STORAGE_DRIVE_IDE
+	default "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_kdevops1" if LIBVIRT && LIBVIRT_EXTRA_STORAGE_DRIVE_NVME
+	default "/dev/disk/by-id/virtio-kdevops1" if LIBVIRT && LIBVIRT_EXTRA_STORAGE_DRIVE_VIRTIO
+	default "/dev/disk/by-id/ata-QEMU_HARDDISK_kdevops1" if LIBVIRT && LIBVIRT_EXTRA_STORAGE_DRIVE_IDE
 	default "/dev/nvme2n1" if TERRAFORM_AWS_INSTANCE_M5AD_4XLARGE
 	default "/dev/nvme1n1" if TERRAFORM_GCE
 	default "/dev/sdd" if TERRAFORM_AZURE
