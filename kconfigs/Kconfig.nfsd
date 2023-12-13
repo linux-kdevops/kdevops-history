@@ -31,6 +31,9 @@ config NFSD_EXPORT_FSTYPE_XFS
 config NFSD_EXPORT_FSTYPE_EXT4
 	bool "ext4"
 
+config NFSD_EXPORT_FSTYPE_TMPFS
+	bool "tmpfs"
+
 endchoice
 
 config NFSD_EXPORT_FSTYPE
@@ -38,6 +41,7 @@ config NFSD_EXPORT_FSTYPE
 	default "btrfs" if NFSD_EXPORT_FSTYPE_BTRFS
 	default "xfs" if NFSD_EXPORT_FSTYPE_XFS
 	default "ext4" if NFSD_EXPORT_FSTYPE_EXT4
+	default "tmpfs" if NFSD_EXPORT_FSTYPE_TMPFS
 
 config NFSD_EXPORT_PATH
 	string "The path under which to mount the devices to be exported."

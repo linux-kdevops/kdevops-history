@@ -1,3 +1,4 @@
+---
 - name: Create a new LVM partition
   become: yes
   become_flags: 'su - -c'
@@ -7,6 +8,8 @@
     vg: exports
     lv: "{{ export_volname }}"
     size: "{{ export_size }}"
+  when:
+    - export_fstype != "tmpfs"
 
 - name: Format new volume for {{ export_fstype }}
   become: yes
@@ -16,6 +19,8 @@
   filesystem:
     fstype: "{{ export_fstype }}"
     dev: "/dev/exports/{{ export_volname }}"
+  when:
+    - export_fstype != "tmpfs"
 
 - name: Mount volume under {{ nfsd_export_path }}
   become: yes
@@ -28,6 +33,22 @@
     src: "/dev/exports/{{ export_volname }}"
     fstype: "{{ export_fstype }}"
     state: mounted
+  when:
+    - export_fstype != "tmpfs"
+
+- name: Mount tmpfs under {{ nfsd_export_path }}
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  delegate_to: "{{ server_host }}"
+  throttle: 1  # running this in parallel can clobber fstab changes
+  mount:
+    path: "{{ nfsd_export_path }}/{{ export_volname }}"
+    src: "tmpfs"
+    fstype: "tmpfs"
+    state: mounted
+  when:
+    - export_fstype == "tmpfs"
 
 - name: Ensure {{ export_volname }} has correct permissions
   become: yes
