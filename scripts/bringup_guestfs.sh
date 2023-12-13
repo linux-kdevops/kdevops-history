@@ -17,7 +17,7 @@ STORAGEDIR="${CONFIG_KDEVOPS_STORAGE_POOL_PATH}/kdevops/guestfs"
 GUESTFSDIR="${TOPDIR}/guestfs"
 OS_VERSION=${CONFIG_VIRT_BUILDER_OS_VERSION}
 BASE_IMAGE_DIR="${STORAGEDIR}/base_images"
-BASE_IMAGE="${BASE_IMAGE_DIR}/${OS_VERSION}.qcow2"
+BASE_IMAGE="${BASE_IMAGE_DIR}/${OS_VERSION}.raw"
 mkdir -p $STORAGEDIR
 mkdir -p $BASE_IMAGE_DIR
 
@@ -43,11 +43,8 @@ firstboot-command dpkg-reconfigure openssh-server
 _EOT
 	fi
 
-	#
-	# Note that we always use qcow2 for the base image.
-	#
 	echo "Generating new base image for ${OS_VERSION}"
-	virt-builder ${OS_VERSION} -o $BASE_IMAGE --size 20G --format qcow2 --commands-from-file $cmdfile
+	virt-builder ${OS_VERSION} -o $BASE_IMAGE --size 20G --format raw --commands-from-file $cmdfile
 fi
 
 # FIXME: is there a yaml equivalent of jq?
@@ -75,7 +72,7 @@ do
 	mkdir -p "$STORAGEDIR/$name"
 
 	# Copy the base image and prep it
-	ROOTIMG="$STORAGEDIR/$name/root.qcow2"
+	ROOTIMG="$STORAGEDIR/$name/root.raw"
 	cp --reflink=auto $BASE_IMAGE $ROOTIMG
 	virt-sysprep -a $ROOTIMG --hostname $name --ssh-inject "kdevops:file:$SSH_KEY.pub"
 

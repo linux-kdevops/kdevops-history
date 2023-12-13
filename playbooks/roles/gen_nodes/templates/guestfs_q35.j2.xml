@@ -27,8 +27,8 @@
   <devices>
     <emulator>{{ qemu_bin_path }}</emulator>
     <disk type='file' device='disk'>
-      <driver name='qemu' type='qcow2'/>
-      <source file='{{ kdevops_storage_pool_path }}/guestfs/{{ hostname }}/root.qcow2' index='1'/>
+      <driver name='qemu' type='raw'/>
+      <source file='{{ kdevops_storage_pool_path }}/guestfs/{{ hostname }}/root.raw' index='1'/>
       <backingStore/>
       <target dev='vda' bus='virtio'/>
       <alias name='virtio-disk0'/>
