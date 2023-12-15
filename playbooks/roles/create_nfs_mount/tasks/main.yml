@@ -1,0 +1,47 @@
+---
+- name: Import optional extra_args file
+  include_vars: "{{ item }}"
+  ignore_errors: yes
+  with_first_found:
+    - files:
+      - "../extra_vars.yml"
+      - "../extra_vars.yaml"
+      - "../extra_vars.json"
+      skip: true
+  tags: vars
+
+- name: Check if {{ nfs_mounted_on }} is mounted
+  become: yes
+  become_method: sudo
+  ansible.builtin.command: mountpoint -q {{ nfs_mounted_on }}
+  register: mountpoint_stat
+  failed_when: False
+  changed_when: False
+
+#- name: Check if {{ nfs_mounted_on }} is present in /etc/fstab
+#  become: yes
+#  become_method: sudo
+#  ansible.builtin.shell: |
+#    set -o pipefail
+#    awk '{ print $2 }' /etc/fstab | grep -q ^"{{ nfs_mounted_on }}"
+#  register: fstab_grep_stat
+#  failed_when: False
+#  changed_when: False
+#  args:
+#    executable: /bin/bash
+
+- include: tasks/install-deps/main.yml
+
+- name: Ensure {{ nfs_mounted_on }} is mounted
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  throttle: 1
+  ansible.builtin.mount:
+    path: "{{ nfs_mounted_on }}"
+    src: "{{ nfs_server_hostname }}:{{ nfs_server_export }}"
+    fstype: "nfs"
+    opts: "{{ nfs_mount_options }}"
+    state: mounted
+  when:
+    mountpoint_stat != 0

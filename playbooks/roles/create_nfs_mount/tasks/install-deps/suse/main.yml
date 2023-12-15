@@ -1,0 +1,8 @@
+---
+- name: Install NFS client administrative tools
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - nfs-utils
+    state: present

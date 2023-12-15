@@ -1,0 +1,10 @@
+---
+- name: Install NFS client administrative tools
+  become: yes
+  become_method: sudo
+  apt:
+    name:
+      - nfs-common
+    state: present
+    update_cache: yes
+  tags: [ 'deps' ]
