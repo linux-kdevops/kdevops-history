@@ -43,6 +43,18 @@
   command: /usr/sbin/restorecon -R "{{ nfsd_export_path }}/{{ export_volname }}"
   when: selinux_status.rc == 0
 
+- name: Ensure /etc/exports.d exists
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  delegate_to: "{{ server_host }}"
+  file:
+    state: directory
+    path: "/etc/exports.d"
+    owner: "root"
+    group: "root"
+    mode: '644'
+
 - name: Create an exports.d file for the new fs
   become: yes
   become_flags: 'su - -c'
