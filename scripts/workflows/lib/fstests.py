@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: copyleft-next-0.3.1
 from datetime import datetime
 from lib import kssh
+from lib import systemd_remote
 import sys, os
 import configparser
 import argparse
@@ -71,11 +72,22 @@ def fstests_test_uses_soak_duration(testname):
         return True
     return False
 
-def get_fstest_host(host, basedir, kernel, section, config):
+def get_fstest_host(use_remote, use_ssh, host, basedir, kernel, section, config):
     stall_suspect = False
+    force_ssh = False
     if kernel == "Uname-issue":
         return (None, None, None, None, True)
-    latest_dmesg_fstest_line = kssh.get_last_fstest(host)
+
+    if "CONFIG_DEVCONFIG_ENABLE_SYSTEMD_JOURNAL_REMOTE" not in config:
+        force_ssh = True
+    if use_ssh:
+        force_ssh = True
+
+    if force_ssh:
+        latest_dmesg_fstest_line = kssh.get_last_fstest(host)
+    else:
+        remote_path = "/var/log/journal/remote/"
+        latest_dmesg_fstest_line = systemd_remote.get_last_fstest(remote_path, host)
     if latest_dmesg_fstest_line is None:
         return (None, None, None, None, False)
     if latest_dmesg_fstest_line == "Timeout":

@@ -15,10 +15,10 @@ import configparser
 import argparse
 from itertools import chain
 
-def print_fstest_host_status(host, verbose, basedir, config):
+def print_fstest_host_status(host, verbose, use_remote, use_ssh, basedir, config):
     kernel = kssh.get_uname(host).rstrip()
     section = fstests.get_section(host, config)
-    (last_test, last_test_time, current_time_str, delta_seconds, stall_suspect) = fstests.get_fstest_host(host, basedir, kernel, section, config)
+    (last_test, last_test_time, current_time_str, delta_seconds, stall_suspect) = fstests.get_fstest_host(use_remote, use_ssh, host, basedir, kernel, section, config)
     checktime =  fstests.get_checktime(host, basedir, kernel, section, last_test)
 
     percent_done = 0
@@ -81,6 +81,10 @@ def _main():
                         help='The name of the section to read hosts from')
     parser.add_argument('--verbose', const=True, default=False, action="store_const",
                         help='Be verbose on otput.')
+    parser.add_argument('--use-systemd-remote', const=True, default=True, action="store_const",
+                        help='Use use systemd-remote uploaded journals if available')
+    parser.add_argument('--use-ssh', const=True, default=False, action="store_const",
+                        help='Force to only use use ssh for journals.')
     args = parser.parse_args()
 
     if not os.path.isfile(args.hostfile):
@@ -97,7 +101,22 @@ def _main():
     hosts = fstests.get_hosts(args.hostfile, args.hostsection)
     sys.stdout.write("%35s%20s%20s%20s%20s%15s%30s\n" % ("Hostname", "Test-name", "Completion %", "runtime(s)", "last-runtime(s)", "Stall-status", "Kernel"))
     for h in hosts:
-        print_fstest_host_status(h, args.verbose, basedir, config)
+        print_fstest_host_status(h, args.verbose,
+                                 args.use_systemd_remote,
+                                 args.use_ssh,
+                                 basedir,
+                                 config)
+    soak_duration_seconds = 0
+    if "CONFIG_FSTESTS_SOAK_DURATION" in config:
+        soak_duration_seconds = config["CONFIG_FSTESTS_SOAK_DURATION"].strip('\"')
+        soak_duration_seconds = int(soak_duration_seconds)
+
+    journal_method = "ssh"
+    if "CONFIG_DEVCONFIG_ENABLE_SYSTEMD_JOURNAL_REMOTE" in config and not args.use_ssh:
+        journal_method = "systemd-journal-remote"
+
+    sys.stdout.write("\n%25s%20s\n" % ("Journal-method", "Soak-duration(s)"))
+    sys.stdout.write("%25s%20d\n" % (journal_method, soak_duration_seconds))
 
 if __name__ == '__main__':
     ret = _main()
