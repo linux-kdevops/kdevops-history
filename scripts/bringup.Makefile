@@ -48,13 +48,13 @@ journal-server:
 journal-restart:
 	@$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -l baseline,dev \
 		-f 30 -i hosts  \
-		--tags vars_simple,journal-upload-restart \
+		--tags vars_extra,journal-upload-restart \
 		$(KDEVOPS_PLAYBOOKS_DIR)/devconfig.yml
 
 journal-status:
 	@$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -l baseline,dev \
 		-f 30 -i hosts  \
-		--tags vars_simple,journal-status \
+		--tags vars_extra,journal-status \
 		$(KDEVOPS_PLAYBOOKS_DIR)/devconfig.yml
 
 journal-ls:
