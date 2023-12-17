@@ -894,6 +894,33 @@
   tags: [ 'oscheck', 'fstests', 'copy_results', 'print_results', 'augment_expunge_list' ]
   run_once: true
 
+- name: Ensure systemd-journal-remote.service is running on the server
+  tags: [ 'oscheck', 'fstests', 'run_tests' ]
+  delegate_to: localhost
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.systemd_service:
+    name: systemd-journal-remote.service
+    state: started
+  when:
+    - devconfig_enable_systemd_journal_remote|bool
+
+- name: Ensure systemd-journal-upload.service is running
+  tags: [ 'oscheck', 'fstests', 'run_tests' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.systemd_service:
+    name: systemd-journal-upload.service
+    state: started
+  when:
+    - devconfig_enable_systemd_journal_remote|bool
+
+
 - name: Hint to watchdog tests are about to kick off
   local_action: file path="{{ fstests_workflow_dir }}/.begin" state=touch
   tags: [ 'oscheck', 'fstests', 'run_tests' ]
