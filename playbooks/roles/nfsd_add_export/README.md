@@ -21,6 +21,8 @@ Role Variables
     the /exports directory on the NFS server
   * export_fstype: the file system type of the new export
   * export_size: the maximum size of the new export
+  * export_user: the owner of the new export
+  * export_group: the owner group of the new export
 
 Dependencies
 ------------

@@ -29,6 +29,17 @@
     fstype: "{{ export_fstype }}"
     state: mounted
 
+- name: Ensure {{ export_volname }} has correct permissions
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  delegate_to: "{{ server_host }}"
+  file:
+    state: directory
+    path: "{{ nfsd_export_path }}/{{ export_volname }}"
+    owner: "{{ export_user }}"
+    group: "{{ export_group }}"
+
 - name: Test whether SELinux is enabled
   command: /usr/sbin/selinuxenabled
   ignore_errors: yes
