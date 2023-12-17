@@ -500,11 +500,10 @@
     - devconfig_enable_systemd_journal_remote|bool
 
 - name: Gather ipv4 address
-  tags: [ 'journal_ln' ]
+  tags: [ 'journal_ln', 'vars_extra' ]
   setup:
     gather_subset:
       - "all_ipv4_addresses"
-  tags: vars_extra
   when:
     - devconfig_enable_systemd_journal_remote|bool
 
