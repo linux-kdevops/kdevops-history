@@ -143,6 +143,56 @@ config KDEVOPS_PYTHON_OLD_INTERPRETER
 	  KDEVOPSPYTHONOLDINTERPRETER value on your hosts.in file on old
 	  systems so that this gets properly placed.
 
+config DEVCONFIG_ENABLE_SYSTEMD_JOURNAL_REMOTE
+	bool "Set up remote systemd-journal-remote"
+	default n
+	help
+          It is a pain to have to ssh to target nodes one is testing to check
+          for kernel logs. Enable this to allow us to set up the host with
+	  systemd-journal-remote.service on then we will also congigure all
+	  test nodes with systemd-journal-upload.service so to upload their
+	  systemd journal to the host. By default we rely on insecure http
+	  on the default port 19532 on the host.
+
+	  The journal logs will be placed on the host on
+
+	  /var/log/journal/remote/remote-*test-node*.journal
+
+	  By default a reverse lookup is tried, if that does not work the IP
+	  address of incoming test node is used. Note that if you install and
+	  enable libnss-libvirt (Fedora libvirt-nss) you will only get DNS
+	  resolution, but not reverse lookups so by default we will only have
+	  IP addresses. A way to overcome this is to edit the host /etc/hosts
+	  file, however that is instrusive. A post process make target for
+	  kdevops will be developed which will create symlinks to the respective
+	  test node IP addresses.
+
+	  For more details see:
+	  https://www.freedesktop.org/software/systemd/man/latest/systemd-journal-remote.service.html
+	  https://www.freedesktop.org/software/systemd/man/latest/systemd-journal-upload.service.html
+	  https://www.freedesktop.org/software/systemd/man/latest/journal-upload.conf.html
+
+	  The systemd journal format:
+	  https://systemd.io/JOURNAL_EXPORT_FORMATS/
+
+	  libvirt nss module:
+	  https://libvirt.org/nss.html
+
+if DEVCONFIG_ENABLE_SYSTEMD_JOURNAL_REMOTE
+
+config DEVCONFIG_SYSTEMD_JOURNAL_REMOTE_URL
+	string "systemd-remote URL"
+	default "http://192.168.124.1"
+	help
+          This is used for the client /etc/systemd/journal-upload.conf URL line.
+          By default we won't use SSL for now. If you should make sure the
+	  IP address used here matches what the node should use. If using
+	  libvirt then ensure it is the same for your virtualization setup.
+	  If you are using vagrant on debian on the host it would seem the
+	  current default should work.
+
+endif # DEVCONFIG_ENABLE_SYSTEMD_JOURNAL_REMOTE
+
 if KDEVOPS_DEVCONFIG_ENABLE
 config KDEVOPS_DEVCONFIG_ENABLE_CUSTOM_REPOS
 	bool "Allow user to add custom repositories and install packages from them"

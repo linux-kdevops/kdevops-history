@@ -1,0 +1,40 @@
+---
+- name: Import optional extra_args file
+  include_vars: "{{ item }}"
+  ignore_errors: yes
+  with_first_found:
+    - files:
+      - "../extra_vars.yml"
+      - "../extra_vars.yaml"
+      - "../extra_vars.json"
+      skip: true
+  tags: vars
+
+# Distro specific
+- name: Install systemd-journal-remote
+  include_tasks: install-deps/main.yml
+
+- name: Set up the server /etc/systemd/journal-remote.conf
+  tags: [ 'journal' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  template:
+    src: "journal-remote.conf.j2"
+    dest: "/etc/systemd/journal-remote.conf"
+    force: yes
+    trim_blocks: True
+    lstrip_blocks: True
+  when:
+    - devconfig_enable_systemd_journal_remote|bool
+
+- name: Restart systemd-journal-remote on the server
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.systemd_service:
+    name: systemd-journal-remote.service
+    enabled: true
+    state: restarted
+  when:
+    - devconfig_enable_systemd_journal_remote|bool

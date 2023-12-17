@@ -1,0 +1,14 @@
+---
+- name: Install systemd-journal-remote
+  become: yes
+  become_method: sudo
+  yum:
+    update_cache: yes
+    name: "systemd-journal-remote"
+  retries: 3
+  delay: 5
+  register: result
+  until: result.rc == 0
+  when:
+    - devconfig_enable_systemd_journal_remote|bool
+  tags: journal

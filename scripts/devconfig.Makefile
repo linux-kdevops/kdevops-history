@@ -37,6 +37,9 @@ GRUB_TIMEOUT:=$(subst ",,$(CONFIG_KDEVOPS_GRUB_TIMEOUT))
 ANSIBLE_EXTRA_ARGS += devconfig_grub_timeout=$(GRUB_TIMEOUT)
 endif
 
+ifeq (y,$(CONFIG_DEVCONFIG_ENABLE_SYSTEMD_JOURNAL_REMOTE))
+endif
+
 EXTRA_VAR_INPUTS += extend-extra-args-devconfig
 
 extend-extra-args-devconfig:

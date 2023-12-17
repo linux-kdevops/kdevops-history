@@ -533,3 +533,14 @@
     - repos_will_be_added|bool
     - devconfig_try_install_kdevtools|bool
   tags: kdump
+
+- name: Install systemd-journal-remote
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - systemd-journal-remote
+  when:
+    - devconfig_enable_systemd_journal_remote|bool
+    - repos_will_be_added|bool
+  tags: journal
