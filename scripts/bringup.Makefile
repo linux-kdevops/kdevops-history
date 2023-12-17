@@ -38,11 +38,24 @@ journal-client:
 		--extra-vars '{ kdevops_cli_install: True }' \
 		--tags vars_simple,journal \
 		$(KDEVOPS_PLAYBOOKS_DIR)/devconfig.yml
+
 journal-server:
 	@$(Q)ansible-playbook $(ANSIBLE_VERBOSE) --connection=local \
 		--inventory localhost, \
 		$(KDEVOPS_PLAYBOOKS_DIR)/install_systemd_journal_remote.yml \
 		-e 'ansible_python_interpreter=/usr/bin/python3'
+
+journal-restart:
+	@$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -l baseline,dev \
+		-f 30 -i hosts  \
+		--tags vars_simple,journal-upload-restart \
+		$(KDEVOPS_PLAYBOOKS_DIR)/devconfig.yml
+
+journal-status:
+	@$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -l baseline,dev \
+		-f 30 -i hosts  \
+		--tags vars_simple,journal-status \
+		$(KDEVOPS_PLAYBOOKS_DIR)/devconfig.yml
 
 journal-ls:
 	@$(Q)du -hs /var/log/journal/remote/*
@@ -84,6 +97,8 @@ ifeq (y,$(CONFIG_DEVCONFIG_ENABLE_SYSTEMD_JOURNAL_REMOTE))
 journal-help:
 	@echo "journal-server	   - Setup systemd-journal-remote on localhost"
 	@echo "journal-client	   - Setup systemd-journal-remote on clients"
+	@echo "journal-restart	   - Restart client upload service"
+	@echo "journal-check	   - Ensure systemd-journal-remote works"
 	@echo "journal-ls          - List journals available and sizes"
 	@echo "journal-ln          - Add symlinks with hostnames"
 

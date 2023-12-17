@@ -464,7 +464,7 @@
     - devconfig_enable_systemd_journal_remote|bool
 
 - name: Enable and restart systemd-journal-upload.service on the client
-  tags: [ 'journal' ]
+  tags: [ 'journal', 'journal-upload-restart' ]
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
@@ -472,6 +472,30 @@
     name: systemd-journal-upload.service
     enabled: true
     state: restarted
+  when:
+    - devconfig_enable_systemd_journal_remote|bool
+
+- name: Ensure systemd-journal-remote.service is running on the server
+  tags: [ 'journal-status' ]
+  delegate_to: localhost
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.systemd_service:
+    name: systemd-journal-remote.service
+    state: started
+  when:
+    - devconfig_enable_systemd_journal_remote|bool
+
+
+- name: Ensure systemd-journal-upload.service is running
+  tags: [ 'journal-status' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.systemd_service:
+    name: systemd-journal-upload.service
+    state: started
   when:
     - devconfig_enable_systemd_journal_remote|bool
 
