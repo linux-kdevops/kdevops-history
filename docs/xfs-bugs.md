@@ -1,7 +1,9 @@
 Table of Contents
 =================
 
+* [Table of Contents](#table-of-contents)
 * [Upstream bugs reported on kdevops for XFS](#upstream-bugs-reported-on-kdevops-for-xfs)
+   * [Process for stable fixes](#process-for-stable-fixes)
    * [v6.6-rc5](#v66-rc5)
       * [Defining critical bugs](#defining-critical-bugs)
       * [Critial bugs count](#critial-bugs-count)
@@ -22,6 +24,27 @@ There are plenty of bugs found and reported by kdevops, you can use git grep
 korg for bugs reported bugzilla.kernel.org but there are also many bugs reported
 on other bugzillas for other distributions. This section tracks bugs perhaps
 not yet reported on linux-next or rc kernels.
+
+## Process for stable fixes
+
+A table fix candidate does by no means indicate that we should immediately send
+the fix to stable, this is precisely why we have stable XFS maintainers to avoid
+fiascos to users like the recent [ext4 data corruption](https://lwn.net/Articles/954770/)
+and so someone has to go through the trouble of ensuring first:
+
+  * 1) A baseline is created for the respective stable kernel
+  * 2) Verifying that the fix does not regress that stable kernel
+
+Please coordinate with the stable XFS maintainers:
+
+ * Leah Rumancik <leah.rumancik@gmail.com>
+ * Amir Goldstein <amir73il@gmail.com>
+ * Chandan Babu R <chandan.babu@oracle.com>
+
+Likewise if the issue is found not yet merged upstream a fix first needs
+to be vetted by the community, and ultimately the release manager will
+decide when / if to merge something. The release manager for XFS is
+Chandan Babu R <chandan.babu@oracle.com>.
 
 ## v6.6-rc5
 
@@ -86,14 +109,7 @@ v6.7-rc2~10^2
 This tells us that the fix was first merged into v6.7-rc2~10, and so clearly
 not part of v6.6-rc5 which was where the issues were found. If this fix
 is confirmed to resolve these issues it would be a good stable backport
-candidate to evaluate for integration. Note that a stable fix candidate
-does by no means indicate that we should immediately send the fix to
-stable, this is precisely why we have stable XFS maintainers to avoid
-fiascos to users like the recent [ext4 data corruption](https://lwn.net/Articles/954770/)
-and so someone has to go through the trouble of ensuring first:
-
-  * 1) A baseline is created for the respective stable kernel
-  * 2) Verifying that the fix does not regress that stable kernel
+candidate to evaluate for integration.
 
 #### 2) [korg#218225](https://bugzilla.kernel.org/show_bug.cgi?id=218225) - xfs assert (irec->br_blockcount & ~XFS_IEXT_LENGTH_MASK) == 0 file: fs/xfs/libxfs/xfs_iext_tree.c, line: 58
 
