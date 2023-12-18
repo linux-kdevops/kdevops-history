@@ -72,6 +72,7 @@
   vars:
     server_host: "{{ nfsd_hostname }}"
     export_volname: "{{ volname_base }}-4.0"
+    export_options: "{{ nfsd_export_options }}"
     export_fstype: "{{ nfsd_export_fstype }}"
     export_size: 10g
 
@@ -82,6 +83,7 @@
   vars:
     server_host: "{{ nfsd_hostname }}"
     export_volname: "{{ volname_base }}-4.1"
+    export_options: "{{ nfsd_export_options }}"
     export_fstype: "{{ nfsd_export_fstype }}"
     export_size: 10g
 

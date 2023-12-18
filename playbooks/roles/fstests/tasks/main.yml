@@ -633,6 +633,7 @@
   vars:
     server_host: "{{ fstests_nfs_server_host }}"
     export_volname: "{{ volname_prefix }}-t"
+    export_options: "{{ nfsd_export_options }}"
     export_fstype: "{{ nfsd_export_fstype }}"
     export_size: 20g
   when:
@@ -645,6 +646,7 @@
   vars:
     server_host: "{{ fstests_nfs_server_host }}"
     export_volname: "{{ volname_prefix }}-s"
+    export_options: "{{ nfsd_export_options }}"
     export_fstype: "{{ nfsd_export_fstype }}"
     export_size: 20g
   when:

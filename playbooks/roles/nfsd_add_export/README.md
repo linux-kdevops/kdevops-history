@@ -19,6 +19,7 @@ Role Variables
     the new export is to be created
   * export_volname: the name of the new export, to be created under
     the /exports directory on the NFS server
+  * export_options: the export options for the new export
   * export_fstype: the file system type of the new export
   * export_size: the maximum size of the new export
   * export_user: the owner of the new export
