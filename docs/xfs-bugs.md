@@ -140,12 +140,12 @@ mailing list directly.
 #### 1) [korg#216114](https://bugzilla.kernel.org/show_bug.cgi?id=216114) - page dumped because: VM_BUG_ON_FOLIO(!folio_contains(folio, index)) and kernel BUG at mm/truncate.c:669!
 
 Matthew acknowledged that this is a terribly rare issue, and suggested and
-[https://lore.kernel.org/all/ZXQAgFl8WGr2pK7R@casper.infradead.org/T/#u](suggested a patch to try)
+[suggested a patch to try](https://lore.kernel.org/all/ZXQAgFl8WGr2pK7R@casper.infradead.org/T/#u)
 to see if it fixes the issue.
 
 #### 2) [korg#218227](https://bugzilla.kernel.org/show_bug.cgi?id=218227) - fsstress + compaction
 
-Ongoing [https://lore.kernel.org/all/8fa1c95c-4749-33dd-42ba-243e492ab109@suse.cz/](discussion here).
+Ongoing [discussion here](https://lore.kernel.org/all/8fa1c95c-4749-33dd-42ba-243e492ab109@suse.cz/)
 Vlastimil noted this is caused as of commit 9c5ccf2db04b ("mm: remove HUGETLB_PAGE_DTOR")).
 
 It is not yet clear what to do or how to resolve this.
