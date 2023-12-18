@@ -1,3 +1,29 @@
+Table of Contents
+=================
+
+* [kdevops](#kdevops)
+   * [Quick kdevops demos](#quick-kdevops-demos)
+      * [Start kernel hacking in just 4 commands](#start-kernel-hacking-in-just-4-commands)
+      * [Start running fstests in 2 commands](#start-running-fstests-in-2-commands)
+      * [Start running blktests in 2 commands](#start-running-blktests-in-2-commands)
+      * [Start testing NFS with in 2 commands](#start-testing-nfs-with-in-2-commands)
+      * [Runs some kernel selftests in a parallel manner](#runs-some-kernel-selftests-in-a-parallel-manner)
+      * [CXL](#cxl)
+   * [kdevops chats](#kdevops-chats)
+   * [kdevops on discord](#kdevops-on-discord)
+      * [kdevops IRC](#kdevops-irc)
+   * [Parts to kdevops](#parts-to-kdevops)
+* [kdevops workflow documentation](#kdevops-workflow-documentation)
+   * [kdevops shared workflows](#kdevops-shared-workflows)
+   * [kdevops workflows which may be dedicated](#kdevops-workflows-which-may-be-dedicated)
+* [kdevops general documentation](#kdevops-general-documentation)
+* [kdevops kernel-ci support](#kdevops-kernel-ci-support)
+* [kdevops organization](#kdevops-organization)
+* [kdevops tests results](#kdevops-tests-results)
+* [Video presentations on kdevops or related](#video-presentations-on-kdevops-or-related)
+* [Underneath the kdevops hood](#underneath-the-kdevops-hood)
+   * [License](#license)
+
 # kdevops
 
 The master git repo for kdevops is:

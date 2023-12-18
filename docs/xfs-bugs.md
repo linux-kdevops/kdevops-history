@@ -1,3 +1,21 @@
+Table of Contents
+=================
+
+* [Upstream bugs reported on kdevops for XFS](#upstream-bugs-reported-on-kdevops-for-xfs)
+   * [v6.6-rc5](#v66-rc5)
+      * [Defining critical bugs](#defining-critical-bugs)
+      * [Critial bugs count](#critial-bugs-count)
+      * [Non critical bugs count](#non-critical-bugs-count)
+      * [XFS bugs](#xfs-bugs)
+         * [1) <a href="https://bugzilla.kernel.org/show_bug.cgi?id=218224" rel="nofollow">korg#218224</a> - XFS: Assertion failed: ip-&gt;i_nblocks == 0 file: fs/xfs/xfs_inode.c, line: 2359](#1-korg218224---xfs-assertion-failed-ip-i_nblocks--0-file-fsxfsxfs_inodec-line-2359)
+         * [2) <a href="https://bugzilla.kernel.org/show_bug.cgi?id=218225" rel="nofollow">korg#218225</a> - xfs assert (irec-&gt;br_blockcount &amp; ~XFS_IEXT_LENGTH_MASK) == 0 file: fs/xfs/libxfs/xfs_iext_tree.c, line: 58](#2-korg218225---xfs-assert-irec-br_blockcount--xfs_iext_length_mask--0-file-fsxfslibxfsxfs_iext_treec-line-58)
+         * [3) <a href="https://bugzilla.kernel.org/show_bug.cgi?id=218226" rel="nofollow">korg#218226</a> - XFS: Assertion failed: bp-&gt;b_flags &amp; XBF_DONE, file: fs/xfs/xfs_trans_buf.c, line: 241](#3-korg218226---xfs-assertion-failed-bp-b_flags--xbf_done-file-fsxfsxfs_trans_bufc-line-241)
+         * [4) <a href="https://bugzilla.kernel.org/show_bug.cgi?id=218229" rel="nofollow">korg#218229</a> - xfs/438 hung](#4-korg218229---xfs438-hung)
+         * [5) <a href="https://bugzilla.kernel.org/show_bug.cgi?id=218230" rel="nofollow">korg#218230</a> - xfs/538 hung](#5-korg218230---xfs538-hung)
+      * [Memory management bugs](#memory-management-bugs)
+         * [1) <a href="https://bugzilla.kernel.org/show_bug.cgi?id=216114" rel="nofollow">korg#216114</a> - page dumped because: VM_BUG_ON_FOLIO(!folio_contains(folio, index)) and kernel BUG at mm/truncate.c:669!](#1-korg216114---page-dumped-because-vm_bug_on_foliofolio_containsfolio-index-and-kernel-bug-at-mmtruncatec669)
+         * [2) <a href="https://bugzilla.kernel.org/show_bug.cgi?id=218227" rel="nofollow">korg#218227</a> - fsstress + compaction](#2-korg218227---fsstress--compaction)
+
 # Upstream bugs reported on kdevops for XFS
 
 There are plenty of bugs found and reported by kdevops, you can use git grep
