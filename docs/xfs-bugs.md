@@ -81,19 +81,19 @@ and so someone has to go through the trouble of ensuring first:
 
 No feedback from the community yet.
 
-#### * [korg#218226](https://bugzilla.kernel.org/show_bug.cgi?id=218226) - XFS: Assertion failed: bp->b_flags & XBF_DONE, file: fs/xfs/xfs_trans_buf.c, line: 241 
+#### 3) [korg#218226](https://bugzilla.kernel.org/show_bug.cgi?id=218226) - XFS: Assertion failed: bp->b_flags & XBF_DONE, file: fs/xfs/xfs_trans_buf.c, line: 241 
 
 [Chinner noted that this is a known issue](https://lore.kernel.org/linux-xfs/20231128153808.GA19360@lst.de/).
 Christoph posted a patch but Chinner does not believe that is a right fix and
 so a proper fix is still pending.
 
-#### [korg#218229](https://bugzilla.kernel.org/show_bug.cgi?id=218229) - xfs/438 hung
+#### 4) [korg#218229](https://bugzilla.kernel.org/show_bug.cgi?id=218229) - xfs/438 hung
 
 [Chandan noted that Leah had fixed
 this](https://lore.kernel.org/linux-xfs/20231030203349.663275-1-leah.rumancik@gmail.com/), we should test and
 confirms if this fixes the issue.
 
-#### [korg#218230](https://bugzilla.kernel.org/show_bug.cgi?id=218230) - xfs/538 hung
+#### 5) [korg#218230](https://bugzilla.kernel.org/show_bug.cgi?id=218230) - xfs/538 hung
 
 Chandan has root caused this issue and is working on an issue.
 
@@ -103,13 +103,13 @@ Note that the memory management folks do not want us to use bugzilla.kernel.org
 for memory management bugs. They want us to instead report issues to the
 mailing list directly.
 
-#### [korg#216114](https://bugzilla.kernel.org/show_bug.cgi?id=216114) - page dumped because: VM_BUG_ON_FOLIO(!folio_contains(folio, index)) and kernel BUG at mm/truncate.c:669!
+#### 1) [korg#216114](https://bugzilla.kernel.org/show_bug.cgi?id=216114) - page dumped because: VM_BUG_ON_FOLIO(!folio_contains(folio, index)) and kernel BUG at mm/truncate.c:669!
 
 Matthew acknowledged that this is a terribly rare issue, and suggested and
 [https://lore.kernel.org/all/ZXQAgFl8WGr2pK7R@casper.infradead.org/T/#u](suggested a patch to try)
 to see if it fixes the issue.
 
-#### [korg#218227](https://bugzilla.kernel.org/show_bug.cgi?id=218227) - fsstress + compaction
+#### 2) [korg#218227](https://bugzilla.kernel.org/show_bug.cgi?id=218227) - fsstress + compaction
 
 Ongoing [https://lore.kernel.org/all/8fa1c95c-4749-33dd-42ba-243e492ab109@suse.cz/](discussion here).
 Vlastimil noted this is caused as of commit 9c5ccf2db04b ("mm: remove HUGETLB_PAGE_DTOR")).
