@@ -6,6 +6,7 @@ generic/455 # F:1/12
 generic/471
 generic/482 # metadata corruption: https://gist.github.com/dagmcr/9fc650327b2dafd89fabd45ede0a932d
 generic/648 # https://gist.githubusercontent.com/dagmcr/447a5030dde1f91206604f1b8ee9d2a5/raw/6c8568284b6c5c05920a132c73c67fd86dcbe6f8/gistfile1.txt
+generic/670
 xfs/033
 xfs/051 # F:1/11
 xfs/075
