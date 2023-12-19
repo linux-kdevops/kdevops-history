@@ -897,12 +897,9 @@
 - name: Ensure systemd-journal-remote.service is running on the server
   tags: [ 'oscheck', 'fstests', 'run_tests' ]
   delegate_to: localhost
-  become: yes
-  become_flags: 'su - -c'
   become_method: sudo
   become: yes
   become_flags: 'su - -c'
-  become_method: sudo
   ansible.builtin.systemd_service:
     name: systemd-journal-remote.service
     state: started
