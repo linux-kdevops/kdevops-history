@@ -88,6 +88,30 @@
     group: "root"
     mode: '644'
 
+- name: Copy export options to a template variable
+  set_fact:
+    template_export_options: "{{ export_options }}"
+
+- name: Check for an fsid= export option
+  set_fact:
+    fsid_is_present: '{{ "fsid=" in export_options }}'
+  when:
+    - export_fstype == "tmpfs"
+
+- name: Generate a unique fsid
+  command: "uuidgen -r"
+  register: export_fsid
+  when:
+    - export_fstype == "tmpfs"
+    - not fsid_is_present|bool
+
+- name: Add an fsid= export option
+  set_fact:
+    template_export_options: "{{ export_options }},fsid={{ export_fsid.stdout }}"
+  when:
+    - export_fstype == "tmpfs"
+    - not fsid_is_present|bool
+
 - name: Create an exports.d file for the new fs
   become: yes
   become_flags: 'su - -c'
