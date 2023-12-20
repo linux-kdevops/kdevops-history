@@ -487,7 +487,6 @@
   when:
     - devconfig_enable_systemd_journal_remote|bool
 
-
 - name: Ensure systemd-journal-upload.service is running
   tags: [ 'journal-status' ]
   become: yes
@@ -517,21 +516,10 @@
 
 - name: Set up symlinks for journals
   tags: [ 'journal_ln' ]
-  become: yes
-  become_flags: 'su - -c'
-  become_method: sudo
   delegate_to: localhost
   command: "{{ topdir_path }}/workflows/kdevops/scripts/jounal-ln.sh {{ devconfig_systemd_journal_remote_path }} {{ node_host_ip }}"
   when:
     devconfig_enable_systemd_journal_remote|bool
-
-- name: Set up symlinks for journals
-  tags: [ 'journal_ln' ]
-  debug:
-    msg: "IP: {{ ansible_ssh_host }} {{ ansible_eth0.ipv4.address }}"
-  when:
-    - False
-    - devconfig_enable_systemd_journal_remote|bool
 
 - name: Enables systemd's watchdog
   stat:

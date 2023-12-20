@@ -10,7 +10,7 @@
 from datetime import datetime
 from lib import kssh
 from lib import fstests
-import sys, os
+import sys, os, grp
 import configparser
 import argparse
 from itertools import chain
@@ -97,6 +97,21 @@ def _main():
         sys.stdout.write("%s does not exist\n" % (dotconfig))
         sys.exit(1)
     basedir = os.path.dirname(dotconfig)
+
+    remote_group = "systemd-journal-remote"
+
+    if "CONFIG_DEVCONFIG_ENABLE_SYSTEMD_JOURNAL_REMOTE" in config and not args.use_ssh:
+        group = grp.getgrnam(remote_group)
+        if group is not None:
+            remote_gid = group[2]
+            if remote_gid not in os.getgrouplist(os.getlogin(), os.getgid()):
+                sys.stderr.write("Your username is not part of the group %s\n" %
+                                 remote_group)
+                sys.stderr.write("Fix this and try again")
+                sys.exit(1)
+        else:
+                sys.stderr.write("The group %s was not found, add Kconfig support for the systemd-remote-journal group used" % remote_group)
+                sys.exit(1)
 
     hosts = fstests.get_hosts(args.hostfile, args.hostsection)
     sys.stdout.write("%35s%20s%20s%20s%20s%15s%30s\n" % ("Hostname", "Test-name", "Completion %", "runtime(s)", "last-runtime(s)", "Stall-status", "Kernel"))

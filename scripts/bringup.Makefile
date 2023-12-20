@@ -58,7 +58,7 @@ journal-status:
 		$(KDEVOPS_PLAYBOOKS_DIR)/devconfig.yml
 
 journal-ls:
-	@$(Q)du -hs /var/log/journal/remote/*
+	@$(Q)./workflows/kdevops/scripts/jounal-ls.sh /var/log/journal/remote/
 
 journal-ln:
 	@$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -l baseline,dev \

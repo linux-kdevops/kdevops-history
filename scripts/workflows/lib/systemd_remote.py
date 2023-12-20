@@ -19,7 +19,7 @@ def get_test(remote_path, host, suite):
     # Example: /var/log/journal/remote/remote-line-xfs-reflink.journal
     fpath = remote_path + "remote-" + host + '.journal'
     run_string = "run " + suite
-    cmd = ['sudo',
+    cmd = [
            'journalctl',
            '--no-pager',
            '-n 1',

@@ -28,6 +28,18 @@
   when:
     - devconfig_enable_systemd_journal_remote|bool
 
+- name: Ensure our user is part of the systemd-journal-remote group
+  tags: [ 'journal' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.user:
+    name:  "{{ ansible_user_id }}"
+    groups: systemd-journal-remote
+    append: yes
+  when:
+    - devconfig_enable_systemd_journal_remote|bool
+
 - name: Restart systemd-journal-remote on the server
   become: yes
   become_flags: 'su - -c'
@@ -36,5 +48,20 @@
     name: systemd-journal-remote.service
     enabled: true
     state: restarted
+  when:
+    - devconfig_enable_systemd_journal_remote|bool
+
+- name: Set group sticky bit for /var/log/journal/remote/
+  tags: [ 'journal' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  file:
+    path: "/var/log/journal/remote/"
+    owner: systemd-journal-remote
+    group: systemd-journal-remote
+    mode: u=rwx,g=rwx,o=rx,g+s
+    recurse: True
+    state: directory
   when:
     - devconfig_enable_systemd_journal_remote|bool
