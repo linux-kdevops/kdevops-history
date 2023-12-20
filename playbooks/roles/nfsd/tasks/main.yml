@@ -41,8 +41,9 @@
 
 - name: Test whether SELinux is enabled
   command: /usr/sbin/selinuxenabled
-  ignore_errors: yes
   register: selinux_status
+  changed_when: False
+  failed_when: False
 
 - name: Copy SELinux type enforcement file to server
   become: yes

@@ -63,9 +63,10 @@
 
 - name: Test whether SELinux is enabled
   command: /usr/sbin/selinuxenabled
-  ignore_errors: yes
   register: selinux_status
   delegate_to: "{{ server_host }}"
+  changed_when: False
+  failed_when: False
 
 - name: Fix SELinux file context under new mount
   become: yes
