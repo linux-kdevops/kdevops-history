@@ -26,6 +26,11 @@ config BOOTLINUX_TREE_MCGROF_NEXT
 	help
 	  Use mcgrof's linux-next tree.
 
+config BOOTLINUX_TREE_CEL_LINUX
+	bool "cel-linux"
+	help
+	  Use Chuck Lever's linux repo.
+
 endchoice
 
 endif # BOOTLINUX_DEV
