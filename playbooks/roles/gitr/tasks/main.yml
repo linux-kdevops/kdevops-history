@@ -165,6 +165,15 @@
   failed_when: False
   changed_when: False
 
+- name: Run specific git regression tests
+  tags: run_specific_tests
+  ansible.builtin.shell:
+    cmd: "prove {{ gitr_test_list }}"
+    chdir: "{{ gitr_mnt }}/git/t"
+  register: gitr_results
+  failed_when: false
+  changed_when: false
+
 - name: Capture RPC statistics
   tags: copy_results
   ansible.builtin.command: "mountstats --rpc"

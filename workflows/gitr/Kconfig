@@ -79,4 +79,30 @@ config GITR_REPO_COMMIT
 	help
 	  The commit to be used for the test.
 
+if KDEVOPS_WORKFLOW_DEDICATE_GITR
+
+config GITR_ALL_TESTS
+	bool "Run all available git regression tests"
+	default y
+	help
+	  Say Y here if you simply want to run the full git
+	  regression suite. This is the default.
+
+	  If you would like to run only specific individual tests,
+	  say N here, and fill in the GITR_TEST_LIST option below.
+
+config GITR_TEST_LIST
+	string "List of regression tests to run"
+	default ""
+	depends on !GITR_ALL_TESTS
+	help
+	  This option specifies a blank-separated list of specific
+	  individual regression tests that can be run with "make
+	  gitr-baseline" and its brethren targets.
+
+	  You can find a list of scripts that can be run in the t/
+	  directory of the git repo.
+
+endif # KDEVOPS_WORKFLOW_DEDICATE_GITR
+
 endif # KDEVOPS_WORKFLOW_ENABLE_GITR

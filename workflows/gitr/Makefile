@@ -31,6 +31,13 @@ GITR_ARGS += gitr_repo=$(GITR_REPO)
 GITR_REPO_COMMIT:=$(subst ",,$(CONFIG_GITR_REPO_COMMIT))
 GITR_ARGS += gitr_repo_commit=$(GITR_REPO_COMMIT)
 
+ifeq (y,$(CONFIG_GITR_ALL_TESTS))
+GITR_PLAY_TAGS := vars,run_tests,copy_results
+else
+GITR_ARGS += gitr_test_list=$(subst ",,$(CONFIG_GITR_TEST_LIST))
+GITR_PLAY_TAGS := vars,run_specific_tests,copy_results
+endif
+
 WORKFLOW_ARGS_DIRECT += $(GITR_ARGS)
 
 ifeq (y,$(CONFIG_KDEVOPS_WORKFLOW_DEDICATE_GITR))
@@ -47,12 +54,13 @@ endif # CONFIG_KERNEL_CI
 
 gitr:
 	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -l baseline,dev \
-		-f 30 -i hosts playbooks/gitr.yml --skip-tags run_tests,copy_results
+		-f 30 -i hosts playbooks/gitr.yml \
+		--skip-tags run_tests,run_specific_tests,copy_results
 
 gitr-baseline:
 	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
 		-f 30 -i hosts -l baseline playbooks/gitr.yml \
-		--tags vars,run_tests,copy_results \
+		--tags $(GITR_PLAY_TAGS) \
 		--extra-vars=@./extra_vars.yaml
 
 gitr-baseline-loop:
@@ -63,7 +71,9 @@ gitr-baseline-kernelci:
 
 gitr-dev-baseline:
 	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
-		-f 30 -i hosts -l dev playbooks/gitr.yml --tags vars,run_tests,copy_results --extra-vars=@./extra_vars.yaml
+		-f 30 -i hosts -l dev playbooks/gitr.yml \
+		--tags $(GITR_PLAY_TAGS) \
+		--extra-vars=@./extra_vars.yaml
 
 gitr-dev-loop:
 	$(Q)$(GITR_KERNEL_CI_LOOP) dev

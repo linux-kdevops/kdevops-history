@@ -7,6 +7,7 @@ kdevops_run_gitr: False
 
 kdevops_workflows_dedicated_workflow: false
 
+gitr_test_list: ""
 gitr_uses_no_devices: False
 
 # NFS-specific defaults
