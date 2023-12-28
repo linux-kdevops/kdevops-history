@@ -2,7 +2,7 @@ if BOOTLINUX_TREE_NEXT
 
 config BOOTLINUX_TREE_NEXT_TAG
 	string
-	default "next-20230913"
+	default "next-20231006"
 
 config BOOTLINUX_TREE_NEXT_NAME
 	string

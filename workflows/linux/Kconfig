@@ -132,6 +132,7 @@ endchoice
 source "workflows/linux/Kconfig.linus"
 source "workflows/linux/Kconfig.stable"
 source "workflows/linux/Kconfig.dev"
+source "workflows/linux/Kconfig.next"
 
 # Later on we could automate this with 'make dynconfig' and reading
 # dynamically kernel.org's sources / branches.
