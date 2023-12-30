@@ -59,6 +59,7 @@
       - libaio-dev
       - snmpd
       - snmp
+      - trace-cmd
     state: present
     update_cache: yes
   tags: [ 'kdevops', 'deps' ]

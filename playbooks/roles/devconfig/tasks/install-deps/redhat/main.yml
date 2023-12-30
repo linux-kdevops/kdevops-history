@@ -98,6 +98,7 @@
       - ncurses-devel
       - openssh-server
       - net-snmp
+      - trace-cmd
 
 - name: Install btrfs-progs
   become: yes

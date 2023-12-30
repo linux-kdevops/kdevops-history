@@ -358,6 +358,7 @@
       - openssh
       - bc
       - vim-data
+      - trace-cmd
     state: present
   when:
     - not is_sle12sp3|bool
