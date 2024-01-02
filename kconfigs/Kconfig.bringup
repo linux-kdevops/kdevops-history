@@ -66,6 +66,29 @@ config VIRT_BUILDER_OS_VERSION
          build a root image for the guest. Run "virt-builder -l"
          to get a list of operating systems and versions supported
          by guestfs.
+
+config RHEL_REGISTER
+	bool "Register the guests with Red Hat?"
+	default n
+	help
+	  Official RHEL installations require a subscription before you can download
+	  packages from their core repos. Enable this if you're deploying an official
+	  RHEL image and need to attach its subscription.
+
+config RHEL_ORG_ID
+	string "Red Hat Organization Identifier"
+	depends on RHEL_REGISTER
+	default ""
+	help
+	  Enter the Red Hat Organizational ID for your subscription here.
+
+config RHEL_ACTIVATION_KEY
+	string "Red Hat Activation Key"
+	depends on RHEL_REGISTER
+	default ""
+	help
+	  Enter the Activation Key to use when registering systems.
+
 endif # GUESTFS
 
 config LIBVIRT

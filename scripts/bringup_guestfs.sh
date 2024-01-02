@@ -27,6 +27,14 @@ cmdfile=$(mktemp)
 
 if [ ! -f $BASE_IMAGE ]; then
 
+	if echo $OS_VERSION | grep -q '^rhel'; then
+		if [ -n "$CONFIG_RHEL_ORG_ID" -a -n "$CONFIG_RHEL_ACTIVATION_KEY" ]; then
+			cat <<_EOT >>$cmdfile
+run-command subscription-manager register --org=${CONFIG_RHEL_ORG_ID} --activationkey=${CONFIG_RHEL_ACTIVATION_KEY}
+_EOT
+		fi
+	fi
+
 # basic pre-install customization
 	cat <<_EOT >>$cmdfile
 install sudo,qemu-guest-agent

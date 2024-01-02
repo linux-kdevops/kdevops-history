@@ -55,17 +55,10 @@
 
 - name: Install epel-release if we're not on Fedora
   become: yes
-  become_method: sudo
-  yum:
-    update_cache: yes
-    name: "{{ packages }}"
-  retries: 3
-  delay: 5
-  register: result
-  until: result.rc == 0
-  vars:
-    packages:
-      - epel-release
+  ansible.builtin.dnf:
+    name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
+    disable_gpg_check: true
+    state: present
   when: ansible_distribution != "Fedora"
 
 - name: Enable epel repository
