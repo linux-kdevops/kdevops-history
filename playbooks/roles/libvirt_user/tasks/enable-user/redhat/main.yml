@@ -25,28 +25,30 @@
     - 'only_verify_user|bool'
     - 'apparmor_file_stat_result.stat.exists'
 
-- name: Check if getenforce exists
-  stat:
-    path: /usr/sbin/getenforce
-  register: getenforce_file_stat_result
-  when: 'only_verify_user|bool'
-
-- name: Check if SELinux is enabled
-  command:
-    cmd: /usr/sbin/getenforce
-  register: selinux_check
+- name: Test whether SELinux is enabled
+  command: /usr/sbin/selinuxenabled
+  register: selinux_status
+  changed_when: False
+  failed_when: False
   when:
-    - 'only_verify_user|bool'
-    - 'getenforce_file_stat_result.stat.exists'
+    - only_verify_user|bool
 
-- name: Inform if the user must disable SELinux
-  register: selinux_enabled
-  debug:
-    msg: "SELinux is enabled which may cause problems without the proper svirt_t context settings, disable SELinux or patch this thing to set the contexts properly"
-  failed_when: '"Enforcing" in selinux_check.stdout'
+- name: Test SELinux context of {{ storage_pool_path }}
+  command: "/usr/bin/stat -c %C {{ storage_pool_path }}"
+  register: storage_pool_path_ctx
   when:
-    - 'only_verify_user|bool'
-    - 'selinux_check is defined and "Enforcing" in selinux_check.stdout'
+    - only_verify_user|bool
+
+- name: Set SELinux context on {{ storage_pool_path }}
+  become: yes
+  community.general.sefcontext:
+    target: "{{ storage_pool_path }}(/.*)?"
+    setype: svirt_home_t
+    state: present
+  when:
+    - only_verify_user|bool
+    - selinux_status.rc == 0
+    - storage_pool_path_ctx.stdout.find(':svirt_home_t:') == -1
 
 - name: Verifies user's effective group allows to run libvirt/kvm without being root
   shell: groups | grep {{ item }}
