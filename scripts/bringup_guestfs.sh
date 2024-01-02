@@ -5,6 +5,8 @@
 source ${TOPDIR}/.config
 source ${TOPDIR}/scripts/lib.sh
 
+export LIBVIRT_DEFAULT_URI=$CONFIG_LIBVIRT_URI
+
 #
 # We use the NVMe setting for virtio too (go figure), but IDE
 # requires qcow2
