@@ -107,4 +107,4 @@
   ansible.builtin.systemd_service:
     name: tlshd.service
     enabled: true
-    state: reloaded
+    state: restarted
