@@ -6,7 +6,9 @@
     name: "{{ ansible_env.USER }}"
     groups: libvirt,kvm,qemu
     append: yes
-  when: 'not only_verify_user|bool'
+  when:
+    - not libvirt_session
+    - not only_verify_user|bool
 
 - name: Check if apparmor_status exists
   stat:
@@ -36,7 +38,9 @@
   register: group_check
   failed_when: False
   ignore_errors: true
-  when: 'only_verify_user|bool'
+  when:
+    - not libvirt_session
+    - only_verify_user|bool
 
 - name: Inform if user must log out and back in to use libvirt as a regular user
   register: user_groups_ready
@@ -44,8 +48,9 @@
     msg: "User group settings are not in effect, you must log out and back in to make group {{ item.item }} be part of your effective group"
   failed_when: item.rc is undefined or item.rc != 0
   when:
-    - 'only_verify_user|bool'
-    - 'item.rc != 0'
+    - not libvirt_session
+    - only_verify_user|bool
+    - item.rc != 0
   loop: "{{ group_check.results }}"
   loop_control:
     label: "Ensure if user's current effective groups includes {{ item.item }}"
