@@ -68,7 +68,7 @@ libvirt_pcie_passthrough_permissions:
 
 $(KDEVOPS_GUESTFS_PROVISIONED):
 	$(Q)if [[ "$(CONFIG_KDEVOPS_SSH_CONFIG_UPDATE)" == "y" ]]; then \
-		$(TOPDIR)/scripts/update_ssh_config_guestfs.py; \
+		LIBVIRT_DEFAULT_URI=$(CONFIG_LIBVIRT_URI) $(TOPDIR)/scripts/update_ssh_config_guestfs.py; \
 	fi
 	$(Q)if [[ "$(CONFIG_KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK)" != "" ]]; then \
 		ansible-playbook $(ANSIBLE_VERBOSE) -i \
