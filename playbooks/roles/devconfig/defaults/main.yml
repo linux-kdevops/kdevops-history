@@ -45,6 +45,7 @@ rhel_org_id: ""
 rhel_activation_key: ""
 
 kdevops_cli_install: False
+kdevops_enable_guestfs: False
 devconfig_enable_systemd_journal_remote: False
 devconfig_systemd_journal_remote_url: "http://192.168.124.1"
 devconfig_systemd_journal_remote_path: "/var/log/journal/remote/"
