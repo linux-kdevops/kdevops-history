@@ -26,9 +26,10 @@ mkdir -p $BASE_IMAGE_DIR
 cmdfile=$(mktemp)
 
 if [ ! -f $BASE_IMAGE ]; then
-
+	DO_UNREG=0
 	if echo $OS_VERSION | grep -q '^rhel'; then
 		if [ -n "$CONFIG_RHEL_ORG_ID" -a -n "$CONFIG_RHEL_ACTIVATION_KEY" ]; then
+			DO_UNREG=1
 			cat <<_EOT >>$cmdfile
 run-command subscription-manager register --org=${CONFIG_RHEL_ORG_ID} --activationkey=${CONFIG_RHEL_ACTIVATION_KEY}
 _EOT
@@ -41,6 +42,12 @@ install sudo,qemu-guest-agent
 run-command useradd -m kdevops
 append-line /etc/sudoers.d/kdevops:kdevops   ALL=(ALL)       NOPASSWD: ALL
 _EOT
+
+	if [ $DO_UNREG -ne 0 ]; then
+		cat <<_EOT >>$cmdfile
+sm-unregister
+_EOT
+	fi
 
 # Ugh, debian has to be told to bring up the network and regenerate ssh keys
 # Hope we get that interface name right!
