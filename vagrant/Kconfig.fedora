@@ -17,6 +17,28 @@ config VAGRANT_FEDORA_OLD_RELEASE
 	  features. Enabling this will disable testing certain
 	  configurations by default in the fstests workflow.
 
+config RHEL_REGISTER
+	bool "Register the guests with Red Hat?"
+	default n
+	help
+	  Official RHEL installations require a subscription before you can download
+	  packages from their core repos. Enable this if you're deploying an official
+	  RHEL cloud image (e.g. generic/rhel9).
+
+config RHEL_ORG_ID
+	string "Red Hat Organization Identifier"
+	depends on RHEL_REGISTER
+	default ""
+	help
+	  Enter the Red Hat Organizational ID for your subscription here.
+
+config RHEL_ACTIVATION_KEY
+	string "Red Hat Activation Key"
+	depends on RHEL_REGISTER
+	default ""
+	help
+	  Enter the Activation Key to use when registering systems.
+
 config VAGRANT_FEDORA_NEW_RELEASE
 	bool
 	default y
