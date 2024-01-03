@@ -27,9 +27,30 @@ config KDEVOPS_TRY_REFRESH_REPOS
 	  Disabling this is a good idea if all you want to do is test raw
 	  bring up of kdevops.
 
+config RHEL_REGISTER
+	bool "Register the guests with Red Hat?"
+	default n
+	help
+	  Official RHEL installations require a subscription before you can download
+	  packages from their core repos. Enable this if you're deploying an official
+	  RHEL cloud image (e.g. generic/rhel9).
+
+config RHEL_ORG_ID
+	string "Red Hat Organization Identifier"
+	depends on RHEL_REGISTER
+	default ""
+	help
+	  Enter the Red Hat Organizational ID for your subscription here.
+
+config RHEL_ACTIVATION_KEY
+	string "Red Hat Activation Key"
+	depends on RHEL_REGISTER
+	default ""
+	help
+	  Enter the Activation Key to use when registering systems.
+
 config KDEVOPS_CUSTOM_YUM_REPOFILE
 	string "Custom yum repo file"
-	depends on DISTRO_FEDORA
 	default ""
 	help
 	  Add a custom yum repo file to /etc/yum.repos.d before updating? Leave blank to
