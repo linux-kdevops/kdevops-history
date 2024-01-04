@@ -73,8 +73,9 @@ do
 	#
 	virsh domstate $name 1>/dev/null 2>&1
 	if [ $? -eq 0 ]; then
-		echo "Domain $name is already defined. Aborting!"
-		exit 1
+		echo "Domain $name is already defined."
+		virsh start $name
+		exit 0
 	fi
 
 	SSH_KEY_DIR="${GUESTFSDIR}/$name/ssh"
