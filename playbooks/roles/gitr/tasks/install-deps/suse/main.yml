@@ -19,6 +19,7 @@
     name:
       - cvs
       - cvsps
+      - perl-Test-Harness
       - subversion
       - subversion-perl
     state: present

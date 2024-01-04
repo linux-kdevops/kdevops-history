@@ -34,5 +34,7 @@
       - cvs
       - cvsps
       - git-email
+      - perl-Test-Harness
+      - perl-TAP-Harness-Archive
       - subversion
 #     - subversion-perl

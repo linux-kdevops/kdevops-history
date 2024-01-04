@@ -126,10 +126,9 @@
 
 - name: Run the full git regression suite
   tags: [ 'run_tests' ]
-  community.general.make:
-    chdir: "{{ gitr_mnt }}/git"
-    target: "test"
-    jobs: "{{ nproc.stdout }}"
+  ansible.builtin.shell:
+    cmd: "prove -Q --jobs {{ nproc.stdout }} ./t[0-9]*.sh"
+    chdir: "{{ gitr_mnt }}/git/t"
   register: gitr_results
   failed_when: False
   changed_when: False
@@ -153,6 +152,13 @@
   ansible.builtin.copy:
     content: "{{ gitr_results.stdout_lines|join('\n') }}"
     dest: "{{ gitr_mnt }}/gitr.stdout"
+
+- name: Save standard error to a file
+  tags: [ 'copy_results' ]
+  ansible.builtin.copy:
+    content: "{{ gitr_results.stderr_lines|join('\n') }}"
+    dest: "{{ gitr_mnt }}/gitr.stderr"
+  when: gitr_results.rc != 0
 
 - name: Save RPC statistics to a file
   tags: [ 'copy_results' ]
@@ -188,6 +194,14 @@
     dest: "{{ gitr_workflow_dir }}/results/{{ kernel_rev }}.stdout"
     flat: yes
 
+- name: Copy stderr over
+  tags: [ 'copy_results' ]
+  ansible.builtin.fetch:
+    src: "{{ gitr_mnt }}/gitr.stderr"
+    dest: "{{ gitr_workflow_dir }}/results/{{ kernel_rev }}.stderr"
+    flat: yes
+  when: gitr_results.rc != 0
+
 - name: Copy RPC statistics over
   tags: [ 'copy_results' ]
   ansible.builtin.fetch:
@@ -205,10 +219,4 @@
     flat: yes
   when:
     - gitr_fstype == "nfs"
-
-# XXX: This is working now, but it should copy the failures into a log file
-- name: Report failures
-  tags: [ 'copy_results' ]
-  debug:
-    msg: "{{ gitr_results.stderr_lines }}"
-  when: gitr_results.stderr | length > 0
+    - ansible_os_family == 'RedHat'

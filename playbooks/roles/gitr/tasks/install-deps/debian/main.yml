@@ -22,6 +22,7 @@
     name:
       - cvs
       - cvsps
+      - perl
       - sqlite3
     state: present
     update_cache: yes
