@@ -139,6 +139,7 @@
   register: rpc_results
   when:
     - gitr_fstype == "nfs"
+    - ansible_os_family == 'RedHat'
 
 - name: Capture transport statistics
   tags: [ 'copy_results' ]
@@ -146,6 +147,7 @@
   register: xprt_results
   when:
     - gitr_fstype == "nfs"
+    - ansible_os_family == 'RedHat'
 
 - name: Save git regression test output to a file
   tags: [ 'copy_results' ]
@@ -167,6 +169,7 @@
     dest: "{{ gitr_mnt }}/gitr.rpc"
   when:
     - gitr_fstype == "nfs"
+    - ansible_os_family == 'RedHat'
 
 - name: Save transport statistics to a file
   tags: [ 'copy_results' ]
@@ -175,11 +178,13 @@
     dest: "{{ gitr_mnt }}/gitr.xprt"
   when:
     - gitr_fstype == "nfs"
+    - ansible_os_family == 'RedHat'
 
 - name: Get used target kernel version
   tags: [ 'copy_results' ]
   ansible.builtin.command: "uname -r"
   register: uname_cmd
+  changed_when: False
 
 - name: Store kernel_rev variable
   tags: [ 'copy_results' ]
@@ -210,6 +215,7 @@
     flat: yes
   when:
     - gitr_fstype == "nfs"
+    - ansible_os_family == 'RedHat'
 
 - name: Copy transport statistics over
   tags: [ 'copy_results' ]
