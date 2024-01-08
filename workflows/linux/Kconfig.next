@@ -1,8 +1,8 @@
 if BOOTLINUX_TREE_NEXT
 
 config BOOTLINUX_TREE_NEXT_TAG
-	string
-	default "next-20231006"
+	string "linux-next tag to pull"
+	default "next-20240108"
 
 config BOOTLINUX_TREE_NEXT_NAME
 	string
