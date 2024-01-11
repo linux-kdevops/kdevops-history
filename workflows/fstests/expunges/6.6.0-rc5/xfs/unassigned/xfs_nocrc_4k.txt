@@ -2,6 +2,7 @@ generic/269 # F:1/11
 generic/451 # F:1/278 korg#216114 invalidate_inode_pages2_range()
 generic/455
 generic/471
+generic/482 # F:1/6
 generic/607
 xfs/008
 xfs/013 # F:1/6 korg#218226 xfs assert fs/xfs/xfs_message.c:102
