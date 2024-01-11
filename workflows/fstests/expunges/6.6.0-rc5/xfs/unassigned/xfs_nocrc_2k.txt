@@ -3,6 +3,7 @@ generic/388 # korg#218224 XFS: Assertion failed: ip->i_nblocks == 0 file: fs/xfs
 generic/455 # F:1/6
 generic/471
 generic/607
+generic/645
 xfs/008
 xfs/051 # F:1/11
 xfs/075
