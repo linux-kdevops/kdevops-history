@@ -1,8 +1,8 @@
 <domain type='kvm' xmlns:qemu='http://libvirt.org/schemas/domain/qemu/1.0'>
   <name>{{ hostname }}</name>
-  <memory unit='MiB'>{{ vagrant_mem_mb }}</memory>
-  <currentMemory unit='MiB'>{{ vagrant_mem_mb }}</currentMemory>
-  <vcpu placement='static'>{{ vagrant_vcpus_count }}</vcpu>
+  <memory unit='MiB'>{{ libvirt_mem_mb }}</memory>
+  <currentMemory unit='MiB'>{{ libvirt_mem_mb }}</currentMemory>
+  <vcpu placement='static'>{{ libvirt_vcpus_count }}</vcpu>
   <os>
     <type arch='x86_64' machine='q35'>hvm</type>
     <boot dev='hd'/>
