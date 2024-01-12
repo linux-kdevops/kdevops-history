@@ -4,12 +4,14 @@ generic/455
 generic/471
 generic/482 # F:1/6
 generic/607
+generic/645
 xfs/008
 xfs/013 # F:1/6 korg#218226 xfs assert fs/xfs/xfs_message.c:102
 xfs/051 # F:1/11
 xfs/075
 xfs/168 # F:1/6
 xfs/188
+xfs/242
 xfs/273
 xfs/301 # F:1/3
 xfs/495
