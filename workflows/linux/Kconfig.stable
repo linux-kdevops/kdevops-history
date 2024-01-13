@@ -15,7 +15,7 @@ if BOOTLINUX_TREE_STABLE
 
 choice
 	prompt "Stable branch to use"
-	default BOOTLINUX_STABLE_V60
+	default BOOTLINUX_STABLE_V66
 
 config BOOTLINUX_STABLE_V419
 	bool "linux-4.19.y"
@@ -56,6 +56,11 @@ config BOOTLINUX_STABLE_V61
 	bool "linux-6.1.y"
 	help
 	  Automatically enable the latest supported linux-6.1.y kernel.
+
+config BOOTLINUX_STABLE_V66
+	bool "linux-6.6.y"
+	help
+	  Automatically enable the latest supported linux-6.6.y kernel.
 
 endchoice
 
