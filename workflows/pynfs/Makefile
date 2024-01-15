@@ -23,7 +23,7 @@ endif # CONFIG_KERNEL_CI
 # Makefile for pynfs targets
 pynfs:
 	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -l baseline,dev \
-		-f 30 -i hosts playbooks/pynfs.yml --skip-tags run_tests,copy_results
+		-f 30 -i hosts playbooks/pynfs.yml --skip-tags run_tests,copy_results,clean_local_results
 
 pynfs-baseline:
 	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
