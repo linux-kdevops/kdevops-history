@@ -6,6 +6,7 @@ generic/455 # quota enabled
 generic/471
 generic/531 # F:1/21 korg#218226 xfs assert fs/xfs/xfs_message.c:102
 generic/648 # korg#218224 XFS: Assertion failed: ip->i_nblocks == 0 file: fs/xfs/xfs_inode.c, line: 2359
+generic/682 # F:1/20
 xfs/008
 xfs/009 # F:1/21
 xfs/013 # Crashes
