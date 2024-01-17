@@ -517,6 +517,9 @@
 - name: Set up symlinks for journals
   tags: [ 'journal_ln' ]
   delegate_to: localhost
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
   command: "{{ topdir_path }}/workflows/kdevops/scripts/jounal-ln.sh {{ devconfig_systemd_journal_remote_path }} {{ node_host_ip }}"
   when:
     devconfig_enable_systemd_journal_remote|bool
