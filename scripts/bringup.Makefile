@@ -101,7 +101,7 @@ journal-help:
 	@echo "journal-server	   - Setup systemd-journal-remote on localhost"
 	@echo "journal-client	   - Setup systemd-journal-remote on clients"
 	@echo "journal-restart	   - Restart client upload service"
-	@echo "journal-check	   - Ensure systemd-journal-remote works"
+	@echo "journal-status	   - Ensure systemd-journal-remote works"
 	@echo "journal-ls          - List journals available and sizes"
 	@echo "journal-ln          - Add symlinks with hostnames"
 
