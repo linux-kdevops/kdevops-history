@@ -99,7 +99,7 @@ HELP_TARGETS += bringup-setup-help-menu
 ifeq (y,$(CONFIG_DEVCONFIG_ENABLE_SYSTEMD_JOURNAL_REMOTE))
 journal-help:
 	@echo "journal-server	   - Setup systemd-journal-remote on localhost"
-	@echo "journal-client	   - Setup systemd-journal-remote on clients"
+	@echo "journal-client	   - Setup systemd-journal-upload on clients"
 	@echo "journal-restart	   - Restart client upload service"
 	@echo "journal-status	   - Ensure systemd-journal-remote works"
 	@echo "journal-ls          - List journals available and sizes"
