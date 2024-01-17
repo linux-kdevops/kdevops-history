@@ -38,7 +38,7 @@ _EOT
 
 # basic pre-install customization
 	cat <<_EOT >>$cmdfile
-install sudo,qemu-guest-agent
+install sudo,qemu-guest-agent,python3
 run-command useradd -m kdevops
 append-line /etc/sudoers.d/kdevops:kdevops   ALL=(ALL)       NOPASSWD: ALL
 _EOT
