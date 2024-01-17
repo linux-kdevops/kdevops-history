@@ -113,6 +113,7 @@
   apt:
     name:
       - systemd-journal-remote
+    update_cache: yes
   when:
     - devconfig_enable_systemd_journal_remote|bool
   tags: journal
