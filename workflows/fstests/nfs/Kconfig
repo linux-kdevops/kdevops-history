@@ -61,6 +61,18 @@ config FSTESTS_NFS_SECTION_TLS
 	help
 	  Enabling this will test with the xprtsec=tls mount option.
 
+config FSTESTS_NFS_SECTION_V42
+	bool "Enable testing section: nfs_v42"
+	default n
+	help
+	  Enabling this will test NFSv4.2.
+
+config FSTESTS_NFS_SECTION_V41
+	bool "Enable testing section: nfs_v41"
+	default n
+	help
+	  Enabling this will test NFSv4.1.
+
 config FSTESTS_NFS_SECTION_V40
 	bool "Enable testing section: nfs_v40"
 	default n

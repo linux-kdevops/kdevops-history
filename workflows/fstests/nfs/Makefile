@@ -12,6 +12,12 @@ endif
 ifeq (y,$(CONFIG_FSTESTS_NFS_SECTION_TLS))
 FSTESTS_ARGS += fstests_nfs_section_tls=True
 endif
+ifeq (y,$(CONFIG_FSTESTS_NFS_SECTION_V42))
+FSTESTS_ARGS += fstests_nfs_section_v42=True
+endif
+ifeq (y,$(CONFIG_FSTESTS_NFS_SECTION_V41))
+FSTESTS_ARGS += fstests_nfs_section_v41=True
+endif
 ifeq (y,$(CONFIG_FSTESTS_NFS_SECTION_V40))
 FSTESTS_ARGS += fstests_nfs_section_v40=True
 endif
