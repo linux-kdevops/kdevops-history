@@ -130,17 +130,24 @@ config WORKFLOW_KOTD_ENABLE
 	  found on the latest kernel.
 
 config HAVE_DISTRO_CUSTOM_KOTD_REPO
-	bool
+	bool "Distro has custom KOTD repo"
 	default n
+	help
+	  Enable this to be able to specify the custom KOTD repo for your Linux
+	  distribution.
 
 config CUSTOM_DISTRO_KOTD_REPO
 	string "Distribution KOTD repository"
 	depends on WORKFLOW_KOTD_ENABLE
 	depends on HAVE_DISTRO_CUSTOM_KOTD_REPO
 	default VAGRANT_SUSE_KOTD_REPO if VAGRANT_SUSE
+	help
+	  The URL of the custom KOTD repo for your Linux distribution.
 
 config CUSTOM_DISTRO_KOTD_REPO_NAME
 	string "Distribution KOTD repository name"
 	depends on WORKFLOW_KOTD_ENABLE
 	depends on HAVE_DISTRO_CUSTOM_KOTD_REPO
 	default VAGRANT_SUSE_KOTD_REPO_NAME if VAGRANT_SUSE
+	help
+	  The name of the custom KOTD repo for your Linux distribution.
