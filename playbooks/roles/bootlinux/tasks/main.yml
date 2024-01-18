@@ -122,8 +122,6 @@
   template:
     src: "{{ target_linux_extra_patch }}"
     dest: "{{ bootlinux_9p_host_path }}/{{ target_linux_extra_patch }}"
-    owner: "{{ data_user }}"
-    group: "{{ data_group }}"
     mode: 0644
   tags: [ 'linux', 'git', 'config' ]
   when:
