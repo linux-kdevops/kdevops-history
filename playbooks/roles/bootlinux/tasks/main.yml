@@ -74,28 +74,6 @@
   when:
     - bootlinux_9p|bool
 
-- name: Copy kernel delta if requested on the client side
-  template:
-    src: "{{ target_linux_extra_patch }}"
-    dest: "{{ target_linux_dir_path }}/{{ target_linux_extra_patch }}"
-    owner: "{{ data_user }}"
-    group: "{{ data_group }}"
-    mode: 0644
-  tags: [ 'linux', 'git', 'config' ]
-  when:
-    - not bootlinux_9p|bool
-    - target_linux_extra_patch is defined
-
-- name: Copy kernel delta if requested on the host side
-  template:
-    src: "{{ target_linux_extra_patch }}"
-    dest: "{{ bootlinux_9p_host_path }}/{{ target_linux_extra_patch }}"
-    owner: "{{ data_user }}"
-  tags: [ 'linux', 'git', 'config' ]
-  when:
-    - bootlinux_9p|bool
-    - target_linux_extra_patch is defined
-
 - name: git clone {{ target_linux_tree }} on the client side
   git:
     repo: "{{ target_linux_git }}"
