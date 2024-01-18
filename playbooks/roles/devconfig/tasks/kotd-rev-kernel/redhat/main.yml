@@ -1,13 +1,53 @@
 ---
-# Install dependenciesfor oscheck on Red Hat based systems
-- name: Refresh cache and upgrade all present packages
+- name: Add KOTD repository
   become: yes
   become_method: sudo
-  yum:
-    update_cache: yes
-    name: '*'
+  get_url:
+    url: "{{ devconfig_kotd_repo }}"
+    dest: /etc/yum.repos.d
   when:
-    - devconfig_try_upgrade|bool
+    - devconfig_enable_kotd|bool
+    - devconfig_has_kotd_repo|bool
+
+- name: Parse repository id from repo file
+  become: yes
+  become_method: sudo
+  vars:
+    repo_file: '{{ devconfig_kotd_repo | basename }}'
+  shell: grep -E '\[.*\]' /etc/yum.repos.d/{{ repo_file }} | tr -d '[]'
+  register: result
+  changed_when: false
+  when:
+    - devconfig_enable_kotd|bool
+    - devconfig_has_kotd_repo|bool
+
+- name: Get kernel version from repository-packages
+  become: yes
+  become_method: sudo
+  vars:
+    repo_id: '{{ result.stdout }}'
+  shell: dnf -q --repo={{ repo_id }} repoquery --qf "%{version}-%{release}" kernel.x86_64
+  register: result
+  changed_when: false
+  when:
+    - devconfig_enable_kotd|bool
+    - devconfig_has_kotd_repo|bool
+
+- name: Install KOTD
+  become: yes
+  become_method: sudo
+  vars:
+    kernel_version: '{{ result.stdout }}'
+    arch: 'x86_64'
+  ansible.builtin.dnf:
+    update_cache: yes
+    name: 'kernel-{{ kernel_version }}.{{ arch }}'
+    disable_gpg_check: true
+    sslverify: false
+    state: present
+  when:
+    - devconfig_enable_kotd|bool
+    - devconfig_has_kotd_repo|bool
 
 - name: Reboot system to make the new kernel and modules take effect
   become: yes
