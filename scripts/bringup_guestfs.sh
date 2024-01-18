@@ -36,6 +36,12 @@ _EOT
 		fi
 	fi
 
+	if [ -n "$CONFIG_KDEVOPS_CUSTOM_YUM_REPOFILE" ]; then
+		cat <<_EOT >>$cmdfile
+copy-in $CONFIG_KDEVOPS_CUSTOM_YUM_REPOFILE:/etc/yum.repos.d
+_EOT
+	fi
+
 # basic pre-install customization
 	cat <<_EOT >>$cmdfile
 install sudo,qemu-guest-agent,python3
