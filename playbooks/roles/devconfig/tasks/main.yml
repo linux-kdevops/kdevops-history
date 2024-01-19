@@ -15,6 +15,7 @@
 
 - name: Gathering facts
   setup:
+  tags: always
 
 # Distro specific
 - name: Install dependencies
