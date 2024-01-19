@@ -4,5 +4,4 @@
   become_method: sudo
   apt:
     name:
-      - python3-junitxml
       - python3-junitparser
