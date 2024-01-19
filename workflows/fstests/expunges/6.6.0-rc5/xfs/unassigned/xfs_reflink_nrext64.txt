@@ -8,6 +8,7 @@ generic/670 # quota enabled
 generic/682 # F:1/20
 xfs/009
 xfs/013 # Hung task https://gist.github.com/Panky-codes/81759e9c075d8b94a115c23a1a8501e3
+xfs/033 # F:1/10
 xfs/051 # F:1/11
 xfs/057 # Hung task https://gist.github.com/Panky-codes/5da03618792c10e0047d85f20004e000
 xfs/060
