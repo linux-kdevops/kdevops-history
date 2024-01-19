@@ -49,6 +49,13 @@
     - ansible_facts['os_family']|lower == 'redhat'
     - devconfig_try_refresh_repos|bool
 
+- name: Check kernel uname
+  tags: [ 'kotd' ]
+  debug:
+    msg: "Running kernel {{ running_kernel }}"
+  vars:
+    running_kernel: "{{ uname_cmd.stdout_lines.0 }}"
+
 - name: Get used target kernel version after reving kernel
   tags: [ 'kotd' ]
   command: "uname -r"
