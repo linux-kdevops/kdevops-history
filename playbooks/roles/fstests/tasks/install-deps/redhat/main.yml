@@ -38,7 +38,6 @@
       - xfsprogs
       - xfsprogs-devel
       - xfsdump
-      - xfsprogs-xfs_scrub
       - e2fsprogs
       - gawk
       - util-linux
@@ -72,6 +71,20 @@
       - lzo-devel
       - parted
       - nfs-utils
+
+- name: Install xfsprogs-xfs_scrub
+  yum:
+    update_cache: yes
+    name: "{{ packages }}"
+  retries: 3
+  delay: 5
+  register: result
+  until: result.rc == 0
+  vars:
+    packages:
+      - xfsprogs-xfs_scrub
+  when:
+    - (ansible_facts['distribution'] != 'RedHat' and ansible_facts['distribution'] != 'CentOS') or ansible_facts['distribution_major_version']|int >= 9
 
 - name: Install btrfs-progs
   become: yes
