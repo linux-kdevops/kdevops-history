@@ -11,6 +11,7 @@ xfs/008
 xfs/009 # F:1/21
 xfs/013 # Crashes
 xfs/051 # F:1/11
+xfs/059 # F:1/10
 xfs/075
 xfs/155
 xfs/168

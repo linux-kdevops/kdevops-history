@@ -13,11 +13,13 @@ generic/670
 generic/682 # F:1/20
 xfs/009
 xfs/016
+xfs/033 # F:1/10
 xfs/051 # F:1/11
 xfs/059 # F:1/15
 xfs/060
 xfs/075
 xfs/155
+xfs/168 # Hung task F:1/10 https://gist.github.com/mcgrof/2bd41f7fafd901507fe4b479c4d9a82f
 xfs/188
 xfs/229 # F:1/14 korg#218227 fsstress + compaction
 xfs/242
