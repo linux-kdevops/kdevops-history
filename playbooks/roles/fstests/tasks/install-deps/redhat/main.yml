@@ -73,6 +73,8 @@
       - nfs-utils
 
 - name: Install xfsprogs-xfs_scrub
+  become: yes
+  become_method: sudo
   yum:
     update_cache: yes
     name: "{{ packages }}"
