@@ -47,9 +47,14 @@ config INSTALL_LOCAL_LINUX_MIRROR
 	  first linux-mirror setup and just use USE_LOCAL_LINUX_MIRROR so to
 	  make use of the mirror.
 
+config MIRROR_GIT_WORKS
+	bool
+	default $(shell, ./scripts/test_git_firewall.sh)
+
 choice
 	prompt "Linux mirror protocol"
-	default MIRROR_TORVALDS_GIT
+	default MIRROR_TORVALDS_GIT if MIRROR_GIT_WORKS
+	default MIRROR_TORVALDS_HTTPS if !MIRROR_GIT_WORKS
 	depends on INSTALL_LOCAL_LINUX_MIRROR
 
 config MIRROR_TORVALDS_HTTPS
@@ -70,6 +75,7 @@ config MIRROR_TORVALDS_HTTPS_GOOGLE
 
 config MIRROR_TORVALDS_GIT
 	bool "Git"
+	depends on MIRROR_GIT_WORKS
 	help
 	  If you enable this option then git:// protocol will be used as the
 	  source of the mirror. The URL is:
@@ -105,7 +111,8 @@ config MIRROR_KDEVOPS_LINUS_URL
 
 choice
 	prompt "Linux Next mirror protocol/source"
-	default MIRROR_NEXT_GIT
+	default MIRROR_NEXT_GIT if MIRROR_GIT_WORKS
+	default MIRROR_NEXT_HTTPS if !MIRROR_GIT_WORKS
 	depends on INSTALL_LOCAL_LINUX_MIRROR
 
 config MIRROR_NEXT_HTTPS
@@ -126,6 +133,7 @@ config MIRROR_NEXT_HTTPS_GOOGLE
 
 config MIRROR_NEXT_GIT
 	bool "Git"
+	depends on MIRROR_GIT_WORKS
 	help
 	  If you enable this option then Git protocol will be used as the
 	  source of the mirror. The URL is:
@@ -142,7 +150,8 @@ config MIRROR_NEXT_URL
 
 choice
 	prompt "Linux mcgrof's linux-next fork protocol/source"
-	default MIRROR_MCGROF_GIT
+	default MIRROR_MCGROF_GIT if MIRROR_GIT_WORKS
+	default MIRROR_MCGROF_HTTPS if !MIRROR_GIT_WORKS
 	depends on INSTALL_LOCAL_LINUX_MIRROR
 
 config MIRROR_MCGROF_HTTPS
@@ -163,6 +172,7 @@ config MIRROR_MCGROF_HTTPS_GOOGLE
 
 config MIRROR_MCGROF_GIT
 	bool "Git"
+	depends on MIRROR_GIT_WORKS
 	help
 	  If you enable this option then Git protocol will be used as the
 	  source of the mirror. The URL is:
@@ -179,7 +189,8 @@ config MIRROR_MCGROF_URL
 
 choice
 	prompt "Linux mcgrof's linux fork protocol/source"
-	default MIRROR_MCGROF_LINUS_GIT
+	default MIRROR_MCGROF_LINUS_GIT if MIRROR_GIT_WORKS
+	default MIRROR_MCGROF_LINUS_HTTPS if !MIRROR_GIT_WORKS
 	depends on INSTALL_LOCAL_LINUX_MIRROR
 
 config MIRROR_MCGROF_LINUS_HTTPS
@@ -200,6 +211,7 @@ config MIRROR_MCGROF_LINUS_HTTPS_GOOGLE
 
 config MIRROR_MCGROF_LINUS_GIT
 	bool "Git"
+	depends on MIRROR_GIT_WORKS
 	help
 	  If you enable this option then Git protocol will be used as the
 	  source of the mirror. The URL is:
@@ -216,7 +228,8 @@ config MIRROR_MCGROF_LINUS_URL
 
 choice
 	prompt "Linux stable mirror protocol/source"
-	default MIRROR_STABLE_GIT
+	default MIRROR_STABLE_GIT if MIRROR_GIT_WORKS
+	default MIRROR_STABLE_HTTPS if !MIRROR_GIT_WORKS
 	depends on INSTALL_LOCAL_LINUX_MIRROR
 
 config MIRROR_STABLE_HTTPS
@@ -237,6 +250,7 @@ config MIRROR_STABLE_HTTPS_GOOGLE
 
 config MIRROR_STABLE_GIT
 	bool "Git"
+	depends on MIRROR_GIT_WORKS
 	help
 	  If you enable this option then Git protocol will be used as the
 	  source of the mirror. The URL is:
