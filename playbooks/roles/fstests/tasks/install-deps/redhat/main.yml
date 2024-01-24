@@ -71,6 +71,7 @@
       - lzo-devel
       - parted
       - nfs-utils
+      - liburing-devel
 
 - name: Install xfsprogs-xfs_scrub
   become: yes
