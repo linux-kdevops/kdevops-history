@@ -53,13 +53,26 @@
   when:
     - devconfig_try_upgrade|bool
 
-- name: Install epel-release if we're not on Fedora
+- name: Set epel-release package name for RHEL
+  set_fact:
+    epel_package:
+      - "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
+  when: ansible_distribution == 'RedHat'
+
+- name: Set epel-release package name for OracleLinux
+  set_fact:
+    epel_package:
+      - epel-release
+  when: ansible_distribution == 'OracleLinux'
+
+- name: Install epel-release
   become: yes
+  become_method: sudo
   ansible.builtin.dnf:
-    name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
+    name: "{{ epel_package }}"
     disable_gpg_check: true
     state: present
-  when: ansible_distribution != "Fedora"
+  when: epel_package is defined
 
 - name: Enable epel repository
   become: yes
