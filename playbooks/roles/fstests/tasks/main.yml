@@ -693,7 +693,9 @@
     state: present
   with_items:
     - sys
+    - 123456-fsgqa
     - fsgqa
+    - fsgqa2
     - daemon
     - nobody
   loop_control:
@@ -710,7 +712,9 @@
     home: "/home/{{ item }}"
     group: "{{ item }}"
   with_items:
+    - 123456-fsgqa
     - fsgqa
+    - fsgqa2
     - daemon
     - nobody
   loop_control:
