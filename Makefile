@@ -86,9 +86,10 @@ endif # CONFIG_NEEDS_LOCAL_DEVELOPMENT_PATH
 ANSIBLE_EXTRA_ARGS += $(LOCAL_DEVELOPMENT_ARGS)
 
 # These should be set as non-empty if you want any generic bring up
-# targets to come up. We support 2 bring up methods:
+# targets to come up. We support 3 bring up methods:
 #
-#  - vagrant: for kvm/virtualbox
+#  - vagrant: for kvm/virtualbox - will eventually be deprecated
+#  - libguestfs: for kvm
 #  - terraform: for any cloud provider
 #
 # If you are using bare metal, you don't do bring up, or you'd

@@ -2,7 +2,22 @@
 
 TERRAFORM_EXTRA_VARS :=
 
+export KDEVOPS_TERRAFORM_PROVISIONED_DEVCONFIG    :=      terraform/.provisioned_once_devconfig
+KDEVOPS_MRPROPER += $(KDEVOPS_TERRAFORM_PROVISIONED_DEVCONFIG)
+
 KDEVOPS_BRING_UP_DEPS := bringup_terraform
+# Provisioning goes last
+#
+# Provisioning split into 2 steps:
+# 1) Ensuring we can use ansible with ssh - this is implied by all
+#    terraform providers. That is, our terraform providers all have a last
+#    provisioning element task which does this update for us as part of
+#    the above bringup_terraform.
+# 2) Generic devconfig final configuration (which may include extra tools)
+#
+# Anything deps after this is dealt with on each respective workflow.
+KDEVOPS_BRING_UP_DEPS += $(KDEVOPS_TERRAFORM_PROVISIONED_DEVCONFIG)
+
 KDEVOPS_DESTROY_DEPS := destroy_terraform
 
 KDEVOPS_NODES_TEMPLATE :=	$(KDEVOPS_NODES_ROLE_TEMPLATE_DIR)/terraform_nodes.tf.j2
@@ -163,10 +178,13 @@ ANSIBLE_EXTRA_ARGS += $(TERRAFORM_EXTRA_VARS)
 
 bringup_terraform:
 	$(Q)$(TOPDIR)/scripts/bringup_terraform.sh
+
+$(KDEVOPS_TERRAFORM_PROVISIONED_DEVCONFIG):
 	$(Q)if [[ "$(CONFIG_KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK)" != "" ]]; then \
 		ansible-playbook $(ANSIBLE_VERBOSE) -i \
 			$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/$(KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK) ;\
 	fi
+	$(Q)touch $(KDEVOPS_TERRAFORM_PROVISIONED_DEVCONFIG)
 
 destroy_terraform:
 	$(Q)$(TOPDIR)/scripts/destroy_terraform.sh

@@ -5,9 +5,11 @@ GUESTFS_ARGS :=
 KDEVOPS_NODES_TEMPLATE :=	$(KDEVOPS_NODES_ROLE_TEMPLATE_DIR)/guestfs_nodes.j2
 KDEVOPS_NODES :=		guestfs/kdevops_nodes.yaml
 
-export KDEVOPS_GUESTFS_PROVISIONED :=	guestfs/.provisioned_once
+export KDEVOPS_GUESTFS_PROVISIONED_SSH		:=	guestfs/.provisioned_once_ssh
+export KDEVOPS_GUESTFS_PROVISIONED_DEVCONFIG	:=	guestfs/.provisioned_once_devconfig
 
-KDEVOPS_MRPROPER +=		$(KDEVOPS_GUESTFS_PROVISIONED)
+KDEVOPS_MRPROPER +=		$(KDEVOPS_GUESTFS_PROVISIONED_SSH)
+KDEVOPS_MRPROPER +=		$(KDEVOPS_GUESTFS_PROVISIONED_DEVCONFIG)
 
 GUESTFS_ARGS += kdevops_enable_guestfs=True
 GUESTFS_ARGS += guestfs_path='$(TOPDIR_PATH)/guestfs'
@@ -51,11 +53,18 @@ GUESTFS_BRINGUP_DEPS :=
 GUESTFS_BRINGUP_DEPS +=  $(9P_HOST_CLONE)
 GUESTFS_BRINGUP_DEPS +=  $(LIBVIRT_PCIE_PASSTHROUGH)
 
-KDEVOPS_BRING_UP_DEPS := bringup_guestfs
+	KDEVOPS_BRING_UP_DEPS := bringup_guestfs
 KDEVOPS_DESTROY_DEPS := destroy_guestfs
 
 # Provisioning goes last
-KDEVOPS_BRING_UP_DEPS += $(KDEVOPS_GUESTFS_PROVISIONED)
+#
+# Provisioning split into 2 steps:
+# 1) Ensuring we can use ansible with ssh
+# 2) Generic devconfig final configuration (which may include extra tools)
+#
+# Anything deps after this is dealt with on each respective workflow.
+KDEVOPS_BRING_UP_DEPS += $(KDEVOPS_GUESTFS_PROVISIONED_SSH)
+KDEVOPS_BRING_UP_DEPS += $(KDEVOPS_GUESTFS_PROVISIONED_DEVCONFIG)
 
 9p_linux_clone:
 	$(Q)make linux-clone
@@ -66,15 +75,18 @@ libvirt_pcie_passthrough_permissions:
 		playbooks/libvirt_pcie_passthrough.yml \
 		-e 'ansible_python_interpreter=/usr/bin/python3'
 
-$(KDEVOPS_GUESTFS_PROVISIONED):
+$(KDEVOPS_GUESTFS_PROVISIONED_SSH):
 	$(Q)if [[ "$(CONFIG_KDEVOPS_SSH_CONFIG_UPDATE)" == "y" ]]; then \
 		LIBVIRT_DEFAULT_URI=$(CONFIG_LIBVIRT_URI) $(TOPDIR)/scripts/update_ssh_config_guestfs.py; \
 	fi
+	$(Q)touch $(KDEVOPS_GUESTFS_PROVISIONED_SSH)
+
+$(KDEVOPS_GUESTFS_PROVISIONED_DEVCONFIG):
 	$(Q)if [[ "$(CONFIG_KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK)" != "" ]]; then \
 		ansible-playbook $(ANSIBLE_VERBOSE) -i \
 			$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/$(KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK) ; \
 	fi
-	$(Q)touch $(KDEVOPS_GUESTFS_PROVISIONED)
+	$(Q)touch $(KDEVOPS_GUESTFS_PROVISIONED_DEVCONFIG)
 
 bringup_guestfs: $(GUESTFS_BRINGUP_DEPS)
 	$(Q)$(TOPDIR)/scripts/bringup_guestfs.sh
