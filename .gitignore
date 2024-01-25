@@ -3,6 +3,7 @@
 *.retry
 
 .kdevops\.depcheck
+.provisioned_once*
 
 guestfs/
 
@@ -29,10 +30,7 @@ scripts/workflows/lib/__pycache__/
 vagrant/kdevops_nodes.yaml
 vagrant/.Vagrantfile.generated
 vagrant/Vagrantfile
-vagrant/.provisioned_once*
 .vagrant/
-
-terraform/.provisioned_once*
 
 include/
 

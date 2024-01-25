@@ -85,19 +85,34 @@ endif # CONFIG_NEEDS_LOCAL_DEVELOPMENT_PATH
 
 ANSIBLE_EXTRA_ARGS += $(LOCAL_DEVELOPMENT_ARGS)
 
-# These should be set as non-empty if you want any generic bring up
-# targets to come up. We support 3 bring up methods:
-#
-#  - vagrant: for kvm/virtualbox - will eventually be deprecated
-#  - libguestfs: for kvm
-#  - terraform: for any cloud provider
-#
-# If you are using bare metal, you don't do bring up, or you'd
-# likely do this yourself. What you *might* need if working
-# with bare metal is provisioning, but our workflows targets
-# provide that. The devconfig ansible role can be also augmented
-# to support many different custom provisioning preferences outside
-# of the scope of workflows. With things like kdump, etc.
+# Provisioning methods should set this to their target which will ensure
+# systems will be up after this.
+KDEVOPS_PROVISION_METHOD :=
+
+# Provisioning methods should set this to their target which will ensure
+# the systems will be removed after this
+KDEVOPS_PROVISION_DESTROY_METHOD :=
+
+# The default guard for ssh provisioning. Provisioning methods can set the
+# KDEVOPS_PROVISIONED_SSH to this if they are OK with the default guard.
+KDEVOPS_PROVISIONED_SSH_DEFAULT_GUARD := .provisioned_once_ssh
+
+# This is empty on purpose so to support terraform which does this for us
+# on the terraform provider and bare metal where it is assumed you already
+# have ssh setup. Later we can grow this for other bare metal setups or to
+# consume / gather existing topologies. To be clear, terraform providers are
+# in charge of figuring out ssh configuration updates for you in kdevops.
+KDEVOPS_PROVISIONED_SSH :=
+
+# You should augment this with targets which should be after ssh is
+# ready to go to each node, and before devconfig playbook is run.
+# The devconfig playbook can be used with tags to ensure deps / setup
+# for early deps are run.
+KDEVOPS_BRING_UP_DEPS_EARLY  :=
+
+# This is shared task.
+KDEVOPS_PROVISIONED_DEVCONFIG := .provisioned_once_devconfig
+
 KDEVOPS_BRING_UP_DEPS :=
 KDEVOPS_DESTROY_DEPS :=
 
@@ -114,6 +129,32 @@ endif
 ifeq (y,$(CONFIG_GUESTFS))
 include scripts/guestfs.Makefile
 endif
+
+KDEVOPS_MRPROPER += $(KDEVOPS_PROVISIONED_SSH)
+KDEVOPS_MRPROPER += $(KDEVOPS_PROVISIONED_DEVCONFIG)
+
+$(KDEVOPS_PROVISIONED_DEVCONFIG):
+	$(Q)if [[ "$(CONFIG_KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK)" != "" ]]; then \
+		ansible-playbook $(ANSIBLE_VERBOSE) -i \
+			$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/$(KDEVOPS_ANSIBLE_PROVISION_PLAYBOOK) ;\
+	fi
+	$(Q)touch $(KDEVOPS_PROVISIONED_DEVCONFIG)
+
+# Provisioning split into 4 steps:
+#
+# 1) Provisioning method, if one is defined
+# 2) Ensuring we can use ansible with ssh, if required
+# 3) Installing early dependencies, if any, which independent of any workflow
+# 4) Optionally run the devconfig playbook for configuration (which may include
+#    extra tools)
+#
+# Anything deps after this is dealt with on each respective workflow.
+KDEVOPS_BRING_UP_DEPS += $(KDEVOPS_PROVISION_METHOD)
+KDEVOPS_BRING_UP_DEPS += $(KDEVOPS_PROVISIONED_SSH)
+KDEVOPS_BRING_UP_DEPS += $(KDEVOPS_BRING_UP_DEPS_EARLY)
+KDEVOPS_BRING_UP_DEPS += $(KDEVOPS_PROVISIONED_DEVCONFIG)
+
+KDEVOPS_DESTROY_DEPS += $(KDEVOPS_PROVISION_DESTROY_METHOD)
 
 ifeq (y,$(CONFIG_WORKFLOWS))
 include workflows/Makefile
