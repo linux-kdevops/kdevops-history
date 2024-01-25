@@ -46,6 +46,14 @@ config FSTESTS_NFS_MANUAL_COVERAGE
 
 if FSTESTS_NFS_MANUAL_COVERAGE
 
+config FSTESTS_NFS_SECTION_RDMA
+	bool "Enable testing section: nfs_rdma"
+	default n
+	help
+	  Enabling this will test with the "rdma" mount option. Unless the
+	  hosts have RDMA hardware already, you probably also want to enable
+	  CONFIG_KDEVOPS_SETUP_SIW as well.
+
 config FSTESTS_NFS_SECTION_TLS
 	bool "Enable testing section: nfs_tls"
 	default n

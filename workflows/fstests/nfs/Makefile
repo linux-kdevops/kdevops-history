@@ -9,6 +9,9 @@ FSTESTS_ARGS += fstests_nfs_server_host='$(FSTESTS_NFS_SERVER_HOST)'
 ifeq (y,$(CONFIG_FSTESTS_NFS_SECTION_DEFAULT))
 FSTESTS_ARGS += fstests_nfs_section_default=True
 endif
+ifeq (y,$(CONFIG_FSTESTS_NFS_SECTION_RDMA))
+FSTESTS_ARGS += fstests_nfs_section_rdma=True
+endif
 ifeq (y,$(CONFIG_FSTESTS_NFS_SECTION_TLS))
 FSTESTS_ARGS += fstests_nfs_section_tls=True
 endif
