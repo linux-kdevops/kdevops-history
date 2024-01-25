@@ -760,15 +760,23 @@ config FSTESTS_RUN_LARGE_DISK_TESTS
 	  to run. The "large disk" requirement is test dependent, but
 	  typically, it means a disk with capacity of at several 10G.
 
-config FSTESTS_SOAK_DURATION
-	int "Custom Soak duration to be used"
-	default 0
+config FSTESTS_ENABLE_SOAK_DURATION
+	bool "Enable custom soak duration time"
 	help
-	  Custom Soak duration to be used during test execution. If you set this
-	  to a non-zero value then fstests will increase the amount of time it
-	  takes to run certain tests which are time based and support using
-	  SOAK_DURATION. A moderate high value setting for this is 9900 which is
-	  2.5 hours.
+	  Enable soak duration to be used during test execution. If you are not
+	  interested in extending your testing then leave this disabled.
+
+	  Using a custom soak duration to a non-zero value then fstests will
+	  increase the amount of time it takes to run certain tests which are
+	  time based and support using SOAK_DURATION. A moderately high setting
+	  for this is 9900 for 2.5 hours.
+
+	  Note that we have 46 tests today which will be able to use soak
+	  duration if set. This means your test time will increase by the
+	  soak duration * these number of tests. When soak duration is
+	  enabled the test specific watchdog fstests_watchdog.py will be
+	  aware of tests which require soak duration and consider before
+	  reporting a possible hang.
 
 	  As of 2023-10-31 that consists of the following tests which use either
 	  fsstress or fsx or fio. Tests either use SOAK_DURATION directly or they
@@ -786,7 +794,7 @@ config FSTESTS_SOAK_DURATION
 	  - generic/648 - fsstress + disk failures on loopback
 	  - generic/650 - fsstress - multithreaded write + CPU hotplug
 
-	  The tests below use _scratch_xfs_stress_scrub() to stress
+	  All the tests below use _scratch_xfs_stress_scrub() to stress
 	  test an with fsstress with scrub or an alternate xfs_db operation.
 
 	  - xfs/285
@@ -824,5 +832,68 @@ config FSTESTS_SOAK_DURATION
 	  - xfs/727
 	  - xfs/729
 	  - xfs/800
+
+if FSTESTS_ENABLE_SOAK_DURATION
+
+choice
+	prompt "Soak duration value to use"
+	default FSTESTS_SOAK_DURATION_HIGH
+
+config FSTESTS_SOAK_DURATION_CUSTOM
+	bool "Custom"
+	help
+	  You want to specify the value yourself.
+
+config FSTESTS_SOAK_DURATION_PATHOLOGICAL
+	bool "High (48 hours)"
+	help
+	  Use 48 hours for soak duration.
+
+	  Using this with 46 tests known to use soak duration means your test
+	  time will increase by about 92 days, or a bit over 3 months if run
+	  serially.
+
+config FSTESTS_SOAK_DURATION_HIGH
+	bool "High (2.5 hours)"
+	help
+	  Use 2.5 hours for soak duration.
+
+	  Using this with 46 tests known to use soak duration means your test
+	  time will increase by about 5 days if run serially.
+
+config FSTESTS_SOAK_DURATION_MID
+	bool "Mid (1 hour)"
+	help
+	  Use 1 hour for soak duration.
+
+	  Using this with 46 tests known to use soak duration means your test
+	  time will increase by about 2 days if run serially.
+
+config FSTESTS_SOAK_DURATION_LOW
+	bool "Low (30 minutes)
+	help
+	  Use 30 minutes for soak duration.
+
+	  Using this with 46 tests known to use soak duration means your test
+	  time will increase by about 1 day if run serially.
+
+endchoice
+
+config FSTESTS_SOAK_DURATION_CUSTOM_VAL
+	int "Custom soak duration value (seconds)"
+	default 0
+	depends on FSTESTS_SOAK_DURATION_CUSTOM
+	help
+	  Enter your custom soak duration value in seconds.
+
+endif # FSTESTS_ENABLE_SOAK_DURATION
+
+config FSTESTS_SOAK_DURATION
+	default 0 if !FSTESTS_ENABLE_SOAK_DURATION
+	default FSTESTS_SOAK_DURATION_CUSTOM_VAL if FSTESTS_SOAK_DURATION_CUSTOM
+	default 1800 if FSTESTS_SOAK_DURATION_LOW
+	default 3600 if FSTESTS_SOAK_DURATION_MID
+	default 9900 if FSTESTS_SOAK_DURATION_HIGH
+	default 172800 if FSTESTS_SOAK_DURATION_PATHOLOGICAL
 
 endif # KDEVOPS_WORKFLOW_ENABLE_FSTESTS

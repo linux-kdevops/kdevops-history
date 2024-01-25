@@ -30,6 +30,9 @@ fstests_test_logdev_mkfs_opts: "/dev/null"
 fstests_test_dev_zns: "/dev/null"
 fstests_zns_enabled: False
 
+fstests_soak_duration_enable: False
+fstests_soak_duration: 0
+
 fstests_uses_no_devices: False
 fstests_generate_simple_config_enable: False
 fstests_generate_nvme_live_config_enable: False

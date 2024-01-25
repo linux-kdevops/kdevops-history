@@ -44,6 +44,10 @@ FSTESTS_ARGS += run_large_disk_tests='$(FSTESTS_RUN_LARGE_DISK_TESTS)'
 FSTESTS_ARGS += run_auto_group_tests='$(FSTESTS_RUN_AUTO_GROUP_TESTS)'
 FSTESTS_ARGS += run_custom_group_tests='$(FSTESTS_RUN_CUSTOM_GROUP_TESTS)'
 FSTESTS_ARGS += exclude_test_groups='$(CONFIG_FSTESTS_EXCLUDE_TEST_GROUPS)'
+
+ifeq (y,$(CONFIG_FSTESTS_ENABLE_SOAK_DURATION))
+FSTESTS_ARGS += fstests_soak_duration_enable='True'
+endif
 FSTESTS_ARGS += fstests_soak_duration='$(CONFIG_FSTESTS_SOAK_DURATION)'
 
 ifeq (y,$(CONFIG_FSTESTS_ENABLE_RUN_CUSTOM_TESTS))
