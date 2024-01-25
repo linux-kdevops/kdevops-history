@@ -40,7 +40,8 @@ journal-ln:
 		--tags vars_extra,journal_ln \
 		$(KDEVOPS_PLAYBOOKS_DIR)/devconfig.yml
 
-KDEVOPS_BRING_UP_DEPS += journal-server
+KDEVOPS_BRING_UP_DEPS_EARLY += journal-server
+KDEVOPS_BRING_UP_DEPS_EARLY += journal-client
 
 journal-help:
 	@echo "journal-server	   - Setup systemd-journal-remote on localhost"

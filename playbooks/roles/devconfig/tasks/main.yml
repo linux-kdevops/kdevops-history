@@ -485,6 +485,7 @@
   ansible.builtin.systemd_service:
     name: systemd-journal-remote.service
     state: started
+  run_once: true
   when:
     - devconfig_enable_systemd_journal_remote|bool
 
