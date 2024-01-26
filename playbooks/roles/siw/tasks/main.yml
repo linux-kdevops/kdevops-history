@@ -22,4 +22,4 @@
 - name: Force the target host to reload its udev ruleset
   become: yes
   become_method: sudo
-  ansible.builtin.command: "udevadm control --reload"
+  ansible.builtin.shell: "udevadm control --reload && udevadm trigger"
