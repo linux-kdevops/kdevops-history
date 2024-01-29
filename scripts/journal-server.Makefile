@@ -6,6 +6,10 @@ JOURNAL_REMOTE:=$(subst ",,$(CONFIG_DEVCONFIG_SYSTEMD_JOURNAL_REMOTE_URL))
 ANSIBLE_EXTRA_ARGS += devconfig_systemd_journal_remote_url=$(JOURNAL_REMOTE)
 ANSIBLE_EXTRA_ARGS += devconfig_enable_systemd_journal_remote='True'
 
+ifeq (y,$(CONFIG_DEVCONFIG_SYSTEMD_JOURNAL_USE_HTTP))
+ANSIBLE_EXTRA_ARGS += devconfig_systemd_journal_use_http='True'
+endif
+
 journal-client:
 	@$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -l baseline,dev \
 		-f 30 -i hosts  \
@@ -40,8 +44,9 @@ journal-ln:
 		--tags vars_extra,journal_ln \
 		$(KDEVOPS_PLAYBOOKS_DIR)/devconfig.yml
 
-KDEVOPS_BRING_UP_DEPS_EARLY += journal-server
+LOCALHOST_SETUP_WORK += journal-server
 KDEVOPS_BRING_UP_DEPS_EARLY += journal-client
+KDEVOPS_BRING_UP_LATE_DEPS += journal-ln
 
 journal-help:
 	@echo "journal-server	   - Setup systemd-journal-remote on localhost"
