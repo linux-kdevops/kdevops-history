@@ -31,6 +31,9 @@ KDEVOPS_PROVISIONED_DEVCONFIG := .provisioned_once_devconfig
 KDEVOPS_BRING_UP_DEPS :=
 KDEVOPS_DESTROY_DEPS :=
 
+# These go last
+KDEVOPS_BRING_UP_LATE_DEPS :=
+
 include scripts/dynamic-kconfig.Makefile
 
 ifeq (y,$(CONFIG_TERRAFORM))
