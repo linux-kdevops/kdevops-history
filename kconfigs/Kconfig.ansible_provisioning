@@ -180,6 +180,16 @@ config DEVCONFIG_ENABLE_SYSTEMD_JOURNAL_REMOTE
 
 if DEVCONFIG_ENABLE_SYSTEMD_JOURNAL_REMOTE
 
+config DEVCONFIG_SYSTEMD_JOURNAL_USE_HTTP
+	bool "Use simple insecure http"
+	default y
+	help
+          For a simple setup you don't want to set up SSL cert files.
+          If you disable this you are on your own for now on setting up the
+	  SSL cert files. For cloud environments you may want to have a
+	  command and control server within the network on the nodes, and assign
+	  that node as the systemd service.
+
 config DEVCONFIG_SYSTEMD_JOURNAL_REMOTE_URL
 	string "systemd-remote URL"
 	default "http://192.168.124.1"

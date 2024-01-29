@@ -473,6 +473,7 @@
     name: systemd-journal-upload.service
     enabled: true
     state: restarted
+    daemon_reload: true
   when:
     - devconfig_enable_systemd_journal_remote|bool
 

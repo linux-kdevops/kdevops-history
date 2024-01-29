@@ -1,4 +1,5 @@
 # SPDX-License-Identifier copyleft-next-0.3.1
 ---
 devconfig_enable_systemd_journal_remote: False
+devconfig_systemd_journal_use_http: False
 foo: "/dev/null"
