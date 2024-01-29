@@ -62,3 +62,13 @@ config NFSD_THREADS
 	default 8
 	help
 	  Number of nfsd threads to start up for testing.
+
+config NFSD_LEASE_TIME
+	int "NFSv4 lease time and grace period, in seconds"
+	default 90
+	help
+	  Time, in seconds, that the NFS server will wait before expiring
+	  a client lease. Production servers typically use 90 seconds to
+	  allow a large client cohort enough time to recover their open
+	  and lock state. But a shorter lease time helps certain tests
+	  complete faster.

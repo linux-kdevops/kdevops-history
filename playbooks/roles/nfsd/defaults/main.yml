@@ -3,3 +3,4 @@
 # Our sensible defaults for the nfsd role.
 nfsd_export_label: "export"
 nfsd_export_fs_opts: ""
+nfsd_lease_time: "90"

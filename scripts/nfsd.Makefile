@@ -4,6 +4,7 @@ NFSD_EXTRA_ARGS += nfsd_export_fstype='$(subst ",,$(CONFIG_NFSD_EXPORT_FSTYPE))'
 NFSD_EXTRA_ARGS += nfsd_export_path='$(subst ",,$(CONFIG_NFSD_EXPORT_PATH))'
 NFSD_EXTRA_ARGS += nfsd_export_options='$(subst ",,$(CONFIG_NFSD_EXPORT_OPTIONS))'
 NFSD_EXTRA_ARGS += nfsd_threads=$(CONFIG_NFSD_THREADS)
+NFSD_EXTRA_ARGS += nfsd_lease_time=$(CONFIG_NFSD_LEASE_TIME)
 
 ANSIBLE_EXTRA_ARGS += $(NFSD_EXTRA_ARGS)
 
