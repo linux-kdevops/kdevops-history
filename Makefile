@@ -83,6 +83,13 @@ ifeq (y,$(CONFIG_NEEDS_LOCAL_DEVELOPMENT_PATH))
 include Makefile.local
 endif # CONFIG_NEEDS_LOCAL_DEVELOPMENT_PATH
 
+# To not clutter the top level Makefile, work which requires to be made
+# on the localhost can be augmented on the LOCALHOST_SETUP_WORK variable.
+# This will run after the extra_vars.yaml file is created and so you can
+# rely on it. The work in LOCALHOST_SETUP_WORK is run when you just run
+# make with no arguments.
+LOCALHOST_SETUP_WORK :=
+
 ANSIBLE_EXTRA_ARGS += $(LOCAL_DEVELOPMENT_ARGS)
 
 include scripts/provision.Makefile
@@ -129,13 +136,6 @@ DEFAULT_DEPS += $(KDEVOPS_VAGRANT)
 endif
 
 DEFAULT_DEPS += $(DEFAULT_DEPS_REQS_EXTRA_VARS)
-
-# To not clutter the top level Makefile, work which requires to be made
-# on the localhost can be augmented on the LOCALHOST_SETUP_WORK variable.
-# This will run after the extra_vars.yaml file is created and so you can
-# rely on it. The work in LOCALHOST_SETUP_WORK is run when you just run
-# make with no arguments.
-LOCALHOST_SETUP_WORK :=
 
 include scripts/install-menuconfig-deps.Makefile
 
