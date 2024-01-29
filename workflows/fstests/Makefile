@@ -8,6 +8,8 @@ FSTESTS_ARGS	        :=
 FSTESTS_ARGS_SEPARATED	:=
 FSTESTS_ARGS_DIRECT :=
 
+FSTESTS_BASELINE_EXTRA :=
+
 export FSTYP:=$(subst ",,$(CONFIG_FSTESTS_FSTYP))
 
 ifeq (y,$(CONFIG_WORKFLOWS_DEDICATED_WORKFLOW))
@@ -138,17 +140,21 @@ DYNAMIC_RUNTIME_VARS += , "fstests_start_after": True
 DYNAMIC_RUNTIME_VARS += , "fstests_start_after_test": "$(START_AFTER)"
 endif
 
-fstests:
+ifeq (y,$(CONFIG_DEVCONFIG_ENABLE_SYSTEMD_JOURNAL_REMOTE))
+FSTESTS_BASELINE_EXTRA += journal-ln
+endif
+
+fstests: $(FSTESTS_BASELINE_EXTRA)
 	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -l localhost,baseline,dev \
 		-f 30 -i hosts playbooks/fstests.yml --skip-tags run_tests,copy_results $(LIMIT_HOSTS)
 
-fstests-kdevops-setup: $(KDEVOPS_EXTRA_VARS)
+fstests-kdevops-setup: $(KDEVOPS_EXTRA_VARS) $(FSTESTS_BASELINE_EXTRA)
 	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -l baseline,dev \
 		-f 30 -i hosts playbooks/fstests.yml \
 		--tags vars,kdevops_fstests_setup,gendisks \
 		$(LIMIT_HOSTS)
 
-fstests-baseline:
+fstests-baseline: $(FSTESTS_BASELINE_EXTRA)
 	$(Q)PYTHONUNBUFFERED=1 ansible-playbook $(ANSIBLE_VERBOSE) \
 		-f 30 -i hosts -l baseline playbooks/fstests.yml \
 		--tags vars,run_tests,copy_results \
