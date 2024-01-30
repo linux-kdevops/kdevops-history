@@ -512,7 +512,7 @@
 - name: "Group up facts we'll give to the host"
   tags: [ 'journal_ln' ]
   set_fact:
-    node_host_ip: "{{ ansible_ssh_host}} {{ ansible_eth0.ipv4.address }}"
+    node_host_ip: "{{ ansible_ssh_host}} {{ ansible_default_ipv4.address }}"
   delegate_facts: true
   when:
     devconfig_enable_systemd_journal_remote|bool
