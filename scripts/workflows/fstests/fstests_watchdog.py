@@ -10,13 +10,21 @@
 from datetime import datetime
 from lib import kssh
 from lib import fstests
+from lib import systemd_remote
 import sys, os, grp
 import configparser
 import argparse
 from itertools import chain
 
 def print_fstest_host_status(host, verbose, use_remote, use_ssh, basedir, config):
-    kernel = kssh.get_uname(host).rstrip()
+    if "CONFIG_DEVCONFIG_ENABLE_SYSTEMD_JOURNAL_REMOTE" in config and not use_ssh:
+        remote_path = "/var/log/journal/remote/"
+        kernel = systemd_remote.get_uname(remote_path, host)
+        if kernel is None:
+            sys.stderr.write("No kernel could be identified for host: %s\n" % host)
+            sys.exit(1)
+    else:
+        kernel = kssh.get_uname(host).rstrip()
     section = fstests.get_section(host, config)
     (last_test, last_test_time, current_time_str, delta_seconds, stall_suspect) = fstests.get_fstest_host(use_remote, use_ssh, host, basedir, kernel, section, config)
     checktime =  fstests.get_checktime(host, basedir, kernel, section, last_test)
