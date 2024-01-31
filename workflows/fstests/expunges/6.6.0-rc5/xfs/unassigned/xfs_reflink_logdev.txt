@@ -6,6 +6,7 @@ generic/108
 generic/175
 generic/204
 generic/223
+generic/245
 generic/269 # F:1/11
 generic/297
 generic/298
@@ -13,6 +14,7 @@ generic/361
 generic/471
 generic/648 # korg#218224 XFS: Assertion failed: ip->i_nblocks == 0 file: fs/xfs/xfs_inode.c, line: 2359
 generic/670 # F:1/16
+generic/682
 generic/704
 generic/730
 generic/731
