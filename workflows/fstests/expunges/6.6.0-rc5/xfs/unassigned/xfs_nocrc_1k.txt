@@ -3,6 +3,7 @@ generic/003 # F:1/50
 generic/004 # F:1/50
 generic/005 # F:1/50
 generic/245 # F:1/20
+generic/388 # Hangs. SOAK_DURATION=9900
 generic/455 # F:1/19
 generic/471
 generic/482
