@@ -2,8 +2,8 @@
 vagrant_global:
   box: "{{ vagrant_box }}"
   box_version: "{{ vagrant_box_version }}"
-  memory: {{ vagrant_mem_mb }}
-  cpus: {{ vagrant_vcpus_count }}
+  memory: {{ libvirt_mem_mb }}
+  cpus: {{ libvirt_vcpus_count }}
 {% if nvme_zone_enable %}
   enable_zns: True
 {% endif %}

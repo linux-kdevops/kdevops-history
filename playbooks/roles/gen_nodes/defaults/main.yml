@@ -19,8 +19,8 @@ libvirt_provider: False
 libvirt_extra_drive_format: 'qcow2'
 vagrant_box: "debian/testing64"
 vagrant_box_version: ""
-vagrant_vcpus_count: 8
-vagrant_mem_mb: 4096
+libvirt_vcpus_count: 8
+libvirt_mem_mb: 4096
 qemu_bin_path: "/usr/bin/qemu-system-x86_64"
 extra_disk_path: ".vagrant/nvme_disks"
 extra_disk_driver: "nvme"
