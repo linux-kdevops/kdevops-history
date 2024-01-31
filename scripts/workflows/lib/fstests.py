@@ -92,16 +92,24 @@ def get_fstest_host(use_remote, use_ssh, host, basedir, kernel, section, config)
         return (None, None, None, None, False)
     if latest_dmesg_fstest_line == "Timeout":
         return (None, None, None, None, True)
-    check_pid = fstests_check_pid(host)
-    if check_pid < 0:
-        return (None, None, None, None, True)
-    elif check_pid == 0:
-        return (None, None, None, None, False)
+    if force_ssh:
+        check_pid = fstests_check_pid(host)
+        if check_pid < 0:
+            return (None, None, None, None, True)
+        elif check_pid == 0:
+            return (None, None, None, None, False)
 
     last_test = latest_dmesg_fstest_line.split("at ")[0]
     last_test = last_test.replace(" ", "")
+
+    if "fstestsdone" in last_test:
+        return (None, None, None, None, False)
+
     last_test_time = latest_dmesg_fstest_line.split("at ")[1].rstrip()
-    current_time_str = kssh.get_current_time(host).rstrip()
+    if force_ssh:
+        current_time_str = kssh.get_current_time(host).rstrip()
+    else:
+        current_time_str = systemd_remote.get_current_time(host).rstrip()
 
     fstests_date_str_format = '%Y-%m-%d %H:%M:%S'
     d1 = datetime.strptime(last_test_time, fstests_date_str_format)

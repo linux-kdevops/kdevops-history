@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: copyleft-next-0.3.1
 
 import subprocess, os
+from datetime import datetime
 
 class SystemdError(Exception):
     pass
@@ -11,6 +12,12 @@ class TimeoutExpired(SystemdError):
     def __init__(self, errcode):
         self.error_code = errcode
         return "timeout"
+
+def get_current_time(host):
+    format = '%Y-%m-%d %H:%M:%S'
+    today = datetime.today()
+    today_str = today.strftime(format)
+    return today_str
 
 def get_extra_journals(remote_path, host):
     extra_journals_path = "remote-" + host + '@'
