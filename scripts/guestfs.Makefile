@@ -73,6 +73,8 @@ PHONY += bringup_guestfs
 
 destroy_guestfs:
 	$(Q)$(TOPDIR)/scripts/destroy_guestfs.sh
+	$(Q)rm -f $(KDEVOPS_PROVISIONED_SSH)
+
 PHONY += destroy_guestfs
 
 cleancache:
