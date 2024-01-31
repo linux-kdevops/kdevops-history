@@ -111,3 +111,4 @@ PHONY += bringup_vagrant
 
 destroy_vagrant:
 	$(Q)$(TOPDIR)/scripts/destroy_vagrant.sh
+	$(Q)rm -f $(KDEVOPS_PROVISIONED_SSH)
