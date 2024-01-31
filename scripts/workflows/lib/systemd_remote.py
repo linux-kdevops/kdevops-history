@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: copyleft-next-0.3.1
 
-import subprocess, os
+import subprocess, os, sys
 from datetime import datetime
 
 class SystemdError(Exception):
@@ -28,10 +28,11 @@ def get_extra_journals(remote_path, host):
             extra_journals.append(remote_path + file)
     return extra_journals
 
-def get_uname(remote_path, host):
+def get_uname(remote_path, host, configured_kernel):
     extra_journals = get_extra_journals(remote_path, host)
     fpath = remote_path + "remote-" + host + '.journal'
     grep = "Linux version"
+    grep_str = "\"Linux version\""
     cmd = [
            'journalctl',
            '--no-pager',
@@ -42,6 +43,16 @@ def get_uname(remote_path, host):
            '--file',
            fpath ]
     cmd = cmd + extra_journals
+    cmd_verbose = [
+           'journalctl',
+           '--no-pager',
+           '-n 1',
+           '-k',
+           '-g',
+           grep_str,
+           '--file',
+           fpath ]
+    cmd_verbose = cmd_verbose + extra_journals
     process = subprocess.Popen(cmd,
                                stdout=subprocess.PIPE,
                                stderr=subprocess.STDOUT,
@@ -55,14 +66,23 @@ def get_uname(remote_path, host):
     else:
         process.wait()
         if process.returncode != 0:
-            return None
+            if configured_kernel is None:
+                sys.stderr.write("\nProcess returned non-zero")
+                sys.stderr.write("\nCommand used:\n%s\n\n" % " ".join(cmd_verbose))
+            return configured_kernel
         last_line = data[0].strip()
         if grep not in last_line:
+            sys.stderr.write("\nThe string %s was not found in the journal." % grep_str)
+            sys.stderr.write("\nCommand used:\n%s\n\n" % " ".join(cmd_verbose))
             return None
         if len(last_line.split(grep)) <= 1:
+            sys.stderr.write("\nThe string %s could not be used to split the line." % grep_str)
+            sys.stderr.write("\nCommand used:\n%s\n\n" % " ".join(cmd_verbose))
             return None
         kernel_line = last_line.split(grep)[1].strip()
         if len(last_line.split()) <= 1:
+            sys.stderr.write("\nThe string %s was used but could not find kernel version." % grep_str)
+            sys.stderr.write("\nCommand used:\n%s\n\n" % " ".join(cmd_verbose))
             return None
         kernel = kernel_line.split()[0].strip()
 

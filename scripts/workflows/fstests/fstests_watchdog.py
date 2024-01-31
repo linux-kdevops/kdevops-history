@@ -18,8 +18,15 @@ from itertools import chain
 
 def print_fstest_host_status(host, verbose, use_remote, use_ssh, basedir, config):
     if "CONFIG_DEVCONFIG_ENABLE_SYSTEMD_JOURNAL_REMOTE" in config and not use_ssh:
+        configured_kernel = None
+        if "CONFIG_WORKFLOW_LINUX_DISTRO" in config:
+            configured_kernel = "Distro-kernel"
+        elif "CONFIG_BOOTLINUX_TREE_TAG" in config:
+            configured_kernel = config["CONFIG_BOOTLINUX_TREE_TAG"].strip('\"')
         remote_path = "/var/log/journal/remote/"
-        kernel = systemd_remote.get_uname(remote_path, host)
+        kernel = systemd_remote.get_uname(remote_path, host, configured_kernel)
+        if kernel == configured_kernel:
+            kernel += " (inferred)"
         if kernel is None:
             sys.stderr.write("No kernel could be identified for host: %s\n" % host)
             sys.exit(1)
