@@ -1,4 +1,9 @@
 ---
+- name: Enable the CodeReady repo
+  become: yes
+  command: /usr/bin/dnf config-manager --enable codeready-builder-for-rhel-{{ ansible_distribution_major_version }}-{{ ansible_architecture }}-rpms
+  when: ansible_facts['distribution'] == 'RedHat' or ansible_facts['distribution'] == 'CentOS'
+
 - name: Install epel-release if we're not on Fedora
   become: yes
   become_method: sudo
