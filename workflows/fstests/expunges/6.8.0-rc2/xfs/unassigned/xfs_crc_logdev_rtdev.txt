@@ -1,0 +1,32 @@
+generic/042
+generic/054
+generic/081
+generic/108
+generic/204
+generic/223
+generic/251 # korg#218226 xfs assert fs/xfs/xfs_message.c:102
+generic/361
+generic/388 # Hangs. SOAK_DURATION=9900
+generic/465
+generic/471
+generic/531 # korg#218226 xfs assert fs/xfs/xfs_message.c:102
+generic/704
+generic/730
+generic/731
+shared/298
+xfs/002
+xfs/018
+xfs/051 # F:1/11
+xfs/075
+xfs/188
+xfs/199
+xfs/270
+xfs/294
+xfs/301 # F:1/7
+xfs/338 # F:1/8 hung task https://gist.github.com/mcgrof/1bcde6c7f01d38456320765944654a01
+xfs/513
+xfs/538 # F:1/17 hung task https://gist.github.com/mcgrof/e4f1a5653abc51c10ffa08713ca2a027
+xfs/556
+xfs/559
+xfs/597
+xfs/598

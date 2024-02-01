@@ -1,0 +1,29 @@
+generic/245 # F:1/20
+generic/388 # korg#218226 xfs assert fs/xfs/xfs_message.c:102
+generic/455 # F:1/10
+generic/471
+generic/482 # F:1/8
+generic/531 # F:1/10 crash probably korg#218226
+generic/607
+generic/650 # F:1/5 korg#218226 xfs assert fs/xfs/xfs_message.c:102
+generic/681
+generic/682
+xfs/009
+xfs/016 # F:1/8
+xfs/051 # F:1/11
+xfs/057 # F:1/4 stalls https://gist.github.com/mcgrof/1693a8750ffca91476dc40429056101d
+xfs/059 # F:1/13
+xfs/071
+xfs/075
+xfs/168 # F:1/6
+xfs/188
+xfs/242 # F:1/13
+xfs/273
+xfs/301 # F:1/7
+xfs/495
+xfs/503
+xfs/513
+xfs/538
+xfs/559
+xfs/597
+xfs/598
