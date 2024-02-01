@@ -9,7 +9,7 @@
   set_fact:
     epel_package:
       - epel-release
-  when: ansible_distribution == 'OracleLinux'
+  when: ansible_distribution == 'OracleLinux' or ansible_distribution == 'CentOS'
 
 - name: Install epel-release
   become: yes
