@@ -5,3 +5,5 @@ only_verify_user: False
 
 skip_install: False
 skip_configuration: False
+
+libvirt_session: False
