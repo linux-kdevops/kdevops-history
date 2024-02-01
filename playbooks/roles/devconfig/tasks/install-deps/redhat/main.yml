@@ -98,7 +98,6 @@
       - make
       - gawk
       - bc
-      - dump
       - libtool
       - psmisc
       - sed
