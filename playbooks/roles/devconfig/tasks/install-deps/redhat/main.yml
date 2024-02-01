@@ -221,7 +221,7 @@
   become_method: sudo
   yum:
     update_cache: yes
-    name: "systemd-timesyncd"
+    name: systemd-udev
   retries: 3
   delay: 5
   register: result
