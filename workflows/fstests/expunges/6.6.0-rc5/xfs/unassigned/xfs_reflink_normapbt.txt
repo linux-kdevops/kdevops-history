@@ -3,6 +3,7 @@ generic/245 # F:1/20
 generic/269 # SOAK_DURATION=9900
 generic/297
 generic/298
+generic/388 # Hangs. SOAK_DURATION=9900
 generic/455
 generic/471
 generic/531 # korg#218226 xfs assert fs/xfs/xfs_message.c:102
