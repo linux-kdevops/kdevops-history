@@ -1,0 +1,14 @@
+---
+- name: Install systemd-timesyncd
+  become: yes
+  become_method: sudo
+  yum:
+    update_cache: yes
+    name: "systemd-timesyncd"
+  retries: 3
+  delay: 5
+  register: result
+  until: result.rc == 0
+  when:
+    - devconfig_enable_systemd_timesyncd|bool
+  tags: timesyncd

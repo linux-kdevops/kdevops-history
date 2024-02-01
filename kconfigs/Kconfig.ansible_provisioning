@@ -146,6 +146,9 @@ config KDEVOPS_PYTHON_OLD_INTERPRETER
 config DEVCONFIG_ENABLE_SYSTEMD_JOURNAL_REMOTE
 	bool "Set up remote systemd-journal-remote"
 	default n
+	select DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD
+	select DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD_TIMEZONE
+	select DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD_NTP
 	help
           It is a pain to have to ssh to target nodes one is testing to check
           for kernel logs. Enable this to allow us to set up the host with
@@ -203,7 +206,113 @@ config DEVCONFIG_SYSTEMD_JOURNAL_REMOTE_URL
 
 endif # DEVCONFIG_ENABLE_SYSTEMD_JOURNAL_REMOTE
 
+config DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD
+	bool "Set up systemd-timesyncd"
+	default n
+	help
+          It if often useful to have the host and target nodes on the same
+	  time. This is usefult to optimize watchdogs so that we can use on
+	  local time instead of remote time for a sense of how much time has
+	  lapsed. Enable this if you want to benefit from this.
+
+if DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD
+
+config DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD_TIMEZONE
+	bool "Enable changing timezone using systemd-timesyncd"
+	default y
+	help
+          Set the timezone with timedatectl. Without this then we'd leave all
+	  nodes with whatever time zone they were installed with. The value in
+	  using the same time is so we can simplify watchdogs and so having the
+	  same timezone over the command and control server and remote clients
+	  is very valuable. Enable this to set the timezone on the host and
+	  remote clients.
+
+	  You can grow this list by looking at the output of:
+
+	    timedatectl list-timezones
+
+	  We can likely grow this list automatically later with kdevops
+	  make dynconfig, so the timezone entries are automatically created.
+
+	  Disable this if you know you don't need to do this.
+
+if DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD_TIMEZONE
+
+choice
+	prompt "Timezone to set with timedatectl"
+	default DEVCONFIG_SYSTEMD_TIMESYNCD_TIMEZONE_UTC
+
+config DEVCONFIG_SYSTEMD_TIMESYNCD_TIMEZONE_UTC
+	bool "UTC"
+	help
+	  This will use the UTC timezone. You should consider using UTC.
+
+config DEVCONFIG_SYSTEMD_TIMESYNCD_TIMEZONE_US_PACIFIC
+	bool "US/Pacific"
+	help
+	  This will use the US/Pacific timezone.
+
+config DEVCONFIG_SYSTEMD_TIMESYNCD_TIMEZONE_CUSTOM
+	bool "Custom timezone"
+	help
+	  This will let you specify the timezone yourself"
+
+endchoice
+
+
+config DEVCONFIG_SYSTEMD_TIMESYNCD_TIMEZONE_CUSTOM_STRING
+	string "Timezone to use"
+	default "UTC"
+	help
+	  Set this to a value which is allowed from the output of the command:
+
+	    timedatectl list-timezones
+
+config DEVCONFIG_SYSTEMD_TIMESYNCD_TIMEZONE
+	string
+	default "UTC" if DEVCONFIG_SYSTEMD_TIMESYNCD_TIMEZONE_UTC
+	default "US/Pacific" if DEVCONFIG_SYSTEMD_TIMESYNCD_TIMEZONE_US_PACIFIC
+	default DEVCONFIG_SYSTEMD_TIMESYNCD_TIMEZONE_CUSTOM_STRING if DEVCONFIG_SYSTEMD_TIMESYNCD_TIMEZONE_CUSTOM
+
+endif # DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD_TIMEZONE
+
+config DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD_NTP
+	bool "Enable systemd-timesyncd NTP"
+	default y
+	help
+          Enable NTP service using systemd-timesyncd.
+
+if DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD_NTP
+
+choice
+	prompt "NTP servers to use"
+	default DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD_NTP_GOOGLE_DEBIAN
+
+config DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD_NTP_GOOGLE
+	bool "Google NTP servers"
+	help
+	  This will use Google NTP servers.
+
+config DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD_NTP_GOOGLE
+	bool "Google Debian NTP servers"
+	help
+	  This will use Debian NTP servers.
+
+config DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD_NTP_GOOGLE_DEBIAN
+	bool "Google as primary and Debian as fallback"
+	help
+	  This will use Google NTP servers as the main ones and Bebian NTP
+	  servers as a fallback.
+
+endchoice
+
+endif # DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD_NTP
+
+endif # DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD
+
 if KDEVOPS_DEVCONFIG_ENABLE
+
 config KDEVOPS_DEVCONFIG_ENABLE_CUSTOM_REPOS
 	bool "Allow user to add custom repositories and install packages from them"
 	default n

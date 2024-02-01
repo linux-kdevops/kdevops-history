@@ -1,0 +1,16 @@
+[Time]
+{% if devconfig_enable_systemd_timesyncd_ntp_google -%}
+NTP=time1.google.com time2.google.com time3.google.com time4.google.com
+{% endif %}
+{% if devconfig_enable_systemd_timesyncd_ntp_debian -%}
+NTP=0.debian.pool.ntp.org 1.debian.pool.ntp.org 2.debian.pool.ntp.org 3.debian.pool.ntp.org
+{% endif %}
+{% if devconfig_enable_systemd_timesyncd_ntp_google_debian -%}
+NTP=time1.google.com time2.google.com time3.google.com time4.google.com
+FallbackNTP=0.debian.pool.ntp.org 1.debian.pool.ntp.org 2.debian.pool.ntp.org 3.debian.pool.ntp.org
+{% endif %}
+RootDistanceMaxSec=5
+PollIntervalMinSec=32
+PollIntervalMaxSec=2048
+ConnectionRetrySec=30
+SaveIntervalSec=60

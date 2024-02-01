@@ -1,0 +1,4 @@
+---
+- hosts: localhost
+  roles:
+    - role: install_systemd_timesyncd

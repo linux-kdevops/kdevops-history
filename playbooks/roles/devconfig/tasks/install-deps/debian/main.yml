@@ -117,3 +117,13 @@
   when:
     - devconfig_enable_systemd_journal_remote|bool
   tags: journal
+
+- name: Install systemd-timesyncd
+  become: yes
+  become_method: sudo
+  apt:
+    name:
+      - systemd-timesyncd
+  when:
+    - devconfig_enable_systemd_timesyncd|bool
+  tags: timesyncd

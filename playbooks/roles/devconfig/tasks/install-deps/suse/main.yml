@@ -545,3 +545,14 @@
     - devconfig_enable_systemd_journal_remote|bool
     - repos_will_be_added|bool
   tags: journal
+
+- name: Install systemd-timesyncd
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - systemd-timesyncd
+  when:
+    - devconfig_enable_systemd_timesyncd|bool
+    - repos_will_be_added|bool
+  tags: timesyncd

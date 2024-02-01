@@ -93,6 +93,7 @@ LOCALHOST_SETUP_WORK :=
 ANSIBLE_EXTRA_ARGS += $(LOCAL_DEVELOPMENT_ARGS)
 
 include scripts/provision.Makefile
+include scripts/systemd-timesync.Makefile
 include scripts/journal-server.Makefile
 
 KDEVOPS_BRING_UP_DEPS += $(KDEVOPS_BRING_UP_DEPS_EARLY)
