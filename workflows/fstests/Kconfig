@@ -870,7 +870,7 @@ config FSTESTS_SOAK_DURATION_MID
 	  time will increase by about 2 days if run serially.
 
 config FSTESTS_SOAK_DURATION_LOW
-	bool "Low (30 minutes)
+	bool "Low (30 minutes)"
 	help
 	  Use 30 minutes for soak duration.
 
@@ -889,6 +889,7 @@ config FSTESTS_SOAK_DURATION_CUSTOM_VAL
 endif # FSTESTS_ENABLE_SOAK_DURATION
 
 config FSTESTS_SOAK_DURATION
+	bool
 	default 0 if !FSTESTS_ENABLE_SOAK_DURATION
 	default FSTESTS_SOAK_DURATION_CUSTOM_VAL if FSTESTS_SOAK_DURATION_CUSTOM
 	default 1800 if FSTESTS_SOAK_DURATION_LOW
