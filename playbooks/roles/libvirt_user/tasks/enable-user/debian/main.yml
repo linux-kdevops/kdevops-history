@@ -42,15 +42,18 @@
     - not libvirt_session
     - not only_verify_user|bool
 
-- name: Inform if user must log out and back in to use libvirt as a regular user
-  register: user_groups_ready
-  debug:
-    msg: "User group settings are not in effect, you must log out and back in to make group {{ item.item }} be part of your effective group"
-  failed_when: item.rc is undefined or item.rc != 0
+- name: Ensure our user is part of the libvirt/kvm groups
+  tags: [ 'journal' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.user:
+    name:  "{{ ansible_user_id }}"
+    groups:
+      - libvirt
+      - kvm
+      - libvirt-qemu
+    append: yes
   when:
     - not libvirt_session
-    - only_verify_user|bool
-    - item.rc != 0
-  loop: "{{ group_check.results }}"
-  loop_control:
-    label: "Ensure if user's current effective groups includes {{ item.item }}"
+    - not only_verify_user|bool
