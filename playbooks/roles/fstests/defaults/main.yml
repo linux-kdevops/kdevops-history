@@ -33,6 +33,8 @@ fstests_zns_enabled: False
 fstests_soak_duration_enable: False
 fstests_soak_duration: 0
 
+fstests_journal: False
+
 fstests_uses_no_devices: False
 fstests_generate_simple_config_enable: False
 fstests_generate_nvme_live_config_enable: False

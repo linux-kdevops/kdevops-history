@@ -778,7 +778,11 @@
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
-  command: "./oscheck.sh --check-deps --test-section {{ fstests_section }}"
+  command: |
+    ./oscheck.sh
+      --check-deps
+      --journal {{ fstests_journal }}
+      --test-section {{ fstests_section }}
   args:
     chdir: "{{ fstests_data_target }}"
   environment:
@@ -1028,7 +1032,7 @@
 # Recent environments runs are showing that environment variables
 # set below are not propagated. So best to stuff what you need
 # into the .kdevops_fstests_setup file which is sourced by root.
-- name: Run fstests using ./oscheck.sh --print-start --print-done --test-section {{ fstests_section }} {{ oscheck_extra_args }} {{ all_limit_tests }}
+- name: Run fstests using ./oscheck.sh --print-start --journal {{ fstests_journal }} --print-done --test-section {{ fstests_section }} {{ oscheck_extra_args }} {{ all_limit_tests }}
   vars:
     fstests_section: "{{ ansible_host | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
     initial_baseline_expunges: "{{ fstests_initial_baseline_args | trim }}"
@@ -1036,7 +1040,16 @@
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
-  command: "./oscheck.sh --print-start --print-done --test-section {{ fstests_section }} {{ oscheck_extra_args }} {{ all_limit_tests }} {{ initial_baseline_expunges }}"
+  command: |
+    ./oscheck.sh
+      --print-start
+      --print-done
+      --journal {{ fstests_journal }}
+      --test-section
+      {{ fstests_section }}
+      {{ oscheck_extra_args }}
+      {{ all_limit_tests }}
+      {{ initial_baseline_expunges }}
   ignore_errors: yes
   no_log: True
   args:

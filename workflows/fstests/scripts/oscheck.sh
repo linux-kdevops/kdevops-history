@@ -8,6 +8,7 @@ TEST_ARG_SECTION=""
 ONLY_CHECK_DEPS="false"
 PRINT_START="false"
 PRINT_DONE="false"
+FSTESTS_JOURNAL="false"
 
 # Stuff we use for mkfs. check.sh assumes a few things so we try to
 # do our best.
@@ -155,6 +156,11 @@ parse_args()
 			;;
 		--large-disk)
 			FSTESTS_RUN_LARGE_DISK_TESTS="y"
+			shift
+			;;
+		--journal)
+			FSTESTS_JOURNAL=$(echo "$2" | tr '[:upper:]' '[:lower:]')
+			shift
 			shift
 			;;
 		--help)
@@ -391,7 +397,11 @@ oscheck_run_cmd()
 {
 	if [ "$ONLY_SHOW_CMD" = "false" ]; then
 		echo "LC_ALL=C bash $OSCHECK_CMD" > /tmp/run-cmd.txt
-		LC_ALL=C bash $OSCHECK_CMD
+		if [ "$FSTESTS_JOURNAL" = "true" ]; then
+			LC_ALL=C bash $OSCHECK_CMD | systemd-cat --identifier=fstests
+		else
+			LC_ALL=C bash $OSCHECK_CMD
+		fi
 	else
 		echo "LC_ALL=C bash $OSCHECK_CMD"
 	fi

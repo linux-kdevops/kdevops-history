@@ -131,6 +131,10 @@ ifneq (,$(SKIP_RUN))
 DYNAMIC_RUNTIME_VARS += , "fstests_skip_run": True
 endif
 
+ifeq (y,$(CONFIG_FSTESTS_ENABLE_JOURNAL))
+DYNAMIC_RUNTIME_VARS += , "fstests_journal": True
+endif
+
 ifneq (,$(INITIAL_BASELINE))
 DYNAMIC_RUNTIME_VARS += , "fstests_initial_baseline": True
 endif

@@ -898,3 +898,9 @@ config FSTESTS_SOAK_DURATION
 	default 172800 if FSTESTS_SOAK_DURATION_PATHOLOGICAL
 
 endif # KDEVOPS_WORKFLOW_ENABLE_FSTESTS
+
+config FSTESTS_ENABLE_JOURNAL
+	bool "Connect fstests output to the systemd journal"
+	help
+	  This config connects the output of the fstests to the system journal so one
+	  can monitor it using 'journalctl --identifier=fstests --follow'.
