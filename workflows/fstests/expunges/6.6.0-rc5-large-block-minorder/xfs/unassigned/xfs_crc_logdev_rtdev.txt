@@ -6,9 +6,11 @@ generic/204
 generic/223
 generic/251 # korg#218226 xfs assert fs/xfs/xfs_message.c:102
 generic/361
+generic/388 # Hangs. SOAK_DURATION=9900
 generic/465
 generic/471
 generic/531 # korg#218226 xfs assert fs/xfs/xfs_message.c:102
+generic/642 # Hangs. SOAK_DURATION=9900
 generic/704
 generic/730
 generic/731

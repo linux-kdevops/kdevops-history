@@ -6,17 +6,22 @@ generic/108
 generic/175
 generic/204
 generic/223
+generic/245
 generic/269 # F:1/11
 generic/297
 generic/298
 generic/361
+generic/388 # Hangs. SOAK_DURATION=9900
 generic/471
 generic/648 # korg#218224 XFS: Assertion failed: ip->i_nblocks == 0 file: fs/xfs/xfs_inode.c, line: 2359
+generic/670 # F:1/16
+generic/682
 generic/704
 generic/730
 generic/731
 shared/298
 xfs/002
+xfs/008 # F:~1/5
 xfs/013 # F:1/3 korg#218226
 xfs/045
 xfs/051 # F:1/11
@@ -34,6 +39,7 @@ xfs/242 # F:1/7
 xfs/263
 xfs/270
 xfs/294
+xfs/301 # F:1/14
 xfs/438 # hung task failure rate ~ 1/2 https://gist.github.com/mcgrof/b85b52245b0a91c5e1d02caaf42b0c65
 xfs/507
 xfs/513
