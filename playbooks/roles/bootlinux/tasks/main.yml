@@ -325,6 +325,39 @@
   run_once: true
   delegate_to: localhost
 
+- name: Get kernelversion
+  make:
+    chdir: "{{ bootlinux_9p_host_path }}"
+    target: kernelversion
+  register: target_linux_kernelversion
+  when:
+    - bootlinux_9p|bool
+    - target_linux_kernelrelease | length > 0
+  run_once: true
+  delegate_to: localhost
+
+- name: Generate user kernelrelease {{target_linux_kernelversion.stdout}}-{{target_linux_kernelrelease}}
+  set_fact:
+    target_linux_kernelrelease: "{{ target_linux_kernelversion.stdout }}-{{ target_linux_kernelrelease}}"
+  when:
+    - bootlinux_9p|bool
+    - target_linux_kernelrelease | length > 0
+  run_once: true
+  delegate_to: localhost
+
+- name: Build {{ target_linux_tree }} {{ target_linux_kernelversion }} on the host side using {{ nproc_9p.stdout }} threads
+  make:
+    jobs: "{{ nproc_9p.stdout }}"
+    chdir: "{{ bootlinux_9p_host_path }}"
+    params:
+      KERNELRELEASE={{ target_linux_kernelrelease }}
+  tags: [ 'linux', 'build-linux' ]
+  when:
+    - bootlinux_9p|bool
+    - target_linux_kernelrelease | length > 0
+  run_once: true
+  delegate_to: localhost
+
 - name: Build {{ target_linux_tree }} on the host side using {{ nproc_9p.stdout }} threads
   make:
     jobs: "{{ nproc_9p.stdout }}"
@@ -332,6 +365,7 @@
   tags: [ 'linux', 'build-linux' ]
   when:
     - bootlinux_9p|bool
+    - target_linux_kernelrelease | length == 0
   run_once: true
   delegate_to: localhost
 

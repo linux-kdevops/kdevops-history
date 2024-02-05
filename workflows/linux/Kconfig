@@ -230,6 +230,15 @@ config BOOTLINUX_TREE_TAG
 	default BOOTLINUX_CEL_TREE_TAG if BOOTLINUX_TREE_CEL_LINUX
 	default BOOTLINUX_CUSTOM_TAG if BOOTLINUX_CUSTOM
 
+config BOOTLINUX_TREE_KERNELRELEASE
+	string "Linux kernel release version to use"
+	help
+	  The Linux kernel release version to use (for uname).
+
+	  The string here (e.g. 'devel') will be appended to the result of make
+	  kernelversion. Example: '6.8.0-rc3-devel'
+
+
 config BOOTLINUX_TREE_LOCALVERSION
 	string "Linux local version to use"
 	help
