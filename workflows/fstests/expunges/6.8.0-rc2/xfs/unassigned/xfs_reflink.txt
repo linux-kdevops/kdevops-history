@@ -17,6 +17,7 @@ xfs/008
 xfs/009
 xfs/013 # F:1/115 korg#218226 xfs assert fs/xfs/xfs_message.c:102
 xfs/016 # F:1/6
+xfs/033 # F:1/4
 xfs/051 # F:1/11
 xfs/059
 xfs/060 # F:1/11

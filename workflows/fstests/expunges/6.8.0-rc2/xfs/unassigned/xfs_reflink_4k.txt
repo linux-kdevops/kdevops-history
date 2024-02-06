@@ -9,6 +9,7 @@ generic/388 # Hangs. SOAK_DURATION=9900
 generic/451 # F:1/1604 korg#216114 invalidate_inode_pages2_range()
 generic/455 # F:1/8
 generic/471
+generic/482 # F:1/4
 generic/645
 generic/648 # korg#218224 XFS: Assertion failed: ip->i_nblocks == 0 file: fs/xfs/xfs_inode.c, line: 2359
 generic/670
