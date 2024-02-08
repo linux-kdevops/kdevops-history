@@ -568,7 +568,7 @@ config FSTESTS_XFS_SECTION_REFLINK_8K
 config FSTESTS_XFS_SECTION_REFLINK_8K_4KS
 	bool "Enable testing section: xfs_reflink_8k_4ks"
 	default y
-	depends on FSTESTS_XFS_ENABLE_LBS_8KS
+	depends on FSTESTS_XFS_ENABLE_LBS_4KS
 	help
 	  This will create a host to test the baseline of fstests using the
 	  following configuration which enables reflink using 8192 bytes
