@@ -15,7 +15,7 @@ Table of Contents
          * [4) <a href="https://bugzilla.kernel.org/show_bug.cgi?id=218229" rel="nofollow">korg#218229</a> - xfs/438 hung](#4-korg218229---xfs438-hung)
          * [5) <a href="https://bugzilla.kernel.org/show_bug.cgi?id=218230" rel="nofollow">korg#218230</a> - xfs/538 hung](#5-korg218230---xfs538-hung)
       * [Memory management bugs](#memory-management-bugs)
-         * [1) <a href="https://bugzilla.kernel.org/show_bug.cgi?id=216114" rel="nofollow">korg#216114</a> - page dumped because: VM_BUG_ON_FOLIO(!folio_contains(folio, index)) and kernel BUG at mm/truncate.c:669!](#1-korg216114---page-dumped-because-vm_bug_on_foliofolio_containsfolio-index-and-kernel-bug-at-mmtruncatec669)
+         * [1) <a href="https://bugzilla.kernel.org/show_bug.cgi?id=216114" rel="nofollow">korg#216114</a> - page dumped because: VM_BUG_ON_FOLIO(!folio_contains(folio, index)) and kernel BUG at mm/truncate.c:669!](#1-korg216114---page-dumped-because-vm_bug_on_foliofolio_containsfolio-index-and-kernel-bug-at-mmtruncatec669) -- fixed by commit fc346d0a70a1 ("mm: migrate high-order folios in swap cache correctly") merged as of v6.7-rc8
          * [2) <a href="https://bugzilla.kernel.org/show_bug.cgi?id=218227" rel="nofollow">korg#218227</a> - fsstress + compaction](#2-korg218227---fsstress--compaction)
 
 # Upstream bugs reported on kdevops for XFS
@@ -142,6 +142,8 @@ mailing list directly.
 Matthew acknowledged that this is a terribly rare issue, and suggested and
 [suggested a patch to try](https://lore.kernel.org/all/ZXQAgFl8WGr2pK7R@casper.infradead.org/T/#u)
 to see if it fixes the issue.
+
+This is confirmed to be fixed by commit fc346d0a70a1 ("mm: migrate high-order folios in swap cache correctly") merged as of v6.7-rc8.
 
 #### 2) [korg#218227](https://bugzilla.kernel.org/show_bug.cgi?id=218227) - fsstress + compaction
 
