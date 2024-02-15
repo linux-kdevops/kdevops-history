@@ -12,7 +12,8 @@ Table of Contents
          * [1) <a href="https://bugzilla.kernel.org/show_bug.cgi?id=218224" rel="nofollow">korg#218224</a> - XFS: Assertion failed: ip-&gt;i_nblocks == 0 file: fs/xfs/xfs_inode.c, line: 2359](#1-korg218224---xfs-assertion-failed-ip-i_nblocks--0-file-fsxfsxfs_inodec-line-2359)
          * [2) <a href="https://bugzilla.kernel.org/show_bug.cgi?id=218225" rel="nofollow">korg#218225</a> - xfs assert (irec-&gt;br_blockcount &amp; ~XFS_IEXT_LENGTH_MASK) == 0 file: fs/xfs/libxfs/xfs_iext_tree.c, line: 58](#2-korg218225---xfs-assert-irec-br_blockcount--xfs_iext_length_mask--0-file-fsxfslibxfsxfs_iext_treec-line-58)
          * [3) <a href="https://bugzilla.kernel.org/show_bug.cgi?id=218226" rel="nofollow">korg#218226</a> - XFS: Assertion failed: bp-&gt;b_flags &amp; XBF_DONE, file: fs/xfs/xfs_trans_buf.c, line: 241](#3-korg218226---xfs-assertion-failed-bp-b_flags--xbf_done-file-fsxfsxfs_trans_bufc-line-241)
-         * [4) <a href="https://bugzilla.kernel.org/show_bug.cgi?id=218229" rel="nofollow">korg#218229</a> - xfs/438 hung](#4-korg218229---xfs438-hung)
+         * [4) <a href="https://bugzilla.kernel.org/show_bug.cgi?id=218229" rel="nofollow">korg#218229</a> - xfs/438 hung](#4-korg218229---xfs438-hung) -- fixed by commit 471de20303dd ("xfs: up(ic_sema) if flushing data device
+    fails") merged on v6.7-rc2
          * [5) <a href="https://bugzilla.kernel.org/show_bug.cgi?id=218230" rel="nofollow">korg#218230</a> - xfs/538 hung](#5-korg218230---xfs538-hung)
       * [Memory management bugs](#memory-management-bugs)
          * [1) <a href="https://bugzilla.kernel.org/show_bug.cgi?id=216114" rel="nofollow">korg#216114</a> - page dumped because: VM_BUG_ON_FOLIO(!folio_contains(folio, index)) and kernel BUG at mm/truncate.c:669!](#1-korg216114---page-dumped-because-vm_bug_on_foliofolio_containsfolio-index-and-kernel-bug-at-mmtruncatec669) -- fixed by commit fc346d0a70a1 ("mm: migrate high-order folios in swap cache correctly") merged as of v6.7-rc8
@@ -124,8 +125,9 @@ so a proper fix is still pending.
 #### 4) [korg#218229](https://bugzilla.kernel.org/show_bug.cgi?id=218229) - xfs/438 hung
 
 [Chandan noted that Leah had fixed
-this](https://lore.kernel.org/linux-xfs/20231030203349.663275-1-leah.rumancik@gmail.com/), we should test and
-confirms if this fixes the issue.
+this](https://lore.kernel.org/linux-xfs/20231030203349.663275-1-leah.rumancik@gmail.com/), this
+is confirmed, this is fixed by commit 471de20303dd ("xfs: up(ic_sema) if flushing data device
+fails") merged on v6.7-rc2.
 
 #### 5) [korg#218230](https://bugzilla.kernel.org/show_bug.cgi?id=218230) - xfs/538 hung
 

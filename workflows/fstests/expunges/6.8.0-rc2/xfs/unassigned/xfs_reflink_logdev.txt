@@ -40,7 +40,6 @@ xfs/263
 xfs/270
 xfs/294
 xfs/301 # F:1/14
-xfs/438 # hung task failure rate ~ 1/2 https://gist.github.com/mcgrof/b85b52245b0a91c5e1d02caaf42b0c65
 xfs/507
 xfs/513
 xfs/559
