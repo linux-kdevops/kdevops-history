@@ -11,6 +11,7 @@ generic/607
 generic/645
 generic/682 # F:1/20
 xfs/008
+xfs/009 # F:1/8
 xfs/060 # F:1/11
 xfs/075
 xfs/104 # corruption could be a regression against v6.6-rc5 https://gist.github.com/mcgrof/eab21a8757d0dd9130e63077cf90e89a
