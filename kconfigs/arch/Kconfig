@@ -34,8 +34,3 @@ endchoice
 # a kdevops'ism, it does not exist on the Linux kernel.
 config HAVE_ARCH_64K_PAGES
         bool
-
-config TARGET_ARCH
-        string
-	default "x86_64" if TARGET_ARCH_X86_64
-	default "ppc64le" if TARGET_ARCH_PPC64LE
