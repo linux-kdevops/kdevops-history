@@ -1,6 +1,13 @@
 choice
 	prompt "Target architecture"
-	default TARGET_ARCH_X86_64
+	default $(shell,scripts/get_target_arch.sh)
+	help
+	  Choose the generic platfrom architecture to target during testing.
+	  This setting enables features and workflows for that architecture
+	  and sets sensible defaults.
+
+	  The target host Instruction Set Architecture is selected in the
+	  "Bring up methods" menu.
 
 config TARGET_ARCH_X86_64
 	bool "x86_64"
