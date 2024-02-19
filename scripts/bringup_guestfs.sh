@@ -76,7 +76,7 @@ _EOT
 	fi
 
 	echo "Generating new base image for ${OS_VERSION}"
-	virt-builder ${OS_VERSION} -o $BASE_IMAGE --size 20G --format raw --commands-from-file $cmdfile
+	virt-builder ${OS_VERSION} --arch `uname -m` -o $BASE_IMAGE --size 20G --format raw --commands-from-file $cmdfile
 fi
 
 # FIXME: is there a yaml equivalent of jq?
