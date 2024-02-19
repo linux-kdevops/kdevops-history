@@ -164,7 +164,7 @@ config KDEVOPS_STORAGE_POOL_PATH
 config QEMU_BIN_PATH
 	string
 	default QEMU_BIN_PATH_LIBVIRT if LIBVIRT
-	default "/usr/bin/qemu-system-x86_64" if !LIBVIRT
+	default $(shell,./scripts/get_libvirt_qemu_bin_path.sh) if !QEMU_USE_DEVELOPMENT_VERSION
 
 config LIBVIRT_URI
 	string
