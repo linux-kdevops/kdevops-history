@@ -19,7 +19,7 @@ if [ -f "$GUESTFSDIR/kdevops_nodes.yaml" ]; then
 			if [ "$domstate" = 'running' ]; then
 				virsh destroy $name
 			fi
-			virsh undefine $name
+			virsh undefine --nvram $name
 		fi
 		rm -rf "$GUESTFSDIR/$name"
 		rm -rf "$STORAGEDIR/$name"
