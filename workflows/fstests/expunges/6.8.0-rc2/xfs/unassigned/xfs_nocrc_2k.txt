@@ -7,7 +7,9 @@ generic/607
 generic/645
 generic/682 # F:1/20
 xfs/008
+xfs/009
 xfs/013 # F:1/6 korg#218226 xfs assert fs/xfs/xfs_message.c:102
+xfs/033
 xfs/051 # F:1/11
 xfs/075
 xfs/168
