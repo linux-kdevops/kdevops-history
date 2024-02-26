@@ -1,8 +1,20 @@
 ---
-- name: Distribution specific setup
-  import_tasks: debian/main.yml
-  when: ansible_facts['os_family']|lower == 'debian'
-- import_tasks: suse/main.yml
-  when: ansible_facts['os_family']|lower == 'suse'
-- import_tasks: redhat/main.yml
-  when: ansible_facts['os_family']|lower == 'redhat'
+- name: Debian-specific set up
+  ansible.builtin.include_tasks: install-deps/debian/main.yml
+  when: ansible_os_family == 'Debian'
+
+- name: SuSE-specific set up
+  ansible.builtin.include_tasks: install-deps/suse/main.yml
+  when: ansible_os_family == 'Suse'
+
+- name: Red Hat-specific set up
+  ansible.builtin.include_tasks: install-deps/redhat/main.yml
+  when:
+    - ansible_os_family == 'RedHat'
+    - ansible_facts['distribution'] != "Fedora"
+
+- name: Fedora-specific set up
+  ansible.builtin.include_tasks: install-deps/fedora/main.yml
+  when:
+    - ansible_os_family == 'RedHat'
+    - ansible_facts['distribution'] == "Fedora"
