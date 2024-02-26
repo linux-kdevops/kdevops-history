@@ -60,6 +60,7 @@
       - snmpd
       - snmp
       - trace-cmd
+      - perf
     state: present
     update_cache: yes
   tags: [ 'kdevops', 'deps' ]

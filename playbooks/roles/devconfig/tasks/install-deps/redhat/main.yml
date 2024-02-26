@@ -111,6 +111,7 @@
       - openssh-server
       - net-snmp
       - trace-cmd
+      - perf
 
 - name: Install btrfs-progs
   become: yes
