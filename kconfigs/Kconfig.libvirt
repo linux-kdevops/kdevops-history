@@ -487,6 +487,11 @@ config LIBVIRT_MACHINE_TYPE_Q35
 	  Use q35 for the machine type. This will be required for things like
 	  CXL or PCIe passthrough.
 
+config LIBVIRT_MACHINE_TYPE_VIRT
+	bool "virt"
+	help
+	  Use virt for the machine type. This is the default on aarch64 hosts.
+
 endchoice
 
 config LIBVIRT_HOST_PASSTHROUGH
