@@ -30,7 +30,8 @@
 #  args:
 #    executable: /bin/bash
 
-- include: tasks/install-deps/main.yml
+- name: Install dependencies
+  ansible.builtin.include_tasks: install-deps/main.yml
 
 - name: Ensure {{ nfs_mounted_on }} is mounted
   become: yes

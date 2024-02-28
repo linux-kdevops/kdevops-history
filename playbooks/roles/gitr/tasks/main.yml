@@ -89,7 +89,8 @@
   when:
     - gitr_fstype == "nfs"
 
-- include: tasks/install-deps/main.yml
+- name: Install dependencies
+  ansible.builtin.include_tasks: tasks/install-deps/main.yml
 
 - name: Remove old git dir
   tags: [ 'gitr' ]
