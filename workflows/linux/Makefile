@@ -66,6 +66,9 @@ PHONY +=  linux-help-menu
 linux-help-menu:
 	@echo "Linux git kernel development options"
 	@echo "linux              - Git clones a linux git tree, build Linux, installs and reboots into it"
+	@if [[ "$(CONFIG_BOOTLINUX_9P)" == "y" ]]; then \
+		echo "linux-mount        - Mounts 9p path on targets" ;\
+	fi
 	@echo "linux-deploy       - Builds, installs, updates GRUB and reboots - useful for rapid development"
 	@echo "linux-install      - Only builds and installs Linux"
 	@echo "linux-uninstall    - Remove a kernel you can pass arguments for the version such as KVER=6.5.0-rc7-next-20230825"
@@ -87,6 +90,13 @@ linux: $(KDEVOPS_NODES)
 		--extra-vars="$(BOOTLINUX_ARGS)"
 	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -i \
 		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
+		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS)
+
+PHONY += linux-mount
+linux-mount:
+	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) -i \
+		$(KDEVOPS_HOSTFILE) $(KDEVOPS_PLAYBOOKS_DIR)/bootlinux.yml \
+		--tags vars,9p_mount \
 		--extra-vars="$(BOOTLINUX_ARGS)" $(LIMIT_HOSTS)
 
 PHONY += linux-deploy

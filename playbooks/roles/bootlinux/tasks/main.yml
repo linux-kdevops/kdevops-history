@@ -70,7 +70,7 @@
     fstype: "9p"
     opts: "ro,trans=virtio,version=9p2000.L,posixacl,cache=none"
     state: "mounted"
-  tags: [ 'data_partition' ]
+  tags: [ 'data_partition', '9p_mount' ]
   when:
     - bootlinux_9p|bool
 
