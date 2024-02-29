@@ -1,0 +1,4 @@
+---
+- hosts: localhost
+  roles:
+    - role: update_ssh_config_guestfs

@@ -1,0 +1,6 @@
+- name: Add Include directive to ~/.ssh/config
+  lineinfile:
+    path: ~/.ssh/config
+    line: "Include ~/.ssh/config_kdevops_*"
+    insertbefore: "BOF"
+    create: true
