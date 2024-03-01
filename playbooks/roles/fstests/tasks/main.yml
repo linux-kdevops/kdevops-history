@@ -648,7 +648,7 @@
     export_volname: "{{ volname_prefix }}-s"
     export_options: "{{ nfsd_export_options }}"
     export_fstype: "{{ nfsd_export_fstype }}"
-    export_size: 20g
+    export_size: 30g
   when:
     - fstests_fstyp == "nfs"
     - fstests_nfs_use_kdevops_nfsd|bool
