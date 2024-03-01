@@ -1,5 +1,5 @@
-NFSD_EXTRA_ARGS += nfsd_export_device_0='$(subst ",,$(CONFIG_NFSD_EXPORT_DEVICE_0))'
-NFSD_EXTRA_ARGS += nfsd_export_device_1='$(subst ",,$(CONFIG_NFSD_EXPORT_DEVICE_1))'
+NFSD_EXTRA_ARGS += nfsd_export_device_prefix='$(subst ",,$(CONFIG_NFSD_EXPORT_DEVICE_PREFIX))'
+NFSD_EXTRA_ARGS += nfsd_export_device_count='$(subst ",,$(CONFIG_NFSD_EXPORT_DEVICE_COUNT))'
 NFSD_EXTRA_ARGS += nfsd_export_fstype='$(subst ",,$(CONFIG_NFSD_EXPORT_FSTYPE))'
 NFSD_EXTRA_ARGS += nfsd_export_path='$(subst ",,$(CONFIG_NFSD_EXPORT_PATH))'
 NFSD_EXTRA_ARGS += nfsd_export_options='$(subst ",,$(CONFIG_NFSD_EXPORT_OPTIONS))'

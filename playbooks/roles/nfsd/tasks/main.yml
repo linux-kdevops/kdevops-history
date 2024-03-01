@@ -22,13 +22,22 @@
     group: root
     mode: 0644
 
+- name: Build string of devices to use as PVs
+  set_fact:
+    nfsd_lvm_pvs: "{{ nfsd_lvm_pvs + [ nfsd_export_device_prefix + item|string ] }}"
+  with_items: "{{ range(1, nfsd_export_device_count + 1) }}"
+
+- name: Print the PV list
+  ansible.builtin.debug:
+    var: nfsd_lvm_pvs
+
 - name: Create a new LVM VG
   become: yes
   become_flags: 'su - -c'
   become_method: sudo
   community.general.lvg:
     vg: "exports"
-    pvs: "{{ nfsd_export_device_0 }},{{ nfsd_export_device_1 }}"
+    pvs: "{{ nfsd_lvm_pvs | join(',') }}"
 
 - name: Create {{ nfsd_export_path }}
   become: yes
