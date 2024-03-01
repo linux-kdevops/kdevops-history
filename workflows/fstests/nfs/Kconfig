@@ -46,14 +46,6 @@ config FSTESTS_NFS_MANUAL_COVERAGE
 
 if FSTESTS_NFS_MANUAL_COVERAGE
 
-config FSTESTS_NFS_SECTION_DEFAULT
-	bool "Enable testing section: nfs_default"
-	default y
-	help
-	  Enabling this will test nfs with the default mount options. At the
-	  time of this writing, this makes the client autonegotiate an NFS
-	  version, starting with v4.2 if it's available.
-
 config FSTESTS_NFS_SECTION_TLS
 	bool "Enable testing section: nfs_tls"
 	default n
@@ -63,7 +55,7 @@ config FSTESTS_NFS_SECTION_TLS
 
 config FSTESTS_NFS_SECTION_V42
 	bool "Enable testing section: nfs_v42"
-	default n
+	default y
 	help
 	  Enabling this will test NFSv4.2.
 
