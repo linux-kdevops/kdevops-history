@@ -52,3 +52,4 @@
     path: "{{ tmpfs_mounted_on }}"
     owner: "{{ tmpfs_user }}"
     group: "{{ tmpfs_group }}"
+    mode: "{{ tmpfs_mode }}"

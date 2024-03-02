@@ -31,6 +31,7 @@ Role Variables
   * disk_setup_path: the path to mount the filesystem
   * disk_setup_user: the user to assign the directory path to
   * disk_setup_group: the group to assign the directory path to
+  * disk_setup_mode: the mode of the root directory of the new filesystem
 
 Dependencies
 ------------

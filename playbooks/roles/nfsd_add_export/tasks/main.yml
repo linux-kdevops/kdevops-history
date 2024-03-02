@@ -60,6 +60,7 @@
     path: "{{ nfsd_export_path }}/{{ export_volname }}"
     owner: "{{ export_user }}"
     group: "{{ export_group }}"
+    mode: "{{ export_mode }}"
 
 - name: Test whether SELinux is enabled
   command: /usr/sbin/selinuxenabled

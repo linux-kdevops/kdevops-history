@@ -18,6 +18,7 @@ Role Variables
   * tmpfs_mounted_on: the directory on which to mount the new file system
   * tmpfs_user: the user to assign the directory path to
   * tmpfs_group: the group to assign the directory path to
+  * tmpfs_mode: the mode of the root directory of the new file system
 
 Dependencies
 ------------

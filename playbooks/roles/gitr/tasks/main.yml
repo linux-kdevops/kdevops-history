@@ -45,8 +45,6 @@
     disk_setup_fs_opts: "-L {{ gitr_label }}"
     disk_setup_path: "{{ gitr_mnt }}"
     disk_setup_mount_opts: "{{ gitr_mount_opts }}"
-    disk_setup_user: "{{ data_user }}"
-    disk_setup_group: "{{ data_group }}"
   when:
     - not gitr_uses_no_devices|bool
 
@@ -57,8 +55,6 @@
   vars:
     tmpfs_mnt_options: "{{ gitr_mount_opts }}"
     tmpfs_mounted_on: "{{ gitr_mnt }}"
-    tmpfs_user: "{{ data_user }}"
-    tmpfs_group: "{{ data_group }}"
   when:
     - gitr_fstype == "tmpfs"
 
@@ -71,8 +67,6 @@
     export_options: "{{ nfsd_export_options }}"
     export_fstype: "{{ nfsd_export_fstype }}"
     export_size: 5g
-    export_user: "{{ data_user }}"
-    export_group: "{{ data_group }}"
   when:
     - gitr_nfs_use_kdevops_nfsd|bool
     - gitr_fstype == "nfs"

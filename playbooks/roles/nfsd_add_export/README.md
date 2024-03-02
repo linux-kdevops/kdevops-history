@@ -24,6 +24,7 @@ Role Variables
   * export_size: the maximum size of the new export
   * export_user: the owner of the new export
   * export_group: the owner group of the new export
+  * export_mode: the mode bits for the new export's root directory
 
 Dependencies
 ------------
