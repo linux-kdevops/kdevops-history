@@ -25,7 +25,39 @@ config GITR_NFS_SERVER_EXPORT
 
 config GITR_NFS_MOUNT_OPTS
 	string "The NFS client mount options to use"
-	default "vers=4.2,sec=sys"
+	default "sec=sys,proto=tcp"
 	help
 	  The mount options to use when mounting the file system
 	  under test.
+
+if KDEVOPS_WORKFLOW_DEDICATE_GITR
+
+config GITR_NFS_SECTION_V42
+	bool "Enable testing section: nfs_v42"
+	default n
+	help
+	  Create a target host to run the gitr workflow on an
+	  NFSv4.2 mount.
+
+config GITR_NFS_SECTION_V41
+	bool "Enable testing section: nfs_v41"
+	default n
+	help
+	  Create a target host to run the gitr workflow on an
+	  NFSv4.1 mount.
+
+config GITR_NFS_SECTION_V40
+	bool "Enable testing section: nfs_v40"
+	default n
+	help
+	  Create a target host to run the gitr workflow on an
+	  NFSv4.0 mount.
+
+config GITR_NFS_SECTION_V3
+	bool "Enable testing section: nfs_v3"
+	default n
+	help
+	  Create a target host to run the gitr workflow on an
+	  NFSv3 mount.
+
+endif # KDEVOPS_WORKFLOW_DEDICATE_GITR

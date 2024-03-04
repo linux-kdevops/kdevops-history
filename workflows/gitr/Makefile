@@ -33,6 +33,10 @@ GITR_ARGS += gitr_repo_commit=$(GITR_REPO_COMMIT)
 
 WORKFLOW_ARGS_DIRECT += $(GITR_ARGS)
 
+ifeq (y,$(CONFIG_KDEVOPS_WORKFLOW_DEDICATE_GITR))
+WORKFLOW_ARGS_SEPARATED += gitr_enabled_test_groups='$(subst $(space),+,$(GITR_ENABLED_TEST_GROUPS))'
+endif
+
 GITR_KERNEL_CI_LOOP := false
 GITR_KERNEL_CI_LOOP_KOTD := false
 

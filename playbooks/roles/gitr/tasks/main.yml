@@ -13,6 +13,7 @@
 - name: Set the pathname of the local results directory
   tags: vars
   ansible.builtin.set_fact:
+    gitr_test_group: "{{ ansible_host | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') }}"
     gitr_results_dir: "../workflows/gitr/results/"
 
 - name: Ensure the local results directory exists
@@ -87,9 +88,31 @@
     - gitr_nfs_use_kdevops_nfsd|bool
     - gitr_fstype == "nfs"
 
+- name: Form the list of NFS mount options to use
+  tags: gitr
+  ansible.builtin.set_fact:
+    gitr_nfs_vers: "{{ gitr_nfs_vers_dict[gitr_test_group] }}"
+    gitr_nfs_mount_opts: "{{ gitr_mount_opts | ansible.builtin.split(',') }}"
+  when:
+    - kdevops_workflows_dedicated_workflow|bool
+    - gitr_fstype == "nfs"
+
 - name: Create the NFS mount under test, if needed
-  tags: [ 'gitr' ]
-  include_role:
+  tags: gitr
+  ansible.builtin.include_role:
+    name: create_nfs_mount
+  vars:
+    nfs_mounted_on: "{{ gitr_mnt }}"
+    nfs_server_hostname: "{{ gitr_nfs_server_host }}"
+    nfs_server_export: "{{ nfsd_export_path }}/{{ gitr_nfs_server_export }}"
+    nfs_mount_options: "{{ (gitr_nfs_vers + gitr_nfs_mount_opts) | join(',') }}"
+  when:
+    - kdevops_workflows_dedicated_workflow|bool
+    - gitr_fstype == "nfs"
+
+- name: Create the NFS mount under test, if needed
+  tags: gitr
+  ansible.builtin.include_role:
     name: create_nfs_mount
   vars:
     nfs_mounted_on: "{{ gitr_mnt }}"
@@ -97,6 +120,7 @@
     nfs_server_export: "{{ nfsd_export_path }}/{{ gitr_nfs_server_export }}"
     nfs_mount_options: "{{ gitr_mount_opts }}"
   when:
+    - not kdevops_workflows_dedicated_workflow|bool
     - gitr_fstype == "nfs"
 
 - name: Remove old git dir
@@ -198,7 +222,7 @@
   tags: copy_results
   ansible.builtin.fetch:
     src: "{{ gitr_mnt }}/gitr.stdout"
-    dest: "{{ gitr_results_dir }}/{{ ansible_kernel }}/{{ ansible_host }}/"
+    dest: "{{ gitr_results_dir }}/{{ ansible_kernel }}/{{ gitr_test_group }}/"
     flat: true
     validate_checksum: false
 
@@ -206,7 +230,7 @@
   tags: copy_results
   ansible.builtin.fetch:
     src: "{{ gitr_mnt }}/gitr.stderr"
-    dest: "{{ gitr_results_dir }}/{{ ansible_kernel }}/{{ ansible_host }}/"
+    dest: "{{ gitr_results_dir }}/{{ ansible_kernel }}/{{ gitr_test_group }}/"
     flat: true
     validate_checksum: false
   when: gitr_results.rc != 0
@@ -215,7 +239,7 @@
   tags: copy_results
   ansible.builtin.fetch:
     src: "{{ gitr_mnt }}/gitr.rpc"
-    dest: "{{ gitr_results_dir }}/{{ ansible_kernel }}/{{ ansible_host }}/"
+    dest: "{{ gitr_results_dir }}/{{ ansible_kernel }}/{{ gitr_test_group }}/"
     flat: true
     validate_checksum: false
   when:
@@ -226,7 +250,7 @@
   tags: copy_results
   ansible.builtin.fetch:
     src: "{{ gitr_mnt }}/gitr.xprt"
-    dest: "{{ gitr_results_dir }}/{{ ansible_kernel }}/{{ ansible_host }}/"
+    dest: "{{ gitr_results_dir }}/{{ ansible_kernel }}/{{ gitr_test_group }}/"
     flat: true
     validate_checksum: false
   when:

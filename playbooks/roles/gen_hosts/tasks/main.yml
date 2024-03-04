@@ -96,12 +96,14 @@
 
 - name: Generate the Ansible hosts file for dedicated gitr workflow
   tags: [ 'hosts' ]
+  vars:
+    gitr_enabled_hosts: "{{ gitr_enabled_test_groups|ansible.builtin.split }}"
   template:
     src: "{{ kdevops_hosts_template }}"
     dest: "{{ topdir_path }}/{{ kdevops_hosts }}"
-    force: yes
-    trim_blocks: True
-    lstrip_blocks: True
+    force: true
+    trim_blocks: true
+    lstrip_blocks: true
   when:
     - kdevops_workflows_dedicated_workflow
     - kdevops_workflow_enable_gitr

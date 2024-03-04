@@ -1,20 +1,29 @@
 [all]
-{{ kdevops_hosts_prefix }}
-{% if kdevops_baseline_and_dev == True %}
-{{ kdevops_hosts_prefix }}-dev
+{% for s in gitr_enabled_hosts %}
+{{ kdevops_host_prefix }}-{{ s }}
+{% if kdevops_baseline_and_dev %}
+{{ kdevops_host_prefix }}-{{ s }}-dev
 {% endif %}
+{% endfor %}
 [all:vars]
 ansible_python_interpreter =  "{{ kdevops_python_interpreter }}"
+
 [baseline]
-{{ kdevops_hosts_prefix }}
+{% for s in gitr_enabled_hosts %}
+{{ kdevops_host_prefix }}-{{ s }}
+{% endfor %}
 [baseline:vars]
 ansible_python_interpreter =  "{{ kdevops_python_interpreter }}"
+
 [dev]
 {% if kdevops_baseline_and_dev %}
-{{ kdevops_hosts_prefix }}-dev
+  {% for s in gitr_enabled_hosts %}
+{{ kdevops_host_prefix }}-{{ s }}-dev
+  {% endfor %}
 {% endif %}
 [dev:vars]
 ansible_python_interpreter =  "{{ kdevops_python_interpreter }}"
+
 {% if kdevops_nfsd_enable %}
 [nfsd]
 {{ kdevops_hosts_prefix }}-nfsd

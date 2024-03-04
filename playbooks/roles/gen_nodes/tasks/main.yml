@@ -144,20 +144,44 @@
     - kdevops_workflow_enable_cxl
     - ansible_nodes_template.stat.exists
 
-- name: Generate the gitr kdevops nodes file using {{ kdevops_nodes_template }} as jinja2 source template
-  tags: [ 'nodes' ]
-  vars:
-    node_template: "{{ kdevops_nodes_template | basename }}"
-    all_generic_nodes: "{{ generic_nodes }}"
-    nodes: "{{ all_generic_nodes }}"
-  template:
-    src: "{{ node_template }}"
-    dest: "{{ topdir_path }}/{{ kdevops_nodes }}"
-    force: yes
+- name: Initialize the enabled nodes list for gitr
+  tags: hosts
+  ansible.builtin.set_fact:
+    is_gitr: true
+    gitr_enabled_nodes: "{{ gitr_enabled_test_groups|ansible.builtin.split }}"
   when:
     - kdevops_workflows_dedicated_workflow
     - kdevops_workflow_enable_gitr
     - ansible_nodes_template.stat.exists
+
+- name: Expand the gitr node list to include -dev nodes
+  tags: hosts
+  ansible.builtin.set_fact:
+    gitr_enabled_nodes: "{{ gitr_enabled_nodes + [ item + '-dev' ] }}"
+  with_items: "{{ gitr_enabled_test_groups|ansible.builtin.split }}"
+  when:
+    - is_gitr|bool
+    - kdevops_baseline_and_dev|bool
+
+- name: Add the nfs server if one was selected
+  ansible.builtin.set_fact:
+    gitr_enabled_nodes: "{{ gitr_enabled_nodes + ['nfsd'] }}"
+  when:
+    - is_gitr|bool
+    - kdevops_nfsd_enable|bool
+
+- name: Generate a kdevops nodes file using {{ kdevops_nodes_template }} as the template
+  tags: hosts
+  vars:
+    node_template: "{{ kdevops_nodes_template | basename }}"
+    all_generic_nodes: "{{ generic_nodes }}"
+    nodes: "{{ [kdevops_host_prefix + '-'] | product(gitr_enabled_nodes) | map('join') | list }}"
+  ansible.builtin.template:
+    src: "{{ node_template }}"
+    dest: "{{ topdir_path }}/{{ kdevops_nodes }}"
+    force: true
+  when:
+    - is_gitr|bool
 
 - name: Initialize the enabled nodes list for ltp
   tags: [ 'hosts' ]

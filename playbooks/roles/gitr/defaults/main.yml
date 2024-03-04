@@ -5,8 +5,16 @@
 # The default is to not run the gitr tests.
 kdevops_run_gitr: False
 
+kdevops_workflows_dedicated_workflow: false
+
 gitr_uses_no_devices: False
-gitr_nfs_use_kdevops_nfsd: False
+
+# NFS-specific defaults
+gitr_nfs_use_kdevops_nfsd: false
+gitr_nfs_section_v42: false
+gitr_nfs_section_v41: false
+gitr_nfs_section_v40: false
+gitr_nfs_section_v3: false
 
 # Family-dependent packages to install
 gitr_os_family_packages:
@@ -50,3 +58,14 @@ gitr_os_family_packages:
     - perl-Test-Harness
     - subversion
     - subversion-perl
+
+# "test host" to "NFS version" mapping
+gitr_nfs_vers_dict:
+  nfs-v3:
+    - "vers=3"
+  nfs-v40:
+    - "vers=4.0"
+  nfs-v41:
+    - "vers=4.1"
+  nfs-v42:
+    - "vers=4.2"
