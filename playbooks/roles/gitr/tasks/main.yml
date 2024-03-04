@@ -58,6 +58,14 @@
   when:
     - gitr_fstype == "tmpfs"
 
+- name: Set the export pathname
+  tags: [ 'gitr' ]
+  set_fact:
+    gitr_nfs_server_export: "{{ ansible_host }}-gitr"
+  when:
+    - gitr_nfs_use_kdevops_nfsd|bool
+    - gitr_fstype == "nfs"
+
 - name: Create an NFSD export for testing
   include_role:
     name: nfsd_add_export
