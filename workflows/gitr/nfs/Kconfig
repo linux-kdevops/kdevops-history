@@ -23,7 +23,7 @@ config GITR_NFS_SERVER_EXPORT
 	help
 	  The NFS server export path that test clients are to mount.
 
-config GITR_MOUNT_OPTS
+config GITR_NFS_MOUNT_OPTS
 	string "The NFS client mount options to use"
 	default "vers=4.2,sec=sys"
 	help

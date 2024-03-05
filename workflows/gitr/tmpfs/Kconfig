@@ -1,4 +1,4 @@
-config GITR_MOUNT_OPTS
+config GITR_TMPFS_MOUNT_OPTS
 	string "The file system mount options to use"
 	default "size=75%"
 	help

@@ -11,4 +11,4 @@ GITR_ARGS += gitr_nfs_server_export='$(subst ",,$(CONFIG_GITR_NFS_SERVER_EXPORT)
 GITR_ARGS += gitr_nfs_use_kdevops_nfsd='False'
 endif # CONFIG_GITR_USE_KDEVOPS_NFSD
 
-GITR_ARGS += gitr_mount_opts='$(subst ",,$(CONFIG_GITR_MOUNT_OPTS))'
+GITR_ARGS += gitr_mount_opts='$(subst ",,$(CONFIG_GITR_NFS_MOUNT_OPTS))'
