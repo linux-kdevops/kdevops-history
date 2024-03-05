@@ -114,6 +114,9 @@ do
 		diskimg="$STORAGEDIR/$name/extra${i}.${IMG_FMT}"
 		rm -f $diskimg
 		qemu-img create -f $IMG_FMT "$STORAGEDIR/$name/extra${i}.$IMG_FMT" 100G
+		if [[ "$CONFIG_LIBVIRT_URI_SYSTEM" == "y" ]]; then
+			chmod g+rw $STORAGEDIR/$name/extra${i}.$IMG_FMT
+		fi
 	done
 
 	virsh define $GUESTFSDIR/$name/$name.xml
