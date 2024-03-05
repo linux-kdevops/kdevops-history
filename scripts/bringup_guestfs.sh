@@ -7,6 +7,15 @@ source ${TOPDIR}/scripts/lib.sh
 
 export LIBVIRT_DEFAULT_URI=$CONFIG_LIBVIRT_URI
 
+# On systems using system sesion, ensure that we start the default
+# libvirt network.
+if [[ "$CONFIG_LIBVIRT_URI_SYSTEM" == "y" ]]; then
+	 sudo virsh net-list | grep -q default
+	 if [[ $? -ne 0 ]]; then
+		 sudo virsh net-start default
+	 fi
+fi
+
 #
 # We use the NVMe setting for virtio too (go figure), but IDE
 # requires qcow2
