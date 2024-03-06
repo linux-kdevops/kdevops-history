@@ -466,7 +466,8 @@ endif # HAVE_LIBVIRT_PCIE_PASSTHROUGH
 
 choice
 	prompt "Machine type to use"
-	default LIBVIRT_MACHINE_TYPE_Q35
+	default LIBVIRT_MACHINE_TYPE_Q35 if TARGET_ARCH_X86_64
+	default LIBVIRT_MACHINE_TYPE_VIRT if TARGET_ARCH_ARM64
 
 config LIBVIRT_MACHINE_TYPE_DEFAULT
 	bool "Use the default machine type"
@@ -483,12 +484,14 @@ config LIBVIRT_MACHINE_TYPE_DEFAULT
 
 config LIBVIRT_MACHINE_TYPE_Q35
 	bool "q35"
+	depends on TARGET_ARCH_X86_64
 	help
 	  Use q35 for the machine type. This will be required for things like
 	  CXL or PCIe passthrough.
 
 config LIBVIRT_MACHINE_TYPE_VIRT
 	bool "virt"
+	depends on TARGET_ARCH_ARM64
 	help
 	  Use virt for the machine type. This is the default on aarch64 hosts.
 
