@@ -1,0 +1,12 @@
+---
+nfsd_packages:
+  - checkpolicy
+  - lvm2
+  - nfs-utils
+  - policycoreutils
+  - python3-policycoreutils
+
+fstype_userspace_progs:
+  btrfs: btrfs-progs
+  ext4: e2fsprogs
+  xfs: xfsprogs

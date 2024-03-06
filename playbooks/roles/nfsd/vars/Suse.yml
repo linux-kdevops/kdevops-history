@@ -1,0 +1,10 @@
+---
+nfsd_packages:
+  - lvm2
+  - nfs-utils
+  - policycoreutils
+
+fstype_userspace_progs:
+  btrfs: btrfsprogs
+  ext4: e2fsprogs
+  xfs: xfsprogs
