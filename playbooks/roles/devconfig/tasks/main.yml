@@ -17,6 +17,18 @@
   setup:
   tags: always
 
+# Update /etc/hostname first so the change gets picked up by the reboot
+# that occurs during the distro-specific tasks
+
+- name: Ensure /etc/hostname is set
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  template:
+    src: hostname
+    dest: /etc/hostname
+  tags: hostname
+
 # Distro specific
 - name: Install dependencies
   import_tasks: install-deps/main.yml
@@ -27,15 +39,6 @@
     - ansible_facts['os_family']|lower == 'redhat'
 
 # Distro agnostic stuff goes below
-
-- name: Ensure /etc/hostname is set
-  become: yes
-  become_flags: 'su - -c'
-  become_method: sudo
-  template:
-    src: hostname
-    dest: /etc/hostname
-  tags: hostname
 
 - name: Check if the developer has a git config
   delegate_to: localhost
