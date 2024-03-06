@@ -63,6 +63,8 @@ libvirt_extra_storage_drive_virtio: False
 libvirt_extra_storage_drive_ide: False
 libvirt_extra_storage_aio_mode: "native"
 libvirt_extra_storage_aio_cache_mode: "none"
+# Note that NVMe on qemu does not allow the physical block size
+# to differ from the logical block size so we just have one variable.
 libvirt_extra_storage_nvme_logical_block_size: 512
 libvirt_extra_storage_virtio_logical_block_size: 512
 libvirt_extra_storage_virtio_physical_block_size: 512

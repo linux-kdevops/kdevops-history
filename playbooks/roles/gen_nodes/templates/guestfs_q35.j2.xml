@@ -204,7 +204,7 @@
     <qemu:arg value='-device'/>
     <qemu:arg value='nvme,id=nvme{{ n }},serial=kdevops{{ n }},bus=pcie-port-for-nvme-{{ n }},addr=0x0'/>
     <qemu:arg value='-device'/>
-    <qemu:arg value='nvme-ns,drive=drv{{ n }},bus=nvme{{ n }},nsid=1,logical_block_size=512,physical_block_size=512'/>
+    <qemu:arg value='nvme-ns,drive=drv{{ n }},bus=nvme{{ n }},nsid=1,logical_block_size={{ libvirt_extra_storage_nvme_logical_block_size }},physical_block_size={{ libvirt_extra_storage_nvme_logical_block_size }}'/>
 {% endfor %}
 {% endif %}
 {% if bootlinux_9p %}
