@@ -65,3 +65,15 @@
   with_items: "{{ ueh_hosts }}"
   when:
     - not terraform_private_net_enabled
+
+- name: Fix up hostname on Debian guestfs hosts
+  become: yes
+  become_method: sudo
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^(127\.0\.1\.1)(\s+)unassigned-hostname\.unassigned-domain\s+({{ ansible_hostname }})$'
+    backrefs: yes
+    line: '\1\2\3'
+  when:
+    - ansible_os_family == 'Debian'
+    - kdevops_enable_guestfs
