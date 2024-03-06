@@ -187,7 +187,7 @@
 {% elif libvirt_extra_storage_drive_virtio %}
 {% for n in range(0,4) %}
     <qemu:arg value='-device'/>
-    <qemu:arg value='pcie-root-port,id=pcie-port-for-virtio-{{ n }},multifunction=on,bus=pcie.1,addr=0x{{ n }},chassis=5{{ n }}'/>
+    <qemu:arg value='pcie-root-port,id=pcie-port-for-virtio-{{ n }},multifunction=on,bus=pcie.1,addr=0x{{ "%0x" | format( n | int) }},chassis=5{{ n }}'/>
     <qemu:arg value="-object"/>
     <qemu:arg value="iothread,id=kdevops-virtio-iothread-{{ n }}"/>
     <qemu:arg value="-drive"/>
@@ -198,7 +198,7 @@
 {% elif libvirt_extra_storage_drive_nvme  %}
 {% for n in range(0,4) %}
     <qemu:arg value='-device'/>
-    <qemu:arg value='pcie-root-port,id=pcie-port-for-nvme-{{ n }},multifunction=on,bus=pcie.1,addr=0x{{ n }},chassis=5{{ n }}'/>
+    <qemu:arg value='pcie-root-port,id=pcie-port-for-nvme-{{ n }},multifunction=on,bus=pcie.1,addr=0x{{ "%0x" | format( n | int) }},chassis=5{{ n }}'/>
     <qemu:arg value='-drive'/>
     <qemu:arg value='file={{ kdevops_storage_pool_path }}/guestfs/{{ hostname }}/extra{{ n }}.{{ libvirt_extra_drive_format }},format={{ libvirt_extra_drive_format }},if=none,id=drv{{ n }}'/>
     <qemu:arg value='-device'/>
