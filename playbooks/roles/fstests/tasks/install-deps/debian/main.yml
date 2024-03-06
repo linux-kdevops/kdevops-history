@@ -74,6 +74,22 @@
     update_cache: yes
   tags: [ 'fstests', 'deps' ]
 
+- name: Install dependencies for building xfsprogs
+  become: yes
+  become_method: sudo
+  apt:
+    name:
+      - libinih-dev
+      - liburcu-dev
+      - libicu-dev
+      - libedit-dev
+      - liblvm2-dev
+      - libdevmapper-dev
+      - libselinux1-dev
+      - libsepol-dev
+      - libpcre2-dev
+  when: 'fstests_xfs_build_custom_xfsprogs|bool'
+
 # Debian testing has removed xfsdump. Build from sources until it is available
 # in Debian Testing repository
 - name: git clone xfsdump
