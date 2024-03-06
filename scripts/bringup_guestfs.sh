@@ -109,16 +109,36 @@ do
 	cp --reflink=auto $BASE_IMAGE $ROOTIMG
 	virt-sysprep -a $ROOTIMG --hostname $name --ssh-inject "kdevops:file:$SSH_KEY.pub"
 
-	# build some extra disks
-	for i in $(seq 0 3); do
-		diskimg="$STORAGEDIR/$name/extra${i}.${IMG_FMT}"
-		rm -f $diskimg
-		qemu-img create -f $IMG_FMT "$STORAGEDIR/$name/extra${i}.$IMG_FMT" 100G
-		if [[ "$CONFIG_LIBVIRT_URI_SYSTEM" == "y" ]]; then
-			chmod g+rw $STORAGEDIR/$name/extra${i}.$IMG_FMT
-		fi
-	done
+
+	if [[ "$CONFIG_LIBVIRT_ENABLE_LARGEIO" == "y" ]]; then
+		lbs_idx=1
+		for i in $(seq 1 $(($CONFIG_QEMU_LARGEIO_MAX_POW_LIMIT+1))); do
+			for x in $(seq 0 $CONFIG_QEMU_EXTRA_DRIVE_LARGEIO_NUM_DRIVES_PER_SPACE); do
+				diskimg="$STORAGEDIR/$name/extra${lbs_idx}.${IMG_FMT}"
+				rm -f $diskimg
+				qemu-img create -f $IMG_FMT "$diskimg" 100G
+				if [[ "$CONFIG_LIBVIRT_URI_SYSTEM" == "y" ]]; then
+					chmod g+rw $diskimg
+				fi
+				let lbs_idx=$lbs_idx+1
+			done
+		done
+	else
+		# build some extra disks
+		for i in $(seq 0 3); do
+			diskimg="$STORAGEDIR/$name/extra${i}.${IMG_FMT}"
+			rm -f $diskimg
+			qemu-img create -f $IMG_FMT "$STORAGEDIR/$name/extra${i}.$IMG_FMT" 100G
+			if [[ "$CONFIG_LIBVIRT_URI_SYSTEM" == "y" ]]; then
+				chmod g+rw $STORAGEDIR/$name/extra${i}.$IMG_FMT
+			fi
+		done
+	fi
 
 	virsh define $GUESTFSDIR/$name/$name.xml
 	virsh start $name
+	if [[ $? -ne 0 ]]; then
+		echo "Failed to start $name"
+		exit 1
+	fi
 done
