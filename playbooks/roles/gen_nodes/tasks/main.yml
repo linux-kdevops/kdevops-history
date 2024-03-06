@@ -159,6 +159,38 @@
     - kdevops_workflow_enable_gitr
     - ansible_nodes_template.stat.exists
 
+- name: Initialize the enabled nodes list for ltp
+  tags: [ 'hosts' ]
+  set_fact:
+    is_ltp: True
+    ltp_enabled_nodes: "{{ ltp_enabled_test_groups|ansible.builtin.split }}"
+  when:
+    - kdevops_workflows_dedicated_workflow
+    - kdevops_workflow_enable_ltp
+    - ansible_nodes_template.stat.exists
+
+- name: Expand the ltp node list to include -dev nodes
+  tags: [ 'hosts' ]
+  set_fact:
+    ltp_enabled_nodes: "{{ ltp_enabled_nodes + [ item + '-dev' ] }}"
+  with_items: "{{ ltp_enabled_test_groups|ansible.builtin.split }}"
+  when:
+    - is_ltp|bool
+    - kdevops_baseline_and_dev|bool
+
+- name: Generate a kdevops nodes file using {{ kdevops_nodes_template }} as the template
+  tags: [ 'hosts' ]
+  vars:
+    node_template: "{{ kdevops_nodes_template | basename }}"
+    all_generic_nodes: "{{ generic_nodes }}"
+    nodes: "{{ [kdevops_host_prefix + '-'] | product(ltp_enabled_nodes) | map('join') | list }}"
+  ansible.builtin.template:
+    src: "{{ node_template }}"
+    dest: "{{ topdir_path }}/{{ kdevops_nodes }}"
+    force: yes
+  when:
+    - is_ltp|bool
+
 - name: Set empty enabled test types list for fstests
   tags: [ 'hosts' ]
   set_fact:

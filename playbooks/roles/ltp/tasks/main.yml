@@ -1,0 +1,195 @@
+---
+- name: Import optional extra_args file
+  tags: [ 'vars' ]
+  include_vars: "{{ item }}"
+  ignore_errors: yes
+  with_first_found:
+    - files:
+      - "../extra_vars.yml"
+      - "../extra_vars.yaml"
+      - "../extra_vars.json"
+      skip: true
+
+- include_role:
+    name: create_data_partition
+  tags: [ 'data_partition' ]
+
+- name: Set the pathname of the local results directory
+  tags: [ 'vars' ]
+  ansible.builtin.set_fact:
+    ltp_results_dir: "../workflows/ltp/results/{{ ansible_host }}/"
+
+- name: Clean up the local results directory
+  tags: [ 'clean_local_results' ]
+  local_action: ansible.builtin.file path="{{ ltp_results_dir }}" state=absent
+  run_once: true
+
+- name: Create the local results directory
+  tags: [ 'first_run' ]
+  local_action: ansible.builtin.file path="{{ ltp_results_dir }}" state=directory
+  run_once: true
+
+- name: Install {{ ansible_os_family }} dependencies
+  tags: [ 'build', 'ltp' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.package:
+    name: "{{ ltp_os_family_packages[ansible_os_family] }}"
+    state: present
+
+- name: Set the pathname of the build directory
+  tags: [ 'build', 'ltp' ]
+  ansible.builtin.set_fact:
+    ltp_build_dir: "{{ data_path }}/ltp"
+
+- name: Remove existing ltp build directory
+  tags: [ 'build', 'ltp' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.file:
+    path: "{{ ltp_build_dir }}"
+    state: absent
+
+- name: Clone the {{ ltp_repo }} repository
+  tags: [ 'build', 'clone', 'git', 'ltp' ]
+  ansible.builtin.git:
+    repo: "{{ ltp_repo }}"
+    dest: "{{ ltp_build_dir }}"
+    version: "{{ ltp_repo_commit }}"
+    update: yes
+  retries: 3
+  delay: 5
+  register: result
+  until: not result.failed
+
+- name: Initialize autotools in the build directory
+  tags: [ 'build', 'ltp' ]
+  community.general.make:
+    chdir: "{{ ltp_build_dir }}"
+    target: autotools
+
+- name: Configure the ltp build environment
+  tags: [ 'build', 'ltp' ]
+  ansible.builtin.command:
+    cmd: "./configure"
+    chdir: "{{ ltp_build_dir }}"
+
+- name: Get nproc on the build system
+  tags: [ 'build', 'ltp' ]
+  ansible.builtin.command: "{{ num_jobs }}"
+  register: nproc
+  changed_when: False
+
+- name: Build ltp from source
+  tags: [ 'build', 'ltp' ]
+  community.general.make:
+    chdir: "{{ ltp_build_dir }}"
+    target: all
+    jobs: "{{ nproc.stdout }}"
+
+- name: Ensure /opt has correct permissions
+  tags: [ 'ltp' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.file:
+    state: directory
+    path: "/opt"
+    mode: "u=rwx,g=rwx,o=rwxt"
+
+- name: Install ltp on the test systems
+  tags: [ 'ltp' ]
+  community.general.make:
+    chdir: "{{ ltp_build_dir }}"
+    target: install
+    jobs: "{{ nproc.stdout }}"
+
+- name: Start the rpcbind service
+  tags: [ 'ltp' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.systemd_service:
+    name: rpcbind.service
+    state: started
+    enabled: True
+
+- name: Generate /etc/nfs.conf
+  tags: [ 'ltp' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  template:
+    src: nfs.conf.j2
+    dest: /etc/nfs.conf
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_host is search("-nfs")
+
+- name: Start the NFSD service
+  tags: [ 'ltp' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.systemd_service:
+    name: nfs-server.service
+    state: reloaded
+    enabled: True
+  when: ansible_host is search("-nfs")
+
+- name: Run ltp
+  tags: [ 'run_tests' ]
+  vars:
+    ltp_test: "{{ ansible_host | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') }}"
+  environment:
+    LTP_TIMEOUT_MUL: 5
+    TST_DISABLE_APPARMOR: 1
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.command:
+    cmd: "/opt/ltp/runltp {{ ltp_runltp_arg_dict[ltp_test] }}"
+  failed_when: False
+
+- name: Look for test results in target node's /opt/ltp/results
+  tags: [ 'copy_results' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.find:
+    paths: "/opt/ltp/results/"
+  register: results_files
+
+- name: Copy test results to localhost
+  tags: [ 'copy_results' ]
+  ansible.builtin.fetch:
+    src: "{{ item.path }}"
+    dest: "{{ ltp_results_dir }}"
+    flat: yes
+    validate_checksum: False
+  with_items: "{{ results_files.files }}"
+  when:
+    - results_files.matched > 0
+
+- name: Look for test output in target node's /opt/ltp/output
+  tags: [ 'copy_results' ]
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.find:
+    paths: "/opt/ltp/output/"
+  register: output_files
+
+- name: Copy test output to localhost
+  tags: [ 'copy_results' ]
+  ansible.builtin.fetch:
+    src: "{{ item.path }}"
+    dest: "{{ ltp_results_dir }}"
+    flat: yes
+    validate_checksum: False
+  with_items: "{{ output_files.files }}"
+  when:
+    - output_files.matched > 0

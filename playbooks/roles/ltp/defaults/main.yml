@@ -1,0 +1,71 @@
+# SPDX-License-Identifier GPL-2.0+
+---
+# Our sensible defaults for the ltp role.
+#
+# The default is to not run the ltp tests.
+kdevops_run_ltp: False
+
+# Family-dependent packages to install
+ltp_os_family_packages:
+  Debian:
+    - gcc
+    - git
+    - make
+    - pkgconf
+    - autoconf
+    - automake
+    - bison
+    - flex
+    - m4
+    - ethtool
+    - nfs-common
+    - libc6-dev
+    - rpcbind
+    - libtirpc-dev
+    - libssl-dev
+  RedHat:
+    - gcc
+    - git
+    - make
+    - pkgconf
+    - autoconf
+    - automake
+    - bison
+    - flex
+    - m4
+    - ethtool
+    - nfs-utils
+    - kernel-headers
+    - glibc-headers
+    - libacl-devel
+    - libtirpc-devel
+    - openssl-devel
+  Suse:
+    - gcc
+    - git
+    - make
+    - pkg-config
+    - autoconf
+    - automake
+    - bison
+    - flex
+    - m4
+    - ethtool
+    - nfs-utils
+    - linux-glibc-devel
+    - glibc-devel
+    - libacl-devel
+    - libtirpc-devel
+    - libopenssl-devel
+
+ltp_runltp_arg_dict:
+  cve: "-f cve"
+  fs: "-f fs"
+  fs-bind: "-f fs_bind"
+  fs-perms-simple: "-f fs_perms_simple"
+  fs-readonly: "-f fs_readonly"
+  nfs: "-f net.nfs"
+  notify: "-f syscalls -s notify"
+  rpc: "-f net.rpc_tests"
+  smack: "-f smack"
+  tirpc: "-f net.tirpc_tests"

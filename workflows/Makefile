@@ -48,6 +48,11 @@ WORKFLOW_ARGS += kdevops_workflow_enable_gitr='True'
 include workflows/gitr/Makefile
 endif # CONFIG_KDEVOPS_WORKFLOW_ENABLE_GITR == y
 
+ifeq (y,$(CONFIG_KDEVOPS_WORKFLOW_ENABLE_LTP))
+WORKFLOW_ARGS += kdevops_workflow_enable_ltp='True'
+include workflows/ltp/Makefile
+endif # CONFIG_KDEVOPS_WORKFLOW_ENABLE_LTP == y
+
 ANSIBLE_EXTRA_ARGS += $(WORKFLOW_ARGS)
 ANSIBLE_EXTRA_ARGS_SEPARATED += $(WORKFLOW_ARGS_SEPARATED)
 ANSIBLE_EXTRA_ARGS_DIRECT += $(WORKFLOW_ARGS_DIRECT)

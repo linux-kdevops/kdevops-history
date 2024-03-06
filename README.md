@@ -128,6 +128,15 @@ and then run:
 
 For more details see [kdevops gitr docs](docs/gitr.md)
 
+### Start running the ltp suite in 2 commands
+
+To test a kernel using the ltp suite, enable the ltp workflow and then run:
+
+  * `make ltp`
+  * `make ltp-baseline`
+
+For more details see [kdevops gitr docs](docs/gitr.md)
+
 ### Runs some kernel selftests in a parallel manner
 
 kdevops supports running Linux kernel selftests in parallel, this is as easy as:

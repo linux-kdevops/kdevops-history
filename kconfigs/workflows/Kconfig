@@ -159,6 +159,13 @@ config KDEVOPS_WORKFLOW_DEDICATE_GITR
 	  This will dedicate your configuration to running only the
 	  multi-threaded git regression workflow.
 
+config KDEVOPS_WORKFLOW_DEDICATE_LTP
+	bool "ltp"
+	select KDEVOPS_WORKFLOW_ENABLE_LTP
+	help
+	  This will dedicate your configuration to running only the
+	  ltp workflow in separate target nodes per testing group.
+
 endchoice
 
 endif
@@ -224,6 +231,14 @@ config KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_GITR
 	  Select this option if you want to configure the deployment for
 	  testing via the multi-threaded git regression workflow.
 
+config KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_LTP
+	bool "ltp"
+	select KDEVOPS_WORKFLOW_ENABLE_LTP
+	depends on LIBVIRT || TERRAFORM_PRIVATE_NET
+	help
+	  Select this option if you want to provision ltp on a single
+	  target node for by-hand testing.
+
 endif # !WORKFLOWS_DEDICATED_WORKFLOW
 
 config KDEVOPS_WORKFLOW_ENABLE_FSTESTS
@@ -284,6 +299,16 @@ config KDEVOPS_WORKFLOW_ENABLE_GITR
 if KDEVOPS_WORKFLOW_ENABLE_GITR
 menu "Configure and run the git regression suite"
 source "workflows/gitr/Kconfig"
+endmenu
+endif # KDEVOPS_WORKFLOW_ENABLE_GITR
+
+config KDEVOPS_WORKFLOW_ENABLE_LTP
+	bool
+	default y if KDEVOPS_WORKFLOW_NOT_DEDICATED_ENABLE_LTP || KDEVOPS_WORKFLOW_DEDICATE_LTP
+
+if KDEVOPS_WORKFLOW_ENABLE_LTP
+menu "Configure and run the ltp suite"
+source "workflows/ltp/Kconfig"
 endmenu
 endif # KDEVOPS_WORKFLOW_ENABLE_GITR
 
