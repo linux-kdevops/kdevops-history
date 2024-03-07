@@ -1,6 +1,60 @@
-- name: Add Include directive to ~/.ssh/config
+# Check if the include directive is already presetn
+- name: Check if the kdevops include directive was used
+  lineinfile:
+    path: ~/.ssh/config
+    regexp: "Include ~/.ssh/config_kdevops_*"
+    state: absent
+  check_mode: yes
+  changed_when: false
+  register: kdevops_ssh_include
+
+# Check if the the kdevops_version was added in a comment
+- name: Check if the new include directive was used with a kdevops_version comment
+  lineinfile:
+    path: ~/.ssh/config
+    regexp: "^#(.*)kdevops_version(.*)"
+    state: absent
+  check_mode: yes
+  changed_when: false
+  register: fixed_ssh_entry
+
+# If both the include directive was found and kdevops version comment was found
+# we bail right away to avoid updating the ssh config file always.
+- name: Check if the new fixed include directive was used
+  meta: end_play
+  when:
+    - kdevops_ssh_include.found
+    - fixed_ssh_entry.found
+
+# If we're still running it means the correct include directive following a new
+# line was not found. So remove old stale include directives which may be
+# buggy.
+- name: Add remove buggy stale include directive to ~/.ssh/config without a new line which was buggy
   lineinfile:
     path: ~/.ssh/config
     line: "Include ~/.ssh/config_kdevops_*"
-    insertbefore: "BOF"
+    state: absent
+
+- name: Remove any stale kdevops comments
+  lineinfile:
+    path: ~/.ssh/config
+    regexp: "^#(.*)kdevops(.*)"
+    state: absent
+
+- name: Remove any extra new lines
+  replace:
+    path: ~/.ssh/config
+    regexp: '(^\s*$)'
+    replace: ''
+
+# ssh include directives must follow a new line.
+- name: Add Include directive to ~/.ssh/config
+  blockinfile:
+    path: ~/.ssh/config
+    insertbefore: BOF
+    marker: "{mark}"
+    marker_begin: "# Automatically added by kdevops\n# kdevops_version: {{ kdevops_version }}"
+    marker_end: ""
     create: true
+    block: |
+      Include ~/.ssh/config_kdevops_*

@@ -109,7 +109,6 @@ do
 	cp --reflink=auto $BASE_IMAGE $ROOTIMG
 	virt-sysprep -a $ROOTIMG --hostname $name --ssh-inject "kdevops:file:$SSH_KEY.pub"
 
-
 	if [[ "$CONFIG_LIBVIRT_ENABLE_LARGEIO" == "y" ]]; then
 		lbs_idx=1
 		for i in $(seq 1 $(($CONFIG_QEMU_LARGEIO_MAX_POW_LIMIT+1))); do
