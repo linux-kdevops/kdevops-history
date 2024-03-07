@@ -13,3 +13,9 @@ config EXTRA_STORAGE_SUPPORTS_2K
 config EXTRA_STORAGE_SUPPORTS_4K
 	bool
 	default n
+config EXTRA_STORAGE_SUPPORTS_ZNS
+	bool
+	default n
+config EXTRA_STORAGE_SUPPORTS_LARGEIO
+	bool
+	default n

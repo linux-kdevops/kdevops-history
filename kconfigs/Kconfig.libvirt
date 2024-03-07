@@ -1091,6 +1091,8 @@ config LIBVIRT_STORAGE_POOL_NAME
 	  For instance you may want to use a volume name of "data2" for a path
 	  on a partition on /data2/ or something like that.
 
+if EXTRA_STORAGE_SUPPORTS_ZNS
+
 config QEMU_ENABLE_NVME_ZNS
 	bool "Enable QEMU NVMe ZNS drives"
 	depends on LIBVIRT && LIBVIRT_EXTRA_STORAGE_DRIVE_NVME
@@ -1238,6 +1240,10 @@ config QEMU_NVME_ZONE_LOGICAL_BLOCK_SIZE
 	default 4096 if !QEMU_CUSTOM_NVME_ZNS
 	default QEMU_CUSTOM_NVME_ZONE_LOGICAL_BLOCK_SIZE if QEMU_CUSTOM_NVME_ZNS
 
+endif # EXTRA_STORAGE_SUPPORTS_ZNS
+
+if EXTRA_STORAGE_SUPPORTS_LARGEIO
+
 config QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
 	bool "Enable QEMU drives for large IO experimentation"
 	depends on LIBVIRT
@@ -1369,10 +1375,13 @@ config QEMU_LARGEIO_MAX_POW_LIMIT
 	default 12 if !QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
 	default QEMU_EXTRA_DRIVE_LARGEIO_MAX_POW_LIMIT if QEMU_ENABLE_EXTRA_DRIVE_LARGEIO
 
+endif # EXTRA_STORAGE_SUPPORTS_LARGEIO
+
 config QEMU_ENABLE_CXL
 	bool "Enable QEMU CXL devices"
 	depends on LIBVIRT
 	depends on LIBVIRT_MACHINE_TYPE_Q35
+	depends on BRINGUP_SUPPORTS_CXL
 	depends on QEMU_USE_DEVELOPMENT_VERSION
 	default n
 	help
