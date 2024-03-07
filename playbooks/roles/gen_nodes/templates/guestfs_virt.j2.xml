@@ -174,42 +174,6 @@
     <qemu:arg value='ICH9-LPC.disable_s4=0'/>
     <qemu:arg value='-device'/>
     <qemu:arg value='pxb-pcie,id=pcie.1,bus_nr=32,bus=pcie.0,addr=0x8'/>
-{% if libvirt_extra_storage_drive_ide %}
-{% for n in range(0,4) %}
-    <qemu:arg value='-drive'/>
-    <qemu:arg value='file={{ kdevops_storage_pool_path }}/guestfs/{{ hostname }}/extra{{ n }}.{{ libvirt_extra_drive_format }},format={{ libvirt_extra_drive_format }},aio={{ libvirt_extra_storage_aio_mode }},cache={{ libvirt_extra_storage_aio_cache_mode }},if=none,id=drv{{ n }}'/>
-    <qemu:arg value='-device'/>
-    <qemu:arg value="ide-hd,drive=drv{{ n }},bus=ide.{{ n }},serial=kdevops{{ n }}"/>
-{% endfor %}
-{% elif libvirt_extra_storage_drive_virtio %}
-{% for n in range(0,4) %}
-    <qemu:arg value='-device'/>
-    <qemu:arg value='pcie-root-port,id=pcie-port-for-virtio-{{ n }},multifunction=on,bus=pcie.1,addr=0x{{ n }},chassis=5{{ n }}'/>
-    <qemu:arg value="-object"/>
-    <qemu:arg value="iothread,id=kdevops-virtio-iothread-{{ n }}"/>
-    <qemu:arg value="-drive"/>
-    <qemu:arg value="file={{ kdevops_storage_pool_path }}/guestfs/{{ hostname }}/extra{{ n }}.{{ libvirt_extra_drive_format }},format={{ libvirt_extra_drive_format }},if=none,aio={{ libvirt_extra_storage_aio_mode }},cache={{ libvirt_extra_storage_aio_cache_mode }},id=drv{{ n }}"/>
-    <qemu:arg value="-device"/>
-    <qemu:arg value="virtio-blk-pci,scsi=off,drive=drv{{ n }},id=virtio-drv{{ n }},serial=kdevops{{ n }},bus=pcie-port-for-virtio-{{ n }},addr=0x0,iothread=kdevops-virtio-iothread-{{ n }},logical_block_size={{ libvirt_extra_storage_virtio_logical_block_size }},physical_block_size={{ libvirt_extra_storage_virtio_physical_block_size }}"/>
-{% endfor %}
-{% elif libvirt_extra_storage_drive_nvme  %}
-{% for n in range(0,4) %}
-    <qemu:arg value='-device'/>
-    <qemu:arg value='pcie-root-port,id=pcie-port-for-nvme-{{ n }},multifunction=on,bus=pcie.1,addr=0x{{ n }},chassis=5{{ n }}'/>
-    <qemu:arg value='-drive'/>
-    <qemu:arg value='file={{ kdevops_storage_pool_path }}/guestfs/{{ hostname }}/extra{{ n }}.{{ libvirt_extra_drive_format }},format={{ libvirt_extra_drive_format }},if=none,id=drv{{ n }}'/>
-    <qemu:arg value='-device'/>
-    <qemu:arg value='nvme,id=nvme{{ n }},serial=kdevops{{ n }},bus=pcie-port-for-nvme-{{ n }},addr=0x0'/>
-    <qemu:arg value='-device'/>
-    <qemu:arg value='nvme-ns,drive=drv{{ n }},bus=nvme{{ n }},nsid=1,logical_block_size=512,physical_block_size=512'/>
-{% endfor %}
-{% endif %}
-{% if bootlinux_9p %}
-    <qemu:arg value='-device'/>
-    <qemu:arg value='{{ bootlinux_9p_driver }},fsdev={{ bootlinux_9p_fsdev }},mount_tag={{ bootlinux_9p_mount_tag }},bus=pcie.0,addr=0x10'/>
-    <qemu:arg value='-fsdev'/>
-    <qemu:arg value='local,id={{ bootlinux_9p_fsdev }},path={{ bootlinux_9p_host_path }},security_model={{ bootlinux_9p_security_model }}'/>
-{% endif %}
+{% include './templates/gen_drives.j2' %}
   </qemu:commandline>
 </domain>
-

@@ -1,0 +1,57 @@
+{% if libvirt_extra_storage_drive_ide %}
+{{ drives.gen_drive_ide(4,
+			kdevops_storage_pool_path,
+			hostname,
+			libvirt_extra_drive_format,
+			libvirt_extra_storage_aio_mode,
+			libvirt_extra_storage_aio_cache_mode) }}
+{% elif libvirt_extra_storage_drive_virtio %}
+{% if libvirt_largeio_enable %}
+{{ drives.gen_drive_large_io_virtio(libvirt_largeio_logical_compat,
+				    libvirt_largeio_logical_compat_size,
+				    libvirt_largeio_pow_limit,
+				    libvirt_largeio_drives_per_space,
+				    hostname,
+				    libvirt_extra_drive_format,
+				    libvirt_extra_storage_aio_mode,
+				    libvirt_extra_storage_aio_cache_mode,
+				    kdevops_storage_pool_path) }}
+{% else %}
+{{ drives.gen_drive_virtio(4,
+			   kdevops_storage_pool_path,
+			   hostname,
+			   libvirt_extra_drive_format,
+			   libvirt_extra_storage_aio_mode,
+			   libvirt_extra_storage_aio_cache_mode,
+			   libvirt_extra_storage_virtio_logical_block_size,
+			   libvirt_extra_storage_virtio_physical_block_size) }}
+{% endif %}
+{% elif libvirt_extra_storage_drive_nvme  %}
+{% if libvirt_largeio_enable %}
+{{ drives.gen_drive_large_io_nvme(libvirt_largeio_logical_compat,
+				  libvirt_largeio_logical_compat_size,
+				  libvirt_largeio_pow_limit,
+				  libvirt_largeio_drives_per_space,
+				  hostname,
+				  libvirt_extra_drive_format,
+				  libvirt_extra_storage_aio_mode,
+				  libvirt_extra_storage_aio_cache_mode,
+				  kdevops_storage_pool_path) }}
+{% else %}
+{{ drives.gen_drive_nvme(4,
+			 kdevops_storage_pool_path,
+			 hostname,
+			 libvirt_extra_drive_format,
+			 libvirt_extra_storage_aio_mode,
+			 libvirt_extra_storage_aio_cache_mode,
+			 libvirt_extra_storage_nvme_logical_block_size) }}
+{% endif %}
+{% endif %}
+{% if bootlinux_9p %}
+  {{ drives.gen_9p_mount(bootlinux_9p_driver,
+			 bootlinux_9p_fsdev,
+			 bootlinux_9p_host_path,
+			 bootlinux_9p_mount_tag,
+			 bootlinux_9p_security_model,
+			 10) }}
+{% endif %}
