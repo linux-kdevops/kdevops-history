@@ -471,6 +471,7 @@ choice
 
 config LIBVIRT_MACHINE_TYPE_DEFAULT
 	bool "Use the default machine type"
+	depends on VAGRANT
 	help
 	  Use whatever default the guest was intended to use. This will either
 	  be the machine type used at virt-install time or some other default
@@ -481,6 +482,9 @@ config LIBVIRT_MACHINE_TYPE_DEFAULT
 
 	  It would seem today's default for libvirt is to still use "pc" which
 	  is the old i440x, so you will not get PCIe support.
+
+	  We only want to support PCI-E capable guests with libguest so the
+	  deafult is not allowed on libguest.
 
 config LIBVIRT_MACHINE_TYPE_Q35
 	bool "q35"
