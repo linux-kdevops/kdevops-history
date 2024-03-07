@@ -47,7 +47,7 @@ endchoice
 
 config TERRAFORM_OPENSTACK_IMAGE_NAME
 	string "OpenStack image name"
-	default "Debian 10 ppc64le" if TERRAFORM_OPENSTACK_IMAGE_DEBIAN_10_PPC64LE
+	default "Debian 10 ppc64le" if TERRAFORM_OPENSTACK_IMAGE_DEBIAN_10_PPC64LE && DISTRO_DEBIAN
 	help
 	  This option will set OpenStack image name to use.
 

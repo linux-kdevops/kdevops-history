@@ -57,7 +57,8 @@ config TERRAFORM_GCE_SCRATCH_DISK_INTERFACE
 
 config TERRAFORM_GCE_IMAGE
 	string "GCE image to use"
-	default "debian-cloud/debian-10"
+	default "debian-cloud/debian-10" if DISTRO_DEBIAN
+	default "debian-cloud/debian-10" if !DISTRO_DEBIAN
 	help
 	  This option will set GCE image to debian-cloud/debian-10.
 
