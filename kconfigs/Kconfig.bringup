@@ -64,62 +64,12 @@ config SKIP_BRINGUP
 
 endchoice
 
-if GUESTFS
-
-choice
-	prompt "Guestfs Linux distribution to use"
-	default GUESTFS_FEDORA
-
-config GUESTFS_FEDORA
-	bool "Fedora (or derived distro)"
-	select HAVE_DISTRO_XFS_PREFERS_MANUAL if FSTESTS_XFS
-	select HAVE_DISTRO_BTRFS_PREFERS_MANUAL if FSTESTS_BTRFS
-	select HAVE_DISTRO_EXT4_PREFERS_MANUAL if FSTESTS_EXT4
-	select HAVE_DISTRO_PREFERS_FSTESTS_WATCHDOG if KDEVOPS_WORKFLOW_ENABLE_FSTESTS
-	select HAVE_DISTRO_PREFERS_FSTESTS_WATCHDOG_KILL if KDEVOPS_WORKFLOW_ENABLE_FSTESTS
-	help
-	  This option will set the target guest to be a distro in the Fedora family.
-	  For example, Fedora, RHEL, etc.
-
-config GUESTFS_DEBIAN
-	bool "Debian"
-	select HAVE_CUSTOM_DISTRO_HOST_PREFIX
-	select HAVE_DISTRO_XFS_PREFERS_MANUAL if FSTESTS_XFS
-	select HAVE_DISTRO_BTRFS_PREFERS_MANUAL if FSTESTS_BTRFS
-	select HAVE_DISTRO_EXT4_PREFERS_MANUAL if FSTESTS_EXT4
-	select HAVE_DISTRO_PREFERS_CUSTOM_HOST_PREFIX
-	select HAVE_DISTRO_PREFERS_FSTESTS_WATCHDOG if KDEVOPS_WORKFLOW_ENABLE_FSTESTS
-	select HAVE_DISTRO_PREFERS_FSTESTS_WATCHDOG_KILL if KDEVOPS_WORKFLOW_ENABLE_FSTESTS
-	help
-	  This option will set the target guest to Debian.
-
-endchoice
-
-config VIRT_BUILDER_OS_VERSION
-       string "virt-builder os-version"
-       default "fedora-39" if GUESTFS_FEDORA
-       default "debian-12" if GUESTFS_DEBIAN
-       help
-         Have virt-builder use this os-version string to
-         build a root image for the guest. Run "virt-builder -l"
-         to get a list of operating systems and versions supported
-         by guestfs.
-
-if GUESTFS_DEBIAN
-
-config GUESTFS_DEBIAN_BOX_SHORT
-        string
-        default "debian12" if GUESTFS_DEBIAN
-
-endif
-
-endif # GUESTFS
-
 config LIBVIRT
 	bool
 	depends on VAGRANT_LIBVIRT_SELECT || GUESTFS
 	default y
 
+source "kconfigs/Kconfig.guestfs"
 source "vagrant/Kconfig"
 source "terraform/Kconfig"
 if LIBVIRT
