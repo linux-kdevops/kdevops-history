@@ -23,6 +23,7 @@ if [ -f "$GUESTFSDIR/kdevops_nodes.yaml" ]; then
 		fi
 		rm -rf "$GUESTFSDIR/$name"
 		rm -rf "$STORAGEDIR/$name"
+		ssh-keygen -q -f ~/.ssh/known_hosts -R $name 1> /dev/null 2>&1
 	done
 fi
 
