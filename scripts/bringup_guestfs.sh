@@ -135,6 +135,13 @@ do
 	fi
 
 	virsh define $GUESTFSDIR/$name/$name.xml
+	XML_DEVICES_COUNT=$(find $GUESTFSDIR/$name/ -name pcie_passthrough_*.xml | wc -l)
+	if [[ $XML_DEVICES_COUNT -gt 0 ]]; then
+		for xml in $GUESTFSDIR/$name/pcie_passthrough_*.xml; do
+			echo "Doing PCI-E passthrough for device $xml"
+			virsh attach-device $name $xml --config
+		done
+	fi
 	virsh start $name
 	if [[ $? -ne 0 ]]; then
 		echo "Failed to start $name"

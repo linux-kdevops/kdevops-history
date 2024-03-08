@@ -385,6 +385,19 @@
   with_items: "{{ guestfs_nodes }}"
   when: kdevops_enable_guestfs
 
+- name: Generate XML files for the libvirt guests for PCI passthrough for guestfs
+  delegate_to: localhost
+  run_once: true
+  shell: |
+    set -o pipefail
+    {{ role_path }}/python/gen_pcie_passthrough_guestfs_xml.py
+  args:
+    executable: /bin/bash
+    chdir: "{{ topdir_path }}"
+  when:
+    - kdevops_enable_guestfs
+    - pcie_passthrough_enable|bool
+
 - name: Generate XML files for the libvirt guests
   vars:
     hostname: "{{ item.name }}"
