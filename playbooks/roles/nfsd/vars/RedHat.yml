@@ -10,3 +10,5 @@ fstype_userspace_progs:
   btrfs: btrfs-progs
   ext4: e2fsprogs
   xfs: xfsprogs
+
+pipefs_directory: /var/lib/nfs/rpc_pipefs
