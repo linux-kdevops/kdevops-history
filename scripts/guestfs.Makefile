@@ -70,6 +70,7 @@ $(KDEVOPS_PROVISIONED_SSH):
 			-e 'ansible_python_interpreter=/usr/bin/python3' ;\
 		LIBVIRT_DEFAULT_URI=$(CONFIG_LIBVIRT_URI) $(TOPDIR)/scripts/update_ssh_config_guestfs.py; \
 	fi
+	$(Q)ansible $(ANSIBLE_VERBOSE) -i hosts all -e 'ansible_python_interpreter=/usr/bin/python3' -m wait_for_connection
 	$(Q)touch $(KDEVOPS_PROVISIONED_SSH)
 
 bringup_guestfs: $(GUESTFS_BRINGUP_DEPS)
