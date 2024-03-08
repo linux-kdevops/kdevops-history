@@ -1,3 +1,4 @@
+{% import './templates/drives.j2' as drives %}
 {% if libvirt_extra_storage_drive_ide %}
 {{ drives.gen_drive_ide(4,
 			kdevops_storage_pool_path,

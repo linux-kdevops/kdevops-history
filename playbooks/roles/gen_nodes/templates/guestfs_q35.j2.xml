@@ -1,4 +1,3 @@
-{% import './templates/drives.j2' as drives %}
 <domain type='kvm' xmlns:qemu='http://libvirt.org/schemas/domain/qemu/1.0'>
   <name>{{ hostname }}</name>
   <memory unit='MiB'>{{ libvirt_mem_mb }}</memory>
