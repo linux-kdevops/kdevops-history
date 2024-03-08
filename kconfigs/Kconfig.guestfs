@@ -1,5 +1,11 @@
 if GUESTFS
 
+config GUESTFS_DEFAULT_BRIDGE_IP
+       string
+       default "http://192.168.122.1" if DISTRO_FEDORA || DISTRO_REDHAT
+       default "http://192.168.122.1" if DISTRO_OPENSUSE || DISTRO_SUSE
+       default "http://192.168.122.1" if DISTRO_DEBIAN || DISTRO_UBUNTU
+
 choice
 	prompt "Guestfs Linux distribution to use"
 	default GUESTFS_FEDORA if DISTRO_FEDORA || DISTRO_REDHAT
