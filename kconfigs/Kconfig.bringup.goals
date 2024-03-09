@@ -97,3 +97,4 @@ config KDEVOPS_SETUP_KTLS
 	  necessary for testing RPC over TLS, or NVMe over TCP.
 
 source "kconfigs/Kconfig.nfsd"
+source "kconfigs/Kconfig.krb5"

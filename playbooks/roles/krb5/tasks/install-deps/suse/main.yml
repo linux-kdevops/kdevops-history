@@ -1,0 +1,16 @@
+---
+- name: Install krb5 dependencies
+  become: yes
+  become_method: sudo
+  zypper:
+    name:
+      - krb5
+      - krb5-client
+      - kernel-default
+    state: present
+    force_resolution: true
+
+- name: Reboot system to make the new kernel and modules take effect
+  become: yes
+  become_method: sudo
+  ansible.builtin.reboot:

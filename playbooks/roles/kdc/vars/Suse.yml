@@ -1,0 +1,7 @@
+---
+kdc_conf_dir: /var/lib/kerberos/krb5kdc
+kdc_data_dir: /var/lib/kerberos/krb5kdc
+kdc_master_key_type: aes256-cts
+kdc_supported_enctypes: aes256-cts:normal aes128-cts:normal
+krb5kdc_service_name: krb5kdc
+kadmin_service_name: kadmind

@@ -55,6 +55,18 @@
   when:
     - kdevops_nfsd_enable|bool
 
+- name: Set kdc_nodes list
+  set_fact:
+    kdc_nodes: "{{ [ kdevops_host_prefix + '-kdc' ] }}"
+  when:
+    - kdevops_krb5_enable|bool
+
+- name: Add a KRB5 KDC if one was selected
+  set_fact:
+    generic_nodes: "{{ generic_nodes + kdc_nodes }}"
+  when:
+    - kdevops_krb5_enable|bool
+
 - name: Set fstests config file variable for {{ fstests_fstyp }}
   set_fact:
     is_fstests: True
@@ -216,6 +228,13 @@
   when:
     - is_fstests|bool
     - kdevops_nfsd_enable|bool
+
+- name: Add the KRB5 KDC if one was selected
+  set_fact:
+    fstests_enabled_nodes: "{{ fstests_enabled_nodes + kdc_nodes }}"
+  when:
+    - is_fstests|bool
+    - kdevops_krb5_enable|bool
 
 - name: Generate the fstests kdevops nodes file using {{ kdevops_nodes_template }} as jinja2 source template
   tags: [ 'hosts' ]

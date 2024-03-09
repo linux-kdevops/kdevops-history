@@ -13,6 +13,7 @@ kdevops_workflow_enable_pynfs: False
 kdevops_workflow_enable_gitr: False
 kdevops_workflow_enable_selftests: False
 kdevops_nfsd_enable: False
+kdevops_krb5_enable: False
 
 virtualbox_provider: False
 libvirt_provider: False

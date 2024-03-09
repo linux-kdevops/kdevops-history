@@ -107,6 +107,7 @@ endif # CONFIG_WORKFLOWS
 include scripts/siw.Makefile
 include scripts/ktls.Makefile
 include scripts/nfsd.Makefile
+include scripts/krb5.Makefile
 
 include scripts/devconfig.Makefile
 include scripts/ssh.Makefile

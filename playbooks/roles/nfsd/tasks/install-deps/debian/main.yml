@@ -21,6 +21,11 @@
     - fsprogs is defined
     - fsprogs
 
+- name: Add gssproxy to the nfsd packages list
+  set_fact:
+    nfsd_packages: "{{ nfsd_packages + ['gssproxy'] }}"
+  when: kdevops_krb5_enable|bool
+
 - name: Install nfsd dependencies
   become: yes
   become_method: sudo

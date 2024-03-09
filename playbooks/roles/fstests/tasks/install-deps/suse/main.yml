@@ -237,3 +237,13 @@
   when:
     - repos_present|bool
     - fstests_fstyp == "nfs"
+
+- name: Ensure nfs-client.target is enabled
+  become: yes
+  become_method: sudo
+  ansible.builtin.systemd:
+    name: nfs-client.target
+    enabled: true
+    state: started
+  when:
+    - fstests_fstyp == "nfs"

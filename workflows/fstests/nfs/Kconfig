@@ -98,3 +98,32 @@ config FSTESTS_NFS_SECTION_V3
 	default n
 
 endif # !FSTESTS_NFS_MANUAL_COVERAGE
+
+choice
+	prompt "Authentication flavor to use"
+	default	FSTESTS_NFS_AUTH_KRB5
+	depends on KDEVOPS_SETUP_KRB5
+	help
+	  This is the authentication flavor you want to test.  The selected
+          option will get written to /etc/nfsmount.conf on the NFS clients.
+
+config FSTESTS_NFS_AUTH_SYS
+	bool "sys"
+
+config FSTESTS_NFS_AUTH_KRB5
+	bool "krb5"
+
+config FSTESTS_NFS_AUTH_KRB5I
+	bool "krb5i"
+
+config FSTESTS_NFS_AUTH_KRB5P
+	bool "krb5p"
+
+endchoice
+
+config FSTESTS_NFS_AUTH_FLAVOR
+	string
+	default "sys" if FSTESTS_NFS_AUTH_SYS
+	default "krb5" if FSTESTS_NFS_AUTH_KRB5
+	default "krb5i" if FSTESTS_NFS_AUTH_KRB5I
+	default "krb5p" if FSTESTS_NFS_AUTH_KRB5P

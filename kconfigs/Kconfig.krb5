@@ -1,0 +1,25 @@
+config KDEVOPS_SETUP_KRB5
+	bool "Set up KRB5"
+	default n
+	help
+	  Configure and bring up a MIT Kerberos V5 KDC.
+
+if KDEVOPS_SETUP_KRB5
+
+menu "Configure the KRB5 KDC"
+
+config KRB5_REALM
+	string "KRB5 Realm"
+	default "KDEVOPS"
+	help
+	  Kerberos realm to create.
+
+config KRB5_ADMIN_PW
+	string "KRB5 admin password"
+	default "kdevops"
+	help
+	  Password to use for the 'root/admin' principal.
+
+endmenu
+
+endif

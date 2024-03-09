@@ -668,6 +668,47 @@
   when:
     - fstests_fstyp == "nfs"
 
+- name: Check to see if /etc/nfsmount.conf exists
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.stat:
+    path: /etc/nfsmount.conf
+  register: nfsmount_conf
+  when:
+    - fstests_fstyp == "nfs"
+    - fstests_nfs_auth_flavor is defined
+    - fstests_nfs_auth_flavor
+
+- name: Create /etc/nfsmount.conf
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.template:
+    src: "{{ fstests_fstyp }}/nfsmount.conf"
+    dest: /etc/nfsmount.conf
+    owner: root
+    group: root
+    mode: 0644
+  when:
+    - fstests_fstyp == "nfs"
+    - fstests_nfs_auth_flavor is defined
+    - fstests_nfs_auth_flavor
+    - not nfsmount_conf.stat.exists
+
+- name: Set auth flavor for NFS
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.lineinfile:
+    path: /etc/nfsmount.conf
+    regexp: '^# Sec='
+    line: 'Sec={{ fstests_nfs_auth_flavor }}'
+  when:
+    - fstests_fstyp == "nfs"
+    - fstests_nfs_auth_flavor is defined
+    - fstests_nfs_auth_flavor
+
 - name: Reboot system before our test so we know everything is sane
   tags: [ 'oscheck', 'fstests', 'run_tests', 'reboot' ]
   become: yes

@@ -24,3 +24,7 @@ endif
 ifeq (y,$(CONFIG_FSTESTS_NFS_SECTION_V3))
 FSTESTS_ARGS += fstests_nfs_section_v3=True
 endif
+
+ifdef CONFIG_FSTESTS_NFS_AUTH_FLAVOR
+FSTESTS_ARGS += fstests_nfs_auth_flavor='$(subst ",,$(CONFIG_FSTESTS_NFS_AUTH_FLAVOR))'
+endif
