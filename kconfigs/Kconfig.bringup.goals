@@ -96,16 +96,4 @@ config KDEVOPS_SETUP_KTLS
 	  authority, and configure tlshd on the hosts to use it. This is
 	  necessary for testing RPC over TLS, or NVMe over TCP.
 
-config KDEVOPS_SETUP_NFSD
-	bool "Set up the kernel nfs server"
-	default n
-	help
-	  Configure and bring up the kernel NFS server. This will provision
-	  a filesystem on a block device, mount it, export it and start up the
-	  nfs server and associated daemons.
-
-if KDEVOPS_SETUP_NFSD
-menu "Configure the kernel NFS server"
 source "kconfigs/Kconfig.nfsd"
-endmenu
-endif

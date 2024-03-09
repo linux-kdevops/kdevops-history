@@ -1,4 +1,16 @@
 # FIXME: need defaults for terraform hosts
+config KDEVOPS_SETUP_NFSD
+	bool "Set up the kernel nfs server"
+	default n
+	help
+	  Configure and bring up the kernel NFS server. This will provision
+	  a filesystem on a block device, mount it, export it and start up the
+	  nfs server and associated daemons.
+
+if KDEVOPS_SETUP_NFSD
+
+menu "Configure the kernel NFS server"
+
 config NFSD_EXPORT_DEVICE_PREFIX
 	string "The device prefix to use for LVM PVs"
 	default "/dev/disk/by-id/nvme-QEMU_NVMe_Ctrl_kdevops" if LIBVIRT && LIBVIRT_EXTRA_STORAGE_DRIVE_NVME
@@ -70,3 +82,7 @@ config NFSD_LEASE_TIME
 	  allow a large client cohort enough time to recover their open
 	  and lock state. But a shorter lease time helps certain tests
 	  complete faster.
+
+endmenu
+
+endif
