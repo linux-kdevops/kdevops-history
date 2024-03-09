@@ -104,17 +104,9 @@ ifeq (y,$(CONFIG_WORKFLOWS))
 include workflows/Makefile
 endif # CONFIG_WORKFLOWS
 
-ifeq (y,$(CONFIG_KDEVOPS_SETUP_SIW))
 include scripts/siw.Makefile
-endif # CONFIG_KDEVOPS_SETUP_SIW
-
-ifeq (y,$(CONFIG_KDEVOPS_SETUP_KTLS))
 include scripts/ktls.Makefile
-endif # CONFIG_KDEVOPS_SETUP_KTLS
-
-ifeq (y,$(CONFIG_KDEVOPS_SETUP_NFSD))
 include scripts/nfsd.Makefile
-endif # CONFIG_KDEVOPS_SETUP_NFSD
 
 include scripts/devconfig.Makefile
 include scripts/ssh.Makefile
