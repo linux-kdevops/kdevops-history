@@ -6,6 +6,7 @@ NFSD_EXTRA_ARGS += nfsd_export_fstype='$(subst ",,$(CONFIG_NFSD_EXPORT_FSTYPE))'
 NFSD_EXTRA_ARGS += nfsd_export_path='$(subst ",,$(CONFIG_NFSD_EXPORT_PATH))'
 NFSD_EXTRA_ARGS += nfsd_threads=$(CONFIG_NFSD_THREADS)
 NFSD_EXTRA_ARGS += nfsd_lease_time=$(CONFIG_NFSD_LEASE_TIME)
+NFSD_EXTRA_ARGS += kdevops_nfsd_enable=True
 
 EXTRA_VAR_INPUTS += extend-extra-args-nfsd
 

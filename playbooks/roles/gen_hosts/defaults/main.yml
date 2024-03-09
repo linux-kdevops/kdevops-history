@@ -30,3 +30,5 @@ is_fstests: False
 fstests_fstyp: "bogus"
 fs_config_role_path: "/dev/null"
 fs_config_data: "[section_1]"
+
+kdevops_nfsd_enable: False

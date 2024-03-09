@@ -47,13 +47,13 @@
   set_fact:
     nfsd_nodes: "{{ [ kdevops_host_prefix + '-nfsd' ] }}"
   when:
-    - nfsd_threads is defined
+    - kdevops_nfsd_enable|bool
 
 - name: Add an nfs server if one was selected
   set_fact:
     generic_nodes: "{{ generic_nodes + nfsd_nodes }}"
   when:
-    - nfsd_threads is defined
+    - kdevops_nfsd_enable|bool
 
 - name: Set fstests config file variable for {{ fstests_fstyp }}
   set_fact:
@@ -215,7 +215,7 @@
     fstests_enabled_nodes: "{{ fstests_enabled_nodes + nfsd_nodes }}"
   when:
     - is_fstests|bool
-    - nfsd_threads is defined
+    - kdevops_nfsd_enable|bool
 
 - name: Generate the fstests kdevops nodes file using {{ kdevops_nodes_template }} as jinja2 source template
   tags: [ 'hosts' ]

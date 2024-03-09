@@ -15,9 +15,9 @@ ansible_python_interpreter =  "{{ kdevops_python_interpreter }}"
 {% endif %}
 [dev:vars]
 ansible_python_interpreter =  "{{ kdevops_python_interpreter }}"
+{% if kdevops_nfsd_enable %}
 [nfsd]
-{% if nfsd_threads is defined %}
 {{ kdevops_hosts_prefix }}-nfsd
-{% endif %}
 [nfsd:vars]
 ansible_python_interpreter =  "{{ kdevops_python_interpreter }}"
+{% endif %}

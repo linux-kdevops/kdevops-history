@@ -14,7 +14,7 @@ write-your-own-template-for-your-workflow-and-task
 {% if kdevops_baseline_and_dev == True %}
 {{ kdevops_hosts_prefix }}-dev
 {% endif %}
-{% if nfsd_threads is defined %}
+{% if kdevops_nfsd_enable %}
 {{ kdevops_hosts_prefix }}-nfsd
 {% endif %}
 [all:vars]
@@ -29,10 +29,10 @@ ansible_python_interpreter =  "{{ kdevops_python_interpreter }}"
 {% endif %}
 [dev:vars]
 ansible_python_interpreter =  "{{ kdevops_python_interpreter }}"
+{% if kdevops_nfsd_enable %}
 [nfsd]
-{% if nfsd_threads is defined %}
 {{ kdevops_hosts_prefix }}-nfsd
-{% endif %}
 [nfsd:vars]
 ansible_python_interpreter =  "{{ kdevops_python_interpreter }}"
+{% endif %}
 {% endif %}
