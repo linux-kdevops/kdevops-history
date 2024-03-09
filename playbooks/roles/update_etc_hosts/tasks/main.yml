@@ -1,8 +1,4 @@
-- name: Gather network facts
-  ansible.builtin.setup:
-    gather_subset:
-      - 'network'
-
+---
 - name: Import optional extra_args file
   include_vars: "{{ item }}"
   ignore_errors: yes
@@ -13,6 +9,14 @@
       - "../extra_vars.json"
       skip: true
   tags: vars
+
+- name: Wait for hosts to become available
+  wait_for_connection:
+
+- name: Gather network facts
+  ansible.builtin.setup:
+    gather_subset:
+      - 'network'
 
 - name: Build network address
   set_fact:

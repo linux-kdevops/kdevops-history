@@ -33,11 +33,7 @@ ifeq (y,$(CONFIG_KDEVOPS_SETUP_SIW))
 KDEVOPS_BRING_UP_DEPS += siw
 endif # KDEVOPS_SETUP_SIW
 
-update_etc_hosts:
-	$(Q)ansible-playbook $(ANSIBLE_VERBOSE) \
-		-f 30 -i hosts playbooks/update_etc_hosts.yml
-
-bringup: $(KDEVOPS_BRING_UP_DEPS) update_etc_hosts
+bringup: $(KDEVOPS_BRING_UP_DEPS)
 
 destroy: $(KDEVOPS_DESTROY_DEPS)
 
