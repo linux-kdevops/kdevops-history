@@ -75,7 +75,7 @@ config GITR_REPO
 
 config GITR_REPO_COMMIT
 	string "The version of git to check out"
-	default "maint"
+	default "v2.43.0"
 	help
 	  The commit to be used for the test.
 
