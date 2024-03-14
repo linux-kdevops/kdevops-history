@@ -144,6 +144,11 @@ DYNAMIC_RUNTIME_VARS += , "fstests_start_after": True
 DYNAMIC_RUNTIME_VARS += , "fstests_start_after_test": "$(START_AFTER)"
 endif
 
+ifneq (,$(SKIP_TESTS))
+DYNAMIC_RUNTIME_VARS += , "fstests_skip_tests_enable": True
+DYNAMIC_RUNTIME_VARS += , "fstests_skip_tests": "$(SKIP_TESTS)"
+endif
+
 ifeq (y,$(CONFIG_DEVCONFIG_ENABLE_SYSTEMD_JOURNAL_REMOTE))
 FSTESTS_BASELINE_EXTRA += journal-ln
 endif

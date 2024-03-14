@@ -895,6 +895,13 @@
     - fstests_start_after|bool
   tags: [ 'oscheck', 'fstests', 'run_tests', 'checktime' ]
 
+- name: Expand tests to skip tests dynamically passed on the command line
+  set_fact:
+    fstests_skip_tests_args: "-e {{ fstests_skip_tests }}"
+  when:
+    - fstests_skip_tests_enable|bool
+  tags: [ 'oscheck', 'fstests', 'run_tests', 'checktime' ]
+
 - name: Verify use of START_AFTER
   tags: [ 'oscheck', 'fstests', 'run_tests', 'kdevops_fstests_setup', 'install' , 'generate-fstests-config' ]
   ansible.builtin.fail:
@@ -1077,6 +1084,7 @@
   vars:
     fstests_section: "{{ ansible_host | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') | regex_replace('-', '_') }}"
     initial_baseline_expunges: "{{ fstests_initial_baseline_args | trim }}"
+    skip_tests_args: "{{ fstests_skip_tests_args | trim }}"
   tags: [ 'oscheck', 'fstests', 'run_tests' ]
   become: yes
   become_flags: 'su - -c'
@@ -1091,6 +1099,7 @@
       {{ oscheck_extra_args }}
       {{ all_limit_tests }}
       {{ initial_baseline_expunges }}
+      {{ skip_tests_args }}
   ignore_errors: yes
   no_log: True
   args:

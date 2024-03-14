@@ -15,6 +15,11 @@ dynamic_limit_tests:
 
 fstests_start_after: False
 fstests_start_after_test: ""
+
+fstests_skip_tests_enable: False
+fstests_skip_tests: ""
+fstests_skip_tests_args: ""
+
 fstests_initial_baseline: False
 fstests_initial_baseline_args: ""
 
