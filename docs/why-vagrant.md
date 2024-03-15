@@ -1,3 +1,9 @@
+# Vagrant deprecation
+
+vagrant is not actively maintained so we have moved away from it for
+new development / features, [libguestfs](https://libguestfs.org/) is the
+focus of support for new features involving local virtualization.
+
 # Why Vagrant is used for virtualization
 
 There are a few reasons why kdevops has embraced Vagrant. Below we go through

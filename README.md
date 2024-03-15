@@ -37,13 +37,16 @@ and testing. It is intended to help you both be able to ramp up with any complex
 Linux kernel development environment super fast, and to also let you ramp up
 an entire lab for Linux kernel testing for a complex subsystem in a jiffy.
 
-It makes use of local ansible roles and optionally lets you use vagrant for
-different virtualization technologies or terraform in order to support any
-cloud provider, if you're into that sort of stuff. Variability is provided
-through the same variability language used in the Linux kernel, kconfig. It
-is written by Linux kernel developers, for Linux kernel developers. The
-project aims to enable support for all Linux distributions, and even has
-some support for OS X.
+It makes use of local ansible roles and optionally lets you use
+[libguestfs](https://libguestfs.org/) with libvirt or terraform in order
+to support an cloud provider. Support for vagrant in kdevops exists but is now
+deprecated in favor of [libguestfs](https://libguestfs.org/) since vagrant
+lacks any active maintenance, new development should use and focus on
+[libguestfs](https://libguestfs.org/).
+
+Variability is provided through the same variability language used in the Linux
+kernel, kconfig. It is written by Linux kernel developers, for Linux kernel
+developers. The project aims to enable support for all Linux distributions.
 
 kdevops supports [PCIe passthrough](docs/libvirt-pcie-passthrough.md)
 when using virtualization and allows you to pick and choose onto which guest
@@ -307,7 +310,7 @@ Below are sections which get into technical details of how kdevops works.
     * [How is the dynamic Vagrant files generated](docs/the-gen-nodes-ansible-role-vagrant.md)
     * [How is the terraform kdevops_nodes variable generated](docs/the-gen-nodes-ansible-role-terraform.md)
   * [How are the terraform terraform/terraform.tfvars variables generated](docs/the-terraform-gen-tfvar-ansible-role.md)
-  * [Why Vagrant is used for virtualization](docs/why-vagrant.md)
+  * [Why Vagrant (deprecated) used to be used for virtualization](docs/why-vagrant.md)
   * [A case for supporting truncated files with loopback block devices](docs/testing-with-loopback.md)
   * [Seeing more issues with loopback / truncated files setup](docs/seeing-more-issues.md)
   * [Adding a new workflow to kdevops](docs/adding-a-new-workflow.md)
