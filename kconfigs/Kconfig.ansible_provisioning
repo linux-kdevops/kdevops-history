@@ -295,8 +295,8 @@ config DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD_NTP_GOOGLE
 	help
 	  This will use Google NTP servers.
 
-config DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD_NTP_GOOGLE
-	bool "Google Debian NTP servers"
+config DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD_NTP_DEBIAN
+	bool "Debian NTP servers"
 	help
 	  This will use Debian NTP servers.
 
