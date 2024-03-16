@@ -50,6 +50,7 @@ devconfig_systemd_journal_remote_url: "http://192.168.124.1"
 devconfig_systemd_journal_remote_path: "/var/log/journal/remote/"
 
 devconfig_enable_systemd_timesyncd: False
+devconfig_enable_systemd_timesyncd_copy_host_timezone: False
 devconfig_enable_systemd_timesyncd_ntp: False
 devconfig_enable_systemd_timesyncd_ntp_google: False
 devconfig_enable_systemd_timesyncd_ntp_debian: False

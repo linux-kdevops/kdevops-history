@@ -518,6 +518,24 @@
   when:
     - devconfig_enable_systemd_timesyncd|bool
 
+- name: Get the host's timezone
+  ansible.builtin.command: "timedatectl show -p Timezone --value"
+  register: host_timezone
+  delegate_to: localhost
+  run_once: true
+  when:
+    - devconfig_enable_systemd_timesyncd_copy_host_timezone|bool
+    - not devconfig_enable_systemd_timesyncd_timezone|bool
+
+- name: Set the timezone on the target nodes to {{ host_timezone.stdout }}
+  become: yes
+  become_flags: 'su - -c'
+  become_method: sudo
+  ansible.builtin.command: "timedatectl set-timezone {{ host_timezone.stdout }}"
+  when:
+    - devconfig_enable_systemd_timesyncd_copy_host_timezone|bool
+    - not devconfig_enable_systemd_timesyncd_timezone|bool
+
 - name: Set timezone on the client to {{ devconfig_systemd_timesyncd_timezone }}
   become: yes
   become_flags: 'su - -c'

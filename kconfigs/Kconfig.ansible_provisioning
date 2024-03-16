@@ -218,9 +218,20 @@ config DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD
 
 if DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD
 
+config DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD_COPY_HOST_TIMEZONE
+	bool "Copy control host's timezone to target nodes on bringup"
+	default y
+	help
+	  When set to Y, kdevops copies the control host's timezone setting
+	  to each target node. When set to N, target nodes use the default
+	  timezone set by the Linux distribution (typically, UTC).
+
+	  The default is to copy the control host's timezone to target nodes
+	  when they are provisioned.
+
 config DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD_TIMEZONE
 	bool "Enable changing timezone using systemd-timesyncd"
-	default y
+	default n
 	help
           Set the timezone with timedatectl. Without this then we'd leave all
 	  nodes with whatever time zone they were installed with. The value in
