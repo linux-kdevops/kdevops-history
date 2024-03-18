@@ -7,3 +7,46 @@ kdevops_run_gitr: False
 
 gitr_uses_no_devices: False
 gitr_nfs_use_kdevops_nfsd: False
+
+# Family-dependent packages to install
+gitr_os_family_packages:
+  Debian:
+    - cvs
+    - cvsps
+    - gcc
+    - gettext
+    - git-core
+    - libcurl4-openssl-dev
+    - libexpat1-dev
+    - libssl-dev
+    - libz-dev
+    - perl
+    - sqlite3
+  RedHat:
+    - cvs
+    - cvsps
+    - expat-devel
+    - gcc
+    - gettext
+    - git-core
+    - git-email
+    - libcurl-devel
+    - openssl-devel
+    - perl-Memoize
+    - perl-Test-Harness
+    - perl-TAP-Harness-Archive
+    - subversion
+    - subversion-perl
+    - zlib-devel
+  Suse:
+    - cvs
+    - cvsps
+    - gcc
+    - gettext
+    - git-core
+    - libcurl-devel
+    - libexpat-devel
+    - libopenssl-1_1-devel
+    - perl-Test-Harness
+    - subversion
+    - subversion-perl

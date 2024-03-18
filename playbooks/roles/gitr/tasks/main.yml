@@ -25,6 +25,15 @@
   local_action: file path="{{ gitr_workflow_dir }}/results/" state=directory
   run_once: true
 
+- name: Install dependencies for {{ ansible_os_family }}
+  tags: gitr
+  become: true
+  become_flags: 'su - -c'
+  become_method: ansible.builtin.sudo
+  ansible.builtin.package:
+    name: "{{ gitr_os_family_packages[ansible_os_family] }}"
+    state: present
+
 - name: Remove the old test file system, if needed
   tags: [ 'gitr' ]
   become: yes
@@ -90,9 +99,6 @@
     nfs_mount_options: "{{ gitr_mount_opts }}"
   when:
     - gitr_fstype == "nfs"
-
-- name: Install dependencies
-  ansible.builtin.include_tasks: tasks/install-deps/main.yml
 
 - name: Remove old git dir
   tags: [ 'gitr' ]
