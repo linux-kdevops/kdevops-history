@@ -17,7 +17,7 @@
     <gic version='3'/>
   </features>
   <cpu mode='{{ 'host-passthrough' if libvirt_host_passthrough else 'host-model' }}' migratable='off'/>
-  <clock offset='utc'/>
+  <clock offset='localtime'/>
   <on_poweroff>destroy</on_poweroff>
   <on_reboot>restart</on_reboot>
   <on_crash>destroy</on_crash>

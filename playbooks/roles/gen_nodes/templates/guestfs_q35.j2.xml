@@ -12,7 +12,7 @@
     <apic/>
   </features>
   <cpu mode='{{ 'host-passthrough' if libvirt_host_passthrough else 'host-model' }}' migratable='off'/>
-  <clock offset='utc'>
+  <clock offset='localtime'>
     <timer name='rtc' tickpolicy='catchup'/>
     <timer name='pit' tickpolicy='delay'/>
     <timer name='hpet' present='no'/>
