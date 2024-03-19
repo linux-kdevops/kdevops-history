@@ -54,5 +54,3 @@ devconfig_enable_systemd_timesyncd_ntp: False
 devconfig_enable_systemd_timesyncd_ntp_google: False
 devconfig_enable_systemd_timesyncd_ntp_debian: False
 devconfig_enable_systemd_timesyncd_ntp_google_debian: False
-devconfig_enable_systemd_timesyncd_timezone: False
-devconfig_systemd_timesyncd_timezone: "UTC"

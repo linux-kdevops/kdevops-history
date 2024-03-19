@@ -28,14 +28,6 @@
   when:
     - devconfig_enable_systemd_timesyncd|bool
 
-- name: Set timezone on the host to {{ devconfig_systemd_timesyncd_timezone }}
-  become: yes
-  become_flags: 'su - -c'
-  become_method: sudo
-  command: "timedatectl set-timezone {{ devconfig_systemd_timesyncd_timezone }}"
-  when:
-    - devconfig_enable_systemd_timesyncd_timezone|bool
-
 - name: Enable NTP
   become: yes
   become_flags: 'su - -c'
