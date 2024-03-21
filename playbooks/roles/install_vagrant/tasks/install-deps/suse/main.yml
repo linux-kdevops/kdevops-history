@@ -109,3 +109,11 @@
   when:
     - force_install_zip|bool
     - force_install_if_present|bool or vagrant_present.rc != 0
+
+- name: Install the timezone vagrant plugin
+  command: "vagrant plugin install vagrant-timezone"
+  register: cmd_done
+  changed_when: "cmd_done.rc == 0"
+  when:
+    - force_install_zip|bool
+    - force_install_if_present|bool or vagrant_present.rc != 0

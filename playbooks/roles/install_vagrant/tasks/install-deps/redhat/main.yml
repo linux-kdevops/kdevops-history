@@ -136,3 +136,13 @@
   when:
     - force_install_zip|bool
     - plugin_check.rc != 0
+
+- name: Install the timezone vagrant plugin
+  command: "vagrant plugin install vagrant-timezone"
+  environment:
+    CONFIGURE_ARGS: 'with-libvirt-include=/usr/include/libvirt with-libvirt-lib=/usr/lib64'
+  register: cmd_done
+  changed_when: "cmd_done.rc == 0"
+  when:
+    - force_install_zip|bool
+    - plugin_check.rc != 0

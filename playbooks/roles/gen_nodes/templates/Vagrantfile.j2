@@ -108,6 +108,9 @@ libvirt_session_public_network_dev = global_data['libvirt_cfg']['session_public_
 
 Vagrant.configure("2") do |config|
   vagrant_boxes.each do |server_data|
+    if Vagrant.has_plugin?("vagrant-timezone")
+      config.timezone.value = "{{ kdevops_host_timezone.stdout }}"
+    end
     # Using sync folders won't work for say openstack / aws / azure / gce, and
     # for that we'll use terraform, so best to allow whatever data we want to
     # sync be provisioned with ansible.

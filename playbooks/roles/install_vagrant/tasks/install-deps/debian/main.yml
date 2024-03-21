@@ -76,3 +76,11 @@
   when:
     - force_install_zip|bool
     - plugin_check.rc != 0
+
+- name: Install the timezone Vagrant plugin
+  command: "vagrant plugin install vagrant-timezone"
+  register: cmd_done
+  changed_when: "cmd_done.rc == 0"
+  when:
+    - force_install_zip|bool
+    - plugin_check.rc != 0

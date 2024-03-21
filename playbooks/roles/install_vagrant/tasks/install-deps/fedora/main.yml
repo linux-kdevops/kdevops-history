@@ -7,3 +7,8 @@
       - vagrant
       - vagrant-libvirt
     state: present
+
+- name: Install the timezone vagrant plugin
+  command: "vagrant plugin install vagrant-timezone"
+  register: cmd_done
+  changed_when: "cmd_done.rc == 0"

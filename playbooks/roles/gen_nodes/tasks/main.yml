@@ -379,6 +379,10 @@
     - kdevops_workflow_enable_selftests
     - ansible_nodes_template.stat.exists
 
+- name: Get the control host's timezone
+  ansible.builtin.command: "timedatectl show -p Timezone --value"
+  register: kdevops_host_timezone
+
 - name: Verify vagrant template file exists {{ kdevops_vagrant_template_full_path }}
   stat:
     path: "{{ kdevops_vagrant_template_full_path }}"
