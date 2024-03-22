@@ -3,10 +3,6 @@
 ifeq (y,$(CONFIG_DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD))
 ANSIBLE_EXTRA_ARGS += devconfig_enable_systemd_timesyncd='True'
 
-ifeq (y,$(CONFIG_DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD_COPY_HOST_TIMEZONE))
-ANSIBLE_EXTRA_ARGS += devconfig_enable_systemd_timesyncd_copy_host_timezone='True'
-endif
-
 ifeq (y,$(CONFIG_DEVCONFIG_ENABLE_SYSTEMD_TIMESYNCD_TIMEZONE))
 ANSIBLE_EXTRA_ARGS += devconfig_enable_systemd_timesyncd_timezone='True'
 ANSIBLE_EXTRA_ARGS_DIRECT += devconfig_systemd_timesyncd_timezone='$(subst ",,$(CONFIG_DEVCONFIG_SYSTEMD_TIMESYNCD_TIMEZONE))'
