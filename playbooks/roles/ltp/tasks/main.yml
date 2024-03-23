@@ -127,7 +127,6 @@
     owner: root
     group: root
     mode: 0644
-  when: ansible_host is search("-nfs")
 
 - name: Start the NFSD service
   tags: [ 'ltp' ]
@@ -138,7 +137,6 @@
     name: nfs-server.service
     state: reloaded
     enabled: True
-  when: ansible_host is search("-nfs")
 
 - name: Run ltp
   tags: [ 'run_tests' ]
