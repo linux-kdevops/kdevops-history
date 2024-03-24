@@ -100,8 +100,8 @@
     jobs: "{{ nproc.stdout }}"
 
 - name: Ensure /opt has correct permissions
-  tags: [ 'ltp' ]
-  become: yes
+  tags: ['ltp']
+  become: true
   become_flags: 'su - -c'
   become_method: sudo
   ansible.builtin.file:
@@ -110,43 +110,43 @@
     mode: "u=rwx,g=rwx,o=rwxt"
 
 - name: Install ltp on the test systems
-  tags: [ 'ltp' ]
+  tags: ['ltp']
   community.general.make:
     chdir: "{{ ltp_build_dir }}"
     target: install
     jobs: "{{ nproc.stdout }}"
 
 - name: Start the rpcbind service
-  tags: [ 'ltp' ]
-  become: yes
+  tags: ['ltp']
+  become: true
   become_flags: 'su - -c'
   become_method: sudo
   ansible.builtin.systemd_service:
     name: rpcbind.service
     state: started
-    enabled: True
+    enabled: true
 
 - name: Generate /etc/nfs.conf
-  tags: [ 'ltp' ]
-  become: yes
+  tags: ['ltp']
+  become: true
   become_flags: 'su - -c'
   become_method: sudo
-  template:
+  ansible.builtin.template:
     src: nfs.conf.j2
     dest: /etc/nfs.conf
     owner: root
     group: root
-    mode: 0644
+    mode: "u=rw,g=r,o=r"
 
 - name: Start the NFSD service
-  tags: [ 'ltp' ]
-  become: yes
+  tags: ['ltp']
+  become: true
   become_flags: 'su - -c'
   become_method: sudo
   ansible.builtin.systemd_service:
     name: nfs-server.service
     state: reloaded
-    enabled: True
+    enabled: true
 
 - name: Run ltp
   tags: ['run_tests']
