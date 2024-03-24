@@ -39,51 +39,52 @@
     state: present
 
 - name: Set the pathname of the build directory
-  tags: [ 'build', 'ltp' ]
+  tags: ['build', 'ltp']
   ansible.builtin.set_fact:
     ltp_build_dir: "{{ data_path }}/ltp"
 
 - name: Remove existing ltp build directory
-  tags: [ 'build', 'ltp' ]
-  become: yes
+  tags: ['build', 'ltp']
+  become: true
   become_flags: 'su - -c'
   become_method: sudo
   ansible.builtin.file:
     path: "{{ ltp_build_dir }}"
     state: absent
 
-- name: Clone the {{ ltp_repo }} repository
-  tags: [ 'build', 'clone', 'git', 'ltp' ]
+- name: Clone the ltp source code from {{ ltp_repo }}
+  tags: ['build', 'clone', 'git', 'ltp']
   ansible.builtin.git:
     repo: "{{ ltp_repo }}"
     dest: "{{ ltp_build_dir }}"
     version: "{{ ltp_repo_commit }}"
-    update: yes
+    update: true
   retries: 3
   delay: 5
   register: result
   until: not result.failed
 
 - name: Initialize autotools in the build directory
-  tags: [ 'build', 'ltp' ]
+  tags: ['build', 'ltp']
   community.general.make:
     chdir: "{{ ltp_build_dir }}"
     target: autotools
 
 - name: Configure the ltp build environment
-  tags: [ 'build', 'ltp' ]
+  tags: ['build', 'ltp']
   ansible.builtin.command:
     cmd: "./configure"
     chdir: "{{ ltp_build_dir }}"
+    creates: include/config.h
 
 - name: Get nproc on the build system
-  tags: [ 'build', 'ltp' ]
+  tags: ['build', 'ltp']
   ansible.builtin.command: "{{ num_jobs }}"
   register: nproc
-  changed_when: False
+  changed_when: false
 
 - name: Build ltp from source
-  tags: [ 'build', 'ltp' ]
+  tags: ['build', 'ltp']
   community.general.make:
     chdir: "{{ ltp_build_dir }}"
     target: all
