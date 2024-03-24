@@ -17,18 +17,25 @@
     name: create_data_partition
 
 - name: Set the pathname of the local results directory
-  tags: [ 'vars' ]
+  tags: ['vars']
   ansible.builtin.set_fact:
     ltp_results_dir: "../workflows/ltp/results/{{ ansible_host }}/"
 
 - name: Clean up the local results directory
-  tags: [ 'clean_local_results' ]
-  local_action: ansible.builtin.file path="{{ ltp_results_dir }}" state=absent
+  tags: ['clean_local_results']
+  ansible.builtin.file:
+    path: "{{ ltp_results_dir }}"
+    state: absent
+  delegate_to: localhost
   run_once: true
 
 - name: Create the local results directory
-  tags: [ 'first_run' ]
-  local_action: ansible.builtin.file path="{{ ltp_results_dir }}" state=directory
+  tags: ['first_run']
+  ansible.builtin.file:
+    path: "{{ ltp_results_dir }}"
+    state: directory
+    mode: "u=rwx,g=rx,o=rx"
+  delegate_to: localhost
   run_once: true
 
 - name: Install {{ ansible_os_family }} dependencies
