@@ -11,9 +11,10 @@
       skip: true
   failed_when: false
 
-- include_role:
+- name: Set up the /data mount point
+  tags: ['data_partition']
+  ansible.builtin.include_role:
     name: create_data_partition
-  tags: [ 'data_partition' ]
 
 - name: Set the pathname of the local results directory
   tags: [ 'vars' ]
