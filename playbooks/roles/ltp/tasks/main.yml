@@ -1,14 +1,15 @@
 ---
 - name: Import optional extra_args file
-  tags: [ 'vars' ]
-  include_vars: "{{ item }}"
-  ignore_errors: yes
+  tags: ['vars']
+  ansible.builtin.include_vars:
+    file: "{{ item }}"
   with_first_found:
-    - files:
+    - files: # noqa: yaml[indentation]
       - "../extra_vars.yml"
       - "../extra_vars.yaml"
       - "../extra_vars.json"
       skip: true
+  failed_when: false
 
 - include_role:
     name: create_data_partition
