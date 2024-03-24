@@ -38,9 +38,9 @@
   delegate_to: localhost
   run_once: true
 
-- name: Install {{ ansible_os_family }} dependencies
-  tags: [ 'build', 'ltp' ]
-  become: yes
+- name: Install dependencies for {{ ansible_os_family }}
+  tags: ['build', 'ltp']
+  become: true
   become_flags: 'su - -c'
   become_method: sudo
   ansible.builtin.package:
