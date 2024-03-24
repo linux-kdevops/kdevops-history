@@ -161,41 +161,41 @@
   failed_when: false
 
 - name: Look for test results in target node's /opt/ltp/results
-  tags: [ 'copy_results' ]
-  become: yes
+  tags: ['copy_results']
+  become: true
   become_flags: 'su - -c'
   become_method: sudo
   ansible.builtin.find:
     paths: "/opt/ltp/results/"
   register: results_files
 
-- name: Copy test results to localhost
-  tags: [ 'copy_results' ]
+- name: Copy test results to the control host
+  tags: ['copy_results']
   ansible.builtin.fetch:
     src: "{{ item.path }}"
     dest: "{{ ltp_results_dir }}"
-    flat: yes
-    validate_checksum: False
+    flat: true
+    validate_checksum: false
   with_items: "{{ results_files.files }}"
   when:
     - results_files.matched > 0
 
 - name: Look for test output in target node's /opt/ltp/output
-  tags: [ 'copy_results' ]
-  become: yes
+  tags: ['copy_results']
+  become: true
   become_flags: 'su - -c'
   become_method: sudo
   ansible.builtin.find:
     paths: "/opt/ltp/output/"
   register: output_files
 
-- name: Copy test output to localhost
-  tags: [ 'copy_results' ]
+- name: Copy test output to the control host
+  tags: ['copy_results']
   ansible.builtin.fetch:
     src: "{{ item.path }}"
     dest: "{{ ltp_results_dir }}"
-    flat: yes
-    validate_checksum: False
+    flat: true
+    validate_checksum: false
   with_items: "{{ output_files.files }}"
   when:
     - output_files.matched > 0
