@@ -140,18 +140,16 @@
     enabled: True
 
 - name: Run ltp
-  tags: [ 'run_tests' ]
-  vars:
-    ltp_test: "{{ ansible_host | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') }}"
-  environment:
-    LTP_TIMEOUT_MUL: 5
-    TST_DISABLE_APPARMOR: 1
-  become: yes
+  tags: ['run_tests']
+  become: true
   become_flags: 'su - -c'
   become_method: sudo
+  vars:
+    ltp_test: "{{ ansible_host | regex_replace(kdevops_host_prefix + '-') | regex_replace('-dev') }}"
   ansible.builtin.command:
     cmd: "/opt/ltp/runltp {{ ltp_runltp_arg_dict[ltp_test] }}"
-  failed_when: False
+  changed_when: true
+  failed_when: false
 
 - name: Look for test results in target node's /opt/ltp/results
   tags: [ 'copy_results' ]
