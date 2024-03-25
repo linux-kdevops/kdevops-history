@@ -10,19 +10,18 @@
       skip: true
   tags: vars
 
-- name: Set the path where we collect gitr test results
-  tags: [ 'vars' ]
-  set_fact:
-    gitr_workflow_dir: "../workflows/gitr"
+- name: Set the pathname of the local results directory
+  tags: vars
+  ansible.builtin.set_fact:
+    gitr_results_dir: "../workflows/gitr/results/"
 
-- name: Clean up localhost results directory and files
-  tags: [ 'clean_local_results' ]
-  local_action: file path="{{ gitr_workflow_dir }}/results/" state=absent
-  run_once: true
-
-- name: Create the results directory
-  tags: [ 'first_run' ]
-  local_action: file path="{{ gitr_workflow_dir }}/results/" state=directory
+- name: Ensure the local results directory exists
+  tags: copy_results
+  ansible.builtin.file:
+    path: "{{ gitr_results_dir }}"
+    state: directory
+    mode: "u=rwx,g=rx,o=rx"
+  delegate_to: localhost
   run_once: true
 
 - name: Install dependencies for {{ ansible_os_family }}
@@ -143,95 +142,93 @@
   changed_when: False
 
 - name: Capture RPC statistics
-  tags: [ 'copy_results' ]
+  tags: copy_results
   ansible.builtin.command: "mountstats --rpc"
   register: rpc_results
   when:
     - gitr_fstype == "nfs"
     - ansible_os_family == 'RedHat'
+  changed_when: false
 
 - name: Capture transport statistics
-  tags: [ 'copy_results' ]
+  tags: copy_results
   ansible.builtin.command: "mountstats --xprt"
   register: xprt_results
   when:
     - gitr_fstype == "nfs"
     - ansible_os_family == 'RedHat'
+  changed_when: false
 
 - name: Save git regression test output to a file
-  tags: [ 'copy_results' ]
+  tags: copy_results
   ansible.builtin.copy:
     content: "{{ gitr_results.stdout_lines|join('\n') }}\n"
     dest: "{{ gitr_mnt }}/gitr.stdout"
+    mode: "u=rw,g=r,o=r"
 
 - name: Save standard error to a file
-  tags: [ 'copy_results' ]
+  tags: copy_results
   ansible.builtin.copy:
     content: "{{ gitr_results.stderr_lines|join('\n') }}\n"
     dest: "{{ gitr_mnt }}/gitr.stderr"
+    mode: "u=rw,g=r,o=r"
   when: gitr_results.rc != 0
 
 - name: Save RPC statistics to a file
-  tags: [ 'copy_results' ]
+  tags: copy_results
   ansible.builtin.copy:
     content: "{{ rpc_results.stdout_lines|join('\n') }}\n"
     dest: "{{ gitr_mnt }}/gitr.rpc"
+    mode: "u=rw,g=r,o=r"
   when:
     - gitr_fstype == "nfs"
     - ansible_os_family == 'RedHat'
 
 - name: Save transport statistics to a file
-  tags: [ 'copy_results' ]
+  tags: copy_results
   ansible.builtin.copy:
     content: "{{ xprt_results.stdout_lines|join('\n') }}\n"
     dest: "{{ gitr_mnt }}/gitr.xprt"
+    mode: "u=rw,g=r,o=r"
   when:
     - gitr_fstype == "nfs"
     - ansible_os_family == 'RedHat'
 
-- name: Get used target kernel version
-  tags: [ 'copy_results' ]
-  ansible.builtin.command: "uname -r"
-  register: uname_cmd
-  changed_when: False
-
-- name: Store kernel_rev variable
-  tags: [ 'copy_results' ]
-  set_fact:
-    kernel_rev: "{{ uname_cmd.stdout_lines | regex_replace('\\]') | regex_replace('\\[') | replace(\"'\",'') }}"
-  run_once: true
-
-- name: Copy regression results over
-  tags: [ 'copy_results' ]
+- name: Copy regression results to the control host
+  tags: copy_results
   ansible.builtin.fetch:
     src: "{{ gitr_mnt }}/gitr.stdout"
-    dest: "{{ gitr_workflow_dir }}/results/{{ kernel_rev }}.stdout"
-    flat: yes
+    dest: "{{ gitr_results_dir }}/{{ ansible_kernel }}/{{ ansible_host }}/"
+    flat: true
+    validate_checksum: false
 
-- name: Copy stderr over
-  tags: [ 'copy_results' ]
+- name: Copy stderr to the control host
+  tags: copy_results
   ansible.builtin.fetch:
     src: "{{ gitr_mnt }}/gitr.stderr"
-    dest: "{{ gitr_workflow_dir }}/results/{{ kernel_rev }}.stderr"
-    flat: yes
+    dest: "{{ gitr_results_dir }}/{{ ansible_kernel }}/{{ ansible_host }}/"
+    flat: true
+    validate_checksum: false
   when: gitr_results.rc != 0
 
-- name: Copy RPC statistics over
-  tags: [ 'copy_results' ]
+- name: Copy RPC statistics to the control host
+  tags: copy_results
   ansible.builtin.fetch:
     src: "{{ gitr_mnt }}/gitr.rpc"
-    dest: "{{ gitr_workflow_dir }}/results/{{ kernel_rev }}.rpc"
-    flat: yes
+    dest: "{{ gitr_results_dir }}/{{ ansible_kernel }}/{{ ansible_host }}/"
+    flat: true
+    validate_checksum: false
   when:
     - gitr_fstype == "nfs"
     - ansible_os_family == 'RedHat'
 
-- name: Copy transport statistics over
-  tags: [ 'copy_results' ]
+- name: Copy transport statistics to the control host
+  tags: copy_results
   ansible.builtin.fetch:
     src: "{{ gitr_mnt }}/gitr.xprt"
-    dest: "{{ gitr_workflow_dir }}/results/{{ kernel_rev }}.xprt"
-    flat: yes
+    dest: "{{ gitr_results_dir }}/{{ ansible_kernel }}/{{ ansible_host }}/"
+    flat: true
+    validate_checksum: false
   when:
     - gitr_fstype == "nfs"
     - ansible_os_family == 'RedHat'
