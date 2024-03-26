@@ -22,7 +22,7 @@
   ansible.builtin.file:
     path: "{{ guestfs_path }}"
     state: directory
-  when: kdevops_enable_guestfs
+  when: kdevops_enable_guestfs|bool
 
 - name: Verify Ansible nodes template file exists {{ kdevops_nodes_template_full_path }}
   stat:
@@ -427,14 +427,14 @@
   include_vars: "{{ topdir_path }}/{{ kdevops_nodes }}"
   ignore_errors: yes
   when:
-    - kdevops_enable_guestfs
+    - kdevops_enable_guestfs|bool
 
 - name: Create local directories for each of the guests
   ansible.builtin.file:
     path: "{{ guestfs_path }}/{{ item.name }}"
     state: directory
   with_items: "{{ guestfs_nodes }}"
-  when: kdevops_enable_guestfs
+  when: kdevops_enable_guestfs|bool
 
 - name: Generate XML files for the libvirt guests for PCI passthrough for guestfs
   delegate_to: localhost
@@ -446,7 +446,7 @@
     executable: /bin/bash
     chdir: "{{ topdir_path }}"
   when:
-    - kdevops_enable_guestfs
+    - kdevops_enable_guestfs|bool
     - pcie_passthrough_enable|bool
 
 - name: Generate XML files for the libvirt guests
@@ -458,4 +458,4 @@
     force: yes
   with_items: "{{ guestfs_nodes }}"
   when:
-    - kdevops_enable_guestfs
+    - kdevops_enable_guestfs|bool

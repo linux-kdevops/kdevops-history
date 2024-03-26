@@ -80,4 +80,4 @@
     line: '\1\2\3'
   when:
     - ansible_os_family == 'Debian'
-    - kdevops_enable_guestfs
+    - kdevops_enable_guestfs|bool
