@@ -11,7 +11,8 @@ config BOOTLINUX_TREE_NEXT_NAME
 config BOOTLINUX_TREE_NEXT_URL
 	string
 	default "https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git" if !USE_LOCAL_LINUX_MIRROR
-	default "git://192.168.124.1/mirror/linux-next.git" if USE_LIBVIRT_MIRROR && !BOOTLINUX_9P
+	default $(shell, scripts/append-makefile-vars.sh git:// $(KDEVOPS_DEFAULT_BRIDGE_IP_VAGRANT) /mirror/linux-next.git) if USE_LIBVIRT_MIRROR && !BOOTLINUX_9P && VAGRANT
+	default $(shell, scripts/append-makefile-vars.sh git:// $(KDEVOPS_DEFAULT_BRIDGE_IP_GUESTFS) /mirror/linux-next.git) if USE_LIBVIRT_MIRROR && !BOOTLINUX_9P && GUESTFS
 	default "/mirror/linux-next.git" if USE_LIBVIRT_MIRROR && BOOTLINUX_9P
 
 endif # BOOTLINUX_TREE_NEXT
