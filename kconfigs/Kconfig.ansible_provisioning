@@ -194,8 +194,8 @@ config DEVCONFIG_SYSTEMD_JOURNAL_USE_HTTP
 
 config DEVCONFIG_SYSTEMD_JOURNAL_REMOTE_URL
 	string "systemd-remote URL"
-	default "http://192.168.124.1" if VAGRANT
-	default GUESTFS_DEFAULT_BRIDGE_IP if GUESTFS
+	default $(shell, scripts/append-makefile-vars.sh http:// $(KDEVOPS_DEFAULT_BRIDGE_IP_VAGRANT)) if VAGRANT
+	default $(shell, scripts/append-makefile-vars.sh http:// $(KDEVOPS_DEFAULT_BRIDGE_IP_GUESTFS)) if GUESTFS
 	help
           This is used for the client /etc/systemd/journal-upload.conf URL line.
           By default we won't use SSL for now. If you should make sure the

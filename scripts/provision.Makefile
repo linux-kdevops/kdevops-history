@@ -31,6 +31,18 @@ KDEVOPS_PROVISIONED_DEVCONFIG := .provisioned_once_devconfig
 KDEVOPS_BRING_UP_DEPS :=
 KDEVOPS_DESTROY_DEPS :=
 
+# This is currently used when vitualization is enabled so to allow us to
+# allow guests to use the bridge ip for mirroring git trees but the general idea
+# could be extended to support cloud later. For example perhaps this could be
+# a third guest which we can instantiate later. This would be useful for things
+# like systemd-remote as well.
+#
+# We export this into Makefiles so that we can use them both on Makefiles and
+# on Kconfig files with environment variables such as $(FOO)
+export KDEVOPS_DEFAULT_DISTRO			:= $(shell $(TOPDIR)/scripts/get-distro-prefix.sh)
+export KDEVOPS_DEFAULT_BRIDGE_IP_VAGRANT	:= $(shell $(TOPDIR)/scripts/get-distro-default-bridge.sh $(KDEVOPS_DEFAULT_DISTRO) vagrant)
+export KDEVOPS_DEFAULT_BRIDGE_IP_GUESTFS	:= $(shell $(TOPDIR)/scripts/get-distro-default-bridge.sh $(KDEVOPS_DEFAULT_DISTRO) guestfs)
+
 # These go last
 KDEVOPS_BRING_UP_LATE_DEPS :=
 
