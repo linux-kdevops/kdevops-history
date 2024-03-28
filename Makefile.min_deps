@@ -8,6 +8,7 @@
 BINARY_DEPS :=
 BINARY_DEPS += sudo
 BINARY_DEPS += make
+BINARY_DEPS += nc
 BINARY_DEPS += ansible-playbook
 
 BINARY_DEPS_VCHECKS := $(subst $(TOPDIR)/,,$(wildcard $(TOPDIR)/scripts/version_check/*))
