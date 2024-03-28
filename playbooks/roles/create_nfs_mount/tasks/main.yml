@@ -1,13 +1,14 @@
 ---
 - name: Import optional extra_args file
-  include_vars: "{{ item }}"
-  ignore_errors: yes
+  ansible.builtin.include_vars:
+    file: "{{ item }}"
   with_first_found:
     - files:
-      - "../extra_vars.yml"
-      - "../extra_vars.yaml"
-      - "../extra_vars.json"
+        - "../extra_vars.yml"
+        - "../extra_vars.yaml"
+        - "../extra_vars.json"
       skip: true
+  failed_when: false
   tags: vars
 
 - name: Install NFS client administrative tools for {{ ansible_os_family }}
@@ -27,20 +28,20 @@
     name: "{{ packages[ansible_os_family] }}"
     state: present
 
-- name: Check if {{ nfs_mounted_on }} is mounted
-  become: yes
-  become_method: sudo
+- name: Inspect {{ nfs_mounted_on }}
+  become: true
+  become_method: ansible.builtin.sudo
   ansible.builtin.command: mountpoint -q {{ nfs_mounted_on }}
   register: mountpoint_stat
-  failed_when: False
-  changed_when: False
+  failed_when: false
+  changed_when: false
 
-- name: Ensure {{ nfs_mounted_on }} is mounted
-  become: yes
+- name: Mount {{ nfs_mounted_on }}
+  become: true
   become_flags: 'su - -c'
-  become_method: sudo
+  become_method: ansible.builtin.sudo
   throttle: 1
-  ansible.builtin.mount:
+  ansible.posix.mount:
     path: "{{ nfs_mounted_on }}"
     src: "{{ nfs_server_hostname }}:{{ nfs_server_export }}"
     fstype: "nfs"
