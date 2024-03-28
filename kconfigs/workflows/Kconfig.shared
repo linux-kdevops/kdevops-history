@@ -75,11 +75,18 @@ endif # WORKFLOW_KDEVOPS_GIT_CUSTOM
 
 if !WORKFLOW_KDEVOPS_GIT_CUSTOM
 
+config HAVE_MIRROR_KDEVOPS
+	bool
+	depends on USE_LIBVIRT_MIRROR
+	default $(shell, scripts/check_mirror_present.sh /mirror/kdevops.git)
+
 config WORKFLOW_KDEVOPS_GIT
 	string
 	default "https://github.com/linux-kdevops/kdevops.git" if !GIT_ALTERNATIVES && !HAVE_CUSTOM_KDEVOPS_GIT
-	default "https://github.com/linux-kdevops/kdevops.git" if GIT_LINUX_KDEVOPS_GITHUB
-	default "https://gitlab.com/linux-kdevops/kdevops.git" if GIT_LINUX_KDEVOPS_GITLAB
+	default "https://github.com/linux-kdevops/kdevops.git" if GIT_LINUX_KDEVOPS_GITHUB && !HAVE_MIRROR_KDEVOPS
+	default "https://gitlab.com/linux-kdevops/kdevops.git" if GIT_LINUX_KDEVOPS_GITLAB && !HAVE_MIRROR_KDEVOPS
+	default $(shell, scripts/append-makefile-vars.sh git:// $(KDEVOPS_DEFAULT_BRIDGE_IP_VAGRANT) /mirror/kdevops.git) if HAVE_MIRROR_KDEVOPS && VAGRANT
+	default $(shell, scripts/append-makefile-vars.sh git:// $(KDEVOPS_DEFAULT_BRIDGE_IP_GUESTFS) /mirror/kdevops.git) if HAVE_MIRROR_KDEVOPS && GUESTFS
 	help
 	  Some workflows want to also clone a version of kdevops on each target.
 	  An example of this is when using the fstests workflow, which carries
