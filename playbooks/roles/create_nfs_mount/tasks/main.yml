@@ -10,6 +10,23 @@
       skip: true
   tags: vars
 
+- name: Install NFS client administrative tools for {{ ansible_os_family }}
+  tags: deps
+  vars:
+    packages:
+      Debian:
+        - "nfs-common"
+      Suse:
+        - "nfs-utils"
+      RedHat:
+        - "nfs-utils"
+  become: true
+  become_flags: 'su - -c'
+  become_method: ansible.builtin.sudo
+  ansible.builtin.package:
+    name: "{{ packages[ansible_os_family] }}"
+    state: present
+
 - name: Check if {{ nfs_mounted_on }} is mounted
   become: yes
   become_method: sudo
@@ -17,21 +34,6 @@
   register: mountpoint_stat
   failed_when: False
   changed_when: False
-
-#- name: Check if {{ nfs_mounted_on }} is present in /etc/fstab
-#  become: yes
-#  become_method: sudo
-#  ansible.builtin.shell: |
-#    set -o pipefail
-#    awk '{ print $2 }' /etc/fstab | grep -q ^"{{ nfs_mounted_on }}"
-#  register: fstab_grep_stat
-#  failed_when: False
-#  changed_when: False
-#  args:
-#    executable: /bin/bash
-
-- name: Install dependencies
-  ansible.builtin.include_tasks: install-deps/main.yml
 
 - name: Ensure {{ nfs_mounted_on }} is mounted
   become: yes
