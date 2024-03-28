@@ -34,12 +34,16 @@ config INSTALL_LOCAL_LINUX_MIRROR
 	  to keep these properly updated. The repositories will be placed
 	  into /mirror/ directory:
 
+	  Kernel development trees:
 	    /mirror/linux.git
 	    /mirror/linux-stable.git
 	    /mirror/linux-next.git
 	    /mirror/kdevops-linus.git
 	    /mirror/mcgrof-next.git
 	    /mirror/mcgrof-linus.git
+
+	  kdevops specific trees and kdevops git alternatives:
+	    /mirror/kdevops.git
 
 	  Enabling this even if you already have the repositories does nothing
 	  so it is safe to keep this enabled even after your first linux-mirror
@@ -50,6 +54,34 @@ config INSTALL_LOCAL_LINUX_MIRROR
 config MIRROR_GIT_WORKS
 	bool
 	default $(shell, ./scripts/test_git_firewall.sh)
+
+choice
+	prompt "kdevops mirror source"
+	default MIRROR_KDEVOPS_HTTPS_GITHUB
+	depends on INSTALL_LOCAL_LINUX_MIRROR
+
+config MIRROR_KDEVOPS_HTTPS_GITHUB
+	bool "HTTPS (github)"
+	help
+	  If you enable this option then Github HTTPS will be used as the
+	  source of the mirror. The URL is:
+
+	  https://github.com/linux-kdevops/kdevops.git
+
+config MIRROR_KDEVOPS_HTTPS_GITLAB
+	bool "HTTPS (GitLab)"
+	help
+	  If you enable this option then GitLab HTTPS will be used as the
+	  source of the mirror. The URL is:
+
+	  https://gitlab.com/linux-kdevops/kdevops.git
+
+endchoice
+
+config MIRROR_KDEVOPS_URL
+	string
+	default "https://github.com/linux-kdevops/kdevops.git" if MIRROR_KDEVOPS_HTTPS_GITHUB
+	default "https://gitlab.com/linux-kdevops/kdevops.git" if MIRROR_KDEVOPS_HTTPS_GITLAB
 
 choice
 	prompt "Linux mirror protocol"

@@ -46,8 +46,8 @@ LOCALHOST_SETUP_WORK += mirror
 
 mirror-help-menu:
 	@echo "Mirror options:"
-	@echo "mirror		- sets up systemd mirrors (Linux & QEMU)"
-	@echo "mirror-status	- checks systemd mirrors status (Linux & QEMU)"
+	@echo "mirror		- sets up systemd mirrors"
+	@echo "mirror-status	- checks systemd mirrors status"
 	@echo ""
 
 HELP_TARGETS += mirror-help-menu
@@ -60,3 +60,4 @@ export MCGROF		:= $(subst ",,$(CONFIG_MIRROR_MCGROF_URL))
 export MCGROF_LINUS	:= $(subst ",,$(CONFIG_MIRROR_MCGROF_LINUS_URL))
 export QEMU		:= $(subst ",,$(CONFIG_MIRROR_QEMU_URL))
 export QEMU_JIC23	:= $(subst ",,$(CONFIG_MIRROR_QEMU_JIC23_URL))
+export KDEVOPS		:= $(subst ",,$(CONFIG_MIRROR_KDEVOPS_URL))

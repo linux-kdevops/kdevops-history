@@ -1,0 +1,10 @@
+[Unit]
+Description=kdevops mirror query timer [kdevops.git]
+ConditionPathExists=/mirror/qemu.git
+
+[Timer]
+OnBootSec=5m
+OnUnitInactiveSec=10m
+
+[Install]
+WantedBy=default.target

@@ -15,6 +15,9 @@ LINUX_TIMERS += kdevops-linus-mirror.timer
 LINUX_TIMERS += mcgrof-next-mirror.timer
 LINUX_TIMERS += mcgrof-linus-mirror.timer
 
+KDEVOPS_SERVICES  := kdevops-mirror.service
+KDEVOPS_TIMERS := kdevops-mirror.timer
+
 QEMU_SERVICES  := qemu-mirror.service
 QEMU_SERVICES  += qemu-jic23-mirror.service
 QEMU_TIMERS    := qemu-mirror.timer
@@ -32,12 +35,15 @@ MCGROF_TARGET_LINUS	:= $(MIRROR_PATH)/mcgrof-linus.git
 MCGROF_TARGET		:= $(MIRROR_PATH)/mcgrof-next.git
 QEMU_TARGET     	:= $(MIRROR_PATH)/qemu.git
 QEMU_JIC23_TARGET	:= $(MIRROR_PATH)/qemu-jic23.git
+KDEVOPS_TARGET		:= $(MIRROR_PATH)/kdevops.git
 
 MIRROR_SERVICES := $(LINUX_SERVICES)
 MIRROR_SERVICES += $(QEMU_SERVICES)
+MIRROR_SERVICES += $(KDEVOPS_SERVICES)
 
 MIRROR_TIMERS   := $(LINUX_TIMERS)
 MIRROR_TIMERS   += $(QEMU_TIMERS)
+MIRROR_TIMERS   += $(KDEVOPS_TIMERS)
 
 ifeq ($(V),1)
 export Q=
@@ -95,6 +101,10 @@ mirror:
 	$(Q)if [ ! -d $(QEMU_JIC23_TARGET) ]; then \
 	  echo "          CLONE qemu-project/jic23-qemu" ;\
 	  git -C $(MIRROR_PATH) clone $(GIT_VERBOSE) --progress --mirror $(QEMU_JIC23) --reference /mirror/qemu.git $(QEMU_JIC23_TARGET) ;\
+	fi
+	$(Q)if [ ! -d $(KDEVOPS_TARGET) ]; then \
+	  echo "          CLONE linux-kdevops/kdevops" ;\
+	  git -C $(MIRROR_PATH) clone $(GIT_VERBOSE) --progress --mirror $(KDEVOPS) $(KDEVOPS_TARGET) ;\
 	fi
 
 install:
