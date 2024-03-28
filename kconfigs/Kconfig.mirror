@@ -45,6 +45,9 @@ config INSTALL_LOCAL_LINUX_MIRROR
 	  kdevops specific trees and kdevops git alternatives:
 	    /mirror/kdevops.git
 
+	  Tools:
+	    /mirror/fstests.git
+
 	  Enabling this even if you already have the repositories does nothing
 	  so it is safe to keep this enabled even after your first linux-mirror
 	  setup. You can however safely also disable this option after your
@@ -387,5 +390,44 @@ config MIRROR_QEMU_JIC23_URL
 	default "https://gitlab.com/jic23/qemu.git" if MIRROR_QEMU_JIC23_HTTPS_GITLAB
 	default "ssh://git@gitlab.com:jic23/qemu.git" if MIRROR_QEMU_JIC23_SSH_GITLAB
 
-endif
+choice
+	prompt "Tools - xfstests-dev.git mirror protocol/source"
+	default MIRROR_FSTESTS_GIT if MIRROR_GIT_WORKS
+	default MIRROR_FSTESTS_HTTPS if !MIRROR_GIT_WORKS
+	depends on INSTALL_LOCAL_LINUX_MIRROR
+
+config MIRROR_FSTESTS_GIT
+	bool "Git"
+	depends on MIRROR_GIT_WORKS
+	help
+	  If you enable this option then git:// protocol will be used as the
+	  source of the mirror. The URL is:
+
+	  git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
+
+config MIRROR_FSTESTS_HTTPS
+	bool "HTTPS"
+	help
+	  If you enable this option then GitLab HTTPS will be used as the
+	  source of the mirror. The URL is:
+
+	  https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
+
+config MIRROR_FSTESTS_HTTPS_GOOGLE
+	bool "HTTPS (Google)"
+	help
+	  If you enable this option then Google HTTPS will be used as the source
+	  of the mirror. The URL is:
+
+	  https://kernel.googlesource.com/pub/scm/fs/xfs/xfstests-dev.git
+
+endchoice
+
+config MIRROR_FSTESTS_URL
+	string
+	default "git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git" if MIRROR_FSTESTS_GIT
+	default "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git" if MIRROR_FSTESTS_HTTPS
+	default "https://kernel.googlesource.com/pub/scm/fs/xfs/xfstests-dev.git" if MIRROR_FSTESTS_HTTPS_GOOGLE
+
+endif # ENABLE_LOCAL_LINUX_MIRROR
 endif # TERRAFORM

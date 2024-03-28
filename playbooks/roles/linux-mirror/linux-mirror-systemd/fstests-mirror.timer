@@ -1,0 +1,11 @@
+[Unit]
+Description=fstests mirror query timer [fstests.git]
+ConditionPathExists=/mirror/fstests.git
+
+[Timer]
+OnBootSec=10m
+# Every 6 hours
+OnUnitInactiveSec=360m
+
+[Install]
+WantedBy=default.target
