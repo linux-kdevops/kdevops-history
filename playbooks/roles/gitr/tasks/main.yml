@@ -1,13 +1,14 @@
 ---
 - name: Import optional extra_args file
-  include_vars: "{{ item }}"
-  ignore_errors: yes
+  ansible.builtin.include_vars:
+    file: "{{ item }}"
   with_first_found:
     - files:
-      - "../extra_vars.yml"
-      - "../extra_vars.yaml"
-      - "../extra_vars.json"
+        - "../extra_vars.yml"
+        - "../extra_vars.yaml"
+        - "../extra_vars.json"
       skip: true
+  failed_when: false
   tags: vars
 
 - name: Set the pathname of the local results directory
@@ -34,51 +35,51 @@
     name: "{{ gitr_os_family_packages[ansible_os_family] }}"
     state: present
 
-- name: Remove the old test file system, if needed
-  tags: [ 'gitr' ]
-  become: yes
+- name: Remove the old test file system
+  tags: gitr
+  become: true
   become_flags: 'su - -c'
-  become_method: sudo
+  become_method: ansible.builtin.sudo
   ansible.posix.mount:
     path: "{{ gitr_mnt }}"
     state: unmounted
 
-- name: Create the file system under test, if needed
-  tags: [ 'gitr' ]
-  include_role:
+- name: Create the file system under test
+  tags: gitr
+  ansible.builtin.include_role:
     name: create_partition
-  vars:
+  vars: # noqa: var-naming[no-role-prefix]
     disk_setup_device: "{{ gitr_device }}"
     disk_setup_fstype: "{{ gitr_fstype }}"
-    disk_setup_label : "{{ gitr_label }}"
+    disk_setup_label: "{{ gitr_label }}"
     disk_setup_fs_opts: "-L {{ gitr_label }}"
     disk_setup_path: "{{ gitr_mnt }}"
     disk_setup_mount_opts: "{{ gitr_mount_opts }}"
   when:
     - not gitr_uses_no_devices|bool
 
-- name: Create the tmpfs file system under test, if needed
-  tags: [ 'gitr' ]
-  include_role:
+- name: Create the tmpfs file system under test
+  tags: gitr
+  ansible.builtin.include_role:
     name: create_tmpfs
-  vars:
-    tmpfs_mnt_options: "{{ gitr_mount_opts }}"
+  vars: # noqa: var-naming[no-role-prefix]
+    tmpfs_mount_options: "{{ gitr_mount_opts }}"
     tmpfs_mounted_on: "{{ gitr_mnt }}"
   when:
     - gitr_fstype == "tmpfs"
 
 - name: Set the export pathname
-  tags: [ 'gitr' ]
-  set_fact:
+  tags: gitr
+  ansible.builtin.set_fact:
     gitr_nfs_server_export: "{{ ansible_host }}-gitr"
   when:
     - gitr_nfs_use_kdevops_nfsd|bool
     - gitr_fstype == "nfs"
 
 - name: Create an NFSD export for testing
-  include_role:
+  ansible.builtin.include_role:
     name: nfsd_add_export
-  vars:
+  vars: # noqa: var-naming[no-role-prefix]
     server_host: "{{ gitr_nfs_server_host }}"
     export_volname: "{{ gitr_nfs_server_export }}"
     export_options: "{{ nfsd_export_options }}"
@@ -101,7 +102,7 @@
   tags: gitr
   ansible.builtin.include_role:
     name: create_nfs_mount
-  vars:
+  vars:  # noqa: var-naming[no-role-prefix]
     nfs_mounted_on: "{{ gitr_mnt }}"
     nfs_server_hostname: "{{ gitr_nfs_server_host }}"
     nfs_server_export: "{{ nfsd_export_path }}/{{ gitr_nfs_server_export }}"
@@ -123,47 +124,47 @@
     - not kdevops_workflows_dedicated_workflow|bool
     - gitr_fstype == "nfs"
 
-- name: Remove old git dir
-  tags: [ 'gitr' ]
-  become: yes
+- name: Remove existing git build directory
+  tags: gitr
+  become: true
   become_flags: 'su - -c'
-  become_method: sudo
+  become_method: ansible.builtin.sudo
   ansible.builtin.file:
     path: "{{ gitr_mnt }}/git"
     state: absent
 
-- name: git clone git
-  tags: [ 'gitr' ]
+- name: Clone the git source code from {{ gitr_repo }}
+  tags: gitr
   ansible.builtin.git:
     repo: "{{ gitr_repo }}"
     dest: "{{ gitr_mnt }}/git"
-    update: yes
+    update: true
     version: "{{ gitr_repo_commit }}"
   retries: 3
   delay: 5
   register: result
   until: not result.failed
 
-- name: Get nproc
-  tags: [ 'gitr', 'build', 'vars' ]
+- name: Get nproc on the target node
+  tags: vars
   ansible.builtin.command: "{{ num_jobs }}"
   register: nproc
-  changed_when: False
+  changed_when: false
 
-- name: Build git
-  tags: [ 'gitr', 'build' ]
+- name: Build git on the target nodes
+  tags: ['gitr', 'build']
   community.general.make:
     chdir: "{{ gitr_mnt }}/git"
     jobs: "{{ nproc.stdout }}"
 
 - name: Run the full git regression suite
-  tags: [ 'run_tests' ]
+  tags: run_tests
   ansible.builtin.shell:
     cmd: "prove -Q --jobs {{ nproc.stdout }} ./t[0-9]*.sh"
     chdir: "{{ gitr_mnt }}/git/t"
   register: gitr_results
-  failed_when: False
-  changed_when: False
+  failed_when: false
+  changed_when: false
 
 - name: Run specific git regression tests
   tags: run_specific_tests
