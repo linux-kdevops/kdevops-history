@@ -149,3 +149,11 @@ install:
 	$(Q)sudo cp $(GIT_DAEMON_FILES) $(LOCAL_SYSTEMD)
 	$(Q)sudo systemctl enable git-daemon.socket
 	$(Q)sudo systemctl start git-daemon.socket
+
+status:
+	$(NQ) systemd timer units list
+	$(Q)systemctl --user list-timers
+	$(NQ) systemd timer status
+	$(Q)systemctl status --user $(MIRROR_TIMERS)
+	$(NQ) systemd service units status
+	$(Q)systemctl status --user $(MIRROR_SERVICES)

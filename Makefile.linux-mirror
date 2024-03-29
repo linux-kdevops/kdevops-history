@@ -26,18 +26,7 @@ mirror: $(KDEVOPS_EXTRA_VARS)
 PHONY += mirror
 
 mirror-status: $(KDEVOPS_EXTRA_VARS)
-	$(NQ) systemd timer units list
-	$(Q)systemctl --user list-timers
-	$(NQ) systemd timer status
-	$(Q)systemctl status --user linux-mirror.timer linux-stable-mirror.timer \
-		linux-next-mirror.timer mcgrof-next-mirror.timer \
-		kdevops-linus-mirror.timer \
-		qemu-mirror.timer jic23-qemu-mirror.timer
-	$(NQ) systemd service units status
-	$(Q)systemctl status --user linux-mirror.service linux-stable-mirror.service \
-		kdevops-linus-mirror.service \
-		linux-next-mirror.service mcgrof-next-mirror.service \
-		qemu-mirror.service jic23-qemu-mirror.timer
+	$(Q)make -C $(MIRROR_CODE) status
 
 PHONY += mirror-status
 
