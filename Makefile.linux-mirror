@@ -19,7 +19,7 @@ MIRROR_CODE      := $(TOPDIR)/playbooks/roles/linux-mirror/linux-mirror-systemd/
 
 # Since we don't support varabiliity yet, for now we keep it very simple:
 mirror: $(KDEVOPS_EXTRA_VARS)
-	$(NQ) Setting up Linux and QEMU systemd mirrors on localhost
+	$(Q)echo Setting up all mirrors on localhost
 	$(Q)make -C $(MIRROR_CODE) mirror
 	$(Q)make -C $(MIRROR_CODE) install
 
