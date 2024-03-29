@@ -1,15 +1,15 @@
 ---
 - name: Import optional extra_args file
-  tags: ['vars']
   ansible.builtin.include_vars:
     file: "{{ item }}"
   with_first_found:
-    - files: # noqa: yaml[indentation]
-      - "../extra_vars.yml"
-      - "../extra_vars.yaml"
-      - "../extra_vars.json"
+    - files:
+        - "../extra_vars.yml"
+        - "../extra_vars.yaml"
+        - "../extra_vars.json"
       skip: true
   failed_when: false
+  tags: vars
 
 - name: Set up the /data mount point
   tags: ['data_partition']
