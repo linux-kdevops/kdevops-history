@@ -48,6 +48,7 @@ config INSTALL_LOCAL_LINUX_MIRROR
 
 	  Tools:
 	    /mirror/fstests.git
+	    /mirror/blktests.git
 
 	  Enabling this even if you already have the repositories does nothing
 	  so it is safe to keep this enabled even after your first linux-mirror
@@ -458,6 +459,10 @@ config MIRROR_KDEVOPS_FSTESTS_URL
 	string
 	default "https://github.com/linux-kdevops/fstests.git" if MIRROR_KDEVOPS_FSTESTS_HTTPS_GITHUB
 	default "https://gitlab.com/linux-kdevops/fstests.git" if MIRROR_KDEVOPS_FSTESTS_HTTPS_GITLAB
+
+config MIRROR_BLKTESTS_URL
+	string
+	default "https://github.com/osandov/blktests.git"
 
 endif # ENABLE_LOCAL_LINUX_MIRROR
 endif # TERRAFORM
