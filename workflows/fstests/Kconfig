@@ -275,9 +275,16 @@ endmenu
 
 endif # FSTESTS_TMPFS
 
+config HAVE_MIRROR_FSTESTS
+	bool
+	depends on USE_LIBVIRT_MIRROR
+	default $(shell, scripts/check_mirror_present.sh /mirror/fstests.git)
+
 config FSTESTS_GIT
 	string "The fstests git tree to clone"
-	default "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git" if !GIT_ALTERNATIVES
+	default "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git" if !GIT_ALTERNATIVES && !HAVE_MIRROR_FSTESTS
+	default $(shell, scripts/append-makefile-vars.sh git:// $(KDEVOPS_DEFAULT_BRIDGE_IP_VAGRANT) /mirror/fstests.git) if !GIT_ALTERNATIVES && HAVE_MIRROR_FSTESTS && VAGRANT
+	default $(shell, scripts/append-makefile-vars.sh git:// $(KDEVOPS_DEFAULT_BRIDGE_IP_GUESTFS) /mirror/fstests.git) if !GIT_ALTERNATIVES && HAVE_MIRROR_FSTESTS && GUESTFS
 	default "https://github.com/linux-kdevops/fstests.git" if GIT_LINUX_KDEVOPS_GITHUB
 	default "https://gitlab.com/linux-kdevops/fstests.git" if GIT_LINUX_KDEVOPS_GITLAB
 	default "https://github.com/btrfs/fstests.git" if FSTESTS_BTRFS
