@@ -127,9 +127,16 @@ config BLKTESTS_WATCHDOG_RESET_HUNG_SYSTEMS
 
 endif # BLKTESTS_WATCHDOG
 
+config HAVE_MIRROR_BLKTESTS
+	bool
+	depends on USE_LIBVIRT_MIRROR
+	default $(shell, scripts/check_mirror_present.sh /mirror/blktests.git)
+
 config BLKTESTS_GIT
 	string "The blktests git tree to clone"
-	default "https://github.com/osandov/blktests.git"
+	default "https://github.com/osandov/blktests.git" if !HAVE_MIRROR_BLKTESTS
+	default $(shell, scripts/append-makefile-vars.sh git:// $(KDEVOPS_DEFAULT_BRIDGE_IP_VAGRANT) /mirror/blktests.git) if HAVE_MIRROR_BLKTESTS && VAGRANT
+	default $(shell, scripts/append-makefile-vars.sh git:// $(KDEVOPS_DEFAULT_BRIDGE_IP_GUESTFS) /mirror/blktests.git) if HAVE_MIRROR_BLKTESTS && GUESTFS
 	help
 	  The blktests git tree to clone.
 
