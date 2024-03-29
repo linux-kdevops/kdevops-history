@@ -23,6 +23,7 @@ config KDEVOPS_FIRST_RUN
 	  for a series of entries which will help you with this first run.
 	  Enabling these are not required, they do however help.
 
+source "kconfigs/Kconfig.defaults"
 source "kconfigs/Kconfig.distro"
 
 menu "Target architecture"

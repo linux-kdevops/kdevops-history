@@ -1,0 +1,91 @@
+---
+- name: Import optional extra_args file
+  include_vars: "{{ item }}"
+  ignore_errors: yes
+  with_first_found:
+    - files:
+      - "../extra_vars.yml"
+      - "../extra_vars.yaml"
+      - "../extra_vars.json"
+      skip: true
+  tags: vars
+
+- name: Set up the mirrors.yaml based on preferences configured
+  tags: [ 'mirror' ]
+  template:
+    src: "mirrors.yaml.j2"
+    dest: "{{ topdir_path }}/playbooks/roles/linux-mirror/linux-mirror-systemd/mirrors.yaml"
+    force: yes
+    trim_blocks: True
+    lstrip_blocks: True
+  when:
+    - install_linux_mirror|bool
+
+- name: Start mirroring
+  delegate_to: localhost
+  run_once: true
+  shell: |
+    set -o pipefail
+    {{ role_path }}/python/start-mirroring.py --verbose
+  args:
+    executable: /bin/bash
+    chdir: "{{ topdir_path }}"
+  when:
+    - install_linux_mirror|bool
+
+- name: Generate systemd service and timer unit files
+  delegate_to: localhost
+  run_once: true
+  shell: |
+    set -o pipefail
+    {{ role_path }}/python/gen-mirror-files.py --refresh 360m --refresh-on-boot 10m
+  args:
+    executable: /bin/bash
+    chdir: "{{ topdir_path }}"
+  when:
+    - install_linux_mirror|bool
+
+- name: load variables from yaml file
+  include_vars:
+    file: "{{ topdir_path }}/playbooks/roles/linux-mirror/linux-mirror-systemd/mirrors.yaml"
+    name: mirrors
+
+- name: Copy systemd service file to user systemd dir
+  copy:
+    src: "{{ topdir_path }}/playbooks/roles/linux-mirror/linux-mirror-systemd/{{ item.short_name}}-mirror.service"
+    dest: "{{ mirror_user_system_dir }}/"
+  with_items:
+    - "{{ mirrors.get('mirrors') }}"
+  loop_control:
+    label: "Installing {{ item.short_name}}-mirror.service user serice unit ..."
+
+- name: Copy systemd timer file to user systemd dir
+  copy:
+    src: "{{ topdir_path }}/playbooks/roles/linux-mirror/linux-mirror-systemd/{{ item.short_name}}-mirror.timer"
+    dest: "{{ mirror_user_system_dir }}/"
+  with_items:
+    - "{{ mirrors.get('mirrors') }}"
+  loop_control:
+    label: "Installing {{ item.short_name}}-mirror.service user unit ..."
+
+- name: Enable systemd unit for mirror services
+  ansible.builtin.systemd_service:
+    name: "{{ item.short_name}}-mirror.service"
+    state: started
+    enabled: true
+    scope: user
+  with_items:
+    - "{{ mirrors.get('mirrors') }}"
+  loop_control:
+    label: "Enabling {{ item.short_name}}-mirror.service unit ..."
+
+- name: Enable systemd unit for mirror timers
+  ansible.builtin.systemd_service:
+    name: "{{ item.short_name }}-mirror.timer"
+    state: started
+    enabled: true
+    scope: user
+  with_items:
+    - "{{ mirrors.get('mirrors') }}"
+  loop_control:
+    label: "Enabling {{ item.short_name}}-mirror.timer unit ..."

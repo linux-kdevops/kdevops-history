@@ -464,5 +464,9 @@ config MIRROR_BLKTESTS_URL
 	string
 	default "https://github.com/osandov/blktests.git"
 
+config MIRROR_XFSPROGS_URL
+	string
+	default DEFAULT_XFSPROGS_URL
+
 endif # ENABLE_LOCAL_LINUX_MIRROR
 endif # TERRAFORM

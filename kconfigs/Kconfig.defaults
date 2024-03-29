@@ -1,0 +1,3 @@
+config DEFAULT_XFSPROGS_URL
+	string
+	default "https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git"
