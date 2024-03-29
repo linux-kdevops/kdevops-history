@@ -19,7 +19,9 @@ KDEVOPS_SERVICES  := kdevops-mirror.service
 KDEVOPS_TIMERS := kdevops-mirror.timer
 
 TOOLS_SERVICES  := fstests-mirror.service
+TOOLS_SERVICES  += kdevops-fstests-mirror.service
 TOOLS_TIMERS := fstests-mirror.timer
+TOOLS_TIMERS += kdevops-fstests-mirror.timer
 
 QEMU_SERVICES  := qemu-mirror.service
 QEMU_SERVICES  += qemu-jic23-mirror.service
@@ -40,6 +42,7 @@ QEMU_TARGET     	:= $(MIRROR_PATH)/qemu.git
 QEMU_JIC23_TARGET	:= $(MIRROR_PATH)/qemu-jic23.git
 KDEVOPS_TARGET		:= $(MIRROR_PATH)/kdevops.git
 FSTESTS_TARGET		:= $(MIRROR_PATH)/fstests.git
+KDEVOPS_FSTESTS_TARGET	:= $(MIRROR_PATH)/kdevops/fstests.git
 
 MIRROR_SERVICES := $(LINUX_SERVICES)
 MIRROR_SERVICES += $(QEMU_SERVICES)
@@ -115,6 +118,10 @@ mirror:
 	$(Q)if [ ! -d $(FSTESTS_TARGET) ]; then \
 	  echo "          CLONE fstests" ;\
 	  git -C $(MIRROR_PATH) clone $(GIT_VERBOSE) --progress --mirror $(FSTESTS) $(FSTESTS_TARGET) ;\
+	fi
+	$(Q)if [ ! -d $(KDEVOPS_FSTESTS_TARGET) ]; then \
+	  echo "          CLONE kdevops-fstests" ;\
+	  git -C $(MIRROR_PATH) clone $(GIT_VERBOSE) --progress --mirror $(KDEVOPS_FSTESTS) --reference $(FSTESTS_TARGET) $(KDEVOPS_FSTESTS_TARGET) ;\
 	fi
 
 install:

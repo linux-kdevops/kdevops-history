@@ -1,0 +1,11 @@
+[Unit]
+Description=kdevops fstests mirror query timer [kdevops/fstests.git]
+ConditionPathExists=/mirror/kdevops/fstests.git
+
+[Timer]
+OnBootSec=10m
+# Every 6 hours
+OnUnitInactiveSec=360m
+
+[Install]
+WantedBy=default.target
