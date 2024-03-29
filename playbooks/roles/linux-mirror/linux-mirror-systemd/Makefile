@@ -1,6 +1,24 @@
 USER_SYSTEM := ~/.config/systemd/user/
 MIRROR_PATH := /mirror
 
+ifeq (,$(wildcard $(TOPDIR_PATH)/.config))
+else
+include $(TOPDIR_PATH)/.config
+endif
+
+export TORVALDS		:= $(subst ",,$(CONFIG_MIRROR_TORVALDS_URL))
+export STABLE		:= $(subst ",,$(CONFIG_MIRROR_STABLE_URL))
+export NEXT		:= $(subst ",,$(CONFIG_MIRROR_NEXT_URL))
+export KDEVOPS_LINUS	:= $(subst ",,$(CONFIG_MIRROR_KDEVOPS_LINUS_URL))
+export MCGROF		:= $(subst ",,$(CONFIG_MIRROR_MCGROF_URL))
+export MCGROF_LINUS	:= $(subst ",,$(CONFIG_MIRROR_MCGROF_LINUS_URL))
+export QEMU		:= $(subst ",,$(CONFIG_MIRROR_QEMU_URL))
+export QEMU_JIC23	:= $(subst ",,$(CONFIG_MIRROR_QEMU_JIC23_URL))
+export KDEVOPS		:= $(subst ",,$(CONFIG_MIRROR_KDEVOPS_URL))
+export FSTESTS		:= $(subst ",,$(CONFIG_MIRROR_FSTESTS_URL))
+export KDEVOPS_FSTESTS	:= $(subst ",,$(CONFIG_MIRROR_KDEVOPS_FSTESTS_URL))
+export BLKTESTS		:= $(subst ",,$(CONFIG_MIRROR_BLKTESTS_URL))
+
 LINUX_SERVICES := linux-mirror.service
 LINUX_SERVICES += linux-stable-mirror.service
 LINUX_SERVICES += linux-next-mirror.service
