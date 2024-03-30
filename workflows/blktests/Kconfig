@@ -159,9 +159,16 @@ config BLKTESTS_DATA
 	  Note that {{data_path}} corresponds to the location set by the
 	  configuration option CONFIG_WORKFLOW_DATA_PATH.
 
+config HAVE_MIRROR_BLKTRACE
+	bool
+	depends on USE_LIBVIRT_MIRROR
+	default $(shell, scripts/check_mirror_present.sh /mirror/blktrace.git)
+
 config BLKTRACE_GIT
 	string "The blktrace git tree to clone"
-	default "https://git.kernel.dk/blktrace"
+	default DEFAULT_BLKTRACE_URL if !HAVE_MIRROR_BLKTRACE
+	default $(shell, scripts/append-makefile-vars.sh git:// $(KDEVOPS_DEFAULT_BRIDGE_IP_VAGRANT) /mirror/blktrace.git) if HAVE_MIRROR_BLKTRACE && VAGRANT
+	default $(shell, scripts/append-makefile-vars.sh git:// $(KDEVOPS_DEFAULT_BRIDGE_IP_GUESTFS) /mirror/blktrace.git) if HAVE_MIRROR_BLKTRACE && GUESTFS
 	help
 	  The blktrace git tree to clone.
 
