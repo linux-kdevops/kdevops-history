@@ -4,6 +4,7 @@ ifeq (y,$(CONFIG_INSTALL_LOCAL_LINUX_MIRROR))
 LINUX_MIRROR_ARGS :=
 LINUX_MIRROR_ARGS += install_linux_mirror=True
 LINUX_MIRROR_ARGS += defaults_xfsprogs_git='$(subst ",,$(CONFIG_DEFAULT_XFSPROGS_URL))'
+LINUX_MIRROR_ARGS += defaults_xfsdump_git='$(subst ",,$(CONFIG_DEFAULT_XFSDUMP_URL))'
 
 MIRROR_CODE      := $(TOPDIR)/playbooks/roles/linux-mirror/linux-mirror-systemd/
 

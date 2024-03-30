@@ -94,7 +94,7 @@
 # in Debian Testing repository
 - name: git clone xfsdump
   git:
-    repo: "https://github.com/linux-kdevops/xfsdump-dev.git"
+    repo: "{{ fstests_xsfsdump_git }}"
     dest: "{{ data_path }}/xfsdump"
     update: yes
     version: v3.1.10-fixed

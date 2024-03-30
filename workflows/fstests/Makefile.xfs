@@ -6,6 +6,8 @@ FSTESTS_ARGS += fstests_xfs_xfsprogs_data='$(CONFIG_FSTESTS_XFS_XFSPROGS_DATA)'
 FSTESTS_ARGS += fstests_xfs_xfsprogs_install_path='$(CONFIG_FSTESTS_XFS_XFSPROGS_INSTALL_PATH)'
 endif
 
+FSTESTS_ARGS += fstests_xsfsdump_git='$(subst ",,$(CONFIG_FSTESTS_XFSDUMP_GIT_URL))'
+
 ifeq (y,$(CONFIG_FSTESTS_XFS_QUOTA_ENABLED))
 FSTESTS_ARGS += fstests_xfs_mount_quota_opts='$(CONFIG_FSTESTS_XFS_MOUNT_QUOTA_OPTS)'
 endif

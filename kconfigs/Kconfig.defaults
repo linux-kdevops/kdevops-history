@@ -1,3 +1,9 @@
+# Please keep in alphabetical order
+
+config DEFAULT_XFSDUMP_URL
+	string
+	default "https://github.com/linux-kdevops/xfsdump-dev.git"
+
 config DEFAULT_XFSPROGS_URL
 	string
 	default "https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git"

@@ -68,6 +68,17 @@ config FSTESTS_XFS_XFSPROGS_INSTALL_PATH
 	help
 	  Destination path to install Xfsprogs binaries
 
+config HAVE_MIRROR_XFSDUMP
+       bool
+       depends on USE_LIBVIRT_MIRROR
+       default $(shell, scripts/check_mirror_present.sh /mirror/xfsdump-dev.git)
+
+config FSTESTS_XFSDUMP_GIT_URL
+	string
+	default DEFAULT_XFSDUMP_URL if !HAVE_MIRROR_XFSDUMP
+	default $(shell, scripts/append-makefile-vars.sh git:// $(KDEVOPS_DEFAULT_BRIDGE_IP_VAGRANT) /mirror/xfsdump-dev.git) if HAVE_MIRROR_XFSDUMP && VAGRANT
+	default $(shell, scripts/append-makefile-vars.sh git:// $(KDEVOPS_DEFAULT_BRIDGE_IP_GUESTFS) /mirror/xfsdump-dev.git) if HAVE_MIRROR_XFSDUMP && GUESTFS
+
 config FSTESTS_XFS_QUOTA_ENABLED
 	bool "Enable XFS quota"
 	default n

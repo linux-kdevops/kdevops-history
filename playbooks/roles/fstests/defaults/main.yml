@@ -184,3 +184,5 @@ fstests_tmpfs_section_huge_within_size: False
 fstests_tmpfs_section_huge_advise: False
 
 devconfig_enable_systemd_journal_remote: False
+
+fstests_xsfsdump_git: "https://github.com/linux-kdevops/xfsdump-dev.git"
