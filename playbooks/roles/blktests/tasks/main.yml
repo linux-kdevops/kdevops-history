@@ -42,7 +42,7 @@
     name: compile_dbench
   vars:
     dbench_data: "{{ data_path }}/dbench"
-    dbench_git: "https://github.com/linux-kdevops/dbench.git"
+    dbench_git: "{{ blktests_dbench_git }}"
   tags: [ 'oscheck', 'git', 'dbench']
 
 - name: Remove any old blktrace as we always clone a fresh tree

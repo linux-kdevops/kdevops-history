@@ -27,6 +27,7 @@ NBD_DATA:=$(subst ",,$(CONFIG_NBD_DATA))
 
 BLKTESTS_DATA_TARGET:=$(subst ",,$(CONFIG_BLKTESTS_DATA_TARGET))
 
+BLKTESTS_ARGS += blktests_dbench_git='$(subst ",,$(CONFIG_BLKTESTS_DBENCH_GIT_URL))'
 BLKTESTS_ARGS += blktests_git='$(BLKTESTS_GIT)'
 BLKTESTS_ARGS += blktests_data=\"$(BLKTESTS_DATA)\"
 

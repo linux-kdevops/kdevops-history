@@ -22,3 +22,4 @@ nbd_version: "nbd-3.21"
 nbd_data: "{{data_path}}/nbd"
 
 compile_dbench: False
+blktests_dbench_git: "https://github.com/linux-kdevops/dbench.git"

@@ -12,6 +12,17 @@ config HAVE_DISTRO_PREFERS_BLKTESTS_WATCHDOG_RESET
 	bool
 	default n
 
+config HAVE_MIRROR_DBENCH
+	bool
+	depends on USE_LIBVIRT_MIRROR
+	default $(shell, scripts/check_mirror_present.sh /mirror/dbench.git)
+
+config BLKTESTS_DBENCH_GIT_URL
+	string
+	default DEFAULT_DBENCH_URL if !HAVE_MIRROR_DBENCH
+	default $(shell, scripts/append-makefile-vars.sh git:// $(KDEVOPS_DEFAULT_BRIDGE_IP_VAGRANT) /mirror/dbench.git) if HAVE_MIRROR_XFSDUMP && VAGRANT
+	default $(shell, scripts/append-makefile-vars.sh git:// $(KDEVOPS_DEFAULT_BRIDGE_IP_GUESTFS) /mirror/dbench.git) if HAVE_MIRROR_XFSDUMP && GUESTFS
+
 config BLKTESTS_WATCHDOG
 	bool "Enable kdevops blktests watchdog"
 	default y if HAVE_DISTRO_PREFERS_BLKTESTS_WATCHDOG

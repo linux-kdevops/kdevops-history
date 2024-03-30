@@ -1,5 +1,9 @@
 # Please keep in alphabetical order
 
+config DEFAULT_DBENCH_URL
+	string
+	default "https://github.com/linux-kdevops/dbench.git"
+
 config DEFAULT_XFSDUMP_URL
 	string
 	default "https://github.com/linux-kdevops/xfsdump-dev.git"
