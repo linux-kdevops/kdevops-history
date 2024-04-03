@@ -1,4 +1,0 @@
-block/011
-block/012
-loop/002
-scsi/004

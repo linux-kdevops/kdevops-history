@@ -1,7 +1,0 @@
-generic/388 # failure only appears on xunit file no *.bad file
-generic/618
-generic/681
-generic/682
-xfs/071
-xfs/220
-xfs/295 # failure rate is about 1/30 xfs_logprint: unknown log operation type (0) Bad data in log

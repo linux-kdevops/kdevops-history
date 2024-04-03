@@ -1,6 +1,0 @@
-runtime	0.223s
-description	tests on partition handling for an nbd device
-exit_status	1
-reason	output
-date	2021-02-24 23:09:21
-status	fail

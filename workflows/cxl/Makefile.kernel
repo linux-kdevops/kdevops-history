@@ -1,9 +1,0 @@
-ifeq (y,$(CONFIG_BOOTLINUX))
-cxl-help-linux:
-	@echo "cxl-linux           - Builds cxl_test kernel module and installs it"
-
-cxl-linux:
-	$(Q)$(MAKE) linux-cxl
-
-BOOTLINUX_CXL_HELP += cxl-help-linux
-endif

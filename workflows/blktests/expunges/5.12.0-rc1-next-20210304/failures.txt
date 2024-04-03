@@ -1,3 +1,0 @@
-block/009 # korg#212305 failure rate 1/669
-block/011
-block/012

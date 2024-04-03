@@ -1,5 +1,0 @@
-runtime	0.405s
-date	2021-02-19 15:30:09
-description	try various loop device block sizes
-exit_status	0
-status	pass

@@ -1,6 +1,0 @@
-runtime	1.504s
-description	check page-cache coherency after BLKDISCARD
-exit_status	0
-reason	output
-date	2021-03-16 16:25:28
-status	fail

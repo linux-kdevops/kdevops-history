@@ -1,1 +1,0 @@
-../generic/run_kernel_ci.sh

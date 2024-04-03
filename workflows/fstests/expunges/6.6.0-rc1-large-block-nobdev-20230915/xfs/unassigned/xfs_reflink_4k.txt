@@ -1,5 +1,0 @@
-generic/388
-generic/645
-generic/670 # failure rate of about 1/50
-xfs/008 # possible regression
-xfs/104 # failure rate 1/50 https://gist.github.com/mcgrof/dc9dc55fe249d5a88d4b625e623f648e

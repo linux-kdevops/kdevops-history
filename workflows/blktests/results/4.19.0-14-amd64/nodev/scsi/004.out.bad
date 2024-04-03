@@ -1,6 +1,0 @@
-Running scsi/004
-tests/scsi/004: line 34: echo: write error: Device or resource busy
-Input/output error
-grep: /proc/scsi/scsi_debug/2: No such file or directory
-tests/scsi/004: line 44: echo: write error: Device or resource busy
-Test complete

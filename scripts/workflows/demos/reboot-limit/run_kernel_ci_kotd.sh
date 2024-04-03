@@ -1,1 +1,0 @@
-../../kotd/run_kernel_ci_kotd.sh

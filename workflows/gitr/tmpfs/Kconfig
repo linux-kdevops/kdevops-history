@@ -1,5 +1,0 @@
-config GITR_TMPFS_MOUNT_OPTS
-	string "The file system mount options to use"
-	default "size=75%"
-	help
-	  The mount options to use when mounting the file system under test.

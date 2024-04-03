@@ -1,6 +1,0 @@
-runtime	251.870s
-description	disable PCI device while doing I/O
-exit_status	0
-reason	output
-date	2021-03-04 13:50:24
-status	fail

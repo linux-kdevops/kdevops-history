@@ -1,6 +1,0 @@
-reason	output
-runtime	0.012s
-date	2021-02-16 22:46:12
-description	check that a read-only block device fails writes
-exit_status	0
-status	fail

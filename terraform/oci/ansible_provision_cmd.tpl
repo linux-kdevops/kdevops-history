@@ -1,1 +1,0 @@
-../ansible_provision_cmd.tpl

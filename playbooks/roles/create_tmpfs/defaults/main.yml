@@ -1,7 +1,0 @@
-# SPDX-License-Identifier copyleft-next-0.3.1
----
-tmpfs_mount_options: "defaults"
-tmpfs_mounted_on: "/data"
-tmpfs_user: "root"
-tmpfs_group: "root"
-tmpfs_mode: "u=rwx,g=rwx,o=rwxt"

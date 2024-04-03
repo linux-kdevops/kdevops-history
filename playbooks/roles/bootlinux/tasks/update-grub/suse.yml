@@ -1,8 +1,0 @@
-- name: Run update-grub
-  become: yes
-  become_flags: 'su - -c'
-  become_method: sudo
-  command: "update-bootloader --refresh"
-  register: grub_update
-  changed_when: "grub_update.rc == 0"
-  tags: [ 'linux', 'manual-update-grub', 'console' ]

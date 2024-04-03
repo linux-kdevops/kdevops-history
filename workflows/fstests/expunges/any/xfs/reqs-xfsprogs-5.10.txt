@@ -1,8 +1,0 @@
-# failure from running with xfsprogs 5.10 on debian/bullseye
-xfs/082 # xfs_copy bug fixed in xfsprogs 5.19-rc1
-xfs/144 # mkfs.xfs issue with formatting small filesystem with large journal
-xfs/540 # xfs_db issue fixed in xfsprogs 5.13
-xfs/543 # mkfs.xfs bug fixed in xfsprogs 5.19-rc1
-xfs/544 # xfsdump bug
-xfs/545 # xfsdump bug
-xfs/549 # fixed by "50dba8189b1f mkfs: terminate getsubopt arrays properly" in xfsprogs v5.19

@@ -1,2 +1,0 @@
-SUBSYSTEM=="net", KERNEL=="{{ ansible_default_ipv4.interface }}", \
-   PROGRAM="/usr/sbin/rdma link add siw0 type siw netdev {{ ansible_default_ipv4.interface }}"

@@ -1,4 +1,0 @@
-# SPDX-License-Identifier GPL-2.0+
-#
-terraform_private_net_enabled: false
-kdevops_enable_guestfs: False

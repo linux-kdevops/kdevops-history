@@ -1,8 +1,0 @@
-# SPDX-License-Identifier copyleft-next-0.3.1
----
-mirror_user_system_dir: "~/.config/systemd/user/"
-install_linux_mirror:  False
-defaults_xfsprogs_git: "https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git"
-defaults_xfsdump_git: "https://github.com/linux-kdevops/xfsdump-dev.git"
-defaults_dbench_git: "https://github.com/linux-kdevops/dbench.git"
-defaults_blktrace_git: "https://git.kernel.dk/blktrace"

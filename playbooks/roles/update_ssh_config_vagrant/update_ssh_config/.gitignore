@@ -1,6 +1,0 @@
-tests/*.copy
-tests/*.bk
-
-*.swp
-__pycache__/
-

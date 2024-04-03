@@ -1,6 +1,0 @@
-runtime	24.073s
-description	create/delete many NVMeOF block device-backed ns and test discovery
-exit_status	0
-reason	output
-date	2022-08-18 18:23:48
-status	fail

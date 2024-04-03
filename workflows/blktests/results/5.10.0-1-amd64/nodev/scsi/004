@@ -1,6 +1,0 @@
-runtime	30.968s
-description	ensure repeated TASK SET FULL results in EIO on timing out command
-exit_status	0
-reason	output
-date	2021-02-22 17:00:10
-status	fail

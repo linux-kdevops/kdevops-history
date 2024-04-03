@@ -1,5 +1,0 @@
-generic/002 # failure rate 1/70 seems like a test bug? https://gist.github.com/mcgrof/125e451cedeb584c0513d454d8ba2e30
-generic/003 # failure rate 1/70 seems like a test bug? https://gist.github.com/mcgrof/125e451cedeb584c0513d454d8ba2e30
-xfs/002
-xfs/556 # failure rate ~ 1/3
-xfs/559 # failure rate ~ 1/3

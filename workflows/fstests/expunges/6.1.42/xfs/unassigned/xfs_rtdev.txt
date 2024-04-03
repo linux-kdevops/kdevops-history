@@ -1,1 +1,0 @@
-xfs/002 # xfs_growfs: log growth not supported yet

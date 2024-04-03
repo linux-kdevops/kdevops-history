@@ -1,5 +1,0 @@
-block/001 # bsc#1191116 crashes
-block/002 # bsc#1191117 scsi_debug cannot be removed
-block/009 # bsc#1183392 failure rate 1/9
-block/024 # bsc#1183395 failure rate 1/55
-loop/002 # bsc#1183396 failure rate 1/4

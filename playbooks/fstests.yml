@@ -1,8 +1,0 @@
----
-- hosts: localhost
-  roles:
-    - role: fstests_prep_localhost
-
-- hosts: all
-  roles:
-    - role: fstests

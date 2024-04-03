@@ -1,5 +1,0 @@
-generic/009 # diff https://gist.github.com/mcgrof/bbc91b95a0dc76abb211d68e1b8b0ed3
-generic/012 # diff https://gist.github.com/mcgrof/300bdda60e05f0e34c9b96d60dfaac0b
-generic/018 # runs forever no log
-generic/016 # diff https://gist.github.com/mcgrof/f5d8fb014407c8be50d7ca8f5eb5fb47
-generic/030 # kernel warning https://gist.github.com/mcgrof/25a204fe3aa8aab39213309d51aa6450

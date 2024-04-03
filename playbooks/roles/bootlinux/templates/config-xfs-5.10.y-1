@@ -1,1 +1,0 @@
-config-xfs-5.10.y

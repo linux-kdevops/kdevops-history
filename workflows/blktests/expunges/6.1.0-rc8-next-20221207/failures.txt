@@ -1,6 +1,0 @@
-block/011
-block/012
-block/019
-nvme/002
-nvme/016
-nvme/017

@@ -1,7 +1,0 @@
----
-kdc_conf_dir: /var/kerberos/krb5kdc
-kdc_data_dir: /var/kerberos/krb5kdc
-kdc_master_key_type: aes256-cts-hmac-sha384-192
-kdc_supported_enctypes: aes256-cts-hmac-sha384-192:normal aes128-cts-hmac-sha256-128:normal aes256-cts-hmac-sha1-96:normal aes128-cts-hmac-sha1-96:normal camellia256-cts-cmac:normal camellia128-cts-cmac:normal
-krb5kdc_service_name: krb5kdc
-kadmin_service_name: kadmin

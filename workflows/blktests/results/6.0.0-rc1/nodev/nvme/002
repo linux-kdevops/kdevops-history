@@ -1,6 +1,0 @@
-runtime	43.085s
-description	create many subsystems and test discovery
-exit_status	0
-reason	output
-date	2022-08-18 18:20:43
-status	fail

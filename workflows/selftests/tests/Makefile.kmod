@@ -1,9 +1,0 @@
-ifeq (y,$(CONFIG_SELFTESTS_SECTION_KMOD))
-SELFTESTS_HELP_TARGETS += selftests-help-menu-target-kmod
-SELFTESTS_ARGS += selftests_section_kmod='True'
-selftests-kmod:
-	$(Q)$(MAKE) selftests-baseline HOSTS=$(KDEVOPS_HOSTS_PREFIX)-kmod
-endif
-
-selftests-help-menu-target-kmod:
-	@echo "selftests-kmod                    - Runs selftests for module loader"

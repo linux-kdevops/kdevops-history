@@ -1,8 +1,0 @@
-# SPDX-License-Identifier copyleft-next-0.3.1
----
-
-btrfs_progs_build: False
-
-btrfs_progs_data: "{{ data_path }}/btrfs-progs"
-btrfs_progs_git: "https://github.com/kdave/btrfs-progs.git"
-btrfs_progs_version: "devel"

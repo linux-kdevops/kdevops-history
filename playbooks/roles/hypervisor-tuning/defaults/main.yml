@@ -1,6 +1,0 @@
-# SPDX-License-Identifier copyleft-next-0.3.1
----
-hypervisor_tunning_enabled: False
-hypervisor_tunning_ksm_enable: False
-hypervisor_tunning_zswap_enable: False
-hypervisor_tunning_zswap_max_pool_percent: 20

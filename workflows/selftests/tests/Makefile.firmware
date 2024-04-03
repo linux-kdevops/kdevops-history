@@ -1,9 +1,0 @@
-ifeq (y,$(CONFIG_SELFTESTS_SECTION_FIRMWARE))
-SELFTESTS_HELP_TARGETS += selftests-help-menu-target-firmware
-SELFTESTS_ARGS := selftests_section_firmware='True'
-selftests-firmware:
-	$(Q)$(MAKE) selftests-baseline HOSTS=$(KDEVOPS_HOSTS_PREFIX)-firmware
-endif
-
-selftests-help-menu-target-firmware:
-	@echo "selftests-firmware                - Runs selftests for the firmware loader"

@@ -1,6 +1,0 @@
-runtime	25.919s
-description	create/delete many file-ns and test discovery
-exit_status	0
-reason	output
-date	2022-08-18 18:24:13
-status	fail

@@ -1,6 +1,0 @@
-generic/055
-xfs/016
-xfs/045
-xfs/158
-xfs/160
-xfs/161

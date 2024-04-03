@@ -1,1 +1,0 @@
-xfs/599 # Possible test bug reported https://lore.kernel.org/fstests/ZULu%2FRm%2FEiBY8ZzG@bombadil.infradead.org/T/#u

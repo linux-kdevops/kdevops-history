@@ -1,1 +1,0 @@
-hosts_comma: "{{ ansible_play_hosts | join(',') }}"

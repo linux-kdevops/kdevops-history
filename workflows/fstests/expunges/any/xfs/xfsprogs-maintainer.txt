@@ -1,8 +1,0 @@
-# These are tests for the maintainer of xfsprogs to run only. We don't
-# need to be running them. They are just informational.
-
-# libxfs-diff needs KWORKAREA and WORKAREA set. If you really wanted
-# to set these you can use something like:
-# export WORKAREA="/usr/src/packages/BUILD/xfsprogs-4.13.1/"
-# export KWORKAREA="/usr/src/linux-4.12.14-6.1/"
-xfs/040

@@ -1,7 +1,0 @@
----
-- name: Install local dependencies for fstests command and control
-  become: yes
-  become_method: sudo
-  apt:
-    name:
-      - python3-junitparser

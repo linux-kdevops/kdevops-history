@@ -1,7 +1,0 @@
----
-kdc_conf_dir: /etc/krb5kdc
-kdc_data_dir: /var/lib/krb5kdc
-kdc_master_key_type: aes256-cts
-kdc_supported_enctypes: aes256-cts:normal aes128-cts:normal
-krb5kdc_service_name: krb5-kdc
-kadmin_service_name: krb5-admin-server

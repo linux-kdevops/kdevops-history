@@ -1,2 +1,0 @@
-xfs/008
-xfs/559 # failure rate ~ 1/3
